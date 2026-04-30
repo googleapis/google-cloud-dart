@@ -20,7 +20,6 @@
 /// performance, and ease of application development.
 library;
 
-// ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
 // ignore_for_file: constant_identifier_names
@@ -28,7 +27,6 @@ library;
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: non_constant_identifier_names
 // ignore_for_file: unintended_html_in_doc_comment
-// ignore_for_file: use_null_aware_elements
 
 import 'package:google_cloud_longrunning/longrunning.dart';
 import 'package:google_cloud_protobuf/protobuf.dart';
@@ -1019,7 +1017,7 @@ final class BloomFilter extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (bits case final bits?) 'bits': bits.toJson(),
+    'bits': ?bits?.toJson(),
     if (hashCount.isNotDefault) 'hashCount': hashCount,
   };
 
@@ -1093,10 +1091,7 @@ final class Precondition extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    if (exists case final exists?) 'exists': exists,
-    if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
-  };
+  Object toJson() => {'exists': ?exists, 'updateTime': ?updateTime?.toJson()};
 
   @override
   String toString() {
@@ -1135,8 +1130,8 @@ final class TransactionOptions extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (readOnly case final readOnly?) 'readOnly': readOnly.toJson(),
-    if (readWrite case final readWrite?) 'readWrite': readWrite.toJson(),
+    'readOnly': ?readOnly?.toJson(),
+    'readWrite': ?readWrite?.toJson(),
   };
 
   @override
@@ -1206,9 +1201,7 @@ final class TransactionOptions_ReadOnly extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    if (readTime case final readTime?) 'readTime': readTime.toJson(),
-  };
+  Object toJson() => {'readTime': ?readTime?.toJson()};
 
   @override
   String toString() => 'ReadOnly()';
@@ -1302,8 +1295,8 @@ final class Document extends ProtoMessage {
     if (name.isNotDefault) 'name': name,
     if (fields.isNotDefault)
       'fields': {for (final e in fields.entries) e.key: e.value.toJson()},
-    if (createTime case final createTime?) 'createTime': createTime.toJson(),
-    if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
+    'createTime': ?createTime?.toJson(),
+    'updateTime': ?updateTime?.toJson(),
   };
 
   @override
@@ -1483,31 +1476,21 @@ final class Value extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (nullValue case final nullValue?) 'nullValue': nullValue.toJson(),
-    if (booleanValue case final booleanValue?) 'booleanValue': booleanValue,
-    if (integerValue case final integerValue?)
-      'integerValue': integerValue.toString(),
-    if (doubleValue case final doubleValue?)
-      'doubleValue': encodeDouble(doubleValue),
-    if (timestampValue case final timestampValue?)
-      'timestampValue': timestampValue.toJson(),
-    if (stringValue case final stringValue?) 'stringValue': stringValue,
-    if (bytesValue case final bytesValue?)
-      'bytesValue': encodeBytes(bytesValue),
-    if (referenceValue case final referenceValue?)
-      'referenceValue': referenceValue,
-    if (geoPointValue case final geoPointValue?)
-      'geoPointValue': geoPointValue.toJson(),
-    if (arrayValue case final arrayValue?) 'arrayValue': arrayValue.toJson(),
-    if (mapValue case final mapValue?) 'mapValue': mapValue.toJson(),
-    if (fieldReferenceValue case final fieldReferenceValue?)
-      'fieldReferenceValue': fieldReferenceValue,
-    if (variableReferenceValue case final variableReferenceValue?)
-      'variableReferenceValue': variableReferenceValue,
-    if (functionValue case final functionValue?)
-      'functionValue': functionValue.toJson(),
-    if (pipelineValue case final pipelineValue?)
-      'pipelineValue': pipelineValue.toJson(),
+    'nullValue': ?nullValue?.toJson(),
+    'booleanValue': ?booleanValue,
+    'integerValue': ?integerValue?.toString(),
+    if (doubleValue case final $1?) 'doubleValue': encodeDouble($1),
+    'timestampValue': ?timestampValue?.toJson(),
+    'stringValue': ?stringValue,
+    if (bytesValue case final $1?) 'bytesValue': encodeBytes($1),
+    'referenceValue': ?referenceValue,
+    'geoPointValue': ?geoPointValue?.toJson(),
+    'arrayValue': ?arrayValue?.toJson(),
+    'mapValue': ?mapValue?.toJson(),
+    'fieldReferenceValue': ?fieldReferenceValue,
+    'variableReferenceValue': ?variableReferenceValue,
+    'functionValue': ?functionValue?.toJson(),
+    'pipelineValue': ?pipelineValue?.toJson(),
   };
 
   @override
@@ -1796,7 +1779,7 @@ final class ExplainStats extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {if (data case final data?) 'data': data.toJson()};
+  Object toJson() => {'data': ?data?.toJson()};
 
   @override
   String toString() => 'ExplainStats()';
@@ -1860,10 +1843,9 @@ final class GetDocumentRequest extends ProtoMessage {
   @override
   Object toJson() => {
     'name': name,
-    if (mask case final mask?) 'mask': mask.toJson(),
-    if (transaction case final transaction?)
-      'transaction': encodeBytes(transaction),
-    if (readTime case final readTime?) 'readTime': readTime.toJson(),
+    'mask': ?mask?.toJson(),
+    if (transaction case final $1?) 'transaction': encodeBytes($1),
+    'readTime': ?readTime?.toJson(),
   };
 
   @override
@@ -2008,10 +1990,9 @@ final class ListDocumentsRequest extends ProtoMessage {
     if (pageSize.isNotDefault) 'pageSize': pageSize,
     if (pageToken.isNotDefault) 'pageToken': pageToken,
     if (orderBy.isNotDefault) 'orderBy': orderBy,
-    if (mask case final mask?) 'mask': mask.toJson(),
-    if (transaction case final transaction?)
-      'transaction': encodeBytes(transaction),
-    if (readTime case final readTime?) 'readTime': readTime.toJson(),
+    'mask': ?mask?.toJson(),
+    if (transaction case final $1?) 'transaction': encodeBytes($1),
+    'readTime': ?readTime?.toJson(),
     if (showMissing.isNotDefault) 'showMissing': showMissing,
   };
 
@@ -2144,8 +2125,8 @@ final class CreateDocumentRequest extends ProtoMessage {
     'parent': parent,
     'collectionId': collectionId,
     if (documentId.isNotDefault) 'documentId': documentId,
-    if (document case final document?) 'document': document.toJson(),
-    if (mask case final mask?) 'mask': mask.toJson(),
+    'document': ?document?.toJson(),
+    'mask': ?mask?.toJson(),
   };
 
   @override
@@ -2219,11 +2200,10 @@ final class UpdateDocumentRequest extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (document case final document?) 'document': document.toJson(),
-    if (updateMask case final updateMask?) 'updateMask': updateMask.toJson(),
-    if (mask case final mask?) 'mask': mask.toJson(),
-    if (currentDocument case final currentDocument?)
-      'currentDocument': currentDocument.toJson(),
+    'document': ?document?.toJson(),
+    'updateMask': ?updateMask?.toJson(),
+    'mask': ?mask?.toJson(),
+    'currentDocument': ?currentDocument?.toJson(),
   };
 
   @override
@@ -2264,8 +2244,7 @@ final class DeleteDocumentRequest extends ProtoMessage {
   @override
   Object toJson() => {
     'name': name,
-    if (currentDocument case final currentDocument?)
-      'currentDocument': currentDocument.toJson(),
+    'currentDocument': ?currentDocument?.toJson(),
   };
 
   @override
@@ -2357,12 +2336,10 @@ final class BatchGetDocumentsRequest extends ProtoMessage {
   Object toJson() => {
     'database': database,
     if (documents.isNotDefault) 'documents': documents,
-    if (mask case final mask?) 'mask': mask.toJson(),
-    if (transaction case final transaction?)
-      'transaction': encodeBytes(transaction),
-    if (newTransaction case final newTransaction?)
-      'newTransaction': newTransaction.toJson(),
-    if (readTime case final readTime?) 'readTime': readTime.toJson(),
+    'mask': ?mask?.toJson(),
+    if (transaction case final $1?) 'transaction': encodeBytes($1),
+    'newTransaction': ?newTransaction?.toJson(),
+    'readTime': ?readTime?.toJson(),
   };
 
   @override
@@ -2432,10 +2409,10 @@ final class BatchGetDocumentsResponse extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (found case final found?) 'found': found.toJson(),
-    if (missing case final missing?) 'missing': missing,
+    'found': ?found?.toJson(),
+    'missing': ?missing,
     if (transaction.isNotDefault) 'transaction': encodeBytes(transaction),
-    if (readTime case final readTime?) 'readTime': readTime.toJson(),
+    'readTime': ?readTime?.toJson(),
   };
 
   @override
@@ -2480,10 +2457,7 @@ final class BeginTransactionRequest extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    'database': database,
-    if (options case final options?) 'options': options.toJson(),
-  };
+  Object toJson() => {'database': database, 'options': ?options?.toJson()};
 
   @override
   String toString() {
@@ -2622,7 +2596,7 @@ final class CommitResponse extends ProtoMessage {
   Object toJson() => {
     if (writeResults.isNotDefault)
       'writeResults': [for (final i in writeResults) i.toJson()],
-    if (commitTime case final commitTime?) 'commitTime': commitTime.toJson(),
+    'commitTime': ?commitTime?.toJson(),
   };
 
   @override
@@ -2754,15 +2728,11 @@ final class RunQueryRequest extends ProtoMessage {
   @override
   Object toJson() => {
     'parent': parent,
-    if (structuredQuery case final structuredQuery?)
-      'structuredQuery': structuredQuery.toJson(),
-    if (transaction case final transaction?)
-      'transaction': encodeBytes(transaction),
-    if (newTransaction case final newTransaction?)
-      'newTransaction': newTransaction.toJson(),
-    if (readTime case final readTime?) 'readTime': readTime.toJson(),
-    if (explainOptions case final explainOptions?)
-      'explainOptions': explainOptions.toJson(),
+    'structuredQuery': ?structuredQuery?.toJson(),
+    if (transaction case final $1?) 'transaction': encodeBytes($1),
+    'newTransaction': ?newTransaction?.toJson(),
+    'readTime': ?readTime?.toJson(),
+    'explainOptions': ?explainOptions?.toJson(),
   };
 
   @override
@@ -2856,12 +2826,11 @@ final class RunQueryResponse extends ProtoMessage {
   @override
   Object toJson() => {
     if (transaction.isNotDefault) 'transaction': encodeBytes(transaction),
-    if (document case final document?) 'document': document.toJson(),
-    if (readTime case final readTime?) 'readTime': readTime.toJson(),
+    'document': ?document?.toJson(),
+    'readTime': ?readTime?.toJson(),
     if (skippedResults.isNotDefault) 'skippedResults': skippedResults,
-    if (done case final done?) 'done': done,
-    if (explainMetrics case final explainMetrics?)
-      'explainMetrics': explainMetrics.toJson(),
+    'done': ?done,
+    'explainMetrics': ?explainMetrics?.toJson(),
   };
 
   @override
@@ -2943,13 +2912,10 @@ final class ExecutePipelineRequest extends ProtoMessage {
   @override
   Object toJson() => {
     'database': database,
-    if (structuredPipeline case final structuredPipeline?)
-      'structuredPipeline': structuredPipeline.toJson(),
-    if (transaction case final transaction?)
-      'transaction': encodeBytes(transaction),
-    if (newTransaction case final newTransaction?)
-      'newTransaction': newTransaction.toJson(),
-    if (readTime case final readTime?) 'readTime': readTime.toJson(),
+    'structuredPipeline': ?structuredPipeline?.toJson(),
+    if (transaction case final $1?) 'transaction': encodeBytes($1),
+    'newTransaction': ?newTransaction?.toJson(),
+    'readTime': ?readTime?.toJson(),
   };
 
   @override
@@ -3044,10 +3010,8 @@ final class ExecutePipelineResponse extends ProtoMessage {
   Object toJson() => {
     if (transaction.isNotDefault) 'transaction': encodeBytes(transaction),
     if (results.isNotDefault) 'results': [for (final i in results) i.toJson()],
-    if (executionTime case final executionTime?)
-      'executionTime': executionTime.toJson(),
-    if (explainStats case final explainStats?)
-      'explainStats': explainStats.toJson(),
+    'executionTime': ?executionTime?.toJson(),
+    'explainStats': ?explainStats?.toJson(),
   };
 
   @override
@@ -3138,15 +3102,11 @@ final class RunAggregationQueryRequest extends ProtoMessage {
   @override
   Object toJson() => {
     'parent': parent,
-    if (structuredAggregationQuery case final structuredAggregationQuery?)
-      'structuredAggregationQuery': structuredAggregationQuery.toJson(),
-    if (transaction case final transaction?)
-      'transaction': encodeBytes(transaction),
-    if (newTransaction case final newTransaction?)
-      'newTransaction': newTransaction.toJson(),
-    if (readTime case final readTime?) 'readTime': readTime.toJson(),
-    if (explainOptions case final explainOptions?)
-      'explainOptions': explainOptions.toJson(),
+    'structuredAggregationQuery': ?structuredAggregationQuery?.toJson(),
+    if (transaction case final $1?) 'transaction': encodeBytes($1),
+    'newTransaction': ?newTransaction?.toJson(),
+    'readTime': ?readTime?.toJson(),
+    'explainOptions': ?explainOptions?.toJson(),
   };
 
   @override
@@ -3223,11 +3183,10 @@ final class RunAggregationQueryResponse extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (result case final result?) 'result': result.toJson(),
+    'result': ?result?.toJson(),
     if (transaction.isNotDefault) 'transaction': encodeBytes(transaction),
-    if (readTime case final readTime?) 'readTime': readTime.toJson(),
-    if (explainMetrics case final explainMetrics?)
-      'explainMetrics': explainMetrics.toJson(),
+    'readTime': ?readTime?.toJson(),
+    'explainMetrics': ?explainMetrics?.toJson(),
   };
 
   @override
@@ -3338,13 +3297,12 @@ final class PartitionQueryRequest extends ProtoMessage {
   @override
   Object toJson() => {
     'parent': parent,
-    if (structuredQuery case final structuredQuery?)
-      'structuredQuery': structuredQuery.toJson(),
+    'structuredQuery': ?structuredQuery?.toJson(),
     if (partitionCount.isNotDefault)
       'partitionCount': partitionCount.toString(),
     if (pageToken.isNotDefault) 'pageToken': pageToken,
     if (pageSize.isNotDefault) 'pageSize': pageSize,
-    if (readTime case final readTime?) 'readTime': readTime.toJson(),
+    'readTime': ?readTime?.toJson(),
   };
 
   @override
@@ -3592,7 +3550,7 @@ final class WriteResponse extends ProtoMessage {
     if (streamToken.isNotDefault) 'streamToken': encodeBytes(streamToken),
     if (writeResults.isNotDefault)
       'writeResults': [for (final i in writeResults) i.toJson()],
-    if (commitTime case final commitTime?) 'commitTime': commitTime.toJson(),
+    'commitTime': ?commitTime?.toJson(),
   };
 
   @override
@@ -3658,8 +3616,8 @@ final class ListenRequest extends ProtoMessage {
   @override
   Object toJson() => {
     'database': database,
-    if (addTarget case final addTarget?) 'addTarget': addTarget.toJson(),
-    if (removeTarget case final removeTarget?) 'removeTarget': removeTarget,
+    'addTarget': ?addTarget?.toJson(),
+    'removeTarget': ?removeTarget,
     if (labels.isNotDefault) 'labels': labels,
   };
 
@@ -3733,15 +3691,11 @@ final class ListenResponse extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (targetChange case final targetChange?)
-      'targetChange': targetChange.toJson(),
-    if (documentChange case final documentChange?)
-      'documentChange': documentChange.toJson(),
-    if (documentDelete case final documentDelete?)
-      'documentDelete': documentDelete.toJson(),
-    if (documentRemove case final documentRemove?)
-      'documentRemove': documentRemove.toJson(),
-    if (filter case final filter?) 'filter': filter.toJson(),
+    'targetChange': ?targetChange?.toJson(),
+    'documentChange': ?documentChange?.toJson(),
+    'documentDelete': ?documentDelete?.toJson(),
+    'documentRemove': ?documentRemove?.toJson(),
+    'filter': ?filter?.toJson(),
   };
 
   @override
@@ -3845,15 +3799,13 @@ final class Target extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (query case final query?) 'query': query.toJson(),
-    if (documents case final documents?) 'documents': documents.toJson(),
-    if (resumeToken case final resumeToken?)
-      'resumeToken': encodeBytes(resumeToken),
-    if (readTime case final readTime?) 'readTime': readTime.toJson(),
+    'query': ?query?.toJson(),
+    'documents': ?documents?.toJson(),
+    if (resumeToken case final $1?) 'resumeToken': encodeBytes($1),
+    'readTime': ?readTime?.toJson(),
     if (targetId.isNotDefault) 'targetId': targetId,
     if (once.isNotDefault) 'once': once,
-    if (expectedCount case final expectedCount?)
-      'expectedCount': expectedCount.toJson(),
+    'expectedCount': ?expectedCount?.toJson(),
   };
 
   @override
@@ -3935,8 +3887,7 @@ final class Target_QueryTarget extends ProtoMessage {
   @override
   Object toJson() => {
     if (parent.isNotDefault) 'parent': parent,
-    if (structuredQuery case final structuredQuery?)
-      'structuredQuery': structuredQuery.toJson(),
+    'structuredQuery': ?structuredQuery?.toJson(),
   };
 
   @override
@@ -4022,9 +3973,9 @@ final class TargetChange extends ProtoMessage {
     if (targetChangeType.isNotDefault)
       'targetChangeType': targetChangeType.toJson(),
     if (targetIds.isNotDefault) 'targetIds': targetIds,
-    if (cause case final cause?) 'cause': cause.toJson(),
+    'cause': ?cause?.toJson(),
     if (resumeToken.isNotDefault) 'resumeToken': encodeBytes(resumeToken),
-    if (readTime case final readTime?) 'readTime': readTime.toJson(),
+    'readTime': ?readTime?.toJson(),
   };
 
   @override
@@ -4139,7 +4090,7 @@ final class ListCollectionIdsRequest extends ProtoMessage {
     'parent': parent,
     if (pageSize.isNotDefault) 'pageSize': pageSize,
     if (pageToken.isNotDefault) 'pageToken': pageToken,
-    if (readTime case final readTime?) 'readTime': readTime.toJson(),
+    'readTime': ?readTime?.toJson(),
   };
 
   @override
@@ -4347,7 +4298,7 @@ final class StructuredPipeline extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (pipeline case final pipeline?) 'pipeline': pipeline.toJson(),
+    'pipeline': ?pipeline?.toJson(),
     if (options.isNotDefault)
       'options': {for (final e in options.entries) e.key: e.value.toJson()},
   };
@@ -4537,16 +4488,15 @@ final class StructuredQuery extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (select case final select?) 'select': select.toJson(),
+    'select': ?select?.toJson(),
     if (from.isNotDefault) 'from': [for (final i in from) i.toJson()],
-    if (where case final where?) 'where': where.toJson(),
+    'where': ?where?.toJson(),
     if (orderBy.isNotDefault) 'orderBy': [for (final i in orderBy) i.toJson()],
-    if (startAt case final startAt?) 'startAt': startAt.toJson(),
-    if (endAt case final endAt?) 'endAt': endAt.toJson(),
+    'startAt': ?startAt?.toJson(),
+    'endAt': ?endAt?.toJson(),
     if (offset.isNotDefault) 'offset': offset,
-    if (limit case final limit?) 'limit': limit.toJson(),
-    if (findNearest case final findNearest?)
-      'findNearest': findNearest.toJson(),
+    'limit': ?limit?.toJson(),
+    'findNearest': ?findNearest?.toJson(),
   };
 
   @override
@@ -4645,12 +4595,9 @@ final class StructuredQuery_Filter extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (compositeFilter case final compositeFilter?)
-      'compositeFilter': compositeFilter.toJson(),
-    if (fieldFilter case final fieldFilter?)
-      'fieldFilter': fieldFilter.toJson(),
-    if (unaryFilter case final unaryFilter?)
-      'unaryFilter': unaryFilter.toJson(),
+    'compositeFilter': ?compositeFilter?.toJson(),
+    'fieldFilter': ?fieldFilter?.toJson(),
+    'unaryFilter': ?unaryFilter?.toJson(),
   };
 
   @override
@@ -4774,9 +4721,9 @@ final class StructuredQuery_FieldFilter extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (field case final field?) 'field': field.toJson(),
+    'field': ?field?.toJson(),
     if (op.isNotDefault) 'op': op.toJson(),
-    if (value case final value?) 'value': value.toJson(),
+    'value': ?value?.toJson(),
   };
 
   @override
@@ -4922,7 +4869,7 @@ final class StructuredQuery_UnaryFilter extends ProtoMessage {
   @override
   Object toJson() => {
     if (op.isNotDefault) 'op': op.toJson(),
-    if (field case final field?) 'field': field.toJson(),
+    'field': ?field?.toJson(),
   };
 
   @override
@@ -5007,7 +4954,7 @@ final class StructuredQuery_Order extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (field case final field?) 'field': field.toJson(),
+    'field': ?field?.toJson(),
     if (direction.isNotDefault) 'direction': direction.toJson(),
   };
 
@@ -5171,16 +5118,13 @@ final class StructuredQuery_FindNearest extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (vectorField case final vectorField?)
-      'vectorField': vectorField.toJson(),
-    if (queryVector case final queryVector?)
-      'queryVector': queryVector.toJson(),
+    'vectorField': ?vectorField?.toJson(),
+    'queryVector': ?queryVector?.toJson(),
     'distanceMeasure': distanceMeasure.toJson(),
-    if (limit case final limit?) 'limit': limit.toJson(),
+    'limit': ?limit?.toJson(),
     if (distanceResultField.isNotDefault)
       'distanceResultField': distanceResultField,
-    if (distanceThreshold case final distanceThreshold?)
-      'distanceThreshold': distanceThreshold.toJson(),
+    'distanceThreshold': ?distanceThreshold?.toJson(),
   };
 
   @override
@@ -5309,8 +5253,7 @@ final class StructuredAggregationQuery extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (structuredQuery case final structuredQuery?)
-      'structuredQuery': structuredQuery.toJson(),
+    'structuredQuery': ?structuredQuery?.toJson(),
     if (aggregations.isNotDefault)
       'aggregations': [for (final i in aggregations) i.toJson()],
   };
@@ -5401,9 +5344,9 @@ final class StructuredAggregationQuery_Aggregation extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (count case final count?) 'count': count.toJson(),
-    if (sum case final sum?) 'sum': sum.toJson(),
-    if (avg case final avg?) 'avg': avg.toJson(),
+    'count': ?count?.toJson(),
+    'sum': ?sum?.toJson(),
+    'avg': ?avg?.toJson(),
     if (alias.isNotDefault) 'alias': alias,
   };
 
@@ -5455,7 +5398,7 @@ final class StructuredAggregationQuery_Aggregation_Count extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {if (upTo case final upTo?) 'upTo': upTo.toJson()};
+  Object toJson() => {'upTo': ?upTo?.toJson()};
 
   @override
   String toString() => 'Count()';
@@ -5503,7 +5446,7 @@ final class StructuredAggregationQuery_Aggregation_Sum extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {if (field case final field?) 'field': field.toJson()};
+  Object toJson() => {'field': ?field?.toJson()};
 
   @override
   String toString() => 'Sum()';
@@ -5541,7 +5484,7 @@ final class StructuredAggregationQuery_Aggregation_Avg extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {if (field case final field?) 'field': field.toJson()};
+  Object toJson() => {'field': ?field?.toJson()};
 
   @override
   String toString() => 'Avg()';
@@ -5658,10 +5601,8 @@ final class ExplainMetrics extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (planSummary case final planSummary?)
-      'planSummary': planSummary.toJson(),
-    if (executionStats case final executionStats?)
-      'executionStats': executionStats.toJson(),
+    'planSummary': ?planSummary?.toJson(),
+    'executionStats': ?executionStats?.toJson(),
   };
 
   @override
@@ -5763,11 +5704,10 @@ final class ExecutionStats extends ProtoMessage {
   Object toJson() => {
     if (resultsReturned.isNotDefault)
       'resultsReturned': resultsReturned.toString(),
-    if (executionDuration case final executionDuration?)
-      'executionDuration': executionDuration.toJson(),
+    'executionDuration': ?executionDuration?.toJson(),
     if (readOperations.isNotDefault)
       'readOperations': readOperations.toString(),
-    if (debugStats case final debugStats?) 'debugStats': debugStats.toJson(),
+    'debugStats': ?debugStats?.toJson(),
   };
 
   @override
@@ -5862,14 +5802,13 @@ final class Write extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (update case final update?) 'update': update.toJson(),
-    if (delete case final delete?) 'delete': delete,
-    if (transform case final transform?) 'transform': transform.toJson(),
-    if (updateMask case final updateMask?) 'updateMask': updateMask.toJson(),
+    'update': ?update?.toJson(),
+    'delete': ?delete,
+    'transform': ?transform?.toJson(),
+    'updateMask': ?updateMask?.toJson(),
     if (updateTransforms.isNotDefault)
       'updateTransforms': [for (final i in updateTransforms) i.toJson()],
-    if (currentDocument case final currentDocument?)
-      'currentDocument': currentDocument.toJson(),
+    'currentDocument': ?currentDocument?.toJson(),
   };
 
   @override
@@ -6052,15 +5991,12 @@ final class DocumentTransform_FieldTransform extends ProtoMessage {
   @override
   Object toJson() => {
     if (fieldPath.isNotDefault) 'fieldPath': fieldPath,
-    if (setToServerValue case final setToServerValue?)
-      'setToServerValue': setToServerValue.toJson(),
-    if (increment case final increment?) 'increment': increment.toJson(),
-    if (maximum case final maximum?) 'maximum': maximum.toJson(),
-    if (minimum case final minimum?) 'minimum': minimum.toJson(),
-    if (appendMissingElements case final appendMissingElements?)
-      'appendMissingElements': appendMissingElements.toJson(),
-    if (removeAllFromArray case final removeAllFromArray?)
-      'removeAllFromArray': removeAllFromArray.toJson(),
+    'setToServerValue': ?setToServerValue?.toJson(),
+    'increment': ?increment?.toJson(),
+    'maximum': ?maximum?.toJson(),
+    'minimum': ?minimum?.toJson(),
+    'appendMissingElements': ?appendMissingElements?.toJson(),
+    'removeAllFromArray': ?removeAllFromArray?.toJson(),
   };
 
   @override
@@ -6136,7 +6072,7 @@ final class WriteResult extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
+    'updateTime': ?updateTime?.toJson(),
     if (transformResults.isNotDefault)
       'transformResults': [for (final i in transformResults) i.toJson()],
   };
@@ -6195,7 +6131,7 @@ final class DocumentChange extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (document case final document?) 'document': document.toJson(),
+    'document': ?document?.toJson(),
     if (targetIds.isNotDefault) 'targetIds': targetIds,
     if (removedTargetIds.isNotDefault) 'removedTargetIds': removedTargetIds,
   };
@@ -6256,7 +6192,7 @@ final class DocumentDelete extends ProtoMessage {
   Object toJson() => {
     if (document.isNotDefault) 'document': document,
     if (removedTargetIds.isNotDefault) 'removedTargetIds': removedTargetIds,
-    if (readTime case final readTime?) 'readTime': readTime.toJson(),
+    'readTime': ?readTime?.toJson(),
   };
 
   @override
@@ -6320,7 +6256,7 @@ final class DocumentRemove extends ProtoMessage {
   Object toJson() => {
     if (document.isNotDefault) 'document': document,
     if (removedTargetIds.isNotDefault) 'removedTargetIds': removedTargetIds,
-    if (readTime case final readTime?) 'readTime': readTime.toJson(),
+    'readTime': ?readTime?.toJson(),
   };
 
   @override
@@ -6388,8 +6324,7 @@ final class ExistenceFilter extends ProtoMessage {
   Object toJson() => {
     if (targetId.isNotDefault) 'targetId': targetId,
     if (count.isNotDefault) 'count': count,
-    if (unchangedNames case final unchangedNames?)
-      'unchangedNames': unchangedNames.toJson(),
+    'unchangedNames': ?unchangedNames?.toJson(),
   };
 
   @override

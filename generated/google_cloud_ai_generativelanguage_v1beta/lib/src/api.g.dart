@@ -25,7 +25,6 @@
 /// agents, summarization and classification systems, and more.
 library;
 
-// ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
 // ignore_for_file: constant_identifier_names
@@ -33,7 +32,6 @@ library;
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: non_constant_identifier_names
 // ignore_for_file: unintended_html_in_doc_comment
-// ignore_for_file: use_null_aware_elements
 
 import 'package:google_cloud_longrunning/longrunning.dart';
 import 'package:google_cloud_protobuf/protobuf.dart';
@@ -1720,9 +1718,7 @@ final class ModelService {
   ) async {
     final url = _endPoint.replace(
       path: '/v1beta/tunedModels',
-      queryParameters: {
-        if (request.tunedModelId case final $1?) 'tunedModelId': $1,
-      },
+      queryParameters: {'tunedModelId': ?request.tunedModelId},
     );
     final response = await _client.post(url, body: request.tunedModel);
     return Operation.fromJson(
@@ -4187,10 +4183,7 @@ final class CreateCachedContentRequest extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    if (cachedContent case final cachedContent?)
-      'cachedContent': cachedContent.toJson(),
-  };
+  Object toJson() => {'cachedContent': ?cachedContent?.toJson()};
 
   @override
   String toString() => 'CreateCachedContentRequest()';
@@ -4257,9 +4250,8 @@ final class UpdateCachedContentRequest extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (cachedContent case final cachedContent?)
-      'cachedContent': cachedContent.toJson(),
-    if (updateMask case final updateMask?) 'updateMask': updateMask.toJson(),
+    'cachedContent': ?cachedContent?.toJson(),
+    'updateMask': ?updateMask?.toJson(),
   };
 
   @override
@@ -4422,21 +4414,19 @@ final class CachedContent extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (expireTime case final expireTime?) 'expireTime': expireTime.toJson(),
-    if (ttl case final ttl?) 'ttl': ttl.toJson(),
-    if (name case final name?) 'name': name,
-    if (displayName case final displayName?) 'displayName': displayName,
-    if (model case final model?) 'model': model,
-    if (systemInstruction case final systemInstruction?)
-      'systemInstruction': systemInstruction.toJson(),
+    'expireTime': ?expireTime?.toJson(),
+    'ttl': ?ttl?.toJson(),
+    'name': ?name,
+    'displayName': ?displayName,
+    'model': ?model,
+    'systemInstruction': ?systemInstruction?.toJson(),
     if (contents.isNotDefault)
       'contents': [for (final i in contents) i.toJson()],
     if (tools.isNotDefault) 'tools': [for (final i in tools) i.toJson()],
-    if (toolConfig case final toolConfig?) 'toolConfig': toolConfig.toJson(),
-    if (createTime case final createTime?) 'createTime': createTime.toJson(),
-    if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
-    if (usageMetadata case final usageMetadata?)
-      'usageMetadata': usageMetadata.toJson(),
+    'toolConfig': ?toolConfig?.toJson(),
+    'createTime': ?createTime?.toJson(),
+    'updateTime': ?updateTime?.toJson(),
+    'usageMetadata': ?usageMetadata?.toJson(),
   };
 
   @override
@@ -4565,10 +4555,10 @@ final class CitationSource extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (startIndex case final startIndex?) 'startIndex': startIndex,
-    if (endIndex case final endIndex?) 'endIndex': endIndex,
-    if (uri case final uri?) 'uri': uri,
-    if (license case final license?) 'license': license,
+    'startIndex': ?startIndex,
+    'endIndex': ?endIndex,
+    'uri': ?uri,
+    'license': ?license,
   };
 
   @override
@@ -4753,24 +4743,18 @@ final class Part extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (text case final text?) 'text': text,
-    if (inlineData case final inlineData?) 'inlineData': inlineData.toJson(),
-    if (functionCall case final functionCall?)
-      'functionCall': functionCall.toJson(),
-    if (functionResponse case final functionResponse?)
-      'functionResponse': functionResponse.toJson(),
-    if (fileData case final fileData?) 'fileData': fileData.toJson(),
-    if (executableCode case final executableCode?)
-      'executableCode': executableCode.toJson(),
-    if (codeExecutionResult case final codeExecutionResult?)
-      'codeExecutionResult': codeExecutionResult.toJson(),
-    if (videoMetadata case final videoMetadata?)
-      'videoMetadata': videoMetadata.toJson(),
+    'text': ?text,
+    'inlineData': ?inlineData?.toJson(),
+    'functionCall': ?functionCall?.toJson(),
+    'functionResponse': ?functionResponse?.toJson(),
+    'fileData': ?fileData?.toJson(),
+    'executableCode': ?executableCode?.toJson(),
+    'codeExecutionResult': ?codeExecutionResult?.toJson(),
+    'videoMetadata': ?videoMetadata?.toJson(),
     if (thought.isNotDefault) 'thought': thought,
     if (thoughtSignature.isNotDefault)
       'thoughtSignature': encodeBytes(thoughtSignature),
-    if (partMetadata case final partMetadata?)
-      'partMetadata': partMetadata.toJson(),
+    'partMetadata': ?partMetadata?.toJson(),
   };
 
   @override
@@ -4813,9 +4797,7 @@ final class FunctionResponsePart extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    if (inlineData case final inlineData?) 'inlineData': inlineData.toJson(),
-  };
+  Object toJson() => {'inlineData': ?inlineData?.toJson()};
 
   @override
   String toString() => 'FunctionResponsePart()';
@@ -5001,9 +4983,8 @@ final class VideoMetadata extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (startOffset case final startOffset?)
-      'startOffset': startOffset.toJson(),
-    if (endOffset case final endOffset?) 'endOffset': endOffset.toJson(),
+    'startOffset': ?startOffset?.toJson(),
+    'endOffset': ?endOffset?.toJson(),
     if (fps.isNotDefault) 'fps': encodeDouble(fps),
   };
 
@@ -5272,17 +5253,13 @@ final class Tool extends ProtoMessage {
       'functionDeclarations': [
         for (final i in functionDeclarations) i.toJson(),
       ],
-    if (googleSearchRetrieval case final googleSearchRetrieval?)
-      'googleSearchRetrieval': googleSearchRetrieval.toJson(),
-    if (codeExecution case final codeExecution?)
-      'codeExecution': codeExecution.toJson(),
-    if (googleSearch case final googleSearch?)
-      'googleSearch': googleSearch.toJson(),
-    if (computerUse case final computerUse?)
-      'computerUse': computerUse.toJson(),
-    if (urlContext case final urlContext?) 'urlContext': urlContext.toJson(),
-    if (fileSearch case final fileSearch?) 'fileSearch': fileSearch.toJson(),
-    if (googleMaps case final googleMaps?) 'googleMaps': googleMaps.toJson(),
+    'googleSearchRetrieval': ?googleSearchRetrieval?.toJson(),
+    'codeExecution': ?codeExecution?.toJson(),
+    'googleSearch': ?googleSearch?.toJson(),
+    'computerUse': ?computerUse?.toJson(),
+    'urlContext': ?urlContext?.toJson(),
+    'fileSearch': ?fileSearch?.toJson(),
+    'googleMaps': ?googleMaps?.toJson(),
   };
 
   @override
@@ -5313,10 +5290,7 @@ final class Tool_GoogleSearch extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    if (timeRangeFilter case final timeRangeFilter?)
-      'timeRangeFilter': timeRangeFilter.toJson(),
-  };
+  Object toJson() => {'timeRangeFilter': ?timeRangeFilter?.toJson()};
 
   @override
   String toString() => 'GoogleSearch()';
@@ -5442,7 +5416,7 @@ final class UrlContext extends ProtoMessage {
 
   UrlContext() : super(fullyQualifiedName);
 
-  factory UrlContext.fromJson(Object? j) => UrlContext();
+  factory UrlContext.fromJson(Object? _) => UrlContext();
 
   @override
   Object toJson() => {};
@@ -5488,8 +5462,7 @@ final class FileSearch extends ProtoMessage {
   @override
   Object toJson() => {
     'retrievalResources': [for (final i in retrievalResources) i.toJson()],
-    if (retrievalConfig case final retrievalConfig?)
-      'retrievalConfig': retrievalConfig.toJson(),
+    'retrievalConfig': ?retrievalConfig?.toJson(),
   };
 
   @override
@@ -5559,7 +5532,7 @@ final class FileSearch_RetrievalConfig extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (topK case final topK?) 'topK': topK,
+    'topK': ?topK,
     if (metadataFilter.isNotDefault) 'metadataFilter': metadataFilter,
   };
 
@@ -5596,8 +5569,7 @@ final class GoogleSearchRetrieval extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (dynamicRetrievalConfig case final dynamicRetrievalConfig?)
-      'dynamicRetrievalConfig': dynamicRetrievalConfig.toJson(),
+    'dynamicRetrievalConfig': ?dynamicRetrievalConfig?.toJson(),
   };
 
   @override
@@ -5638,8 +5610,7 @@ final class DynamicRetrievalConfig extends ProtoMessage {
   @override
   Object toJson() => {
     if (mode.isNotDefault) 'mode': mode.toJson(),
-    if (dynamicThreshold case final dynamicThreshold?)
-      'dynamicThreshold': encodeDouble(dynamicThreshold),
+    if (dynamicThreshold case final $1?) 'dynamicThreshold': encodeDouble($1),
   };
 
   @override
@@ -5687,7 +5658,7 @@ final class CodeExecution extends ProtoMessage {
 
   CodeExecution() : super(fullyQualifiedName);
 
-  factory CodeExecution.fromJson(Object? j) => CodeExecution();
+  factory CodeExecution.fromJson(Object? _) => CodeExecution();
 
   @override
   Object toJson() => {};
@@ -5727,10 +5698,8 @@ final class ToolConfig extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (functionCallingConfig case final functionCallingConfig?)
-      'functionCallingConfig': functionCallingConfig.toJson(),
-    if (retrievalConfig case final retrievalConfig?)
-      'retrievalConfig': retrievalConfig.toJson(),
+    'functionCallingConfig': ?functionCallingConfig?.toJson(),
+    'retrievalConfig': ?retrievalConfig?.toJson(),
   };
 
   @override
@@ -5769,7 +5738,7 @@ final class RetrievalConfig extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (latLng case final latLng?) 'latLng': latLng.toJson(),
+    'latLng': ?latLng?.toJson(),
     if (languageCode.isNotDefault) 'languageCode': languageCode,
   };
 
@@ -5987,12 +5956,10 @@ final class FunctionDeclaration extends ProtoMessage {
   Object toJson() => {
     'name': name,
     'description': description,
-    if (parameters case final parameters?) 'parameters': parameters.toJson(),
-    if (parametersJsonSchema case final parametersJsonSchema?)
-      'parametersJsonSchema': parametersJsonSchema.toJson(),
-    if (response case final response?) 'response': response.toJson(),
-    if (responseJsonSchema case final responseJsonSchema?)
-      'responseJsonSchema': responseJsonSchema.toJson(),
+    'parameters': ?parameters?.toJson(),
+    'parametersJsonSchema': ?parametersJsonSchema?.toJson(),
+    'response': ?response?.toJson(),
+    'responseJsonSchema': ?responseJsonSchema?.toJson(),
     if (behavior.isNotDefault) 'behavior': behavior.toJson(),
   };
 
@@ -6080,7 +6047,7 @@ final class FunctionCall extends ProtoMessage {
   Object toJson() => {
     if (id.isNotDefault) 'id': id,
     'name': name,
-    if (args case final args?) 'args': args.toJson(),
+    'args': ?args?.toJson(),
   };
 
   @override
@@ -6180,10 +6147,10 @@ final class FunctionResponse extends ProtoMessage {
   Object toJson() => {
     if (id.isNotDefault) 'id': id,
     'name': name,
-    if (response case final response?) 'response': response.toJson(),
+    'response': ?response?.toJson(),
     if (parts.isNotDefault) 'parts': [for (final i in parts) i.toJson()],
     if (willContinue.isNotDefault) 'willContinue': willContinue,
-    if (scheduling case final scheduling?) 'scheduling': scheduling.toJson(),
+    'scheduling': ?scheduling?.toJson(),
   };
 
   @override
@@ -6454,7 +6421,7 @@ final class Schema extends ProtoMessage {
     if (description.isNotDefault) 'description': description,
     if (nullable.isNotDefault) 'nullable': nullable,
     if (enum$.isNotDefault) 'enum': enum$,
-    if (items case final items?) 'items': items.toJson(),
+    'items': ?items?.toJson(),
     if (maxItems.isNotDefault) 'maxItems': maxItems.toString(),
     if (minItems.isNotDefault) 'minItems': minItems.toString(),
     if (properties.isNotDefault)
@@ -6464,15 +6431,15 @@ final class Schema extends ProtoMessage {
     if (required.isNotDefault) 'required': required,
     if (minProperties.isNotDefault) 'minProperties': minProperties.toString(),
     if (maxProperties.isNotDefault) 'maxProperties': maxProperties.toString(),
-    if (minimum case final minimum?) 'minimum': encodeDouble(minimum),
-    if (maximum case final maximum?) 'maximum': encodeDouble(maximum),
+    if (minimum case final $1?) 'minimum': encodeDouble($1),
+    if (maximum case final $1?) 'maximum': encodeDouble($1),
     if (minLength.isNotDefault) 'minLength': minLength.toString(),
     if (maxLength.isNotDefault) 'maxLength': maxLength.toString(),
     if (pattern.isNotDefault) 'pattern': pattern,
-    if (example case final example?) 'example': example.toJson(),
+    'example': ?example?.toJson(),
     if (anyOf.isNotDefault) 'anyOf': [for (final i in anyOf) i.toJson()],
     if (propertyOrdering.isNotDefault) 'propertyOrdering': propertyOrdering,
-    if (default$ case final default$?) 'default': default$.toJson(),
+    'default': ?default$?.toJson(),
   };
 
   @override
@@ -6528,7 +6495,7 @@ final class GroundingPassage extends ProtoMessage {
   @override
   Object toJson() => {
     if (id.isNotDefault) 'id': id,
-    if (content case final content?) 'content': content.toJson(),
+    'content': ?content?.toJson(),
   };
 
   @override
@@ -6702,13 +6669,11 @@ final class GenerateMessageRequest extends ProtoMessage {
   @override
   Object toJson() => {
     'model': model,
-    if (prompt case final prompt?) 'prompt': prompt.toJson(),
-    if (temperature case final temperature?)
-      'temperature': encodeDouble(temperature),
-    if (candidateCount case final candidateCount?)
-      'candidateCount': candidateCount,
-    if (topP case final topP?) 'topP': encodeDouble(topP),
-    if (topK case final topK?) 'topK': topK,
+    'prompt': ?prompt?.toJson(),
+    if (temperature case final $1?) 'temperature': encodeDouble($1),
+    'candidateCount': ?candidateCount,
+    if (topP case final $1?) 'topP': encodeDouble($1),
+    'topK': ?topK,
   };
 
   @override
@@ -6841,8 +6806,7 @@ final class Message extends ProtoMessage {
   Object toJson() => {
     if (author.isNotDefault) 'author': author,
     'content': content,
-    if (citationMetadata case final citationMetadata?)
-      'citationMetadata': citationMetadata.toJson(),
+    'citationMetadata': ?citationMetadata?.toJson(),
   };
 
   @override
@@ -6972,10 +6936,7 @@ final class Example extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    if (input case final input?) 'input': input.toJson(),
-    if (output case final output?) 'output': output.toJson(),
-  };
+  Object toJson() => {'input': ?input?.toJson(), 'output': ?output?.toJson()};
 
   @override
   String toString() => 'Example()';
@@ -7018,10 +6979,7 @@ final class CountMessageTokensRequest extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    'model': model,
-    if (prompt case final prompt?) 'prompt': prompt.toJson(),
-  };
+  Object toJson() => {'model': model, 'prompt': ?prompt?.toJson()};
 
   @override
   String toString() {
@@ -7201,22 +7159,20 @@ final class File extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (videoMetadata case final videoMetadata?)
-      'videoMetadata': videoMetadata.toJson(),
+    'videoMetadata': ?videoMetadata?.toJson(),
     if (name.isNotDefault) 'name': name,
     if (displayName.isNotDefault) 'displayName': displayName,
     if (mimeType.isNotDefault) 'mimeType': mimeType,
     if (sizeBytes.isNotDefault) 'sizeBytes': sizeBytes.toString(),
-    if (createTime case final createTime?) 'createTime': createTime.toJson(),
-    if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
-    if (expirationTime case final expirationTime?)
-      'expirationTime': expirationTime.toJson(),
+    'createTime': ?createTime?.toJson(),
+    'updateTime': ?updateTime?.toJson(),
+    'expirationTime': ?expirationTime?.toJson(),
     if (sha256Hash.isNotDefault) 'sha256Hash': encodeBytes(sha256Hash),
     if (uri.isNotDefault) 'uri': uri,
     if (downloadUri.isNotDefault) 'downloadUri': downloadUri,
     if (state.isNotDefault) 'state': state.toJson(),
     if (source.isNotDefault) 'source': source.toJson(),
-    if (error case final error?) 'error': error.toJson(),
+    'error': ?error?.toJson(),
   };
 
   @override
@@ -7310,10 +7266,7 @@ final class VideoFileMetadata extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    if (videoDuration case final videoDuration?)
-      'videoDuration': videoDuration.toJson(),
-  };
+  Object toJson() => {'videoDuration': ?videoDuration?.toJson()};
 
   @override
   String toString() => 'VideoFileMetadata()';
@@ -7340,7 +7293,7 @@ final class CreateFileRequest extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {if (file case final file?) 'file': file.toJson()};
+  Object toJson() => {'file': ?file?.toJson()};
 
   @override
   String toString() => 'CreateFileRequest()';
@@ -7367,7 +7320,7 @@ final class CreateFileResponse extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {if (file case final file?) 'file': file.toJson()};
+  Object toJson() => {'file': ?file?.toJson()};
 
   @override
   String toString() => 'CreateFileResponse()';
@@ -7558,7 +7511,7 @@ final class DownloadFileResponse extends ProtoMessage {
 
   DownloadFileResponse() : super(fullyQualifiedName);
 
-  factory DownloadFileResponse.fromJson(Object? j) => DownloadFileResponse();
+  factory DownloadFileResponse.fromJson(Object? _) => DownloadFileResponse();
 
   @override
   Object toJson() => {};
@@ -7690,16 +7643,14 @@ final class GenerateContentRequest extends ProtoMessage {
   @override
   Object toJson() => {
     'model': model,
-    if (systemInstruction case final systemInstruction?)
-      'systemInstruction': systemInstruction.toJson(),
+    'systemInstruction': ?systemInstruction?.toJson(),
     'contents': [for (final i in contents) i.toJson()],
     if (tools.isNotDefault) 'tools': [for (final i in tools) i.toJson()],
-    if (toolConfig case final toolConfig?) 'toolConfig': toolConfig.toJson(),
+    'toolConfig': ?toolConfig?.toJson(),
     if (safetySettings.isNotDefault)
       'safetySettings': [for (final i in safetySettings) i.toJson()],
-    if (generationConfig case final generationConfig?)
-      'generationConfig': generationConfig.toJson(),
-    if (cachedContent case final cachedContent?) 'cachedContent': cachedContent,
+    'generationConfig': ?generationConfig?.toJson(),
+    'cachedContent': ?cachedContent,
   };
 
   @override
@@ -7733,9 +7684,7 @@ final class PrebuiltVoiceConfig extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    if (voiceName case final voiceName?) 'voiceName': voiceName,
-  };
+  Object toJson() => {'voiceName': ?voiceName};
 
   @override
   String toString() {
@@ -7765,10 +7714,7 @@ final class VoiceConfig extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    if (prebuiltVoiceConfig case final prebuiltVoiceConfig?)
-      'prebuiltVoiceConfig': prebuiltVoiceConfig.toJson(),
-  };
+  Object toJson() => {'prebuiltVoiceConfig': ?prebuiltVoiceConfig?.toJson()};
 
   @override
   String toString() => 'VoiceConfig()';
@@ -7806,8 +7752,7 @@ final class SpeakerVoiceConfig extends ProtoMessage {
   @override
   Object toJson() => {
     'speaker': speaker,
-    if (voiceConfig case final voiceConfig?)
-      'voiceConfig': voiceConfig.toJson(),
+    'voiceConfig': ?voiceConfig?.toJson(),
   };
 
   @override
@@ -7897,10 +7842,8 @@ final class SpeechConfig extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (voiceConfig case final voiceConfig?)
-      'voiceConfig': voiceConfig.toJson(),
-    if (multiSpeakerVoiceConfig case final multiSpeakerVoiceConfig?)
-      'multiSpeakerVoiceConfig': multiSpeakerVoiceConfig.toJson(),
+    'voiceConfig': ?voiceConfig?.toJson(),
+    'multiSpeakerVoiceConfig': ?multiSpeakerVoiceConfig?.toJson(),
     if (languageCode.isNotDefault) 'languageCode': languageCode,
   };
 
@@ -7942,10 +7885,8 @@ final class ThinkingConfig extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (includeThoughts case final includeThoughts?)
-      'includeThoughts': includeThoughts,
-    if (thinkingBudget case final thinkingBudget?)
-      'thinkingBudget': thinkingBudget,
+    'includeThoughts': ?includeThoughts,
+    'thinkingBudget': ?thinkingBudget,
   };
 
   @override
@@ -7983,9 +7924,7 @@ final class ImageConfig extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    if (aspectRatio case final aspectRatio?) 'aspectRatio': aspectRatio,
-  };
+  Object toJson() => {'aspectRatio': ?aspectRatio};
 
   @override
   String toString() {
@@ -8322,42 +8261,28 @@ final class GenerationConfig extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (candidateCount case final candidateCount?)
-      'candidateCount': candidateCount,
+    'candidateCount': ?candidateCount,
     if (stopSequences.isNotDefault) 'stopSequences': stopSequences,
-    if (maxOutputTokens case final maxOutputTokens?)
-      'maxOutputTokens': maxOutputTokens,
-    if (temperature case final temperature?)
-      'temperature': encodeDouble(temperature),
-    if (topP case final topP?) 'topP': encodeDouble(topP),
-    if (topK case final topK?) 'topK': topK,
-    if (seed case final seed?) 'seed': seed,
+    'maxOutputTokens': ?maxOutputTokens,
+    if (temperature case final $1?) 'temperature': encodeDouble($1),
+    if (topP case final $1?) 'topP': encodeDouble($1),
+    'topK': ?topK,
+    'seed': ?seed,
     if (responseMimeType.isNotDefault) 'responseMimeType': responseMimeType,
-    if (responseSchema case final responseSchema?)
-      'responseSchema': responseSchema.toJson(),
-    if (responseJsonSchema case final responseJsonSchema?)
-      '_responseJsonSchema': responseJsonSchema.toJson(),
-    if (responseJsonSchemaOrdered case final responseJsonSchemaOrdered?)
-      'responseJsonSchema': responseJsonSchemaOrdered.toJson(),
-    if (presencePenalty case final presencePenalty?)
-      'presencePenalty': encodeDouble(presencePenalty),
-    if (frequencyPenalty case final frequencyPenalty?)
-      'frequencyPenalty': encodeDouble(frequencyPenalty),
-    if (responseLogprobs case final responseLogprobs?)
-      'responseLogprobs': responseLogprobs,
-    if (logprobs case final logprobs?) 'logprobs': logprobs,
-    if (enableEnhancedCivicAnswers case final enableEnhancedCivicAnswers?)
-      'enableEnhancedCivicAnswers': enableEnhancedCivicAnswers,
+    'responseSchema': ?responseSchema?.toJson(),
+    '_responseJsonSchema': ?responseJsonSchema?.toJson(),
+    'responseJsonSchema': ?responseJsonSchemaOrdered?.toJson(),
+    if (presencePenalty case final $1?) 'presencePenalty': encodeDouble($1),
+    if (frequencyPenalty case final $1?) 'frequencyPenalty': encodeDouble($1),
+    'responseLogprobs': ?responseLogprobs,
+    'logprobs': ?logprobs,
+    'enableEnhancedCivicAnswers': ?enableEnhancedCivicAnswers,
     if (responseModalities.isNotDefault)
       'responseModalities': [for (final i in responseModalities) i.toJson()],
-    if (speechConfig case final speechConfig?)
-      'speechConfig': speechConfig.toJson(),
-    if (thinkingConfig case final thinkingConfig?)
-      'thinkingConfig': thinkingConfig.toJson(),
-    if (imageConfig case final imageConfig?)
-      'imageConfig': imageConfig.toJson(),
-    if (mediaResolution case final mediaResolution?)
-      'mediaResolution': mediaResolution.toJson(),
+    'speechConfig': ?speechConfig?.toJson(),
+    'thinkingConfig': ?thinkingConfig?.toJson(),
+    'imageConfig': ?imageConfig?.toJson(),
+    'mediaResolution': ?mediaResolution?.toJson(),
   };
 
   @override
@@ -8510,13 +8435,12 @@ final class SemanticRetrieverConfig extends ProtoMessage {
   @override
   Object toJson() => {
     'source': source,
-    if (query case final query?) 'query': query.toJson(),
+    'query': ?query?.toJson(),
     if (metadataFilters.isNotDefault)
       'metadataFilters': [for (final i in metadataFilters) i.toJson()],
-    if (maxChunksCount case final maxChunksCount?)
-      'maxChunksCount': maxChunksCount,
-    if (minimumRelevanceScore case final minimumRelevanceScore?)
-      'minimumRelevanceScore': encodeDouble(minimumRelevanceScore),
+    'maxChunksCount': ?maxChunksCount,
+    if (minimumRelevanceScore case final $1?)
+      'minimumRelevanceScore': encodeDouble($1),
   };
 
   @override
@@ -8599,10 +8523,8 @@ final class GenerateContentResponse extends ProtoMessage {
   Object toJson() => {
     if (candidates.isNotDefault)
       'candidates': [for (final i in candidates) i.toJson()],
-    if (promptFeedback case final promptFeedback?)
-      'promptFeedback': promptFeedback.toJson(),
-    if (usageMetadata case final usageMetadata?)
-      'usageMetadata': usageMetadata.toJson(),
+    'promptFeedback': ?promptFeedback?.toJson(),
+    'usageMetadata': ?usageMetadata?.toJson(),
     if (modelVersion.isNotDefault) 'modelVersion': modelVersion,
     if (responseId.isNotDefault) 'responseId': responseId,
   };
@@ -9004,26 +8926,22 @@ final class Candidate extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (index case final index?) 'index': index,
-    if (content case final content?) 'content': content.toJson(),
+    'index': ?index,
+    'content': ?content?.toJson(),
     if (finishReason.isNotDefault) 'finishReason': finishReason.toJson(),
-    if (finishMessage case final finishMessage?) 'finishMessage': finishMessage,
+    'finishMessage': ?finishMessage,
     if (safetyRatings.isNotDefault)
       'safetyRatings': [for (final i in safetyRatings) i.toJson()],
-    if (citationMetadata case final citationMetadata?)
-      'citationMetadata': citationMetadata.toJson(),
+    'citationMetadata': ?citationMetadata?.toJson(),
     if (tokenCount.isNotDefault) 'tokenCount': tokenCount,
     if (groundingAttributions.isNotDefault)
       'groundingAttributions': [
         for (final i in groundingAttributions) i.toJson(),
       ],
-    if (groundingMetadata case final groundingMetadata?)
-      'groundingMetadata': groundingMetadata.toJson(),
+    'groundingMetadata': ?groundingMetadata?.toJson(),
     if (avgLogprobs.isNotDefault) 'avgLogprobs': encodeDouble(avgLogprobs),
-    if (logprobsResult case final logprobsResult?)
-      'logprobsResult': logprobsResult.toJson(),
-    if (urlContextMetadata case final urlContextMetadata?)
-      'urlContextMetadata': urlContextMetadata.toJson(),
+    'logprobsResult': ?logprobsResult?.toJson(),
+    'urlContextMetadata': ?urlContextMetadata?.toJson(),
   };
 
   @override
@@ -9288,8 +9206,7 @@ final class LogprobsResult extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (logProbabilitySum case final logProbabilitySum?)
-      'logProbabilitySum': encodeDouble(logProbabilitySum),
+    if (logProbabilitySum case final $1?) 'logProbabilitySum': encodeDouble($1),
     if (topCandidates.isNotDefault)
       'topCandidates': [for (final i in topCandidates) i.toJson()],
     if (chosenCandidates.isNotDefault)
@@ -9342,10 +9259,9 @@ final class LogprobsResult_Candidate extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (token case final token?) 'token': token,
-    if (tokenId case final tokenId?) 'tokenId': tokenId,
-    if (logProbability case final logProbability?)
-      'logProbability': encodeDouble(logProbability),
+    'token': ?token,
+    'tokenId': ?tokenId,
+    if (logProbability case final $1?) 'logProbability': encodeDouble($1),
   };
 
   @override
@@ -9423,10 +9339,8 @@ final class AttributionSourceId extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (groundingPassage case final groundingPassage?)
-      'groundingPassage': groundingPassage.toJson(),
-    if (semanticRetrieverChunk case final semanticRetrieverChunk?)
-      'semanticRetrieverChunk': semanticRetrieverChunk.toJson(),
+    'groundingPassage': ?groundingPassage?.toJson(),
+    'semanticRetrieverChunk': ?semanticRetrieverChunk?.toJson(),
   };
 
   @override
@@ -9558,8 +9472,8 @@ final class GroundingAttribution extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (sourceId case final sourceId?) 'sourceId': sourceId.toJson(),
-    if (content case final content?) 'content': content.toJson(),
+    'sourceId': ?sourceId?.toJson(),
+    'content': ?content?.toJson(),
   };
 
   @override
@@ -9680,17 +9594,14 @@ final class GroundingMetadata extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (searchEntryPoint case final searchEntryPoint?)
-      'searchEntryPoint': searchEntryPoint.toJson(),
+    'searchEntryPoint': ?searchEntryPoint?.toJson(),
     if (groundingChunks.isNotDefault)
       'groundingChunks': [for (final i in groundingChunks) i.toJson()],
     if (groundingSupports.isNotDefault)
       'groundingSupports': [for (final i in groundingSupports) i.toJson()],
-    if (retrievalMetadata case final retrievalMetadata?)
-      'retrievalMetadata': retrievalMetadata.toJson(),
+    'retrievalMetadata': ?retrievalMetadata?.toJson(),
     if (webSearchQueries.isNotDefault) 'webSearchQueries': webSearchQueries,
-    if (googleMapsWidgetContextToken case final googleMapsWidgetContextToken?)
-      'googleMapsWidgetContextToken': googleMapsWidgetContextToken,
+    'googleMapsWidgetContextToken': ?googleMapsWidgetContextToken,
   };
 
   @override
@@ -9787,10 +9698,9 @@ final class GroundingChunk extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (web case final web?) 'web': web.toJson(),
-    if (retrievedContext case final retrievedContext?)
-      'retrievedContext': retrievedContext.toJson(),
-    if (maps case final maps?) 'maps': maps.toJson(),
+    'web': ?web?.toJson(),
+    'retrievedContext': ?retrievedContext?.toJson(),
+    'maps': ?maps?.toJson(),
   };
 
   @override
@@ -9825,10 +9735,7 @@ final class GroundingChunk_Web extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    if (uri case final uri?) 'uri': uri,
-    if (title case final title?) 'title': title,
-  };
+  Object toJson() => {'uri': ?uri, 'title': ?title};
 
   @override
   String toString() {
@@ -9876,11 +9783,7 @@ final class GroundingChunk_RetrievedContext extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    if (uri case final uri?) 'uri': uri,
-    if (title case final title?) 'title': title,
-    if (text case final text?) 'text': text,
-  };
+  Object toJson() => {'uri': ?uri, 'title': ?title, 'text': ?text};
 
   @override
   String toString() {
@@ -9952,12 +9855,11 @@ final class GroundingChunk_Maps extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (uri case final uri?) 'uri': uri,
-    if (title case final title?) 'title': title,
-    if (text case final text?) 'text': text,
-    if (placeId case final placeId?) 'placeId': placeId,
-    if (placeAnswerSources case final placeAnswerSources?)
-      'placeAnswerSources': placeAnswerSources.toJson(),
+    'uri': ?uri,
+    'title': ?title,
+    'text': ?text,
+    'placeId': ?placeId,
+    'placeAnswerSources': ?placeAnswerSources?.toJson(),
   };
 
   @override
@@ -10058,9 +9960,9 @@ final class GroundingChunk_Maps_PlaceAnswerSources_ReviewSnippet
 
   @override
   Object toJson() => {
-    if (reviewId case final reviewId?) 'reviewId': reviewId,
-    if (googleMapsUri case final googleMapsUri?) 'googleMapsUri': googleMapsUri,
-    if (title case final title?) 'title': title,
+    'reviewId': ?reviewId,
+    'googleMapsUri': ?googleMapsUri,
+    'title': ?title,
   };
 
   @override
@@ -10191,7 +10093,7 @@ final class GroundingSupport extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (segment case final segment?) 'segment': segment.toJson(),
+    'segment': ?segment?.toJson(),
     if (groundingChunkIndices.isNotDefault)
       'groundingChunkIndices': groundingChunkIndices,
     if (confidenceScores.isNotDefault)
@@ -10308,17 +10210,14 @@ final class GenerateAnswerRequest extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (inlinePassages case final inlinePassages?)
-      'inlinePassages': inlinePassages.toJson(),
-    if (semanticRetriever case final semanticRetriever?)
-      'semanticRetriever': semanticRetriever.toJson(),
+    'inlinePassages': ?inlinePassages?.toJson(),
+    'semanticRetriever': ?semanticRetriever?.toJson(),
     'model': model,
     'contents': [for (final i in contents) i.toJson()],
     'answerStyle': answerStyle.toJson(),
     if (safetySettings.isNotDefault)
       'safetySettings': [for (final i in safetySettings) i.toJson()],
-    if (temperature case final temperature?)
-      'temperature': encodeDouble(temperature),
+    if (temperature case final $1?) 'temperature': encodeDouble($1),
   };
 
   @override
@@ -10429,11 +10328,10 @@ final class GenerateAnswerResponse extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (answer case final answer?) 'answer': answer.toJson(),
-    if (answerableProbability case final answerableProbability?)
-      'answerableProbability': encodeDouble(answerableProbability),
-    if (inputFeedback case final inputFeedback?)
-      'inputFeedback': inputFeedback.toJson(),
+    'answer': ?answer?.toJson(),
+    if (answerableProbability case final $1?)
+      'answerableProbability': encodeDouble($1),
+    'inputFeedback': ?inputFeedback?.toJson(),
   };
 
   @override
@@ -10484,8 +10382,7 @@ final class GenerateAnswerResponse_InputFeedback extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (blockReason case final blockReason?)
-      'blockReason': blockReason.toJson(),
+    'blockReason': ?blockReason?.toJson(),
     if (safetyRatings.isNotDefault)
       'safetyRatings': [for (final i in safetyRatings) i.toJson()],
   };
@@ -10604,11 +10501,10 @@ final class EmbedContentRequest extends ProtoMessage {
   @override
   Object toJson() => {
     'model': model,
-    if (content case final content?) 'content': content.toJson(),
-    if (taskType case final taskType?) 'taskType': taskType.toJson(),
-    if (title case final title?) 'title': title,
-    if (outputDimensionality case final outputDimensionality?)
-      'outputDimensionality': outputDimensionality,
+    'content': ?content?.toJson(),
+    'taskType': ?taskType?.toJson(),
+    'title': ?title,
+    'outputDimensionality': ?outputDimensionality,
   };
 
   @override
@@ -10676,9 +10572,7 @@ final class EmbedContentResponse extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    if (embedding case final embedding?) 'embedding': embedding.toJson(),
-  };
+  Object toJson() => {'embedding': ?embedding?.toJson()};
 
   @override
   String toString() => 'EmbedContentResponse()';
@@ -10827,8 +10721,7 @@ final class CountTokensRequest extends ProtoMessage {
     'model': model,
     if (contents.isNotDefault)
       'contents': [for (final i in contents) i.toJson()],
-    if (generateContentRequest case final generateContentRequest?)
-      'generateContentRequest': generateContentRequest.toJson(),
+    'generateContentRequest': ?generateContentRequest?.toJson(),
   };
 
   @override
@@ -10959,12 +10852,9 @@ final class RealtimeInputConfig extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (automaticActivityDetection case final automaticActivityDetection?)
-      'automaticActivityDetection': automaticActivityDetection.toJson(),
-    if (activityHandling case final activityHandling?)
-      'activityHandling': activityHandling.toJson(),
-    if (turnCoverage case final turnCoverage?)
-      'turnCoverage': turnCoverage.toJson(),
+    'automaticActivityDetection': ?automaticActivityDetection?.toJson(),
+    'activityHandling': ?activityHandling?.toJson(),
+    'turnCoverage': ?turnCoverage?.toJson(),
   };
 
   @override
@@ -11049,15 +10939,11 @@ final class RealtimeInputConfig_AutomaticActivityDetection
 
   @override
   Object toJson() => {
-    if (disabled case final disabled?) 'disabled': disabled,
-    if (startOfSpeechSensitivity case final startOfSpeechSensitivity?)
-      'startOfSpeechSensitivity': startOfSpeechSensitivity.toJson(),
-    if (prefixPaddingMs case final prefixPaddingMs?)
-      'prefixPaddingMs': prefixPaddingMs,
-    if (endOfSpeechSensitivity case final endOfSpeechSensitivity?)
-      'endOfSpeechSensitivity': endOfSpeechSensitivity.toJson(),
-    if (silenceDurationMs case final silenceDurationMs?)
-      'silenceDurationMs': silenceDurationMs,
+    'disabled': ?disabled,
+    'startOfSpeechSensitivity': ?startOfSpeechSensitivity?.toJson(),
+    'prefixPaddingMs': ?prefixPaddingMs,
+    'endOfSpeechSensitivity': ?endOfSpeechSensitivity?.toJson(),
+    'silenceDurationMs': ?silenceDurationMs,
   };
 
   @override
@@ -11250,7 +11136,7 @@ final class SessionResumptionConfig extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {if (handle case final handle?) 'handle': handle};
+  Object toJson() => {'handle': ?handle};
 
   @override
   String toString() {
@@ -11299,10 +11185,8 @@ final class ContextWindowCompressionConfig extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (slidingWindow case final slidingWindow?)
-      'slidingWindow': slidingWindow.toJson(),
-    if (triggerTokens case final triggerTokens?)
-      'triggerTokens': triggerTokens.toString(),
+    'slidingWindow': ?slidingWindow?.toJson(),
+    'triggerTokens': ?triggerTokens?.toString(),
   };
 
   @override
@@ -11345,10 +11229,7 @@ final class ContextWindowCompressionConfig_SlidingWindow extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    if (targetTokens case final targetTokens?)
-      'targetTokens': targetTokens.toString(),
-  };
+  Object toJson() => {'targetTokens': ?targetTokens?.toString()};
 
   @override
   String toString() {
@@ -11366,7 +11247,7 @@ final class AudioTranscriptionConfig extends ProtoMessage {
 
   AudioTranscriptionConfig() : super(fullyQualifiedName);
 
-  factory AudioTranscriptionConfig.fromJson(Object? j) =>
+  factory AudioTranscriptionConfig.fromJson(Object? _) =>
       AudioTranscriptionConfig();
 
   @override
@@ -11501,21 +11382,14 @@ final class BidiGenerateContentSetup extends ProtoMessage {
   @override
   Object toJson() => {
     'model': model,
-    if (generationConfig case final generationConfig?)
-      'generationConfig': generationConfig.toJson(),
-    if (systemInstruction case final systemInstruction?)
-      'systemInstruction': systemInstruction.toJson(),
+    'generationConfig': ?generationConfig?.toJson(),
+    'systemInstruction': ?systemInstruction?.toJson(),
     if (tools.isNotDefault) 'tools': [for (final i in tools) i.toJson()],
-    if (realtimeInputConfig case final realtimeInputConfig?)
-      'realtimeInputConfig': realtimeInputConfig.toJson(),
-    if (sessionResumption case final sessionResumption?)
-      'sessionResumption': sessionResumption.toJson(),
-    if (contextWindowCompression case final contextWindowCompression?)
-      'contextWindowCompression': contextWindowCompression.toJson(),
-    if (inputAudioTranscription case final inputAudioTranscription?)
-      'inputAudioTranscription': inputAudioTranscription.toJson(),
-    if (outputAudioTranscription case final outputAudioTranscription?)
-      'outputAudioTranscription': outputAudioTranscription.toJson(),
+    'realtimeInputConfig': ?realtimeInputConfig?.toJson(),
+    'sessionResumption': ?sessionResumption?.toJson(),
+    'contextWindowCompression': ?contextWindowCompression?.toJson(),
+    'inputAudioTranscription': ?inputAudioTranscription?.toJson(),
+    'outputAudioTranscription': ?outputAudioTranscription?.toJson(),
   };
 
   @override
@@ -11686,15 +11560,12 @@ final class BidiGenerateContentRealtimeInput extends ProtoMessage {
   Object toJson() => {
     if (mediaChunks.isNotDefault)
       'mediaChunks': [for (final i in mediaChunks) i.toJson()],
-    if (audio case final audio?) 'audio': audio.toJson(),
-    if (audioStreamEnd case final audioStreamEnd?)
-      'audioStreamEnd': audioStreamEnd,
-    if (video case final video?) 'video': video.toJson(),
-    if (text case final text?) 'text': text,
-    if (activityStart case final activityStart?)
-      'activityStart': activityStart.toJson(),
-    if (activityEnd case final activityEnd?)
-      'activityEnd': activityEnd.toJson(),
+    'audio': ?audio?.toJson(),
+    'audioStreamEnd': ?audioStreamEnd,
+    'video': ?video?.toJson(),
+    'text': ?text,
+    'activityStart': ?activityStart?.toJson(),
+    'activityEnd': ?activityEnd?.toJson(),
   };
 
   @override
@@ -11715,7 +11586,7 @@ final class BidiGenerateContentRealtimeInput_ActivityStart
 
   BidiGenerateContentRealtimeInput_ActivityStart() : super(fullyQualifiedName);
 
-  factory BidiGenerateContentRealtimeInput_ActivityStart.fromJson(Object? j) =>
+  factory BidiGenerateContentRealtimeInput_ActivityStart.fromJson(Object? _) =>
       BidiGenerateContentRealtimeInput_ActivityStart();
 
   @override
@@ -11732,7 +11603,7 @@ final class BidiGenerateContentRealtimeInput_ActivityEnd extends ProtoMessage {
 
   BidiGenerateContentRealtimeInput_ActivityEnd() : super(fullyQualifiedName);
 
-  factory BidiGenerateContentRealtimeInput_ActivityEnd.fromJson(Object? j) =>
+  factory BidiGenerateContentRealtimeInput_ActivityEnd.fromJson(Object? _) =>
       BidiGenerateContentRealtimeInput_ActivityEnd();
 
   @override
@@ -11830,13 +11701,10 @@ final class BidiGenerateContentClientMessage extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (setup case final setup?) 'setup': setup.toJson(),
-    if (clientContent case final clientContent?)
-      'clientContent': clientContent.toJson(),
-    if (realtimeInput case final realtimeInput?)
-      'realtimeInput': realtimeInput.toJson(),
-    if (toolResponse case final toolResponse?)
-      'toolResponse': toolResponse.toJson(),
+    'setup': ?setup?.toJson(),
+    'clientContent': ?clientContent?.toJson(),
+    'realtimeInput': ?realtimeInput?.toJson(),
+    'toolResponse': ?toolResponse?.toJson(),
   };
 
   @override
@@ -11850,7 +11718,7 @@ final class BidiGenerateContentSetupComplete extends ProtoMessage {
 
   BidiGenerateContentSetupComplete() : super(fullyQualifiedName);
 
-  factory BidiGenerateContentSetupComplete.fromJson(Object? j) =>
+  factory BidiGenerateContentSetupComplete.fromJson(Object? _) =>
       BidiGenerateContentSetupComplete();
 
   @override
@@ -11972,19 +11840,15 @@ final class BidiGenerateContentServerContent extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (modelTurn case final modelTurn?) 'modelTurn': modelTurn.toJson(),
+    'modelTurn': ?modelTurn?.toJson(),
     if (generationComplete.isNotDefault)
       'generationComplete': generationComplete,
     if (turnComplete.isNotDefault) 'turnComplete': turnComplete,
     if (interrupted.isNotDefault) 'interrupted': interrupted,
-    if (groundingMetadata case final groundingMetadata?)
-      'groundingMetadata': groundingMetadata.toJson(),
-    if (inputTranscription case final inputTranscription?)
-      'inputTranscription': inputTranscription.toJson(),
-    if (outputTranscription case final outputTranscription?)
-      'outputTranscription': outputTranscription.toJson(),
-    if (urlContextMetadata case final urlContextMetadata?)
-      'urlContextMetadata': urlContextMetadata.toJson(),
+    'groundingMetadata': ?groundingMetadata?.toJson(),
+    'inputTranscription': ?inputTranscription?.toJson(),
+    'outputTranscription': ?outputTranscription?.toJson(),
+    'urlContextMetadata': ?urlContextMetadata?.toJson(),
     if (waitingForInput.isNotDefault) 'waitingForInput': waitingForInput,
   };
 
@@ -12090,9 +11954,7 @@ final class GoAway extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    if (timeLeft case final timeLeft?) 'timeLeft': timeLeft.toJson(),
-  };
+  Object toJson() => {'timeLeft': ?timeLeft?.toJson()};
 
   @override
   String toString() => 'GoAway()';
@@ -12258,18 +12120,13 @@ final class BidiGenerateContentServerMessage extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (setupComplete case final setupComplete?)
-      'setupComplete': setupComplete.toJson(),
-    if (serverContent case final serverContent?)
-      'serverContent': serverContent.toJson(),
-    if (toolCall case final toolCall?) 'toolCall': toolCall.toJson(),
-    if (toolCallCancellation case final toolCallCancellation?)
-      'toolCallCancellation': toolCallCancellation.toJson(),
-    if (goAway case final goAway?) 'goAway': goAway.toJson(),
-    if (sessionResumptionUpdate case final sessionResumptionUpdate?)
-      'sessionResumptionUpdate': sessionResumptionUpdate.toJson(),
-    if (usageMetadata case final usageMetadata?)
-      'usageMetadata': usageMetadata.toJson(),
+    'setupComplete': ?setupComplete?.toJson(),
+    'serverContent': ?serverContent?.toJson(),
+    'toolCall': ?toolCall?.toJson(),
+    'toolCallCancellation': ?toolCallCancellation?.toJson(),
+    'goAway': ?goAway?.toJson(),
+    'sessionResumptionUpdate': ?sessionResumptionUpdate?.toJson(),
+    'usageMetadata': ?usageMetadata?.toJson(),
   };
 
   @override
@@ -12603,12 +12460,10 @@ final class Model extends ProtoMessage {
     if (outputTokenLimit.isNotDefault) 'outputTokenLimit': outputTokenLimit,
     if (supportedGenerationMethods.isNotDefault)
       'supportedGenerationMethods': supportedGenerationMethods,
-    if (temperature case final temperature?)
-      'temperature': encodeDouble(temperature),
-    if (maxTemperature case final maxTemperature?)
-      'maxTemperature': encodeDouble(maxTemperature),
-    if (topP case final topP?) 'topP': encodeDouble(topP),
-    if (topK case final topK?) 'topK': topK,
+    if (temperature case final $1?) 'temperature': encodeDouble($1),
+    if (maxTemperature case final $1?) 'maxTemperature': encodeDouble($1),
+    if (topP case final $1?) 'topP': encodeDouble($1),
+    'topK': ?topK,
     if (thinking.isNotDefault) 'thinking': thinking,
   };
 
@@ -12953,8 +12808,8 @@ final class CreateTunedModelRequest extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (tunedModelId case final tunedModelId?) 'tunedModelId': tunedModelId,
-    if (tunedModel case final tunedModel?) 'tunedModel': tunedModel.toJson(),
+    'tunedModelId': ?tunedModelId,
+    'tunedModel': ?tunedModel?.toJson(),
   };
 
   @override
@@ -13075,8 +12930,8 @@ final class UpdateTunedModelRequest extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (tunedModel case final tunedModel?) 'tunedModel': tunedModel.toJson(),
-    if (updateMask case final updateMask?) 'updateMask': updateMask.toJson(),
+    'tunedModel': ?tunedModel?.toJson(),
+    'updateMask': ?updateMask?.toJson(),
   };
 
   @override
@@ -13182,10 +13037,9 @@ final class Permission extends ProtoMessage {
   @override
   Object toJson() => {
     if (name.isNotDefault) 'name': name,
-    if (granteeType case final granteeType?)
-      'granteeType': granteeType.toJson(),
-    if (emailAddress case final emailAddress?) 'emailAddress': emailAddress,
-    if (role case final role?) 'role': role.toJson(),
+    'granteeType': ?granteeType?.toJson(),
+    'emailAddress': ?emailAddress,
+    'role': ?role?.toJson(),
   };
 
   @override
@@ -13291,10 +13145,7 @@ final class CreatePermissionRequest extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    'parent': parent,
-    if (permission case final permission?) 'permission': permission.toJson(),
-  };
+  Object toJson() => {'parent': parent, 'permission': ?permission?.toJson()};
 
   @override
   String toString() {
@@ -13488,8 +13339,8 @@ final class UpdatePermissionRequest extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (permission case final permission?) 'permission': permission.toJson(),
-    if (updateMask case final updateMask?) 'updateMask': updateMask.toJson(),
+    'permission': ?permission?.toJson(),
+    'updateMask': ?updateMask?.toJson(),
   };
 
   @override
@@ -13577,7 +13428,7 @@ final class TransferOwnershipResponse extends ProtoMessage {
 
   TransferOwnershipResponse() : super(fullyQualifiedName);
 
-  factory TransferOwnershipResponse.fromJson(Object? j) =>
+  factory TransferOwnershipResponse.fromJson(Object? _) =>
       TransferOwnershipResponse();
 
   @override
@@ -13635,7 +13486,7 @@ final class PredictRequest extends ProtoMessage {
   Object toJson() => {
     'model': model,
     'instances': [for (final i in instances) i.toJson()],
-    if (parameters case final parameters?) 'parameters': parameters.toJson(),
+    'parameters': ?parameters?.toJson(),
   };
 
   @override
@@ -13692,7 +13543,7 @@ final class PredictLongRunningRequest extends ProtoMessage {
   Object toJson() => {
     'model': model,
     'instances': [for (final i in instances) i.toJson()],
-    if (parameters case final parameters?) 'parameters': parameters.toJson(),
+    'parameters': ?parameters?.toJson(),
   };
 
   @override
@@ -13756,8 +13607,7 @@ final class PredictLongRunningResponse extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (generateVideoResponse case final generateVideoResponse?)
-      'generateVideoResponse': generateVideoResponse.toJson(),
+    'generateVideoResponse': ?generateVideoResponse?.toJson(),
   };
 
   @override
@@ -13771,7 +13621,7 @@ final class PredictLongRunningMetadata extends ProtoMessage {
 
   PredictLongRunningMetadata() : super(fullyQualifiedName);
 
-  factory PredictLongRunningMetadata.fromJson(Object? j) =>
+  factory PredictLongRunningMetadata.fromJson(Object? _) =>
       PredictLongRunningMetadata();
 
   @override
@@ -13802,7 +13652,7 @@ final class Media extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {if (video case final video?) 'video': video.toJson()};
+  Object toJson() => {'video': ?video?.toJson()};
 
   @override
   String toString() => 'Media()';
@@ -13837,8 +13687,8 @@ final class Video extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (video case final video?) 'video': encodeBytes(video),
-    if (uri case final uri?) 'uri': uri,
+    if (video case final $1?) 'video': encodeBytes($1),
+    'uri': ?uri,
   };
 
   @override
@@ -13971,8 +13821,8 @@ final class Corpus extends ProtoMessage {
   Object toJson() => {
     if (name.isNotDefault) 'name': name,
     if (displayName.isNotDefault) 'displayName': displayName,
-    if (createTime case final createTime?) 'createTime': createTime.toJson(),
-    if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
+    'createTime': ?createTime?.toJson(),
+    'updateTime': ?updateTime?.toJson(),
   };
 
   @override
@@ -14052,8 +13902,8 @@ final class Document extends ProtoMessage {
     if (displayName.isNotDefault) 'displayName': displayName,
     if (customMetadata.isNotDefault)
       'customMetadata': [for (final i in customMetadata) i.toJson()],
-    if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
-    if (createTime case final createTime?) 'createTime': createTime.toJson(),
+    'updateTime': ?updateTime?.toJson(),
+    'createTime': ?createTime?.toJson(),
   };
 
   @override
@@ -14139,11 +13989,9 @@ final class CustomMetadata extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (stringValue case final stringValue?) 'stringValue': stringValue,
-    if (stringListValue case final stringListValue?)
-      'stringListValue': stringListValue.toJson(),
-    if (numericValue case final numericValue?)
-      'numericValue': encodeDouble(numericValue),
+    'stringValue': ?stringValue,
+    'stringListValue': ?stringListValue?.toJson(),
+    if (numericValue case final $1?) 'numericValue': encodeDouble($1),
     'key': key,
   };
 
@@ -14244,9 +14092,8 @@ final class Condition extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (stringValue case final stringValue?) 'stringValue': stringValue,
-    if (numericValue case final numericValue?)
-      'numericValue': encodeDouble(numericValue),
+    'stringValue': ?stringValue,
+    if (numericValue case final $1?) 'numericValue': encodeDouble($1),
     'operation': operation.toJson(),
   };
 
@@ -14381,11 +14228,11 @@ final class Chunk extends ProtoMessage {
   @override
   Object toJson() => {
     if (name.isNotDefault) 'name': name,
-    if (data case final data?) 'data': data.toJson(),
+    'data': ?data?.toJson(),
     if (customMetadata.isNotDefault)
       'customMetadata': [for (final i in customMetadata) i.toJson()],
-    if (createTime case final createTime?) 'createTime': createTime.toJson(),
-    if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
+    'createTime': ?createTime?.toJson(),
+    'updateTime': ?updateTime?.toJson(),
     if (state.isNotDefault) 'state': state.toJson(),
   };
 
@@ -14445,9 +14292,7 @@ final class ChunkData extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    if (stringValue case final stringValue?) 'stringValue': stringValue,
-  };
+  Object toJson() => {'stringValue': ?stringValue};
 
   @override
   String toString() {
@@ -14479,7 +14324,7 @@ final class CreateCorpusRequest extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {if (corpus case final corpus?) 'corpus': corpus.toJson()};
+  Object toJson() => {'corpus': ?corpus?.toJson()};
 
   @override
   String toString() => 'CreateCorpusRequest()';
@@ -14547,8 +14392,8 @@ final class UpdateCorpusRequest extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (corpus case final corpus?) 'corpus': corpus.toJson(),
-    if (updateMask case final updateMask?) 'updateMask': updateMask.toJson(),
+    'corpus': ?corpus?.toJson(),
+    'updateMask': ?updateMask?.toJson(),
   };
 
   @override
@@ -14866,8 +14711,8 @@ final class RelevantChunk extends ProtoMessage {
   Object toJson() => {
     if (chunkRelevanceScore.isNotDefault)
       'chunkRelevanceScore': encodeDouble(chunkRelevanceScore),
-    if (chunk case final chunk?) 'chunk': chunk.toJson(),
-    if (document case final document?) 'document': document.toJson(),
+    'chunk': ?chunk?.toJson(),
+    'document': ?document?.toJson(),
   };
 
   @override
@@ -14907,10 +14752,7 @@ final class CreateDocumentRequest extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    'parent': parent,
-    if (document case final document?) 'document': document.toJson(),
-  };
+  Object toJson() => {'parent': parent, 'document': ?document?.toJson()};
 
   @override
   String toString() {
@@ -14982,8 +14824,8 @@ final class UpdateDocumentRequest extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (document case final document?) 'document': document.toJson(),
-    if (updateMask case final updateMask?) 'updateMask': updateMask.toJson(),
+    'document': ?document?.toJson(),
+    'updateMask': ?updateMask?.toJson(),
   };
 
   @override
@@ -15309,10 +15151,7 @@ final class CreateChunkRequest extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    'parent': parent,
-    if (chunk case final chunk?) 'chunk': chunk.toJson(),
-  };
+  Object toJson() => {'parent': parent, 'chunk': ?chunk?.toJson()};
 
   @override
   String toString() {
@@ -15461,8 +15300,8 @@ final class UpdateChunkRequest extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (chunk case final chunk?) 'chunk': chunk.toJson(),
-    if (updateMask case final updateMask?) 'updateMask': updateMask.toJson(),
+    'chunk': ?chunk?.toJson(),
+    'updateMask': ?updateMask?.toJson(),
   };
 
   @override
@@ -15771,7 +15610,7 @@ final class ContentFilter extends ProtoMessage {
   @override
   Object toJson() => {
     if (reason.isNotDefault) 'reason': reason.toJson(),
-    if (message case final message?) 'message': message,
+    'message': ?message,
   };
 
   @override
@@ -15846,8 +15685,8 @@ final class SafetyFeedback extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (rating case final rating?) 'rating': rating.toJson(),
-    if (setting case final setting?) 'setting': setting.toJson(),
+    'rating': ?rating?.toJson(),
+    'setting': ?setting?.toJson(),
   };
 
   @override
@@ -16183,15 +16022,12 @@ final class GenerateTextRequest extends ProtoMessage {
   @override
   Object toJson() => {
     'model': model,
-    if (prompt case final prompt?) 'prompt': prompt.toJson(),
-    if (temperature case final temperature?)
-      'temperature': encodeDouble(temperature),
-    if (candidateCount case final candidateCount?)
-      'candidateCount': candidateCount,
-    if (maxOutputTokens case final maxOutputTokens?)
-      'maxOutputTokens': maxOutputTokens,
-    if (topP case final topP?) 'topP': encodeDouble(topP),
-    if (topK case final topK?) 'topK': topK,
+    'prompt': ?prompt?.toJson(),
+    if (temperature case final $1?) 'temperature': encodeDouble($1),
+    'candidateCount': ?candidateCount,
+    'maxOutputTokens': ?maxOutputTokens,
+    if (topP case final $1?) 'topP': encodeDouble($1),
+    'topK': ?topK,
     if (safetySettings.isNotDefault)
       'safetySettings': [for (final i in safetySettings) i.toJson()],
     if (stopSequences.isNotDefault) 'stopSequences': stopSequences,
@@ -16357,8 +16193,7 @@ final class TextCompletion extends ProtoMessage {
     if (output.isNotDefault) 'output': output,
     if (safetyRatings.isNotDefault)
       'safetyRatings': [for (final i in safetyRatings) i.toJson()],
-    if (citationMetadata case final citationMetadata?)
-      'citationMetadata': citationMetadata.toJson(),
+    'citationMetadata': ?citationMetadata?.toJson(),
   };
 
   @override
@@ -16428,9 +16263,7 @@ final class EmbedTextResponse extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    if (embedding case final embedding?) 'embedding': embedding.toJson(),
-  };
+  Object toJson() => {'embedding': ?embedding?.toJson()};
 
   @override
   String toString() => 'EmbedTextResponse()';
@@ -16595,10 +16428,7 @@ final class CountTextTokensRequest extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    'model': model,
-    if (prompt case final prompt?) 'prompt': prompt.toJson(),
-  };
+  Object toJson() => {'model': model, 'prompt': ?prompt?.toJson()};
 
   @override
   String toString() {
@@ -16796,20 +16626,18 @@ final class TunedModel extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (tunedModelSource case final tunedModelSource?)
-      'tunedModelSource': tunedModelSource.toJson(),
-    if (baseModel case final baseModel?) 'baseModel': baseModel,
+    'tunedModelSource': ?tunedModelSource?.toJson(),
+    'baseModel': ?baseModel,
     if (name.isNotDefault) 'name': name,
     if (displayName.isNotDefault) 'displayName': displayName,
     if (description.isNotDefault) 'description': description,
-    if (temperature case final temperature?)
-      'temperature': encodeDouble(temperature),
-    if (topP case final topP?) 'topP': encodeDouble(topP),
-    if (topK case final topK?) 'topK': topK,
+    if (temperature case final $1?) 'temperature': encodeDouble($1),
+    if (topP case final $1?) 'topP': encodeDouble($1),
+    'topK': ?topK,
     if (state.isNotDefault) 'state': state.toJson(),
-    if (createTime case final createTime?) 'createTime': createTime.toJson(),
-    if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
-    if (tuningTask case final tuningTask?) 'tuningTask': tuningTask.toJson(),
+    'createTime': ?createTime?.toJson(),
+    'updateTime': ?updateTime?.toJson(),
+    'tuningTask': ?tuningTask?.toJson(),
     if (readerProjectNumbers.isNotDefault)
       'readerProjectNumbers': [
         for (final i in readerProjectNumbers) i.toString(),
@@ -16965,15 +16793,12 @@ final class TuningTask extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (startTime case final startTime?) 'startTime': startTime.toJson(),
-    if (completeTime case final completeTime?)
-      'completeTime': completeTime.toJson(),
+    'startTime': ?startTime?.toJson(),
+    'completeTime': ?completeTime?.toJson(),
     if (snapshots.isNotDefault)
       'snapshots': [for (final i in snapshots) i.toJson()],
-    if (trainingData case final trainingData?)
-      'trainingData': trainingData.toJson(),
-    if (hyperparameters case final hyperparameters?)
-      'hyperparameters': hyperparameters.toJson(),
+    'trainingData': ?trainingData?.toJson(),
+    'hyperparameters': ?hyperparameters?.toJson(),
   };
 
   @override
@@ -17038,12 +16863,11 @@ final class Hyperparameters extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (learningRate case final learningRate?)
-      'learningRate': encodeDouble(learningRate),
-    if (learningRateMultiplier case final learningRateMultiplier?)
-      'learningRateMultiplier': encodeDouble(learningRateMultiplier),
-    if (epochCount case final epochCount?) 'epochCount': epochCount,
-    if (batchSize case final batchSize?) 'batchSize': batchSize,
+    if (learningRate case final $1?) 'learningRate': encodeDouble($1),
+    if (learningRateMultiplier case final $1?)
+      'learningRateMultiplier': encodeDouble($1),
+    'epochCount': ?epochCount,
+    'batchSize': ?batchSize,
   };
 
   @override
@@ -17080,9 +16904,7 @@ final class Dataset extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    if (examples case final examples?) 'examples': examples.toJson(),
-  };
+  Object toJson() => {'examples': ?examples?.toJson()};
 
   @override
   String toString() => 'Dataset()';
@@ -17149,10 +16971,7 @@ final class TuningExample extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    if (textInput case final textInput?) 'textInput': textInput,
-    'output': output,
-  };
+  Object toJson() => {'textInput': ?textInput, 'output': output};
 
   @override
   String toString() {
@@ -17215,8 +17034,7 @@ final class TuningSnapshot extends ProtoMessage {
     if (step.isNotDefault) 'step': step,
     if (epoch.isNotDefault) 'epoch': epoch,
     if (meanLoss.isNotDefault) 'meanLoss': encodeDouble(meanLoss),
-    if (computeTime case final computeTime?)
-      'computeTime': computeTime.toJson(),
+    'computeTime': ?computeTime?.toJson(),
   };
 
   @override

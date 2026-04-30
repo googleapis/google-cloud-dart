@@ -20,7 +20,6 @@
 /// Provides convenience while improving security.
 library;
 
-// ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
 // ignore_for_file: constant_identifier_names
@@ -28,7 +27,6 @@ library;
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: non_constant_identifier_names
 // ignore_for_file: unintended_html_in_doc_comment
-// ignore_for_file: use_null_aware_elements
 
 import 'package:google_cloud_iam_v1/iam.dart';
 import 'package:google_cloud_location/location.dart';
@@ -1015,24 +1013,21 @@ final class Secret extends ProtoMessage {
   @override
   Object toJson() => {
     if (name.isNotDefault) 'name': name,
-    if (replication case final replication?)
-      'replication': replication.toJson(),
-    if (createTime case final createTime?) 'createTime': createTime.toJson(),
+    'replication': ?replication?.toJson(),
+    'createTime': ?createTime?.toJson(),
     if (labels.isNotDefault) 'labels': labels,
     if (topics.isNotDefault) 'topics': [for (final i in topics) i.toJson()],
-    if (expireTime case final expireTime?) 'expireTime': expireTime.toJson(),
-    if (ttl case final ttl?) 'ttl': ttl.toJson(),
+    'expireTime': ?expireTime?.toJson(),
+    'ttl': ?ttl?.toJson(),
     if (etag.isNotDefault) 'etag': etag,
-    if (rotation case final rotation?) 'rotation': rotation.toJson(),
+    'rotation': ?rotation?.toJson(),
     if (versionAliases.isNotDefault)
       'versionAliases': {
         for (final e in versionAliases.entries) e.key: e.value.toString(),
       },
     if (annotations.isNotDefault) 'annotations': annotations,
-    if (versionDestroyTtl case final versionDestroyTtl?)
-      'versionDestroyTtl': versionDestroyTtl.toJson(),
-    if (customerManagedEncryption case final customerManagedEncryption?)
-      'customerManagedEncryption': customerManagedEncryption.toJson(),
+    'versionDestroyTtl': ?versionDestroyTtl?.toJson(),
+    'customerManagedEncryption': ?customerManagedEncryption?.toJson(),
     if (tags.isNotDefault) 'tags': tags,
   };
 
@@ -1159,19 +1154,15 @@ final class SecretVersion extends ProtoMessage {
   @override
   Object toJson() => {
     if (name.isNotDefault) 'name': name,
-    if (createTime case final createTime?) 'createTime': createTime.toJson(),
-    if (destroyTime case final destroyTime?)
-      'destroyTime': destroyTime.toJson(),
+    'createTime': ?createTime?.toJson(),
+    'destroyTime': ?destroyTime?.toJson(),
     if (state.isNotDefault) 'state': state.toJson(),
-    if (replicationStatus case final replicationStatus?)
-      'replicationStatus': replicationStatus.toJson(),
+    'replicationStatus': ?replicationStatus?.toJson(),
     if (etag.isNotDefault) 'etag': etag,
     if (clientSpecifiedPayloadChecksum.isNotDefault)
       'clientSpecifiedPayloadChecksum': clientSpecifiedPayloadChecksum,
-    if (scheduledDestroyTime case final scheduledDestroyTime?)
-      'scheduledDestroyTime': scheduledDestroyTime.toJson(),
-    if (customerManagedEncryption case final customerManagedEncryption?)
-      'customerManagedEncryption': customerManagedEncryption.toJson(),
+    'scheduledDestroyTime': ?scheduledDestroyTime?.toJson(),
+    'customerManagedEncryption': ?customerManagedEncryption?.toJson(),
   };
 
   @override
@@ -1254,9 +1245,8 @@ final class Replication extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (automatic case final automatic?) 'automatic': automatic.toJson(),
-    if (userManaged case final userManaged?)
-      'userManaged': userManaged.toJson(),
+    'automatic': ?automatic?.toJson(),
+    'userManaged': ?userManaged?.toJson(),
   };
 
   @override
@@ -1296,8 +1286,7 @@ final class Replication_Automatic extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (customerManagedEncryption case final customerManagedEncryption?)
-      'customerManagedEncryption': customerManagedEncryption.toJson(),
+    'customerManagedEncryption': ?customerManagedEncryption?.toJson(),
   };
 
   @override
@@ -1385,8 +1374,7 @@ final class Replication_UserManaged_Replica extends ProtoMessage {
   @override
   Object toJson() => {
     if (location.isNotDefault) 'location': location,
-    if (customerManagedEncryption case final customerManagedEncryption?)
-      'customerManagedEncryption': customerManagedEncryption.toJson(),
+    'customerManagedEncryption': ?customerManagedEncryption?.toJson(),
   };
 
   @override
@@ -1483,9 +1471,8 @@ final class ReplicationStatus extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (automatic case final automatic?) 'automatic': automatic.toJson(),
-    if (userManaged case final userManaged?)
-      'userManaged': userManaged.toJson(),
+    'automatic': ?automatic?.toJson(),
+    'userManaged': ?userManaged?.toJson(),
   };
 
   @override
@@ -1522,8 +1509,7 @@ final class ReplicationStatus_AutomaticStatus extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (customerManagedEncryption case final customerManagedEncryption?)
-      'customerManagedEncryption': customerManagedEncryption.toJson(),
+    'customerManagedEncryption': ?customerManagedEncryption?.toJson(),
   };
 
   @override
@@ -1611,8 +1597,7 @@ final class ReplicationStatus_UserManagedStatus_ReplicaStatus
   @override
   Object toJson() => {
     if (location.isNotDefault) 'location': location,
-    if (customerManagedEncryption case final customerManagedEncryption?)
-      'customerManagedEncryption': customerManagedEncryption.toJson(),
+    'customerManagedEncryption': ?customerManagedEncryption?.toJson(),
   };
 
   @override
@@ -1742,10 +1727,8 @@ final class Rotation extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (nextRotationTime case final nextRotationTime?)
-      'nextRotationTime': nextRotationTime.toJson(),
-    if (rotationPeriod case final rotationPeriod?)
-      'rotationPeriod': rotationPeriod.toJson(),
+    'nextRotationTime': ?nextRotationTime?.toJson(),
+    'rotationPeriod': ?rotationPeriod?.toJson(),
   };
 
   @override
@@ -1801,7 +1784,7 @@ final class SecretPayload extends ProtoMessage {
   @override
   Object toJson() => {
     if (data.isNotDefault) 'data': encodeBytes(data),
-    if (dataCrc32C case final dataCrc32C?) 'dataCrc32c': dataCrc32C.toString(),
+    'dataCrc32c': ?dataCrc32C?.toString(),
   };
 
   @override
@@ -2003,7 +1986,7 @@ final class CreateSecretRequest extends ProtoMessage {
   Object toJson() => {
     'parent': parent,
     'secretId': secretId,
-    if (secret case final secret?) 'secret': secret.toJson(),
+    'secret': ?secret?.toJson(),
   };
 
   @override
@@ -2047,10 +2030,7 @@ final class AddSecretVersionRequest extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    'parent': parent,
-    if (payload case final payload?) 'payload': payload.toJson(),
-  };
+  Object toJson() => {'parent': parent, 'payload': ?payload?.toJson()};
 
   @override
   String toString() {
@@ -2305,8 +2285,8 @@ final class UpdateSecretRequest extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (secret case final secret?) 'secret': secret.toJson(),
-    if (updateMask case final updateMask?) 'updateMask': updateMask.toJson(),
+    'secret': ?secret?.toJson(),
+    'updateMask': ?updateMask?.toJson(),
   };
 
   @override
@@ -2387,7 +2367,7 @@ final class AccessSecretVersionResponse extends ProtoMessage {
   @override
   Object toJson() => {
     if (name.isNotDefault) 'name': name,
-    if (payload case final payload?) 'payload': payload.toJson(),
+    'payload': ?payload?.toJson(),
   };
 
   @override

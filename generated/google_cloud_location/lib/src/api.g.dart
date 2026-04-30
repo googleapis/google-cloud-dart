@@ -21,7 +21,6 @@
 /// zones, regions, and countries.
 library;
 
-// ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
 // ignore_for_file: constant_identifier_names
@@ -29,7 +28,6 @@ library;
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: non_constant_identifier_names
 // ignore_for_file: unintended_html_in_doc_comment
-// ignore_for_file: use_null_aware_elements
 
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/src/encoding.dart';
@@ -387,7 +385,7 @@ final class Location extends ProtoMessage {
     if (locationId.isNotDefault) 'locationId': locationId,
     if (displayName.isNotDefault) 'displayName': displayName,
     if (labels.isNotDefault) 'labels': labels,
-    if (metadata case final metadata?) 'metadata': metadata.toJson(),
+    'metadata': ?metadata?.toJson(),
   };
 
   @override
