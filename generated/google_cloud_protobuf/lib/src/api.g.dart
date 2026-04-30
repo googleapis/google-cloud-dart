@@ -19,6 +19,7 @@
 /// Core Protobuf types used by most services.
 library;
 
+// ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
 // ignore_for_file: constant_identifier_names
@@ -503,7 +504,7 @@ final class Empty extends ProtoMessage {
 
   Empty() : super(fullyQualifiedName);
 
-  factory Empty.fromJson(Object? _) => Empty();
+  factory Empty.fromJson(Object? j) => Empty();
 
   @override
   Object toJson() => {};

@@ -19,6 +19,7 @@
 /// Defines common types for Google APIs.
 library;
 
+// ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
 // ignore_for_file: constant_identifier_names

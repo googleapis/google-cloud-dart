@@ -20,6 +20,7 @@
 /// client library generator consumption.
 library;
 
+// ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
 // ignore_for_file: constant_identifier_names
@@ -6096,7 +6097,7 @@ final class FailEchoWithDetailsResponse extends ProtoMessage {
 
   FailEchoWithDetailsResponse() : super(fullyQualifiedName);
 
-  factory FailEchoWithDetailsResponse.fromJson(Object? _) =>
+  factory FailEchoWithDetailsResponse.fromJson(Object? j) =>
       FailEchoWithDetailsResponse();
 
   @override

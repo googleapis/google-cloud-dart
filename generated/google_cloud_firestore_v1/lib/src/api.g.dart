@@ -20,6 +20,7 @@
 /// performance, and ease of application development.
 library;
 
+// ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
 // ignore_for_file: constant_identifier_names
@@ -1476,7 +1477,7 @@ final class Value extends ProtoMessage {
 
   @override
   Object toJson() => {
-    'nullValue': ?nullValue?.toJson(),
+    if (nullValue case final $1?) 'nullValue': $1.toJson(),
     'booleanValue': ?booleanValue,
     'integerValue': ?integerValue?.toString(),
     if (doubleValue case final $1?) 'doubleValue': encodeDouble($1),

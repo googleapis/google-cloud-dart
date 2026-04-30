@@ -19,6 +19,7 @@
 /// Writes log entries and manages your Cloud Logging configuration.
 library;
 
+// ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
 // ignore_for_file: constant_identifier_names
@@ -3005,7 +3006,7 @@ final class WriteLogEntriesResponse extends ProtoMessage {
 
   WriteLogEntriesResponse() : super(fullyQualifiedName);
 
-  factory WriteLogEntriesResponse.fromJson(Object? _) =>
+  factory WriteLogEntriesResponse.fromJson(Object? j) =>
       WriteLogEntriesResponse();
 
   @override

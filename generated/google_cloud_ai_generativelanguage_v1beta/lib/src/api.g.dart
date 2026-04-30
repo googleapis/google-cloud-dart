@@ -25,6 +25,7 @@
 /// agents, summarization and classification systems, and more.
 library;
 
+// ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
 // ignore_for_file: constant_identifier_names
@@ -5416,7 +5417,7 @@ final class UrlContext extends ProtoMessage {
 
   UrlContext() : super(fullyQualifiedName);
 
-  factory UrlContext.fromJson(Object? _) => UrlContext();
+  factory UrlContext.fromJson(Object? j) => UrlContext();
 
   @override
   Object toJson() => {};
@@ -5658,7 +5659,7 @@ final class CodeExecution extends ProtoMessage {
 
   CodeExecution() : super(fullyQualifiedName);
 
-  factory CodeExecution.fromJson(Object? _) => CodeExecution();
+  factory CodeExecution.fromJson(Object? j) => CodeExecution();
 
   @override
   Object toJson() => {};
@@ -5957,9 +5958,10 @@ final class FunctionDeclaration extends ProtoMessage {
     'name': name,
     'description': description,
     'parameters': ?parameters?.toJson(),
-    'parametersJsonSchema': ?parametersJsonSchema?.toJson(),
+    if (parametersJsonSchema case final $1?)
+      'parametersJsonSchema': $1.toJson(),
     'response': ?response?.toJson(),
-    'responseJsonSchema': ?responseJsonSchema?.toJson(),
+    if (responseJsonSchema case final $1?) 'responseJsonSchema': $1.toJson(),
     if (behavior.isNotDefault) 'behavior': behavior.toJson(),
   };
 
@@ -6436,10 +6438,10 @@ final class Schema extends ProtoMessage {
     if (minLength.isNotDefault) 'minLength': minLength.toString(),
     if (maxLength.isNotDefault) 'maxLength': maxLength.toString(),
     if (pattern.isNotDefault) 'pattern': pattern,
-    'example': ?example?.toJson(),
+    if (example case final $1?) 'example': $1.toJson(),
     if (anyOf.isNotDefault) 'anyOf': [for (final i in anyOf) i.toJson()],
     if (propertyOrdering.isNotDefault) 'propertyOrdering': propertyOrdering,
-    'default': ?default$?.toJson(),
+    if (default$ case final $1?) 'default': $1.toJson(),
   };
 
   @override
@@ -7511,7 +7513,7 @@ final class DownloadFileResponse extends ProtoMessage {
 
   DownloadFileResponse() : super(fullyQualifiedName);
 
-  factory DownloadFileResponse.fromJson(Object? _) => DownloadFileResponse();
+  factory DownloadFileResponse.fromJson(Object? j) => DownloadFileResponse();
 
   @override
   Object toJson() => {};
@@ -8270,8 +8272,9 @@ final class GenerationConfig extends ProtoMessage {
     'seed': ?seed,
     if (responseMimeType.isNotDefault) 'responseMimeType': responseMimeType,
     'responseSchema': ?responseSchema?.toJson(),
-    '_responseJsonSchema': ?responseJsonSchema?.toJson(),
-    'responseJsonSchema': ?responseJsonSchemaOrdered?.toJson(),
+    if (responseJsonSchema case final $1?) '_responseJsonSchema': $1.toJson(),
+    if (responseJsonSchemaOrdered case final $1?)
+      'responseJsonSchema': $1.toJson(),
     if (presencePenalty case final $1?) 'presencePenalty': encodeDouble($1),
     if (frequencyPenalty case final $1?) 'frequencyPenalty': encodeDouble($1),
     'responseLogprobs': ?responseLogprobs,
@@ -11247,7 +11250,7 @@ final class AudioTranscriptionConfig extends ProtoMessage {
 
   AudioTranscriptionConfig() : super(fullyQualifiedName);
 
-  factory AudioTranscriptionConfig.fromJson(Object? _) =>
+  factory AudioTranscriptionConfig.fromJson(Object? j) =>
       AudioTranscriptionConfig();
 
   @override
@@ -11586,7 +11589,7 @@ final class BidiGenerateContentRealtimeInput_ActivityStart
 
   BidiGenerateContentRealtimeInput_ActivityStart() : super(fullyQualifiedName);
 
-  factory BidiGenerateContentRealtimeInput_ActivityStart.fromJson(Object? _) =>
+  factory BidiGenerateContentRealtimeInput_ActivityStart.fromJson(Object? j) =>
       BidiGenerateContentRealtimeInput_ActivityStart();
 
   @override
@@ -11603,7 +11606,7 @@ final class BidiGenerateContentRealtimeInput_ActivityEnd extends ProtoMessage {
 
   BidiGenerateContentRealtimeInput_ActivityEnd() : super(fullyQualifiedName);
 
-  factory BidiGenerateContentRealtimeInput_ActivityEnd.fromJson(Object? _) =>
+  factory BidiGenerateContentRealtimeInput_ActivityEnd.fromJson(Object? j) =>
       BidiGenerateContentRealtimeInput_ActivityEnd();
 
   @override
@@ -11718,7 +11721,7 @@ final class BidiGenerateContentSetupComplete extends ProtoMessage {
 
   BidiGenerateContentSetupComplete() : super(fullyQualifiedName);
 
-  factory BidiGenerateContentSetupComplete.fromJson(Object? _) =>
+  factory BidiGenerateContentSetupComplete.fromJson(Object? j) =>
       BidiGenerateContentSetupComplete();
 
   @override
@@ -13428,7 +13431,7 @@ final class TransferOwnershipResponse extends ProtoMessage {
 
   TransferOwnershipResponse() : super(fullyQualifiedName);
 
-  factory TransferOwnershipResponse.fromJson(Object? _) =>
+  factory TransferOwnershipResponse.fromJson(Object? j) =>
       TransferOwnershipResponse();
 
   @override
@@ -13486,7 +13489,7 @@ final class PredictRequest extends ProtoMessage {
   Object toJson() => {
     'model': model,
     'instances': [for (final i in instances) i.toJson()],
-    'parameters': ?parameters?.toJson(),
+    if (parameters case final $1?) 'parameters': $1.toJson(),
   };
 
   @override
@@ -13543,7 +13546,7 @@ final class PredictLongRunningRequest extends ProtoMessage {
   Object toJson() => {
     'model': model,
     'instances': [for (final i in instances) i.toJson()],
-    'parameters': ?parameters?.toJson(),
+    if (parameters case final $1?) 'parameters': $1.toJson(),
   };
 
   @override
@@ -13621,7 +13624,7 @@ final class PredictLongRunningMetadata extends ProtoMessage {
 
   PredictLongRunningMetadata() : super(fullyQualifiedName);
 
-  factory PredictLongRunningMetadata.fromJson(Object? _) =>
+  factory PredictLongRunningMetadata.fromJson(Object? j) =>
       PredictLongRunningMetadata();
 
   @override
