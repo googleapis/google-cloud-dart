@@ -13,19 +13,19 @@
 // limitations under the License.
 
 import 'dart:convert';
-import 'package:google_cloud/google_cloud.dart';
+import 'package:google_cloud_logging/google_cloud_logging.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('structuredLogEntry', () {
+  group('createStructuredLog', () {
     test('simple message', () {
-      final entry = structuredLogEntry('hello', LogSeverity.info);
+      final entry = createStructuredLog('hello', LogSeverity.info);
       final map = jsonDecode(entry) as Map<String, dynamic>;
       expect(map, {'message': 'hello', 'severity': 'INFO'});
     });
 
     test('message with traceId in payload', () {
-      final entry = structuredLogEntry(
+      final entry = createStructuredLog(
         'hello',
         LogSeverity.info,
         payload: {'logging.googleapis.com/trace': 'trace-123'},
@@ -40,28 +40,28 @@ void main() {
 
     test('list message remains in message key', () {
       final message = ['foo', 'bar'];
-      final entry = structuredLogEntry(message, LogSeverity.info);
+      final entry = createStructuredLog(message, LogSeverity.info);
       final map = jsonDecode(entry) as Map<String, dynamic>;
       expect(map, {'message': message, 'severity': 'INFO'});
     });
 
     test('map message is merged into payload', () {
       final message = {'foo': 'bar', 'count': 42};
-      final entry = structuredLogEntry(message, LogSeverity.info);
+      final entry = createStructuredLog(message, LogSeverity.info);
       final map = jsonDecode(entry) as Map<String, dynamic>;
       expect(map, {'foo': 'bar', 'count': 42, 'severity': 'INFO'});
     });
 
     test('map message with message key extracts message', () {
       final message = {'foo': 'bar', 'message': 'my msg'};
-      final entry = structuredLogEntry(message, LogSeverity.info);
+      final entry = createStructuredLog(message, LogSeverity.info);
       final map = jsonDecode(entry) as Map<String, dynamic>;
       expect(map, {'foo': 'bar', 'message': 'my msg', 'severity': 'INFO'});
     });
 
     test('payload overrides map message', () {
       final message = {'foo': 'bar', 'count': 42, 'message': 'original'};
-      final entry = structuredLogEntry(
+      final entry = createStructuredLog(
         message,
         LogSeverity.info,
         payload: {'count': 99, 'env': 'prod', 'message': 'overridden'},
@@ -78,13 +78,13 @@ void main() {
 
     test('non-encodable message is stringified', () {
       final message = _NonEncodable();
-      final entry = structuredLogEntry(message, LogSeverity.info);
+      final entry = createStructuredLog(message, LogSeverity.info);
       final map = jsonDecode(entry) as Map<String, dynamic>;
       expect(map, {'message': 'I am not encodable', 'severity': 'INFO'});
     });
 
     test('with payload', () {
-      final entry = structuredLogEntry(
+      final entry = createStructuredLog(
         'hello',
         LogSeverity.info,
         payload: {'foo': 'bar', 'count': 42},
@@ -99,7 +99,7 @@ void main() {
     });
 
     test('with empty message', () {
-      final entry = structuredLogEntry(
+      final entry = createStructuredLog(
         '',
         LogSeverity.info,
         payload: {'foo': 'bar', 'count': 42},
@@ -109,7 +109,7 @@ void main() {
     });
 
     test('payload does not override core fields', () {
-      final entry = structuredLogEntry(
+      final entry = createStructuredLog(
         'hello',
         LogSeverity.info,
         payload: {'message': 'overridden', 'severity': 'CRITICAL'},
@@ -120,7 +120,7 @@ void main() {
 
     test('non-encodable payload is stringified', () {
       final payload = {'foo': _NonEncodable()};
-      final entry = structuredLogEntry(
+      final entry = createStructuredLog(
         'hello',
         LogSeverity.info,
         payload: payload,
@@ -137,7 +137,7 @@ void main() {
       final payload = <String, dynamic>{};
       payload['cycle'] = payload;
       final message = _NonEncodable();
-      final entry = structuredLogEntry(
+      final entry = createStructuredLog(
         message,
         LogSeverity.info,
         payload: payload,

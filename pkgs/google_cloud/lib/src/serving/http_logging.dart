@@ -16,17 +16,15 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:google_cloud_logging/google_cloud_logging.dart';
 import 'package:meta/meta.dart';
 import 'package:shelf/shelf.dart';
+import 'package:stack_trace/stack_trace.dart';
 
 import '../constants.dart';
-import '../logger.dart';
-import '../structured_logging.dart';
 import 'http_response_exception.dart';
 import 'json_request_checking.dart';
 import 'trace_context_data.dart';
-
-export '../structured_logging.dart';
 
 /// The default message to use for internal server errors.
 ///
@@ -223,7 +221,7 @@ Middleware cloudLoggingMiddleware(String projectId) {
       StackTrace? stackTrace,
       LogSeverity logSeverity, {
       Map<String, Object?>? extraPayload,
-    }) => structuredLogEntry(
+    }) => createStructuredLog(
       '$error'.trim(),
       logSeverity,
       payload: {...?traceContext?.asPayloadMap(), ...?extraPayload},
@@ -291,7 +289,7 @@ Middleware cloudLoggingMiddleware(String projectId) {
     }
 
     void zonePrint(Zone self, ZoneDelegate parent, _, String line) {
-      final logContent = structuredLogEntry(
+      final logContent = createStructuredLog(
         line,
         LogSeverity.info,
         payload: traceContext?.asPayloadMap(),
@@ -336,10 +334,9 @@ Middleware cloudLoggingMiddleware(String projectId) {
 ///
 /// Otherwise, the returned [CloudLogger] will simply [print] log entries,
 /// with entries having a [LogSeverity] different than
-/// [LogSeverity.defaultSeverity] being prefixed as such.
+/// [LogSeverity.$default] being prefixed as such.
 CloudLogger get currentLogger =>
-    Zone.current[_loggerKey] as CloudLogger? ??
-    const CloudLogger.defaultLogger();
+    Zone.current[_loggerKey] as CloudLogger? ?? const CloudLogger.printLogger();
 
 /// Used to represent the [CloudLogger] in [Zone] values.
 final _loggerKey = Object();
@@ -355,7 +352,7 @@ final class _CloudLogger extends CloudLogger {
   _CloudLogger({required this.zone, this.traceContext});
 
   /// If [message] is a [Map], it is used as the log entry payload. Otherwise,
-  /// it is passed directly to [structuredLogEntry], which handles
+  /// it is passed directly to [createStructuredLog], which handles
   /// serialization.
   @override
   void log(
@@ -364,7 +361,7 @@ final class _CloudLogger extends CloudLogger {
     Map<String, Object?>? payload,
     StackTrace? stackTrace,
   }) => zone.print(
-    structuredLogEntry(
+    createStructuredLog(
       message,
       severity,
       payload: traceContext?.asPayloadMap(payload) ?? payload,
@@ -372,3 +369,10 @@ final class _CloudLogger extends CloudLogger {
     ),
   );
 }
+
+bool _frameFolder(Frame frame) =>
+    frame.isCore || frame.package == 'google_cloud';
+
+@internal
+Chain formatStackTrace(StackTrace stackTrace) =>
+    Chain.forTrace(stackTrace).foldFrames(_frameFolder, terse: true);

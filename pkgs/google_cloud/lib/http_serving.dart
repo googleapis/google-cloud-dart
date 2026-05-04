@@ -50,7 +50,6 @@
 /// {@canonicalFor http_serving.waitForTerminate}
 library;
 
-export 'src/logger.dart' show CloudLogger, LogSeverity;
 export 'src/serving/bad_configuration_exception.dart'
     show BadConfigurationException;
 export 'src/serving/http_logging.dart'

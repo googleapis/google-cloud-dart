@@ -12,39 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:google_cloud/google_cloud.dart';
+import 'dart:convert';
+
+import 'package:google_cloud_logging/google_cloud_logging.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('LogSeverity', () {
-    test('toJson returns name', () {
-      expect(LogSeverity.info.toJson(), 'INFO');
-      expect(LogSeverity.error.toJson(), 'ERROR');
-    });
-
-    test('comparable', () {
-      expect(LogSeverity.info.compareTo(LogSeverity.error), isNegative);
-      expect(LogSeverity.critical.compareTo(LogSeverity.warning), isPositive);
-    });
-
-    test('operators', () {
-      expect(LogSeverity.debug, lessThan(LogSeverity.info));
-      expect(LogSeverity.info, lessThanOrEqualTo(LogSeverity.info));
-      expect(LogSeverity.error, greaterThan(LogSeverity.warning));
-      expect(LogSeverity.critical, greaterThanOrEqualTo(LogSeverity.critical));
-    });
-
-    test('toString returns description', () {
-      expect(LogSeverity.info.toString(), 'LogSeverity INFO (200)');
-    });
-  });
-
-  group('CloudLogger.defaultLogger()', () {
-    const logger = CloudLogger.defaultLogger();
+  group('CloudLogger.printLogger()', () {
+    const logger = CloudLogger.printLogger();
 
     test('log with default severity', () {
       expect(
-        () => logger.log('hello', LogSeverity.defaultSeverity),
+        () => logger.log('hello', LogSeverity.$default),
         prints('hello\n'),
       );
     });
@@ -80,6 +59,60 @@ void main() {
         () => logger.log('hello', LogSeverity.error, stackTrace: trace),
         prints(
           allOf([startsWith('ERROR: hello\n'), contains('logger_test.dart')]),
+        ),
+      );
+    });
+  });
+
+  group('CloudLogger.structuredLogger()', () {
+    const logger = CloudLogger.structuredLogger();
+
+    test('basic log', () {
+      expect(
+        () => logger.info('hello'),
+        prints(
+          isA<String>().having(
+            (s) => jsonDecode(s) as Map<String, Object?>,
+            'parsed json',
+            {'message': 'hello', 'severity': 'INFO'},
+          ),
+        ),
+      );
+      expect(
+        () {
+          Never throwingFunction() => throw ArgumentError('sample');
+
+          try {
+            throwingFunction();
+          } catch (e, trace) {
+            logger.error(
+              e.toString(),
+              payload: {'a': 2, 'b': 3},
+              stackTrace: trace,
+            );
+          }
+        },
+        prints(
+          isA<String>().having(
+            (s) => jsonDecode(s) as Map<String, Object?>,
+            'parsed json',
+            {
+              'message': 'Invalid argument(s): sample',
+              'severity': 'ERROR',
+              'a': 2,
+              'b': 3,
+              'stack_trace': contains('logger_test.dart'),
+              'logging.googleapis.com/sourceLocation': {
+                'file': endsWith('logger_test.dart'),
+                'function': endsWith('throwingFunction'),
+                'line': isA<String>().having(
+                  int.parse,
+                  'parsed line',
+                  greaterThan(1),
+                ),
+              },
+            },
+          ),
         ),
       );
     });

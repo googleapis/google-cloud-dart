@@ -1,7 +1,15 @@
+<!--
+TODO: This is going to be a breaking change release, but we need to bump deps
+-->
 ## 0.4.2-wip
+
+### `general.dart`
+
+- REMOVED `CloudLogger`, `LogSeverity`, `structuredLogEntry`.
 
 ### `http_serving.dart`
 
+- REMOVED: `CloudLogger`, `LogSeverity`: moved to other packages.
 - REMOVED/BREAKING: `BadRequestException` and `badRequestMiddleware`
   are removed.
   - Replaced by `HttpResponseException` and `errorLoggingMiddleware`,
