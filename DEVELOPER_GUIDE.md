@@ -11,7 +11,78 @@
 
 The dependency graph for the current set of packages:
 
-![Dependency Graph](deps.png)
+<!-- DEPS_DIAGRAM_START -->
+```mermaid
+graph TD
+  google_cloud["google_cloud"]
+  google_cloud_ai_generativelanguage_v1beta["ai_generativelanguage_v1beta"]
+  google_cloud_aiplatform_v1beta1["aiplatform_v1beta1"]
+  google_cloud_api["api"]
+  google_cloud_common["common"]
+  google_cloud_firestore_v1["firestore_v1"]
+  google_cloud_functions_v2["functions_v2"]
+  google_cloud_iam_v1["iam_v1"]
+  google_cloud_language_v2["language_v2"]
+  google_cloud_location["location"]
+  google_cloud_logging_type["logging_type"]
+  google_cloud_logging_v2["logging_v2"]
+  google_cloud_longrunning["longrunning"]
+  google_cloud_protobuf["protobuf"]
+  google_cloud_rpc["rpc"]
+  google_cloud_secretmanager_v1["secretmanager_v1"]
+  google_cloud_storage["storage"]
+  google_cloud_type["type"]
+
+  google_cloud_ai_generativelanguage_v1beta --> google_cloud_longrunning
+  google_cloud_ai_generativelanguage_v1beta --> google_cloud_protobuf
+  google_cloud_ai_generativelanguage_v1beta --> google_cloud_rpc
+  google_cloud_ai_generativelanguage_v1beta --> google_cloud_type
+  google_cloud_aiplatform_v1beta1 --> google_cloud_api
+  google_cloud_aiplatform_v1beta1 --> google_cloud_iam_v1
+  google_cloud_aiplatform_v1beta1 --> google_cloud_location
+  google_cloud_aiplatform_v1beta1 --> google_cloud_longrunning
+  google_cloud_aiplatform_v1beta1 --> google_cloud_protobuf
+  google_cloud_aiplatform_v1beta1 --> google_cloud_rpc
+  google_cloud_aiplatform_v1beta1 --> google_cloud_type
+  google_cloud_api --> google_cloud_protobuf
+  google_cloud_common --> google_cloud_protobuf
+  google_cloud_firestore_v1 --> google_cloud_longrunning
+  google_cloud_firestore_v1 --> google_cloud_protobuf
+  google_cloud_firestore_v1 --> google_cloud_rpc
+  google_cloud_firestore_v1 --> google_cloud_type
+  google_cloud_functions_v2 --> google_cloud_iam_v1
+  google_cloud_functions_v2 --> google_cloud_location
+  google_cloud_functions_v2 --> google_cloud_longrunning
+  google_cloud_functions_v2 --> google_cloud_protobuf
+  google_cloud_functions_v2 --> google_cloud_rpc
+  google_cloud_functions_v2 --> google_cloud_type
+  google_cloud_iam_v1 --> google_cloud_protobuf
+  google_cloud_iam_v1 --> google_cloud_rpc
+  google_cloud_iam_v1 --> google_cloud_type
+  google_cloud_language_v2 --> google_cloud_protobuf
+  google_cloud_language_v2 --> google_cloud_rpc
+  google_cloud_location --> google_cloud_protobuf
+  google_cloud_location --> google_cloud_rpc
+  google_cloud_logging_type --> google_cloud_protobuf
+  google_cloud_logging_v2 --> google_cloud_api
+  google_cloud_logging_v2 --> google_cloud_logging_type
+  google_cloud_logging_v2 --> google_cloud_longrunning
+  google_cloud_logging_v2 --> google_cloud_protobuf
+  google_cloud_logging_v2 --> google_cloud_rpc
+  google_cloud_longrunning --> google_cloud_protobuf
+  google_cloud_longrunning --> google_cloud_rpc
+  google_cloud_rpc --> google_cloud_protobuf
+  google_cloud_secretmanager_v1 --> google_cloud_iam_v1
+  google_cloud_secretmanager_v1 --> google_cloud_location
+  google_cloud_secretmanager_v1 --> google_cloud_protobuf
+  google_cloud_secretmanager_v1 --> google_cloud_rpc
+  google_cloud_storage --> google_cloud
+  google_cloud_storage --> google_cloud_protobuf
+  google_cloud_storage --> google_cloud_rpc
+  google_cloud_type --> google_cloud_protobuf
+```
+
+<!-- DEPS_DIAGRAM_END -->
 
 ## Testing
 

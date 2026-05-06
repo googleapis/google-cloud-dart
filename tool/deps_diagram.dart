@@ -13,48 +13,13 @@
 // limitations under the License.
 
 /// Generate a diagram showing the relationship between packages in this
-/// repository.
+/// repository and inject it into target markdown files.
 ///
-/// It must be run from the root directory and graphviz must be installed.
-///
-/// Must have `dot` installed from the `graphviz` project.
-///
-/// Use `DOT_PATH` environment variable to specify the path to `dot` if it's
-/// not in your `PATH`.
+/// It must be run from the root directory.
 library;
 
 import 'dart:convert';
 import 'dart:io';
-
-const _dotTemplate = '''
-digraph "" {
-  rankdir = TB;
-  graph [style=rounded fontname="Arial Black" fontsize=13 penwidth=2.6];
-  node [shape=rect style="filled,rounded" fontname=Arial fontsize=15 fillcolor=Lavender penwidth=1.3];
-  edge [penwidth=1.3];
-{{HEADERS}}
-{{EDGES}}
-}
-''';
-
-const _noPublishVersion = '0.0.0';
-
-class _Package implements Comparable<_Package> {
-  static Map<String, _Package> namesToPackages = {};
-  final String name;
-  final Set<_Package> deps = {};
-
-  static _Package putIfAbsent(String packageName) => _Package.namesToPackages
-      .putIfAbsent(packageName, () => _Package(packageName));
-
-  _Package(this.name);
-
-  @override
-  String toString() => name;
-
-  @override
-  int compareTo(_Package other) => name.compareTo(other.name);
-}
 
 void main() {
   final results = Process.runSync(Platform.resolvedExecutable, [
@@ -72,71 +37,99 @@ void main() {
 
   final json = jsonDecode(results.stdout as String) as Map<String, dynamic>;
   final packageMaps = (json['packages'] as List).cast<Map<String, dynamic>>();
-  final connections = StringBuffer();
-  final headers = StringBuffer();
+
+  final publishablePackages = <String>{};
+  final dependencies = <String, Set<String>>{};
 
   for (final packageMap in packageMaps) {
     final packageName = packageMap['name'] as String;
     final packageVersion = packageMap['version'] as String;
-    if (packageName.startsWith('google_cloud') &&
-        packageVersion != _noPublishVersion &&
-        // `package:google_cloud` is not (yet!) part of this workspace.
-        packageName != 'google_cloud') {
-      final package = _Package.putIfAbsent(packageName);
-      final dependencies = (packageMap['directDependencies'] as List)
-          .cast<String>();
-      for (final dependencyName in dependencies) {
-        final dependency = _Package.putIfAbsent(dependencyName);
-        package.deps.add(dependency);
-        connections.writeln('"$packageName" -> "$dependencyName";');
+
+    // Only consider packages in our google_cloud ecosystem that are publishable
+    if (packageName.startsWith('google_cloud') ||
+        packageName == 'google_cloud') {
+      if (packageVersion != '0.0.0') {
+        publishablePackages.add(packageName);
+        final directDeps = (packageMap['directDependencies'] as List)
+            .cast<String>();
+        dependencies[packageName] = directDeps.toSet();
       }
     }
   }
 
-  // Color all foreign packages grey.
-  for (final package in _Package.namesToPackages.values) {
-    if (!package.name.startsWith('google_cloud')) {
-      headers.writeln('"${package.name}" [fillcolor="grey"]');
-    }
-  }
-
-  // Put all of the packages with common dependencies on the same level of the
-  // graph.
-  final remaining = Set<_Package>.from(_Package.namesToPackages.values);
-  final visited = <_Package>{};
-  while (remaining.isNotEmpty) {
-    final rank = <_Package>[];
-    for (final p in remaining) {
-      if (visited.containsAll(p.deps)) {
-        rank.add(p);
+  // Build connections only between publishable workspace packages
+  final connections = <String, Set<String>>{};
+  for (final packageName in publishablePackages) {
+    final directDeps = dependencies[packageName] ?? {};
+    for (final dep in directDeps) {
+      if (publishablePackages.contains(dep)) {
+        connections.putIfAbsent(packageName, () => {}).add(dep);
       }
     }
-    headers.writeln(
-      '{ rank = same; ${[for (final p in rank) '"${p.name}"'].join(" ")}}',
-    );
-    visited.addAll(rank);
-    remaining.removeAll(rank);
   }
 
-  final tmpDir = Directory.systemTemp.createTempSync('deps');
-  final path = '${tmpDir.path}/deps.dot';
-  print(path);
+  // Construct the Mermaid diagram block
+  final buffer = StringBuffer()
+    ..writeln('```mermaid')
+    ..writeln('graph TD');
 
-  File(path).writeAsStringSync(
-    _dotTemplate
-        .replaceFirst('{{HEADERS}}', headers.toString())
-        .replaceFirst('{{EDGES}}', connections.toString()),
-  );
+  // Sort packages alphabetically to ensure deterministic output
+  final sortedPackages = publishablePackages.toList()..sort();
 
-  final dotEnv = Platform.environment['DOT_PATH'] ?? 'dot';
+  // Output Node Declarations with clean, short labels
+  for (final pkg in sortedPackages) {
+    final label = pkg == 'google_cloud'
+        ? 'google_cloud'
+        : pkg.substring('google_cloud_'.length);
+    buffer.writeln('  $pkg["$label"]');
+  }
 
-  final dotProcess = Process.runSync(dotEnv, ['-Tpng', path, '-o', 'deps.png']);
-  if (dotProcess.exitCode != 0) {
-    print('Failed to generate diagram:');
-    print(dotProcess.stderr);
-    exitCode = dotProcess.exitCode;
+  buffer.writeln();
+
+  // Sort and output Link Declarations
+  final sortedConnections = <String>[];
+  for (final pkg in sortedPackages) {
+    final targets = connections[pkg] ?? {};
+    final sortedTargets = targets.toList()..sort();
+    for (final target in sortedTargets) {
+      sortedConnections.add('  $pkg --> $target');
+    }
+  }
+  buffer
+    ..write(sortedConnections.join('\n'))
+    ..writeln()
+    ..writeln('```');
+
+  final mermaidDiagram = buffer.toString();
+
+  // Update the target markdown files
+  _updateFile('DEVELOPER_GUIDE.md', mermaidDiagram);
+}
+
+void _updateFile(String filePath, String mermaidDiagram) {
+  final file = File(filePath);
+  if (!file.existsSync()) {
+    print('Skipped: $filePath does not exist');
     return;
   }
 
-  print('Wrote deps.png');
+  final content = file.readAsStringSync();
+  const startMarker = '<!-- DEPS_DIAGRAM_START -->';
+  const endMarker = '<!-- DEPS_DIAGRAM_END -->';
+
+  final startIndex = content.indexOf(startMarker);
+  final endIndex = content.indexOf(endMarker);
+
+  if (startIndex == -1 || endIndex == -1) {
+    print('Warning: Could not find markers in $filePath');
+    return;
+  }
+
+  final updatedContent =
+      '${content.substring(0, startIndex + startMarker.length)}\n'
+      '$mermaidDiagram\n'
+      '${content.substring(endIndex)}';
+
+  file.writeAsStringSync(updatedContent);
+  print('Successfully updated $filePath');
 }
