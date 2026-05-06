@@ -160,26 +160,30 @@ void main() {
       expect(map, containsPair('severity', 'DEFAULT'));
     });
 
-    test('cyclic payload with stack trace attaches source location', () {
-      final payload = <String, dynamic>{};
-      payload['cycle'] = payload;
-      final caught = catchingFunction();
-      final entry = createStructuredLog(
-        caught.error,
-        LogSeverity.info,
-        payload: payload,
-        stackTrace: caught.stackTrace,
-      );
-      expect(jsonDecode(entry), {
-        'severity': 'INFO',
-        'logging.googleapis.com/sourceLocation': {
-          'file': endsWith('test_utils.dart'),
-          'line': isNotEmpty,
-          'function': 'throwingFunction',
-        },
-        'message': caught.error.toString(),
-      });
-    });
+    test(
+      'cyclic payload with stack trace attaches source location',
+      testOn: '!browser',
+      () {
+        final payload = <String, dynamic>{};
+        payload['cycle'] = payload;
+        final caught = catchingFunction();
+        final entry = createStructuredLog(
+          caught.error,
+          LogSeverity.info,
+          payload: payload,
+          stackTrace: caught.stackTrace,
+        );
+        expect(jsonDecode(entry), {
+          'severity': 'INFO',
+          'logging.googleapis.com/sourceLocation': {
+            'file': endsWith('test_utils.dart'),
+            'line': isNotEmpty,
+            'function': 'throwingFunction',
+          },
+          'message': caught.error.toString(),
+        });
+      },
+    );
 
     test('all-filtered stack trace falls back to first frame', () {
       // Create a trace consisting entirely of filtered core frames

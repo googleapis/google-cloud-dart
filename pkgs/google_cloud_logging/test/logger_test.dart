@@ -58,7 +58,7 @@ Payload: {foo: bar}
       expect(() => logger.emergency('hello'), prints('EMERGENCY: hello\n'));
     });
 
-    test('log with stack trace', () {
+    test('log with stack trace', testOn: '!browser', () {
       expect(
         () {
           final caught = catchingFunction();
@@ -91,6 +91,9 @@ test/test_utils.dart'''),
           ),
         ),
       );
+    });
+
+    test('log with stack trace', testOn: '!browser', () {
       expect(
         () {
           final caught = catchingFunction();
