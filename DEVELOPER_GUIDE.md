@@ -14,24 +14,35 @@ The dependency graph for the current set of packages:
 <!-- DEPS_DIAGRAM_START -->
 ```mermaid
 graph TD
-  google_cloud["google_cloud"]
-  google_cloud_ai_generativelanguage_v1beta["ai_generativelanguage_v1beta"]
-  google_cloud_aiplatform_v1beta1["aiplatform_v1beta1"]
-  google_cloud_api["api"]
-  google_cloud_common["common"]
-  google_cloud_firestore_v1["firestore_v1"]
-  google_cloud_functions_v2["functions_v2"]
-  google_cloud_iam_v1["iam_v1"]
-  google_cloud_language_v2["language_v2"]
-  google_cloud_location["location"]
-  google_cloud_logging_type["logging_type"]
-  google_cloud_logging_v2["logging_v2"]
-  google_cloud_longrunning["longrunning"]
-  google_cloud_protobuf["protobuf"]
-  google_cloud_rpc["rpc"]
-  google_cloud_secretmanager_v1["secretmanager_v1"]
-  google_cloud_storage["storage"]
-  google_cloud_type["type"]
+  subgraph Tier0 ["Tier 0 (Publish First)"]
+    google_cloud["google_cloud"]
+    google_cloud_protobuf["protobuf"]
+  end
+
+  subgraph Tier1 ["Tier 1"]
+    google_cloud_api["api"]
+    google_cloud_common["common"]
+    google_cloud_logging_type["logging_type"]
+    google_cloud_rpc["rpc"]
+    google_cloud_type["type"]
+  end
+
+  subgraph Tier2 ["Tier 2"]
+    google_cloud_iam_v1["iam_v1"]
+    google_cloud_language_v2["language_v2"]
+    google_cloud_location["location"]
+    google_cloud_longrunning["longrunning"]
+    google_cloud_storage["storage"]
+  end
+
+  subgraph Tier3 ["Tier 3 (Publish Last)"]
+    google_cloud_ai_generativelanguage_v1beta["ai_generativelanguage_v1beta"]
+    google_cloud_aiplatform_v1beta1["aiplatform_v1beta1"]
+    google_cloud_firestore_v1["firestore_v1"]
+    google_cloud_functions_v2["functions_v2"]
+    google_cloud_logging_v2["logging_v2"]
+    google_cloud_secretmanager_v1["secretmanager_v1"]
+  end
 
   google_cloud_ai_generativelanguage_v1beta --> google_cloud_longrunning
   google_cloud_ai_generativelanguage_v1beta --> google_cloud_protobuf

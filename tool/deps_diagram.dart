@@ -13,7 +13,7 @@
 // limitations under the License.
 
 /// Generate a diagram showing the relationship between packages in this
-/// repository and inject it into target markdown files.
+/// repository and inject it into DEVELOPER_GUIDE.md.
 ///
 /// It must be run from the root directory.
 library;
@@ -29,8 +29,9 @@ void main() {
   ]);
 
   if (results.exitCode != 0) {
-    print('Failed to get dependencies:');
-    print(results.stderr);
+    stderr
+      ..writeln('Failed to get dependencies:')
+      ..writeln(results.stderr);
     exitCode = results.exitCode;
     return;
   }
@@ -68,25 +69,59 @@ void main() {
     }
   }
 
+  // Compute dependency tiers (topological ranks) dynamically
+  final tiers = <List<String>>[];
+  final remaining = Set<String>.from(publishablePackages);
+  final visited = <String>{};
+
+  while (remaining.isNotEmpty) {
+    final currentTier = <String>[];
+    for (final pkg in remaining) {
+      final deps = connections[pkg] ?? {};
+      if (visited.containsAll(deps)) {
+        currentTier.add(pkg);
+      }
+    }
+    if (currentTier.isEmpty) {
+      // Break out of potential cycle loops
+      currentTier.addAll(remaining);
+    }
+    currentTier.sort();
+    tiers.add(currentTier);
+    visited.addAll(currentTier);
+    remaining.removeAll(currentTier);
+  }
+
   // Construct the Mermaid diagram block
   final buffer = StringBuffer()
     ..writeln('```mermaid')
     ..writeln('graph TD');
 
-  // Sort packages alphabetically to ensure deterministic output
-  final sortedPackages = publishablePackages.toList()..sort();
+  // Output Subgraphs per Tier
+  for (var i = 0; i < tiers.length; i++) {
+    final String tierName;
+    if (i == 0) {
+      tierName = 'Tier 0 (Publish First)';
+    } else if (i == tiers.length - 1) {
+      tierName = 'Tier $i (Publish Last)';
+    } else {
+      tierName = 'Tier $i';
+    }
 
-  // Output Node Declarations with clean, short labels
-  for (final pkg in sortedPackages) {
-    final label = pkg == 'google_cloud'
-        ? 'google_cloud'
-        : pkg.substring('google_cloud_'.length);
-    buffer.writeln('  $pkg["$label"]');
+    buffer.writeln('  subgraph Tier$i ["$tierName"]');
+    for (final pkg in tiers[i]) {
+      final label = pkg == 'google_cloud'
+          ? 'google_cloud'
+          : pkg.startsWith('google_cloud_')
+          ? pkg.substring('google_cloud_'.length)
+          : pkg;
+      buffer.writeln('    $pkg["$label"]');
+    }
+    buffer.writeln('  end\n');
   }
 
-  buffer.writeln();
-
   // Sort and output Link Declarations
+  final sortedPackages = publishablePackages.toList()..sort();
   final sortedConnections = <String>[];
   for (final pkg in sortedPackages) {
     final targets = connections[pkg] ?? {};
@@ -109,7 +144,7 @@ void main() {
 void _updateFile(String filePath, String mermaidDiagram) {
   final file = File(filePath);
   if (!file.existsSync()) {
-    print('Skipped: $filePath does not exist');
+    stderr.writeln('Skipped: $filePath does not exist');
     return;
   }
 
@@ -120,8 +155,8 @@ void _updateFile(String filePath, String mermaidDiagram) {
   final startIndex = content.indexOf(startMarker);
   final endIndex = content.indexOf(endMarker);
 
-  if (startIndex == -1 || endIndex == -1) {
-    print('Warning: Could not find markers in $filePath');
+  if (startIndex == -1 || endIndex == -1 || endIndex <= startIndex) {
+    stderr.writeln('Warning: Could not find valid markers in $filePath');
     return;
   }
 
