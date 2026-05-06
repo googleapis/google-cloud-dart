@@ -18,6 +18,7 @@ import 'package:google_cloud_logging_type/logging_type.dart' show LogSeverity;
 import 'package:google_cloud_logging_v2/logging.dart'
     show LogEntry, LogEntrySourceLocation;
 import 'package:google_cloud_protobuf/protobuf.dart' show Struct;
+import 'package:meta/meta.dart';
 import 'package:stack_trace/stack_trace.dart';
 
 /// Converts [entry] to a JSON string formatted for Google Cloud
@@ -100,7 +101,7 @@ String createStructuredLog(
   if (stackTrace != null) {
     actualPayload = {
       ...?actualPayload,
-      'stack_trace': _formatStackTrace(stackTrace).toString(),
+      'stack_trace': formatStackTrace(stackTrace).toString(),
     };
   }
 
@@ -188,7 +189,7 @@ LogEntrySourceLocation _sourceLocation(StackTrace trace) {
 /// Finds the first stack frame that is not considered a "folder" frame (i.e.,
 /// not core or from this package).
 Frame _debugFrame(StackTrace stackTrace) {
-  final chain = _formatStackTrace(stackTrace);
+  final chain = formatStackTrace(stackTrace);
   final stackFrame = chain.traces
       .expand((t) => t.frames)
       .firstWhere(
@@ -201,9 +202,10 @@ Frame _debugFrame(StackTrace stackTrace) {
 
 /// Returns true if the frame is from `dart:` libraries or from this package.
 bool _frameFolder(Frame frame) =>
-    frame.isCore || frame.package == 'google_cloud_logging_v2';
+    frame.isCore || frame.package == 'google_cloud_logging';
 
 /// Formats the stack trace by folding frames that belong to this package or
 /// core.
-Chain _formatStackTrace(StackTrace stackTrace) =>
+@internal
+Chain formatStackTrace(StackTrace stackTrace) =>
     Chain.forTrace(stackTrace).foldFrames(_frameFolder, terse: true);

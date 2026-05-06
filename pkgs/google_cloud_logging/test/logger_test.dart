@@ -17,6 +17,8 @@ import 'dart:convert';
 import 'package:google_cloud_logging/google_cloud_logging.dart';
 import 'package:test/test.dart';
 
+import 'test_utils.dart';
+
 void main() {
   group('CloudLogger.printLogger()', () {
     const logger = CloudLogger.printLogger();
@@ -38,7 +40,10 @@ void main() {
     test('log with payload', () {
       expect(
         () => logger.log('hello', LogSeverity.error, payload: {'foo': 'bar'}),
-        prints('ERROR: hello {foo: bar}\n'),
+        prints('''
+ERROR: hello
+Payload: {foo: bar}
+'''),
       );
     });
 
@@ -54,11 +59,19 @@ void main() {
     });
 
     test('log with stack trace', () {
-      final trace = StackTrace.current;
       expect(
-        () => logger.log('hello', LogSeverity.error, stackTrace: trace),
+        () {
+          final caught = catchingFunction();
+          logger.error(
+            caught.error.toString(),
+            payload: {'a': 2, 'b': 3},
+            stackTrace: caught.stackTrace,
+          );
+        },
         prints(
-          allOf([startsWith('ERROR: hello\n'), contains('logger_test.dart')]),
+          startsWith('''
+ERROR: Invalid argument(s): sample
+test/test_utils.dart'''),
         ),
       );
     });
@@ -80,17 +93,12 @@ void main() {
       );
       expect(
         () {
-          Never throwingFunction() => throw ArgumentError('sample');
-
-          try {
-            throwingFunction();
-          } catch (e, trace) {
-            logger.error(
-              e.toString(),
-              payload: {'a': 2, 'b': 3},
-              stackTrace: trace,
-            );
-          }
+          final caught = catchingFunction();
+          logger.error(
+            caught.error.toString(),
+            payload: {'a': 2, 'b': 3},
+            stackTrace: caught.stackTrace,
+          );
         },
         prints(
           isA<String>().having(
@@ -103,7 +111,7 @@ void main() {
               'b': 3,
               'stack_trace': contains('logger_test.dart'),
               'logging.googleapis.com/sourceLocation': {
-                'file': endsWith('logger_test.dart'),
+                'file': endsWith('test_utils.dart'),
                 'function': endsWith('throwingFunction'),
                 'line': isA<String>().having(
                   int.parse,

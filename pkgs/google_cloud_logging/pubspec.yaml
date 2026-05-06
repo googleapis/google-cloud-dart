@@ -9,6 +9,7 @@ dependencies:
   google_cloud_logging_type: ^0.5.2
   google_cloud_logging_v2: ^0.5.2
   google_cloud_protobuf: ^0.5.2
+  meta: ^1.18.2
   stack_trace: ^1.11.0
 
 dev_dependencies:

@@ -14,7 +14,7 @@
 
 import 'package:google_cloud_logging_type/logging_type.dart' as logging_type;
 
-import 'structured_logging.dart' show createStructuredLog;
+import 'structured_logging.dart' show createStructuredLog, formatStackTrace;
 
 /// Base class for logging.
 ///
@@ -164,12 +164,16 @@ final class _DefaultLogger extends CloudLogger {
     Map<String, Object?>? payload,
     StackTrace? stackTrace,
   }) {
-    final payloadStr = payload != null && payload.isNotEmpty ? ' $payload' : '';
-    final traceStr = stackTrace != null ? '\n$stackTrace' : '';
+    final payloadStr = payload != null && payload.isNotEmpty
+        ? '\nPayload: $payload'
+        : '';
+    final traceStr = stackTrace != null
+        ? '\n${formatStackTrace(stackTrace).terse}'
+        : '';
     if (severity == logging_type.LogSeverity.$default) {
-      print('$message$payloadStr$traceStr');
+      print('$message$traceStr$payloadStr');
     } else {
-      print('${severity.value}: $message$payloadStr$traceStr');
+      print('${severity.value}: $message$traceStr$payloadStr');
     }
   }
 }

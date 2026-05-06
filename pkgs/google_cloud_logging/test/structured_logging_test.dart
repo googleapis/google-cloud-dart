@@ -14,7 +14,10 @@
 
 import 'dart:convert';
 import 'package:google_cloud_logging/google_cloud_logging.dart';
+import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:test/test.dart';
+
+import 'test_utils.dart';
 
 void main() {
   group('createStructuredLog', () {
@@ -144,6 +147,53 @@ void main() {
       );
       final map = jsonDecode(entry) as Map<String, dynamic>;
       expect(map, {'message': 'I am not encodable', 'severity': 'INFO'});
+    });
+
+    test('missing severity infers DEFAULT', () {
+      final entry = LogEntry(
+        logName: '',
+        resource: null,
+        jsonPayload: Struct(fields: {'foo': Value(stringValue: 'bar')}),
+      );
+      final result = createStructuredLogFromEntry(entry);
+      final map = jsonDecode(result) as Map<String, dynamic>;
+      expect(map, containsPair('severity', 'DEFAULT'));
+    });
+
+    test('cyclic payload with stack trace attaches source location', () {
+      final payload = <String, dynamic>{};
+      payload['cycle'] = payload;
+      final caught = catchingFunction();
+      final entry = createStructuredLog(
+        caught.error,
+        LogSeverity.info,
+        payload: payload,
+        stackTrace: caught.stackTrace,
+      );
+      expect(jsonDecode(entry), {
+        'severity': 'INFO',
+        'logging.googleapis.com/sourceLocation': {
+          'file': endsWith('test_utils.dart'),
+          'line': isNotEmpty,
+          'function': 'throwingFunction',
+        },
+        'message': caught.error.toString(),
+      });
+    });
+
+    test('all-filtered stack trace falls back to first frame', () {
+      // Create a trace consisting entirely of filtered core frames
+      final trace = StackTrace.fromString('dart:core 10:11 String.split\n');
+      final entry = createStructuredLog(
+        'hello',
+        LogSeverity.info,
+        stackTrace: trace,
+      );
+      final map = jsonDecode(entry) as Map<String, dynamic>;
+      expect(
+        map['logging.googleapis.com/sourceLocation'],
+        containsPair('file', 'dart:core'),
+      );
     });
   });
 }
