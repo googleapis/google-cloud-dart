@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/// General Google Cloud Logging
+/// General Google Cloud Logging.
 ///
-/// Includes
+/// Includes:
 ///
 /// - [CloudLogger]: for basic logging operations
 /// - [createStructuredLog]: for creating structured logs
 /// - [createStructuredLogFromEntry]: for creating structured logs from entries
 ///
-/// Exports [LogSeverity] and [LogEntry] from other packages for easy acces.
+/// Exports [LogSeverity] and [LogEntry] from other packages for easy access.
 ///
 /// @docImport 'package:google_cloud_logging_type/logging_type.dart';
 /// @docImport 'package:google_cloud_logging_v2/logging.dart';

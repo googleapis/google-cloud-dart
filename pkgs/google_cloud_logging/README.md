@@ -1,5 +1,13 @@
 # Google Cloud Logging for Dart
 
+[![pub package](https://img.shields.io/pub/v/google_cloud_logging.svg)](https://pub.dev/packages/google_cloud_logging)
+[![package publisher](https://img.shields.io/pub/publisher/google_cloud_logging.svg)](https://pub.dev/packages/google_cloud_logging/publisher)
+
+> NOTE: This is a **community-supported project**, meaning there is no official
+> level of support. The code is not covered by any SLA or deprecation policy.
+>
+> Feel free to open [issues] for bugs and feature requests.
+
 A lightweight logging package for creating formatted logs suitable for Google
 Cloud Platform, specifically tailored for Google Cloud structured logging.
 
@@ -52,10 +60,4 @@ void main() {
 }
 ```
 
-## Running Tests
-
-This package uses standard `package:test`:
-
-```bash
-dart test
-```
+[issues]: https://github.com/googleapis/google-cloud-dart/issues
