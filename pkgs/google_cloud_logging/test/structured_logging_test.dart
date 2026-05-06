@@ -149,6 +149,26 @@ void main() {
       expect(map, {'message': 'I am not encodable', 'severity': 'INFO'});
     });
 
+    test(
+      'shared references in non-cyclic payload (DAG) serialize correctly',
+      () {
+        final shared = {'foo': 'bar'};
+        final payload = {'first': shared, 'second': shared};
+        final entry = createStructuredLog(
+          'hello',
+          LogSeverity.info,
+          payload: payload,
+        );
+        final map = jsonDecode(entry) as Map<String, dynamic>;
+        expect(map, {
+          'message': 'hello',
+          'severity': 'INFO',
+          'first': {'foo': 'bar'},
+          'second': {'foo': 'bar'},
+        });
+      },
+    );
+
     test('missing severity infers DEFAULT', () {
       final entry = LogEntry(
         logName: '',

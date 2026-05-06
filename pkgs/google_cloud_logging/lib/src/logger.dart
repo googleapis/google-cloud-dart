@@ -168,7 +168,7 @@ final class _DefaultLogger extends CloudLogger {
         ? '\nPayload: $payload'
         : '';
     final traceStr = stackTrace != null
-        ? '\n${formatStackTrace(stackTrace).terse}'
+        ? '\n${formatStackTrace(stackTrace)}'
         : '';
     if (severity == logging_type.LogSeverity.$default) {
       print('$message$traceStr$payloadStr');

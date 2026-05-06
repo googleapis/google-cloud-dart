@@ -154,13 +154,17 @@ Object? _sanitize(Object? value, [Set<Object>? seen]) {
   }
   seen.add(value);
 
-  if (value is List) {
-    return value.map((e) => _sanitize(e, seen)).toList();
+  try {
+    if (value is List) {
+      return value.map((e) => _sanitize(e, seen)).toList();
+    }
+    if (value is Map) {
+      return value.map((k, v) => MapEntry(k.toString(), _sanitize(v, seen)));
+    }
+    return _toEncodableFallback(value);
+  } finally {
+    seen.remove(value);
   }
-  if (value is Map) {
-    return value.map((k, v) => MapEntry(k.toString(), _sanitize(v, seen)));
-  }
-  return _toEncodableFallback(value);
 }
 
 /// A fallback function for non-JSON-primitive objects.
