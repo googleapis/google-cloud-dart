@@ -16,12 +16,17 @@
 /// repository.
 ///
 /// It must be run from the root directory and graphviz must be installed.
+///
+/// Must have `dot` installed from the `graphviz` project.
+///
+/// Use `DOT_PATH` environment variable to specify the path to `dot` if it's
+/// not in your `PATH`.
 library;
 
 import 'dart:convert';
 import 'dart:io';
 
-const dotTemplate = '''
+const _dotTemplate = '''
 digraph "" {
   rankdir = TB;
   graph [style=rounded fontname="Arial Black" fontsize=13 penwidth=2.6];
@@ -32,27 +37,38 @@ digraph "" {
 }
 ''';
 
-const noPublishVersion = '0.0.0';
+const _noPublishVersion = '0.0.0';
 
-class Package implements Comparable<Package> {
-  static Map<String, Package> namesToPackages = {};
+class _Package implements Comparable<_Package> {
+  static Map<String, _Package> namesToPackages = {};
   final String name;
-  final Set<Package> deps = {};
+  final Set<_Package> deps = {};
 
-  static Package putIfAbsent(String packageName) => Package.namesToPackages
-      .putIfAbsent(packageName, () => Package(packageName));
+  static _Package putIfAbsent(String packageName) => _Package.namesToPackages
+      .putIfAbsent(packageName, () => _Package(packageName));
 
-  Package(this.name);
+  _Package(this.name);
 
   @override
   String toString() => name;
 
   @override
-  int compareTo(Package other) => name.compareTo(other.name);
+  int compareTo(_Package other) => name.compareTo(other.name);
 }
 
 void main() {
-  final results = Process.runSync('dart', ['pub', 'deps', '--json']);
+  final results = Process.runSync(Platform.resolvedExecutable, [
+    'pub',
+    'deps',
+    '--json',
+  ]);
+
+  if (results.exitCode != 0) {
+    print('Failed to get dependencies:');
+    print(results.stderr);
+    exitCode = results.exitCode;
+    return;
+  }
 
   final json = jsonDecode(results.stdout as String) as Map<String, dynamic>;
   final packageMaps = (json['packages'] as List).cast<Map<String, dynamic>>();
@@ -63,14 +79,14 @@ void main() {
     final packageName = packageMap['name'] as String;
     final packageVersion = packageMap['version'] as String;
     if (packageName.startsWith('google_cloud') &&
-        packageVersion != noPublishVersion &&
+        packageVersion != _noPublishVersion &&
         // `package:google_cloud` is not (yet!) part of this workspace.
         packageName != 'google_cloud') {
-      final package = Package.putIfAbsent(packageName);
+      final package = _Package.putIfAbsent(packageName);
       final dependencies = (packageMap['directDependencies'] as List)
           .cast<String>();
       for (final dependencyName in dependencies) {
-        final dependency = Package.putIfAbsent(dependencyName);
+        final dependency = _Package.putIfAbsent(dependencyName);
         package.deps.add(dependency);
         connections.writeln('"$packageName" -> "$dependencyName";');
       }
@@ -78,7 +94,7 @@ void main() {
   }
 
   // Color all foreign packages grey.
-  for (final package in Package.namesToPackages.values) {
+  for (final package in _Package.namesToPackages.values) {
     if (!package.name.startsWith('google_cloud')) {
       headers.writeln('"${package.name}" [fillcolor="grey"]');
     }
@@ -86,10 +102,10 @@ void main() {
 
   // Put all of the packages with common dependencies on the same level of the
   // graph.
-  final remaining = Set<Package>.from(Package.namesToPackages.values);
-  final visited = <Package>{};
+  final remaining = Set<_Package>.from(_Package.namesToPackages.values);
+  final visited = <_Package>{};
   while (remaining.isNotEmpty) {
-    final rank = <Package>[];
+    final rank = <_Package>[];
     for (final p in remaining) {
       if (visited.containsAll(p.deps)) {
         rank.add(p);
@@ -107,10 +123,20 @@ void main() {
   print(path);
 
   File(path).writeAsStringSync(
-    dotTemplate
+    _dotTemplate
         .replaceFirst('{{HEADERS}}', headers.toString())
         .replaceFirst('{{EDGES}}', connections.toString()),
   );
 
-  Process.runSync('dot', ['-Tpng', path, '-o', 'deps.png']);
+  final dotEnv = Platform.environment['DOT_PATH'] ?? 'dot';
+
+  final dotProcess = Process.runSync(dotEnv, ['-Tpng', path, '-o', 'deps.png']);
+  if (dotProcess.exitCode != 0) {
+    print('Failed to generate diagram:');
+    print(dotProcess.stderr);
+    exitCode = dotProcess.exitCode;
+    return;
+  }
+
+  print('Wrote deps.png');
 }
