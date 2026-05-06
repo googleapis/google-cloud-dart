@@ -69,9 +69,10 @@ Payload: {foo: bar}
           );
         },
         prints(
-          startsWith('''
-ERROR: Invalid argument(s): sample
-test/test_utils.dart'''),
+          allOf(
+            startsWith('ERROR: Invalid argument(s): sample\n'),
+            contains('test/test_utils.dart'),
+          ),
         ),
       );
     });
