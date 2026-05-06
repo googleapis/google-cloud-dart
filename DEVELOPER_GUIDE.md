@@ -92,7 +92,6 @@ graph TD
   google_cloud_storage --> google_cloud_rpc
   google_cloud_type --> google_cloud_protobuf
 ```
-
 <!-- DEPS_DIAGRAM_END -->
 
 ## Testing

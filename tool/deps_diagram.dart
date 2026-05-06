@@ -47,8 +47,7 @@ void main() {
     final packageVersion = packageMap['version'] as String;
 
     // Only consider packages in our google_cloud ecosystem that are publishable
-    if (packageName.startsWith('google_cloud') ||
-        packageName == 'google_cloud') {
+    if (packageName.startsWith('google_cloud')) {
       if (packageVersion != '0.0.0') {
         publishablePackages.add(packageName);
         final directDeps = (packageMap['directDependencies'] as List)
@@ -110,9 +109,7 @@ void main() {
 
     buffer.writeln('  subgraph Tier$i ["$tierName"]');
     for (final pkg in tiers[i]) {
-      final label = pkg == 'google_cloud'
-          ? 'google_cloud'
-          : pkg.startsWith('google_cloud_')
+      final label = pkg.startsWith('google_cloud_')
           ? pkg.substring('google_cloud_'.length)
           : pkg;
       buffer.writeln('    $pkg["$label"]');
@@ -137,7 +134,7 @@ void main() {
 
   final mermaidDiagram = buffer.toString();
 
-  // Update the target markdown files
+  // Update the target markdown file
   _updateFile('DEVELOPER_GUIDE.md', mermaidDiagram);
 }
 
@@ -156,13 +153,14 @@ void _updateFile(String filePath, String mermaidDiagram) {
   final endIndex = content.indexOf(endMarker);
 
   if (startIndex == -1 || endIndex == -1 || endIndex <= startIndex) {
-    stderr.writeln('Warning: Could not find valid markers in $filePath');
+    stderr.writeln('Error: Could not find valid markers in $filePath');
+    exitCode = 1;
     return;
   }
 
   final updatedContent =
       '${content.substring(0, startIndex + startMarker.length)}\n'
-      '$mermaidDiagram\n'
+      '$mermaidDiagram'
       '${content.substring(endIndex)}';
 
   file.writeAsStringSync(updatedContent);
