@@ -13,104 +13,156 @@
 // limitations under the License.
 
 /// Generate a diagram showing the relationship between packages in this
-/// repository.
+/// repository and inject it into DEVELOPER_GUIDE.md.
 ///
-/// It must be run from the root directory and graphviz must be installed.
+/// It must be run from the root directory.
 library;
 
 import 'dart:convert';
 import 'dart:io';
 
-const dotTemplate = '''
-digraph "" {
-  rankdir = TB;
-  graph [style=rounded fontname="Arial Black" fontsize=13 penwidth=2.6];
-  node [shape=rect style="filled,rounded" fontname=Arial fontsize=15 fillcolor=Lavender penwidth=1.3];
-  edge [penwidth=1.3];
-{{HEADERS}}
-{{EDGES}}
-}
-''';
-
-const noPublishVersion = '0.0.0';
-
-class Package implements Comparable<Package> {
-  static Map<String, Package> namesToPackages = {};
-  final String name;
-  final Set<Package> deps = {};
-
-  static Package putIfAbsent(String packageName) => Package.namesToPackages
-      .putIfAbsent(packageName, () => Package(packageName));
-
-  Package(this.name);
-
-  @override
-  String toString() => name;
-
-  @override
-  int compareTo(Package other) => name.compareTo(other.name);
-}
-
 void main() {
-  final results = Process.runSync('dart', ['pub', 'deps', '--json']);
+  final results = Process.runSync(Platform.resolvedExecutable, [
+    'pub',
+    'deps',
+    '--json',
+  ]);
+
+  if (results.exitCode != 0) {
+    stderr
+      ..writeln('Failed to get dependencies:')
+      ..writeln(results.stderr);
+    exitCode = results.exitCode;
+    return;
+  }
 
   final json = jsonDecode(results.stdout as String) as Map<String, dynamic>;
   final packageMaps = (json['packages'] as List).cast<Map<String, dynamic>>();
-  final connections = StringBuffer();
-  final headers = StringBuffer();
+
+  final publishablePackages = <String>{};
+  final dependencies = <String, Set<String>>{};
 
   for (final packageMap in packageMaps) {
     final packageName = packageMap['name'] as String;
     final packageVersion = packageMap['version'] as String;
-    if (packageName.startsWith('google_cloud') &&
-        packageVersion != noPublishVersion &&
-        // `package:google_cloud` is not (yet!) part of this workspace.
-        packageName != 'google_cloud') {
-      final package = Package.putIfAbsent(packageName);
-      final dependencies = (packageMap['directDependencies'] as List)
-          .cast<String>();
-      for (final dependencyName in dependencies) {
-        final dependency = Package.putIfAbsent(dependencyName);
-        package.deps.add(dependency);
-        connections.writeln('"$packageName" -> "$dependencyName";');
+
+    // Only consider packages in our google_cloud ecosystem that are publishable
+    if (packageName.startsWith('google_cloud')) {
+      if (packageVersion != '0.0.0') {
+        publishablePackages.add(packageName);
+        final directDeps = (packageMap['directDependencies'] as List)
+            .cast<String>();
+        dependencies[packageName] = directDeps.toSet();
       }
     }
   }
 
-  // Color all foreign packages grey.
-  for (final package in Package.namesToPackages.values) {
-    if (!package.name.startsWith('google_cloud')) {
-      headers.writeln('"${package.name}" [fillcolor="grey"]');
+  // Build connections only between publishable workspace packages
+  final connections = <String, Set<String>>{};
+  for (final packageName in publishablePackages) {
+    final directDeps = dependencies[packageName] ?? {};
+    for (final dep in directDeps) {
+      if (publishablePackages.contains(dep)) {
+        connections.putIfAbsent(packageName, () => {}).add(dep);
+      }
     }
   }
 
-  // Put all of the packages with common dependencies on the same level of the
-  // graph.
-  final remaining = Set<Package>.from(Package.namesToPackages.values);
-  final visited = <Package>{};
+  // Compute dependency tiers (topological ranks) dynamically
+  final tiers = <List<String>>[];
+  final remaining = Set<String>.from(publishablePackages);
+  final visited = <String>{};
+
   while (remaining.isNotEmpty) {
-    final rank = <Package>[];
-    for (final p in remaining) {
-      if (visited.containsAll(p.deps)) {
-        rank.add(p);
+    final currentTier = <String>[];
+    for (final pkg in remaining) {
+      final deps = connections[pkg] ?? {};
+      if (visited.containsAll(deps)) {
+        currentTier.add(pkg);
       }
     }
-    headers.writeln(
-      '{ rank = same; ${[for (final p in rank) '"${p.name}"'].join(" ")}}',
-    );
-    visited.addAll(rank);
-    remaining.removeAll(rank);
+    if (currentTier.isEmpty) {
+      // Break out of potential cycle loops
+      currentTier.addAll(remaining);
+    }
+    currentTier.sort();
+    tiers.add(currentTier);
+    visited.addAll(currentTier);
+    remaining.removeAll(currentTier);
   }
 
-  final tmpDir = Directory.systemTemp.createTempSync('deps');
-  final path = '${tmpDir.path}/deps.dot';
-  print(path);
+  // Construct the Mermaid diagram block
+  final buffer = StringBuffer()
+    ..writeln('```mermaid')
+    ..writeln('graph TD');
 
-  File(path).writeAsStringSync(
-    dotTemplate
-        .replaceFirst('{{HEADERS}}', headers.toString())
-        .replaceFirst('{{EDGES}}', connections.toString()),
-  );
+  // Output Subgraphs per Tier
+  for (var i = 0; i < tiers.length; i++) {
+    final String tierName;
+    if (i == 0) {
+      tierName = 'Tier 0 (Publish First)';
+    } else if (i == tiers.length - 1) {
+      tierName = 'Tier $i (Publish Last)';
+    } else {
+      tierName = 'Tier $i';
+    }
 
-  Process.runSync('dot', ['-Tpng', path, '-o', 'deps.png']);
+    buffer.writeln('  subgraph Tier$i ["$tierName"]');
+    for (final pkg in tiers[i]) {
+      final label = pkg.startsWith('google_cloud_')
+          ? pkg.substring('google_cloud_'.length)
+          : pkg;
+      buffer.writeln('    $pkg["$label"]');
+    }
+    buffer.writeln('  end\n');
+  }
+
+  // Sort and output Link Declarations
+  final sortedPackages = publishablePackages.toList()..sort();
+  final sortedConnections = <String>[];
+  for (final pkg in sortedPackages) {
+    final targets = connections[pkg] ?? {};
+    final sortedTargets = targets.toList()..sort();
+    for (final target in sortedTargets) {
+      sortedConnections.add('  $pkg --> $target');
+    }
+  }
+  buffer
+    ..write(sortedConnections.join('\n'))
+    ..writeln()
+    ..writeln('```');
+
+  final mermaidDiagram = buffer.toString();
+
+  // Update the target markdown file
+  _updateFile('DEVELOPER_GUIDE.md', mermaidDiagram);
+}
+
+void _updateFile(String filePath, String mermaidDiagram) {
+  final file = File(filePath);
+  if (!file.existsSync()) {
+    stderr.writeln('Skipped: $filePath does not exist');
+    return;
+  }
+
+  final content = file.readAsStringSync();
+  const startMarker = '<!-- DEPS_DIAGRAM_START -->';
+  const endMarker = '<!-- DEPS_DIAGRAM_END -->';
+
+  final startIndex = content.indexOf(startMarker);
+  final endIndex = content.indexOf(endMarker);
+
+  if (startIndex == -1 || endIndex == -1 || endIndex <= startIndex) {
+    stderr.writeln('Error: Could not find valid markers in $filePath');
+    exitCode = 1;
+    return;
+  }
+
+  final updatedContent =
+      '${content.substring(0, startIndex + startMarker.length)}\n'
+      '$mermaidDiagram'
+      '${content.substring(endIndex)}';
+
+  file.writeAsStringSync(updatedContent);
+  print('Successfully updated $filePath');
 }
