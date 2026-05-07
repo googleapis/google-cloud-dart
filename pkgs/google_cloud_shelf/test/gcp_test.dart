@@ -180,5 +180,5 @@ Future<TestProcess> _run(
 
 Map<String, String> get _minimalWindowsEnvironment => {
   for (var key in ['SystemRoot', 'SystemDrive', 'TEMP', 'TMP'])
-    key: Platform.environment[key] ?? '',
+    key: ?Platform.environment[key],
 };
