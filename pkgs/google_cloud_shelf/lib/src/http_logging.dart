@@ -39,7 +39,7 @@ const internalServerErrorMessage = 'Internal Server Error';
 /// correlation.
 ///
 /// If [projectId] is `null`, returns the value returned by
-/// [errorLoggingMiddleware] (which prints successful request logs to stderr).
+/// [errorLoggingMiddleware] (which prints successful request logs to stdout).
 ///
 /// If [projectId] is provided, returns the value returned by
 /// [cloudLoggingMiddleware] (which delegates request logs to the Cloud host
