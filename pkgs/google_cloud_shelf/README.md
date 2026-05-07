@@ -15,8 +15,8 @@ mapping, and graceful shutdown orchestration.
 
 * **Google Cloud Structured Logging:** Integrates Shelf middleware
   (`createLoggingMiddleware`, `cloudLoggingMiddleware`,
-  `errorLoggingMiddleware`) that automatically captures request/response
-  metadata and outputs logs in GCP's native structured format.
+  `errorLoggingMiddleware`) that automatically formats application and error
+  logs in GCP's native structured format.
 * **Trace Correlation:** Automatically parses Google Cloud trace context
   headers (`X-Cloud-Trace-Context`). Any log entry emitted using
   `currentLogger` or standard `print()` within request execution is correlated
@@ -89,6 +89,13 @@ Response _userHandler(Request request) {
   return Response.ok('User Profile');
 }
 ```
+
+> [!NOTE]
+> When running in a Google Cloud environment (with a `projectId` provided),
+> successful HTTP request access logs are automatically captured by the Google
+> Cloud host infrastructure (such as the Cloud Run Load Balancer).
+> Therefore, `cloudLoggingMiddleware` intentionally avoids outputting successful
+> access log statements to prevent duplicate request logging.
 
 ### 3. Standardized Error & Exception Handling
 
