@@ -30,11 +30,17 @@ Future<void> main(List<String> args) async {
   }
 
   // List all package directories in `pkgs/`
-  final packages = pkgsDir.listSync().whereType<Directory>().map(
-    (dir) => path.basename(dir.path),
-  );
+  final packages =
+      pkgsDir
+          .listSync()
+          .whereType<Directory>()
+          .map((dir) => path.basename(dir.path))
+          .where((name) => !name.startsWith('.'))
+          .toList()
+        ..sort();
 
   for (final pkgName in packages) {
+    // NOTE: skipping generated packages for now - need sidekick integration
     final pkgPath = path.join(repositoryRoot, 'pkgs', pkgName);
     final readmeFile = File(path.join(pkgPath, 'README.md'));
     if (!readmeFile.existsSync()) continue;
