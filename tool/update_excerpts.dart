@@ -19,7 +19,6 @@ import 'package:path/path.dart' as path;
 Future<void> main(List<String> args) async {
   final isDryRun = args.contains('--dry-run');
   final isFailOnUpdate = args.contains('--fail-on-update');
-  final isVerbose = args.contains('--verbose');
 
   final repositoryRoot = Directory.current.path;
   final pkgsDir = Directory(path.join(repositoryRoot, 'pkgs'));
@@ -40,9 +39,7 @@ Future<void> main(List<String> args) async {
     final readmeFile = File(path.join(pkgPath, 'README.md'));
     if (!readmeFile.existsSync()) continue;
 
-    if (isVerbose) {
-      print('Updating excerpts for package: $pkgName...');
-    }
+    print('package:$pkgName (${path.relative(pkgPath)})');
 
     final updater = Updater(
       baseSourcePath: pkgPath,
@@ -58,13 +55,11 @@ Future<void> main(List<String> args) async {
 
     final result = await updater.update(pkgPath, makeUpdates: !isDryRun);
 
-    if (result.excerptsNeedingUpdates > 0 || isVerbose) {
-      print(
-        'Package $pkgName: processed ${result.filesVisited} files. '
-        '${result.excerptsNeedingUpdates} excerpts '
-        '${isDryRun ? 'need updates' : 'updated'}.',
-      );
-    }
+    print('''
+  Files: ${result.filesVisited}
+  Excerpts found: ${result.excerptsVisited}
+  Excerpts updated: ${result.excerptsNeedingUpdates}
+  Action: ${isDryRun ? 'need updates' : 'updated'}''');
 
     if (result.errors.isNotEmpty) {
       for (final error in result.errors) {
@@ -79,7 +74,7 @@ Future<void> main(List<String> args) async {
     }
   }
 
-  if (exitCode == 0 && isVerbose) {
+  if (exitCode == 0) {
     print('All excerpts processed successfully!');
   }
 }
