@@ -49,15 +49,14 @@ void main() {
 ```dart
 import 'package:google_cloud_logging/google_cloud_logging.dart';
 
+const _logger = CloudLogger.printLogger();
+
 void main() {
-  const logger = CloudLogger.printLogger();
-
-  logger.info('Processing item.', payload: {'itemId': 'A-987'});
-
+  _logger.info('Processing item.', payload: {'itemId': 'A-987'});
   try {
     throw Exception('Failed to connect to DB');
-  } catch (e, stack) {
-    logger.error('Database connection failure.', stackTrace: stack);
+  } catch (error, stack) {
+    _logger.error('Database connection failure - $error', stackTrace: stack);
   }
 }
 ```
