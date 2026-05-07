@@ -6,7 +6,7 @@ the [Firebase Emulators Suite][].
 ## Running Tests Locally
 
 The [Developer Guide](../DEVELOPER_GUIDE.md) has the canonical instructions
-for running these tests. If you are running the tests many time, it may be
+for running these tests. If you are running the tests many times, it may be
 faster to keep the emulator running between test invocations.
 
 You can do that by running the emulator in one terminal session and
