@@ -16,6 +16,11 @@ import 'dart:io';
 import 'package:excerpter/excerpter.dart';
 import 'package:path/path.dart' as path;
 
+/// Synchronizes code excerpts from source files (like those under `example/`)
+/// into Markdown documentation files (like `README.md`).
+///
+/// This ensures documentation examples are kept in sync with working, analyzed
+/// code.
 Future<void> main(List<String> args) async {
   final isDryRun = args.contains('--dry-run');
   final isFailOnUpdate = args.contains('--fail-on-update');
