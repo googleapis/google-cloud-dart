@@ -48,6 +48,7 @@ graph TD
 
   subgraph Tier5 ["Tier 5"]
     google_cloud["google_cloud"]
+    google_cloud_shelf["shelf"]
   end
 
   subgraph Tier6 ["Tier 6 (Publish Last)"]
@@ -101,6 +102,7 @@ graph TD
   google_cloud_secretmanager_v1 --> google_cloud_location
   google_cloud_secretmanager_v1 --> google_cloud_protobuf
   google_cloud_secretmanager_v1 --> google_cloud_rpc
+  google_cloud_shelf --> google_cloud_logging
   google_cloud_storage --> google_cloud
   google_cloud_storage --> google_cloud_protobuf
   google_cloud_storage --> google_cloud_rpc
