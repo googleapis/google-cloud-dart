@@ -85,21 +85,9 @@ jobs:
       - run: dart pub get
       - name: Install Firebase CLI
         run: npm install -g firebase-tools
-      - name: Run Emulators
-        run: |
-          const { spawn } = require('child_process');
-          const cmd = process.platform === 'win32' ? 'npx.cmd' : 'npx';
-          spawn(
-            cmd,
-            ['firebase', 'emulators:start'],
-            { stdio: 'ignore', detached: true, shell: process.platform === 'win32' }).unref();
-        shell: node {0}
-        working-directory: firestore_emulators
       - name: Run Tests
-        env:
-          FIRESTORE_EMULATOR_HOST: 127.0.0.1:8080
-          STORAGE_EMULATOR_HOST: 127.0.0.1:9199
-        run: dart test -P firebase-emulator .
+        run: firebase emulators:exec --config=firestore_emulators/firebase.json \
+          "dart test -P firebase-emulator ."
 
   generator:
     name: Generators
