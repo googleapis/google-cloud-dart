@@ -42,6 +42,8 @@ jobs:
         run: dart analyze --fatal-infos
       - name: Format
         run: dart format --output=none --set-exit-if-changed .
+      - name: Verify Code Excerpts Up-to-Date
+        run: dart run tool/update_excerpts.dart --fail-on-update
 
   unit_tests:
     name: Unit Tests

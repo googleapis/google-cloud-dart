@@ -38,12 +38,14 @@ This package is split into two main libraries:
 
 ### Project Discovery
 
+<?code-excerpt "example/project_discovery.dart (project-discovery)"?>
 ```dart
 import 'package:google_cloud/general.dart';
 
 void main() async {
   // Discovers the project ID using all available strategies.
-  // Discovery via the Metadata Server is cached for the lifetime of the process.
+  // Discovery via the Metadata Server is cached for the lifetime of the
+  // process.
   final projectId = await computeProjectId();
   print('Running in project: $projectId');
 }
@@ -51,6 +53,7 @@ void main() async {
 
 ### Structured Logging and Serving
 
+<?code-excerpt "example/logging_and_serving.dart (logging-and-serving)"?>
 ```dart
 import 'package:google_cloud/general.dart';
 import 'package:google_cloud/http_serving.dart';

@@ -26,6 +26,7 @@ Cloud Platform, specifically tailored for Google Cloud structured logging.
 
 ### Structured Logging on stdout
 
+<?code-excerpt "example/structured_stdout.dart (structured-stdout)"?>
 ```dart
 import 'package:google_cloud_logging/google_cloud_logging.dart';
 
@@ -44,11 +45,12 @@ void main() {
 
 ### Using the CloudLogger
 
+<?code-excerpt "example/cloud_logger.dart (cloud-logger)"?>
 ```dart
 import 'package:google_cloud_logging/google_cloud_logging.dart';
 
 void main() {
-  const logger = CloudLogger.defaultLogger();
+  const logger = CloudLogger.printLogger();
 
   logger.info('Processing item.', payload: {'itemId': 'A-987'});
 

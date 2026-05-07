@@ -12,35 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// #docregion main
+// #docregion retry
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 
 void main() async {
-  // By default, the `Storage` class will use the currently configured project
-  // and automatically attempt to authenticate using Application Default
-  // Credentials.
   final storage = Storage();
 
-  // Create a bucket.
-  final bucket = await storage.createBucket(
-    BucketMetadata(
-      name: 'put-your-bucket-name-here',
-      defaultObjectAcl: [
-        ObjectAccessControl(entity: 'allUsers', role: 'READER'),
-      ],
-    ),
+  // This operation is only idempotent if `ifMetagenerationMatch` is provided.
+  await storage.patchBucket(
+    'my-bucket',
+    BucketMetadataPatchBuilder()..labels = {'key': 'value'},
+    ifMetagenerationMatch: BigInt.from(1),
+    retry: const ExponentialRetry(maxRetries: 2),
   );
-  await storage.uploadObjectFromString(
-    bucket.name!,
-    'index.html',
-    '<h1>Hello World!</h1>',
-    metadata: ObjectMetadata(contentType: 'text/html'),
-  );
-  print(
-    'Your website is available at:\n'
-    'https://storage.googleapis.com/${bucket.name}/index.html',
-  );
+
   storage.close();
 }
 
-// #enddocregion main
+// #enddocregion retry
