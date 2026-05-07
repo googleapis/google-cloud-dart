@@ -12,12 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:google_cloud/google_cloud.dart';
+// #docregion graceful-termination
+import 'package:google_cloud_shelf/google_cloud_shelf.dart';
 import 'package:shelf/shelf.dart';
+import 'package:shelf/shelf_io.dart' as shelf_io;
 
 Future<void> main() async {
-  Response handler(Request request) => Response.ok('Hello from serveHandler!');
+  final handler = const Pipeline()
+      .addMiddleware(createLoggingMiddleware())
+      .addHandler((_) => Response.ok('Custom setup'));
 
-  await serveHandler(handler);
-  print('done!');
+  // Start the server manually
+  final server = await shelf_io.serve(handler, '0.0.0.0', 8080);
+
+  // Await a shutdown signal (SIGTERM or SIGINT)
+  await waitForTerminate();
+
+  // Gracefully shut down the server
+  await server.close();
 }
+
+// #enddocregion graceful-termination

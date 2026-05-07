@@ -1,0 +1,17 @@
+name: google_cloud_shelf
+version: 0.5.0-wip
+resolution: workspace
+
+environment:
+  sdk: ^3.9.0
+
+dependencies:
+  google_cloud_logging: ^0.5.0-0
+  http: ^1.6.0
+  meta: ^1.18.2
+  shelf: ^1.4.2
+  stack_trace: ^1.12.1
+
+dev_dependencies:
+  test: ^1.31.0
+  test_process: ^2.0.3

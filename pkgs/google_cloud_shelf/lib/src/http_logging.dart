@@ -21,7 +21,7 @@ import 'package:meta/meta.dart';
 import 'package:shelf/shelf.dart';
 import 'package:stack_trace/stack_trace.dart';
 
-import '../constants.dart';
+import 'constants.dart';
 import 'http_response_exception.dart';
 import 'json_request_checking.dart';
 import 'trace_context_data.dart';
@@ -371,7 +371,7 @@ final class _CloudLogger extends CloudLogger {
 }
 
 bool _frameFolder(Frame frame) =>
-    frame.isCore || frame.package == 'google_cloud';
+    frame.isCore || frame.package == 'google_cloud_shelf';
 
 @internal
 Chain formatStackTrace(StackTrace stackTrace) =>
