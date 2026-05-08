@@ -26,6 +26,8 @@ jobs:
   publish:
     if: ${{ github.repository_owner == 'googleapis' }}
     uses: dart-lang/ecosystem/.github/workflows/publish.yaml@main
+    with:
+      ignore-patterns: generated/**
     permissions:
       id-token: write
       pull-requests: write
