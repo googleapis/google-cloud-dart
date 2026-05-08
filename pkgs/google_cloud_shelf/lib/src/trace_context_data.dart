@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import '../constants.dart';
+import 'constants.dart';
 
 /// Matches a 32-character hexadecimal value representing a 128-bit number.
 ///

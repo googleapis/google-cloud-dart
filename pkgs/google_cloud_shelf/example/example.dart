@@ -1,4 +1,4 @@
-// Copyright 2022 Google LLC
+// Copyright 2026 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,10 +11,17 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-import 'package:google_cloud/google_cloud.dart';
+
+// #docregion basic-setup
+import 'package:google_cloud_shelf/google_cloud_shelf.dart';
+import 'package:shelf/shelf.dart';
 
 Future<void> main() async {
-  print('waiting for termination');
-  await waitForTerminate();
-  print('done!');
+  final handler = const Pipeline()
+      .addMiddleware(createLoggingMiddleware())
+      .addHandler((_) => Response.ok('Hello, World!'));
+
+  await serveHandler(handler);
 }
+
+// #enddocregion basic-setup

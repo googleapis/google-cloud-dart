@@ -13,7 +13,7 @@
 // limitations under the License.
 
 // #docregion project-discovery
-import 'package:google_cloud/general.dart';
+import 'package:google_cloud/google_cloud.dart';
 
 void main() async {
   // Discovers the project ID using all available strategies.

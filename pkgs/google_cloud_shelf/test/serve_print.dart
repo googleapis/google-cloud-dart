@@ -12,23 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// #docregion logging-and-serving
-import 'package:google_cloud/general.dart';
-import 'package:google_cloud/http_serving.dart';
+import 'package:google_cloud_shelf/google_cloud_shelf.dart';
 import 'package:shelf/shelf.dart';
 
-void main() async {
-  final projectId = await computeProjectId();
+Future<void> main() async {
+  Response handler(Request request) => Response.ok('Hello from serveHandler!');
 
-  final handler = const Pipeline()
-      .addMiddleware(createLoggingMiddleware(projectId: projectId))
-      .addHandler((request) {
-        currentLogger.info('Handling request: ${request.url}');
-        return Response.ok('Hello, World!');
-      });
-
-  // Automatically listens on the correct port and handles termination signals.
   await serveHandler(handler);
+  print('done!');
 }
-
-// #enddocregion logging-and-serving
