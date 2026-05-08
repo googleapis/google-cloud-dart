@@ -11,7 +11,7 @@ TODO: This is going to be a breaking change release, but we need to bump deps
 
 ### `http_serving.dart`
 
-- REMOVED everything.
+- REMOVED everything. These features are now in the new [`package:google_cloud_shelf`](https://pub.dev/packages/google_cloud_shelf) package.
 
 ## 0.4.1
 
