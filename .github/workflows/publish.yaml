@@ -20,7 +20,7 @@ on:
   pull_request:
     branches: [ main ]
   push:
-    tags: [ '[a-zA-Z_]*-v[0-9].[0-9].[0-9]*' ]
+    tags: [ '[A-z]+-v[0-9]+.[0-9]+.[0-9]+*' ]
 
 jobs:
   publish:
