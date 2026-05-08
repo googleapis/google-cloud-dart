@@ -19,8 +19,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:google_cloud/http_serving.dart';
 import 'package:google_cloud_logging/google_cloud_logging.dart';
+import 'package:google_cloud_shelf/google_cloud_shelf.dart';
 import 'package:shelf/shelf.dart';
 import 'package:test/test.dart';
 

@@ -21,7 +21,7 @@ import 'package:meta/meta.dart';
 import 'package:shelf/shelf.dart';
 import 'package:stack_trace/stack_trace.dart';
 
-import '../constants.dart';
+import 'constants.dart';
 import 'http_response_exception.dart';
 import 'json_request_checking.dart';
 import 'trace_context_data.dart';
@@ -39,10 +39,12 @@ const internalServerErrorMessage = 'Internal Server Error';
 /// correlation.
 ///
 /// If [projectId] is `null`, returns the value returned by
-/// [errorLoggingMiddleware].
+/// [errorLoggingMiddleware] (which prints successful request logs to stdout).
 ///
 /// If [projectId] is provided, returns the value returned by
-/// [cloudLoggingMiddleware].
+/// [cloudLoggingMiddleware] (which delegates request logs to the Cloud host
+/// infrastructure to prevent duplicate logging, but formats error/uncaught logs
+/// in GCP's structured format).
 Middleware createLoggingMiddleware({String? projectId}) => projectId == null
     ? errorLoggingMiddleware
     : cloudLoggingMiddleware(projectId);
@@ -54,7 +56,7 @@ Middleware createLoggingMiddleware({String? projectId}) => projectId == null
 ///
 /// {@template exceptionResponseMapping}
 /// All errors that are thrown in the context of the handler are caught and
-/// and logged with an appopriate response sent to the caller.
+/// logged with an appropriate response sent to the caller.
 ///
 /// The HTTP status code sent depends on the exception type.
 ///
@@ -194,7 +196,7 @@ String _formatDetailsAsPseudoYaml(List<Map<String, Object?>> details) {
   return buffer.toString().trimRight();
 }
 
-/// Return [Middleware] that handles exceptions and generates Google Cloud
+/// Returns [Middleware] that handles exceptions and generates Google Cloud
 /// structured logs.
 ///
 /// [projectId] is the Google Cloud Project ID used for trace correlation.
@@ -371,7 +373,7 @@ final class _CloudLogger extends CloudLogger {
 }
 
 bool _frameFolder(Frame frame) =>
-    frame.isCore || frame.package == 'google_cloud';
+    frame.isCore || frame.package == 'google_cloud_shelf';
 
 @internal
 Chain formatStackTrace(StackTrace stackTrace) =>

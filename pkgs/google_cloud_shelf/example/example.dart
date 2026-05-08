@@ -12,12 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:google_cloud/google_cloud.dart';
+// #docregion basic-setup
+import 'package:google_cloud_shelf/google_cloud_shelf.dart';
 import 'package:shelf/shelf.dart';
 
 Future<void> main() async {
-  Response handler(Request request) => Response.ok('Hello from serveHandler!');
+  final handler = const Pipeline()
+      .addMiddleware(createLoggingMiddleware())
+      .addHandler((_) => Response.ok('Hello, World!'));
 
   await serveHandler(handler);
-  print('done!');
 }
+
+// #enddocregion basic-setup

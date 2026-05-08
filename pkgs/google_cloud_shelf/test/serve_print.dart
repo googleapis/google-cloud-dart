@@ -1,4 +1,4 @@
-// Copyright 2021 Google LLC
+// Copyright 2026 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,9 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:google_cloud/google_cloud.dart';
+import 'package:google_cloud_shelf/google_cloud_shelf.dart';
+import 'package:shelf/shelf.dart';
 
 Future<void> main() async {
-  final projectId = await computeProjectId();
-  print('Project ID: $projectId');
+  Response handler(Request request) => Response.ok('Hello from serveHandler!');
+
+  await serveHandler(handler);
+  print('done!');
 }

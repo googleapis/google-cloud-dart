@@ -21,6 +21,7 @@ A Dart client for Google Cloud Storage.
 
 All access to Google Cloud Storage is made through the `Storage` class.
 
+<?code-excerpt "example/main.dart (main)"?>
 ```dart
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 
@@ -69,6 +70,7 @@ You can control the retry behavior using the `retry` parameter on each method.
 
 For example:
 
+<?code-excerpt "example/retry.dart (retry)"?>
 ```dart
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 
@@ -79,8 +81,8 @@ void main() async {
   await storage.patchBucket(
     'my-bucket',
     BucketMetadataPatchBuilder()..labels = {'key': 'value'},
-    ifMetagenerationMatch: 1,
-    retry: ExponentialRetry(maxRetries: 2),
+    ifMetagenerationMatch: BigInt.from(1),
+    retry: const ExponentialRetry(maxRetries: 2),
   );
 
   storage.close();
