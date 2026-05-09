@@ -19,7 +19,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:google_cloud/http_serving.dart';
+import 'package:google_cloud_logging/google_cloud_logging.dart';
+import 'package:google_cloud_shelf/google_cloud_shelf.dart';
 import 'package:shelf/shelf.dart';
 import 'package:test/test.dart';
 
@@ -491,7 +492,7 @@ Future<Response> _respondSuccessfullyWithLogs(_) async {
   currentLogger.info('trace me');
   print('print me');
   currentLogger
-    ..log('default me', LogSeverity.defaultSeverity)
+    ..log('default me', LogSeverity.$default)
     ..warning('warning me');
   return Response.ok('done', headers: {'content-type': 'text/plain'});
 }

@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:google_cloud/google_cloud.dart';
-import 'package:shelf/shelf.dart';
-
-Future<void> main() async {
-  Response handler(Request request) => Response.ok('Hello from serveHandler!');
-
-  await serveHandler(handler);
-  print('done!');
+({Object error, StackTrace stackTrace}) catchingFunction() {
+  try {
+    throwingFunction();
+  } catch (e, trace) {
+    return (error: e, stackTrace: trace);
+  }
 }
+
+Never throwingFunction() => throw ArgumentError('sample');

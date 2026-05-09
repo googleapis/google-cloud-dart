@@ -1,4 +1,4 @@
-// Copyright 2021 Google LLC
+// Copyright 2026 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,9 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:google_cloud/google_cloud.dart';
+// #docregion cloud-logger
+import 'package:google_cloud_logging/google_cloud_logging.dart';
 
-Future<void> main() async {
-  final projectId = await computeProjectId();
-  print('Project ID: $projectId');
+const _logger = CloudLogger.printLogger();
+
+void main() {
+  _logger.info('Processing item.', payload: {'itemId': 'A-987'});
+  try {
+    throw Exception('Failed to connect to DB');
+  } catch (error, stack) {
+    _logger.error('Database connection failure - $error', stackTrace: stack);
+  }
 }
+
+// #enddocregion cloud-logger

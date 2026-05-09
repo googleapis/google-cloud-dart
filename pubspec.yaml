@@ -39,9 +39,22 @@ workspace:
   - generated/google_cloud_showcase_v1beta1
   - generated/google_cloud_type
   - pkgs/google_cloud
+  - pkgs/google_cloud_logging
+  - pkgs/google_cloud_shelf
   - pkgs/google_cloud_storage
   - test_utils
   - tests
 
 dev_dependencies:
   dart_flutter_team_lints: ^3.5.2
+  excerpter:
+    # See this issue for discussion about making this a "real" package
+    # https://github.com/dart-lang/labs/issues/322
+    git:
+      # https://github.com/flutter/website/tree/main/packages/excerpter
+      # In theory 👆 is more maintained, but it requires Dart 3.11
+      # Since we're using a stable REF, it's not a big deal now
+      url: https://github.com/dart-lang/site-shared
+      path: pkgs/excerpter
+      ref: b2ffb98eaf2d4022ebfc8ceb0af268f2e6449d13
+  path: ^1.9.0

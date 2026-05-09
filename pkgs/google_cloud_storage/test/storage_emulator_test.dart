@@ -22,7 +22,7 @@ import 'package:test/test.dart';
 
 void main() async {
   group('storage emulator tests', () {
-    test('STORAGE_EMULATOR_HOST configuration', () async {
+    test('STORAGE_EMULATOR_HOST configuration', testOn: 'vm', () async {
       final storage = Storage();
       addTearDown(storage.close);
 
@@ -40,7 +40,7 @@ void main() async {
         await storage.downloadObject(bucketName, 'object1'),
         utf8.encode('Hello World!'),
       );
-    }, testOn: 'vm');
+    });
 
     test('explicit configuration', () async {
       final storage = Storage(
