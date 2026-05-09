@@ -1,8 +1,9 @@
-## 0.6.2
+## 0.6.2-wip
 
-* Add retries to `uploadObjectFromSink`.
-* Add `deleteObjectAcl`.
-* Add `makeObjectPublic`.
+* Add `Storage.moveObject` and `StorageObject.move`.
+* Add `Storage.deleteObjectAcl`.
+* Add `Storage.makeObjectPublic` and `StorageObject.makePublic`.
+* Add `ifGenerationMatch` and `retry` parameters to `Storage.uploadObjectFromSink`.
 
 ## 0.6.1
 
