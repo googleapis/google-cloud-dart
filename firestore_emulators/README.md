@@ -5,8 +5,12 @@ the [Firebase Emulators Suite][].
 
 ## Running Tests Locally
 
-To run these tests on your machine, you need to have the emulator running in
-one terminal session and execute the tests in another.
+The [Developer Guide](../DEVELOPER_GUIDE.md) has the canonical instructions
+for running these tests. If you are running the tests many times, it may be
+faster to keep the emulator running between test invocations.
+
+You can do that by running the emulator in one terminal session and
+executing the tests in another.
 
 ### 1. Start the Firebase Emulator
 

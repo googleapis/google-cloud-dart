@@ -158,6 +158,22 @@ To run these tests locally (they are automatically run for PRs using
 *   **Missing Scopes:** If a test fails with `insufficient_scope`, check the error message for the required scope URL and re-authenticate with that scope.
 *   **Disabled APIs:** If a test fails with a `ForbiddenException` stating an API has not been used, follow the URL in the error message to enable the API in the Google Cloud Console.
 
+### Running against the Firebase Emulators Suite
+
+Some integration tests require access to the [Firebase Emulators Suite][]. These
+tests are tagged with `@Tags(['firebase-emulator'])` and are not run by default,
+i.e., `dart test` will not run them.
+
+To run these tests locally (they are automatically run for PRs using a GitHub workflow):
+
+```bash
+$ firebase emulators:exec \
+    --config=firestore_emulators/firebase.json \
+    "GOOGLE_CLOUD_PROJECT=test-project dart test -P firebase-emulator ."
+```
+
+See the [Firebase emulator configuration](firestore_emulators/).
+
 ## Pull Requests
 
 * PRs should follow [Conventional Commits][]
@@ -182,3 +198,4 @@ tests by commenting `/gcbrun` on the PR.
 [Conventional Commits]: https://www.conventionalcommits.org/
 [`cloud-sdk-dart-team`]: https://github.com/orgs/googleapis/teams/cloud-sdk-dart-team
 [`dart-sdk-testing`]: https://pantheon.corp.google.com/welcome?project=dart-sdk-testing
+[Firebase Emulators Suite]: https://firebase.google.com/docs/emulator-suite
