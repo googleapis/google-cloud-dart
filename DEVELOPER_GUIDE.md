@@ -182,6 +182,65 @@ See the [Firebase emulator configuration](firestore_emulators/).
   example, for a documentation changes to `package:google_cloud_storage`,
   `docs(storage): clarify retry logic`.
 
+## Publishing Packages
+
+Package publishing is automated using GitHub Actions and the shared
+[ecosystem workflows](https://github.com/dart-lang/ecosystem).
+
+### Pull Requests (Dry Run)
+When a PR is opened or updated on `main`, the
+[Publish workflow](file:///Users/kevmoo/github/google-cloud-dart/.github/workflows/publish.yaml)
+runs a dry-run check for all packages in the repository. It validates that
+there are no issues that would prevent publishing to `pub.dev`
+(`dart pub publish --dry-run`).
+
+### Triggering a Release (Tagging)
+To publish a package to `pub.dev`, a git tag matching the package name and
+version must be created and pushed.
+
+There are two ways to do this:
+
+#### Option A: Via the PR Comment UI (Recommended)
+When a PR is created or updated with a version bump, the dry-run workflow
+detects it and posts a summary comment on the PR.
+
+1. In the PR's health/publish summary comment, locate the packages table.
+2. For any package ready to publish, click the pre-constructed **Publish** link
+   in the table.
+3. This opens GitHub's **Draft a new release** page with the correct tag name
+   (`<package_name>-v<version>`), target branch, and release title already
+   pre-filled.
+4. Click **Publish release** in the GitHub UI to create the tag automatically.
+
+This method is highly recommended as it avoids manual terminal execution and
+prevents tag naming typos.
+
+#### Option B: Manual Tagging (CLI)
+Alternatively, you can manually create and push the tag from your terminal:
+
+- **Tag Format:** `<package_name>-v<version>` (e.g., `google_cloud-v1.0.0` or
+  `google_cloud_storage-v0.2.1`).
+- **Publish Command:**
+  ```bash
+  git tag google_cloud_storage-v0.2.1
+  git push origin google_cloud_storage-v0.2.1
+  ```
+
+When this tag is pushed to GitHub, the workflow:
+1. Identifies the target package based on the `<package_name>` prefix in the
+   tag.
+2. Uses OIDC authentication to securely publish the package directly to
+   `pub.dev`.
+
+> [!NOTE]
+> - Packages with `publish_to: none` in their `pubspec.yaml` are
+>   automatically ignored.
+> - The `generated/` directory is explicitly excluded from publishing in this
+>   repository (`ignore-packages: generated/**` in
+>   [publish.yaml](file:///Users/kevmoo/github/google-cloud-dart/.github/workflows/publish.yaml)).
+> - Version numbers ending with `-dev` (e.g., `1.2.3-dev`) are validated but
+>   **not** auto-published to `pub.dev`.
+
 ## Maintainers
 
 The ability to triage issues, merge PRs, and assign reviewers is limited to 
