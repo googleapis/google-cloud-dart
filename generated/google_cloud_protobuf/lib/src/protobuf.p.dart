@@ -262,21 +262,36 @@ class _DurationHelper {
   /// with 's'.
   ///
   /// E.g., 3 seconds with 0 nanoseconds would be '3s'; 3 seconds with 70
-  /// nanosecond would be '3.00000007s'.
+  /// nanosecond would be '3.000000070s'.
+  /// See
+  /// [Duration.java](https://github.com/protocolbuffers/protobuf/blob/44025909eb7064a008decaa60c305bddc8757b3a/java/util/src/main/java/com/google/protobuf/util/Durations.java#L200)
   static String encode(Duration duration) {
-    if (duration.nanos == 0) {
-      return '${duration.seconds}s';
+    var seconds = duration.seconds;
+    var nanos = duration.nanos;
+
+    final result = StringBuffer();
+    if (seconds < 0 || nanos < 0) {
+      result.write('-');
+      seconds = -seconds;
+      nanos = -nanos;
+    }
+    result.write(seconds);
+    if (nanos != 0) {
+      result
+        ..write('.')
+        ..write(_formatNanos(nanos));
+    }
+    result.write('s');
+    return result.toString();
+  }
+
+  static String _formatNanos(int nanos) {
+    if (nanos % 1_000_000 == 0) {
+      return (nanos ~/ 1_000_000).toString().padLeft(3, '0');
+    } else if (nanos % 1_000 == 0) {
+      return (nanos ~/ 1_000).toString().padLeft(6, '0');
     } else {
-      final rhs = duration.nanos.abs().toString().padLeft(9, '0');
-
-      var result = duration.seconds == 0
-          ? '${duration.nanos < 0 ? '-' : ''}0.$rhs'
-          : '${duration.seconds}.$rhs';
-      while (result.endsWith('0')) {
-        result = result.substring(0, result.length - 1);
-      }
-
-      return '${result}s';
+      return nanos.toString().padLeft(9, '0');
     }
   }
 
