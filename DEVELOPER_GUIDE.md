@@ -194,6 +194,20 @@ runs a dry-run check for all packages in the repository. It validates that
 there are no issues that would prevent publishing to `pub.dev`
 (`dart pub publish --dry-run`).
 
+### Enabling Automated Publishing on pub.dev
+
+Before GitHub Actions can publish a package to `pub.dev`, you must authorize the GitHub repository on the `pub.dev` website:
+
+1. **Ensure Permissions:** You must be an admin of the verified publisher that owns the package (or a direct uploader if the package does not belong to a publisher).
+2. **Navigate to Package Admin:** Go to the **Admin** tab of the package on `pub.dev` (e.g., `https://pub.dev/packages/<package_name>/admin`).
+3. **Enable GitHub Actions:** Locate the **Automated publishing** section and click **Enable publishing from GitHub Actions**.
+4. **Configure Repository & Tags:**
+   - **Repository:** Enter `googleapis/google-cloud-dart`.
+   - **Tag pattern:** Because this is a monorepo, use a pattern matching the package-specific tag prefix: `<package_name>-v{{version}}` (e.g., `google_cloud_storage-v{{version}}` or `google_cloud-v{{version}}`).
+5. **Save:** Save the settings.
+
+Once configured, `pub.dev` will authenticate and accept automated publishing requests from GitHub Actions via OIDC whenever a matching git tag is pushed.
+
 ### Triggering a Release (Tagging)
 To publish a package to `pub.dev`, a git tag matching the package name and
 version must be created and pushed.
