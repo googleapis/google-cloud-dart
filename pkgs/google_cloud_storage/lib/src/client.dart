@@ -585,9 +585,6 @@ final class Storage {
   /// If set, [generation] selects a specific revision of this object whose ACL
   /// should be retrieved.
   ///
-  /// If set, [userProject] is the project to be billed for this request. This
-  /// argument must be set for [Requester Pays] buckets.
-  ///
   /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/objectAccessControls/get).
   ///
   /// [Google Cloud Storage object]: https://docs.cloud.google.com/storage/docs/objects
@@ -1012,9 +1009,6 @@ final class Storage {
   ///
   /// If set, [generation] selects a specific revision of this object whose ACL
   /// should be modified.
-  ///
-  /// If set, [userProject] is the project to be billed for this request. This
-  /// argument must be set for [Requester Pays] buckets.
   ///
   /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/objectAccessControls/update).
   ///
