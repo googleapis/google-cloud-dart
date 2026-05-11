@@ -1,6 +1,8 @@
 ## 0.6.2-wip
 
 * Add retries to `uploadObjectFromSink`.
+* Add `deleteBucketAcl`, `getBucketAcl`, `insertBucketAcl`,
+  `listBucketAcl`, `patchBucketAcl`, and `updateBucketAcl`.
 * Add `deleteObjectAcl`, `getObjectAcl`, `listObjectAcl`, `patchObjectAcl`,
   and `updateObjectAcl`.
 * Add `makeObjectPublic`.
