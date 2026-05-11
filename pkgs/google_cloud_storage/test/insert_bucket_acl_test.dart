@@ -40,13 +40,15 @@ void insertBucketAclTest(Storage Function() createStorage) {
       ),
     );
 
-    final acl = await storage.insertBucketAcl(
-      bucketName,
-      'user-${cloud.googleTestUser}',
-      'READER',
-    );
+    // The `iam.allowedPolicyMemberDomains` constraint on the test project does
+    // not allow `cloud.googleTestUser` to be an owner, so we use project
+    // viewers instead.
+    final initialMetadata = await storage.bucketMetadata(bucketName);
+    final entity = 'project-viewers-${initialMetadata.projectNumber}';
 
-    expect(acl.entity, 'user-${cloud.googleTestUser}');
+    final acl = await storage.insertBucketAcl(bucketName, entity, 'READER');
+
+    expect(acl.entity, entity);
     expect(acl.role, 'READER');
 
     final metadata = await storage.bucketMetadata(
@@ -55,9 +57,9 @@ void insertBucketAclTest(Storage Function() createStorage) {
     );
     final testUserRoles = [
       for (var i in metadata.acl ?? <BucketAccessControl>[])
-        if (i.entity == 'user-${cloud.googleTestUser}') (i.entity, i.role),
+        if (i.entity == entity) (i.entity, i.role),
     ];
-    expect(testUserRoles, [('user-${cloud.googleTestUser}', 'READER')]);
+    expect(testUserRoles, [(entity, 'READER')]);
   });
 
   test('reader then owner', () async {
@@ -71,16 +73,11 @@ void insertBucketAclTest(Storage Function() createStorage) {
       ),
     );
 
-    await storage.insertBucketAcl(
-      bucketName,
-      'user-${cloud.googleTestUser}',
-      'READER',
-    );
-    await storage.insertBucketAcl(
-      bucketName,
-      'user-${cloud.googleTestUser}',
-      'OWNER',
-    );
+    final initialMetadata = await storage.bucketMetadata(bucketName);
+    final entity = 'project-viewers-${initialMetadata.projectNumber}';
+
+    await storage.insertBucketAcl(bucketName, entity, 'READER');
+    await storage.insertBucketAcl(bucketName, entity, 'OWNER');
 
     final metadata = await storage.bucketMetadata(
       bucketName,
@@ -89,9 +86,9 @@ void insertBucketAclTest(Storage Function() createStorage) {
 
     final testUserRoles = [
       for (var i in metadata.acl ?? <BucketAccessControl>[])
-        if (i.entity == 'user-${cloud.googleTestUser}') (i.entity, i.role),
+        if (i.entity == entity) (i.entity, i.role),
     ];
-    expect(testUserRoles, [('user-${cloud.googleTestUser}', 'OWNER')]);
+    expect(testUserRoles, [(entity, 'OWNER')]);
   });
 
   test('owner then reader', () async {
@@ -105,16 +102,11 @@ void insertBucketAclTest(Storage Function() createStorage) {
       ),
     );
 
-    await storage.insertBucketAcl(
-      bucketName,
-      'user-${cloud.googleTestUser}',
-      'OWNER',
-    );
-    await storage.insertBucketAcl(
-      bucketName,
-      'user-${cloud.googleTestUser}',
-      'READER',
-    );
+    final initialMetadata = await storage.bucketMetadata(bucketName);
+    final entity = 'project-viewers-${initialMetadata.projectNumber}';
+
+    await storage.insertBucketAcl(bucketName, entity, 'OWNER');
+    await storage.insertBucketAcl(bucketName, entity, 'READER');
 
     final metadata = await storage.bucketMetadata(
       bucketName,
@@ -123,9 +115,9 @@ void insertBucketAclTest(Storage Function() createStorage) {
 
     final testUserRoles = [
       for (var i in metadata.acl ?? <BucketAccessControl>[])
-        if (i.entity == 'user-${cloud.googleTestUser}') (i.entity, i.role),
+        if (i.entity == entity) (i.entity, i.role),
     ];
-    expect(testUserRoles, [('user-${cloud.googleTestUser}', 'READER')]);
+    expect(testUserRoles, [(entity, 'READER')]);
   });
 
   test('not found', () async {
@@ -143,9 +135,7 @@ void insertBucketAclTest(Storage Function() createStorage) {
 void main() async {
   group('insert bucket acl', () {
     group('google-cloud', tags: ['google-cloud', 'no-ulba'], () {
-      // TODO: run when the test project disables the
-      // `iam.allowedPolicyMemberDomains` constraint.
-      // insertBucketAclTest(Storage.new);
+      insertBucketAclTest(Storage.new);
 
       test('ubla enabled failure', () async {
         // UBLA is not supposed in Storage Testbench

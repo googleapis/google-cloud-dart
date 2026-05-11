@@ -40,7 +40,11 @@ void deleteBucketAclTest(Storage Function() createStorage) {
       ),
     );
 
-    const entity = 'user-${cloud.googleTestUser}';
+    // The `iam.allowedPolicyMemberDomains` constraint on the test project does
+    // not allow `cloud.googleTestUser` to be an owner, so we use project
+    // viewers instead.
+    final initialMetadata = await storage.bucketMetadata(bucketName);
+    final entity = 'project-viewers-${initialMetadata.projectNumber}';
     await storage.insertBucketAcl(bucketName, entity, 'READER');
 
     await storage.deleteBucketAcl(bucketName, entity);
@@ -86,9 +90,7 @@ void deleteBucketAclTest(Storage Function() createStorage) {
 void main() async {
   group('delete bucket acl', () {
     group('google-cloud', tags: ['google-cloud', 'no-ulba'], () {
-      // TODO: run when the test project disables the
-      // `iam.allowedPolicyMemberDomains` constraint.
-      // deleteBucketAclTest(Storage.new);
+      deleteBucketAclTest(Storage.new);
     });
 
     group('storage-testbench', tags: ['storage-testbench'], () {

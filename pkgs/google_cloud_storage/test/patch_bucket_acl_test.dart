@@ -16,7 +16,6 @@ import 'package:google_cloud_storage/google_cloud_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:test/test.dart';
-import 'package:test_utils/cloud.dart' as cloud;
 
 import 'test_utils.dart';
 
@@ -40,7 +39,11 @@ void patchBucketAclTest(Storage Function() createStorage) {
       ),
     );
 
-    const entity = 'user-${cloud.googleTestUser}';
+    // The `iam.allowedPolicyMemberDomains` constraint on the test project does
+    // not allow `cloud.googleTestUser` to be an owner, so we use project
+    // viewers instead.
+    final initialMetadata = await storage.bucketMetadata(bucketName);
+    final entity = 'project-viewers-${initialMetadata.projectNumber}';
     await storage.insertBucketAcl(bucketName, entity, 'READER');
 
     final acl = await storage.patchBucketAcl(bucketName, entity, 'OWNER');
@@ -70,9 +73,7 @@ void patchBucketAclTest(Storage Function() createStorage) {
 void main() async {
   group('patch bucket acl', () {
     group('google-cloud', tags: ['google-cloud', 'no-ulba'], () {
-      // TODO: run when the test project disables the
-      // `iam.allowedPolicyMemberDomains` constraint.
-      // patchBucketAclTest(Storage.new);
+      patchBucketAclTest(Storage.new);
     });
 
     group('storage-testbench', tags: ['storage-testbench'], () {

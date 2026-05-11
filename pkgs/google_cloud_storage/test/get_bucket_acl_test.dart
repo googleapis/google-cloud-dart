@@ -40,7 +40,11 @@ void getBucketAclTest(Storage Function() createStorage) {
       ),
     );
 
-    const entity = 'user-${cloud.googleTestUser}';
+    // The `iam.allowedPolicyMemberDomains` constraint on the test project does
+    // not allow `cloud.googleTestUser` to be an owner, so we use project
+    // viewers instead.
+    final initialMetadata = await storage.bucketMetadata(bucketName);
+    final entity = 'project-viewers-${initialMetadata.projectNumber}';
     await storage.insertBucketAcl(bucketName, entity, 'READER');
 
     final acl = await storage.getBucketAcl(bucketName, entity);
@@ -77,9 +81,7 @@ void getBucketAclTest(Storage Function() createStorage) {
 void main() async {
   group('get bucket acl', () {
     group('google-cloud', tags: ['google-cloud', 'no-ulba'], () {
-      // TODO: run when the test project disables the
-      // `iam.allowedPolicyMemberDomains` constraint.
-      // getBucketAclTest(Storage.new);
+      getBucketAclTest(Storage.new);
     });
 
     group('storage-testbench', tags: ['storage-testbench'], () {
