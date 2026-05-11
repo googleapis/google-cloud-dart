@@ -17,7 +17,7 @@
   * `patchObjectAcl`
   * `updateObjectAcl`.
 * Add `Storage.makeObjectPublic`.
-* Add `StorageObject.makeObjectPublic`.
+* Add StorageObject.makePublic.
 
 ## 0.6.1
 
