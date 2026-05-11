@@ -314,6 +314,118 @@ final class Storage {
     await serviceClient.delete(url);
   }, isIdempotent: ifMetagenerationMatch != null);
 
+  /// Deletes an ACL entry on the specified [Google Cloud Storage bucket].
+  ///
+  /// This operation is not idempotent.
+  ///
+  /// If the bucket has uniform bucket-level access enabled, this operation
+  /// will fail with [BadRequestException].
+  ///
+  /// Throws [NotFoundException] if the bucket or ACL does not exist.
+  ///
+  /// {@macro acl_entity_docs}
+  ///
+  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/bucketAccessControls/delete).
+  ///
+  /// [Google Cloud Storage bucket]: https://docs.cloud.google.com/storage/docs/buckets
+  Future<void> deleteBucketAcl(
+    String bucket,
+    String entity, {
+    RetryRunner retry = defaultRetry,
+  }) => retry.run(() async {
+    final serviceClient = await _serviceClient;
+    final url = _requestUrl(['storage', 'v1', 'b', bucket, 'acl', entity], {});
+    await serviceClient.delete(url);
+  }, isIdempotent: false);
+
+  /// Returns the ACL entry for the specified entity on the specified
+  /// [Google Cloud Storage bucket].
+  ///
+  /// This operation is read-only and always idempotent.
+  ///
+  /// {@macro acl_entity_docs}
+  ///
+  /// Throws [NotFoundException] if the bucket or ACL entry does not exist.
+  ///
+  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/bucketAccessControls/get).
+  ///
+  /// [Google Cloud Storage bucket]: https://docs.cloud.google.com/storage/docs/buckets
+  Future<BucketAccessControl> getBucketAcl(
+    String bucket,
+    String entity, {
+    RetryRunner retry = defaultRetry,
+  }) => retry.run(() async {
+    final serviceClient = await _serviceClient;
+    final url = _requestUrl(['storage', 'v1', 'b', bucket, 'acl', entity], {});
+    final j = await serviceClient.get(url);
+    return bucketAccessControlFromJson(j as Map<String, Object?>)!;
+  }, isIdempotent: true);
+
+  /// Creates a new ACL entry on the specified [Google Cloud Storage bucket].
+  ///
+  /// This operation is not idempotent.
+  ///
+  /// If the bucket has uniform bucket-level access enabled, this operation
+  /// will fail with [BadRequestException].
+  ///
+  /// Throws [NotFoundException] if the bucket does not exist.
+  ///
+  /// {@macro acl_entity_docs}
+  ///
+  /// {@template bucket_acl_role_docs}
+  /// [role] specifies the access permission for the entity. There are three
+  /// roles that can be assigned to an entity:
+  /// 1. `READER`s can get the bucket, though no acl property will be returned,
+  ///    and list the bucket's objects.
+  /// 2. `WRITER`s are `READER`s, and they can insert objects into the bucket
+  ///    and delete the bucket's objects.
+  /// 3. `OWNER`s are `WRITER`s, and they can get the acl property of a bucket,
+  ///    update a bucket, and call all [BucketAccessControl]-related methods on
+  ///    the bucket.
+  /// {@endtemplate}
+  ///
+  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/bucketAccessControls/insert).
+  ///
+  /// [Google Cloud Storage bucket]: https://docs.cloud.google.com/storage/docs/buckets
+  Future<BucketAccessControl> insertBucketAcl(
+    String bucket,
+    String entity,
+    String role, {
+    RetryRunner retry = defaultRetry,
+  }) => retry.run(() async {
+    final serviceClient = await _serviceClient;
+    final url = _requestUrl(['storage', 'v1', 'b', bucket, 'acl'], {});
+    final j = await serviceClient.post(
+      url,
+      body: _JsonEncodableWrapper({'entity': entity, 'role': role}),
+    );
+    return bucketAccessControlFromJson(j as Map<String, Object?>)!;
+  }, isIdempotent: false);
+
+  /// A list of Access Control List (ACL) entries on the specified
+  /// [Google Cloud Storage bucket].
+  ///
+  /// This operation is read-only and always idempotent.
+  ///
+  /// Throws [NotFoundException] if the bucket does not exist.
+  ///
+  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/bucketAccessControls/list).
+  ///
+  /// [Google Cloud Storage bucket]: https://docs.cloud.google.com/storage/docs/buckets
+  Future<List<BucketAccessControl>> listBucketAcl(
+    String bucket, {
+    RetryRunner retry = defaultRetry,
+  }) => retry.run(() async {
+    final serviceClient = await _serviceClient;
+    final url = _requestUrl(['storage', 'v1', 'b', bucket, 'acl'], {});
+    final j = await serviceClient.get(url);
+    final items = j['items'] as List<Object?>? ?? const [];
+    return [
+      for (final item in items)
+        bucketAccessControlFromJson(item as Map<String, Object?>)!,
+    ];
+  }, isIdempotent: true);
+
   /// A stream of buckets in the project in lexicographical order by name.
   ///
   /// [prefix] filters the returned buckets to those whose names begin with the
@@ -436,6 +548,70 @@ final class Storage {
     );
     return bucketMetadataFromJson(j as Map<String, Object?>);
   }, isIdempotent: ifMetagenerationMatch != null);
+
+  /// Patches an Access Control List (ACL) entry on the specified
+  /// [Google Cloud Storage bucket].
+  ///
+  /// This operation is not idempotent.
+  ///
+  /// If the bucket has uniform bucket-level access enabled, this operation
+  /// will fail with [BadRequestException].
+  ///
+  /// Throws [NotFoundException] if the bucket or ACL does not exist.
+  ///
+  /// {@macro acl_entity_docs}
+  ///
+  /// {@macro bucket_acl_role_docs}
+  ///
+  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/bucketAccessControls/patch).
+  ///
+  /// [Google Cloud Storage bucket]: https://docs.cloud.google.com/storage/docs/buckets
+  Future<BucketAccessControl> patchBucketAcl(
+    String bucket,
+    String entity,
+    String role, {
+    RetryRunner retry = defaultRetry,
+  }) => retry.run(() async {
+    final serviceClient = await _serviceClient;
+    final url = _requestUrl(['storage', 'v1', 'b', bucket, 'acl', entity], {});
+    final j = await serviceClient.patch(
+      url,
+      body: _JsonEncodableWrapper({'entity': entity, 'role': role}),
+    );
+    return bucketAccessControlFromJson(j as Map<String, Object?>)!;
+  }, isIdempotent: false);
+
+  /// Updates an Access Control List (ACL) entry on the specified
+  /// [Google Cloud Storage bucket].
+  ///
+  /// This operation is not idempotent.
+  ///
+  /// If the bucket has uniform bucket-level access enabled, this operation
+  /// will fail with [BadRequestException].
+  ///
+  /// Throws [NotFoundException] if the bucket or ACL does not exist.
+  ///
+  /// {@macro acl_entity_docs}
+  ///
+  /// {@macro bucket_acl_role_docs}
+  ///
+  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/bucketAccessControls/update).
+  ///
+  /// [Google Cloud Storage bucket]: https://docs.cloud.google.com/storage/docs/buckets
+  Future<BucketAccessControl> updateBucketAcl(
+    String bucket,
+    String entity,
+    String role, {
+    RetryRunner retry = defaultRetry,
+  }) => retry.run(() async {
+    final serviceClient = await _serviceClient;
+    final url = _requestUrl(['storage', 'v1', 'b', bucket, 'acl', entity], {});
+    final j = await serviceClient.put(
+      url,
+      body: _JsonEncodableWrapper({'entity': entity, 'role': role}),
+    );
+    return bucketAccessControlFromJson(j as Map<String, Object?>)!;
+  }, isIdempotent: false);
 
   // Object-related methods, keep alphabetized.
 
