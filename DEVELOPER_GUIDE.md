@@ -15,6 +15,7 @@ The dependency graph for the current set of packages:
 ```mermaid
 graph TD
   subgraph Tier0 ["Tier 0 (Publish First)"]
+    google_cloud["google_cloud"]
     google_cloud_protobuf["protobuf"]
   end
 
@@ -31,6 +32,7 @@ graph TD
     google_cloud_language_v2["language_v2"]
     google_cloud_location["location"]
     google_cloud_longrunning["longrunning"]
+    google_cloud_storage["storage"]
   end
 
   subgraph Tier3 ["Tier 3"]
@@ -46,16 +48,10 @@ graph TD
     google_cloud_logging["logging"]
   end
 
-  subgraph Tier5 ["Tier 5"]
-    google_cloud["google_cloud"]
+  subgraph Tier5 ["Tier 5 (Publish Last)"]
     google_cloud_shelf["shelf"]
   end
 
-  subgraph Tier6 ["Tier 6 (Publish Last)"]
-    google_cloud_storage["storage"]
-  end
-
-  google_cloud --> google_cloud_logging
   google_cloud_ai_generativelanguage_v1beta --> google_cloud_longrunning
   google_cloud_ai_generativelanguage_v1beta --> google_cloud_protobuf
   google_cloud_ai_generativelanguage_v1beta --> google_cloud_rpc
