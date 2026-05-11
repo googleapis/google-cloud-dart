@@ -9,13 +9,13 @@
   * `insertBucketAcl`
   * `listBucketAcl`
   * `patchBucketAcl`
-  * `updateBucketAcl`.
+  * `updateBucketAcl`
 * Add new `Storage` methods for object ACLs:
   * `deleteObjectAcl`
   * `getObjectAcl`
   * `listObjectAcl`
   * `patchObjectAcl`
-  * `updateObjectAcl`.
+  * `updateObjectAcl`
 * Add `Storage.makeObjectPublic`.
 * Add `StorageObject.makeObjectPublic`.
 
