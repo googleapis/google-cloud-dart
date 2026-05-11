@@ -136,7 +136,9 @@ void listObjectAclTest(Storage Function() createStorage) {
 void main() async {
   group('list object acl', () {
     group('google-cloud', tags: ['google-cloud', 'no-ulba'], () {
-      listObjectAclTest(Storage.new);
+      // TODO: run when the test project disables the
+      // `iam.allowedPolicyMemberDomains` constraint.
+      // listObjectAclTest(Storage.new);
     });
 
     group('storage-testbench', tags: ['storage-testbench'], () {
