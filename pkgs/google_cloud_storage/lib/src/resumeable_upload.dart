@@ -213,7 +213,6 @@ class ResumableUploadSink implements StreamSink<List<int>> {
         } else if (res.statusCode >= 200 && res.statusCode < 300) {
           return res;
         } else {
-          print('XXX: ${res.body}');
           throw ServiceException.fromHttpResponse(res, res.body);
         }
       }
