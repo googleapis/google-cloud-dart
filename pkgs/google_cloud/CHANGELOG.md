@@ -1,7 +1,4 @@
-<!--
-TODO: This is going to be a breaking change release, but we need to bump deps
--->
-## 0.4.2-wip
+## 0.5.0
 
 ### `google_cloud.dart`: now is the primary exporter of the core APIs.
 
