@@ -38,6 +38,17 @@ Storage createEmulatorClient() => Storage(
   useAuthWithCustomEndpoint: false,
 );
 
+(RetryTestHttpClient, Storage) createStorageTestbenchClient() {
+  final client = RetryTestHttpClient(http.Client());
+  final storage = Storage(
+    projectId: 'test-project',
+    apiEndpoint: 'localhost:9000',
+    useAuthWithCustomEndpoint: false,
+    client: client,
+  );
+  return (client, storage);
+}
+
 String bucketNameWithTearDown(Storage storage, String name) {
   final generatedName = testBucketName(name);
   addTearDown(() async {
@@ -96,7 +107,6 @@ Future<String> fakeCreateBucketWithTearDown(
   BucketMetadata? metadata,
   bool enableObjectRetention = false,
 }) async => testBucketName(name);
-
 
 /// An HTTP client that can add a `x-retry-test-id` header to requests for
 /// testing with Storage Testbench.

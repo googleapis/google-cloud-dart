@@ -15,7 +15,6 @@
 import 'dart:convert';
 
 import 'package:google_cloud_storage/google_cloud_storage.dart';
-import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 
 import 'test_utils.dart';
@@ -116,16 +115,9 @@ void main() {
 
     group('storage-testbench', tags: ['storage-testbench'], () {
       late Storage storage;
-      late RetryTestHttpClient client;
 
       setUp(() {
-        client = RetryTestHttpClient(http.Client());
-        storage = Storage(
-          projectId: 'test-project',
-          apiEndpoint: 'localhost:9000',
-          useAuthWithCustomEndpoint: false,
-          client: client,
-        );
+        (_, storage) = createStorageTestbenchClient();
       });
 
       tearDown(() => storage.close());
