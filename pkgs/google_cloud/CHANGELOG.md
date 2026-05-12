@@ -4,11 +4,16 @@
 
 ### `general.dart`
 
-- DEPRECATED. Use `google_cloud.dart` instead.
+- **DEPRECATED:** Use `google_cloud.dart` instead.
+- **BREAKING:** All logging-related features are now in the new
+  [`package:google_cloud_logging`](https://pub.dev/packages/google_cloud_logging)
+  package.
 
 ### `http_serving.dart`
 
-- REMOVED everything. These features are now in the new [`package:google_cloud_shelf`](https://pub.dev/packages/google_cloud_shelf) package.
+- **BREAKING:** These features are now in the new
+  [`package:google_cloud_shelf`](https://pub.dev/packages/google_cloud_shelf)
+  package.
 
 ## 0.4.1
 
