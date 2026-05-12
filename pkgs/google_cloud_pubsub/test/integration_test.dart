@@ -1,11 +1,10 @@
-@Tags(['google-cloud'])
-library;
-
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:google_cloud_pubsub/google_cloud_pubsub.dart';
 import 'package:test/test.dart';
+
+import 'src/credentials.dart';
 
 void main() {
   group('PubSub Integration', () {
@@ -18,13 +17,17 @@ void main() {
       if (host != null) {
         client = PubSub(projectId: 'test-project');
       } else if (project != null) {
-        client = PubSub(projectId: project);
+        client = PubSub(
+          projectId: project,
+          tokenProvider: applicationDefaultCredentials(
+            scopes: ['https://www.googleapis.com/auth/pubsub'],
+          ),
+        );
       } else {
-        markTestSkipped(
+        fail(
           'Neither PUBSUB_EMULATOR_HOST nor GOOGLE_CLOUD_PROJECT '
           'environment variable set',
         );
-        return;
       }
     });
 
@@ -33,8 +36,6 @@ void main() {
     });
 
     test('create topic and publish message', () async {
-      if (client == null) return; // Skipped
-
       final topicName = 'test-topic-${DateTime.now().millisecondsSinceEpoch}';
       final topic = client!.topic(topicName);
 
@@ -51,8 +52,6 @@ void main() {
     });
 
     test('Delete non-existent topic returns false', () async {
-      if (client == null) return; // Skipped
-
       final topic = client!.topic(
         'non-existent-${DateTime.now().millisecondsSinceEpoch}',
       );
@@ -61,8 +60,6 @@ void main() {
     });
 
     test('create existing topic throws TopicAlreadyExistsException', () async {
-      if (client == null) return; // Skipped
-
       final topicName = 'test-topic-${DateTime.now().millisecondsSinceEpoch}';
       final topic = client!.topic(topicName);
 
@@ -77,8 +74,6 @@ void main() {
     test(
       'create existing subscription throws SubscriptionAlreadyExistsException',
       () async {
-        if (client == null) return; // Skipped
-
         final topicName = 'test-topic-${DateTime.now().millisecondsSinceEpoch}';
         final subscriptionName =
             'test-sub-${DateTime.now().millisecondsSinceEpoch}';
@@ -102,8 +97,6 @@ void main() {
 
     test('create subscription for non-existent topic throws '
         'TopicNotFoundException', () async {
-      if (client == null) return; // Skipped
-
       final subscriptionName =
           'test-sub-${DateTime.now().millisecondsSinceEpoch}';
       final subscription = client!.subscription(subscriptionName);
@@ -117,8 +110,6 @@ void main() {
     test(
       'publish to non-existent topic throws TopicNotFoundException',
       () async {
-        if (client == null) return; // Skipped
-
         final topicName =
             'non-existent-${DateTime.now().millisecondsSinceEpoch}';
         final topic = client!.topic(topicName);
@@ -132,8 +123,6 @@ void main() {
 
     test('pull from non-existent subscription throws '
         'SubscriptionNotFoundException', () async {
-      if (client == null) return; // Skipped
-
       final subscriptionName =
           'non-existent-${DateTime.now().millisecondsSinceEpoch}';
       final subscription = client!.subscription(subscriptionName);
@@ -143,8 +132,6 @@ void main() {
 
     test('acknowledge for non-existent subscription throws '
         'SubscriptionNotFoundException', () async {
-      if (client == null) return; // Skipped
-
       final subscriptionName =
           'non-existent-${DateTime.now().millisecondsSinceEpoch}';
       final subscription = client!.subscription(subscriptionName);
@@ -157,8 +144,6 @@ void main() {
 
     test('modifyAckDeadline for non-existent subscription throws '
         'SubscriptionNotFoundException', () async {
-      if (client == null) return; // Skipped
-
       final subscriptionName =
           'non-existent-${DateTime.now().millisecondsSinceEpoch}';
       final subscription = client!.subscription(subscriptionName);
@@ -170,8 +155,6 @@ void main() {
     });
 
     test('publish and pull message', () async {
-      if (client == null) return; // Skipped
-
       final topicName = 'test-topic-${DateTime.now().millisecondsSinceEpoch}';
       final subscriptionName =
           'test-sub-'
@@ -198,8 +181,6 @@ void main() {
     });
 
     test('publish and streaming pull message', () async {
-      if (client == null) return; // Skipped
-
       final topicName = 'test-topic-${DateTime.now().millisecondsSinceEpoch}';
       final subscriptionName =
           'test-sub-'
@@ -231,8 +212,6 @@ void main() {
 
     test('streaming pull throws StreamBrokenException '
         'when subscription is deleted', () async {
-      if (client == null) return; // Skipped
-
       final topicName = 'test-topic-${DateTime.now().millisecondsSinceEpoch}';
       final subscriptionName =
           'test-sub-'
@@ -253,6 +232,65 @@ void main() {
 
       // Expect stream to throw StreamBrokenException
       expect(stream.first, throwsA(isA<StreamBrokenException>()));
+    });
+
+    test('publish and pull message with attributes', () async {
+      final topicName = 'test-topic-${DateTime.now().millisecondsSinceEpoch}';
+      final subscriptionName =
+          'test-sub-${DateTime.now().millisecondsSinceEpoch}';
+      final topic = client!.topic(topicName);
+      final subscription = client!.subscription(subscriptionName);
+
+      await topic.create();
+      addTearDown(() async => await topic.delete());
+
+      await subscription.create(topic: topicName);
+      addTearDown(() async => await subscription.delete());
+
+      final data = utf8.encode('Hello PubSub with Attributes');
+      final attributes = {'key1': 'value1', 'key2': 'value2'};
+      await topic.publish(data, attributes: attributes);
+
+      // Pull message
+      final messages = await client!.pull(subscriptionName);
+      expect(messages, hasLength(1));
+      expect(messages.first.message.data, equals(data));
+      expect(messages.first.message.attributes, equals(attributes));
+
+      // Ack message
+      await client!.acknowledge(subscriptionName, [messages.first.ackId]);
+    });
+
+    test('publish multiple messages and pull batch', () async {
+      final topicName = 'test-topic-${DateTime.now().millisecondsSinceEpoch}';
+      final subscriptionName =
+          'test-sub-${DateTime.now().millisecondsSinceEpoch}';
+      final topic = client!.topic(topicName);
+      final subscription = client!.subscription(subscriptionName);
+
+      await topic.create();
+      addTearDown(() async => await topic.delete());
+
+      await subscription.create(topic: topicName);
+      addTearDown(() async => await subscription.delete());
+
+      final data1 = utf8.encode('Message 1');
+      final data2 = utf8.encode('Message 2');
+      await topic.publish(data1);
+      await topic.publish(data2);
+
+      // Pull messages
+      final messages = await client!.pull(subscriptionName, maxMessages: 2);
+      expect(messages, hasLength(2));
+
+      final receivedData = messages.map((m) => m.message.data).toList();
+      expect(receivedData, containsAll([data1, data2]));
+
+      // Ack messages
+      await client!.acknowledge(
+        subscriptionName,
+        messages.map((m) => m.ackId).toList(),
+      );
     });
   });
 }

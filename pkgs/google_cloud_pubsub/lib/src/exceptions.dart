@@ -14,8 +14,11 @@
 
 import 'package:grpc/grpc.dart';
 
+/// Base class for all exceptions thrown by the google_cloud_pubsub package.
+abstract class PubSubException implements Exception {}
+
 /// Thrown when a topic is not found.
-class TopicNotFoundException implements Exception {
+class TopicNotFoundException implements PubSubException {
   /// The name of the topic that was not found.
   final String name;
 
@@ -26,7 +29,7 @@ class TopicNotFoundException implements Exception {
 }
 
 /// Thrown when a topic already exists.
-class TopicAlreadyExistsException implements Exception {
+class TopicAlreadyExistsException implements PubSubException {
   /// The name of the topic that already exists.
   final String name;
 
@@ -38,7 +41,7 @@ class TopicAlreadyExistsException implements Exception {
 }
 
 /// Thrown when a subscription already exists.
-class SubscriptionAlreadyExistsException implements Exception {
+class SubscriptionAlreadyExistsException implements PubSubException {
   /// The name of the subscription that already exists.
   final String name;
 
@@ -51,7 +54,7 @@ class SubscriptionAlreadyExistsException implements Exception {
 }
 
 /// Thrown when a subscription is not found.
-class SubscriptionNotFoundException implements Exception {
+class SubscriptionNotFoundException implements PubSubException {
   /// The name of the subscription that was not found.
   final String name;
 
@@ -63,7 +66,7 @@ class SubscriptionNotFoundException implements Exception {
 }
 
 /// Thrown when a streaming pull connection is broken.
-class StreamBrokenException implements Exception {
+class StreamBrokenException implements PubSubException {
   /// The underlying gRPC error that caused the stream to break.
   final GrpcError error;
 

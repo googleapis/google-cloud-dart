@@ -14,12 +14,10 @@
 
 import 'dart:async';
 
-import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:grpc/grpc.dart';
 import '../google_cloud_pubsub.dart';
 import 'generated/google/pubsub/v1/pubsub.pbgrpc.dart' as grpc;
-import 'pubsub_emulator_host_web.dart'
-    if (dart.library.io) 'pubsub_emulator_host_vm.dart';
+import 'pubsub_emulator_host_vm.dart';
 import 'subscription.dart' show newSubscription;
 import 'topic.dart' show newTopic;
 
@@ -32,8 +30,7 @@ final class PubSub {
   final bool _isEmulator;
   grpc.PublisherClient? _publisherClient;
   grpc.SubscriberClient? _subscriberClient;
-  auth.AutoRefreshingAuthClient? _authClient;
-  Future<auth.AutoRefreshingAuthClient>? _authClientFuture;
+  Future<String> Function()? _tokenProvider;
 
   Future<String> get _requiredProjectId async {
     final id = await _projectId;
@@ -82,7 +79,12 @@ final class PubSub {
     );
   }
 
-  PubSub._(this._projectId, this._channel, this._isEmulator);
+  PubSub._(
+    this._projectId,
+    this._channel,
+    this._isEmulator,
+    this._tokenProvider,
+  );
 
   static ReceivedMessage _mapReceivedMessage(grpc.ReceivedMessage m) =>
       ReceivedMessage(
@@ -96,12 +98,24 @@ final class PubSub {
       );
 
   /// Constructs a client used to communicate with [Google Cloud Pub/Sub][].
-  factory PubSub({String? projectId, String? apiEndpoint}) {
+  ///
+  /// For authentication, a [tokenProvider] can be supplied to obtain
+  /// and refresh access tokens for authenticating gRPC requests. The provider
+  /// must return the raw access token (e.g., "ya29.a0AfB_g..."), which will be
+  /// prefixed with "Bearer" in the authorization header.
+  ///
+  /// It will be invoked once per request.
+  factory PubSub({
+    String? projectId,
+    String? apiEndpoint,
+    Future<String> Function()? tokenProvider,
+  }) {
     final emulatorHost = pubsubEmulatorHost;
     return PubSub._(
       _calculateProjectId(projectId, emulatorHost),
       _calculateChannel(apiEndpoint, emulatorHost),
       emulatorHost != null,
+      tokenProvider,
     );
   }
 
@@ -109,31 +123,11 @@ final class PubSub {
     if (_isEmulator) {
       return CallOptions();
     }
-    if (_authClient == null) {
-      _authClientFuture ??= auth.clientViaApplicationDefaultCredentials(
-        scopes: ['https://www.googleapis.com/auth/pubsub'],
-      );
-      _authClient = await _authClientFuture;
+    final provider = _tokenProvider;
+    if (provider == null) {
+      return CallOptions();
     }
-
-    // AutoRefreshingAuthClient only refreshes when used via HTTP. But we
-    // extract the access token manually for using in grpc calls.
-    // We trigger a refresh by making a dummy request if close to expiry.
-    final expiry = _authClient!.credentials.accessToken.expiry;
-    if (expiry.isBefore(DateTime.now().add(const Duration(minutes: 5)))) {
-      try {
-        await _authClient!.get(
-          Uri.parse(
-            'https://pubsub.googleapis.com/v1/projects/non-existent-project/topics',
-          ),
-        );
-      } on Exception catch (_) {
-        // Ignore exceptions, we just want the side effect of refreshing the
-        // token.
-      }
-    }
-
-    final token = _authClient!.credentials.accessToken.data;
+    final token = await provider();
     return CallOptions(metadata: {'authorization': 'Bearer $token'});
   }
 
@@ -145,7 +139,6 @@ final class PubSub {
   /// Closes the client and cleans up any resources associated with it.
   Future<void> close() async {
     await _channel.shutdown();
-    _authClient?.close();
   }
 
   // Topic-related methods
