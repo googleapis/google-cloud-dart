@@ -32,6 +32,12 @@ String testBucketName(String name) {
   return '$name-${randomBucketCharacters(45 - name.length)}';
 }
 
+Storage createEmulatorClient() => Storage(
+  projectId: 'test-project',
+  apiEndpoint: '127.0.0.1:9199',
+  useAuthWithCustomEndpoint: false,
+);
+
 String bucketNameWithTearDown(Storage storage, String name) {
   final generatedName = testBucketName(name);
   addTearDown(() async {
