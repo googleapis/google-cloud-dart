@@ -24,6 +24,9 @@
 
 ### `general.dart`
 
+- **BREAKING:** No longer exports logging features. Use
+  [`package:google_cloud_logging`](https://pub.dev/packages/google_cloud_logging)
+  instead.
 - **DEPRECATED:** Use `google_cloud.dart` instead.
 
 ### `http_serving.dart`
