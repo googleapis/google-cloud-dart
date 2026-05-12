@@ -1,17 +1,35 @@
 ## 0.5.0
 
-### `google_cloud.dart`: now is the primary exporter of the core APIs.
+### `google_cloud.dart`
+
+- **BREAKING:** No longer exports logging or HTTP serving features.
+  These are now exported by the new packages:
+
+  - [`package:google_cloud_logging`](https://pub.dev/packages/google_cloud_logging)
+  - [`package:google_cloud_shelf`](https://pub.dev/packages/google_cloud_shelf)
+
+### `constants.dart`
+
+- **BREAKING:** Removed logging and serving related constants:
+
+  - `portEnvironmentVariable`
+  - `defaultListenPort`
+  - `cloudTraceContextHeader`
+  - `logTraceKey`
+  - `logSpanIdKey`
+  - `logTraceSampledKey`
+
+  These constants are available in the new
+  [`package:google_cloud_shelf`](https://pub.dev/packages/google_cloud_shelf).
 
 ### `general.dart`
 
 - **DEPRECATED:** Use `google_cloud.dart` instead.
-- **BREAKING:** All logging-related features are now in the new
-  [`package:google_cloud_logging`](https://pub.dev/packages/google_cloud_logging)
-  package.
 
 ### `http_serving.dart`
 
-- **BREAKING:** These features are now in the new
+- **BREAKING:** Library file has been removed entirely. All HTTP serving
+  features are now in the new
   [`package:google_cloud_shelf`](https://pub.dev/packages/google_cloud_shelf)
   package.
 
