@@ -88,6 +88,16 @@ Future<String> createBucketWithTearDown(
   return bucketName;
 }
 
+/// The Firebase Storage Emulator does not support bucket creation, so just
+/// generate a unique name.
+Future<String> fakeCreateBucketWithTearDown(
+  Storage storage,
+  String name, {
+  BucketMetadata? metadata,
+  bool enableObjectRetention = false,
+}) async => testBucketName(name);
+
+
 /// An HTTP client that can add a `x-retry-test-id` header to requests for
 /// testing with Storage Testbench.
 ///
