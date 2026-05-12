@@ -1,5 +1,11 @@
 name: google_cloud_shelf
 version: 0.5.0
+description: >-
+  Shelf middleware for Google Cloud environments providing structured
+  logging, trace correlation, exception mapping, and graceful shutdown
+  orchestration.
+repository: https://github.com/googleapis/google-cloud-dart/tree/main/pkgs/google_cloud_shelf
+
 resolution: workspace
 
 environment:
