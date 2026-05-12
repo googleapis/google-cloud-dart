@@ -64,7 +64,7 @@ resource "google_cloudbuild_trigger" "pull-request" {
     repository = google_cloudbuildv2_repository.main.id
     pull_request {
       branch          = "^main$"
-      comment_control = "COMMENTS_ENABLED_FOR_EXTERNAL_CONTRIBUTORS_ONLY"
+      comment_control = "COMMENTS_ENABLED"
     }
   }
 
