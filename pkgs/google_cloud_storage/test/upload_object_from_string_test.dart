@@ -27,9 +27,8 @@ void uploadObjectFromStringTest(
     BucketMetadata? metadata,
     bool enableObjectRetention,
   })
-  createBucketWithTearDown, [
-  bool isStorageEmulator = false,
-]) {
+  createBucketWithTearDown,
+) {
   late Storage storage;
 
   setUp(() {
@@ -109,7 +108,6 @@ void main() {
       uploadObjectFromStringTest(
         createEmulatorClient,
         fakeCreateBucketWithTearDown,
-        true,
       );
     });
 
