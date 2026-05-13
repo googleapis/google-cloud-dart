@@ -13,7 +13,8 @@
 // limitations under the License.
 
 /// Generate a diagram showing the relationship between packages in this
-/// repository and inject it into DEVELOPER_GUIDE.md.
+/// repository and inject it into DEVELOPER_GUIDE.md, and generate a table of
+/// packages and inject it into README.md.
 ///
 /// It must be run from the root directory.
 library;
@@ -21,7 +22,29 @@ library;
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:path/path.dart' as p;
+
 void main() {
+  final result = _generateMermaidDiagram();
+
+  // Update DEVELOPER_GUIDE.md
+  _updateSection(
+    filePath: 'DEVELOPER_GUIDE.md',
+    startMarker: '<!-- DEPS_DIAGRAM_START -->',
+    endMarker: '<!-- DEPS_DIAGRAM_END -->',
+    newContent: result.content,
+  );
+
+  // Update README.md
+  _updateSection(
+    filePath: 'README.md',
+    startMarker: '<!-- PKG_TABLE_START -->',
+    endMarker: '<!-- PKG_TABLE_END -->',
+    newContent: _generatePackageTable(result.publishablePackages),
+  );
+}
+
+({String content, Set<String> publishablePackages}) _generateMermaidDiagram() {
   final results = Process.runSync(Platform.resolvedExecutable, [
     'pub',
     'deps',
@@ -33,7 +56,12 @@ void main() {
       ..writeln('Failed to get dependencies:')
       ..writeln(results.stderr);
     exitCode = results.exitCode;
-    return;
+    throw ProcessException(
+      'pub',
+      ['deps', '--json'],
+      results.stderr as String,
+      results.exitCode,
+    );
   }
 
   final json = jsonDecode(results.stdout as String) as Map<String, dynamic>;
@@ -132,35 +160,85 @@ void main() {
     ..writeln()
     ..writeln('```');
 
-  final mermaidDiagram = buffer.toString();
-
-  // Update the target markdown file
-  _updateFile('DEVELOPER_GUIDE.md', mermaidDiagram);
+  return (content: buffer.toString(), publishablePackages: publishablePackages);
 }
 
-void _updateFile(String filePath, String mermaidDiagram) {
+String _generatePackageTable(Set<String> publishablePackages) {
+  final results = Process.runSync(Platform.resolvedExecutable, [
+    'pub',
+    'workspace',
+    'list',
+    '--json',
+  ]);
+
+  if (results.exitCode != 0) {
+    stderr.writeln('Failed to list workspace packages');
+    throw ProcessException(
+      'pub',
+      ['workspace', 'list', '--json'],
+      results.stderr as String,
+      results.exitCode,
+    );
+  }
+
+  final json = jsonDecode(results.stdout as String) as Map<String, dynamic>;
+  final packages =
+      (json['packages'] as List)
+          .cast<Map<String, dynamic>>()
+          .map((m) => (name: m['name'] as String, path: m['path'] as String))
+          .where((p) => publishablePackages.contains(p.name))
+          .toList()
+        ..sort((a, b) => a.name.compareTo(b.name));
+  final currentPath = Directory.current.absolute.path;
+
+  final tableBuffer = StringBuffer()
+    ..writeln('| Package | Version | Source |')
+    ..writeln('|---|---|---|');
+
+  for (final pkg in packages) {
+    final relPath = p.posix.joinAll(
+      p.split(p.relative(pkg.path, from: currentPath)),
+    );
+    tableBuffer.writeln(
+      '| [`${pkg.name}`](https://pub.dev/packages/${pkg.name}) '
+      '| [![pub package](https://img.shields.io/pub/v/${pkg.name}.svg)](https://pub.dev/packages/${pkg.name}) '
+      '| [$relPath]($relPath) |',
+    );
+  }
+
+  return tableBuffer.toString();
+}
+
+void _updateSection({
+  required String filePath,
+  required String startMarker,
+  required String endMarker,
+  required String newContent,
+}) {
   final file = File(filePath);
   if (!file.existsSync()) {
-    stderr.writeln('Skipped: $filePath does not exist');
+    stderr.writeln('ERROR: $filePath does not exist');
+    exitCode = 2; // ENOENT - file not found
     return;
   }
 
   final content = file.readAsStringSync();
-  const startMarker = '<!-- DEPS_DIAGRAM_START -->';
-  const endMarker = '<!-- DEPS_DIAGRAM_END -->';
 
   final startIndex = content.indexOf(startMarker);
   final endIndex = content.indexOf(endMarker);
 
   if (startIndex == -1 || endIndex == -1 || endIndex <= startIndex) {
-    stderr.writeln('Error: Could not find valid markers in $filePath');
-    exitCode = 1;
+    stderr.writeln(
+      'ERROR: Could not find valid markers ($startMarker, $endMarker) '
+      'in $filePath',
+    );
+    exitCode = 75; // EPROTO - invalid protocol
     return;
   }
 
   final updatedContent =
       '${content.substring(0, startIndex + startMarker.length)}\n'
-      '$mermaidDiagram'
+      '$newContent'
       '${content.substring(endIndex)}';
 
   file.writeAsStringSync(updatedContent);

@@ -129,8 +129,8 @@ jobs:
         run: go run github.com/googleapis/librarian/cmd/librarian@${{ env.LIBRARIAN_VERSION }} generate -all
       - name: Format librarian configuration
         run: go run github.com/googleapis/librarian/cmd/librarian@${{ env.LIBRARIAN_VERSION }} tidy
-      - name: Regenerate dependency graph
-        run: dart run tool/deps_diagram.dart
+      - name: Update documentation
+        run: dart run tool/update_docs.dart
       - name: Generated Diff
         run: git diff --exit-code
       - name: Print diff on failure
