@@ -32,6 +32,23 @@ String testBucketName(String name) {
   return '$name-${randomBucketCharacters(45 - name.length)}';
 }
 
+Storage createEmulatorClient() => Storage(
+  projectId: 'test-project',
+  apiEndpoint: '127.0.0.1:9199',
+  useAuthWithCustomEndpoint: false,
+);
+
+(RetryTestHttpClient, Storage) createStorageTestbenchClient() {
+  final client = RetryTestHttpClient(http.Client());
+  final storage = Storage(
+    projectId: 'test-project',
+    apiEndpoint: 'localhost:9000',
+    useAuthWithCustomEndpoint: false,
+    client: client,
+  );
+  return (client, storage);
+}
+
 String bucketNameWithTearDown(Storage storage, String name) {
   final generatedName = testBucketName(name);
   addTearDown(() async {
@@ -81,6 +98,15 @@ Future<String> createBucketWithTearDown(
   );
   return bucketName;
 }
+
+/// The Firebase Storage Emulator does not support bucket creation, so just
+/// generate a unique name.
+Future<String> fakeCreateBucketWithTearDown(
+  Storage storage,
+  String name, {
+  BucketMetadata? metadata,
+  bool enableObjectRetention = false,
+}) async => testBucketName(name);
 
 /// An HTTP client that can add a `x-retry-test-id` header to requests for
 /// testing with Storage Testbench.

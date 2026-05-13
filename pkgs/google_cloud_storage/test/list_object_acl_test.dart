@@ -20,7 +20,7 @@ import 'package:test_utils/cloud.dart' as cloud;
 
 import 'test_utils.dart';
 
-void deleteObjectAclTest(Storage Function() createStorage) {
+void listObjectAclTest(Storage Function() createStorage) {
   late Storage storage;
 
   setUp(() {
@@ -32,7 +32,7 @@ void deleteObjectAclTest(Storage Function() createStorage) {
   test('success', () async {
     final bucketName = await createBucketWithTearDown(
       storage,
-      'del_obj_acl_ok',
+      'list_obj_acl_ok',
       metadata: BucketMetadata(
         iamConfiguration: BucketIamConfiguration(
           uniformBucketLevelAccess: UniformBucketLevelAccess(enabled: false),
@@ -50,54 +50,21 @@ void deleteObjectAclTest(Storage Function() createStorage) {
     const entity = 'user-${cloud.googleTestUser}';
     await storage.insertObjectAcl(bucketName, 'object.txt', entity, 'READER');
 
-    await storage.deleteObjectAcl(bucketName, 'object.txt', entity);
+    final aclList = await storage.listObjectAcl(bucketName, 'object.txt');
+    expect(aclList, isNotEmpty);
 
-    final metadata = await storage.objectMetadata(
-      bucketName,
-      'object.txt',
-      projection: 'full',
-    );
-
-    final testUserRoles = [
-      for (var i in metadata.acl ?? <ObjectAccessControl>[])
-        if (i.entity == entity) (i.entity, i.role),
-    ];
-    expect(testUserRoles, isEmpty);
+    final testUserAcl = aclList.firstWhere((i) => i.entity == entity);
+    expect(testUserAcl.role, 'READER');
   });
 
   test('no object', () async {
     final bucketName = await createBucketWithTearDown(
       storage,
-      'del_obj_acl_no_object',
+      'list_obj_acl_no_object',
     );
 
     expect(
-      () => storage.deleteObjectAcl(bucketName, 'non-existent.txt', 'allUsers'),
-      throwsA(isA<NotFoundException>()),
-    );
-  });
-
-  test('no acl', () async {
-    final bucketName = await createBucketWithTearDown(
-      storage,
-      'del_obj_acl_no_acl',
-      metadata: BucketMetadata(
-        iamConfiguration: BucketIamConfiguration(
-          uniformBucketLevelAccess: UniformBucketLevelAccess(enabled: false),
-        ),
-      ),
-    );
-
-    await storage.uploadObjectFromString(
-      bucketName,
-      'object.txt',
-      'Hello World!',
-      ifGenerationMatch: BigInt.zero,
-    );
-
-    const entity = 'user-${cloud.googleTestUser}';
-    expect(
-      () => storage.deleteObjectAcl(bucketName, 'object.txt', entity),
+      () => storage.listObjectAcl(bucketName, 'non-existent.txt'),
       throwsA(isA<NotFoundException>()),
     );
   });
@@ -105,7 +72,7 @@ void deleteObjectAclTest(Storage Function() createStorage) {
   test('success with generation', () async {
     final bucketName = await createBucketWithTearDown(
       storage,
-      'del_obj_acl_gen_ok',
+      'list_obj_acl_gen_ok',
       metadata: BucketMetadata(
         iamConfiguration: BucketIamConfiguration(
           uniformBucketLevelAccess: UniformBucketLevelAccess(enabled: false),
@@ -123,30 +90,21 @@ void deleteObjectAclTest(Storage Function() createStorage) {
     const entity = 'user-${cloud.googleTestUser}';
     await storage.insertObjectAcl(bucketName, 'object.txt', entity, 'READER');
 
-    await storage.deleteObjectAcl(
+    final aclList = await storage.listObjectAcl(
       bucketName,
       'object.txt',
-      entity,
       generation: md.generation,
     );
+    expect(aclList, isNotEmpty);
 
-    final metadata = await storage.objectMetadata(
-      bucketName,
-      'object.txt',
-      projection: 'full',
-    );
-
-    final testUserRoles = [
-      for (var i in metadata.acl ?? <ObjectAccessControl>[])
-        if (i.entity == entity) (i.entity, i.role),
-    ];
-    expect(testUserRoles, isEmpty);
+    final testUserAcl = aclList.firstWhere((i) => i.entity == entity);
+    expect(testUserAcl.role, 'READER');
   });
 
   test('not found with wrong generation', () async {
     final bucketName = await createBucketWithTearDown(
       storage,
-      'del_obj_acl_gen_not_found',
+      'list_obj_acl_gen_not_found',
       metadata: BucketMetadata(
         iamConfiguration: BucketIamConfiguration(
           uniformBucketLevelAccess: UniformBucketLevelAccess(enabled: false),
@@ -165,10 +123,9 @@ void deleteObjectAclTest(Storage Function() createStorage) {
     await storage.insertObjectAcl(bucketName, 'object.txt', entity, 'READER');
 
     expect(
-      () => storage.deleteObjectAcl(
+      () => storage.listObjectAcl(
         bucketName,
         'object.txt',
-        entity,
         generation: BigInt.from(12345),
       ),
       throwsA(isA<NotFoundException>()),
@@ -177,9 +134,9 @@ void deleteObjectAclTest(Storage Function() createStorage) {
 }
 
 void main() async {
-  group('delete object acl', () {
+  group('list object acl', () {
     group('google-cloud', tags: ['google-cloud', 'no-ulba'], () {
-      deleteObjectAclTest(Storage.new);
+      listObjectAclTest(Storage.new);
     });
 
     group('storage-testbench', tags: ['storage-testbench'], () {
@@ -191,27 +148,7 @@ void main() async {
 
       tearDown(() => storage.close());
 
-      deleteObjectAclTest(() => storage);
-    });
-
-    test('non-idempotent transport failure', () async {
-      var count = 0;
-      final mockClient = MockClient((request) async {
-        count++;
-        if (count == 1) {
-          throw http.ClientException('Some transport failure');
-        } else {
-          throw StateError('Unexpected call count: $count');
-        }
-      });
-
-      final storage = Storage(client: mockClient, projectId: 'fake project');
-
-      await expectLater(
-        storage.deleteObjectAcl('bucket', 'object', 'entity'),
-        throwsA(isA<http.ClientException>()),
-      );
-      expect(count, 1);
+      listObjectAclTest(() => storage);
     });
 
     test('idempotent transport failure', () async {
@@ -221,7 +158,12 @@ void main() async {
         if (count == 1) {
           throw http.ClientException('Some transport failure');
         } else if (count == 2) {
-          return http.Response('', 204);
+          return http.Response(
+            '{"kind": "storage#objectAccessControls", "items": '
+            '[{"kind": "storage#objectAccessControl", "entity": '
+            '"user-test", "role": "READER"}]}',
+            200,
+          );
         } else {
           throw StateError('Unexpected call count: $count');
         }
@@ -229,12 +171,10 @@ void main() async {
 
       final storage = Storage(client: mockClient, projectId: 'fake project');
 
-      await storage.deleteObjectAcl(
-        'bucket',
-        'object',
-        'entity',
-        generation: BigInt.from(1),
-      );
+      final aclList = await storage.listObjectAcl('bucket', 'object');
+      expect(aclList, hasLength(1));
+      expect(aclList.first.entity, 'user-test');
+      expect(aclList.first.role, 'READER');
       expect(count, 2);
     });
   });

@@ -452,13 +452,7 @@ void main() {
       late RetryTestHttpClient client;
 
       setUp(() {
-        client = RetryTestHttpClient(http.Client());
-        storage = Storage(
-          projectId: 'test-project',
-          apiEndpoint: 'localhost:9000',
-          useAuthWithCustomEndpoint: false,
-          client: client,
-        );
+        (client, storage) = createStorageTestbenchClient();
       });
 
       tearDown(() => storage.close());

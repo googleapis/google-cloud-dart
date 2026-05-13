@@ -1,8 +1,23 @@
-## 0.6.2-wip
+## 0.6.2
 
 * Add retries to `uploadObjectFromSink`.
-* Add `deleteObjectAcl`.
-* Add `makeObjectPublic`.
+* Add `Storage.moveObject`.
+* Add `StorageObject.move`.
+* Add new `Storage` methods for bucket ACLs:
+  * `deleteBucketAcl`
+  * `getBucketAcl`
+  * `insertBucketAcl`
+  * `listBucketAcl`
+  * `patchBucketAcl`
+  * `updateBucketAcl`
+* Add new `Storage` methods for object ACLs:
+  * `deleteObjectAcl`
+  * `getObjectAcl`
+  * `listObjectAcl`
+  * `patchObjectAcl`
+  * `updateObjectAcl`
+* Add `Storage.makeObjectPublic`.
+* Add `StorageObject.makePublic`.
 
 ## 0.6.1
 
