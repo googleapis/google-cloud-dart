@@ -1,3 +1,3 @@
-## 0.5.0-wip
+## 0.5.0
 
 - Initial release.
