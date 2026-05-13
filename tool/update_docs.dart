@@ -13,7 +13,8 @@
 // limitations under the License.
 
 /// Generate a diagram showing the relationship between packages in this
-/// repository and inject it into DEVELOPER_GUIDE.md.
+/// repository and inject it into DEVELOPER_GUIDE.md, and generate a table of
+/// packages and inject it into README.md.
 ///
 /// It must be run from the root directory.
 library;
@@ -134,33 +135,102 @@ void main() {
 
   final mermaidDiagram = buffer.toString();
 
-  // Update the target markdown file
-  _updateFile('DEVELOPER_GUIDE.md', mermaidDiagram);
+  // Update DEVELOPER_GUIDE.md
+  _updateSection(
+    filePath: 'DEVELOPER_GUIDE.md',
+    startMarker: '<!-- DEPS_DIAGRAM_START -->',
+    endMarker: '<!-- DEPS_DIAGRAM_END -->',
+    newContent: mermaidDiagram,
+  );
+
+  // Generate Package Table
+  final tableBuffer = StringBuffer()
+    ..writeln('| Package | Version | Source |')
+    ..writeln('|---|---|---|');
+
+  final workspacePaths = _getWorkspacePaths();
+
+  for (final pkg in sortedPackages) {
+    final relPath = workspacePaths[pkg] ?? '';
+    tableBuffer.writeln(
+      '| [`$pkg`](https://pub.dev/packages/$pkg) '
+      '| [![pub package](https://img.shields.io/pub/v/$pkg.svg)](https://pub.dev/packages/$pkg) '
+      '| [$relPath]($relPath) |',
+    );
+  }
+
+  // Update README.md
+  _updateSection(
+    filePath: 'README.md',
+    startMarker: '<!-- PKG_TABLE_START -->',
+    endMarker: '<!-- PKG_TABLE_END -->',
+    newContent: tableBuffer.toString(),
+  );
 }
 
-void _updateFile(String filePath, String mermaidDiagram) {
+Map<String, String> _getWorkspacePaths() {
+  final workspacePaths = <String, String>{};
+  final rootPubspec = File('pubspec.yaml');
+  if (!rootPubspec.existsSync()) return workspacePaths;
+
+  final lines = rootPubspec.readAsLinesSync();
+  var inWorkspace = false;
+  for (final line in lines) {
+    if (line.startsWith('workspace:')) {
+      inWorkspace = true;
+      continue;
+    }
+    if (inWorkspace) {
+      if (line.trim().startsWith('-')) {
+        final relPath = line.trim().substring(1).trim();
+        final pubspec = File('$relPath/pubspec.yaml');
+        if (pubspec.existsSync()) {
+          for (final pLine in pubspec.readAsLinesSync()) {
+            if (pLine.startsWith('name:')) {
+              final name = pLine.substring(5).trim();
+              workspacePaths[name] = relPath;
+              break;
+            }
+          }
+        }
+      } else if (line.isNotEmpty && !line.startsWith(' ')) {
+        inWorkspace = false;
+      }
+    }
+  }
+  return workspacePaths;
+}
+
+void _updateSection({
+  required String filePath,
+  required String startMarker,
+  required String endMarker,
+  required String newContent,
+}) {
   final file = File(filePath);
   if (!file.existsSync()) {
-    stderr.writeln('Skipped: $filePath does not exist');
+    stderr.writeln('ERROR: $filePath does not exist');
+    exitCode = 2; // ENOENT - file not found
     return;
   }
 
   final content = file.readAsStringSync();
-  const startMarker = '<!-- DEPS_DIAGRAM_START -->';
-  const endMarker = '<!-- DEPS_DIAGRAM_END -->';
 
   final startIndex = content.indexOf(startMarker);
   final endIndex = content.indexOf(endMarker);
 
   if (startIndex == -1 || endIndex == -1 || endIndex <= startIndex) {
-    stderr.writeln('Error: Could not find valid markers in $filePath');
-    exitCode = 1;
+    stderr.writeln(
+      'ERROR: Could not find valid markers ($startMarker, $endMarker) '
+      'in $filePath',
+    );
+    exitCode = 75; // EPROTO - invalid protocol
     return;
   }
 
   final updatedContent =
       '${content.substring(0, startIndex + startMarker.length)}\n'
-      '$mermaidDiagram'
+      '$newContent'
       '${content.substring(endIndex)}';
 
   file.writeAsStringSync(updatedContent);
