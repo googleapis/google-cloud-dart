@@ -22,7 +22,29 @@ library;
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:path/path.dart' as p;
+
 void main() {
+  final result = _generateMermaidDiagram();
+
+  // Update DEVELOPER_GUIDE.md
+  _updateSection(
+    filePath: 'DEVELOPER_GUIDE.md',
+    startMarker: '<!-- DEPS_DIAGRAM_START -->',
+    endMarker: '<!-- DEPS_DIAGRAM_END -->',
+    newContent: result.content,
+  );
+
+  // Update README.md
+  _updateSection(
+    filePath: 'README.md',
+    startMarker: '<!-- PKG_TABLE_START -->',
+    endMarker: '<!-- PKG_TABLE_END -->',
+    newContent: _generatePackageTable(result.publishablePackages),
+  );
+}
+
+({String content, Set<String> publishablePackages}) _generateMermaidDiagram() {
   final results = Process.runSync(Platform.resolvedExecutable, [
     'pub',
     'deps',
@@ -34,7 +56,12 @@ void main() {
       ..writeln('Failed to get dependencies:')
       ..writeln(results.stderr);
     exitCode = results.exitCode;
-    return;
+    throw ProcessException(
+      'pub',
+      ['deps', '--json'],
+      results.stderr as String,
+      results.exitCode,
+    );
   }
 
   final json = jsonDecode(results.stdout as String) as Map<String, dynamic>;
@@ -133,72 +160,53 @@ void main() {
     ..writeln()
     ..writeln('```');
 
-  final mermaidDiagram = buffer.toString();
+  return (content: buffer.toString(), publishablePackages: publishablePackages);
+}
 
-  // Update DEVELOPER_GUIDE.md
-  _updateSection(
-    filePath: 'DEVELOPER_GUIDE.md',
-    startMarker: '<!-- DEPS_DIAGRAM_START -->',
-    endMarker: '<!-- DEPS_DIAGRAM_END -->',
-    newContent: mermaidDiagram,
-  );
+String _generatePackageTable(Set<String> publishablePackages) {
+  final results = Process.runSync(Platform.resolvedExecutable, [
+    'pub',
+    'workspace',
+    'list',
+    '--json',
+  ]);
 
-  // Generate Package Table
+  if (results.exitCode != 0) {
+    stderr.writeln('Failed to list workspace packages');
+    throw ProcessException(
+      'pub',
+      ['workspace', 'list', '--json'],
+      results.stderr as String,
+      results.exitCode,
+    );
+  }
+
+  final json = jsonDecode(results.stdout as String) as Map<String, dynamic>;
+  final packages =
+      (json['packages'] as List)
+          .cast<Map<String, dynamic>>()
+          .map((m) => (name: m['name'] as String, path: m['path'] as String))
+          .where((p) => publishablePackages.contains(p.name))
+          .toList()
+        ..sort((a, b) => a.name.compareTo(b.name));
+  final currentPath = Directory.current.absolute.path;
+
   final tableBuffer = StringBuffer()
     ..writeln('| Package | Version | Source |')
     ..writeln('|---|---|---|');
 
-  final workspacePaths = _getWorkspacePaths();
-
-  for (final pkg in sortedPackages) {
-    final relPath = workspacePaths[pkg] ?? '';
+  for (final pkg in packages) {
+    final relPath = p.posix.joinAll(
+      p.split(p.relative(pkg.path, from: currentPath)),
+    );
     tableBuffer.writeln(
-      '| [`$pkg`](https://pub.dev/packages/$pkg) '
-      '| [![pub package](https://img.shields.io/pub/v/$pkg.svg)](https://pub.dev/packages/$pkg) '
+      '| [`${pkg.name}`](https://pub.dev/packages/${pkg.name}) '
+      '| [![pub package](https://img.shields.io/pub/v/${pkg.name}.svg)](https://pub.dev/packages/${pkg.name}) '
       '| [$relPath]($relPath) |',
     );
   }
 
-  // Update README.md
-  _updateSection(
-    filePath: 'README.md',
-    startMarker: '<!-- PKG_TABLE_START -->',
-    endMarker: '<!-- PKG_TABLE_END -->',
-    newContent: tableBuffer.toString(),
-  );
-}
-
-Map<String, String> _getWorkspacePaths() {
-  final workspacePaths = <String, String>{};
-  final rootPubspec = File('pubspec.yaml');
-  if (!rootPubspec.existsSync()) return workspacePaths;
-
-  final lines = rootPubspec.readAsLinesSync();
-  var inWorkspace = false;
-  for (final line in lines) {
-    if (line.startsWith('workspace:')) {
-      inWorkspace = true;
-      continue;
-    }
-    if (inWorkspace) {
-      if (line.trim().startsWith('-')) {
-        final relPath = line.trim().substring(1).trim();
-        final pubspec = File('$relPath/pubspec.yaml');
-        if (pubspec.existsSync()) {
-          for (final pLine in pubspec.readAsLinesSync()) {
-            if (pLine.startsWith('name:')) {
-              final name = pLine.substring(5).trim();
-              workspacePaths[name] = relPath;
-              break;
-            }
-          }
-        }
-      } else if (line.isNotEmpty && !line.startsWith(' ')) {
-        inWorkspace = false;
-      }
-    }
-  }
-  return workspacePaths;
+  return tableBuffer.toString();
 }
 
 void _updateSection({
