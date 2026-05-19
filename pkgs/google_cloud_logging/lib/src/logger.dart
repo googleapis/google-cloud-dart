@@ -52,17 +52,19 @@ abstract base class CloudLogger {
   void handleLog(LogRecord record) {
     final method = switch (record.level) {
       <= Level.FINE => debug,
+      <= Level.CONFIG => notice,
       <= Level.INFO => info,
       <= Level.WARNING => warning,
       <= Level.SEVERE => error,
       _ => emergency,
     };
-    final object = record.object;
-    final errorObject = record.error;
-
+    final payload = {
+      'error': ?record.error,
+      if (record.loggerName.isNotEmpty) 'logger': record.loggerName,
+    };
     method(
-      object ?? record.message,
-      payload: errorObject == null ? null : {'error': errorObject},
+      record.object ?? record.message,
+      payload: payload.isNotEmpty ? payload : null,
       stackTrace: record.stackTrace,
     );
   }

@@ -24,40 +24,40 @@ void main() {
   group('CloudLogger.printLogger()', () {
     test('string message', () async {
       const cloudLogger = CloudLogger.printLogger();
-      final log = Logger('CloudLogger');
+      final log = Logger('MyClass');
 
       await expectLater(() async {
         log.onRecord.listen(cloudLogger.handleLog);
         log.info('hello');
         await Future<void>.delayed(const Duration(milliseconds: 10));
-      }, prints('INFO: hello\n'));
+      }, prints('INFO: hello\nPayload: {logger: MyClass}\n'));
     });
 
     test('object message', () async {
       const cloudLogger = CloudLogger.printLogger();
-      final log = Logger('CloudLogger');
+      final log = Logger('MyClass');
 
       await expectLater(() async {
         log.onRecord.listen(cloudLogger.handleLog);
         log.info([1, 2, 3]);
         await Future<void>.delayed(const Duration(milliseconds: 10));
-      }, prints('INFO: [1, 2, 3]\n'));
+      }, prints('INFO: [1, 2, 3]\nPayload: {logger: MyClass}\n'));
     });
 
     test('with error', () async {
       const cloudLogger = CloudLogger.printLogger();
-      final log = Logger('CloudLogger');
+      final log = Logger('MyClass');
 
       await expectLater(() async {
         log.onRecord.listen(cloudLogger.handleLog);
         log.info('hello', [1, 2, 3]);
         await Future<void>.delayed(const Duration(milliseconds: 10));
-      }, prints('INFO: hello\nPayload: {error: [1, 2, 3]}\n'));
+      }, prints('INFO: hello\nPayload: {error: [1, 2, 3], logger: MyClass}\n'));
     });
 
     test('with stacktrace', testOn: '!browser', () async {
       const cloudLogger = CloudLogger.printLogger();
-      final log = Logger('CloudLogger');
+      final log = Logger('MyClass');
       final caught = catchingFunction();
 
       await expectLater(
@@ -67,16 +67,31 @@ void main() {
           await Future<void>.delayed(const Duration(milliseconds: 10));
         },
         prints(
-          allOf(startsWith('INFO: hello\n'), contains('test/test_utils.dart')),
+          allOf(
+            startsWith('INFO: hello\n'),
+            contains('test/test_utils.dart'),
+            endsWith('Payload: {logger: MyClass}\n'),
+          ),
         ),
       );
+    });
+
+    test('empty logger name', () async {
+      const cloudLogger = CloudLogger.printLogger();
+      final log = Logger('');
+
+      await expectLater(() async {
+        log.onRecord.listen(cloudLogger.handleLog);
+        log.info('hello');
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+      }, prints('INFO: hello\n'));
     });
   });
 
   group('CloudLogger.structuredLogger()', () {
     test('string message', () async {
       const cloudLogger = CloudLogger.structuredLogger();
-      final log = Logger('CloudLogger');
+      final log = Logger('MyClass');
 
       await expectLater(
         () async {
@@ -88,7 +103,7 @@ void main() {
           isA<String>().having(
             (s) => jsonDecode(s) as Map<String, Object?>,
             'parsed json',
-            {'message': 'hello', 'severity': 'INFO'},
+            {'message': 'hello', 'severity': 'INFO', 'logger': 'MyClass'},
           ),
         ),
       );
@@ -96,7 +111,7 @@ void main() {
 
     test('object message', () async {
       const cloudLogger = CloudLogger.structuredLogger();
-      final log = Logger('CloudLogger');
+      final log = Logger('MyClass');
 
       await expectLater(
         () async {
@@ -111,6 +126,7 @@ void main() {
             {
               'message': [1, 2, 3],
               'severity': 'INFO',
+              'logger': 'MyClass',
             },
           ),
         ),
@@ -119,7 +135,7 @@ void main() {
 
     test('with error', () async {
       const cloudLogger = CloudLogger.structuredLogger();
-      final log = Logger('CloudLogger');
+      final log = Logger('MyClass');
 
       await expectLater(
         () async {
@@ -135,6 +151,7 @@ void main() {
               'message': 'hello',
               'severity': 'INFO',
               'error': [1, 2, 3],
+              'logger': 'MyClass',
             },
           ),
         ),
@@ -143,7 +160,7 @@ void main() {
 
     test('with stacktrace', testOn: '!browser', () async {
       const cloudLogger = CloudLogger.structuredLogger();
-      final log = Logger('CloudLogger');
+      final log = Logger('MyClass');
       final caught = catchingFunction();
 
       await expectLater(
@@ -159,6 +176,7 @@ void main() {
             {
               'message': 'hello',
               'severity': 'INFO',
+              'logger': 'MyClass',
               'stack_trace': contains('logging_test.dart'),
               'logging.googleapis.com/sourceLocation': {
                 'file': endsWith('test_utils.dart'),
@@ -170,6 +188,26 @@ void main() {
                 ),
               },
             },
+          ),
+        ),
+      );
+    });
+
+    test('empty logger name', () async {
+      const cloudLogger = CloudLogger.structuredLogger();
+      final log = Logger('');
+
+      await expectLater(
+        () async {
+          log.onRecord.listen(cloudLogger.handleLog);
+          log.info('hello');
+          await Future<void>.delayed(const Duration(milliseconds: 10));
+        },
+        prints(
+          isA<String>().having(
+            (s) => jsonDecode(s) as Map<String, Object?>,
+            'parsed json',
+            {'message': 'hello', 'severity': 'INFO'},
           ),
         ),
       );
