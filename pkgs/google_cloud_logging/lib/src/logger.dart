@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import 'package:google_cloud_logging_type/logging_type.dart' as logging_type;
+import 'package:logging/logging.dart';
 
 import 'structured_logging.dart' show createStructuredLog, formatStackTrace;
 
@@ -29,6 +30,25 @@ abstract base class CloudLogger {
   /// Creates a logger that outputs log messages in Cloud Logging structured
   /// format.
   const factory CloudLogger.structuredLogger() = _StructuredLogger;
+
+  void handleLog(LogRecord record) {
+    final method = switch (record.level) {
+      Level.FINE || Level.FINER || Level.FINEST => debug,
+      Level.INFO => info,
+      Level.WARNING => warning,
+      Level.SEVERE => error,
+      Level.SHOUT => emergency,
+      _ => error,
+    };
+    final object = record.object;
+    final errorObject = record.error;
+
+    method(
+      object ?? record.message,
+      payload: errorObject == null ? null : {'error': errorObject},
+      stackTrace: record.stackTrace,
+    );
+  }
 
   /// Logs a message at the given [severity].
   ///
