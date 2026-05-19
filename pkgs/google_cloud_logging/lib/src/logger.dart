@@ -51,8 +51,10 @@ abstract base class CloudLogger {
   /// ```
   void handleLog(LogRecord record) {
     final method = switch (record.level) {
+      // Where both levels have the same name, they are mapped together.
+      // Arguably, `Level.CONFIG` (700) should map to `info` (200) and
+      // `Level.INFO` (800) should map to `notice` (300).
       <= Level.FINE => debug,
-      <= Level.CONFIG => notice,
       <= Level.INFO => info,
       <= Level.WARNING => warning,
       <= Level.SEVERE => error,
