@@ -34,8 +34,8 @@ abstract base class CloudLogger {
   /// A handler for streams of [LogRecord] provided by a `package:logging`
   /// [Logger].
   ///
-  /// You can configure `package:logging` to use `CloudLogger` globally with
-  /// this code:
+  /// You can configure `package:logging` to redirect all logs globally with
+  /// this setup:
   ///
   /// ```dart
   /// import 'package:google_cloud_logging/google_cloud_logging.dart';
@@ -51,12 +51,11 @@ abstract base class CloudLogger {
   /// ```
   void handleLog(LogRecord record) {
     final method = switch (record.level) {
-      Level.FINE || Level.FINER || Level.FINEST => debug,
-      Level.INFO => info,
-      Level.WARNING => warning,
-      Level.SEVERE => error,
-      Level.SHOUT => emergency,
-      _ => error,
+      <= Level.FINE => debug,
+      <= Level.INFO => info,
+      <= Level.WARNING => warning,
+      <= Level.SEVERE => error,
+      _ => emergency,
     };
     final object = record.object;
     final errorObject = record.error;

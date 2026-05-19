@@ -61,13 +61,11 @@ void main() {
 }
 ```
 
-### Using CloudLogging with `package:logging`
+### Integrating with `package:logging`
 
-`CloudLogger` can be installed as a handler for 
-[`package:logging`](https://pub.dev/packages/logging).
+`CloudLogger` can be used as a global handler for the standard [`package:logging`](https://pub.dev/packages/logging) package.
 
-This allows you to generate structured logs for Google Cloud without changing
-the logging in the rest of your application and libraries.
+This allows you to output structured logs for Google Cloud automatically without changing any existing logging code in your application or its dependencies.
 
 <?code-excerpt "example/logging.dart"?>
 ```dart
