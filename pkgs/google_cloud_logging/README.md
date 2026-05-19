@@ -69,7 +69,7 @@ void main() {
 This allows you to generate structured logs for Google Cloud without changing
 the logging in the rest of your application and libraries.
 
-<?code-excerpt "example/logging.dart (cloud-logger)"?>
+<?code-excerpt "example/logging.dart"?>
 ```dart
 import 'package:google_cloud_logging/google_cloud_logging.dart';
 import 'package:logging/logging.dart';

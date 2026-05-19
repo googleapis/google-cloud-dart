@@ -31,6 +31,24 @@ abstract base class CloudLogger {
   /// format.
   const factory CloudLogger.structuredLogger() = _StructuredLogger;
 
+  /// A handler for streams of [LogRecord] provided by a `package:logging`
+  /// [Logger].
+  ///
+  /// You can configure `package:logging` to use `CloudLogger` globally with
+  /// this code:
+  ///
+  /// ```dart
+  /// import 'package:google_cloud_logging/google_cloud_logging.dart';
+  /// import 'package:logging/logging.dart';
+  ///
+  /// void main() {
+  ///   const cloudLogger = CloudLogger.structuredLogger();
+  ///   Logger.root.onRecord.listen(cloudLogger.handleLog);
+  ///   Logger.root.level = Level.ALL;
+  ///
+  ///   // Use `package:logging` as normal.
+  /// }
+  /// ```
   void handleLog(LogRecord record) {
     final method = switch (record.level) {
       Level.FINE || Level.FINER || Level.FINEST => debug,

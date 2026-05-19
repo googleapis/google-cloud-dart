@@ -1,3 +1,7 @@
+## 0.5.1
+
+- Add integrations for `package:logging`.
+
 ## 0.5.0
 
 - Added `CloudLogger`
