@@ -15,9 +15,7 @@ Cloud Platform, specifically tailored for Google Cloud structured logging.
 
 * **Google Cloud Structured Logging:** Utilities to construct log entries that
   seamlessly map to Google Cloud's native structured logging schema on `stdout`.
-* **CloudLogger:** An extensible base logging class with convenience methods for
-  standard Google Cloud logging severities (`debug`, `info`, `notice`,
-  `warning`, `error`, etc.).
+* **StructuredLogHandler:** Intercept and format logs from standard libraries (like `package:logging` or `package:logger`) into Cloud Logging format.
 * **Safe Sanitization:** Deep primitive checking to format complex object
   payloads, preventing cyclic referencing and providing graceful string
   fallback.
@@ -43,20 +41,25 @@ void main() {
 }
 ```
 
-### Using the CloudLogger
+### Using package:logging with StructuredLogHandler
 
 <?code-excerpt "example/cloud_logger.dart (cloud-logger)"?>
 ```dart
 import 'package:google_cloud_logging/google_cloud_logging.dart';
+import 'package:logging/logging.dart';
 
-const _logger = CloudLogger.printLogger();
+final _logger = Logger('my-service');
 
 void main() {
-  _logger.info('Processing item.', payload: {'itemId': 'A-987'});
+  // Configure the standard logger with StructuredLogHandler.
+  Logger.root.onRecord.listen(StructuredLogHandler().handleLogRecord);
+  Logger.root.level = Level.ALL;
+
+  _logger.info('Processing item.', {'itemId': 'A-987'});
   try {
     throw Exception('Failed to connect to DB');
   } catch (error, stack) {
-    _logger.error('Database connection failure - $error', stackTrace: stack);
+    _logger.severe('Database connection failure - $error', error, stack);
   }
 }
 ```

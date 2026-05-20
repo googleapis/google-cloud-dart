@@ -48,7 +48,6 @@ export 'src/http_logging.dart'
     show
         cloudLoggingMiddleware,
         createLoggingMiddleware,
-        currentLogger,
         errorLoggingMiddleware;
 export 'src/http_response_exception.dart' show HttpResponseException;
 export 'src/serve.dart' show listenPortFromEnvironment, serveHandler;

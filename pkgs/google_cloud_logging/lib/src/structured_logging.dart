@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:google_cloud_logging_type/logging_type.dart' show LogSeverity;
@@ -20,6 +21,12 @@ import 'package:google_cloud_logging_v2/logging.dart'
 import 'package:google_cloud_protobuf/protobuf.dart' show Struct;
 import 'package:meta/meta.dart';
 import 'package:stack_trace/stack_trace.dart';
+
+/// Key to store/retrieve trace correlation payload in the [Zone].
+///
+/// The value associated with this key should be a `Map<String, Object?>`
+/// containing the structured log fields for trace, spanId, and traceSampled.
+const logContextZoneKey = #google_cloud_logging.log_context;
 
 /// Converts [entry] to a JSON string formatted for Google Cloud
 /// structured logging on stdout.
@@ -85,6 +92,12 @@ String createStructuredLog(
 }) {
   var actualMessage = message;
   var actualPayload = payload;
+
+  // Retrieve the zone trace/log context if present
+  final zoneContext = Zone.current[logContextZoneKey] as Map<String, Object?>?;
+  if (zoneContext != null && zoneContext.isNotEmpty) {
+    actualPayload = {...zoneContext, ...?actualPayload};
+  }
 
   if (message is Map) {
     // If the message itself is a Map, we normalize its keys to Strings and

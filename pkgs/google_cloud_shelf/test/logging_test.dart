@@ -19,7 +19,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:google_cloud_logging/google_cloud_logging.dart';
 import 'package:google_cloud_shelf/google_cloud_shelf.dart';
 import 'package:shelf/shelf.dart';
 import 'package:test/test.dart';
@@ -398,32 +397,8 @@ TypeMatcher<Response> _responseScenarioFactory(
       'parsed JSON lines',
       [
         {
-          'message': 'trace me',
-          'severity': 'INFO',
-          'logging.googleapis.com/trace':
-              'projects/project-id/traces/0123456789abcdef0123456789abcdef',
-          'logging.googleapis.com/spanId': '000000000000007b',
-          'logging.googleapis.com/trace_sampled': true,
-        },
-        {
           'message': 'print me',
           'severity': 'INFO',
-          'logging.googleapis.com/trace':
-              'projects/project-id/traces/0123456789abcdef0123456789abcdef',
-          'logging.googleapis.com/spanId': '000000000000007b',
-          'logging.googleapis.com/trace_sampled': true,
-        },
-        {
-          'message': 'default me',
-          'severity': 'DEFAULT',
-          'logging.googleapis.com/trace':
-              'projects/project-id/traces/0123456789abcdef0123456789abcdef',
-          'logging.googleapis.com/spanId': '000000000000007b',
-          'logging.googleapis.com/trace_sampled': true,
-        },
-        {
-          'message': 'warning me',
-          'severity': 'WARNING',
           'logging.googleapis.com/trace':
               'projects/project-id/traces/0123456789abcdef0123456789abcdef',
           'logging.googleapis.com/spanId': '000000000000007b',
@@ -434,13 +409,7 @@ TypeMatcher<Response> _responseScenarioFactory(
     stderr: isEmpty,
   ),
   (_ResponseScenarios.successfulWithLogs, _Environment.normal) => (
-    stdout: allOf([
-      contains('trace me'),
-      contains('print me'),
-      contains('default me'),
-      contains('WARNING: warning me'),
-      endsWith('[200] /'),
-    ]),
+    stdout: allOf([contains('print me'), endsWith('[200] /')]),
     stderr: isEmpty,
   ),
 };
@@ -489,11 +458,7 @@ Future<Response> _throwNonHttpResponseError(_) =>
     throw Exception('non http error');
 
 Future<Response> _respondSuccessfullyWithLogs(_) async {
-  currentLogger.info('trace me');
   print('print me');
-  currentLogger
-    ..log('default me', LogSeverity.$default)
-    ..warning('warning me');
   return Response.ok('done', headers: {'content-type': 'text/plain'});
 }
 

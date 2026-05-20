@@ -15,10 +15,18 @@
 // ignore_for_file: cascade_invocations
 
 // #docregion contextual-logging
+import 'package:google_cloud_logging/google_cloud_logging.dart';
 import 'package:google_cloud_shelf/google_cloud_shelf.dart';
+import 'package:logging/logging.dart';
 import 'package:shelf/shelf.dart';
 
+final _logger = Logger('user-service');
+
 Future<void> main() async {
+  // Configure standard logging with StructuredLogHandler globally.
+  Logger.root.onRecord.listen(StructuredLogHandler().handleLogRecord);
+  Logger.root.level = Level.ALL;
+
   final handler = const Pipeline()
       .addMiddleware(createLoggingMiddleware(projectId: 'my-gcp-project-id'))
       .addHandler(_userHandler);
@@ -27,17 +35,16 @@ Future<void> main() async {
 }
 
 Response _userHandler(Request request) {
-  // Get the logger specific to this request context
-  final logger = currentLogger;
-
-  logger.info('Fetching user profile from database.');
+  _logger.info('Fetching user profile from database.');
 
   // A simple print statement is also captured as an INFO log with trace
   // correlation
   print('This print statement is correlated too!');
 
   // Business logic here...
-  logger.info('User successfully retrieved.', payload: {'userId': 'user_123'});
+  _logger.log(Level.INFO, 'User successfully retrieved.', {
+    'userId': 'user_123',
+  });
 
   return Response.ok('User Profile');
 }

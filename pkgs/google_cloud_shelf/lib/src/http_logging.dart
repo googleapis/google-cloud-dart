@@ -201,8 +201,7 @@ String _formatDetailsAsPseudoYaml(List<Map<String, Object?>> details) {
 ///
 /// [projectId] is the Google Cloud Project ID used for trace correlation.
 ///
-/// Logs messages sent to [currentLogger] and calls to [print] are formatted
-/// to include trace correlation.
+/// Calls to [print] are formatted to include trace correlation.
 ///
 /// {@macro exceptionResponseMapping}
 Middleware cloudLoggingMiddleware(String projectId) {
@@ -301,16 +300,9 @@ Middleware cloudLoggingMiddleware(String projectId) {
       parent.print(self, logContent);
     }
 
-    final currentZone = Zone.current;
-
     Zone.current
         .fork(
-          zoneValues: {
-            _loggerKey: _CloudLogger(
-              zone: currentZone,
-              traceContext: traceContext,
-            ),
-          },
+          zoneValues: {logContextZoneKey: traceContext?.asPayloadMap()},
           specification: ZoneSpecification(
             handleUncaughtError: uncaughtErrorHandler,
             print: zonePrint,
@@ -327,49 +319,6 @@ Middleware cloudLoggingMiddleware(String projectId) {
   };
 
   return hostedLoggingMiddleware;
-}
-
-/// Returns the current [CloudLogger].
-///
-/// If called within a context configured with a [CloudLogger], the returned
-/// [CloudLogger] will be used.
-///
-/// Otherwise, the returned [CloudLogger] will simply [print] log entries,
-/// with entries having a [LogSeverity] different than
-/// [LogSeverity.$default] being prefixed as such.
-CloudLogger get currentLogger =>
-    Zone.current[_loggerKey] as CloudLogger? ?? const CloudLogger.printLogger();
-
-/// Used to represent the [CloudLogger] in [Zone] values.
-final _loggerKey = Object();
-
-/// A [CloudLogger] that prints messages using Google Cloud structured
-/// logging.
-final class _CloudLogger extends CloudLogger {
-  final Zone zone;
-
-  final TraceContextData? traceContext;
-
-  /// Creates a new [_CloudLogger] that prints structured logs to [this.zone].
-  _CloudLogger({required this.zone, this.traceContext});
-
-  /// If [message] is a [Map], it is used as the log entry payload. Otherwise,
-  /// it is passed directly to [createStructuredLog], which handles
-  /// serialization.
-  @override
-  void log(
-    Object message,
-    LogSeverity severity, {
-    Map<String, Object?>? payload,
-    StackTrace? stackTrace,
-  }) => zone.print(
-    createStructuredLog(
-      message,
-      severity,
-      payload: traceContext?.asPayloadMap(payload) ?? payload,
-      stackTrace: stackTrace,
-    ),
-  );
 }
 
 bool _frameFolder(Frame frame) =>
