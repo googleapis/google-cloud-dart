@@ -16,8 +16,23 @@ import 'dart:async';
 
 import 'package:google_cloud_logging_type/logging_type.dart' as logging_type;
 
-import 'constants.dart';
 import 'structured_logging.dart' show createStructuredLog, formatStackTrace;
+
+/// The `payload` key used to correlate log entries with Cloud Trace.
+///
+/// See https://docs.cloud.google.com/logging/docs/agent/logging/configuration#special-fields
+const _logTraceKey = 'logging.googleapis.com/trace';
+
+/// The `payload` key used to correlate log entries with a specific span within
+/// a Cloud Trace.
+///
+/// See https://docs.cloud.google.com/logging/docs/agent/logging/configuration#special-fields
+const _logSpanIdKey = 'logging.googleapis.com/spanId';
+
+/// The `payload` key used to indicate whether a trace is sampled.
+///
+/// See https://docs.cloud.google.com/logging/docs/agent/logging/configuration#special-fields
+const _logTraceSampledKey = 'logging.googleapis.com/trace_sampled';
 
 // See:
 // https://www.w3.org/TR/trace-context/#traceparent-header-field-values
@@ -35,9 +50,6 @@ final _traceParentRegex = RegExp('$_version-$_trace-$_parent-$_flags');
 ) {
   final match = _traceParentRegex.firstMatch(traceparent);
   if (match == null) return null;
-
-  final version = match.namedGroup('version')!;
-  if (version == '00' && traceparent.length != 55) return null;
 
   final flags = int.parse(match.namedGroup('flags')!, radix: 16);
   return (
@@ -226,9 +238,9 @@ final class _StructuredLogger extends CloudLogger {
       if (data != null) {
         p = {
           ...?payload,
-          logTraceKey: data.traceId,
-          logSpanIdKey: data.spanId,
-          if (data.traceSampled) logTraceSampledKey: true,
+          _logTraceKey: data.traceId,
+          _logSpanIdKey: data.spanId,
+          if (data.traceSampled) _logTraceSampledKey: true,
         };
       }
     }

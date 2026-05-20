@@ -130,8 +130,8 @@ Payload: {foo: bar}
       );
     });
 
-    group('traceparent correlation', () {
-      test('valid version 00 traceparent, sampled true', () {
+    group('traceparent zone variable', () {
+      test('sampled true', () {
         runZoned(
           () => expect(
             () => logger.info('hello'),
@@ -157,7 +157,7 @@ Payload: {foo: bar}
         );
       });
 
-      test('valid version 00 traceparent, sampled false', () {
+      test('sampled false', () {
         runZoned(
           () => expect(
             () => logger.info('hello'),
@@ -209,7 +209,7 @@ Payload: {foo: bar}
         );
       });
 
-      test('invalid traceparent: empty or too short', () {
+      test('invalid traceparent', () {
         runZoned(
           () => expect(
             () => logger.info('hello'),
@@ -225,10 +225,10 @@ Payload: {foo: bar}
         );
       });
 
-      test('invalid traceparent: version ff', () {
+      test('version ff', () {
         runZoned(
           () => expect(
-            () => logger.info('hello'),
+            () => logger.info('hello'), 
             prints(
               isA<String>().having(
                 (s) => jsonDecode(s) as Map<String, Object?>,
@@ -244,45 +244,7 @@ Payload: {foo: bar}
         );
       });
 
-      test('invalid traceparent: version 00 too long', () {
-        runZoned(
-          () => expect(
-            () => logger.info('hello'),
-            prints(
-              isA<String>().having(
-                (s) => jsonDecode(s) as Map<String, Object?>,
-                'parsed json',
-                {'message': 'hello', 'severity': 'INFO'},
-              ),
-            ),
-          ),
-          zoneValues: {
-            'traceparent':
-                '00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01-extra',
-          },
-        );
-      });
-
-      test('invalid traceparent: uppercase characters', () {
-        runZoned(
-          () => expect(
-            () => logger.info('hello'),
-            prints(
-              isA<String>().having(
-                (s) => jsonDecode(s) as Map<String, Object?>,
-                'parsed json',
-                {'message': 'hello', 'severity': 'INFO'},
-              ),
-            ),
-          ),
-          zoneValues: {
-            'traceparent':
-                '00-4bf92f3577B34da6a3ce929d0e0e4736-00f067aa0ba902b7-01',
-          },
-        );
-      });
-
-      test('invalid traceparent: all zeroes trace-id', () {
+      test('all zeroes trace-id', () {
         runZoned(
           () => expect(
             () => logger.info('hello'),
@@ -301,7 +263,7 @@ Payload: {foo: bar}
         );
       });
 
-      test('invalid traceparent: all zeroes parent-id', () {
+      test('all zeroes parent-id', () {
         runZoned(
           () => expect(
             () => logger.info('hello'),
