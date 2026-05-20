@@ -209,7 +209,7 @@ Payload: {foo: bar}
         );
       });
 
-      test('invalid traceparent', () {
+      test('truncated', () {
         runZoned(
           () => expect(
             () => logger.info('hello'),

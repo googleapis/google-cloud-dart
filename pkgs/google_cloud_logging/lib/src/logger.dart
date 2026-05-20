@@ -234,13 +234,13 @@ final class _StructuredLogger extends CloudLogger {
     var p = payload;
     final traceparent = Zone.current['traceparent'];
     if (traceparent is String) {
-      final data = _parseTraceparent(traceparent);
-      if (data != null) {
+      final traceData = _parseTraceparent(traceparent);
+      if (traceData != null) {
         p = {
           ...?payload,
-          _logTraceKey: data.traceId,
-          _logSpanIdKey: data.spanId,
-          if (data.traceSampled) _logTraceSampledKey: true,
+          _logTraceKey: traceData.traceId,
+          _logSpanIdKey: traceData.spanId,
+          if (traceData.traceSampled) _logTraceSampledKey: true,
         };
       }
     }
