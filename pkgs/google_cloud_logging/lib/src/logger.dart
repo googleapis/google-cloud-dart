@@ -21,7 +21,7 @@ import 'structured_logging.dart' show createStructuredLog, formatStackTrace;
 
 // See:
 // https://www.w3.org/TR/trace-context/#traceparent-header-field-values
-const _version = r'^(?!ff)[0-9a-f]{2}';
+const _version = r'^(?!ff)(?<version>[0-9a-f]{2})';
 const _trace = r'(?!0{32})(?<trace>[0-9a-f]{32})';
 const _parent = r'(?!0{16})(?<parent>[0-9a-f]{16})';
 const _flags = r'(?<flags>[0-9a-f]{2})';
@@ -35,6 +35,9 @@ final _traceParentRegex = RegExp('$_version-$_trace-$_parent-$_flags');
 ) {
   final match = _traceParentRegex.firstMatch(traceparent);
   if (match == null) return null;
+
+  final version = match.namedGroup('version')!;
+  if (version == '00' && traceparent.length != 55) return null;
 
   final flags = int.parse(match.namedGroup('flags')!, radix: 16);
   return (

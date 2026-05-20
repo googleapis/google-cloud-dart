@@ -130,7 +130,6 @@ Payload: {foo: bar}
       );
     });
 
-
     group('traceparent correlation', () {
       test('valid version 00 traceparent, sampled true', () {
         runZoned(
