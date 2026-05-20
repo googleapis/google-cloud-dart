@@ -19,6 +19,31 @@ import 'package:google_cloud_logging_type/logging_type.dart' as logging_type;
 import 'constants.dart';
 import 'structured_logging.dart' show createStructuredLog, formatStackTrace;
 
+// See:
+// https://www.w3.org/TR/trace-context/#traceparent-header-field-values
+const _version = r'^(?!ff)[0-9a-f]{2}';
+const _trace = r'(?!0{32})(?<trace>[0-9a-f]{32})';
+const _parent = r'(?!0{16})(?<parent>[0-9a-f]{16})';
+const _flags = r'(?<flags>[0-9a-f]{2})';
+final _traceParentRegex = RegExp('$_version-$_trace-$_parent-$_flags');
+
+/// Parsers a `'tracecontext'` header.
+///
+/// See https://www.w3.org/TR/trace-context/
+({String traceId, String spanId, bool traceSampled})? _parseTraceparent(
+  String traceparent,
+) {
+  final match = _traceParentRegex.firstMatch(traceparent);
+  if (match == null) return null;
+
+  final flags = int.parse(match.namedGroup('flags')!, radix: 16);
+  return (
+    traceId: match.namedGroup('trace')!,
+    spanId: match.namedGroup('parent')!,
+    traceSampled: flags & 1 == 1,
+  );
+}
+
 /// Base class for logging.
 ///
 /// Extend this class to create your own logger or use the
@@ -213,77 +238,4 @@ final class _StructuredLogger extends CloudLogger {
     );
     print(logEntry);
   }
-}
-
-class _TraceparentData {
-  final String traceId;
-  final String spanId;
-  final bool traceSampled;
-
-  _TraceparentData({
-    required this.traceId,
-    required this.spanId,
-    required this.traceSampled,
-  });
-}
-
-_TraceparentData? _parseTraceparent(String traceparent) {
-  final trimmed = traceparent.trim();
-  if (trimmed.length < 55) return null;
-
-  // Check version prefix (must be 2 hex characters followed by a dash)
-  final versionStr = trimmed.substring(0, 2);
-  if (!_isHex(versionStr)) return null;
-  if (trimmed[2] != '-') return null;
-
-  if (versionStr == 'ff') return null;
-
-  final isVersion00 = versionStr == '00';
-
-  if (isVersion00 && trimmed.length != 55) return null;
-
-  // Parse trace-id (32 hex chars, must be followed by a dash)
-  final traceId = trimmed.substring(3, 35);
-  if (!_isHex(traceId)) return null;
-  if (traceId == '00000000000000000000000000000000') return null;
-  if (trimmed[35] != '-') return null;
-
-  // Parse parent-id (16 hex chars, must be followed by a dash)
-  final spanId = trimmed.substring(36, 52);
-  if (!_isHex(spanId)) return null;
-  if (spanId == '0000000000000000') return null;
-  if (trimmed[52] != '-') return null;
-
-  // Parse trace-flags (2 hex chars)
-  final flagsStr = trimmed.substring(53, 55);
-  if (!_isHex(flagsStr)) return null;
-
-  if (!isVersion00) {
-    // For higher versions, check that the next character is either the
-    // end of the string or a dash.
-    if (trimmed.length > 55 && trimmed[55] != '-') return null;
-  }
-
-  final flags = int.tryParse(flagsStr, radix: 16);
-  if (flags == null) return null;
-
-  final traceSampled = (flags & 1) == 1;
-
-  return _TraceparentData(
-    traceId: traceId,
-    spanId: spanId,
-    traceSampled: traceSampled,
-  );
-}
-
-bool _isHex(String s) {
-  for (var i = 0; i < s.length; i++) {
-    final code = s.codeUnitAt(i);
-    final isDigit = code >= 48 && code <= 57; // 0-9
-    final isLowerHex = code >= 97 && code <= 102; // a-f
-    if (!isDigit && !isLowerHex) {
-      return false;
-    }
-  }
-  return true;
 }
