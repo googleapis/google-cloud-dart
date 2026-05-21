@@ -16,8 +16,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:google_cloud_logging_type/logging_type.dart';
-import 'package:google_cloud_logging_v2/logging.dart';
-import 'package:logger/logger.dart' as logger;
 import 'package:logging/logging.dart' as logging;
 
 import 'structured_logging.dart';
@@ -73,7 +71,7 @@ final class StructuredLogHandler {
     final payload = <String, Object?>{
       'severity': severity.value,
       'loggerName': record.loggerName,
-      ...structuredTraceFromZone()
+      ...structuredTraceFromZone(),
     };
     final object = record.object;
     final error = record.error;
@@ -105,22 +103,6 @@ final class StructuredLogHandler {
 
     _writeln(logStr);
   }
-
-  /// Returns a [logger.LogOutput] for use with `package:logger`'s `Logger`.
-  ///
-  /// ```dart
-  /// import 'package:google_cloud_logging/google_cloud_logging.dart';
-  /// import 'package:logger/logger.dart';
-  ///
-  /// void main() {
-  ///   final logger = Logger(
-  ///     output: StructuredLogHandler().asLogOutput(),
-  ///   );
-  ///
-  ///   // Use logger as normal.
-  /// }
-  /// ```
-  //  logger.LogOutput asLogOutput() => _StructuredLogOutput();
 
   LogSeverity _severityFromLoggingLevel(logging.Level level) {
     if (level <= logging.Level.FINE) {

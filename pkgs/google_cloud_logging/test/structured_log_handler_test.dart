@@ -12,17 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:google_cloud_logging/google_cloud_logging.dart';
-import 'package:logger/logger.dart' as logger;
-import 'package:logging/logging.dart' as logging;
 import 'package:logging/logging.dart';
 import 'package:test/test.dart';
-
-import 'test_utils.dart';
 
 void main() {
   group('StructuredLogHandler', () {

@@ -201,8 +201,7 @@ String _formatDetailsAsPseudoYaml(List<Map<String, Object?>> details) {
 ///
 /// [projectId] is the Google Cloud Project ID used for trace correlation.
 ///
-/// Logs messages sent to [currentLogger] and calls to [print] are formatted
-/// to include trace correlation.
+/// Calls to [print] are formatted to include trace correlation.
 ///
 /// {@macro exceptionResponseMapping}
 Middleware cloudLoggingMiddleware(String projectId) {
@@ -298,7 +297,6 @@ Middleware cloudLoggingMiddleware(String projectId) {
         // Also, it is the wrong header.
         ...formatTraceparent(traceHeader!),
       };
-
 
       // Serialize to a JSON string and output to parent zone.
       parent.print(self, jsonEncode(payload));
