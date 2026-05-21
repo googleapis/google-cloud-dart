@@ -10,6 +10,7 @@ import 'package:google_cloud_logging/google_cloud_logging.dart';
 import 'package:logging/logging.dart';
 
 void main() {
+  // XXX make sure that listen doesn't mess with zones.
   Logger.root.onRecord.listen(StructuredLogHandler().handleLogRecord);
   Logger.root.level = Level.ALL;
 

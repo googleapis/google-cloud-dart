@@ -95,7 +95,57 @@ void main() {
           'loggerName': 'MyClass',
           'k1': 'v1',
           'k2': 'v2',
-          'k3': {'k1': 'v1', 'k2': 'v2', 'k3': '...'},
+          'k3': {'k1': 'v1', 'k2': 'v2', 'k3': '{...}'},
+        });
+      });
+
+      test('recursive list message', () {
+        final output = StringBuffer();
+        final object = {
+          'k1': ['hello', 5],
+        };
+
+        object['k1']!.add(object['k1']!);
+        StructuredLogHandler(writeln: output.writeln).handleLogRecord(
+          LogRecord(
+            Level.WARNING,
+            object.toString(),
+            'MyClass',
+            null,
+            null,
+            null,
+            object,
+          ),
+        );
+        expect(jsonDecode(output.toString()), {
+          'severity': 'WARNING',
+          'loggerName': 'MyClass',
+          'k1': ['hello', 5, '[...]'],
+        });
+      });
+
+      test('recursive list message', () {
+        final output = StringBuffer();
+        final object = {
+          'k1': ['hello', 5],
+        };
+
+        object['k1']!.add(object['k1']!);
+        StructuredLogHandler(writeln: output.writeln).handleLogRecord(
+          LogRecord(
+            Level.WARNING,
+            object.toString(),
+            'MyClass',
+            null,
+            null,
+            null,
+            object,
+          ),
+        );
+        expect(jsonDecode(output.toString()), {
+          'severity': 'WARNING',
+          'loggerName': 'MyClass',
+          'k1': ['hello', 5, '[...]'],
         });
       });
     });

@@ -71,7 +71,7 @@ final class StructuredLogHandler {
     final payload = <String, Object?>{
       'severity': severity.value,
       'loggerName': record.loggerName,
-      ...structuredTraceFromZone(),
+      ...structuredTraceFromZone(record.zone),
     };
     final object = record.object;
     final error = record.error;

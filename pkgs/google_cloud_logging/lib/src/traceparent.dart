@@ -57,8 +57,8 @@ Map<String, Object> formatTraceparent(String traceparent) {
   };
 }
 
-Map<String, Object> structuredTraceFromZone() {
-  final traceparent = Zone.current['traceparent'];
+Map<String, Object> structuredTraceFromZone([Zone? zone]) {
+  final traceparent = (zone ?? Zone.current)['traceparent'];
   if (traceparent is String) {
     return formatTraceparent(traceparent);
   } else {
