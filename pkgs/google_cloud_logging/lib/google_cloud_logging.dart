@@ -34,3 +34,4 @@ export 'package:google_cloud_logging_v2/logging.dart' show LogEntry;
 export 'src/structured_log_handler.dart' show StructuredLogHandler;
 export 'src/structured_logging.dart'
     show createStructuredLog, createStructuredLogFromEntry, logContextZoneKey;
+export 'src/traceparent.dart';

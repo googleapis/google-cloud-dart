@@ -201,7 +201,8 @@ String _formatDetailsAsPseudoYaml(List<Map<String, Object?>> details) {
 ///
 /// [projectId] is the Google Cloud Project ID used for trace correlation.
 ///
-/// Calls to [print] are formatted to include trace correlation.
+/// Logs messages sent to [currentLogger] and calls to [print] are formatted
+/// to include trace correlation.
 ///
 /// {@macro exceptionResponseMapping}
 Middleware cloudLoggingMiddleware(String projectId) {
@@ -290,19 +291,25 @@ Middleware cloudLoggingMiddleware(String projectId) {
     }
 
     void zonePrint(Zone self, ZoneDelegate parent, _, String line) {
-      final logContent = createStructuredLog(
-        line,
-        LogSeverity.info,
-        payload: traceContext?.asPayloadMap(),
-      );
+      final payload = {
+        'message': line,
+        'severity': 'INFO',
+        // XXX // deal with null traceheader!
+        // Also, it is the wrong header.
+        ...formatTraceparent(traceHeader!),
+      };
+
 
       // Serialize to a JSON string and output to parent zone.
-      parent.print(self, logContent);
+      parent.print(self, jsonEncode(payload));
     }
 
     Zone.current
         .fork(
-          zoneValues: {logContextZoneKey: traceContext?.asPayloadMap()},
+          zoneValues: {
+            // See https://www.w3.org/TR/trace-context
+            'traceparent': request.headers['traceparent'],
+          },
           specification: ZoneSpecification(
             handleUncaughtError: uncaughtErrorHandler,
             print: zonePrint,

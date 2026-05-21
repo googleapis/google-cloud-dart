@@ -21,6 +21,7 @@ import 'package:logger/logger.dart' as logger;
 import 'package:logging/logging.dart' as logging;
 
 import 'structured_logging.dart';
+import 'traceparent.dart';
 
 const _structuredLoggingFields = {
   'severity',
@@ -72,13 +73,16 @@ final class StructuredLogHandler {
     final payload = <String, Object?>{
       'severity': severity.value,
       'loggerName': record.loggerName,
+      ...structuredTraceFromZone()
     };
     final object = record.object;
     final error = record.error;
 
     if (object is Map) {
       payload.addAll({
-        for (final entry in object.entries) entry.key.toString(): entry.value,
+        for (final entry in object.entries)
+          if (!_structuredLoggingFields.contains(entry.key.toString()))
+            entry.key.toString(): entry.value,
       });
     } else {
       payload['message'] = record.message;
