@@ -74,6 +74,30 @@ void main() {
           'k2': 'v2',
         });
       });
+
+      test('recursive map message', () {
+        final output = StringBuffer();
+        final object = <String, Object>{'k1': 'v1', 'k2': 'v2'};
+        object['k3'] = object;
+        StructuredLogHandler(writeln: output.writeln).handleLogRecord(
+          LogRecord(
+            Level.WARNING,
+            object.toString(),
+            'MyClass',
+            null,
+            null,
+            null,
+            object,
+          ),
+        );
+        expect(jsonDecode(output.toString()), {
+          'severity': 'WARNING',
+          'loggerName': 'MyClass',
+          'k1': 'v1',
+          'k2': 'v2',
+          'k3': {'k1': 'v1', 'k2': 'v2', 'k3': '...'},
+        });
+      });
     });
   });
 }

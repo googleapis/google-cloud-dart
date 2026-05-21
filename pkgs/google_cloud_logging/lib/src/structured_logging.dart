@@ -163,7 +163,7 @@ Object? sanitize(Object? value, [Set<Object>? seen]) {
   }
   seen ??= <Object>{};
   if (seen.contains(value)) {
-    throw const FormatException('Cyclic reference');
+    return '...';
   }
   seen.add(value);
 
