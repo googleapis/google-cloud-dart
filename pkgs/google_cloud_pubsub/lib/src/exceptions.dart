@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:grpc/grpc.dart';
-
 /// Base class for all exceptions thrown by the google_cloud_pubsub package.
 abstract class PubSubException implements Exception {}
 
@@ -67,11 +65,29 @@ class SubscriptionNotFoundException implements PubSubException {
 
 /// Thrown when a streaming pull connection is broken.
 class StreamBrokenException implements PubSubException {
-  /// The underlying gRPC error that caused the stream to break.
-  final GrpcError error;
+  final int code;
+  final String message;
+  final Map<String, String> trailers;
 
-  StreamBrokenException(this.error);
+  StreamBrokenException(this.code, this.message, [this.trailers = const {}]);
 
   @override
-  String toString() => 'StreamBrokenException: ${error.message}';
+  String toString() => 'StreamBrokenException: [$code] $message';
+}
+
+/// Thrown when a Pub/Sub operation fails due to a gRPC error.
+class PubSubOperationException implements PubSubException {
+  /// The gRPC status code.
+  final int code;
+
+  /// The error message.
+  final String message;
+
+  /// The trailers from the gRPC error.
+  final Map<String, String> trailers;
+
+  PubSubOperationException(this.code, this.message, [this.trailers = const {}]);
+
+  @override
+  String toString() => 'PubSubOperationException: [$code] $message';
 }

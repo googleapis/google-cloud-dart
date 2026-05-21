@@ -25,7 +25,7 @@ import 'topic.dart' show newTopic;
 ///
 /// See [Google Cloud Pub/Sub](https://cloud.google.com/pubsub).
 final class PubSub {
-  final FutureOr<String> _projectId;
+  final FutureOr<String?> _projectId;
   final ClientChannel _channel;
   final bool _isEmulator;
   grpc.PublisherClient? _publisherClient;
@@ -34,21 +34,19 @@ final class PubSub {
 
   Future<String> get _requiredProjectId async {
     final id = await _projectId;
-    if (id == noProject) {
+    if (id == null) {
       throw StateError('a project ID is required');
     }
     return id;
   }
 
-  static const String noProject = '<none>';
-
-  static FutureOr<String> _calculateProjectId(
+  static FutureOr<String?> _calculateProjectId(
     String? projectId,
     String? emulatorHost,
   ) => switch ((projectId, emulatorHost)) {
     (final String projectId, _) => projectId,
     (null, _?) => projectFromEnvironment ?? 'test-project',
-    (null, null) => projectFromEnvironment ?? 'unknown-project',
+    (null, null) => projectFromEnvironment,
   };
 
   static ClientChannel _calculateChannel(
@@ -86,6 +84,8 @@ final class PubSub {
     this._tokenProvider,
   );
 
+  /// Turns the protobuf-generated [grpc.ReceivedMessage] into a
+  /// [ReceivedMessage].
   static ReceivedMessage _mapReceivedMessage(grpc.ReceivedMessage m) =>
       ReceivedMessage(
         ackId: m.ackId,
@@ -165,7 +165,11 @@ final class PubSub {
       if (e.code == StatusCode.alreadyExists) {
         throw TopicAlreadyExistsException(name);
       }
-      rethrow;
+      throw PubSubOperationException(
+        e.code,
+        e.message ?? 'Unknown error',
+        e.trailers ?? const {},
+      );
     }
   }
 
@@ -186,7 +190,11 @@ final class PubSub {
       if (e.code == StatusCode.notFound) {
         return false;
       }
-      rethrow;
+      throw PubSubOperationException(
+        e.code,
+        e.message ?? 'Unknown error',
+        e.trailers ?? const {},
+      );
     }
   }
 
@@ -222,7 +230,11 @@ final class PubSub {
       if (e.code == StatusCode.notFound) {
         throw TopicNotFoundException(topicName);
       }
-      rethrow;
+      throw PubSubOperationException(
+        e.code,
+        e.message ?? 'Unknown error',
+        e.trailers ?? const {},
+      );
     }
   }
 
@@ -269,7 +281,11 @@ final class PubSub {
       if (e.code == StatusCode.notFound) {
         throw TopicNotFoundException(topic);
       }
-      rethrow;
+      throw PubSubOperationException(
+        e.code,
+        e.message ?? 'Unknown error',
+        e.trailers ?? const {},
+      );
     }
   }
 
@@ -296,7 +312,11 @@ final class PubSub {
       if (e.code == StatusCode.notFound) {
         return false;
       }
-      rethrow;
+      throw PubSubOperationException(
+        e.code,
+        e.message ?? 'Unknown error',
+        e.trailers ?? const {},
+      );
     }
   }
 
@@ -329,7 +349,11 @@ final class PubSub {
       if (e.code == StatusCode.notFound) {
         throw SubscriptionNotFoundException(subscriptionName);
       }
-      rethrow;
+      throw PubSubOperationException(
+        e.code,
+        e.message ?? 'Unknown error',
+        e.trailers ?? const {},
+      );
     }
   }
 
@@ -375,7 +399,11 @@ final class PubSub {
         }
       }
     } on GrpcError catch (e) {
-      throw StreamBrokenException(e);
+      throw StreamBrokenException(
+        e.code,
+        e.message ?? 'Unknown error',
+        e.trailers ?? const {},
+      );
     } finally {
       await requestController.close();
     }
@@ -408,7 +436,11 @@ final class PubSub {
       if (e.code == StatusCode.notFound) {
         throw SubscriptionNotFoundException(subscriptionName);
       }
-      rethrow;
+      throw PubSubOperationException(
+        e.code,
+        e.message ?? 'Unknown error',
+        e.trailers ?? const {},
+      );
     }
   }
 
@@ -443,7 +475,11 @@ final class PubSub {
       if (e.code == StatusCode.notFound) {
         throw SubscriptionNotFoundException(subscriptionName);
       }
-      rethrow;
+      throw PubSubOperationException(
+        e.code,
+        e.message ?? 'Unknown error',
+        e.trailers ?? const {},
+      );
     }
   }
 

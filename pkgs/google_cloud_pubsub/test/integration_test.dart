@@ -10,6 +10,24 @@ void main() {
   group('PubSub Integration', () {
     PubSub? client;
 
+    Future<List<ReceivedMessage>> pullReliably(
+      String subscriptionName, {
+      required int count,
+    }) async {
+      final messages = <ReceivedMessage>[];
+      for (var i = 0; i < 10 && messages.length < count; i++) {
+        if (i > 0) {
+          await Future<void>.delayed(const Duration(seconds: 1));
+        }
+        final pulled = await client!.pull(
+          subscriptionName,
+          maxMessages: count - messages.length,
+        );
+        messages.addAll(pulled);
+      }
+      return messages;
+    }
+
     setUp(() async {
       final host = Platform.environment['PUBSUB_EMULATOR_HOST'];
       final project = Platform.environment['GOOGLE_CLOUD_PROJECT'];
@@ -172,7 +190,7 @@ void main() {
       await topic.publish(data);
 
       // Pull message
-      final messages = await client!.pull(subscriptionName);
+      final messages = await pullReliably(subscriptionName, count: 1);
       expect(messages, hasLength(1));
       expect(messages.first.message.data, equals(data));
 
@@ -252,7 +270,7 @@ void main() {
       await topic.publish(data, attributes: attributes);
 
       // Pull message
-      final messages = await client!.pull(subscriptionName);
+      final messages = await pullReliably(subscriptionName, count: 1);
       expect(messages, hasLength(1));
       expect(messages.first.message.data, equals(data));
       expect(messages.first.message.attributes, equals(attributes));
@@ -280,7 +298,7 @@ void main() {
       await topic.publish(data2);
 
       // Pull messages
-      final messages = await client!.pull(subscriptionName, maxMessages: 2);
+      final messages = await pullReliably(subscriptionName, count: 2);
       expect(messages, hasLength(2));
 
       final receivedData = messages.map((m) => m.message.data).toList();

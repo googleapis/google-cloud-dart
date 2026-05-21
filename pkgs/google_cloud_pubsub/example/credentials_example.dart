@@ -66,7 +66,11 @@ final class CredentialsException implements Exception {
 /// Resolves and returns a function that returns a valid access token,
 /// refreshing it if it has expired or is about to expire within 5 minutes.
 ///
+/// Preconditions:
 /// * [scopes] must not be empty.
+///
+/// Throws a [CredentialsException] if security credentials cannot be
+/// obtained or refreshed.
 Future<String> Function() applicationDefaultCredentials({
   required List<String> scopes,
   http.Client? httpClient,
@@ -75,10 +79,12 @@ Future<String> Function() applicationDefaultCredentials({
     throw ArgumentError.value(scopes, 'scopes', 'Must not be empty.');
   }
 
-  final client = httpClient ?? http.Client();
-  auth.AccessCredentials? credentials;
+  Future<auth.AccessCredentials>? credentialsFuture;
 
-  Future<auth.AccessCredentials> obtainFromFile(File file) async {
+  Future<auth.AccessCredentials> obtainFromFile(
+    File file,
+    http.Client client,
+  ) async {
     final jsonContent = await file.readAsString();
     final credentialsMap = json.decode(jsonContent) as Map<String, dynamic>;
 
@@ -113,54 +119,66 @@ Future<String> Function() applicationDefaultCredentials({
   }
 
   Future<auth.AccessCredentials> obtainCredentials() async {
-    final credsEnv = Platform.environment['GOOGLE_APPLICATION_CREDENTIALS'];
-    if (credsEnv != null && credsEnv.isNotEmpty) {
-      return await obtainFromFile(File(credsEnv));
-    }
+    final client = httpClient ?? http.Client();
+    try {
+      final credsEnv = Platform.environment['GOOGLE_APPLICATION_CREDENTIALS'];
+      if (credsEnv != null && credsEnv.isNotEmpty) {
+        return await obtainFromFile(File(credsEnv), client);
+      }
 
-    File credFile;
-    if (Platform.isWindows) {
-      final appData = Platform.environment['APPDATA'];
-      if (appData == null) {
-        throw StateError(
-          'The expected environment variable APPDATA must be set.',
+      File credFile;
+      if (Platform.isWindows) {
+        final appData = Platform.environment['APPDATA'];
+        if (appData == null) {
+          throw StateError(
+            'The expected environment variable APPDATA must be set.',
+          );
+        }
+        credFile = File.fromUri(
+          Uri.directory(
+            appData,
+          ).resolve('gcloud/application_default_credentials.json'),
+        );
+      } else {
+        final homeVar = Platform.environment['HOME'];
+        if (homeVar == null) {
+          throw StateError(
+            'The expected environment variable HOME must be set.',
+          );
+        }
+        credFile = File.fromUri(
+          Uri.directory(
+            homeVar,
+          ).resolve('.config/gcloud/application_default_credentials.json'),
         );
       }
-      credFile = File.fromUri(
-        Uri.directory(
-          appData,
-        ).resolve('gcloud/application_default_credentials.json'),
-      );
-    } else {
-      final homeVar = Platform.environment['HOME'];
-      if (homeVar == null) {
-        throw StateError('The expected environment variable HOME must be set.');
+
+      if (await credFile.exists()) {
+        return await obtainFromFile(credFile, client);
       }
-      credFile = File.fromUri(
-        Uri.directory(
-          homeVar,
-        ).resolve('.config/gcloud/application_default_credentials.json'),
-      );
-    }
 
-    if (await credFile.exists()) {
-      return await obtainFromFile(credFile);
+      return await auth.obtainAccessCredentialsViaMetadataServer(client);
+    } finally {
+      if (httpClient == null) {
+        client.close();
+      }
     }
-
-    return await auth.obtainAccessCredentialsViaMetadataServer(client);
   }
 
   return () async {
     try {
-      var creds = credentials ??= await obtainCredentials();
+      var future = credentialsFuture ??= obtainCredentials();
+      var creds = await future;
 
       final threshold = DateTime.now().toUtc().add(const Duration(minutes: 5));
       if (creds.accessToken.expiry.isBefore(threshold)) {
-        creds = credentials = await obtainCredentials();
+        future = credentialsFuture = obtainCredentials();
+        creds = await future;
       }
 
       return creds.accessToken.data;
     } on Exception catch (e) {
+      credentialsFuture = null;
       throw CredentialsException('Failed to obtain or refresh access token', e);
     }
   };

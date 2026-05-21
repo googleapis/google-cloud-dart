@@ -26,10 +26,10 @@ import 'dart:convert';
 import 'package:google_cloud_pubsub/google_cloud_pubsub.dart';
 
 void main() async {
-  // By default, the `PubSub` class will use the currently configured project
-  // and automatically attempt to authenticate using Application Default
-  // Credentials.
-  final pubSub = PubSub();
+  // Note: You must provide a `tokenProvider` for authentication.
+  final pubSub = PubSub(
+    tokenProvider: () async => 'your-access-token',
+  );
 
   // Create a topic.
   final topic = await pubSub.createTopic('put-your-topic-name-here');
