@@ -14,7 +14,7 @@
 
 // ignore_for_file: avoid_classes_with_only_static_members
 
-part of '../protobuf.dart';
+part of 'api.g.dart';
 
 /// An abstract class that can return a JSON representation of itself.
 ///
@@ -40,7 +40,7 @@ abstract class ProtoEnum implements JsonEncodable {
   const ProtoEnum(this.value);
 
   @override
-  String toJson() => value;
+  Object? toJson() => value;
 
   @override
   bool operator ==(Object other) =>
@@ -216,7 +216,7 @@ class Value extends ProtoMessage {
       case Map<dynamic, dynamic> m:
         return Value(structValue: Struct.fromJson(m));
       default:
-        return Value(nullValue: NullValue.nullValue);
+        throw FormatException('Invalid Value: $json');
     }
   }
 
@@ -262,21 +262,36 @@ class _DurationHelper {
   /// with 's'.
   ///
   /// E.g., 3 seconds with 0 nanoseconds would be '3s'; 3 seconds with 70
-  /// nanosecond would be '3.00000007s'.
+  /// nanosecond would be '3.000000070s'.
+  /// See
+  /// [Duration.java](https://github.com/protocolbuffers/protobuf/blob/44025909eb7064a008decaa60c305bddc8757b3a/java/util/src/main/java/com/google/protobuf/util/Durations.java#L200)
   static String encode(Duration duration) {
-    if (duration.nanos == 0) {
-      return '${duration.seconds}s';
+    var seconds = duration.seconds;
+    var nanos = duration.nanos;
+
+    final result = StringBuffer();
+    if (seconds < 0 || nanos < 0) {
+      result.write('-');
+      seconds = -seconds;
+      nanos = -nanos;
+    }
+    result.write(seconds);
+    if (nanos != 0) {
+      result
+        ..write('.')
+        ..write(_formatNanos(nanos));
+    }
+    result.write('s');
+    return result.toString();
+  }
+
+  static String _formatNanos(int nanos) {
+    if (nanos % 1_000_000 == 0) {
+      return (nanos ~/ 1_000_000).toString().padLeft(3, '0');
+    } else if (nanos % 1_000 == 0) {
+      return (nanos ~/ 1_000).toString().padLeft(6, '0');
     } else {
-      final rhs = duration.nanos.abs().toString().padLeft(9, '0');
-
-      var result = duration.seconds == 0
-          ? '${duration.nanos < 0 ? '-' : ''}0.$rhs'
-          : '${duration.seconds}.$rhs';
-      while (result.endsWith('0')) {
-        result = result.substring(0, result.length - 1);
-      }
-
-      return '${result}s';
+      return nanos.toString().padLeft(9, '0');
     }
   }
 
@@ -310,11 +325,58 @@ class _DurationHelper {
 
 class _FieldMaskHelper {
   /// Encode the field mask as a single comma-separated string.
-  static String encode(FieldMask fieldMask) => fieldMask.paths.join(',');
+  ///
+  /// See https://protobuf.dev/reference/php/api-docs/Google/Protobuf/FieldMask.html
+  /// See https://github.com/protocolbuffers/protobuf/blob/d4ea3dd49c093435443c129497a3e1f0d5b8cd3e/java/util/src/main/java/com/google/protobuf/util/FieldMaskUtil.java#L137
+  static String encode(FieldMask fieldMask) => fieldMask.paths
+      .where((path) => path.isNotEmpty)
+      .map(_lowerUnderscoreToLowerCamel)
+      .join(',');
 
   /// Decode the field mask from a single comma-separated string.
-  static FieldMask decode(Object? format) =>
-      FieldMask(paths: (format as String).split(','));
+  static FieldMask decode(Object? format) {
+    if (format is! String) {
+      throw FormatException(
+        'Expected string for FieldMask, got ${format.runtimeType}',
+      );
+    }
+    final paths = <String>[
+      for (final path in format.split(','))
+        if (path.isNotEmpty) _lowerCamelToLowerUnderscore(path),
+    ];
+    return FieldMask(paths: paths);
+  }
+
+  static String _lowerUnderscoreToLowerCamel(String str) {
+    final sb = StringBuffer();
+    var capitalizeNext = false;
+    for (var i = 0; i < str.length; i++) {
+      final c = str[i];
+      if (c == '_') {
+        capitalizeNext = true;
+      } else if (capitalizeNext) {
+        sb.write(c.toUpperCase());
+        capitalizeNext = false;
+      } else {
+        sb.write(c.toLowerCase());
+      }
+    }
+    return sb.toString();
+  }
+
+  static String _lowerCamelToLowerUnderscore(String str) {
+    final sb = StringBuffer();
+    for (var i = 0; i < str.length; i++) {
+      final c = str[i];
+      final codeUnits = c.codeUnits;
+      // A-Z code units in [65, 90].
+      if (codeUnits.length == 1 && codeUnits[0] >= 65 && codeUnits[0] <= 90) {
+        sb.write('_');
+      }
+      sb.write(c.toLowerCase());
+    }
+    return sb.toString();
+  }
 }
 
 /// Called from the Timestamp constructor to validate construction parameters.
@@ -502,5 +564,17 @@ class _ListValueHelper {
   static ListValue decode(Object? value) {
     final values = (value as List).map(Value.fromJson).toList();
     return ListValue(values: values);
+  }
+}
+
+/// See https://protobuf.dev/programming-guides/json/#null-values
+class _NullValueHelper {
+  static Object? encode(NullValue value) => null;
+
+  static NullValue decode(Object? value) {
+    if (value == 'NULL_VALUE' || value == null) {
+      return NullValue.nullValue;
+    }
+    throw FormatException('Invalid NullValue: $value');
   }
 }

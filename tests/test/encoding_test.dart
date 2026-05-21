@@ -192,4 +192,4 @@ void main() {
 
 /// Encode the given object to a JSON string, then return the results of JSON
 /// decoding that string.
-dynamic encodeDecode(Object json) => jsonDecode(jsonEncode(json));
+dynamic encodeDecode(Object? json) => jsonDecode(jsonEncode(json));

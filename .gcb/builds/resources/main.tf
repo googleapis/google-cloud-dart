@@ -30,3 +30,9 @@ resource "google_cloudbuild_worker_pool" "pool" {
   }
 }
 
+resource "google_firestore_database" "default" {
+  project     = var.project
+  name        = "(default)"
+  location_id = "us-central1"
+  type        = "FIRESTORE_NATIVE"
+}

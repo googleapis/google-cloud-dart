@@ -31,13 +31,7 @@ void main() async {
   group('download object', () {
     group('storage-testbench', tags: ['storage-testbench'], () {
       setUp(() async {
-        client = RetryTestHttpClient(http.Client());
-        storage = Storage(
-          projectId: 'test-project',
-          apiEndpoint: 'localhost:9000',
-          useAuthWithCustomEndpoint: false,
-          client: client,
-        );
+        (client, storage) = createStorageTestbenchClient();
         retryCreator = RetryTestCreator(http.Client());
       });
 

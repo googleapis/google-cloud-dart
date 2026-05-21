@@ -1,35 +1,44 @@
-## 0.4.1
+## 0.5.0
+
+### `google_cloud.dart`
+
+- **BREAKING:** No longer exports logging or HTTP serving features.
+  These are now exported by the new packages:
+
+  - [`package:google_cloud_logging`](https://pub.dev/packages/google_cloud_logging)
+  - [`package:google_cloud_shelf`](https://pub.dev/packages/google_cloud_shelf)
+
+### `constants.dart`
+
+- **BREAKING:** Removed logging and serving related constants:
+
+  - `portEnvironmentVariable`
+  - `defaultListenPort`
+  - `cloudTraceContextHeader`
+  - `logTraceKey`
+  - `logSpanIdKey`
+  - `logTraceSampledKey`
+
+  These constants are available in the new
+  [`package:google_cloud_shelf`](https://pub.dev/packages/google_cloud_shelf).
+
+### `general.dart`
+
+- **BREAKING:** No longer exports logging features. Use
+  [`package:google_cloud_logging`](https://pub.dev/packages/google_cloud_logging)
+  instead.
+- **DEPRECATED:** Use `google_cloud.dart` instead.
 
 ### `http_serving.dart`
 
-- Introduces `HttpResponseException` and `httpResponseExceptionMiddleware`.
-  - `BadRequestException` and `badRequestMiddleware` are deprecated in favor of
-    `HttpResponseException` and `httpResponseExceptionMiddleware`, respectively.
-    (They are aliased for backward compatibility.)
-- Expanded `HttpResponseException` to support structured error reporting as
-  per AIP-193.
-  - Added `status` (`String?`) and `details` (`List<Map<String, Object?>>?`)
-    fields.
-  - Added `toJson()` method to serialize the error into a standard Google Cloud
-    error payload.
-  - Updated `toString()` to include `status` and `details` when non-null.
-  - Added factory constructors for common HTTP 4XX and 5XX status codes:
-    - `badRequest` (400)
-    - `unauthorized` (401)
-    - `forbidden` (403)
-    - `notFound` (404)
-    - `conflict` (409)
-    - `tooManyRequests` (429)
-    - `internalServerError` (500)
-    - `notImplemented` (501)
-    - `serviceUnavailable` (503)
-    - `gatewayTimeout` (504)
-  - Added default `status` values for factories that map 1:1 to gRPC status
-    codes (e.g., `unauthorized` defaults to `'UNAUTHENTICATED'`).
-- Updated `httpResponseExceptionMiddleware` to leverage
-  `HttpResponseException.toJson()` for JSON responses, returning a standard
-  Google Cloud error payload.
-- Updated plain text errors to use `HttpResponseException.toString()`.
+- **BREAKING:** Library file has been removed entirely. All HTTP serving
+  features are now in the new
+  [`package:google_cloud_shelf`](https://pub.dev/packages/google_cloud_shelf)
+  package.
+
+## 0.4.1
+
+- Update dependency `meta: ^1.17.0` to allow workspaces with stable Flutter.
 
 ## 0.4.0
 

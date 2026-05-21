@@ -27,8 +27,18 @@ void main() {
   });
 
   test('encode multiple', () {
-    final fieldMask = FieldMask(paths: ['one', 'two']);
+    final fieldMask = FieldMask(paths: ['one', '', 'two']);
     expect(fieldMask.toJson(), 'one,two');
+  });
+
+  test('encode uppercase', () {
+    final fieldMask = FieldMask(paths: ['Bar.foBar', 'baQux']);
+    expect(fieldMask.toJson(), 'bar.fobar,baqux');
+  });
+
+  test('encode snake_case to camelCase', () {
+    final fieldMask = FieldMask(paths: ['foo_bar', 'baz_qux.foo_bar']);
+    expect(fieldMask.toJson(), 'fooBar,bazQux.fooBar');
   });
 
   test('decode empty', () {
@@ -39,13 +49,16 @@ void main() {
 
   test('decode single', () {
     final fieldMask = FieldMask.fromJson('one');
-    final actual = fieldMask.paths.join('|');
-    expect(actual, 'one');
+    expect(fieldMask.paths, ['one']);
   });
 
   test('decode multiple', () {
     final fieldMask = FieldMask.fromJson('one,two');
-    final actual = fieldMask.paths.join('|');
-    expect(actual, 'one|two');
+    expect(fieldMask.paths, ['one', 'two']);
+  });
+
+  test('decode camelCase', () {
+    final fieldMask = FieldMask.fromJson('fooBar,,bazQux.fooBar');
+    expect(fieldMask.paths, ['foo_bar', 'baz_qux.foo_bar']);
   });
 }

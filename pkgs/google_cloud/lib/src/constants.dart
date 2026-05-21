@@ -12,10 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/// The standard environment variable for specifying the port a service should
-/// listen on.
-const portEnvironmentVariable = 'PORT';
-
 /// Standard environment variable for specifying the path to a service account
 /// JSON file.
 ///
@@ -42,14 +38,6 @@ const projectIdEnvironmentVariableOptions = {
 /// ID.
 const projectIdEnvironmentVariable = 'GOOGLE_CLOUD_PROJECT';
 
-/// The default port a service should listen on if [portEnvironmentVariable] is
-/// not set.
-const defaultListenPort = 8080;
-
-/// Standard HTTP header used by
-/// [Cloud Trace](https://cloud.google.com/trace/docs/setup).
-const cloudTraceContextHeader = 'x-cloud-trace-context';
-
 /// Standard HTTP request headers expected by the
 /// [Metadata Server](https://cloud.google.com/compute/docs/metadata).
 const metadataFlavorHeaders = {'Metadata-Flavor': 'Google'};
@@ -68,19 +56,3 @@ const revisionEnvironmentVariable = 'K_REVISION';
 ///
 /// See https://docs.cloud.google.com/run/docs/container-contract#services-env-vars
 const configurationEnvironmentVariable = 'K_CONFIGURATION';
-
-/// The `payload` key used to correlate log entries with Cloud Trace.
-///
-/// See https://docs.cloud.google.com/logging/docs/agent/logging/configuration#special-fields
-const logTraceKey = 'logging.googleapis.com/trace';
-
-/// The `payload` key used to correlate log entries with a specific span within
-/// a Cloud Trace.
-///
-/// See https://docs.cloud.google.com/logging/docs/agent/logging/configuration#special-fields
-const logSpanIdKey = 'logging.googleapis.com/spanId';
-
-/// The `payload` key used to indicate whether a trace is sampled.
-///
-/// See https://docs.cloud.google.com/logging/docs/agent/logging/configuration#special-fields
-const logTraceSampledKey = 'logging.googleapis.com/trace_sampled';

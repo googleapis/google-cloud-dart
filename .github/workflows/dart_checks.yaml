@@ -25,23 +25,32 @@ on:
 # reproducable builds (formatting can change between SDK versions, ...).
 env:
   DART_VERSION: 3.9.2
-  GOOGLE_CLOUD_PROJECT: skilful-orb-203421
-  LIBRARIAN_VERSION: v0.8.4-0.20260319214857-70b3cca2e8e2
+  GOOGLE_CLOUD_PROJECT: test-project
+  LIBRARIAN_VERSION: v0.11.1-0.20260429222509-0e24d8cd0788
 name: Dart Checks
 jobs:
   analyze_and_format:
     name: Analyze and Format
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
-      - uses: dart-lang/setup-dart@e51d8e571e22473a2ddebf0ef8a2123f0ab2c02c
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - uses: dart-lang/setup-dart@65eb853c7ba17dde3be364c3d2858773e7144260
         with:
           sdk: ${{ env.DART_VERSION }}
+      - name: Cache Pub Dependencies
+        uses: actions/cache@v5
+        with:
+          path: ~/.pub-cache
+          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
       - run: dart pub get
       - name: Analyze
         run: dart analyze --fatal-infos
       - name: Format
         run: dart format --output=none --set-exit-if-changed .
+      - name: Verify Code Excerpts Up-to-Date
+        run: dart run tool/update_excerpts.dart --fail-on-update
 
   unit_tests:
     name: Unit Tests
@@ -50,8 +59,8 @@ jobs:
       matrix:
         platform: ["chrome", "vm"]
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
-      - uses: dart-lang/setup-dart@e51d8e571e22473a2ddebf0ef8a2123f0ab2c02c
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - uses: dart-lang/setup-dart@65eb853c7ba17dde3be364c3d2858773e7144260
         with:
           sdk: ${{ env.DART_VERSION }}
       - run: dart pub get
@@ -61,19 +70,39 @@ jobs:
     name: Storage Testbench Tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
-      - uses: dart-lang/setup-dart@e51d8e571e22473a2ddebf0ef8a2123f0ab2c02c
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - uses: dart-lang/setup-dart@65eb853c7ba17dde3be364c3d2858773e7144260
         with:
           sdk: ${{ env.DART_VERSION }}
       - run: dart pub get
       - run: docker run -d --rm -p 9000:9000 -p 8888:8888 gcr.io/cloud-devrel-public-resources/storage-testbench:latest
       - run: dart test -P storage-testbench .
 
+  firestore_emulator_tests:
+    name: Firestore Emulator Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e
+      - uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654
+        with:
+          distribution: 'zulu'
+          java-version: '25'
+      - uses: dart-lang/setup-dart@65eb853c7ba17dde3be364c3d2858773e7144260
+        with:
+          sdk: ${{ env.DART_VERSION }}
+      - run: dart pub get
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools
+      - name: Run Tests
+        run: firebase emulators:exec --config=firestore_emulators/firebase.json \
+          "dart test -P firebase-emulator ."
+
   generator:
     name: Generators
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
       - name: Install protoc
         run: |
           set -e
@@ -82,15 +111,13 @@ jobs:
           sudo unzip -x /tmp/protoc.zip
           protoc --version
       - name: Install Go
-        uses: actions/setup-go@44694675825211faa026b3c33043df3e48a5fa00
+        uses: actions/setup-go@4a3601121dd01d1626a1e23e37211e3254c1c06c
         with:
           go-version: 1.26.1
       - name: Install Dart  # The generator uses "dart format".
-        uses: dart-lang/setup-dart@e51d8e571e22473a2ddebf0ef8a2123f0ab2c02c
+        uses: dart-lang/setup-dart@65eb853c7ba17dde3be364c3d2858773e7144260
         with:
           sdk: ${{ env.DART_VERSION }}
-      - name: Setup Graphviz
-        run: sudo apt-get install graphviz
       - run: dart pub get
       # Regenerate and check the existing clients. If there is any difference
       # between the generated code and the committed code that is an error; all
@@ -102,14 +129,11 @@ jobs:
         run: go run github.com/googleapis/librarian/cmd/librarian@${{ env.LIBRARIAN_VERSION }} generate -all
       - name: Format librarian configuration
         run: go run github.com/googleapis/librarian/cmd/librarian@${{ env.LIBRARIAN_VERSION }} tidy
-      - name: Regenerate dependency graph
-        run: dart run tool/deps_diagram.dart
+      - name: Update documentation
+        run: dart run tool/update_docs.dart
       - name: Generated Diff
         run: git diff --exit-code
-      - name: Upload dependency graph
+      - name: Print diff on failure
         if: failure()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
-        with:
-          name: Dependency graph
-          path: deps.png
-          retention-days: 1
+        run: git diff
+

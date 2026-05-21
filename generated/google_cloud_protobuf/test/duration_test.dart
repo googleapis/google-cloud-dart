@@ -44,6 +44,20 @@ void main() {
   testCase(0, 999_999_999, '0.999999999s');
   testCase(0, -999_999_999, '-0.999999999s');
 
+  // Verify 3, 6, or 9 fractional digits.
+  testCase(1, 500_000_000, '1.500s');
+  testCase(1, 500_000, '1.000500s');
+  testCase(1, 500, '1.000000500s');
+  testCase(0, 500_000_000, '0.500s');
+  testCase(0, 500_000, '0.000500s');
+  testCase(0, 500, '0.000000500s');
+  testCase(0, -500_000_000, '-0.500s');
+  testCase(0, -500_000, '-0.000500s');
+  testCase(0, -500, '-0.000000500s');
+  testCase(-1, -500_000_000, '-1.500s');
+  testCase(-1, -500_000, '-1.000500s');
+  testCase(-1, -500, '-1.000000500s');
+
   // Verify durations can roundtrip from String -> Duration -> String.
   void roundTrip(String name, String encoding) {
     test('round trip $name ($encoding)', () {
@@ -54,7 +68,7 @@ void main() {
 
   roundTrip('zero', '0s');
   roundTrip('2ns', '0.000000002s');
-  roundTrip('200ms', '0.2s');
+  roundTrip('200ms', '0.200s');
   roundTrip('round positive seconds', '12s');
   roundTrip('positive seconds and nanos', '12.000000123s');
   roundTrip('positive seconds and micros', '12.000123s');

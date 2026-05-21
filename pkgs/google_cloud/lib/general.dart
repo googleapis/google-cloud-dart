@@ -12,35 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/// General Google Cloud Platform integration features.
-///
-/// {@canonicalFor general.CloudLogger}
-/// {@canonicalFor general.computeProjectId}
-/// {@canonicalFor general.fetchMetadataValue}
-/// {@canonicalFor general.gceMetadataHost}
-/// {@canonicalFor general.gceMetadataUrl}
-/// {@canonicalFor general.getMetadataValue}
-/// {@canonicalFor general.LogSeverity}
-/// {@canonicalFor general.MetadataServerException}
-/// {@canonicalFor general.projectIdFromCredentialsFile}
-/// {@canonicalFor general.projectIdFromEnvironmentVariables}
-/// {@canonicalFor general.projectIdFromGcloudConfig}
-/// {@canonicalFor general.projectIdFromMetadataServer}
-/// {@canonicalFor general.serviceAccountEmailFromMetadataServer}
-/// {@canonicalFor general.structuredLogEntry}
+@Deprecated('Use google_cloud.dart instead')
 library;
 
-export 'src/gcp_project.dart'
-    show
-        MetadataServerException,
-        computeProjectId,
-        fetchMetadataValue,
-        getMetadataValue,
-        projectIdFromCredentialsFile,
-        projectIdFromEnvironmentVariables,
-        projectIdFromGcloudConfig,
-        projectIdFromMetadataServer,
-        serviceAccountEmailFromMetadataServer;
-export 'src/logger.dart' show CloudLogger, LogSeverity;
-export 'src/metadata.dart' show gceMetadataHost, gceMetadataUrl;
-export 'src/structured_logging.dart' show structuredLogEntry;
+export 'google_cloud.dart';

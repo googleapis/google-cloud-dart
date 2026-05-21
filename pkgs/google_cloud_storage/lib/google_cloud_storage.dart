@@ -25,5 +25,6 @@ export 'src/exceptions.dart';
 export 'src/object_metadata.dart';
 export 'src/object_metadata_patch_builder.dart' show ObjectMetadataPatchBuilder;
 export 'src/project_team.dart';
+export 'src/resumeable_upload.dart' show ResumableUploadSink;
 export 'src/retry.dart' hide delaySequence;
 export 'src/storage_object.dart' hide newObject;

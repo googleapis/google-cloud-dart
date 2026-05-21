@@ -12,12 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// ignore_for_file: comment_references
-
-/// Utilities for running Dart code correctly on the Google Cloud Platform.
+/// General Google Cloud Platform integration features.
 ///
-/// This library exports both [general] and [http_serving].
+/// {@canonicalFor general.computeProjectId}
+/// {@canonicalFor general.fetchMetadataValue}
+/// {@canonicalFor general.gceMetadataHost}
+/// {@canonicalFor general.gceMetadataUrl}
+/// {@canonicalFor general.getMetadataValue}
+/// {@canonicalFor general.MetadataServerException}
+/// {@canonicalFor general.projectIdFromCredentialsFile}
+/// {@canonicalFor general.projectIdFromEnvironmentVariables}
+/// {@canonicalFor general.projectIdFromGcloudConfig}
+/// {@canonicalFor general.projectIdFromMetadataServer}
+/// {@canonicalFor general.serviceAccountEmailFromMetadataServer}
 library;
 
-export 'general.dart';
-export 'http_serving.dart';
+export 'src/gcp_project.dart'
+    show
+        MetadataServerException,
+        computeProjectId,
+        fetchMetadataValue,
+        getMetadataValue,
+        projectIdFromCredentialsFile,
+        projectIdFromEnvironmentVariables,
+        projectIdFromGcloudConfig,
+        projectIdFromMetadataServer,
+        serviceAccountEmailFromMetadataServer;
+export 'src/metadata.dart' show gceMetadataHost, gceMetadataUrl;

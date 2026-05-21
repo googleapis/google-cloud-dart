@@ -290,20 +290,38 @@ void main() async {
     });
 
     test('idempotent transport failure', () async {
-      var count = 0;
+      final responses =
+          <(String, Future<http.Response> Function(http.Request))>[
+            (
+              'POST',
+              (request) async =>
+                  throw http.ClientException('Some transport failure'),
+            ),
+            (
+              'POST',
+              (request) async => http.Response(
+                '{"name": "object"}',
+                200,
+                headers: {'content-type': 'application/json; charset=UTF-8'},
+              ),
+            ),
+          ];
+
       final mockClient = MockClient((request) async {
-        count++;
-        if (count == 1) {
-          throw http.ClientException('Some transport failure');
-        } else if (count == 2) {
-          return http.Response(
-            '{"name": "object"}',
-            200,
-            headers: {'content-type': 'application/json; charset=UTF-8'},
+        if (responses.isEmpty) {
+          throw StateError(
+            'Unexpected call (method: ${request.method}, '
+            'uri: ${request.url})',
           );
-        } else {
-          throw StateError('Unexpected call count: $count');
         }
+        final (expectedMethod, handler) = responses.removeAt(0);
+        if (request.method != expectedMethod) {
+          throw StateError(
+            'Expected $expectedMethod but got ${request.method} '
+            'for ${request.url}',
+          );
+        }
+        return await handler(request);
       });
 
       final storage = Storage(client: mockClient, projectId: 'fake project');
@@ -314,25 +332,43 @@ void main() async {
         3,
       ], ifGenerationMatch: BigInt.one);
       expect(actualMetadata.name, 'object');
+      expect(responses, isEmpty);
     });
 
     test('non-idempotent transport failure', () async {
-      var count = 0;
+      final responses =
+          <(String, Future<http.Response> Function(http.Request))>[
+            (
+              'POST',
+              (request) async =>
+                  throw http.ClientException('Some transport failure'),
+            ),
+          ];
+
       final mockClient = MockClient((request) async {
-        count++;
-        if (count == 1) {
-          throw http.ClientException('Some transport failure');
-        } else {
-          throw StateError('Unexpected call count: $count');
+        if (responses.isEmpty) {
+          throw StateError(
+            'Unexpected call (method: ${request.method}, '
+            'uri: ${request.url})',
+          );
         }
+        final (expectedMethod, handler) = responses.removeAt(0);
+        if (request.method != expectedMethod) {
+          throw StateError(
+            'Expected $expectedMethod but got ${request.method} '
+            'for ${request.url}',
+          );
+        }
+        return await handler(request);
       });
 
       final storage = Storage(client: mockClient, projectId: 'fake project');
 
-      expect(
-        () => storage.uploadObject('bucket', 'object', [1, 2, 3]),
+      await expectLater(
+        storage.uploadObject('bucket', 'object', [1, 2, 3]),
         throwsA(isA<http.ClientException>()),
       );
+      expect(responses, isEmpty);
     });
   });
 }
