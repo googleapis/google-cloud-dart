@@ -162,23 +162,19 @@ Object? sanitize(Object? value, [Set<Object>? seen]) {
     return value;
   }
   seen ??= <Object>{};
+  if (seen.contains(value)) {
+    return '[CIRCULAR]';
+  }
+  seen.add(value);
 
   try {
     if (value is List) {
-      if (seen.contains(value)) {
-        return '[...]';
-      }
-      seen.add(value);
       return value.map((e) => sanitize(e, seen)).toList();
     }
     if (value is Map) {
-      if (seen.contains(value)) {
-        return '{...}';
-      }
-      seen.add(value);
       return value.map((k, v) => MapEntry(k.toString(), sanitize(v, seen)));
     }
-    return toEncodableFallback(value);
+    return sanitize(toEncodableFallback(value), seen);
   } finally {
     seen.remove(value);
   }
