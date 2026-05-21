@@ -19,7 +19,6 @@
 /// Defines common types for Google APIs.
 library;
 
-// ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
 // ignore_for_file: constant_identifier_names
@@ -27,7 +26,6 @@ library;
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: non_constant_identifier_names
 // ignore_for_file: unintended_html_in_doc_comment
-// ignore_for_file: use_null_aware_elements
 
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/src/encoding.dart';
@@ -211,7 +209,7 @@ final class Color extends ProtoMessage {
     if (red.isNotDefault) 'red': encodeDouble(red),
     if (green.isNotDefault) 'green': encodeDouble(green),
     if (blue.isNotDefault) 'blue': encodeDouble(blue),
-    if (alpha case final alpha?) 'alpha': alpha.toJson(),
+    'alpha': ?alpha?.toJson(),
   };
 
   @override
@@ -410,8 +408,8 @@ final class DateTime extends ProtoMessage {
     if (minutes.isNotDefault) 'minutes': minutes,
     if (seconds.isNotDefault) 'seconds': seconds,
     if (nanos.isNotDefault) 'nanos': nanos,
-    if (utcOffset case final utcOffset?) 'utcOffset': utcOffset.toJson(),
-    if (timeZone case final timeZone?) 'timeZone': timeZone.toJson(),
+    'utcOffset': ?utcOffset?.toJson(),
+    'timeZone': ?timeZone?.toJson(),
   };
 
   @override
@@ -746,8 +744,8 @@ final class Interval extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (startTime case final startTime?) 'startTime': startTime.toJson(),
-    if (endTime case final endTime?) 'endTime': endTime.toJson(),
+    'startTime': ?startTime?.toJson(),
+    'endTime': ?endTime?.toJson(),
   };
 
   @override
@@ -984,8 +982,8 @@ final class PhoneNumber extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (e164Number case final e164Number?) 'e164Number': e164Number,
-    if (shortCode case final shortCode?) 'shortCode': shortCode.toJson(),
+    'e164Number': ?e164Number,
+    'shortCode': ?shortCode?.toJson(),
     if (extension.isNotDefault) 'extension': extension,
   };
 

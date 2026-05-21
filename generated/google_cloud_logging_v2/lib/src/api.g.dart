@@ -19,7 +19,6 @@
 /// Writes log entries and manages your Cloud Logging configuration.
 library;
 
-// ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
 // ignore_for_file: constant_identifier_names
@@ -27,7 +26,6 @@ library;
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: non_constant_identifier_names
 // ignore_for_file: unintended_html_in_doc_comment
-// ignore_for_file: use_null_aware_elements
 
 import 'package:google_cloud_api/api.dart';
 import 'package:google_cloud_logging_type/logging_type.dart' as logging_type;
@@ -2592,27 +2590,22 @@ final class LogEntry extends ProtoMessage {
   @override
   Object toJson() => {
     'logName': logName,
-    if (resource case final resource?) 'resource': resource.toJson(),
-    if (protoPayload case final protoPayload?)
-      'protoPayload': protoPayload.toJson(),
-    if (textPayload case final textPayload?) 'textPayload': textPayload,
-    if (jsonPayload case final jsonPayload?)
-      'jsonPayload': jsonPayload.toJson(),
-    if (timestamp case final timestamp?) 'timestamp': timestamp.toJson(),
-    if (receiveTimestamp case final receiveTimestamp?)
-      'receiveTimestamp': receiveTimestamp.toJson(),
+    'resource': ?resource?.toJson(),
+    'protoPayload': ?protoPayload?.toJson(),
+    'textPayload': ?textPayload,
+    'jsonPayload': ?jsonPayload?.toJson(),
+    'timestamp': ?timestamp?.toJson(),
+    'receiveTimestamp': ?receiveTimestamp?.toJson(),
     if (severity.isNotDefault) 'severity': severity.toJson(),
     if (insertId.isNotDefault) 'insertId': insertId,
-    if (httpRequest case final httpRequest?)
-      'httpRequest': httpRequest.toJson(),
+    'httpRequest': ?httpRequest?.toJson(),
     if (labels.isNotDefault) 'labels': labels,
-    if (operation case final operation?) 'operation': operation.toJson(),
+    'operation': ?operation?.toJson(),
     if (trace.isNotDefault) 'trace': trace,
     if (spanId.isNotDefault) 'spanId': spanId,
     if (traceSampled.isNotDefault) 'traceSampled': traceSampled,
-    if (sourceLocation case final sourceLocation?)
-      'sourceLocation': sourceLocation.toJson(),
-    if (split case final split?) 'split': split.toJson(),
+    'sourceLocation': ?sourceLocation?.toJson(),
+    'split': ?split?.toJson(),
   };
 
   @override
@@ -2987,7 +2980,7 @@ final class WriteLogEntriesRequest extends ProtoMessage {
   @override
   Object toJson() => {
     if (logName.isNotDefault) 'logName': logName,
-    if (resource case final resource?) 'resource': resource.toJson(),
+    'resource': ?resource?.toJson(),
     if (labels.isNotDefault) 'labels': labels,
     'entries': [for (final i in entries) i.toJson()],
     if (partialSuccess.isNotDefault) 'partialSuccess': partialSuccess,
@@ -3012,7 +3005,7 @@ final class WriteLogEntriesResponse extends ProtoMessage {
 
   WriteLogEntriesResponse() : super(fullyQualifiedName);
 
-  factory WriteLogEntriesResponse.fromJson(Object? j) =>
+  factory WriteLogEntriesResponse.fromJson(Object? _) =>
       WriteLogEntriesResponse();
 
   @override
@@ -3518,8 +3511,7 @@ final class TailLogEntriesRequest extends ProtoMessage {
   Object toJson() => {
     'resourceNames': resourceNames,
     if (filter.isNotDefault) 'filter': filter,
-    if (bufferWindow case final bufferWindow?)
-      'bufferWindow': bufferWindow.toJson(),
+    'bufferWindow': ?bufferWindow?.toJson(),
   };
 
   @override
@@ -3710,7 +3702,7 @@ final class IndexConfig extends ProtoMessage {
   Object toJson() => {
     'fieldPath': fieldPath,
     'type': type.toJson(),
-    if (createTime case final createTime?) 'createTime': createTime.toJson(),
+    'createTime': ?createTime?.toJson(),
   };
 
   @override
@@ -3858,8 +3850,8 @@ final class LogBucket extends ProtoMessage {
   Object toJson() => {
     if (name.isNotDefault) 'name': name,
     if (description.isNotDefault) 'description': description,
-    if (createTime case final createTime?) 'createTime': createTime.toJson(),
-    if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
+    'createTime': ?createTime?.toJson(),
+    'updateTime': ?updateTime?.toJson(),
     if (retentionDays.isNotDefault) 'retentionDays': retentionDays,
     if (locked.isNotDefault) 'locked': locked,
     if (lifecycleState.isNotDefault) 'lifecycleState': lifecycleState.toJson(),
@@ -3867,8 +3859,7 @@ final class LogBucket extends ProtoMessage {
     if (restrictedFields.isNotDefault) 'restrictedFields': restrictedFields,
     if (indexConfigs.isNotDefault)
       'indexConfigs': [for (final i in indexConfigs) i.toJson()],
-    if (cmekSettings case final cmekSettings?)
-      'cmekSettings': cmekSettings.toJson(),
+    'cmekSettings': ?cmekSettings?.toJson(),
   };
 
   @override
@@ -3959,8 +3950,8 @@ final class LogView extends ProtoMessage {
   Object toJson() => {
     if (name.isNotDefault) 'name': name,
     if (description.isNotDefault) 'description': description,
-    if (createTime case final createTime?) 'createTime': createTime.toJson(),
-    if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
+    'createTime': ?createTime?.toJson(),
+    'updateTime': ?updateTime?.toJson(),
     if (filter.isNotDefault) 'filter': filter,
   };
 
@@ -4168,10 +4159,9 @@ final class LogSink extends ProtoMessage {
       'outputVersionFormat': outputVersionFormat.toJson(),
     if (writerIdentity.isNotDefault) 'writerIdentity': writerIdentity,
     if (includeChildren.isNotDefault) 'includeChildren': includeChildren,
-    if (bigqueryOptions case final bigqueryOptions?)
-      'bigqueryOptions': bigqueryOptions.toJson(),
-    if (createTime case final createTime?) 'createTime': createTime.toJson(),
-    if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
+    'bigqueryOptions': ?bigqueryOptions?.toJson(),
+    'createTime': ?createTime?.toJson(),
+    'updateTime': ?updateTime?.toJson(),
   };
 
   @override
@@ -4325,10 +4315,9 @@ final class Link extends ProtoMessage {
   Object toJson() => {
     if (name.isNotDefault) 'name': name,
     if (description.isNotDefault) 'description': description,
-    if (createTime case final createTime?) 'createTime': createTime.toJson(),
+    'createTime': ?createTime?.toJson(),
     if (lifecycleState.isNotDefault) 'lifecycleState': lifecycleState.toJson(),
-    if (bigqueryDataset case final bigqueryDataset?)
-      'bigqueryDataset': bigqueryDataset.toJson(),
+    'bigqueryDataset': ?bigqueryDataset?.toJson(),
   };
 
   @override
@@ -4569,7 +4558,7 @@ final class CreateBucketRequest extends ProtoMessage {
   Object toJson() => {
     'parent': parent,
     'bucketId': bucketId,
-    if (bucket case final bucket?) 'bucket': bucket.toJson(),
+    'bucket': ?bucket?.toJson(),
   };
 
   @override
@@ -4636,8 +4625,8 @@ final class UpdateBucketRequest extends ProtoMessage {
   @override
   Object toJson() => {
     'name': name,
-    if (bucket case final bucket?) 'bucket': bucket.toJson(),
-    if (updateMask case final updateMask?) 'updateMask': updateMask.toJson(),
+    'bucket': ?bucket?.toJson(),
+    'updateMask': ?updateMask?.toJson(),
   };
 
   @override
@@ -4920,7 +4909,7 @@ final class CreateViewRequest extends ProtoMessage {
   Object toJson() => {
     'parent': parent,
     'viewId': viewId,
-    if (view case final view?) 'view': view.toJson(),
+    'view': ?view?.toJson(),
   };
 
   @override
@@ -4981,8 +4970,8 @@ final class UpdateViewRequest extends ProtoMessage {
   @override
   Object toJson() => {
     'name': name,
-    if (view case final view?) 'view': view.toJson(),
-    if (updateMask case final updateMask?) 'updateMask': updateMask.toJson(),
+    'view': ?view?.toJson(),
+    'updateMask': ?updateMask?.toJson(),
   };
 
   @override
@@ -5273,7 +5262,7 @@ final class CreateSinkRequest extends ProtoMessage {
   @override
   Object toJson() => {
     'parent': parent,
-    if (sink case final sink?) 'sink': sink.toJson(),
+    'sink': ?sink?.toJson(),
     if (uniqueWriterIdentity.isNotDefault)
       'uniqueWriterIdentity': uniqueWriterIdentity,
   };
@@ -5373,10 +5362,10 @@ final class UpdateSinkRequest extends ProtoMessage {
   @override
   Object toJson() => {
     'sinkName': sinkName,
-    if (sink case final sink?) 'sink': sink.toJson(),
+    'sink': ?sink?.toJson(),
     if (uniqueWriterIdentity.isNotDefault)
       'uniqueWriterIdentity': uniqueWriterIdentity,
-    if (updateMask case final updateMask?) 'updateMask': updateMask.toJson(),
+    'updateMask': ?updateMask?.toJson(),
   };
 
   @override
@@ -5477,7 +5466,7 @@ final class CreateLinkRequest extends ProtoMessage {
   @override
   Object toJson() => {
     'parent': parent,
-    if (link case final link?) 'link': link.toJson(),
+    'link': ?link?.toJson(),
     'linkId': linkId,
   };
 
@@ -5753,8 +5742,8 @@ final class LogExclusion extends ProtoMessage {
     if (description.isNotDefault) 'description': description,
     'filter': filter,
     if (disabled.isNotDefault) 'disabled': disabled,
-    if (createTime case final createTime?) 'createTime': createTime.toJson(),
-    if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
+    'createTime': ?createTime?.toJson(),
+    'updateTime': ?updateTime?.toJson(),
   };
 
   @override
@@ -5959,10 +5948,7 @@ final class CreateExclusionRequest extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    'parent': parent,
-    if (exclusion case final exclusion?) 'exclusion': exclusion.toJson(),
-  };
+  Object toJson() => {'parent': parent, 'exclusion': ?exclusion?.toJson()};
 
   @override
   String toString() {
@@ -6029,8 +6015,8 @@ final class UpdateExclusionRequest extends ProtoMessage {
   @override
   Object toJson() => {
     'name': name,
-    if (exclusion case final exclusion?) 'exclusion': exclusion.toJson(),
-    if (updateMask case final updateMask?) 'updateMask': updateMask.toJson(),
+    'exclusion': ?exclusion?.toJson(),
+    'updateMask': ?updateMask?.toJson(),
   };
 
   @override
@@ -6197,9 +6183,8 @@ final class UpdateCmekSettingsRequest extends ProtoMessage {
   @override
   Object toJson() => {
     'name': name,
-    if (cmekSettings case final cmekSettings?)
-      'cmekSettings': cmekSettings.toJson(),
-    if (updateMask case final updateMask?) 'updateMask': updateMask.toJson(),
+    'cmekSettings': ?cmekSettings?.toJson(),
+    'updateMask': ?updateMask?.toJson(),
   };
 
   @override
@@ -6452,8 +6437,8 @@ final class UpdateSettingsRequest extends ProtoMessage {
   @override
   Object toJson() => {
     'name': name,
-    if (settings case final settings?) 'settings': settings.toJson(),
-    if (updateMask case final updateMask?) 'updateMask': updateMask.toJson(),
+    'settings': ?settings?.toJson(),
+    'updateMask': ?updateMask?.toJson(),
   };
 
   @override
@@ -6722,12 +6707,12 @@ final class CopyLogEntriesMetadata extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (startTime case final startTime?) 'startTime': startTime.toJson(),
-    if (endTime case final endTime?) 'endTime': endTime.toJson(),
+    'startTime': ?startTime?.toJson(),
+    'endTime': ?endTime?.toJson(),
     if (state.isNotDefault) 'state': state.toJson(),
     if (cancellationRequested.isNotDefault)
       'cancellationRequested': cancellationRequested,
-    if (request case final request?) 'request': request.toJson(),
+    'request': ?request?.toJson(),
     if (progress.isNotDefault) 'progress': progress,
     if (writerIdentity.isNotDefault) 'writerIdentity': writerIdentity,
   };
@@ -6835,13 +6820,11 @@ final class BucketMetadata extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (startTime case final startTime?) 'startTime': startTime.toJson(),
-    if (endTime case final endTime?) 'endTime': endTime.toJson(),
+    'startTime': ?startTime?.toJson(),
+    'endTime': ?endTime?.toJson(),
     if (state.isNotDefault) 'state': state.toJson(),
-    if (createBucketRequest case final createBucketRequest?)
-      'createBucketRequest': createBucketRequest.toJson(),
-    if (updateBucketRequest case final updateBucketRequest?)
-      'updateBucketRequest': updateBucketRequest.toJson(),
+    'createBucketRequest': ?createBucketRequest?.toJson(),
+    'updateBucketRequest': ?updateBucketRequest?.toJson(),
   };
 
   @override
@@ -6906,13 +6889,11 @@ final class LinkMetadata extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (startTime case final startTime?) 'startTime': startTime.toJson(),
-    if (endTime case final endTime?) 'endTime': endTime.toJson(),
+    'startTime': ?startTime?.toJson(),
+    'endTime': ?endTime?.toJson(),
     if (state.isNotDefault) 'state': state.toJson(),
-    if (createLinkRequest case final createLinkRequest?)
-      'createLinkRequest': createLinkRequest.toJson(),
-    if (deleteLinkRequest case final deleteLinkRequest?)
-      'deleteLinkRequest': deleteLinkRequest.toJson(),
+    'createLinkRequest': ?createLinkRequest?.toJson(),
+    'deleteLinkRequest': ?deleteLinkRequest?.toJson(),
   };
 
   @override
@@ -7169,14 +7150,12 @@ final class LogMetric extends ProtoMessage {
     'filter': filter,
     if (bucketName.isNotDefault) 'bucketName': bucketName,
     if (disabled.isNotDefault) 'disabled': disabled,
-    if (metricDescriptor case final metricDescriptor?)
-      'metricDescriptor': metricDescriptor.toJson(),
+    'metricDescriptor': ?metricDescriptor?.toJson(),
     if (valueExtractor.isNotDefault) 'valueExtractor': valueExtractor,
     if (labelExtractors.isNotDefault) 'labelExtractors': labelExtractors,
-    if (bucketOptions case final bucketOptions?)
-      'bucketOptions': bucketOptions.toJson(),
-    if (createTime case final createTime?) 'createTime': createTime.toJson(),
-    if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
+    'bucketOptions': ?bucketOptions?.toJson(),
+    'createTime': ?createTime?.toJson(),
+    'updateTime': ?updateTime?.toJson(),
     if (version.isNotDefault) 'version': version.toJson(),
   };
 
@@ -7390,10 +7369,7 @@ final class CreateLogMetricRequest extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    'parent': parent,
-    if (metric case final metric?) 'metric': metric.toJson(),
-  };
+  Object toJson() => {'parent': parent, 'metric': ?metric?.toJson()};
 
   @override
   String toString() {
@@ -7437,10 +7413,7 @@ final class UpdateLogMetricRequest extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    'metricName': metricName,
-    if (metric case final metric?) 'metric': metric.toJson(),
-  };
+  Object toJson() => {'metricName': metricName, 'metric': ?metric?.toJson()};
 
   @override
   String toString() {

@@ -3,6 +3,14 @@
 - Read the [DEVELOPER_GUIDE.md](DEVELOPER_GUIDE.md) before starting work.
 - Run `dart format .` before declaring yourself done.
 - Run `dart analyze .` and fix any issues before declaring yourself done.
+- The pinned version of Librarian is tracked in two files: `version` in
+  [librarian.yaml](librarian.yaml) and `LIBRARIAN_VERSION` in
+  [.github/workflows/dart_checks.yaml](.github/workflows/dart_checks.yaml).
+  Both must be updated during a Librarian upgrade. Running `tidy`
+  (e.g., `go run github.com/googleapis/librarian/cmd/librarian@<version> tidy`)
+  normalizes the schema and automatically cleans up manual overrides like
+  `description_override` which are now obsolete due to improved native
+  description extraction directly from `.proto` doc comments.
 - Update this file if you discover something useful about developing in this
   repository.
 

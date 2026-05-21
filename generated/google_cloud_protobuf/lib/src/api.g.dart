@@ -19,7 +19,6 @@
 /// Core Protobuf types used by most services.
 library;
 
-// ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
 // ignore_for_file: constant_identifier_names
@@ -27,7 +26,6 @@ library;
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: non_constant_identifier_names
 // ignore_for_file: unintended_html_in_doc_comment
-// ignore_for_file: use_null_aware_elements
 
 import 'encoding.dart';
 
@@ -152,8 +150,7 @@ final class Api extends ProtoMessage {
     if (methods.isNotDefault) 'methods': [for (final i in methods) i.toJson()],
     if (options.isNotDefault) 'options': [for (final i in options) i.toJson()],
     if (version.isNotDefault) 'version': version,
-    if (sourceContext case final sourceContext?)
-      'sourceContext': sourceContext.toJson(),
+    'sourceContext': ?sourceContext?.toJson(),
     if (mixins.isNotDefault) 'mixins': [for (final i in mixins) i.toJson()],
     if (syntax.isNotDefault) 'syntax': syntax.toJson(),
     if (edition.isNotDefault) 'edition': edition,
@@ -506,7 +503,7 @@ final class Empty extends ProtoMessage {
 
   Empty() : super(fullyQualifiedName);
 
-  factory Empty.fromJson(Object? j) => Empty();
+  factory Empty.fromJson(Object? _) => Empty();
 
   @override
   Object toJson() => {};
@@ -1011,8 +1008,7 @@ final class Type extends ProtoMessage {
     if (fields.isNotDefault) 'fields': [for (final i in fields) i.toJson()],
     if (oneofs.isNotDefault) 'oneofs': oneofs,
     if (options.isNotDefault) 'options': [for (final i in options) i.toJson()],
-    if (sourceContext case final sourceContext?)
-      'sourceContext': sourceContext.toJson(),
+    'sourceContext': ?sourceContext?.toJson(),
     if (syntax.isNotDefault) 'syntax': syntax.toJson(),
     if (edition.isNotDefault) 'edition': edition,
   };
@@ -1334,8 +1330,7 @@ final class Enum extends ProtoMessage {
     if (enumvalue.isNotDefault)
       'enumvalue': [for (final i in enumvalue) i.toJson()],
     if (options.isNotDefault) 'options': [for (final i in options) i.toJson()],
-    if (sourceContext case final sourceContext?)
-      'sourceContext': sourceContext.toJson(),
+    'sourceContext': ?sourceContext?.toJson(),
     if (syntax.isNotDefault) 'syntax': syntax.toJson(),
     if (edition.isNotDefault) 'edition': edition,
   };
@@ -1445,7 +1440,7 @@ final class Option extends ProtoMessage {
   @override
   Object toJson() => {
     if (name.isNotDefault) 'name': name,
-    if (value case final value?) 'value': value.toJson(),
+    'value': ?value?.toJson(),
   };
 
   @override

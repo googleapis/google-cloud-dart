@@ -68,17 +68,13 @@ void main() async {
       );
     });
 
-    test(
-      'request_id unset',
-      () async {
-        final response = await echoService.echo(
-          EchoRequest(content: 'request_id unset'),
-        );
-        expect(response.requestId, isNotEmpty);
-        expect(response.otherRequestId, isNotEmpty);
-      },
-      skip: 'https://github.com/googleapis/google-cloud-dart/issues/80',
-    );
+    test('request_id unset', () async {
+      final response = await echoService.echo(
+        EchoRequest(content: 'request_id unset'),
+      );
+      expect(response.requestId, isNotEmpty);
+      expect(response.otherRequestId, isNotEmpty);
+    }, skip: 'https://github.com/googleapis/google-cloud-dart/issues/80');
 
     test('request_id custom', () async {
       const requestId = '92500ce6-fba2-4fc5-92ad-b7250282c2fc';

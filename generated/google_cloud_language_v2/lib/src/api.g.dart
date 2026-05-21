@@ -21,7 +21,6 @@
 /// annotations, to developers.
 library;
 
-// ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
 // ignore_for_file: constant_identifier_names
@@ -29,7 +28,6 @@ library;
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: non_constant_identifier_names
 // ignore_for_file: unintended_html_in_doc_comment
-// ignore_for_file: use_null_aware_elements
 
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/src/encoding.dart';
@@ -337,8 +335,8 @@ final class Document extends ProtoMessage {
   @override
   Object toJson() => {
     if (type.isNotDefault) 'type': type.toJson(),
-    if (content case final content?) 'content': content,
-    if (gcsContentUri case final gcsContentUri?) 'gcsContentUri': gcsContentUri,
+    'content': ?content,
+    'gcsContentUri': ?gcsContentUri,
     if (languageCode.isNotDefault) 'languageCode': languageCode,
   };
 
@@ -408,8 +406,8 @@ final class Sentence extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (text case final text?) 'text': text.toJson(),
-    if (sentiment case final sentiment?) 'sentiment': sentiment.toJson(),
+    'text': ?text?.toJson(),
+    'sentiment': ?sentiment?.toJson(),
   };
 
   @override
@@ -490,7 +488,7 @@ final class Entity extends ProtoMessage {
     if (metadata.isNotDefault) 'metadata': metadata,
     if (mentions.isNotDefault)
       'mentions': [for (final i in mentions) i.toJson()],
-    if (sentiment case final sentiment?) 'sentiment': sentiment.toJson(),
+    'sentiment': ?sentiment?.toJson(),
   };
 
   @override
@@ -688,9 +686,9 @@ final class EntityMention extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (text case final text?) 'text': text.toJson(),
+    'text': ?text?.toJson(),
     if (type.isNotDefault) 'type': type.toJson(),
-    if (sentiment case final sentiment?) 'sentiment': sentiment.toJson(),
+    'sentiment': ?sentiment?.toJson(),
     if (probability.isNotDefault) 'probability': encodeDouble(probability),
   };
 
@@ -863,7 +861,7 @@ final class AnalyzeSentimentRequest extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (document case final document?) 'document': document.toJson(),
+    'document': ?document?.toJson(),
     if (encodingType.isNotDefault) 'encodingType': encodingType.toJson(),
   };
 
@@ -927,8 +925,7 @@ final class AnalyzeSentimentResponse extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (documentSentiment case final documentSentiment?)
-      'documentSentiment': documentSentiment.toJson(),
+    'documentSentiment': ?documentSentiment?.toJson(),
     if (languageCode.isNotDefault) 'languageCode': languageCode,
     if (sentences.isNotDefault)
       'sentences': [for (final i in sentences) i.toJson()],
@@ -977,7 +974,7 @@ final class AnalyzeEntitiesRequest extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (document case final document?) 'document': document.toJson(),
+    'document': ?document?.toJson(),
     if (encodingType.isNotDefault) 'encodingType': encodingType.toJson(),
   };
 
@@ -1070,9 +1067,7 @@ final class ClassifyTextRequest extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    if (document case final document?) 'document': document.toJson(),
-  };
+  Object toJson() => {'document': ?document?.toJson()};
 
   @override
   String toString() => 'ClassifyTextRequest()';
@@ -1173,7 +1168,7 @@ final class ModerateTextRequest extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (document case final document?) 'document': document.toJson(),
+    'document': ?document?.toJson(),
     if (modelVersion.isNotDefault) 'modelVersion': modelVersion.toJson(),
   };
 
@@ -1327,8 +1322,8 @@ final class AnnotateTextRequest extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (document case final document?) 'document': document.toJson(),
-    if (features case final features?) 'features': features.toJson(),
+    'document': ?document?.toJson(),
+    'features': ?features?.toJson(),
     if (encodingType.isNotDefault) 'encodingType': encodingType.toJson(),
   };
 
@@ -1503,8 +1498,7 @@ final class AnnotateTextResponse extends ProtoMessage {
       'sentences': [for (final i in sentences) i.toJson()],
     if (entities.isNotDefault)
       'entities': [for (final i in entities) i.toJson()],
-    if (documentSentiment case final documentSentiment?)
-      'documentSentiment': documentSentiment.toJson(),
+    'documentSentiment': ?documentSentiment?.toJson(),
     if (languageCode.isNotDefault) 'languageCode': languageCode,
     if (categories.isNotDefault)
       'categories': [for (final i in categories) i.toJson()],

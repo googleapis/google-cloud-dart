@@ -19,7 +19,6 @@
 /// Defines RPC types.
 library;
 
-// ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
 // ignore_for_file: constant_identifier_names
@@ -27,7 +26,6 @@ library;
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: non_constant_identifier_names
 // ignore_for_file: unintended_html_in_doc_comment
-// ignore_for_file: use_null_aware_elements
 
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/src/encoding.dart';
@@ -158,9 +156,7 @@ final class RetryInfo extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    if (retryDelay case final retryDelay?) 'retryDelay': retryDelay.toJson(),
-  };
+  Object toJson() => {'retryDelay': ?retryDelay?.toJson()};
 
   @override
   String toString() => 'RetryInfo()';
@@ -395,8 +391,7 @@ final class QuotaFailure_Violation extends ProtoMessage {
     if (quotaId.isNotDefault) 'quotaId': quotaId,
     if (quotaDimensions.isNotDefault) 'quotaDimensions': quotaDimensions,
     if (quotaValue.isNotDefault) 'quotaValue': quotaValue.toString(),
-    if (futureQuotaValue case final futureQuotaValue?)
-      'futureQuotaValue': futureQuotaValue.toString(),
+    'futureQuotaValue': ?futureQuotaValue?.toString(),
   };
 
   @override
@@ -639,8 +634,7 @@ final class BadRequest_FieldViolation extends ProtoMessage {
     if (field.isNotDefault) 'field': field,
     if (description.isNotDefault) 'description': description,
     if (reason.isNotDefault) 'reason': reason,
-    if (localizedMessage case final localizedMessage?)
-      'localizedMessage': localizedMessage.toJson(),
+    'localizedMessage': ?localizedMessage?.toJson(),
   };
 
   @override
