@@ -169,6 +169,7 @@ void main() {
       },
     );
 
+    // https://github.com/GoogleCloudPlatform/google-fluentd
     test('missing severity infers DEFAULT', () {
       final entry = LogEntry(
         logName: '',
@@ -177,6 +178,8 @@ void main() {
       );
       final result = createStructuredLogFromEntry(entry);
       final map = jsonDecode(result) as Map<String, dynamic>;
+      // XXX do the JSON fields get mapped?
+      print(map);
       expect(map, containsPair('severity', 'DEFAULT'));
     });
 
