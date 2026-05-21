@@ -24,7 +24,6 @@ import 'package:stack_trace/stack_trace.dart';
 import 'constants.dart';
 import 'http_response_exception.dart';
 import 'json_request_checking.dart';
-import 'trace_context_data.dart';
 
 /// The default message to use for internal server errors.
 ///
@@ -100,7 +99,7 @@ Handler _handleResponseException(Handler innerHandler) {
         formatStackTrace(stackToLog),
       ].expand((e) => LineSplitter.split('$e'.trim())).join('\n');
 
-      stderr.writeln(text);
+      stderr.writeln(text);  
       return _responseFromException(error, stack, request.headers);
     }
   };
@@ -210,12 +209,6 @@ Middleware cloudLoggingMiddleware(String projectId) {
     // Log Viewer.
 
     final traceHeader = request.headers[cloudTraceContextHeader];
-    final traceContext = traceHeader != null
-        ? TraceContextData.tryParse(
-            projectId: projectId,
-            traceHeader: traceHeader,
-          )
-        : null;
 
     String createErrorLogEntryFromRequest(
       Object error,
@@ -225,7 +218,8 @@ Middleware cloudLoggingMiddleware(String projectId) {
     }) => createStructuredLog(
       '$error'.trim(),
       logSeverity,
-      payload: {...?traceContext?.asPayloadMap(), ...?extraPayload},
+      extraFields: extraPayload ?? {},
+      traceparent: traceHeader,
       stackTrace: stackTrace,
     );
 
@@ -290,16 +284,13 @@ Middleware cloudLoggingMiddleware(String projectId) {
     }
 
     void zonePrint(Zone self, ZoneDelegate parent, _, String line) {
-      final payload = {
-        'message': line,
-        'severity': 'INFO',
-        // XXX // deal with null traceheader!
-        // Also, it is the wrong header.
-        ...formatTraceparent(traceHeader!),
-      };
-
+      final foo = createStructuredLog(
+        line,
+        LogSeverity.info,
+        traceparent: traceHeader,
+      );
       // Serialize to a JSON string and output to parent zone.
-      parent.print(self, jsonEncode(payload));
+      parent.print(self, foo);
     }
 
     Zone.current

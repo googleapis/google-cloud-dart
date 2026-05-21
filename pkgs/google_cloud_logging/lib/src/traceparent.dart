@@ -46,7 +46,8 @@ final _traceParentRegex = RegExp('$_version-$_trace-$_parent-$_flags');
   );
 }
 
-Map<String, Object> formatTraceparent(String traceparent) {
+Map<String, Object> formatTraceparent(String? traceparent) {
+  if (traceparent == null) return {};
   final x = parseTraceparent(traceparent);
   if (x == null) return {};
 

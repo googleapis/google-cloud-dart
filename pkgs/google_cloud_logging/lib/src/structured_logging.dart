@@ -22,131 +22,59 @@ import 'package:google_cloud_protobuf/protobuf.dart' show Struct;
 import 'package:meta/meta.dart';
 import 'package:stack_trace/stack_trace.dart';
 
-/// Key to store/retrieve trace correlation payload in the [Zone].
-///
-/// The value associated with this key should be a `Map<String, Object?>`
-/// containing the structured log fields for trace, spanId, and traceSampled.
-const logContextZoneKey = #google_cloud_logging.log_context;
+import 'traceparent.dart';
 
-/// Converts [entry] to a JSON string formatted for Google Cloud
-/// structured logging on stdout.
-///
-/// This flattens [LogEntry.jsonPayload] into the root object and remaps special
-/// fields like `trace` and `spanId` to `logging.googleapis.com/` prefixed keys.
-String createStructuredLogFromEntry(LogEntry entry) {
-  final map = entry.toJson() as Map<String, dynamic>;
 
-  if (map['logName'] == '') {
-    map.remove('logName');
-  }
-
-  if (!map.containsKey('severity')) {
-    map['severity'] = LogSeverity.$default.value;
-  }
-
-  // Flatten jsonPayload
-  if (map.containsKey('jsonPayload')) {
-    final jsonPayload = map.remove('jsonPayload');
-    if (jsonPayload is Map<String, Object?>) {
-      // Remove fields that are already in the root to prevent overriding core
-      // fields
-      for (final key in map.keys) {
-        jsonPayload.remove(key);
-      }
-      map.addAll(jsonPayload);
-    }
-  }
-
-  // Remap special fields to Google Cloud structured logging format
-  for (final MapEntry(key: sourceKey, value: destinationKey)
-      in _specialFieldsMapping.entries) {
-    if (map.containsKey(sourceKey)) {
-      map[destinationKey] = map.remove(sourceKey);
-    }
-  }
-
-  return jsonEncode(map, toEncodable: toEncodableFallback);
-}
-
-// Special fields that need to be mapped to google cloud format
-//
-// https://docs.cloud.google.com/logging/docs/structured-logging
-const _specialFieldsMapping = {
-  'trace': 'logging.googleapis.com/trace',
-  'spanId': 'logging.googleapis.com/spanId',
-  'traceSampled': 'logging.googleapis.com/trace_sampled',
-  'sourceLocation': 'logging.googleapis.com/sourceLocation',
-  'textPayload': 'message',
+const _structuredLoggingFields = {
+  'severity',
+  'httpRequest',
+  'time',
+  'timestamp',
+  'timestampSeconds',
+  'timestampNanos',
+  'logging.googleapis.com/insertId',
+  'logging.googleapis.com/labels',
+  'logging.googleapis.com/operation',
+  'logging.googleapis.com/sourceLocation',
+  'logging.googleapis.com/spanId',
+  'logging.googleapis.com/trace',
+  'logging.googleapis.com/trace_sampled',
 };
 
 /// Formats a log entry for Google Cloud structured logging on stdout.
-///
-/// Prepares the log entry by integrating the [message], [severity], and
-/// optional [payload]. If [stackTrace] is provided, it is automatically
-/// stringified and safely attached to the payload.
 String createStructuredLog(
   Object message,
   LogSeverity severity, {
-  Map<String, Object?>? payload,
+  Map<String, Object?> extraFields = const {},
+  String? traceparent,
+  Zone? zone,
   StackTrace? stackTrace,
 }) {
-  var actualMessage = message;
-  var actualPayload = payload;
-
-  // Retrieve the zone trace/log context if present
-  final zoneContext = Zone.current[logContextZoneKey] as Map<String, Object?>?;
-  if (zoneContext != null && zoneContext.isNotEmpty) {
-    actualPayload = {...zoneContext, ...?actualPayload};
-  }
+  final payload = <String, Object?>{
+    'severity': severity.value,
+    ...(traceparent == null
+        ? structuredTraceFromZone(zone)
+        : formatTraceparent(traceparent)),
+  };
 
   if (message is Map) {
-    // If the message itself is a Map, we normalize its keys to Strings and
-    // merge in any explicitly provided payload entries. Explicit payload
-    // values take precedence over values found in the message Map.
-    actualPayload = {
-      for (final entry in message.entries) entry.key.toString(): entry.value,
-      ...?payload,
-    };
-    actualMessage = actualPayload.remove('message') ?? '';
+    payload.addAll({
+      for (final entry in message.entries)
+        if (!_structuredLoggingFields.contains(entry.key.toString()))
+          entry.key.toString(): entry.value,
+    });
+  } else {
+    payload['message'] = message.toString();
   }
 
-  // Add stack trace to payload as string to avoid Struct conversion failures
-  if (stackTrace != null) {
-    actualPayload = {
-      ...?actualPayload,
-      'stack_trace': formatStackTrace(stackTrace).toString(),
-    };
-  }
-
-  // Add message to payload if not empty, so it supports lists and maps
-  if (actualMessage != '') {
-    actualPayload = {...?actualPayload, 'message': actualMessage};
-  }
-
-  try {
-    final entry = LogEntry(
-      logName: '',
-      resource: null,
-      severity: severity,
-      jsonPayload: actualPayload != null && actualPayload.isNotEmpty
-          ? Struct.fromJson(sanitize(actualPayload) as Map<dynamic, dynamic>)
-          : null,
-      sourceLocation: stackTrace != null ? sourceLocation(stackTrace) : null,
+  if (stackTrace case final stackTrace?) {
+    payload['logging.googleapis.com/sourceLocation'] = sourceLocation(
+      stackTrace,
     );
-
-    return createStructuredLogFromEntry(entry);
-  } on FormatException catch (_) {
-    // Fallback if there are cyclic errors parsing `payload` or invalid values.
-    // We omit the payload to guarantee a safe serialization.
-    final entry = LogEntry(
-      logName: '',
-      resource: null,
-      severity: severity,
-      textPayload: actualMessage != '' ? actualMessage.toString() : null,
-      sourceLocation: stackTrace != null ? sourceLocation(stackTrace) : null,
-    );
-    return createStructuredLogFromEntry(entry);
   }
+
+  return jsonEncode(sanitize(payload), toEncodable: toEncodableFallback,
+    );
 }
 
 /// Recursively traverses [value] and ensures all values are JSON primitives

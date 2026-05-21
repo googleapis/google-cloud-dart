@@ -68,39 +68,15 @@ final class StructuredLogHandler {
     final severity = _severityFromLoggingLevel(record.level);
 
     // Determine if there's structured payload data.
-    final payload = <String, Object?>{
-      'severity': severity.value,
-      'loggerName': record.loggerName,
-      ...structuredTraceFromZone(record.zone),
-    };
-    final object = record.object;
-    final error = record.error;
+    final extra = {'loggerName': record.loggerName, 'error': ?record.error};
 
-    if (object is Map) {
-      payload.addAll({
-        for (final entry in object.entries)
-          if (!_structuredLoggingFields.contains(entry.key.toString()))
-            entry.key.toString(): entry.value,
-      });
-    } else {
-      payload['message'] = record.message;
-    }
-
-    if (error != null) {
-      payload['error'] = error;
-    }
-
-    if (record.stackTrace case final stackTrace?) {
-      payload['logging.googleapis.com/sourceLocation'] = sourceLocation(
-        stackTrace,
-      );
-    }
-
-    final logStr = jsonEncode(
-      sanitize(payload),
-      toEncodable: toEncodableFallback,
+    final logStr = createStructuredLog(
+      record.object ?? record.message,
+      severity,
+      extraFields: extra,
+      zone: record.zone,
+      stackTrace: record.stackTrace,
     );
-
     _writeln(logStr);
   }
 

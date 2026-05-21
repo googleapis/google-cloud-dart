@@ -17,18 +17,12 @@ import 'package:google_cloud_logging_type/logging_type.dart' as logging_type;
 import 'structured_logging.dart' show createStructuredLog, formatStackTrace;
 
 /// Base class for logging.
-///
-/// Extend this class to create your own logger or use the
-/// [CloudLogger.printLogger] factory.
 abstract base class CloudLogger {
   const CloudLogger();
 
-  /// Creates a logger that outputs log messages using [print].
-  const factory CloudLogger.printLogger() = _DefaultLogger;
-
   /// Creates a logger that outputs log messages in Cloud Logging structured
   /// format.
-  const factory CloudLogger.structuredLogger() = _StructuredLogger;
+  const factory CloudLogger.structuredLogger() = StructuredLogger;
 
   /// Logs a message at the given [severity].
   ///
@@ -51,67 +45,56 @@ abstract base class CloudLogger {
   void log(
     Object message,
     logging_type.LogSeverity severity, {
-    Map<String, Object?>? payload,
     StackTrace? stackTrace,
   });
 
   /// Logs [message] using [log] at [logging_type.LogSeverity.debug] severity.
   void debug(
     Object message, {
-    Map<String, Object?>? payload,
     StackTrace? stackTrace,
   }) => log(
     message,
     logging_type.LogSeverity.debug,
-    payload: payload,
     stackTrace: stackTrace,
   );
 
   /// Logs [message] using [log] at [logging_type.LogSeverity.info] severity.
   void info(
     Object message, {
-    Map<String, Object?>? payload,
     StackTrace? stackTrace,
   }) => log(
     message,
     logging_type.LogSeverity.info,
-    payload: payload,
     stackTrace: stackTrace,
   );
 
   /// Logs [message] using [log] at [logging_type.LogSeverity.notice] severity.
   void notice(
     Object message, {
-    Map<String, Object?>? payload,
     StackTrace? stackTrace,
   }) => log(
     message,
     logging_type.LogSeverity.notice,
-    payload: payload,
     stackTrace: stackTrace,
   );
 
   /// Logs [message] using [log] at [logging_type.LogSeverity.warning] severity.
   void warning(
     Object message, {
-    Map<String, Object?>? payload,
     StackTrace? stackTrace,
   }) => log(
     message,
     logging_type.LogSeverity.warning,
-    payload: payload,
     stackTrace: stackTrace,
   );
 
   /// Logs [message] using [log] at [logging_type.LogSeverity.error] severity.
   void error(
     Object message, {
-    Map<String, Object?>? payload,
     StackTrace? stackTrace,
   }) => log(
     message,
     logging_type.LogSeverity.error,
-    payload: payload,
     stackTrace: stackTrace,
   );
 
@@ -119,24 +102,20 @@ abstract base class CloudLogger {
   /// severity.
   void critical(
     Object message, {
-    Map<String, Object?>? payload,
     StackTrace? stackTrace,
   }) => log(
     message,
     logging_type.LogSeverity.critical,
-    payload: payload,
     stackTrace: stackTrace,
   );
 
   /// Logs [message] using [log] at [logging_type.LogSeverity.alert] severity.
   void alert(
     Object message, {
-    Map<String, Object?>? payload,
     StackTrace? stackTrace,
   }) => log(
     message,
     logging_type.LogSeverity.alert,
-    payload: payload,
     stackTrace: stackTrace,
   );
 
@@ -144,54 +123,26 @@ abstract base class CloudLogger {
   /// severity.
   void emergency(
     Object message, {
-    Map<String, Object?>? payload,
     StackTrace? stackTrace,
   }) => log(
     message,
     logging_type.LogSeverity.emergency,
-    payload: payload,
     stackTrace: stackTrace,
   );
 }
 
-final class _DefaultLogger extends CloudLogger {
-  const _DefaultLogger();
+final class StructuredLogger extends CloudLogger {
+  const StructuredLogger();
 
   @override
   void log(
     Object message,
     logging_type.LogSeverity severity, {
-    Map<String, Object?>? payload,
-    StackTrace? stackTrace,
-  }) {
-    final payloadStr = payload != null && payload.isNotEmpty
-        ? '\nPayload: $payload'
-        : '';
-    final traceStr = stackTrace != null
-        ? '\n${formatStackTrace(stackTrace)}'
-        : '';
-    if (severity == logging_type.LogSeverity.$default) {
-      print('$message$traceStr$payloadStr');
-    } else {
-      print('${severity.value}: $message$traceStr$payloadStr');
-    }
-  }
-}
-
-final class _StructuredLogger extends CloudLogger {
-  const _StructuredLogger();
-
-  @override
-  void log(
-    Object message,
-    logging_type.LogSeverity severity, {
-    Map<String, Object?>? payload,
     StackTrace? stackTrace,
   }) {
     final logEntry = createStructuredLog(
       message,
       severity,
-      payload: payload,
       stackTrace: stackTrace,
     );
     print(logEntry);

@@ -52,4 +52,3 @@ export 'src/http_logging.dart'
 export 'src/http_response_exception.dart' show HttpResponseException;
 export 'src/serve.dart' show listenPortFromEnvironment, serveHandler;
 export 'src/terminate.dart' show waitForTerminate;
-export 'src/trace_context_data.dart' show TraceContextData;
