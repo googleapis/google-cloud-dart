@@ -65,7 +65,7 @@ String createStructuredLogFromEntry(LogEntry entry) {
     }
   }
 
-  return jsonEncode(map, toEncodable: _toEncodableFallback);
+  return jsonEncode(map, toEncodable: toEncodableFallback);
 }
 
 // Special fields that need to be mapped to google cloud format
@@ -129,9 +129,9 @@ String createStructuredLog(
       resource: null,
       severity: severity,
       jsonPayload: actualPayload != null && actualPayload.isNotEmpty
-          ? Struct.fromJson(_sanitize(actualPayload) as Map<dynamic, dynamic>)
+          ? Struct.fromJson(sanitize(actualPayload) as Map<dynamic, dynamic>)
           : null,
-      sourceLocation: stackTrace != null ? _sourceLocation(stackTrace) : null,
+      sourceLocation: stackTrace != null ? sourceLocation(stackTrace) : null,
     );
 
     return createStructuredLogFromEntry(entry);
@@ -143,7 +143,7 @@ String createStructuredLog(
       resource: null,
       severity: severity,
       textPayload: actualMessage != '' ? actualMessage.toString() : null,
-      sourceLocation: stackTrace != null ? _sourceLocation(stackTrace) : null,
+      sourceLocation: stackTrace != null ? sourceLocation(stackTrace) : null,
     );
     return createStructuredLogFromEntry(entry);
   }
@@ -154,10 +154,10 @@ String createStructuredLog(
 /// [Struct.fromJson].
 ///
 /// Objects that are not JSON primitives are converted using
-/// [_toEncodableFallback].
+/// [toEncodableFallback].
 ///
 /// Throws a [FormatException] if a cyclic reference is detected.
-Object? _sanitize(Object? value, [Set<Object>? seen]) {
+Object? sanitize(Object? value, [Set<Object>? seen]) {
   if (value == null || value is num || value is String || value is bool) {
     return value;
   }
@@ -169,12 +169,12 @@ Object? _sanitize(Object? value, [Set<Object>? seen]) {
 
   try {
     if (value is List) {
-      return value.map((e) => _sanitize(e, seen)).toList();
+      return value.map((e) => sanitize(e, seen)).toList();
     }
     if (value is Map) {
-      return value.map((k, v) => MapEntry(k.toString(), _sanitize(v, seen)));
+      return value.map((k, v) => MapEntry(k.toString(), sanitize(v, seen)));
     }
-    return _toEncodableFallback(value);
+    return toEncodableFallback(value);
   } finally {
     seen.remove(value);
   }
@@ -184,7 +184,7 @@ Object? _sanitize(Object? value, [Set<Object>? seen]) {
 ///
 /// Attempts to call `toJson()` on the object, and if that fails or is not
 /// available, falls back to `toString()`.
-Object? _toEncodableFallback(Object? nonEncodable) {
+Object? toEncodableFallback(Object? nonEncodable) {
   try {
     return (nonEncodable as dynamic).toJson();
   } catch (_) {
@@ -194,7 +194,7 @@ Object? _toEncodableFallback(Object? nonEncodable) {
 
 /// Creates a [LogEntrySourceLocation] from the given [trace] by finding the
 /// first frame that does not belong to this package.
-LogEntrySourceLocation _sourceLocation(StackTrace trace) {
+LogEntrySourceLocation sourceLocation(StackTrace trace) {
   final frame = _debugFrame(trace);
   return LogEntrySourceLocation(
     file: frame.uri.toString(),

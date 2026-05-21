@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:google_cloud_logging_type/logging_type.dart';
@@ -21,13 +22,31 @@ import 'package:logging/logging.dart' as logging;
 
 import 'structured_logging.dart';
 
+const _structuredLoggingFields = {
+  'severity',
+  'httpRequest',
+  'time',
+  'timestamp',
+  'timestampSeconds',
+  'timestampNanos',
+  'logging.googleapis.com/insertId',
+  'logging.googleapis.com/labels',
+  'logging.googleapis.com/operation',
+  'logging.googleapis.com/sourceLocation',
+  'logging.googleapis.com/spanId',
+  'logging.googleapis.com/trace',
+  'logging.googleapis.com/trace_sampled',
+};
+
+// https://github.com/googleapis/google-cloud-python/blob/3ef95d61995869318097e414e439da1d6c214d1f/packages/google-cloud-logging/google/cloud/logging_v2/handlers/structured_log.py#L62
+
 /// Handler to format logs into the Cloud Logging structured log format, and
 /// write them to standard output.
 final class StructuredLogHandler {
-  /// Outputs a [LogEntry] to stdout in the Google Cloud structured log format.
-  void handleLogEntry(LogEntry entry) {
-    stdout.writeln(createStructuredLogFromEntry(entry));
-  }
+  final void Function(String s) _writeln;
+
+  StructuredLogHandler({void Function(String s)? writeln})
+    : _writeln = writeln ?? stdout.writeln;
 
   /// A handler for streams of [logging.LogRecord] provided by a
   /// `package:logging` [logging.Logger].
@@ -50,43 +69,37 @@ final class StructuredLogHandler {
     final severity = _severityFromLoggingLevel(record.level);
 
     // Determine if there's structured payload data.
-    Map<String, Object?>? payload;
-    final error = record.error;
+    final payload = <String, Object?>{
+      'severity': severity.value,
+      'loggerName': record.loggerName,
+    };
     final object = record.object;
+    final error = record.error;
 
     if (object is Map) {
-      payload = {
+      payload.addAll({
         for (final entry in object.entries) entry.key.toString(): entry.value,
-      };
-    } else if (error is Map) {
-      payload = {
-        for (final entry in error.entries) entry.key.toString(): entry.value,
-      };
+      });
     } else {
-      if (object != null) {
-        payload = {'object': object};
-      }
-      if (error != null) {
-        payload = {...?payload, 'error': error.toString()};
-      }
+      payload['message'] = record.message;
     }
 
-    // If they logged a Map directly, e.g., logger.info({'foo': 'bar'}),
-    // standard logging's message is the stringified map. In that case,
-    // we pass an empty string to avoid a redundant stringified map message.
-    final message = (object is Map && record.message == object.toString())
-        ? ''
-        : record.message;
+    if (error != null) {
+      payload['error'] = error;
+    }
 
-    final logStr = createStructuredLog(
-      message,
-      severity,
-      payload: payload,
-      stackTrace:
-          record.stackTrace ?? (error is! Map ? record.stackTrace : null),
+    if (record.stackTrace case final stackTrace?) {
+      payload['logging.googleapis.com/sourceLocation'] = sourceLocation(
+        stackTrace,
+      );
+    }
+
+    final logStr = jsonEncode(
+      sanitize(payload),
+      toEncodable: toEncodableFallback,
     );
 
-    stdout.writeln(logStr);
+    _writeln(logStr);
   }
 
   /// Returns a [logger.LogOutput] for use with `package:logger`'s `Logger`.
@@ -103,7 +116,7 @@ final class StructuredLogHandler {
   ///   // Use logger as normal.
   /// }
   /// ```
-  logger.LogOutput asLogOutput() => _StructuredLogOutput();
+  //  logger.LogOutput asLogOutput() => _StructuredLogOutput();
 
   LogSeverity _severityFromLoggingLevel(logging.Level level) {
     if (level <= logging.Level.FINE) {
@@ -120,44 +133,4 @@ final class StructuredLogHandler {
       return LogSeverity.emergency;
     }
   }
-}
-
-/// Internal implementation of `logger.LogOutput` for `package:logger`.
-class _StructuredLogOutput extends logger.LogOutput {
-  _StructuredLogOutput();
-
-  @override
-  void output(logger.OutputEvent event) {
-    final origin = event.origin;
-    final severity = _severityFromLoggerLevel(origin.level);
-
-    Map<String, Object?>? payload;
-    final error = origin.error;
-    if (error is Map) {
-      payload = {
-        for (final entry in error.entries) entry.key.toString(): entry.value,
-      };
-    } else if (error != null) {
-      payload = {'error': error.toString()};
-    }
-
-    final logStr = createStructuredLog(
-      origin.message as Object,
-      severity,
-      payload: payload,
-      stackTrace: origin.stackTrace,
-    );
-
-    stdout.writeln(logStr);
-  }
-
-  LogSeverity _severityFromLoggerLevel(logger.Level level) => switch (level) {
-    logger.Level.trace => LogSeverity.debug,
-    logger.Level.debug => LogSeverity.debug,
-    logger.Level.info => LogSeverity.info,
-    logger.Level.warning => LogSeverity.warning,
-    logger.Level.error => LogSeverity.error,
-    logger.Level.fatal => LogSeverity.critical,
-    _ => LogSeverity.$default,
-  };
 }

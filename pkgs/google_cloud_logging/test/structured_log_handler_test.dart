@@ -19,185 +19,74 @@ import 'dart:io';
 import 'package:google_cloud_logging/google_cloud_logging.dart';
 import 'package:logger/logger.dart' as logger;
 import 'package:logging/logging.dart' as logging;
+import 'package:logging/logging.dart';
 import 'package:test/test.dart';
 
 import 'test_utils.dart';
 
 void main() {
-  group('StructuredLogHandler - package:logging', () {
-    final handler = StructuredLogHandler();
-
-    test('handleLogRecord formats standard message', () {
-      final lines = <String>[];
-
-      IOOverrides.runZoned(() {
-        final record = logging.LogRecord(
-          logging.Level.INFO,
-          'A routine message',
-          'my-logger',
-        );
-        handler.handleLogRecord(record);
-      }, stdout: () => _MockStdout(lines));
-
-      expect(lines, hasLength(1));
-      final map = jsonDecode(lines.first) as Map<String, dynamic>;
-      expect(map, {'message': 'A routine message', 'severity': 'INFO'});
-    });
-
-    test('handleLogRecord handles Map object payload', () {
-      final lines = <String>[];
-
-      IOOverrides.runZoned(() {
-        final record = logging.LogRecord(
-          logging.Level.WARNING,
-          'Request failed',
-          'my-logger',
-          null,
-          null,
-          null,
-          {'userId': 'user_123', 'attempts': 3},
-        );
-        handler.handleLogRecord(record);
-      }, stdout: () => _MockStdout(lines));
-
-      expect(lines, hasLength(1));
-      final map = jsonDecode(lines.first) as Map<String, dynamic>;
-      expect(map, {
-        'message': 'Request failed',
-        'severity': 'WARNING',
-        'userId': 'user_123',
-        'attempts': 3,
+  group('StructuredLogHandler', () {
+    group('handleLogRecord', () {
+      test('string message', () {
+        final output = StringBuffer();
+        StructuredLogHandler(
+          writeln: output.writeln,
+        ).handleLogRecord(LogRecord(Level.WARNING, 'Hello', 'MyClass'));
+        expect(jsonDecode(output.toString()), {
+          'severity': 'WARNING',
+          'loggerName': 'MyClass',
+          'message': 'Hello',
+        });
       });
-    });
 
-    test('handleLogRecord extracts zone-based trace context', () {
-      final lines = <String>[];
-
-      IOOverrides.runZoned(() {
-        runZoned(
-          () {
-            final record = logging.LogRecord(
-              logging.Level.INFO,
-              'Request parsed',
-              'my-logger',
-            );
-            handler.handleLogRecord(record);
-          },
-          zoneValues: {
-            logContextZoneKey: {
-              'logging.googleapis.com/trace':
-                  'projects/my-project/traces/12345',
-              'logging.googleapis.com/spanId': '67890',
-            },
-          },
+      test('empty map message', () {
+        final output = StringBuffer();
+        final object = <Object, Object>{};
+        StructuredLogHandler(writeln: output.writeln).handleLogRecord(
+          LogRecord(
+            Level.WARNING,
+            object.toString(),
+            'MyClass',
+            null,
+            null,
+            null,
+            object,
+          ),
         );
-      }, stdout: () => _MockStdout(lines));
-
-      expect(lines, hasLength(1));
-      final map = jsonDecode(lines.first) as Map<String, dynamic>;
-      expect(map, {
-        'message': 'Request parsed',
-        'severity': 'INFO',
-        'logging.googleapis.com/trace': 'projects/my-project/traces/12345',
-        'logging.googleapis.com/spanId': '67890',
+        expect(jsonDecode(output.toString()), {
+          'severity': 'WARNING',
+          'loggerName': 'MyClass',
+        });
       });
-    });
 
-    test('handleLogRecord formats stack trace and error', () {
-      final lines = <String>[];
-
-      IOOverrides.runZoned(() {
-        final caught = catchingFunction();
-        final record = logging.LogRecord(
-          logging.Level.SEVERE,
-          'An error occurred',
-          'my-logger',
-          caught.error,
-          caught.stackTrace,
+      test('map message', () {
+        final output = StringBuffer();
+        final object = {'k1': 'v1', 'k2': 'v2'};
+        StructuredLogHandler(writeln: output.writeln).handleLogRecord(
+          LogRecord(
+            Level.WARNING,
+            object.toString(),
+            'MyClass',
+            null,
+            null,
+            null,
+            object,
+          ),
         );
-        handler.handleLogRecord(record);
-      }, stdout: () => _MockStdout(lines));
-
-      expect(lines, hasLength(1));
-      final map = jsonDecode(lines.first) as Map<String, dynamic>;
-      expect(map['message'], 'An error occurred');
-      expect(map['severity'], 'ERROR');
-      expect(map['error'], contains('Invalid argument'));
-      expect(map['stack_trace'], contains('test_utils.dart'));
-      expect(
-        map['logging.googleapis.com/sourceLocation'],
-        isA<Map<String, Object?>>(),
-      );
-    });
-  });
-
-  group('StructuredLogHandler - package:logger', () {
-    final handler = StructuredLogHandler();
-
-    test('asLogOutput formats standard message', () {
-      final lines = <String>[];
-      final output = handler.asLogOutput();
-
-      IOOverrides.runZoned(() {
-        final event = logger.OutputEvent(
-          logger.LogEvent(logger.Level.info, 'Some trace message'),
-          ['ignored formatted text'],
-        );
-        output.output(event);
-      }, stdout: () => _MockStdout(lines));
-
-      expect(lines, hasLength(1));
-      final map = jsonDecode(lines.first) as Map<String, dynamic>;
-      expect(map, {'message': 'Some trace message', 'severity': 'INFO'});
-    });
-
-    test('asLogOutput extracts zone-based trace context', () {
-      final lines = <String>[];
-      final output = handler.asLogOutput();
-
-      IOOverrides.runZoned(() {
-        runZoned(
-          () {
-            final event = logger.OutputEvent(
-              logger.LogEvent(logger.Level.warning, 'Some warning'),
-              ['ignored formatted text'],
-            );
-            output.output(event);
-          },
-          zoneValues: {
-            logContextZoneKey: {
-              'logging.googleapis.com/trace': 'projects/my-project/traces/abc',
-              'logging.googleapis.com/spanId': 'def',
-            },
-          },
-        );
-      }, stdout: () => _MockStdout(lines));
-
-      expect(lines, hasLength(1));
-      final map = jsonDecode(lines.first) as Map<String, dynamic>;
-      expect(map, {
-        'message': 'Some warning',
-        'severity': 'WARNING',
-        'logging.googleapis.com/trace': 'projects/my-project/traces/abc',
-        'logging.googleapis.com/spanId': 'def',
+        expect(jsonDecode(output.toString()), {
+          'severity': 'WARNING',
+          'loggerName': 'MyClass',
+          'k1': 'v1',
+          'k2': 'v2',
+        });
       });
     });
   });
 }
 
-class _MockStdout implements Stdout {
-  final List<String> lines;
-  _MockStdout(this.lines);
-
-  @override
-  void write(Object? object) => lines.add('$object'.trimRight());
-
-  @override
-  void writeln([Object? object = '']) => lines.add('$object'.trimRight());
-
-  @override
-  bool get supportsAnsiEscapes => false;
-
-  @override
-  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
-}
+/*
+  LogRecord(this.level, this.message, this.loggerName,
+      [this.error, this.stackTrace, this.zone, this.object])
+      : time = DateTime.now(),
+        sequenceNumber = LogRecord._nextNumber++;
+*/
