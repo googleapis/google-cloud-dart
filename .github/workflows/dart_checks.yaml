@@ -51,7 +51,7 @@ jobs:
         # We run fatal analysis in the separate analyze_dev job on the dev SDK.
         run: dart analyze
       - name: Format
-        run: dart format --output=none --set-exit-if-changed .
+        run: dart format --output=json --set-exit-if-changed .
       - name: Verify Code Excerpts Up-to-Date
         run: dart run tool/update_excerpts.dart --fail-on-update
 
