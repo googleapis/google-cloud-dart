@@ -24,7 +24,6 @@ import 'package:stack_trace/stack_trace.dart';
 
 import 'traceparent.dart';
 
-
 const _structuredLoggingFields = {
   'severity',
   'httpRequest',
@@ -41,40 +40,46 @@ const _structuredLoggingFields = {
   'logging.googleapis.com/trace_sampled',
 };
 
+Map<String, Object?> _filter(Map<dynamic, dynamic> m) {
+  return {
+    for (final entry in m.entries)
+      if (!_structuredLoggingFields.contains(entry.key.toString()))
+        entry.key.toString(): entry.value,
+  };
+}
+
 /// Formats a log entry for Google Cloud structured logging on stdout.
 String createStructuredLog(
   Object message,
   LogSeverity severity, {
-  Map<String, Object?> extraFields = const {},
+  Map<String, Object?>? payload,
   String? traceparent,
   Zone? zone,
   StackTrace? stackTrace,
 }) {
-  final payload = <String, Object?>{
+  final Map<String, Object?> messageMap;
+  if (message is Map) {
+    messageMap = _filter(message);
+  } else {
+    messageMap = {'message': message};
+  }
+
+  final result = <String, Object?>{
+    ...messageMap,
+    ...(payload ?? {}),
     'severity': severity.value,
     ...(traceparent == null
         ? structuredTraceFromZone(zone)
         : formatTraceparent(traceparent)),
   };
 
-  if (message is Map) {
-    payload.addAll({
-      for (final entry in message.entries)
-        if (!_structuredLoggingFields.contains(entry.key.toString()))
-          entry.key.toString(): entry.value,
-    });
-  } else {
-    payload['message'] = message.toString();
-  }
-
   if (stackTrace case final stackTrace?) {
-    payload['logging.googleapis.com/sourceLocation'] = sourceLocation(
+    result['logging.googleapis.com/sourceLocation'] = sourceLocation(
       stackTrace,
     );
   }
 
-  return jsonEncode(sanitize(payload), toEncodable: toEncodableFallback,
-    );
+  return jsonEncode(sanitize(result), toEncodable: toEncodableFallback);
 }
 
 /// Recursively traverses [value] and ensures all values are JSON primitives

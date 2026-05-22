@@ -218,7 +218,7 @@ Middleware cloudLoggingMiddleware(String projectId) {
     }) => createStructuredLog(
       '$error'.trim(),
       logSeverity,
-      extraFields: extraPayload ?? {},
+      payload: extraPayload ?? {},
       traceparent: traceHeader,
       stackTrace: stackTrace,
     );
@@ -284,13 +284,13 @@ Middleware cloudLoggingMiddleware(String projectId) {
     }
 
     void zonePrint(Zone self, ZoneDelegate parent, _, String line) {
-      final foo = createStructuredLog(
+      final logContent = createStructuredLog(
         line,
         LogSeverity.info,
         traceparent: traceHeader,
       );
       // Serialize to a JSON string and output to parent zone.
-      parent.print(self, foo);
+      parent.print(self, logContent);
     }
 
     Zone.current

@@ -73,7 +73,7 @@ final class StructuredLogHandler {
     final logStr = createStructuredLog(
       record.object ?? record.message,
       severity,
-      extraFields: extra,
+      payload: extra,
       zone: record.zone,
       stackTrace: record.stackTrace,
     );
