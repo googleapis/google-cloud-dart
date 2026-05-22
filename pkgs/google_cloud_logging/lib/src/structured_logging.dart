@@ -74,12 +74,12 @@ String createStructuredLog(
   };
 
   if (stackTrace case final stackTrace?) {
-    result['logging.googleapis.com/sourceLocation'] = sourceLocation(
+    result['logging.googleapis.com/sourceLocation'] = _sourceLocation(
       stackTrace,
     );
   }
 
-  return jsonEncode(sanitize(result), toEncodable: toEncodableFallback);
+  return jsonEncode(_sanitize(result), toEncodable: _toEncodableFallback);
 }
 
 /// Recursively traverses [value] and ensures all values are JSON primitives
@@ -87,10 +87,8 @@ String createStructuredLog(
 /// [Struct.fromJson].
 ///
 /// Objects that are not JSON primitives are converted using
-/// [toEncodableFallback].
-///
-/// Throws a [FormatException] if a cyclic reference is detected.
-Object? sanitize(Object? value, [Set<Object>? seen]) {
+/// [_toEncodableFallback].
+Object? _sanitize(Object? value, [Set<Object>? seen]) {
   if (value == null || value is num || value is String || value is bool) {
     return value;
   }
@@ -102,12 +100,12 @@ Object? sanitize(Object? value, [Set<Object>? seen]) {
 
   try {
     if (value is List) {
-      return value.map((e) => sanitize(e, seen)).toList();
+      return value.map((e) => _sanitize(e, seen)).toList();
     }
     if (value is Map) {
-      return value.map((k, v) => MapEntry(k.toString(), sanitize(v, seen)));
+      return value.map((k, v) => MapEntry(k.toString(), _sanitize(v, seen)));
     }
-    return sanitize(toEncodableFallback(value), seen);
+    return _sanitize(_toEncodableFallback(value), seen);
   } finally {
     seen.remove(value);
   }
@@ -117,7 +115,7 @@ Object? sanitize(Object? value, [Set<Object>? seen]) {
 ///
 /// Attempts to call `toJson()` on the object, and if that fails or is not
 /// available, falls back to `toString()`.
-Object? toEncodableFallback(Object? nonEncodable) {
+Object? _toEncodableFallback(Object? nonEncodable) {
   try {
     return (nonEncodable as dynamic).toJson();
   } catch (_) {
@@ -127,7 +125,7 @@ Object? toEncodableFallback(Object? nonEncodable) {
 
 /// Creates a [LogEntrySourceLocation] from the given [trace] by finding the
 /// first frame that does not belong to this package.
-LogEntrySourceLocation sourceLocation(StackTrace trace) {
+LogEntrySourceLocation _sourceLocation(StackTrace trace) {
   final frame = _debugFrame(trace);
   return LogEntrySourceLocation(
     file: frame.uri.toString(),
