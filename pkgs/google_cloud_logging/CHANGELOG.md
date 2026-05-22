@@ -1,3 +1,9 @@
+## 0.6.0-wip
+
+- **BREAKING:** Removed `payload` argument from `CloudLogger` methods.
+- **BREAKING:** Removed `CloudLogger.printLogger`.
+- **BREAKING:** Removed `createStructuredLogFromEntry`.
+
 ## 0.5.0
 
 - Added `CloudLogger`

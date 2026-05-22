@@ -18,7 +18,6 @@
 ///
 /// - [StructuredLogHandler]: formats logs to Cloud structured format
 /// - [createStructuredLog]: for creating structured logs
-/// - [createStructuredLogFromEntry]: for creating structured logs from entries
 ///
 /// Exports [LogSeverity] and [LogEntry] from other packages for easy access.
 ///
@@ -33,6 +32,5 @@ export 'package:google_cloud_logging_v2/logging.dart' show LogEntry;
 
 export 'src/logger.dart';
 export 'src/structured_log_handler.dart' show StructuredLogHandler;
-export 'src/structured_logging.dart'
-    show createStructuredLog, createStructuredLogFromEntry, logContextZoneKey;
+export 'src/structured_logging.dart' show createStructuredLog;
 export 'src/traceparent.dart';
