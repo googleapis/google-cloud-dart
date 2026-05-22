@@ -14,7 +14,7 @@
 
 import 'package:google_cloud_logging_type/logging_type.dart' as logging_type;
 
-import 'structured_logging.dart' show createStructuredLog, formatStackTrace;
+import 'structured_logging.dart' show createStructuredLog;
 
 /// Base class for logging.
 abstract base class CloudLogger {

@@ -74,6 +74,7 @@ String createStructuredLog(
   };
 
   if (stackTrace case final stackTrace?) {
+    result['stack_trace'] = _formatStackTrace(stackTrace).toString();
     result['logging.googleapis.com/sourceLocation'] = _sourceLocation(
       stackTrace,
     );
@@ -137,7 +138,7 @@ LogEntrySourceLocation _sourceLocation(StackTrace trace) {
 /// Finds the first stack frame that is not considered a "folder" frame (i.e.,
 /// not core or from this package).
 Frame _debugFrame(StackTrace stackTrace) {
-  final chain = formatStackTrace(stackTrace);
+  final chain = _formatStackTrace(stackTrace);
   final stackFrame = chain.traces
       .expand((t) => t.frames)
       .firstWhere(
@@ -155,5 +156,5 @@ bool _frameFolder(Frame frame) =>
 /// Formats the stack trace by folding frames that belong to this package or
 /// core.
 @internal
-Chain formatStackTrace(StackTrace stackTrace) =>
+Chain _formatStackTrace(StackTrace stackTrace) =>
     Chain.forTrace(stackTrace).foldFrames(_frameFolder, terse: true);

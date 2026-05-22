@@ -7,6 +7,7 @@
 - **BREAKING:** Removed `payload` argument from `CloudLogger` methods.
 - **BREAKING:** Removed `CloudLogger.printLogger`.
 - **BREAKING:** Removed `createStructuredLogFromEntry`.
+- **BREAKING:** Removed `formatStackTrace`.
 
 ## 0.5.0
 
