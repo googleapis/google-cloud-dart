@@ -12,6 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/// A simple server to validate the logging middleware.
+library;
+
 import 'package:google_cloud/google_cloud.dart';
 import 'package:google_cloud_shelf/google_cloud_shelf.dart';
 import 'package:shelf/shelf.dart';
@@ -28,7 +31,7 @@ void main() async {
           print(msg);
           return Response.ok('Printed: $msg');
         }
-        return Response.ok('Hello from E2E Server!');
+        return Response.ok('Hello World!');
       });
 
   await serveHandler(handler);

@@ -25,6 +25,7 @@ import 'package:http/http.dart' as http;
 import 'package:shelf/shelf.dart';
 import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
+import 'package:test_utils/random.dart';
 
 const internalServerErrorMessage = 'Internal Server Error';
 
@@ -229,7 +230,7 @@ Details:
     });
 
     test('print', () async {
-      final uniqueId = 'e2e-print-msg-${DateTime.now().microsecondsSinceEpoch}';
+      final uniqueId = 'Hello World: ${randomAlphaNumString(20)}';
 
       // Trigger a print.
       final response = await http.get(
@@ -240,7 +241,7 @@ Details:
       );
       expect(response.statusCode, 200);
 
-      final entries = await waitForLogs('textPayload:"$uniqueId"', 10);
+      final entries = await waitForLogs('textPayload:"$uniqueId"');
 
       expect(entries, isNotEmpty);
       final entry = entries.first;

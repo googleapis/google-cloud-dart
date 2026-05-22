@@ -14,6 +14,7 @@
 
 import 'dart:io';
 import 'package:path/path.dart' as p;
+import '../random.dart';
 import 'cloud.dart';
 
 const _dockerTemplate = '''
@@ -42,7 +43,9 @@ String get repoRoot {
     }
     dir = parent;
   }
-  return Directory.current.absolute.path;
+  throw StateError(
+    'Could not find repository root starting from ${Directory.current.path}',
+  );
 }
 
 /// Runs Dart programs using Google Cloud Run.
@@ -85,8 +88,10 @@ class CloudRunner {
 
     await File(dockerPath).writeAsString(_dockerTemplate);
 
+    final now = DateTime.now();
     final serviceName =
-        'e2e-print-test-${DateTime.now().millisecondsSinceEpoch}';
+        'cloud-runner-${now.year}-${now.month}-${now.day}-'
+        '${randomAlphaNumString(10)}';
 
     // Start a server using the gcloud command.
     final deploy = await Process.run('gcloud', [

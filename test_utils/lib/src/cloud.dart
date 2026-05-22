@@ -28,14 +28,19 @@ String get projectId =>
     Platform.environment['GOOGLE_CLOUD_PROJECT'] ??
     (throw StateError('Missing environment variable: GOOGLE_CLOUD_PROJECT'));
 
-/// Polls Cloud Logging until log entries matching [filter]
-/// are returned.
+/// Return log entries matching [filter].
+///
+/// Waits up to [timeout] for matching log entries to be available.
 ///
 /// [filter] must be in [Logging query language][1]. For example,
 /// `'textPayload:"Hello World"'`.
 ///
 /// [1]: (https://docs.cloud.google.com/logging/docs/view/logging-query-language)
-Future<List<LogEntry>> waitForLogs(String filter, int count) async {
+Future<List<LogEntry>> waitForLogs(
+  String filter, {
+  int count = 10,
+  Duration timeout = const Duration(seconds: 60),
+}) async {
   final client = await auth.clientViaApplicationDefaultCredentials(
     scopes: ['https://www.googleapis.com/auth/cloud-platform'],
   );
@@ -48,14 +53,20 @@ Future<List<LogEntry>> waitForLogs(String filter, int count) async {
     pageSize: count,
   );
 
+  final endTime = DateTime.now().add(timeout);
+
   try {
-    for (var attempt = 0; attempt <= 10; attempt++) {
-      await Future<void>.delayed(const Duration(seconds: 2));
+    var first = true;
+    do {
+      if (!first) {
+        await Future<void>.delayed(const Duration(seconds: 2));
+      }
+      first = false;
       final listResult = await loggingService.listLogEntries(request);
       if (listResult.entries.isNotEmpty) {
         return listResult.entries;
       }
-    }
+    } while (DateTime.now().isBefore(endTime));
     throw StateError(
       'Log entries matching "$filter" were not found within the timeout.',
     );
