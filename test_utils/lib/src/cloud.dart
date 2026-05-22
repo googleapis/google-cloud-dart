@@ -45,17 +45,16 @@ Future<List<LogEntry>> waitForLogs(
     scopes: ['https://www.googleapis.com/auth/cloud-platform'],
   );
   final loggingService = LoggingServiceV2(client: client);
-
-  final request = ListLogEntriesRequest(
-    resourceNames: ['projects/$projectId'],
-    filter: filter,
-    orderBy: 'timestamp desc',
-    pageSize: count,
-  );
-
-  final endTime = DateTime.now().add(timeout);
-
   try {
+    final request = ListLogEntriesRequest(
+      resourceNames: ['projects/$projectId'],
+      filter: filter,
+      orderBy: 'timestamp desc',
+      pageSize: count,
+    );
+
+    final endTime = DateTime.now().add(timeout);
+
     var first = true;
     do {
       if (!first) {
