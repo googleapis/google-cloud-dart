@@ -22,7 +22,7 @@ abstract base class CloudLogger {
 
   /// Creates a logger that outputs log messages in Cloud Logging structured
   /// format.
-  const factory CloudLogger.structuredLogger() = StructuredLogger;
+  const factory CloudLogger.structuredLogger() = _StructuredLogger;
 
   /// Logs a message at the given [severity].
   ///
@@ -131,8 +131,8 @@ abstract base class CloudLogger {
   );
 }
 
-final class StructuredLogger extends CloudLogger {
-  const StructuredLogger();
+final class _StructuredLogger extends CloudLogger {
+  const _StructuredLogger();
 
   @override
   void log(

@@ -1,6 +1,6 @@
 ## 0.6.0-wip
 
-- Added `StructuredLogHandler` which allows integration with
+- Added `StructuredLogHandler`, which allows integration with
   `package:logging`.
 - **BREAKING:** Removed `payload` argument from `CloudLogger` methods.
 - **BREAKING:** Removed `CloudLogger.printLogger`.
