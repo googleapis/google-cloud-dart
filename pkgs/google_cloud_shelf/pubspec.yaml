@@ -19,5 +19,9 @@ dependencies:
   stack_trace: ^1.12.1
 
 dev_dependencies:
+  google_cloud_logging_v2: any
+  googleapis_auth: ^2.3.1
   test: ^1.31.0
   test_process: ^2.0.3
+  test_utils: any
+

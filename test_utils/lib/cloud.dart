@@ -13,3 +13,4 @@
 // limitations under the License.
 
 export 'src/cloud.dart';
+export 'src/cloud_runner.dart';
