@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'dart:io';
+import 'package:google_cloud/google_cloud.dart';
 import 'package:google_cloud_shelf/google_cloud_shelf.dart';
 import 'package:shelf/shelf.dart';
 
 void main() async {
-  final projectId = Platform.environment['GOOGLE_CLOUD_PROJECT'];
+  final projectId = await computeProjectId();
 
   final handler = const Pipeline()
       .addMiddleware(createLoggingMiddleware(projectId: projectId))

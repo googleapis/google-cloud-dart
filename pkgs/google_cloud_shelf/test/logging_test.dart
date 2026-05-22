@@ -20,9 +20,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:google_cloud_logging/google_cloud_logging.dart';
-import 'package:google_cloud_logging_v2/logging.dart';
 import 'package:google_cloud_shelf/google_cloud_shelf.dart';
-import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:http/http.dart' as http;
 import 'package:shelf/shelf.dart';
 import 'package:test/test.dart';
@@ -242,55 +240,14 @@ Details:
       );
       expect(response.statusCode, 200);
 
-      // 2. Authenticate with GCP Cloud Logging API
-      final client = await auth.clientViaApplicationDefaultCredentials(
-        scopes: ['https://www.googleapis.com/auth/cloud-platform'],
-      );
-      final loggingService = LoggingServiceV2(client: client);
+      final entries = await waitForLogs('textPayload:"$uniqueId"', 10);
 
-      // 3. Query Cloud Logging for the print statement
-      final request = ListLogEntriesRequest(
-        resourceNames: ['projects/$projectId'],
-        filter: 'textPayload:"$uniqueId" OR jsonPayload.message:"$uniqueId"',
-        orderBy: 'timestamp desc',
-        pageSize: 10,
-      );
-
-      var found = false;
-      // Ingestion can take a few seconds, so we poll with retries
-      for (var attempt = 1; attempt <= 15; attempt++) {
-        await Future<void>.delayed(const Duration(seconds: 4));
-        try {
-          final listResult = await loggingService.listLogEntries(request);
-          print(listResult.entries);
-          if (listResult.entries.isNotEmpty) {
-            found = true;
-            final entry = listResult.entries.first;
-            print('Successfully found log entry on attempt $attempt:');
-            if (entry.jsonPayload != null) {
-              print(entry.jsonPayload!.toJson());
-              final payloadMap =
-                  entry.jsonPayload!.toJson() as Map<String, dynamic>;
-              expect(payloadMap['message'], contains(uniqueId));
-            } else if (entry.textPayload != null) {
-              print(entry.textPayload);
-              expect(entry.textPayload, contains(uniqueId));
-            }
-            break;
-          }
-        } catch (e) {
-          print('Attempt $attempt failed with error: $e');
-        }
-      }
-
-      loggingService.close();
-      expect(
-        found,
-        isTrue,
-        reason:
-            'Log entry with unique ID "$uniqueId" was '
-            'not found in Cloud Logging within timeout',
-      );
+      expect(entries, isNotEmpty);
+      final entry = entries.first;
+      expect(entry.textPayload, uniqueId);
+      expect(entry.severity, LogSeverity.info);
+      expect(entry.trace, startsWith('projects/$projectId/traces/'));
+      expect(entry.spanId, isNotEmpty);
     });
   });
 }

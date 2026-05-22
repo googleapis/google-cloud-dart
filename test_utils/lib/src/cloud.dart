@@ -13,6 +13,8 @@
 // limitations under the License.
 
 import 'dart:io';
+import 'package:google_cloud_logging_v2/logging.dart';
+import 'package:googleapis_auth/auth_io.dart' as auth;
 
 /// A real Google test account managed by bquinlan@google.com using Rhea.
 const googleTestUser = 'daenerysstone.938939@gmail.com';
@@ -25,3 +27,39 @@ const googleTestUser = 'daenerysstone.938939@gmail.com';
 String get projectId =>
     Platform.environment['GOOGLE_CLOUD_PROJECT'] ??
     (throw StateError('Missing environment variable: GOOGLE_CLOUD_PROJECT'));
+
+/// Polls Cloud Logging until log entries matching [filter]
+/// are returned.
+///
+/// [filter] must be in [Logging query language][1]. For example,
+/// `'textPayload:"Hello World"'`.
+///
+/// [1]: (https://docs.cloud.google.com/logging/docs/view/logging-query-language)
+Future<List<LogEntry>> waitForLogs(String filter, int count) async {
+  final client = await auth.clientViaApplicationDefaultCredentials(
+    scopes: ['https://www.googleapis.com/auth/cloud-platform'],
+  );
+  final loggingService = LoggingServiceV2(client: client);
+
+  final request = ListLogEntriesRequest(
+    resourceNames: ['projects/$projectId'],
+    filter: filter,
+    orderBy: 'timestamp desc',
+    pageSize: count,
+  );
+
+  try {
+    for (var attempt = 0; attempt <= 10; attempt++) {
+      await Future<void>.delayed(const Duration(seconds: 2));
+      final listResult = await loggingService.listLogEntries(request);
+      if (listResult.entries.isNotEmpty) {
+        return listResult.entries;
+      }
+    }
+    throw StateError(
+      'Log entries matching "$filter" were not found within the timeout.',
+    );
+  } finally {
+    loggingService.close();
+  }
+}
