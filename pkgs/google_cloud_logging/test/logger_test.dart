@@ -20,64 +20,6 @@ import 'package:test/test.dart';
 import 'test_utils.dart';
 
 void main() {
-  group('CloudLogger.printLogger()', () {
-    const logger = CloudLogger.printLogger();
-
-    test('log with default severity', () {
-      expect(
-        () => logger.log('hello', LogSeverity.$default),
-        prints('hello\n'),
-      );
-    });
-
-    test('log with explicit severity', () {
-      expect(
-        () => logger.log('hello', LogSeverity.error),
-        prints('ERROR: hello\n'),
-      );
-    });
-
-    test('log with payload', () {
-      expect(
-        () => logger.log('hello', LogSeverity.error, payload: {'foo': 'bar'}),
-        prints('''
-ERROR: hello
-Payload: {foo: bar}
-'''),
-      );
-    });
-
-    test('convenience methods', () {
-      expect(() => logger.debug('hello'), prints('DEBUG: hello\n'));
-      expect(() => logger.info('hello'), prints('INFO: hello\n'));
-      expect(() => logger.notice('hello'), prints('NOTICE: hello\n'));
-      expect(() => logger.warning('hello'), prints('WARNING: hello\n'));
-      expect(() => logger.error('hello'), prints('ERROR: hello\n'));
-      expect(() => logger.critical('hello'), prints('CRITICAL: hello\n'));
-      expect(() => logger.alert('hello'), prints('ALERT: hello\n'));
-      expect(() => logger.emergency('hello'), prints('EMERGENCY: hello\n'));
-    });
-
-    test('log with stack trace', testOn: '!browser', () {
-      expect(
-        () {
-          final caught = catchingFunction();
-          logger.error(
-            caught.error.toString(),
-            payload: {'a': 2, 'b': 3},
-            stackTrace: caught.stackTrace,
-          );
-        },
-        prints(
-          allOf(
-            startsWith('ERROR: Invalid argument(s): sample\n'),
-            contains('test/test_utils.dart'),
-          ),
-        ),
-      );
-    });
-  });
-
   group('CloudLogger.structuredLogger()', () {
     const logger = CloudLogger.structuredLogger();
 
@@ -100,7 +42,6 @@ Payload: {foo: bar}
           final caught = catchingFunction();
           logger.error(
             caught.error.toString(),
-            payload: {'a': 2, 'b': 3},
             stackTrace: caught.stackTrace,
           );
         },
@@ -111,8 +52,6 @@ Payload: {foo: bar}
             {
               'message': 'Invalid argument(s): sample',
               'severity': 'ERROR',
-              'a': 2,
-              'b': 3,
               'stack_trace': contains('logger_test.dart'),
               'logging.googleapis.com/sourceLocation': {
                 'file': endsWith('test_utils.dart'),
