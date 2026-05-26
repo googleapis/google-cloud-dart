@@ -14,11 +14,124 @@
 
 import 'dart:convert';
 import 'package:google_cloud_logging/google_cloud_logging.dart';
+import 'package:google_cloud_logging/src/structured_logging.dart';
 import 'package:test/test.dart';
 
 import 'test_utils.dart';
 
 void main() {
+  group('sanitize', () {
+    test('null', () {
+      expect(sanitize(null), null);
+    });
+
+    test('bool', () {
+      expect(sanitize(true), true);
+      expect(sanitize(false), false);
+    });
+
+    test('num', () {
+      expect(sanitize(1), 1);
+      expect(sanitize(3.14), 3.14);
+    });
+
+    test('string', () {
+      expect(sanitize('Hello'), 'Hello');
+    });
+
+    test('list of primitives', () {
+      expect(sanitize([1, 'two', true, null]), [1, 'two', true, null]);
+    });
+
+    test('nested lists', () {
+      expect(
+        sanitize([
+          1,
+          [2, 3],
+          [
+            [4],
+          ],
+        ]),
+        [
+          1,
+          [2, 3],
+          [
+            [4],
+          ],
+        ],
+      );
+    });
+
+    test('map with primitive keys and values', () {
+      expect(sanitize({'a': 1, 'b': 'two', 'c': true, 'd': null}), {
+        'a': 1,
+        'b': 'two',
+        'c': true,
+        'd': null,
+      });
+    });
+
+    test('map with non-string keys', () {
+      expect(sanitize({1: 'one', true: 'yes', null: 'empty'}), {
+        '1': 'one',
+        'true': 'yes',
+        'null': 'empty',
+      });
+    });
+
+    test('nested maps', () {
+      expect(
+        sanitize({
+          'a': {'b': 1},
+        }),
+        {
+          'a': {'b': 1},
+        },
+      );
+    });
+
+    test('object with toJson', () {
+      final obj = _EncodeableReference()..ref = 'value';
+      expect(sanitize(obj), {'ref': 'value'});
+    });
+
+    test('object without toJson (falls back to toString)', () {
+      final obj = _NonEncodable();
+      expect(sanitize(obj), 'I am not encodable');
+    });
+
+    test('cyclic toJson', () {
+      final cyclic = _EncodeableReference();
+      cyclic.ref = cyclic;
+
+      expect(sanitize(cyclic), {'ref': '[CIRCULAR]'});
+    });
+
+    test('cyclic list', () {
+      final list = <Object>[];
+      list.add(list);
+
+      expect(sanitize(list), ['[CIRCULAR]']);
+    });
+
+    test('cyclic map', () {
+      final map = <String, Object>{};
+      map['self'] = map;
+
+      expect(sanitize(map), {'self': '[CIRCULAR]'});
+    });
+
+    test('shared references in non-cyclic structure (DAG)', () {
+      final shared = {'foo': 'bar'};
+      final list = [shared, shared];
+
+      expect(sanitize(list), [
+        {'foo': 'bar'},
+        {'foo': 'bar'},
+      ]);
+    });
+  });
+
   group('createStructuredLog', () {
     test('simple message', () {
       final entry = createStructuredLog('hello', LogSeverity.info);
@@ -191,4 +304,10 @@ void main() {
 class _NonEncodable {
   @override
   String toString() => 'I am not encodable';
+}
+
+class _EncodeableReference {
+  Object? ref;
+
+  Object toJson() => {'ref': ref};
 }

@@ -20,6 +20,7 @@ import 'package:google_cloud_logging_type/logging_type.dart' show LogSeverity;
 import 'package:google_cloud_logging_v2/logging.dart'
     show LogEntrySourceLocation;
 import 'package:google_cloud_protobuf/protobuf.dart' show Struct;
+import 'package:meta/meta.dart';
 import 'package:stack_trace/stack_trace.dart';
 
 import 'traceparent.dart';
@@ -41,9 +42,9 @@ const _structuredLoggingFields = {
 };
 
 Map<String, Object?> _filter(Map<dynamic, dynamic> m) => {
-    for (final entry in m.entries)
-      if (!_structuredLoggingFields.contains(entry.key.toString()))
-        entry.key.toString(): entry.value,
+  for (final entry in m.entries)
+    if (!_structuredLoggingFields.contains(entry.key.toString()))
+      entry.key.toString(): entry.value,
 };
 
 /// Formats a log entry for Google Cloud structured logging on stdout.
@@ -78,7 +79,7 @@ String createStructuredLog(
     );
   }
 
-  return jsonEncode(_sanitize(result), toEncodable: _toEncodableFallback);
+  return jsonEncode(sanitize(result));
 }
 
 /// Recursively traverses [value] and ensures all values are JSON primitives
@@ -87,7 +88,8 @@ String createStructuredLog(
 ///
 /// Objects that are not JSON primitives are converted using
 /// [_toEncodableFallback].
-Object? _sanitize(Object? value, [Set<Object>? seen]) {
+@visibleForTesting
+Object? sanitize(Object? value, [Set<Object>? seen]) {
   if (value == null || value is num || value is String || value is bool) {
     return value;
   }
@@ -99,12 +101,12 @@ Object? _sanitize(Object? value, [Set<Object>? seen]) {
 
   try {
     if (value is List) {
-      return value.map((e) => _sanitize(e, seen)).toList();
+      return value.map((e) => sanitize(e, seen)).toList();
     }
     if (value is Map) {
-      return value.map((k, v) => MapEntry(k.toString(), _sanitize(v, seen)));
+      return value.map((k, v) => MapEntry(k.toString(), sanitize(v, seen)));
     }
-    return _sanitize(_toEncodableFallback(value), seen);
+    return sanitize(_toEncodableFallback(value), seen);
   } finally {
     seen.remove(value);
   }

@@ -40,8 +40,7 @@ final class StructuredLogger {
   }
 
   const StructuredLogger({void Function(String s)? writeln})
-    :
-      _writeln = writeln;
+    : _writeln = writeln;
 
   /// Logs a message at the given [severity].
   ///
