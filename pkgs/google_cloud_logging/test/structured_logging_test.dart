@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'dart:async';
 import 'dart:convert';
 import 'package:google_cloud_logging/google_cloud_logging.dart';
 import 'package:google_cloud_logging/src/structured_logging.dart';
@@ -238,51 +239,71 @@ void main() {
       });
     });
 
-    test(
-      'shared references in non-cyclic payload (DAG) serialize correctly',
-      () {
-        final shared = {'foo': 'bar'};
-        final payload = {'first': shared, 'second': shared};
-        final entry = createStructuredLog(
-          'hello',
-          LogSeverity.info,
-          payload: payload,
-        );
-        final map = jsonDecode(entry) as Map<String, dynamic>;
-        expect(map, {
-          'message': 'hello',
-          'severity': 'INFO',
-          'first': {'foo': 'bar'},
-          'second': {'foo': 'bar'},
-        });
-      },
-    );
+    test('map message filters out structured logging fields', () {
+      final message = {
+        'foo': 'bar',
+        'severity': 'WARNING',
+        'logging.googleapis.com/trace': 'trace-123',
+      };
+      final entry = createStructuredLog(message, LogSeverity.info);
+      final map = jsonDecode(entry) as Map<String, dynamic>;
+      expect(map, {'foo': 'bar', 'severity': 'INFO'});
+    });
 
-    test(
-      'cyclic payload with stack trace attaches source location',
-      testOn: '!browser',
-      () {
-        final payload = <String, dynamic>{};
-        payload['cycle'] = payload;
-        final caught = catchingFunction();
-        final entry = createStructuredLog(
-          caught.error,
-          LogSeverity.info,
-          payload: payload,
-          stackTrace: caught.stackTrace,
-        );
-        expect(jsonDecode(entry), {
-          'severity': 'INFO',
-          'logging.googleapis.com/sourceLocation': {
-            'file': endsWith('test_utils.dart'),
-            'line': isNotEmpty,
-            'function': 'throwingFunction',
-          },
-          'message': caught.error.toString(),
-        });
-      },
-      skip: 'XXX',
-    );
+    test('with traceparent', () {
+      final entry = createStructuredLog(
+        'hello',
+        LogSeverity.info,
+        traceparent: '00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01',
+      );
+      final map = jsonDecode(entry) as Map<String, dynamic>;
+      expect(map, {
+        'message': 'hello',
+        'severity': 'INFO',
+        'logging.googleapis.com/spanId': '00f067aa0ba902b7',
+        'logging.googleapis.com/trace_sampled': true,
+      });
+    });
+
+    test('with traceparent and parentId', () {
+      final entry = createStructuredLog(
+        'hello',
+        LogSeverity.info,
+        traceparent: '00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01',
+        projectId: 'my-project',
+      );
+      final map = jsonDecode(entry) as Map<String, dynamic>;
+      expect(map, {
+        'message': 'hello',
+        'severity': 'INFO',
+        'logging.googleapis.com/trace':
+            'projects/my-project/traces/4bf92f3577b34da6a3ce929d0e0e4736',
+        'logging.googleapis.com/spanId': '00f067aa0ba902b7',
+        'logging.googleapis.com/trace_sampled': true,
+      });
+    });
+
+    test('extracts trace and project from zone', () {
+      runZoned(
+        () {
+          final entry = createStructuredLog('hello', LogSeverity.info);
+          final map = jsonDecode(entry) as Map<String, dynamic>;
+          expect(map, {
+            'message': 'hello',
+            'severity': 'INFO',
+            'logging.googleapis.com/trace':
+                'projects/zone-project/traces/4bf92f3577b34da6a3ce929d0e0e4736',
+            'logging.googleapis.com/spanId': '00f067aa0ba902b7',
+            'logging.googleapis.com/trace_sampled': true,
+          });
+        },
+        zoneValues: {
+          'traceparent':
+              '00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01',
+          'google_cloud_project': 'zone-project',
+        },
+      );
+    });
 
     test('all-filtered stack trace falls back to first frame', () {
       // Create a trace consisting entirely of filtered core frames

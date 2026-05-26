@@ -22,19 +22,34 @@ import 'test_utils.dart';
 
 void main() {
   group('StructuredLogger', () {
-    test('info', () {
+    group('convenience methods', () {
       final output = StringBuffer();
+      final logger = StructuredLogger(writeln: output.writeln);
 
-      StructuredLogger(writeln: output.writeln).info('hello');
+      setUp(output.clear);
 
-      expect(
-        output.toString(),
-        isA<String>().having(
-          (s) => jsonDecode(s) as Map<String, Object?>,
-          'parsed json',
-          {'message': 'hello', 'severity': 'INFO'},
-        ),
-      );
+      for (final (method, severity) in [
+        (logger.debug, 'DEBUG'),
+        (logger.info, 'INFO'),
+        (logger.notice, 'NOTICE'),
+        (logger.warning, 'WARNING'),
+        (logger.error, 'ERROR'),
+        (logger.critical, 'CRITICAL'),
+        (logger.alert, 'ALERT'),
+        (logger.emergency, 'EMERGENCY'),
+      ]) {
+        test(severity, () {
+          method('hello');
+          expect(
+            output.toString(),
+            isA<String>().having(
+              (s) => jsonDecode(s) as Map<String, Object?>,
+              'parsed json',
+              {'message': 'hello', 'severity': severity},
+            ),
+          );
+        });
+      }
     });
 
     test('error with stack trace', testOn: '!browser', () {
