@@ -12,42 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:google_cloud_logging_type/logging_type.dart';
 import 'package:logging/logging.dart' as logging;
 
 import 'structured_logging.dart';
-import 'traceparent.dart';
-
-const _structuredLoggingFields = {
-  'severity',
-  'httpRequest',
-  'time',
-  'timestamp',
-  'timestampSeconds',
-  'timestampNanos',
-  'logging.googleapis.com/insertId',
-  'logging.googleapis.com/labels',
-  'logging.googleapis.com/operation',
-  'logging.googleapis.com/sourceLocation',
-  'logging.googleapis.com/spanId',
-  'logging.googleapis.com/trace',
-  'logging.googleapis.com/trace_sampled',
-};
 
 // https://github.com/googleapis/google-cloud-python/blob/3ef95d61995869318097e414e439da1d6c214d1f/packages/google-cloud-logging/google/cloud/logging_v2/handlers/structured_log.py#L62
 
 /// Handler to format logs into the Cloud Logging structured log format, and
 /// write them to standard output.
 final class StructuredLogHandler {
-  final String? _projectId = null; // XXX
+  final String? _projectId;
 
   final void Function(String s) _writeln;
 
-  StructuredLogHandler({void Function(String s)? writeln})
-    : _writeln = writeln ?? stdout.writeln;
+  StructuredLogHandler({String? projectId, void Function(String s)? writeln})
+    : _projectId = projectId,
+      _writeln = writeln ?? stdout.writeln;
 
   /// A handler for streams of [logging.LogRecord] provided by a
   /// `package:logging` [logging.Logger].

@@ -41,13 +41,11 @@ const _structuredLoggingFields = {
   'logging.googleapis.com/trace_sampled',
 };
 
-Map<String, Object?> _filter(Map<dynamic, dynamic> m) {
-  return {
+Map<String, Object?> _filter(Map<dynamic, dynamic> m) => {
     for (final entry in m.entries)
       if (!_structuredLoggingFields.contains(entry.key.toString()))
         entry.key.toString(): entry.value,
-  };
-}
+};
 
 /// Formats a log entry for Google Cloud structured logging on stdout.
 String createStructuredLog(
