@@ -18,8 +18,6 @@ import 'package:google_cloud_logging/google_cloud_logging.dart';
 import 'package:google_cloud_logging/src/structured_logging.dart';
 import 'package:test/test.dart';
 
-import 'test_utils.dart';
-
 void main() {
   group('sanitize', () {
     test('null', () {

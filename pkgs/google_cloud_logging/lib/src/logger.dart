@@ -118,7 +118,7 @@ final class StructuredLogger {
   /// import 'package:logging/logging.dart';
   ///
   /// void main() {
-  ///   Logger.root.onRecord.listen(StructuredLogHandler().handleLogRecord);
+  ///   Logger.root.onRecord.listen(const StructuredLogger().handleLogRecord);
   ///   Logger.root.level = Level.ALL;
   ///
   ///   // Use `package:logging` as normal.

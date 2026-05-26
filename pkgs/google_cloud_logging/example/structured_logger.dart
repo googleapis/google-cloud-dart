@@ -12,19 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// #docregion structured-stdout
+// #docregion cloud-logger
 import 'package:google_cloud_logging/google_cloud_logging.dart';
 
-void main() {
-  // Create a simple structured log string
-  final logString = createStructuredLog(
-    'An informative event happened.',
-    LogSeverity.info,
-    payload: {'event_id': 123, 'status': 'success'},
-  );
+const _logger = StructuredLogger();
 
-  // Print the formatted JSON directly to stdout
-  print(logString);
+void main() {
+  _logger.info({'message': 'Processing item.', 'itemId': 'A-987'});
+  try {
+    throw Exception('Failed to connect to DB');
+  } catch (error, stack) {
+    _logger.error('Database connection failure - $error', stackTrace: stack);
+  }
 }
 
-// #enddocregion structured-stdout
+// #enddocregion cloud-logger

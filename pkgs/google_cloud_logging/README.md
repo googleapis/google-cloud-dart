@@ -15,44 +15,43 @@ Cloud Platform, specifically tailored for Google Cloud structured logging.
 
 * **Google Cloud Structured Logging:** Utilities to construct log entries that
   seamlessly map to Google Cloud's native structured logging schema on `stdout`.
-* **StructuredLogHandler:** Intercept and format logs from standard libraries (like `package:logging` or `package:logger`) into Cloud Logging format.
+* **StructuredLogger:** Write structured logs directly or intercept and format logs from standard libraries (like `package:logging`) into Cloud Logging format.
 * **Safe Sanitization:** Deep primitive checking to format complex object
   payloads, preventing cyclic referencing and providing graceful string
   fallback.
 
 ## Usage
 
-### Structured Logging on stdout
+### Using the `StructuredLogger` directly
 
-<?code-excerpt "example/structured_stdout.dart (structured-stdout)"?>
+<?code-excerpt "example/structured_logger.dart (cloud-logger)"?>
 ```dart
 import 'package:google_cloud_logging/google_cloud_logging.dart';
 
-void main() {
-  // Create a simple structured log string
-  final logString = createStructuredLog(
-    'An informative event happened.',
-    LogSeverity.info,
-    payload: {'event_id': 123, 'status': 'success'},
-  );
+const _logger = StructuredLogger();
 
-  // Print the formatted JSON directly to stdout
-  print(logString);
+void main() {
+  _logger.info({'message': 'Processing item.', 'itemId': 'A-987'});
+  try {
+    throw Exception('Failed to connect to DB');
+  } catch (error, stack) {
+    _logger.error('Database connection failure - $error', stackTrace: stack);
+  }
 }
 ```
 
-### Using package:logging with StructuredLogHandler
+### Using `StructuredLogger` with `package:logging`
 
 <?code-excerpt "example/cloud_logger.dart (cloud-logger)"?>
 ```dart
 import 'package:google_cloud_logging/google_cloud_logging.dart';
 import 'package:logging/logging.dart';
 
-final _logger = Logger('my-service');
+final _logger = Logger('MyClass');
 
 void main() {
-  // Configure the standard logger with StructuredLogHandler.
-  Logger.root.onRecord.listen(StructuredLogHandler().handleLogRecord);
+  // Configure the standard logger with StructuredLogger.
+  Logger.root.onRecord.listen(const StructuredLogger().handleLogRecord);
   Logger.root.level = Level.ALL;
 
   _logger.info('Processing item.', {'itemId': 'A-987'});

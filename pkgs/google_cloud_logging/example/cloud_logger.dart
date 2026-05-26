@@ -19,8 +19,8 @@ import 'package:logging/logging.dart';
 final _logger = Logger('my-service');
 
 void main() {
-  // Configure the standard logger with StructuredLogHandler.
-  Logger.root.onRecord.listen(StructuredLogHandler().handleLogRecord);
+  // Configure the standard logger with StructuredLogger.
+  Logger.root.onRecord.listen(const StructuredLogger().handleLogRecord);
   Logger.root.level = Level.ALL;
 
   _logger.info('Processing item.', {'itemId': 'A-987'});

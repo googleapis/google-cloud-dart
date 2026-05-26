@@ -1,6 +1,6 @@
-`package:google_cloud_logging` provides a single class `StructuredLogHandler`.
+`package:google_cloud_logging` provides a single class `StructuredLogger`.
 
-`StructuredLogHandler` consumes logging events (e.g. from `package:logging`) and
+`StructuredLogger` consumes logging events (e.g. from `package:logging`) and
 outputs them to `stdout` using the Google Cloud structured logging format.
 
 For example:
@@ -11,7 +11,7 @@ import 'package:logging/logging.dart';
 
 void main() {
   // XXX make sure that listen doesn't mess with zones.
-  Logger.root.onRecord.listen(StructuredLogHandler().handleLogRecord);
+  Logger.root.onRecord.listen(const StructuredLogger().handleLogRecord);
   Logger.root.level = Level.ALL;
 
   Logger('MyLogger').warning('Out of disk space.');
