@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import 'dart:async';
+import 'dart:collection';
 import 'dart:convert';
 
 import 'package:google_cloud_logging_type/logging_type.dart' show LogSeverity;
@@ -58,12 +59,11 @@ String createStructuredLog(
   StackTrace? stackTrace,
   String? projectId,
 }) {
-  final Map<String, Object?> messageMap;
-  if (message is Map) {
-    messageMap = _filter(message);
-  } else {
-    messageMap = {'message': message};
-  }
+  final messageMap = switch (message) {
+    '' => <String, Object?>{},
+    Map() => _filter(message),
+    _ => {'message': message},
+  };
 
   final result = <String, Object?>{
     ...messageMap,
@@ -94,7 +94,7 @@ Object? _sanitize(Object? value, [Set<Object>? seen]) {
   if (value == null || value is num || value is String || value is bool) {
     return value;
   }
-  seen ??= <Object>{};
+  seen ??= HashSet.identity();
   if (seen.contains(value)) {
     return '[CIRCULAR]';
   }

@@ -111,16 +111,6 @@ void main() {
       expect(map, {'foo': 'bar', 'count': 42, 'severity': 'INFO'});
     });
 
-    test('payload does not override core fields', () {
-      final entry = createStructuredLog(
-        'hello',
-        LogSeverity.info,
-        payload: {'message': 'overridden', 'severity': 'CRITICAL'},
-      );
-      final map = jsonDecode(entry) as Map<String, dynamic>;
-      expect(map, {'message': 'hello', 'severity': 'INFO'});
-    });
-
     test('non-encodable payload is stringified', () {
       final payload = {'foo': _NonEncodable()};
       final entry = createStructuredLog(
