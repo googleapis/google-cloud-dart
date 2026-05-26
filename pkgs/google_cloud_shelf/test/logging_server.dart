@@ -16,20 +16,27 @@
 library;
 
 import 'package:google_cloud/google_cloud.dart';
+import 'package:google_cloud_logging/google_cloud_logging.dart';
 import 'package:google_cloud_shelf/google_cloud_shelf.dart';
+import 'package:logging/logging.dart';
 import 'package:shelf/shelf.dart';
 
 void main() async {
   final projectId = await computeProjectId();
+  Logger.root.onRecord.listen(StructuredLogHandler().handleLogRecord);
 
   final handler = const Pipeline()
       .addMiddleware(createLoggingMiddleware(projectId: projectId))
       .addHandler((Request request) {
-        if (request.url.path == 'print') {
-          final msg =
-              request.requestedUri.queryParameters['msg'] ?? 'default print';
-          print(msg);
-          return Response.ok('Printed: $msg');
+        final msg =
+            request.requestedUri.queryParameters['msg'] ?? 'default print';
+        switch (request.url.path) {
+          case 'print':
+            print(msg);
+            return Response.ok('Printed: $msg, headers=${request.headers}');
+          case 'logging':
+            Logger('MyClass').severe(msg);
+            return Response.ok('Logged: $msg, headers=${request.headers}');
         }
         return Response.ok('Hello World!');
       });

@@ -221,6 +221,7 @@ Middleware cloudLoggingMiddleware(String projectId) {
       payload: extraPayload ?? {},
       traceparent: traceHeader,
       stackTrace: stackTrace,
+      projectId: projectId,
     );
 
     final completer = Completer<Response>.sync();
@@ -288,6 +289,7 @@ Middleware cloudLoggingMiddleware(String projectId) {
         line,
         LogSeverity.info,
         traceparent: traceHeader,
+        projectId: projectId,
       );
       // Serialize to a JSON string and output to parent zone.
       parent.print(self, logContent);
@@ -296,6 +298,7 @@ Middleware cloudLoggingMiddleware(String projectId) {
     Zone.current
         .fork(
           zoneValues: {
+            'google_cloud_project': projectId,
             // See https://www.w3.org/TR/trace-context
             'traceparent': request.headers['traceparent'],
           },

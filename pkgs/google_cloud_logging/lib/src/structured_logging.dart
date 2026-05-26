@@ -56,6 +56,7 @@ String createStructuredLog(
   String? traceparent,
   Zone? zone,
   StackTrace? stackTrace,
+  String? projectId,
 }) {
   final Map<String, Object?> messageMap;
   if (message is Map) {
@@ -69,8 +70,8 @@ String createStructuredLog(
     ...(payload ?? {}),
     'severity': severity.value,
     ...(traceparent == null
-        ? structuredTraceFromZone(zone)
-        : formatTraceparent(traceparent)),
+        ? structuredTraceFromZone(projectId, zone)
+        : formatTraceparent(projectId, traceparent)),
   };
 
   if (stackTrace case final stackTrace?) {

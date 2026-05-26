@@ -46,22 +46,31 @@ final _traceParentRegex = RegExp('$_version-$_trace-$_parent-$_flags');
   );
 }
 
-Map<String, Object> formatTraceparent(String? traceparent) {
+Map<String, Object> formatTraceparent(String? projectId, String? traceparent) {
   if (traceparent == null) return {};
   final x = parseTraceparent(traceparent);
   if (x == null) return {};
 
   return {
-    _logTraceKey: x.traceId,
+    if (projectId != null)
+      _logTraceKey: 'projects/$projectId/traces/${x.traceId}',
     _logSpanIdKey: x.spanId,
     _logTraceSampledKey: x.traceSampled,
   };
 }
 
-Map<String, Object> structuredTraceFromZone([Zone? zone]) {
+Map<String, Object> structuredTraceFromZone(String? projectId, [Zone? zone]) {
   final traceparent = (zone ?? Zone.current)['traceparent'];
+  final String? calculatedProjectId;
+  if (projectId == null) {
+    calculatedProjectId =
+        (zone ?? Zone.current)['google_cloud_project'] as String?;
+  } else {
+    calculatedProjectId = projectId;
+  }
+
   if (traceparent is String) {
-    return formatTraceparent(traceparent);
+    return formatTraceparent(calculatedProjectId, traceparent);
   } else {
     return {};
   }

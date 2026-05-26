@@ -20,10 +20,6 @@ import 'structured_logging.dart' show createStructuredLog;
 abstract base class CloudLogger {
   const CloudLogger();
 
-  /// Creates a logger that outputs log messages in Cloud Logging structured
-  /// format.
-  const factory CloudLogger.structuredLogger() = _StructuredLogger;
-
   /// Logs a message at the given [severity].
   ///
   /// The available severity levels represent the standard Google Cloud logging
@@ -49,90 +45,43 @@ abstract base class CloudLogger {
   });
 
   /// Logs [message] using [log] at [logging_type.LogSeverity.debug] severity.
-  void debug(
-    Object message, {
-    StackTrace? stackTrace,
-  }) => log(
-    message,
-    logging_type.LogSeverity.debug,
-    stackTrace: stackTrace,
-  );
+  void debug(Object message, {StackTrace? stackTrace}) =>
+      log(message, logging_type.LogSeverity.debug, stackTrace: stackTrace);
 
   /// Logs [message] using [log] at [logging_type.LogSeverity.info] severity.
-  void info(
-    Object message, {
-    StackTrace? stackTrace,
-  }) => log(
-    message,
-    logging_type.LogSeverity.info,
-    stackTrace: stackTrace,
-  );
+  void info(Object message, {StackTrace? stackTrace}) =>
+      log(message, logging_type.LogSeverity.info, stackTrace: stackTrace);
 
   /// Logs [message] using [log] at [logging_type.LogSeverity.notice] severity.
-  void notice(
-    Object message, {
-    StackTrace? stackTrace,
-  }) => log(
-    message,
-    logging_type.LogSeverity.notice,
-    stackTrace: stackTrace,
-  );
+  void notice(Object message, {StackTrace? stackTrace}) =>
+      log(message, logging_type.LogSeverity.notice, stackTrace: stackTrace);
 
   /// Logs [message] using [log] at [logging_type.LogSeverity.warning] severity.
-  void warning(
-    Object message, {
-    StackTrace? stackTrace,
-  }) => log(
-    message,
-    logging_type.LogSeverity.warning,
-    stackTrace: stackTrace,
-  );
+  void warning(Object message, {StackTrace? stackTrace}) =>
+      log(message, logging_type.LogSeverity.warning, stackTrace: stackTrace);
 
   /// Logs [message] using [log] at [logging_type.LogSeverity.error] severity.
-  void error(
-    Object message, {
-    StackTrace? stackTrace,
-  }) => log(
-    message,
-    logging_type.LogSeverity.error,
-    stackTrace: stackTrace,
-  );
+  void error(Object message, {StackTrace? stackTrace}) =>
+      log(message, logging_type.LogSeverity.error, stackTrace: stackTrace);
 
   /// Logs [message] using [log] at [logging_type.LogSeverity.critical]
   /// severity.
-  void critical(
-    Object message, {
-    StackTrace? stackTrace,
-  }) => log(
-    message,
-    logging_type.LogSeverity.critical,
-    stackTrace: stackTrace,
-  );
+  void critical(Object message, {StackTrace? stackTrace}) =>
+      log(message, logging_type.LogSeverity.critical, stackTrace: stackTrace);
 
   /// Logs [message] using [log] at [logging_type.LogSeverity.alert] severity.
-  void alert(
-    Object message, {
-    StackTrace? stackTrace,
-  }) => log(
-    message,
-    logging_type.LogSeverity.alert,
-    stackTrace: stackTrace,
-  );
+  void alert(Object message, {StackTrace? stackTrace}) =>
+      log(message, logging_type.LogSeverity.alert, stackTrace: stackTrace);
 
   /// Logs [message] using [log] at [logging_type.LogSeverity.emergency]
   /// severity.
-  void emergency(
-    Object message, {
-    StackTrace? stackTrace,
-  }) => log(
-    message,
-    logging_type.LogSeverity.emergency,
-    stackTrace: stackTrace,
-  );
+  void emergency(Object message, {StackTrace? stackTrace}) =>
+      log(message, logging_type.LogSeverity.emergency, stackTrace: stackTrace);
 }
 
-final class _StructuredLogger extends CloudLogger {
-  const _StructuredLogger();
+final class StructuredLogger extends CloudLogger {
+  final String? _projectId;
+  const StructuredLogger({String? projectId}) : _projectId = projectId;
 
   @override
   void log(
@@ -143,6 +92,7 @@ final class _StructuredLogger extends CloudLogger {
     final logEntry = createStructuredLog(
       message,
       severity,
+      projectId: _projectId,
       stackTrace: stackTrace,
     );
     print(logEntry);

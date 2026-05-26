@@ -42,6 +42,8 @@ const _structuredLoggingFields = {
 /// Handler to format logs into the Cloud Logging structured log format, and
 /// write them to standard output.
 final class StructuredLogHandler {
+  final String? _projectId = null; // XXX
+
   final void Function(String s) _writeln;
 
   StructuredLogHandler({void Function(String s)? writeln})
@@ -75,6 +77,7 @@ final class StructuredLogHandler {
       severity,
       payload: extra,
       zone: record.zone,
+      projectId: _projectId,
       stackTrace: record.stackTrace,
     );
     _writeln(logStr);

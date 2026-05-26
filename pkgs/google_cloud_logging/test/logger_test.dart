@@ -21,7 +21,7 @@ import 'test_utils.dart';
 
 void main() {
   group('CloudLogger.structuredLogger()', () {
-    const logger = CloudLogger.structuredLogger();
+    const logger = StructuredLogger();
 
     test('basic log', () {
       expect(

@@ -19,6 +19,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:google_cloud_logging/google_cloud_logging.dart';
 import 'package:google_cloud_shelf/google_cloud_shelf.dart';
 import 'package:http/http.dart' as http;
 import 'package:shelf/shelf.dart';
@@ -229,9 +230,8 @@ Details:
     });
 
     test('print', () async {
-      final uniqueId = 'Hello World: ${randomAlphaNumString(20)}';
+      final uniqueId = 'print: ${randomAlphaNumString(20)}';
 
-      // Trigger a print.
       final response = await http.get(
         runner.serverUri.replace(
           path: '/print',
@@ -239,13 +239,35 @@ Details:
         ),
       );
       expect(response.statusCode, 200);
-
       final entries = await waitForLogs('textPayload:"$uniqueId"');
 
       expect(entries, isNotEmpty);
       final entry = entries.first;
       expect(entry.textPayload, uniqueId);
       expect(entry.severity, LogSeverity.info);
+      expect(entry.trace, startsWith('projects/$projectId/traces/'));
+      expect(entry.spanId, isNotEmpty);
+    });
+
+    test('logging', () async {
+      final uniqueId = 'log: ${randomAlphaNumString(20)}';
+
+      final response = await http.get(
+        runner.serverUri.replace(
+          path: '/logging',
+          queryParameters: {'msg': uniqueId},
+        ),
+      );
+      expect(response.statusCode, 200);
+      final entries = await waitForLogs('jsonPayload.message:"$uniqueId"');
+
+      expect(entries, isNotEmpty);
+      final entry = entries.first;
+      expect(entry.jsonPayload?.toJson(), {
+        'loggerName': 'MyClass',
+        'message': uniqueId,
+      });
+      expect(entry.severity, LogSeverity.error);
       expect(entry.trace, startsWith('projects/$projectId/traces/'));
       expect(entry.spanId, isNotEmpty);
     });
