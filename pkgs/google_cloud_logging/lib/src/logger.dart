@@ -12,13 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'dart:io';
+
 import 'package:google_cloud_logging_type/logging_type.dart' as logging_type;
+import 'package:logging/logging.dart' as logging;
 
 import 'structured_logging.dart' show createStructuredLog;
 
-/// Base class for logging.
-abstract base class CloudLogger {
-  const CloudLogger();
+final class StructuredLogger {
+  final String? _projectId;
+  final void Function(String s)? _writeln;
+
+  void _print(String line) {
+    if (_writeln == null) {
+      stdout.writeln(line);
+    } else {
+      _writeln(line);
+    }
+  }
+
+  const StructuredLogger({String? projectId, void Function(String s)? writeln})
+    : _projectId = projectId,
+      _writeln = writeln;
 
   /// Logs a message at the given [severity].
   ///
@@ -42,7 +57,15 @@ abstract base class CloudLogger {
     Object message,
     logging_type.LogSeverity severity, {
     StackTrace? stackTrace,
-  });
+  }) {
+    final logEntry = createStructuredLog(
+      message,
+      severity,
+      projectId: _projectId,
+      stackTrace: stackTrace,
+    );
+    _print(logEntry);
+  }
 
   /// Logs [message] using [log] at [logging_type.LogSeverity.debug] severity.
   void debug(Object message, {StackTrace? stackTrace}) =>
@@ -77,24 +100,54 @@ abstract base class CloudLogger {
   /// severity.
   void emergency(Object message, {StackTrace? stackTrace}) =>
       log(message, logging_type.LogSeverity.emergency, stackTrace: stackTrace);
-}
 
-final class StructuredLogger extends CloudLogger {
-  final String? _projectId;
-  const StructuredLogger({String? projectId}) : _projectId = projectId;
+  /// A handler for streams of [logging.LogRecord] provided by a
+  /// `package:logging` [logging.Logger].
+  ///
+  /// You can configure `package:logging` to redirect all logs globally with
+  /// this setup:
+  ///
+  /// ```dart
+  /// import 'package:google_cloud_logging/google_cloud_logging.dart';
+  /// import 'package:logging/logging.dart';
+  ///
+  /// void main() {
+  ///   Logger.root.onRecord.listen(StructuredLogHandler().handleLogRecord);
+  ///   Logger.root.level = Level.ALL;
+  ///
+  ///   // Use `package:logging` as normal.
+  /// }
+  /// ```
+  void handleLogRecord(logging.LogRecord record) {
+    final severity = _severityFromLoggingLevel(record.level);
 
-  @override
-  void log(
-    Object message,
-    logging_type.LogSeverity severity, {
-    StackTrace? stackTrace,
-  }) {
-    final logEntry = createStructuredLog(
-      message,
+    // Determine if there's structured payload data.
+    final extra = {'loggerName': record.loggerName, 'error': ?record.error};
+
+    final logStr = createStructuredLog(
+      record.object ?? record.message,
       severity,
+      payload: extra,
+      zone: record.zone,
       projectId: _projectId,
-      stackTrace: stackTrace,
+      stackTrace: record.stackTrace,
     );
-    print(logEntry);
+    _print(logStr);
+  }
+
+  logging_type.LogSeverity _severityFromLoggingLevel(logging.Level level) {
+    if (level <= logging.Level.FINE) {
+      return logging_type.LogSeverity.debug;
+    } else if (level <= logging.Level.INFO) {
+      return logging_type.LogSeverity.info;
+    } else if (level <= logging.Level.WARNING) {
+      return logging_type.LogSeverity.warning;
+    } else if (level <= logging.Level.SEVERE) {
+      return logging_type.LogSeverity.error;
+    } else if (level <= logging.Level.SHOUT) {
+      return logging_type.LogSeverity.critical;
+    } else {
+      return logging_type.LogSeverity.emergency;
+    }
   }
 }

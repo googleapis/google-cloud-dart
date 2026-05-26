@@ -18,7 +18,7 @@ import 'dart:convert';
 
 import 'package:google_cloud_logging_type/logging_type.dart' show LogSeverity;
 import 'package:google_cloud_logging_v2/logging.dart'
-    show LogEntry, LogEntrySourceLocation;
+    show LogEntrySourceLocation;
 import 'package:google_cloud_protobuf/protobuf.dart' show Struct;
 import 'package:meta/meta.dart';
 import 'package:stack_trace/stack_trace.dart';
@@ -154,6 +154,5 @@ bool _frameFolder(Frame frame) =>
 
 /// Formats the stack trace by folding frames that belong to this package or
 /// core.
-@internal
 Chain _formatStackTrace(StackTrace stackTrace) =>
     Chain.forTrace(stackTrace).foldFrames(_frameFolder, terse: true);
