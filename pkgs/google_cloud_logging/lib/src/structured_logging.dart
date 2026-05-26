@@ -20,7 +20,6 @@ import 'package:google_cloud_logging_type/logging_type.dart' show LogSeverity;
 import 'package:google_cloud_logging_v2/logging.dart'
     show LogEntrySourceLocation;
 import 'package:google_cloud_protobuf/protobuf.dart' show Struct;
-import 'package:meta/meta.dart';
 import 'package:stack_trace/stack_trace.dart';
 
 import 'traceparent.dart';

@@ -19,6 +19,15 @@ import 'package:logging/logging.dart' as logging;
 
 import 'structured_logging.dart' show createStructuredLog;
 
+/// A simple logger that outputs logging messages using [Structured logging][1].
+///
+/// When used with `package:google_cloud_shelf`, logs written using this logger
+/// are automatically associated with the request that generated them.
+///
+/// You can also use structured logging indirectly through `package:logging`.
+/// See [handleLogRecord].
+///
+/// [1] https://docs.cloud.google.com/logging/docs/structured-logging
 final class StructuredLogger {
   final String? _projectId;
   final void Function(String s)? _writeln;
