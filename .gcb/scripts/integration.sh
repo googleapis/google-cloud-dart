@@ -16,5 +16,15 @@
 
 set -e
 
+# Install Dart SDK using the process detailed here:
+# https://dart.dev/get-dart#install
+apt-get update && apt-get install -y apt-transport-https curl gnupg
+curl -fsSL https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/dart.gpg
+echo 'deb [signed-by=/usr/share/keyrings/dart.gpg] https://storage.googleapis.com/download.dartlang.org/linux/debian stable main' > /etc/apt/sources.list.d/dart.list
+apt-get update && apt-get install -y dart
+
+export PATH="$PATH:/usr/lib/dart/bin"
+
 dart pub get
 dart test . -P google-cloud
+

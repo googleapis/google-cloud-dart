@@ -20,8 +20,11 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:google_cloud_shelf/google_cloud_shelf.dart';
+import 'package:http/http.dart' as http;
 import 'package:shelf/shelf.dart';
 import 'package:test/test.dart';
+import 'package:test_utils/cloud.dart';
+import 'package:test_utils/random.dart';
 
 const internalServerErrorMessage = 'Internal Server Error';
 
@@ -210,6 +213,42 @@ Details:
 
     // Wait a bit for the timer to fire and ensure no crash happens.
     await Future<void>.delayed(const Duration(milliseconds: 10));
+  });
+
+  group('logging server', tags: 'google-cloud', () {
+    late CloudRunner runner;
+
+    setUpAll(() async {
+      runner = await CloudRunner.start(
+        'pkgs/google_cloud_shelf/test/logging_server.dart',
+      );
+    });
+
+    tearDownAll(() async {
+      await runner.stop();
+    });
+
+    test('print', () async {
+      final uniqueId = 'Hello World: ${randomAlphaNumString(20)}';
+
+      // Trigger a print.
+      final response = await http.get(
+        runner.serverUri.replace(
+          path: '/print',
+          queryParameters: {'msg': uniqueId},
+        ),
+      );
+      expect(response.statusCode, 200);
+
+      final entries = await waitForLogs('textPayload:"$uniqueId"');
+
+      expect(entries, isNotEmpty);
+      final entry = entries.first;
+      expect(entry.textPayload, uniqueId);
+      expect(entry.severity, LogSeverity.info);
+      expect(entry.trace, startsWith('projects/$projectId/traces/'));
+      expect(entry.spanId, isNotEmpty);
+    });
   });
 }
 

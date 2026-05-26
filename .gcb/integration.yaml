@@ -24,7 +24,7 @@ options:
 serviceAccount: 'projects/${PROJECT_ID}/serviceAccounts/integration-test-runner@${PROJECT_ID}.iam.gserviceaccount.com'
 steps:
   - id: Run integration tests
-    name: 'dart:stable'
+    name: 'google/cloud-sdk:latest'
     args: ['.gcb/scripts/integration.sh']
     secretEnv: ['GITHUB_TOKEN']
     env:
