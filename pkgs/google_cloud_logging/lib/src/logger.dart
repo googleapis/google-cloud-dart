@@ -29,7 +29,6 @@ import 'structured_logging.dart' show createStructuredLog;
 ///
 /// [1] https://docs.cloud.google.com/logging/docs/structured-logging
 final class StructuredLogger {
-  final String? _projectId;
   final void Function(String s)? _writeln;
 
   void _print(String line) {
@@ -40,8 +39,8 @@ final class StructuredLogger {
     }
   }
 
-  const StructuredLogger({String? projectId, void Function(String s)? writeln})
-    : _projectId = projectId,
+  const StructuredLogger({void Function(String s)? writeln})
+    :
       _writeln = writeln;
 
   /// Logs a message at the given [severity].
@@ -70,7 +69,6 @@ final class StructuredLogger {
     final logEntry = createStructuredLog(
       message,
       severity,
-      projectId: _projectId,
       stackTrace: stackTrace,
     );
     _print(logEntry);
@@ -138,7 +136,6 @@ final class StructuredLogger {
       severity,
       payload: extra,
       zone: record.zone,
-      projectId: _projectId,
       stackTrace: record.stackTrace,
     );
     _print(logStr);
