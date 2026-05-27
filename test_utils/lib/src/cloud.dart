@@ -39,7 +39,7 @@ String get projectId =>
 Future<List<LogEntry>> waitForLogs(
   String filter, {
   int count = 10,
-  Duration timeout = const Duration(seconds: 60),
+  Duration timeout = const Duration(seconds: 30),
 }) async {
   final client = await auth.clientViaApplicationDefaultCredentials(
     scopes: ['https://www.googleapis.com/auth/cloud-platform'],

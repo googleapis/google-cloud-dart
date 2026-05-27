@@ -14,4 +14,4 @@
 
 import 'dart:io';
 
-void writeln(String line) => stdout.writeln;
+void writeln(String line) => stdout.writeln(line);

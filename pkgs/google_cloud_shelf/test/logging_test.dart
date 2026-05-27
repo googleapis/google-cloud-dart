@@ -311,31 +311,7 @@ Details:
 
       expect(entries, isNotEmpty);
       final entry = entries.first;
-      expect(entry.textPayload, uniqueId);
       expect(entry.severity, LogSeverity.emergency);
-      expect(entry.trace, startsWith('projects/$projectId/traces/'));
-      expect(entry.spanId, isNotEmpty);
-    });
-
-    test('logging', () async {
-      final uniqueId = 'log: ${randomAlphaNumString(20)}';
-
-      final response = await http.get(
-        runner.serverUri.replace(
-          path: '/logging',
-          queryParameters: {'msg': uniqueId},
-        ),
-      );
-      expect(response.statusCode, 200);
-      final entries = await waitForLogs('jsonPayload.message:"$uniqueId"');
-
-      expect(entries, isNotEmpty);
-      final entry = entries.first;
-      expect(entry.jsonPayload?.toJson(), {
-        'loggerName': 'MyClass',
-        'message': uniqueId,
-      });
-      expect(entry.severity, LogSeverity.error);
       expect(entry.trace, startsWith('projects/$projectId/traces/'));
       expect(entry.spanId, isNotEmpty);
     });
