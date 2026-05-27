@@ -265,7 +265,6 @@ Details:
 
       expect(entries, isNotEmpty);
       final entry = entries.first;
-      print(entry.toJson());
       expect(entry.jsonPayload?.toJson(), {
         'message': 'Exception: $uniqueId',
         'stack_trace': contains('logging_server.dart'),
