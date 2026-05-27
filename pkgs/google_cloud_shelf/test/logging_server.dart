@@ -21,9 +21,11 @@ import 'package:google_cloud_shelf/google_cloud_shelf.dart';
 import 'package:logging/logging.dart';
 import 'package:shelf/shelf.dart';
 
+const _logger = StructuredLogger();
+
 void main() async {
   final projectId = await computeProjectId();
-  Logger.root.onRecord.listen(StructuredLogHandler().handleLogRecord);
+  Logger.root.onRecord.listen(_logger.handleLogRecord);
 
   final handler = const Pipeline()
       .addMiddleware(createLoggingMiddleware(projectId: projectId))
@@ -34,6 +36,11 @@ void main() async {
           case 'print':
             print(msg);
             return Response.ok('Printed: $msg, headers=${request.headers}');
+          case 'throw':
+            throw Exception(msg);
+          case 'structured':
+            _logger.emergency(msg);
+            return Response.ok('Structured: $msg, headers=${request.headers}');
           case 'logging':
             Logger('MyClass').severe(msg);
             return Response.ok('Logged: $msg, headers=${request.headers}');

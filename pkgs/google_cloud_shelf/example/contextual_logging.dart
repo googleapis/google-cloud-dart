@@ -23,8 +23,8 @@ import 'package:shelf/shelf.dart';
 final _logger = Logger('user-service');
 
 Future<void> main() async {
-  // Configure standard logging with StructuredLogHandler globally.
-  Logger.root.onRecord.listen(StructuredLogHandler().handleLogRecord);
+  // Configure standard logging with StructuredLogger globally.
+  Logger.root.onRecord.listen(const StructuredLogger().handleLogRecord);
   Logger.root.level = Level.ALL;
 
   final handler = const Pipeline()

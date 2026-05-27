@@ -99,7 +99,7 @@ Handler _handleResponseException(Handler innerHandler) {
         formatStackTrace(stackToLog),
       ].expand((e) => LineSplitter.split('$e'.trim())).join('\n');
 
-      stderr.writeln(text);  
+      stderr.writeln(text);
       return _responseFromException(error, stack, request.headers);
     }
   };
