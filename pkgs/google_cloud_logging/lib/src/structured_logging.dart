@@ -12,6 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/// @docImport 'logger.dart';
+library;
+
 import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
@@ -19,12 +22,14 @@ import 'dart:convert';
 import 'package:google_cloud_logging_type/logging_type.dart' show LogSeverity;
 import 'package:google_cloud_logging_v2/logging.dart'
     show LogEntrySourceLocation;
-import 'package:google_cloud_protobuf/protobuf.dart' show Struct;
 import 'package:meta/meta.dart';
 import 'package:stack_trace/stack_trace.dart';
 
 import 'traceparent.dart';
 
+/// Fields that have special meaning in structured-logging.
+///
+/// See https://docs.cloud.google.com/logging/docs/structured-logging#special-payload-fields
 const _structuredLoggingFields = {
   'severity',
   'httpRequest',
@@ -48,6 +53,9 @@ Map<String, Object?> _filter(Map<dynamic, dynamic> m) => {
 };
 
 /// Formats a log entry for Google Cloud structured logging on stdout.
+///
+/// This function should rarely be used by application, instead use
+/// [StructuredLogger].
 String createStructuredLog(
   Object message,
   LogSeverity severity, {
@@ -84,7 +92,7 @@ String createStructuredLog(
 
 /// Recursively traverses [value] and ensures all values are JSON primitives
 /// (String, num, bool, null) or lists/maps of them, making it safe to pass to
-/// [Struct.fromJson].
+/// [jsonEncode].
 ///
 /// Objects that are not JSON primitives are converted using
 /// [_toEncodableFallback].

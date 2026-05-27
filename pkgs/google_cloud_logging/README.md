@@ -9,16 +9,7 @@
 > Feel free to open [issues] for bugs and feature requests.
 
 A lightweight logging package for creating formatted logs suitable for Google
-Cloud Platform, specifically tailored for Google Cloud structured logging.
-
-## Features
-
-* **Google Cloud Structured Logging:** Utilities to construct log entries that
-  seamlessly map to Google Cloud's native structured logging schema on `stdout`.
-* **StructuredLogger:** Write structured logs directly or intercept and format logs from standard libraries (like `package:logging`) into Cloud Logging format.
-* **Safe Sanitization:** Deep primitive checking to format complex object
-  payloads, preventing cyclic referencing and providing graceful string
-  fallback.
+Cloud Platform, specifically tailored for Google Cloud [structured logging].
 
 ## Usage
 
@@ -64,3 +55,4 @@ void main() {
 ```
 
 [issues]: https://github.com/googleapis/google-cloud-dart/issues
+[structured logging]: https://docs.cloud.google.com/logging/docs/structured-logging

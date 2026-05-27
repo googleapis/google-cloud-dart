@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:meta/meta.dart';
+
 /// The `payload` key used to correlate log entries with Cloud Trace.
 ///
 /// See https://docs.cloud.google.com/logging/docs/agent/logging/configuration#special-fields
@@ -32,6 +34,7 @@ final _traceParentRegex = RegExp('$_version-$_trace-$_parent-$_flags');
 /// Parsers a `'tracecontext'` header.
 ///
 /// See https://www.w3.org/TR/trace-context/
+@visibleForTesting
 ({String traceId, String spanId, bool traceSampled})? parseTraceparent(
   String traceparent,
 ) {
@@ -46,6 +49,7 @@ final _traceParentRegex = RegExp('$_version-$_trace-$_parent-$_flags');
   );
 }
 
+@internal
 Map<String, Object> formatTraceparent(String? projectId, String? traceparent) {
   if (traceparent == null) return {};
   final x = parseTraceparent(traceparent);
@@ -59,6 +63,7 @@ Map<String, Object> formatTraceparent(String? projectId, String? traceparent) {
   };
 }
 
+@internal
 Map<String, Object> structuredTraceFromZone(String? projectId, [Zone? zone]) {
   final traceparent = (zone ?? Zone.current)['traceparent'];
   final String? calculatedProjectId;

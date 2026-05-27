@@ -21,13 +21,35 @@ import 'structured_logging.dart' show createStructuredLog;
 
 /// A simple logger that outputs logging messages using [Structured logging][1].
 ///
+/// ```dart
+/// import 'package:google_cloud_logging/google_cloud_logging.dart';
+/// const _logger = StructuredLogger();
+///
+/// void main() {
+///   _logger.info({'message': 'Processing item.', 'itemId': 'A-987'});
+/// }```
+///
+/// [Logging query language][2] can be used to find log entries
+/// For example:
+///
+/// ```shell
+/// $ # Finds the above log entry:
+/// $ gcloud logging read 'jsonPayload.itemId = "A-987"'
+/// ---
+/// insertId: 654sjnf4ovq2l
+/// jsonPayload:
+///   itemId: A-987
+///   message: Processing item.
+/// ...
+/// ```
 /// When used with `package:google_cloud_shelf`, logs written using this logger
 /// are automatically associated with the request that generated them.
 ///
-/// You can also use structured logging indirectly through `package:logging`.
-/// See [handleLogRecord].
+/// You can also use structured logging indirectly through `package:logging`
+/// using [handleLogRecord].
 ///
-/// [1] https://docs.cloud.google.com/logging/docs/structured-logging
+/// [1]: https://docs.cloud.google.com/logging/docs/structured-logging
+/// [2]: https://docs.cloud.google.com/logging/docs/view/logging-query-language
 final class StructuredLogger {
   final void Function(String s)? _writeln;
 

@@ -30,6 +30,5 @@ library;
 export 'package:google_cloud_logging_type/logging_type.dart' show LogSeverity;
 export 'package:google_cloud_logging_v2/logging.dart' show LogEntry;
 
-export 'src/logger.dart';
+export 'src/structured_logger.dart';
 export 'src/structured_logging.dart' show createStructuredLog;
-export 'src/traceparent.dart';
