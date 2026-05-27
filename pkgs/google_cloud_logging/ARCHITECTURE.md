@@ -31,18 +31,12 @@ correlate application logs with the request logs, every log entry must include
 special fields linking it to the trace ID.
 
 Instead of forcing developers to manually pass a logger or request context
-through every function call, this repository leverages Dart's
-[Zone](https://api.dart.dev/stable/dart-async/Zone-class.html) mechanism to flow
-context implicitly across asynchronous boundaries.
+through every function call, `package:google_cloud_logging` and
+`package:google_cloud_shelf` use the 
+[Zone](https://api.dart.dev/stable/dart-async/Zone-class.html) mechanism to
+flow context implicitly across package boundaries.
 
-### The Cross-Package Interaction
-
-The interaction spans two packages:
-1. **`package:google_cloud_shelf` (The Writer):** Intercepts incoming HTTP
-   requests and creates a new asynchronous context (a `Zone`) with variables.
-2. **`package:google_cloud_logging` (The Reader):** Reads the variables from the
-   current `Zone` when a log record is emitted and constructs the appropriate
-   GCP payload.
+This is the flow:
 
 ```mermaid
 %%{init: {'flowchart': {'nodeSpacing': 80, 'rankSpacing': 80, 'subGraphPadding': 30}}}%%
