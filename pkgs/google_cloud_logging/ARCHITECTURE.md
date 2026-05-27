@@ -45,6 +45,7 @@ The interaction spans two packages:
    GCP payload.
 
 ```mermaid
+%%{init: {'flowchart': {'nodeSpacing': 80, 'rankSpacing': 80, 'subGraphPadding': 30}}}%%
 flowchart TD
     %% Subgraph styling
     style Client fill:#F8FAFC,stroke:#E2E8F0,stroke-width:2px
@@ -52,24 +53,24 @@ flowchart TD
     style Logging fill:#FAF5FF,stroke:#E9D5FF,stroke-width:2px
     style GCP fill:#EFF6FF,stroke:#DBEAFE,stroke-width:2px
 
-    subgraph Client["🌐 Client / GCP Load Balancer"]
-        Req(["<code>curl http://... -H 'traceparent: 00-...'</code>"])
+    subgraph Client["Client / GCP Load Balancer"]
+        Req(["<code style='white-space: nowrap;'>curl http://... -H 'traceparent: 00-...'</code>"])
     end
 
-    subgraph Shelf["🚀 package:google_cloud_shelf"]
-        MW("🛡️ cloudLoggingMiddleware")
-        Zone(["🔑 Forks Zone and sets: <br><code>Zone.current['traceparent']</code> <br><code>Zone.current['google_cloud_project']</code>"])
-        Handler("⚙️ Request Handler <br><code>logger.info('something')</code>")
+    subgraph Shelf["package:google_cloud_shelf"]
+        MW("cloudLoggingMiddleware")
+        Zone(["Forks Zone and sets: <br><code>Zone.current['traceparent']</code> <br><code>Zone.current['google_cloud_project']</code>"])
+        Handler("Request Handler <br><code>logger.info('something')</code>")
 
         Req --> MW
         MW -->|"1. Extracts <code>traceparent</code> header"| Zone
         Zone -->|"2. Runs handler inside Zone"| Handler
     end
 
-    subgraph Logging["📝 package:google_cloud_logging"]
-        SL[["📝 StructuredLogger"]]
-        TraceZone("🔍 structuredTraceFromZone()")
-        Stdout[("🖥️ stdout <br><i>Structured JSON line</i>")]
+    subgraph Logging["package:google_cloud_logging"]
+        SL[["StructuredLogger"]]
+        TraceZone("structuredTraceFromZone()")
+        Stdout[("stdout <br><i>Structured JSON line</i>")]
 
         Handler -->|"3. Emits log record"| SL
         SL -->|"4. Resolves trace ID"| TraceZone
@@ -78,9 +79,9 @@ flowchart TD
         SL -->|"6. Outputs JSON string"| Stdout
     end
 
-    subgraph GCP["☁️ Google Cloud Platform"]
-        Agent("📡 Cloud Ops Agent <br><i>Reads stdout</i>")
-        Viewer(["📊 Cloud Log Viewer <br><i>Correlates logs by trace ID</i>"])
+    subgraph GCP["Google Cloud Platform"]
+        Agent("Cloud Ops Agent <br><i>Reads stdout</i>")
+        Viewer(["Cloud Log Viewer <br><i>Correlates logs by trace ID</i>"])
 
         Stdout --> Agent
         Agent --> Viewer
