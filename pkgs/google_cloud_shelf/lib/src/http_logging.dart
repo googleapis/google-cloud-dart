@@ -218,7 +218,7 @@ Middleware cloudLoggingMiddleware(String projectId) {
     }) => createStructuredLog(
       '$error'.trim(),
       logSeverity,
-      payload: extraPayload ?? {},
+      payload: extraPayload,
       traceparent: traceHeader,
       stackTrace: stackTrace,
       projectId: projectId,
