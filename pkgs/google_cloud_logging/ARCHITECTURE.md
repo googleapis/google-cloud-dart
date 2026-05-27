@@ -45,127 +45,55 @@ The interaction spans two packages:
    GCP payload.
 
 ```mermaid
-graph TD
-    subgraph Client["Client / GCP Load Balancer"]
-        Req["HTTP Request with 'traceparent' Header"]
+flowchart TD
+    %% Subgraph styling
+    style Client fill:#F8FAFC,stroke:#E2E8F0,stroke-width:2px
+    style Shelf fill:#F0FDFA,stroke:#CCFBF1,stroke-width:2px
+    style Logging fill:#FAF5FF,stroke:#E9D5FF,stroke-width:2px
+    style GCP fill:#EFF6FF,stroke:#DBEAFE,stroke-width:2px
+
+    subgraph Client["🌐 Client / GCP Load Balancer"]
+        Req(["<code>curl http://... -H 'traceparent: 00-...'</code>"])
     end
 
-    subgraph Shelf["package:google_cloud_shelf (HTTP Serving Context)"]
-        MW["cloudLoggingMiddleware"]
-        Handler["Request Handler / Business Logic (Async)"]
-        
+    subgraph Shelf["🚀 package:google_cloud_shelf"]
+        MW("🛡️ cloudLoggingMiddleware")
+        Zone(["🔑 Forks Zone and sets: <br><code>Zone.current['traceparent']</code> <br><code>Zone.current['google_cloud_project']</code>"])
+        Handler("⚙️ Request Handler <br><code>logger.info('something')</code>")
+
         Req --> MW
-        MW -- "1. Extracts 'traceparent'" --> MW
-        MW -- "2. Forks new Zone with 'traceparent' and 'google_cloud_project'" --> Handler
+        MW -->|"1. Extracts <code>traceparent</code> header"| Zone
+        Zone -->|"2. Runs handler inside Zone"| Handler
     end
 
-    subgraph Logging["package:google_cloud_logging (Logging Context)"]
-        SL["StructuredLogger / package:logging"]
-        TraceZone["structuredTraceFromZone()"]
-        Stdout["stdout / Console Output (JSON)"]
-        
-        Handler -- "3. Emits log record" --> SL
-        SL --> TraceZone
-        TraceZone -- "4. Lookup Zone.current['traceparent'] & Zone.current['google_cloud_project']" --> TraceZone
-        TraceZone -- "5. Formats W3C fields into GCP payload" --> SL
-        SL -- "6. Outputs structured JSON string" --> Stdout
+    subgraph Logging["📝 package:google_cloud_logging"]
+        SL[["📝 StructuredLogger"]]
+        TraceZone("🔍 structuredTraceFromZone()")
+        Stdout[("🖥️ stdout <br><i>Structured JSON line</i>")]
+
+        Handler -->|"3. Emits log record"| SL
+        SL -->|"4. Resolves trace ID"| TraceZone
+        TraceZone -.->|"Reads from Zone"| Zone
+        TraceZone -->|"5. Injects trace & project metadata"| SL
+        SL -->|"6. Outputs JSON string"| Stdout
     end
 
-    subgraph GCP["Google Cloud Logging Service"]
-        Agent["Logging Agent"]
-        Viewer["Log Viewer (Correlates nested log entries)"]
-        
+    subgraph GCP["☁️ Google Cloud Platform"]
+        Agent("📡 Cloud Ops Agent <br><i>Reads stdout</i>")
+        Viewer(["📊 Cloud Log Viewer <br><i>Correlates logs by trace ID</i>"])
+
         Stdout --> Agent
         Agent --> Viewer
     end
-    
-    style Shelf fill:#f9f,stroke:#333,stroke-width:2px
-    style Logging fill:#bbf,stroke:#333,stroke-width:2px
-    style GCP fill:#dfd,stroke:#333,stroke-width:2px
+
+    %% Node styling classes for a premium theme
+    classDef clientNode fill:#F1F5F9,stroke:#94A3B8,stroke-width:1.5px,color:#0F172A;
+    classDef shelfNode fill:#F0FDFA,stroke:#0D9488,stroke-width:1.5px,color:#115E59;
+    classDef loggingNode fill:#FAF5FF,stroke:#9333EA,stroke-width:1.5px,color:#581C87;
+    classDef gcpNode fill:#EFF6FF,stroke:#2563EB,stroke-width:1.5px,color:#1E3A8A;
+
+    class Req clientNode;
+    class MW,Zone,Handler shelfNode;
+    class SL,TraceZone,Stdout loggingNode;
+    class Agent,Viewer gcpNode;
 ```
-
----
-
-## Implementation Details
-
-### 1. Storing Variables in the Zone (google_cloud_shelf)
-
-Inside `package:google_cloud_shelf`'s
-[`cloudLoggingMiddleware`](../google_cloud_shelf/lib/src/http_logging.dart),
-the request handler is executed in a forked `Zone` with the trace and project
-ID embedded in `zoneValues`:
-
-```dart
-Zone.current
-    .fork(
-      zoneValues: {
-        'google_cloud_project': projectId,
-        'traceparent': request.headers['traceparent'],
-      },
-      specification: ZoneSpecification(
-        handleUncaughtError: uncaughtErrorHandler,
-        print: zonePrint,
-      ),
-    )
-    .runGuarded(() async {
-      final response = await innerHandler(request);
-      ...
-    });
-```
-
-*   **`'google_cloud_project'`**: The GCP Project ID, which is needed to
-    formulate the fully-qualified trace name path.
-*   **`'traceparent'`**: The raw W3C header value. A typical header value
-    looks like: `00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01`
-
-### 2. Extracting Variables from the Zone (google_cloud_logging)
-
-When `StructuredLogger` handles a log record (either directly or via the
-`package:logging` handler), it calls `createStructuredLog`. This delegates to
-[`structuredTraceFromZone`](lib/src/traceparent.dart):
-
-```dart
-Map<String, Object> structuredTraceFromZone(String? projectId, [Zone? zone]) {
-  final traceparent = (zone ?? Zone.current)['traceparent'];
-  final String? calculatedProjectId;
-  if (projectId == null) {
-    calculatedProjectId =
-        (zone ?? Zone.current)['google_cloud_project'] as String?;
-  } else {
-    calculatedProjectId = projectId;
-  }
-
-  if (traceparent is String) {
-    return formatTraceparent(calculatedProjectId, traceparent);
-  } else {
-    return {};
-  }
-}
-```
-
-`Zone.current['key']` performs a lookup in the current zone or any of its
-parent zones, allowing `google_cloud_logging` to retrieve the values seamlessly
-without having any dependency on `package:google_cloud_shelf` or requiring
-explicit context objects.
-
-### 3. Parsing and Formatting
-
-Once `traceparent` is fetched, it is parsed into three components:
-- **Trace ID**: The 32-character hex string.
-- **Span ID** (Parent ID): The 16-character hex string.
-- **Trace Sampled**: A boolean flag indicating if the trace was sampled.
-
-These are mapped to [special payload fields](https://cloud.google.com/logging/docs/structured-logging#special-payload-fields)
-that Google Cloud Logging recognizes:
-
-```dart
-{
-  'logging.googleapis.com/trace': 'projects/$projectId/traces/$traceId',
-  'logging.googleapis.com/spanId': spanId,
-  'logging.googleapis.com/trace_sampled': traceSampled,
-}
-```
-
-When these fields are included in the structured console output (`stdout`/`stderr`),
-the Cloud Logging agent automatically links the message to the active HTTP
-request log.
