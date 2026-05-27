@@ -23,7 +23,7 @@
 ///
 /// @docImport 'package:google_cloud_logging_type/logging_type.dart';
 /// @docImport 'package:google_cloud_logging_v2/logging.dart';
-/// @docImport 'src/logger.dart';
+/// @docImport 'src/structured_logger.dart';
 /// @docImport 'src/structured_logging.dart';
 library;
 

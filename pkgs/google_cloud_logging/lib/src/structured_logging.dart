@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/// @docImport 'logger.dart';
+/// @docImport 'structured_logger.dart';
 library;
 
 import 'dart:async';
