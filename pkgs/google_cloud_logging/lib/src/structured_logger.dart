@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'dart:io';
-
 import 'package:google_cloud_logging_type/logging_type.dart' as logging_type;
 import 'package:logging/logging.dart' as logging;
 
 import 'structured_logging.dart' show createStructuredLog;
+import 'write_web.dart' if (dart.library.io) 'write_io.dart';
 
 /// A simple logger that outputs logging messages using [Structured logging][1].
 ///
@@ -55,7 +54,7 @@ final class StructuredLogger {
 
   void _print(String line) {
     if (_writeln == null) {
-      stdout.writeln(line);
+      writeln(line);
     } else {
       _writeln(line);
     }
