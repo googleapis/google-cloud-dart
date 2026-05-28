@@ -99,9 +99,9 @@ class CloudRunner {
       'deploy',
       if (projectId == 'dart-sdk-testing') ...[
         '--build-service-account',
-        'projects/dart-sdk-testing/serviceAccounts/integration-test-runner@dart-sdk-testing.iam.gserviceaccount.com',
+        'integration-test-runner@dart-sdk-testing.iam.gserviceaccount.com',
         '--service-account',
-        'projects/dart-sdk-testing/serviceAccounts/integration-test-runner@dart-sdk-testing.iam.gserviceaccount.com',
+        'integration-test-runner@dart-sdk-testing.iam.gserviceaccount.com',
       ],
       serviceName,
       '--source',
