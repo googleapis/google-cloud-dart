@@ -38,7 +38,7 @@ void main() {
 import 'package:google_cloud_logging/google_cloud_logging.dart';
 import 'package:logging/logging.dart';
 
-final _logger = Logger('MyClass');
+final _logger = Logger('my-service');
 
 void main() {
   // Configure the standard logger with StructuredLogger.

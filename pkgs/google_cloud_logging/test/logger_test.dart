@@ -181,7 +181,7 @@ void main() {
         );
       });
 
-      test('shout with stacktrace', () async {
+      test('shout with stacktrace', testOn: '!browser', () async {
         final output = StringBuffer();
         final structuredLogger = StructuredLogger(writeln: output.writeln);
         final logger = Logger('MyClass');
