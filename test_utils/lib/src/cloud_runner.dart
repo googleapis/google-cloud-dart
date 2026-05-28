@@ -174,24 +174,61 @@ class CloudRunner {
 
   /// Gets an ID token for the service URL.
   Future<String?> getIdToken() async {
-    // 1. Try Metadata Server
+    // 1. Try Metadata Server with dynamic service account discovery
     try {
       final client = HttpClient();
-      final uri = Uri.parse(
-        'http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/identity?audience=${serverUri.toString()}',
+      final listUri = Uri.parse(
+        'http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/',
       );
-      print('Requesting ID token from Metadata Server: $uri');
-      final request = await client.getUrl(uri);
-      request.headers.add('Metadata-Flavor', 'Google');
-      final response = await request.close();
-      print('Metadata Server response status: ${response.statusCode}');
-      if (response.statusCode == 200) {
-        final body = await response.transform(utf8.decoder).join();
-        print('Successfully got ID token from Metadata Server');
-        return body.trim();
+      print('Listing service accounts from Metadata Server: $listUri');
+      final listRequest = await client.getUrl(listUri);
+      listRequest.headers.add('Metadata-Flavor', 'Google');
+      final listResponse = await listRequest.close();
+      print('Metadata Server list response status: ${listResponse.statusCode}');
+
+      if (listResponse.statusCode == 200) {
+        final listBody = await listResponse.transform(utf8.decoder).join();
+        final accounts = listBody
+            .split('\n')
+            .map((e) => e.trim())
+            .where((e) => e.isNotEmpty)
+            .map((e) => e.endsWith('/') ? e.substring(0, e.length - 1) : e)
+            .toList();
+        print('Discovered service accounts: $accounts');
+
+        for (final accountName in accounts) {
+          try {
+            final tokenUri = Uri.parse(
+              'http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/$accountName/identity?audience=${serverUri.toString()}',
+            );
+            print(
+              'Trying to get ID token for account "$accountName" at: $tokenUri',
+            );
+            final requestToken = await client.getUrl(tokenUri);
+            requestToken.headers.add('Metadata-Flavor', 'Google');
+            final responseToken = await requestToken.close();
+            if (responseToken.statusCode == 200) {
+              final tokenBody = await responseToken
+                  .transform(utf8.decoder)
+                  .join();
+              print('Successfully got ID token for account: $accountName');
+              return tokenBody.trim();
+            } else {
+              final tokenBody = await responseToken
+                  .transform(utf8.decoder)
+                  .join();
+              print(
+                'Failed to get ID token for account $accountName: '
+                '$tokenBody (${responseToken.statusCode})',
+              );
+            }
+          } catch (e) {
+            print('Error getting ID token for account $accountName: $e');
+          }
+        }
       } else {
-        final body = await response.transform(utf8.decoder).join();
-        print('Metadata Server failed: $body');
+        final listBody = await listResponse.transform(utf8.decoder).join();
+        print('Listing service accounts failed: $listBody');
       }
     } catch (e, s) {
       print('Metadata Server error: $e\n$s');
