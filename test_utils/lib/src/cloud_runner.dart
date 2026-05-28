@@ -97,6 +97,8 @@ class CloudRunner {
     final deploy = await Process.run('gcloud', [
       'run',
       'deploy',
+      '--build-service-account',
+      'projects/dart-sdk-testing/serviceAccounts/integration-test-runner@dart-sdk-testing.iam.gserviceaccount.com',
       serviceName,
       '--source',
       dir.absolute.path,
