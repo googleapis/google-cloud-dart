@@ -300,7 +300,7 @@ Middleware cloudLoggingMiddleware(String projectId) {
           zoneValues: {
             'google_cloud_project': projectId,
             // See https://www.w3.org/TR/trace-context
-            'traceparent': request.headers['traceparent'],
+            'traceparent': traceHeader,
           },
           specification: ZoneSpecification(
             handleUncaughtError: uncaughtErrorHandler,
