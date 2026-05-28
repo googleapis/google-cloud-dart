@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'dart:convert';
 import 'dart:io';
 import 'package:path/path.dart' as p;
 import '../random.dart';
@@ -174,85 +173,17 @@ class CloudRunner {
 
   /// Gets an ID token for the service URL.
   Future<String?> getIdToken() async {
-    // 1. Try Metadata Server with dynamic service account discovery
     try {
-      final client = HttpClient();
-      final listUri = Uri.parse(
-        'http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/',
-      );
-      print('Listing service accounts from Metadata Server: $listUri');
-      final listRequest = await client.getUrl(listUri);
-      listRequest.headers.add('Metadata-Flavor', 'Google');
-      final listResponse = await listRequest.close();
-      print('Metadata Server list response status: ${listResponse.statusCode}');
-
-      if (listResponse.statusCode == 200) {
-        final listBody = await listResponse.transform(utf8.decoder).join();
-        final accounts = listBody
-            .split('\n')
-            .map((e) => e.trim())
-            .where((e) => e.isNotEmpty)
-            .map((e) => e.endsWith('/') ? e.substring(0, e.length - 1) : e)
-            .toList();
-        print('Discovered service accounts: $accounts');
-
-        for (final accountName in accounts) {
-          try {
-            final tokenUri = Uri.parse(
-              'http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/$accountName/identity?audience=${serverUri.toString()}',
-            );
-            print(
-              'Trying to get ID token for account "$accountName" at: $tokenUri',
-            );
-            final requestToken = await client.getUrl(tokenUri);
-            requestToken.headers.add('Metadata-Flavor', 'Google');
-            final responseToken = await requestToken.close();
-            if (responseToken.statusCode == 200) {
-              final tokenBody = await responseToken
-                  .transform(utf8.decoder)
-                  .join();
-              print('Successfully got ID token for account: $accountName');
-              return tokenBody.trim();
-            } else {
-              final tokenBody = await responseToken
-                  .transform(utf8.decoder)
-                  .join();
-              print(
-                'Failed to get ID token for account $accountName: '
-                '$tokenBody (${responseToken.statusCode})',
-              );
-            }
-          } catch (e) {
-            print('Error getting ID token for account $accountName: $e');
-          }
-        }
-      } else {
-        final listBody = await listResponse.transform(utf8.decoder).join();
-        print('Listing service accounts failed: $listBody');
-      }
-    } catch (e, s) {
-      print('Metadata Server error: $e\n$s');
-    }
-
-    // 2. Try gcloud auth print-identity-token
-    try {
-      print('Running gcloud auth print-identity-token...');
       final result = await Process.run('gcloud', [
         'auth',
         'print-identity-token',
-        '--audiences=${serverUri.toString()}',
+        '--audiences=$serverUri',
       ]);
-      print('gcloud exitCode: ${result.exitCode}');
-      print('gcloud STDOUT: ${result.stdout}');
-      print('gcloud STDERR: ${result.stderr}');
       if (result.exitCode == 0) {
         return result.stdout.toString().trim();
       }
-    } catch (e, s) {
-      print('gcloud run error: $e\n$s');
-    }
+    } catch (_) {}
 
-    print('Failed to obtain any ID token!');
     return null;
   }
 

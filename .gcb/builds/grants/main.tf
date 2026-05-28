@@ -42,6 +42,20 @@ resource "google_project_iam_member" "sa-can-use-logging" {
   member  = "serviceAccount:${data.google_service_account.integration-test-runner.email}"
 }
 
+# The service account needs to generate ID tokens for invoking private Cloud Run services.
+resource "google_project_iam_member" "sa-can-create-tokens" {
+  project = data.google_project.project.id
+  role    = "roles/iam.serviceAccountTokenCreator"
+  member  = "serviceAccount:${data.google_service_account.integration-test-runner.email}"
+}
+
+# The service account needs to invoke Cloud Run services for the logging tests.
+resource "google_project_iam_member" "sa-can-invoke-run" {
+  project = data.google_project.project.id
+  role    = "roles/run.invoker"
+  member  = "serviceAccount:${data.google_service_account.integration-test-runner.email}"
+}
+
 output "runner" {
   value = data.google_service_account.integration-test-runner.id
 }
