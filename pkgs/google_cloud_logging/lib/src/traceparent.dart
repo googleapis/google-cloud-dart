@@ -43,7 +43,10 @@ const _version = r'^(?!ff)(?<version>[0-9a-f]{2})';
 const _trace = r'(?!0{32})(?<trace>[0-9a-f]{32})';
 const _parent = r'(?!0{16})(?<parent>[0-9a-f]{16})';
 const _flags = r'(?<flags>[0-9a-f]{2})';
-final _traceParentRegex = RegExp('$_version-$_trace-$_parent-$_flags');
+final _traceParentRegex = RegExp(
+  '$_version-$_trace-$_parent-$_flags',
+  caseSensitive: false,
+);
 
 /// Parsers a `'traceparent'` header.
 ///
