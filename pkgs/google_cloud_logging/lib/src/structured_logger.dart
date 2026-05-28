@@ -151,7 +151,7 @@ final class StructuredLogger {
     // Determine if there's structured payload data.
     final extra = {
       'loggerName': record.loggerName,
-      if (record.error != null) 'error': record.error,
+      'error': ?record.error,
     };
 
     final logStr = createStructuredLog(
