@@ -1,4 +1,4 @@
-// Copyright 2025 Google LLC
+// Copyright 2026 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,5 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export 'src/cloud.dart';
-export 'src/cloud_runner.dart';
+import 'dart:math';
+
+const _chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+final _random = Random();
+
+String randomAlphaNumString(int length) => [
+  for (int i = 0; i < length; i++) _chars[_random.nextInt(_chars.length)],
+].join();
