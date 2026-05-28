@@ -168,7 +168,7 @@ class CloudRunner {
     ]);
   }
 
-  Future<String?> _getIdToken() async {
+  Future<String?> _identityToken() async {
     try {
       final result = await Process.run('gcloud', [
         'auth',
@@ -186,7 +186,7 @@ class CloudRunner {
   /// Authentication headers required to access [serverUri].
   Future<Map<String, String>> headers() async {
     if (isTestProject) {
-      return {'Authorization': 'Bearer ${await _getIdToken()}'};
+      return {'Authorization': 'Bearer ${await _identityToken()}'};
     }
     return {};
   }
