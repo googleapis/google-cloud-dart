@@ -168,19 +168,21 @@ class CloudRunner {
     ]);
   }
 
-  Future<String?> _identityToken() async {
-    try {
-      final result = await Process.run('gcloud', [
-        'auth',
-        'print-identity-token',
-        '--audiences=$serverUri',
-      ]);
-      if (result.exitCode == 0) {
-        return result.stdout.toString().trim();
-      }
-    } catch (_) {}
-
-    return null;
+  Future<String> _identityToken() async {
+    final result = await Process.run('gcloud', [
+      'auth',
+      'print-identity-token',
+      '--audiences=$serverUri',
+    ]);
+    if (result.exitCode == 0) {
+      return result.stdout.toString().trim();
+    } else {
+      throw StateError(
+        'Failed to get Cloud Run service URL:\n'
+        'STDOUT:\n${result.stdout}\n'
+        'STDERR:\n${result.stderr}',
+      );
+    }
   }
 
   /// Authentication headers required to access [serverUri].
