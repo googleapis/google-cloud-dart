@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'dart:convert';
 import 'dart:io';
 import 'package:path/path.dart' as p;
 import '../random.dart';
@@ -169,6 +170,39 @@ class CloudRunner {
       '--project',
       projectId,
     ]);
+  }
+
+  /// Gets an ID token for the service URL.
+  Future<String?> getIdToken() async {
+    // 1. Try Metadata Server
+    try {
+      final client = HttpClient();
+      final request = await client.getUrl(
+        Uri.parse(
+          'http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/identity?audience=${serverUri.toString()}',
+        ),
+      );
+      request.headers.add('Metadata-Flavor', 'Google');
+      final response = await request.close();
+      if (response.statusCode == 200) {
+        final body = await response.transform(utf8.decoder).join();
+        return body.trim();
+      }
+    } catch (_) {}
+
+    // 2. Try gcloud auth print-identity-token
+    try {
+      final result = await Process.run('gcloud', [
+        'auth',
+        'print-identity-token',
+        '--audiences=${serverUri.toString()}',
+      ]);
+      if (result.exitCode == 0) {
+        return result.stdout.toString().trim();
+      }
+    } catch (_) {}
+
+    return null;
   }
 
   /// Terminate the Google Cloud Run service.
