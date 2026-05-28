@@ -149,10 +149,7 @@ final class StructuredLogger {
     final severity = _severityFromLoggingLevel(record.level);
 
     // Determine if there's structured payload data.
-    final extra = {
-      'loggerName': record.loggerName,
-      'error': ?record.error,
-    };
+    final extra = {'loggerName': record.loggerName, 'error': ?record.error};
 
     final logStr = createStructuredLog(
       record.object ?? record.message,
