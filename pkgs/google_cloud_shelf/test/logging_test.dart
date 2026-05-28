@@ -235,7 +235,10 @@ Details:
       final headers = <String, String>{};
       final token = await runner.getIdToken();
       if (token != null) {
+        print('Retrieved token (first 20 chars): ${token.substring(0, 20)}...');
         headers['Authorization'] = 'Bearer $token';
+      } else {
+        print('No token retrieved!');
       }
 
       // Trigger a print.

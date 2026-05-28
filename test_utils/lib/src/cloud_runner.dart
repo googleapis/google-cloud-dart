@@ -177,31 +177,45 @@ class CloudRunner {
     // 1. Try Metadata Server
     try {
       final client = HttpClient();
-      final request = await client.getUrl(
-        Uri.parse(
-          'http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/identity?audience=${serverUri.toString()}',
-        ),
+      final uri = Uri.parse(
+        'http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/identity?audience=${serverUri.toString()}',
       );
+      print('Requesting ID token from Metadata Server: $uri');
+      final request = await client.getUrl(uri);
       request.headers.add('Metadata-Flavor', 'Google');
       final response = await request.close();
+      print('Metadata Server response status: ${response.statusCode}');
       if (response.statusCode == 200) {
         final body = await response.transform(utf8.decoder).join();
+        print('Successfully got ID token from Metadata Server');
         return body.trim();
+      } else {
+        final body = await response.transform(utf8.decoder).join();
+        print('Metadata Server failed: $body');
       }
-    } catch (_) {}
+    } catch (e, s) {
+      print('Metadata Server error: $e\n$s');
+    }
 
     // 2. Try gcloud auth print-identity-token
     try {
+      print('Running gcloud auth print-identity-token...');
       final result = await Process.run('gcloud', [
         'auth',
         'print-identity-token',
         '--audiences=${serverUri.toString()}',
       ]);
+      print('gcloud exitCode: ${result.exitCode}');
+      print('gcloud STDOUT: ${result.stdout}');
+      print('gcloud STDERR: ${result.stderr}');
       if (result.exitCode == 0) {
         return result.stdout.toString().trim();
       }
-    } catch (_) {}
+    } catch (e, s) {
+      print('gcloud run error: $e\n$s');
+    }
 
+    print('Failed to obtain any ID token!');
     return null;
   }
 
