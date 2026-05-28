@@ -232,19 +232,13 @@ Details:
     test('print', () async {
       final uniqueId = 'Hello World: ${randomAlphaNumString(20)}';
 
-      final headers = <String, String>{};
-      final token = await runner.getIdToken();
-      if (token != null) {
-        headers['Authorization'] = 'Bearer $token';
-      }
-
       // Trigger a print.
       final response = await http.get(
         runner.serverUri.replace(
           path: '/print',
           queryParameters: {'msg': uniqueId},
         ),
-        headers: headers,
+        headers: await runner.headers(),
       );
       expect(response.statusCode, 200);
 

@@ -31,7 +31,7 @@ CMD ["/app/server"]
 ''';
 
 /// The absolute path of the repository on the local file system.
-String get repoRoot {
+String get _repoRoot {
   var dir = Directory.current.absolute;
   while (true) {
     if (File(p.join(dir.path, 'librarian.yaml')).existsSync()) {
@@ -68,7 +68,7 @@ class CloudRunner {
     final dir = Directory.systemTemp.createTempSync('cloud_runner_');
     final serverPath = p.join(dir.absolute.path, 'server');
     final dockerPath = p.join(dir.absolute.path, 'Dockerfile');
-    final sourcePath = p.join(repoRoot, dartPath);
+    final sourcePath = p.join(_repoRoot, dartPath);
 
     final compile = await Process.run('dart', [
       'compile',
@@ -97,10 +97,7 @@ class CloudRunner {
     final deploy = await Process.run('gcloud', [
       'run',
       'deploy',
-      if (projectId == 'dart-sdk-testing') ...[
-        '--build-service-account',
-        'projects/dart-sdk-testing/serviceAccounts/integration-test-runner@dart-sdk-testing.iam.gserviceaccount.com',
-      ],
+      if (isTestProject) ...['--build-service-account', serviceAccount],
       serviceName,
       '--source',
       dir.absolute.path,
@@ -171,8 +168,7 @@ class CloudRunner {
     ]);
   }
 
-  /// Gets an ID token for the service URL.
-  Future<String?> getIdToken() async {
+  Future<String?> _getIdToken() async {
     try {
       final result = await Process.run('gcloud', [
         'auth',
@@ -185,6 +181,14 @@ class CloudRunner {
     } catch (_) {}
 
     return null;
+  }
+
+  /// Authentication headers required to access [serverUri].
+  Future<Map<String, String>> headers() async {
+    if (isTestProject) {
+      return {'Authorization': 'Bearer ${await _getIdToken()}'};
+    }
+    return {};
   }
 
   /// Terminate the Google Cloud Run service.

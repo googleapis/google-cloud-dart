@@ -26,5 +26,5 @@ apt-get update && apt-get install -y dart
 export PATH="$PATH:/usr/lib/dart/bin"
 
 dart pub get
-dart test pkgs/google_cloud_shelf/test/logging_test.dart -P google-cloud
+dart test . -P google-cloud
 
