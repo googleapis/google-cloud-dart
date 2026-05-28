@@ -18,6 +18,8 @@ import 'package:google_cloud_logging/google_cloud_logging.dart';
 import 'package:google_cloud_logging/src/structured_logging.dart';
 import 'package:test/test.dart';
 
+import 'test_utils.dart';
+
 void main() {
   group('sanitize', () {
     test('null', () {
@@ -246,6 +248,29 @@ void main() {
       final entry = createStructuredLog(message, LogSeverity.info);
       final map = jsonDecode(entry) as Map<String, dynamic>;
       expect(map, {'foo': 'bar', 'severity': 'INFO'});
+    });
+
+    test('with stacktrace', testOn: '!browser', () async {
+      final entry = createStructuredLog(
+        'hello',
+        LogSeverity.info,
+        stackTrace: catchingFunction().stackTrace,
+      );
+      final map = jsonDecode(entry) as Map<String, dynamic>;
+      expect(map, {
+        'message': 'hello',
+        'severity': 'INFO',
+        'stack_trace': contains('structured_logging_test.dart'),
+        'logging.googleapis.com/sourceLocation': {
+          'file': endsWith('test_utils.dart'),
+          'function': endsWith('throwingFunction'),
+          'line': isA<String>().having(
+            int.parse,
+            'parsed line',
+            greaterThan(1),
+          ),
+        },
+      });
     });
 
     test('with traceparent', () {
