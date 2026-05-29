@@ -162,19 +162,13 @@ final class StructuredLogger {
     _print(logStr);
   }
 
-  logging_type.LogSeverity _severityFromLoggingLevel(logging.Level level) {
-    if (level <= logging.Level.FINE) {
-      return logging_type.LogSeverity.debug;
-    } else if (level <= logging.Level.INFO) {
-      return logging_type.LogSeverity.info;
-    } else if (level <= logging.Level.WARNING) {
-      return logging_type.LogSeverity.warning;
-    } else if (level <= logging.Level.SEVERE) {
-      return logging_type.LogSeverity.error;
-    } else if (level <= logging.Level.SHOUT) {
-      return logging_type.LogSeverity.critical;
-    } else {
-      return logging_type.LogSeverity.emergency;
-    }
-  }
+  logging_type.LogSeverity _severityFromLoggingLevel(logging.Level level) =>
+      switch (level) {
+        <= logging.Level.FINE => logging_type.LogSeverity.debug,
+        <= logging.Level.INFO => logging_type.LogSeverity.info,
+        <= logging.Level.WARNING => logging_type.LogSeverity.warning,
+        <= logging.Level.SEVERE => logging_type.LogSeverity.error,
+        <= logging.Level.SHOUT => logging_type.LogSeverity.critical,
+        _ => logging_type.LogSeverity.emergency,
+      };
 }
