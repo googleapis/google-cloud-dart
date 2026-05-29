@@ -16,6 +16,8 @@ import 'dart:async';
 
 import 'package:meta/meta.dart';
 
+import 'interop.dart';
+
 /// The `payload` key used to correlate log entries with Cloud Trace.
 ///
 /// See https://docs.cloud.google.com/logging/docs/agent/logging/configuration#special-fields
@@ -82,11 +84,12 @@ Map<String, Object> formatTraceparent(String? projectId, String? traceparent) {
 
 @internal
 Map<String, Object> structuredTraceFromZone(String? projectId, [Zone? zone]) {
-  final traceparent = (zone ?? Zone.current)['traceparent'];
+  final traceparent =
+      (zone ?? Zone.current)[traceparentHeaderValueZoneVariable];
   final String? calculatedProjectId;
   if (projectId == null) {
     calculatedProjectId =
-        (zone ?? Zone.current)['google_cloud_project'] as String?;
+        (zone ?? Zone.current)[googleCloudProjectIdZoneVariable] as String?;
   } else {
     calculatedProjectId = projectId;
   }

@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/// @docImport 'interop.dart';
 /// @docImport 'structured_logger.dart';
 library;
 
@@ -56,8 +57,24 @@ Map<String, Object?> _filterReservedMembers(Map<dynamic, dynamic> m) => {
 
 /// Formats a log entry for Google Cloud structured logging on stdout.
 ///
-/// This function should rarely be used by application, instead use
-/// [StructuredLogger].
+/// Conforms to Google Cloud's structured logging JSON schema.
+///
+/// If [message] is a [Map], its entries are included at the top level of the
+/// output JSON payload (excluding reserved fields like `severity`). Otherwise,
+/// it is stored under the `"message"` key.
+///
+/// The log entry is correlated to a GCP trace using:
+/// - The [traceparent] header value, if provided.
+/// - The [zone] (defaulting to [Zone.current]), looking up
+///   [traceparentHeaderValueZoneVariable] and
+///   [googleCloudProjectIdZoneVariable].
+/// - The [projectId] to format the fully-qualified GCP trace URI.
+///
+/// If [stackTrace] is provided, it is included as `"stack_trace"`, and a
+/// source location (`logging.googleapis.com/sourceLocation`) is derived.
+///
+/// Non-JSON-primitive values in [payload] are recursively sanitized (using
+/// `toJson()` or `toString()`), and circular references are safe-guarded.
 String createStructuredLog(
   Object message,
   LogSeverity severity, {
@@ -80,12 +97,11 @@ String createStructuredLog(
     ...(traceparent == null
         ? structuredTraceFromZone(projectId, zone)
         : formatTraceparent(projectId, traceparent)),
-      if (stackTrace case final stackTrace?) ...{
-        'stack_trace': _formatStackTrace(stackTrace).toString(),
-        'logging.googleapis.com/sourceLocation': _sourceLocation(stackTrace),
-      },
-    };
-  }
+    if (stackTrace case final stackTrace?) ...{
+      'stack_trace': _formatStackTrace(stackTrace).toString(),
+      'logging.googleapis.com/sourceLocation': _sourceLocation(stackTrace),
+    },
+  };
 
   return jsonEncode(sanitize(result));
 }
@@ -102,10 +118,9 @@ Object? sanitize(Object? value, [Set<Object>? seen]) {
     return value;
   }
   seen ??= HashSet.identity();
-  if (seen.contains(value)) {
+  if (!seen.add(value)) {
     return '[CIRCULAR]';
   }
-  seen.add(value);
 
   try {
     if (value is List) {
