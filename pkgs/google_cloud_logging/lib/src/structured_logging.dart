@@ -62,19 +62,6 @@ Map<String, Object?> _filterReservedMembers(Map<dynamic, dynamic> m) => {
 /// If [message] is a [Map], its entries are included at the top level of the
 /// output JSON payload (excluding reserved fields like `severity`). Otherwise,
 /// it is stored under the `"message"` key.
-///
-/// The log entry is correlated to a GCP trace using:
-/// - The [traceparent] header value, if provided.
-/// - The [zone] (defaulting to [Zone.current]), looking up
-///   [traceparentHeaderValueZoneVariable] and
-///   [googleCloudProjectIdZoneVariable].
-/// - The [projectId] to format the fully-qualified GCP trace URI.
-///
-/// If [stackTrace] is provided, it is included as `"stack_trace"`, and a
-/// source location (`logging.googleapis.com/sourceLocation`) is derived.
-///
-/// Non-JSON-primitive values in [payload] are recursively sanitized (using
-/// `toJson()` or `toString()`), and circular references are safe-guarded.
 String createStructuredLog(
   Object message,
   LogSeverity severity, {
