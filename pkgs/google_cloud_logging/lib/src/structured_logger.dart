@@ -22,6 +22,7 @@ import 'write_web.dart' if (dart.library.io) 'write_io.dart';
 ///
 /// ```dart
 /// import 'package:google_cloud_logging/google_cloud_logging.dart';
+///
 /// const _logger = StructuredLogger();
 ///
 /// void main() {
