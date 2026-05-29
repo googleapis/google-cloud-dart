@@ -170,8 +170,9 @@ class CloudRunner {
 
   /// Gets OIDC ID token required to access [serverUri].
   Future<String?> get idToken async {
-    final accountName =
-        isTestProject ? serviceAccount.split('/').last : 'default';
+    final accountName = isTestProject
+        ? serviceAccount.split('/').last
+        : 'default';
 
     // 1. Try Metadata Server
     try {
