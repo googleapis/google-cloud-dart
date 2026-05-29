@@ -78,13 +78,11 @@ String createStructuredLog(
     ...(traceparent == null
         ? structuredTraceFromZone(projectId, zone)
         : formatTraceparent(projectId, traceparent)),
-  };
-
-  if (stackTrace case final stackTrace?) {
-    result['stack_trace'] = _formatStackTrace(stackTrace).toString();
-    result['logging.googleapis.com/sourceLocation'] = _sourceLocation(
-      stackTrace,
-    );
+      if (stackTrace case final stackTrace?) ...{
+        'stack_trace': _formatStackTrace(stackTrace).toString(),
+        'logging.googleapis.com/sourceLocation': _sourceLocation(stackTrace),
+      },
+    };
   }
 
   return jsonEncode(sanitize(result));
