@@ -299,9 +299,8 @@ Middleware cloudLoggingMiddleware(String projectId) {
     Zone.current
         .fork(
           zoneValues: {
-            'google_cloud_project': projectId,
-            // See https://www.w3.org/TR/trace-context
-            'traceparent': traceHeader,
+            googleCloudProjectIdZoneVariable: projectId,
+            traceparentHeaderValueZoneVariable: traceHeader,
           },
           specification: ZoneSpecification(
             handleUncaughtError: uncaughtErrorHandler,
