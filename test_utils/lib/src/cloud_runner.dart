@@ -34,7 +34,7 @@ CMD ["/app/server"]
 ''';
 
 /// The absolute path of the repository on the local file system.
-String get repoRoot {
+String get _repoRoot {
   var dir = Directory.current.absolute;
   while (true) {
     if (File(p.join(dir.path, 'librarian.yaml')).existsSync()) return dir.path;
@@ -68,7 +68,7 @@ class CloudRunner {
     final dir = Directory.systemTemp.createTempSync('cloud_runner_');
     final serverPath = p.join(dir.absolute.path, 'server');
     final dockerPath = p.join(dir.absolute.path, 'Dockerfile');
-    final sourcePath = p.join(repoRoot, dartPath);
+    final sourcePath = p.join(_repoRoot, dartPath);
 
     final compile = await Process.run('dart', [
       'compile',
@@ -170,47 +170,26 @@ class CloudRunner {
 
   /// Gets OIDC ID token required to access [serverUri].
   Future<String?> get idToken async {
-    final accountName = isTestProject
-        ? serviceAccount.split('/').last
-        : 'default';
-
-    // 1. Try Metadata Server
-    try {
-      final client = HttpClient();
-      final tokenUri = Uri.parse(
-        'http://metadata.google.internal/computeMetadata/v1/instance/'
-        'service-accounts/$accountName/identity?audience=$serverUri',
+    final result = await Process.run('gcloud', [
+      'auth',
+      'print-identity-token',
+      '--audiences=$serverUri',
+    ]);
+    if (result.exitCode == 0) {
+      return result.stdout.toString().trim();
+    } else {
+      throw StateError(
+        'Failed to get Cloud Run service URL:\n'
+        'STDOUT:\n${result.stdout}\n'
+        'STDERR:\n${result.stderr}',
       );
-      final requestToken = await client.getUrl(tokenUri)
-        ..headers.add('Metadata-Flavor', 'Google');
-      final responseToken = await requestToken.close();
-      if (responseToken.statusCode == 200) {
-        return (await responseToken.transform(utf8.decoder).join()).trim();
-      }
-    } catch (_) {}
-
-    // 2. Try gcloud auth print-identity-token
-    try {
-      final result = await Process.run('gcloud', [
-        'auth',
-        'print-identity-token',
-        '--audiences=$serverUri',
-      ]);
-      if (result.exitCode == 0) {
-        return result.stdout.toString().trim();
-      }
-    } catch (_) {}
-
-    return null;
+    }
   }
 
   /// Authentication headers required to access [serverUri].
   Future<Map<String, String>> headers() async {
     if (isTestProject) {
-      final token = await idToken;
-      if (token != null) {
-        return {'Authorization': 'Bearer $token'};
-      }
+      return {'Authorization': 'Bearer ${await idToken}'};
     }
     return {};
   }
