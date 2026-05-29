@@ -46,7 +46,9 @@ const _structuredLoggingFields = {
   'logging.googleapis.com/trace_sampled',
 };
 
-Map<String, Object?> _filter(Map<dynamic, dynamic> m) => {
+/// Filter out the top-level JSON object memebers that have special meaning
+/// in structured logging.
+Map<String, Object?> _filterReservedMembers(Map<dynamic, dynamic> m) => {
   for (final entry in m.entries)
     if (!_structuredLoggingFields.contains(entry.key.toString()))
       entry.key.toString(): entry.value,
@@ -67,7 +69,7 @@ String createStructuredLog(
 }) {
   final messageMap = switch (message) {
     '' => <String, Object?>{},
-    Map() => _filter(message),
+    Map() => _filterReservedMembers(message),
     _ => {'message': message},
   };
 
