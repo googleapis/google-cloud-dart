@@ -306,6 +306,7 @@ Middleware cloudLoggingMiddleware(String projectId) {
     Zone.current
         .fork(
           zoneValues: {
+            'traceparent': request.headers['traceparent'],
             _loggerKey: _CloudLogger(
               zone: currentZone,
               traceContext: traceContext,

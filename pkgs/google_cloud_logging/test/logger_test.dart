@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:google_cloud_logging/google_cloud_logging.dart';
@@ -127,6 +128,159 @@ Payload: {foo: bar}
           ),
         ),
       );
+    });
+
+    group('traceparent zone variable', () {
+      test('sampled true', () {
+        runZoned(
+          () => expect(
+            () => logger.info('hello'),
+            prints(
+              isA<String>().having(
+                (s) => jsonDecode(s) as Map<String, Object?>,
+                'parsed json',
+                {
+                  'message': 'hello',
+                  'severity': 'INFO',
+                  'logging.googleapis.com/trace':
+                      '4bf92f3577b34da6a3ce929d0e0e4736',
+                  'logging.googleapis.com/spanId': '00f067aa0ba902b7',
+                  'logging.googleapis.com/trace_sampled': true,
+                },
+              ),
+            ),
+          ),
+          zoneValues: {
+            'traceparent':
+                '00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01',
+          },
+        );
+      });
+
+      test('sampled false', () {
+        runZoned(
+          () => expect(
+            () => logger.info('hello'),
+            prints(
+              isA<String>().having(
+                (s) => jsonDecode(s) as Map<String, Object?>,
+                'parsed json',
+                {
+                  'message': 'hello',
+                  'severity': 'INFO',
+                  'logging.googleapis.com/trace':
+                      '4bf92f3577b34da6a3ce929d0e0e4736',
+                  'logging.googleapis.com/spanId': '00f067aa0ba902b7',
+                },
+              ),
+            ),
+          ),
+          zoneValues: {
+            'traceparent':
+                '00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-00',
+          },
+        );
+      });
+
+      test('valid higher version traceparent with extra fields', () {
+        runZoned(
+          () => expect(
+            () => logger.info('hello'),
+            prints(
+              isA<String>().having(
+                (s) => jsonDecode(s) as Map<String, Object?>,
+                'parsed json',
+                {
+                  'message': 'hello',
+                  'severity': 'INFO',
+                  'logging.googleapis.com/trace':
+                      '4bf92f3577b34da6a3ce929d0e0e4736',
+                  'logging.googleapis.com/spanId': '00f067aa0ba902b7',
+                  'logging.googleapis.com/trace_sampled': true,
+                },
+              ),
+            ),
+          ),
+          zoneValues: {
+            'traceparent':
+                '01-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01'
+                '-extra-fields',
+          },
+        );
+      });
+
+      test('truncated', () {
+        runZoned(
+          () => expect(
+            () => logger.info('hello'),
+            prints(
+              isA<String>().having(
+                (s) => jsonDecode(s) as Map<String, Object?>,
+                'parsed json',
+                {'message': 'hello', 'severity': 'INFO'},
+              ),
+            ),
+          ),
+          zoneValues: {'traceparent': '00-123'},
+        );
+      });
+
+      test('version ff', () {
+        runZoned(
+          () => expect(
+            () => logger.info('hello'), 
+            prints(
+              isA<String>().having(
+                (s) => jsonDecode(s) as Map<String, Object?>,
+                'parsed json',
+                {'message': 'hello', 'severity': 'INFO'},
+              ),
+            ),
+          ),
+          zoneValues: {
+            'traceparent':
+                'ff-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01',
+          },
+        );
+      });
+
+      test('all zeroes trace-id', () {
+        runZoned(
+          () => expect(
+            () => logger.info('hello'),
+            prints(
+              isA<String>().having(
+                (s) => jsonDecode(s) as Map<String, Object?>,
+                'parsed json',
+                {'message': 'hello', 'severity': 'INFO'},
+              ),
+            ),
+          ),
+          zoneValues: {
+            'traceparent':
+                '00-00000000000000000000000000000000-00f067aa0ba902b7-01',
+          },
+        );
+      });
+
+      test('all zeroes parent-id', () {
+        runZoned(
+          () => expect(
+            () => logger.info('hello'),
+            prints(
+              isA<String>().having(
+                (s) => jsonDecode(s) as Map<String, Object?>,
+                'parsed json',
+                {'message': 'hello', 'severity': 'INFO'},
+              ),
+            ),
+          ),
+          zoneValues: {
+            'traceparent':
+                '00-4bf92f3577b34da6a3ce929d0e0e4736-0000000000000000-01',
+          },
+        );
+      });
     });
   });
 }
