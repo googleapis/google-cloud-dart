@@ -237,6 +237,7 @@ Details:
           path: '/print',
           queryParameters: {'msg': uniqueId},
         ),
+        headers: await runner.headers(),
       );
       expect(response.statusCode, 200);
       final entries = await waitForLogs('textPayload:"$uniqueId"');
@@ -257,6 +258,7 @@ Details:
           path: '/throw',
           queryParameters: {'msg': uniqueId},
         ),
+        headers: await runner.headers(),
       );
       expect(response.statusCode, 500);
       final entries = await waitForLogs(
@@ -282,6 +284,7 @@ Details:
           path: '/logging',
           queryParameters: {'msg': uniqueId},
         ),
+        headers: await runner.headers(),
       );
       expect(response.statusCode, 200);
       final entries = await waitForLogs('jsonPayload.message:"$uniqueId"');
@@ -305,6 +308,7 @@ Details:
           path: '/structured',
           queryParameters: {'msg': uniqueId},
         ),
+        headers: await runner.headers(),
       );
       expect(response.statusCode, 200);
       final entries = await waitForLogs('textPayload:"$uniqueId"');

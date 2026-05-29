@@ -12,10 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'dart:convert';
 import 'dart:io';
+
 import 'package:path/path.dart' as p;
-import '../random.dart';
+
 import 'cloud.dart';
+import 'random.dart';
 
 const _dockerTemplate = '''
 FROM debian:stable-slim
@@ -34,13 +37,10 @@ CMD ["/app/server"]
 String get repoRoot {
   var dir = Directory.current.absolute;
   while (true) {
-    if (File(p.join(dir.path, 'librarian.yaml')).existsSync()) {
-      return dir.path;
-    }
+    if (File(p.join(dir.path, 'librarian.yaml')).existsSync()) return dir.path;
+
     final parent = dir.parent;
-    if (parent.path == dir.path) {
-      break;
-    }
+    if (parent.path == dir.path) break;
     dir = parent;
   }
   throw StateError(
@@ -97,6 +97,7 @@ class CloudRunner {
     final deploy = await Process.run('gcloud', [
       'run',
       'deploy',
+      if (isTestProject) ...['--build-service-account', serviceAccount],
       serviceName,
       '--source',
       dir.absolute.path,
@@ -165,6 +166,52 @@ class CloudRunner {
       '--project',
       projectId,
     ]);
+  }
+
+  /// Gets OIDC ID token required to access [serverUri].
+  Future<String?> get idToken async {
+    final accountName =
+        isTestProject ? serviceAccount.split('/').last : 'default';
+
+    // 1. Try Metadata Server
+    try {
+      final client = HttpClient();
+      final tokenUri = Uri.parse(
+        'http://metadata.google.internal/computeMetadata/v1/instance/'
+        'service-accounts/$accountName/identity?audience=$serverUri',
+      );
+      final requestToken = await client.getUrl(tokenUri)
+        ..headers.add('Metadata-Flavor', 'Google');
+      final responseToken = await requestToken.close();
+      if (responseToken.statusCode == 200) {
+        return (await responseToken.transform(utf8.decoder).join()).trim();
+      }
+    } catch (_) {}
+
+    // 2. Try gcloud auth print-identity-token
+    try {
+      final result = await Process.run('gcloud', [
+        'auth',
+        'print-identity-token',
+        '--audiences=$serverUri',
+      ]);
+      if (result.exitCode == 0) {
+        return result.stdout.toString().trim();
+      }
+    } catch (_) {}
+
+    return null;
+  }
+
+  /// Authentication headers required to access [serverUri].
+  Future<Map<String, String>> headers() async {
+    if (isTestProject) {
+      final token = await idToken;
+      if (token != null) {
+        return {'Authorization': 'Bearer $token'};
+      }
+    }
+    return {};
   }
 
   /// Terminate the Google Cloud Run service.

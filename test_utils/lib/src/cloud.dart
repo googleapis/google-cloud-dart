@@ -28,6 +28,14 @@ String get projectId =>
     Platform.environment['GOOGLE_CLOUD_PROJECT'] ??
     (throw StateError('Missing environment variable: GOOGLE_CLOUD_PROJECT'));
 
+/// Whether the project is the test project used by Google Cloud Build.
+bool get isTestProject => projectId == 'dart-sdk-testing';
+
+/// The service used by the Google Cloud build test project.
+const serviceAccount =
+    'projects/dart-sdk-testing/serviceAccounts/'
+    'integration-test-runner@dart-sdk-testing.iam.gserviceaccount.com';
+
 /// Return log entries matching [filter].
 ///
 /// Waits up to [timeout] for matching log entries to be available.
@@ -39,7 +47,7 @@ String get projectId =>
 Future<List<LogEntry>> waitForLogs(
   String filter, {
   int count = 10,
-  Duration timeout = const Duration(seconds: 30),
+  Duration timeout = const Duration(seconds: 60),
 }) async {
   final client = await auth.clientViaApplicationDefaultCredentials(
     scopes: ['https://www.googleapis.com/auth/cloud-platform'],
