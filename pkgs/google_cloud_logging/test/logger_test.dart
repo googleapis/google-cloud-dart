@@ -15,104 +15,191 @@
 import 'dart:convert';
 
 import 'package:google_cloud_logging/google_cloud_logging.dart';
+import 'package:logging/logging.dart';
 import 'package:test/test.dart';
 
 import 'test_utils.dart';
 
 void main() {
-  group('CloudLogger.printLogger()', () {
-    const logger = CloudLogger.printLogger();
+  group('StructuredLogger', () {
+    group('convenience methods', () {
+      final output = StringBuffer();
+      final logger = StructuredLogger(writeln: output.writeln);
 
-    test('log with default severity', () {
-      expect(
-        () => logger.log('hello', LogSeverity.$default),
-        prints('hello\n'),
-      );
-    });
+      setUp(output.clear);
 
-    test('log with explicit severity', () {
-      expect(
-        () => logger.log('hello', LogSeverity.error),
-        prints('ERROR: hello\n'),
-      );
-    });
-
-    test('log with payload', () {
-      expect(
-        () => logger.log('hello', LogSeverity.error, payload: {'foo': 'bar'}),
-        prints('''
-ERROR: hello
-Payload: {foo: bar}
-'''),
-      );
-    });
-
-    test('convenience methods', () {
-      expect(() => logger.debug('hello'), prints('DEBUG: hello\n'));
-      expect(() => logger.info('hello'), prints('INFO: hello\n'));
-      expect(() => logger.notice('hello'), prints('NOTICE: hello\n'));
-      expect(() => logger.warning('hello'), prints('WARNING: hello\n'));
-      expect(() => logger.error('hello'), prints('ERROR: hello\n'));
-      expect(() => logger.critical('hello'), prints('CRITICAL: hello\n'));
-      expect(() => logger.alert('hello'), prints('ALERT: hello\n'));
-      expect(() => logger.emergency('hello'), prints('EMERGENCY: hello\n'));
-    });
-
-    test('log with stack trace', testOn: '!browser', () {
-      expect(
-        () {
-          final caught = catchingFunction();
-          logger.error(
-            caught.error.toString(),
-            payload: {'a': 2, 'b': 3},
-            stackTrace: caught.stackTrace,
+      for (final (method, severity) in [
+        (logger.debug, 'DEBUG'),
+        (logger.info, 'INFO'),
+        (logger.notice, 'NOTICE'),
+        (logger.warning, 'WARNING'),
+        (logger.error, 'ERROR'),
+        (logger.critical, 'CRITICAL'),
+        (logger.alert, 'ALERT'),
+        (logger.emergency, 'EMERGENCY'),
+      ]) {
+        test(severity, () {
+          method('hello');
+          expect(
+            output.toString(),
+            isA<String>().having(
+              (s) => jsonDecode(s) as Map<String, Object?>,
+              'parsed json',
+              {'message': 'hello', 'severity': severity},
+            ),
           );
-        },
-        prints(
-          allOf(
-            startsWith('ERROR: Invalid argument(s): sample\n'),
-            contains('test/test_utils.dart'),
-          ),
-        ),
-      );
+        });
+      }
     });
-  });
 
-  group('CloudLogger.structuredLogger()', () {
-    const logger = CloudLogger.structuredLogger();
+    test('error with stack trace', testOn: '!browser', () {
+      final output = StringBuffer();
+      final logger = StructuredLogger(writeln: output.writeln);
 
-    test('basic log', () {
+      final caught = catchingFunction();
+      logger.error(caught.error.toString(), stackTrace: caught.stackTrace);
+
       expect(
-        () => logger.info('hello'),
-        prints(
-          isA<String>().having(
-            (s) => jsonDecode(s) as Map<String, Object?>,
-            'parsed json',
-            {'message': 'hello', 'severity': 'INFO'},
-          ),
+        output.toString(),
+        isA<String>().having(
+          (s) => jsonDecode(s) as Map<String, Object?>,
+          'parsed json',
+          {
+            'message': 'Invalid argument(s): sample',
+            'severity': 'ERROR',
+            'stack_trace': contains('logger_test.dart'),
+            'logging.googleapis.com/sourceLocation': {
+              'file': endsWith('test_utils.dart'),
+              'function': endsWith('throwingFunction'),
+              'line': isA<String>().having(
+                int.parse,
+                'parsed line',
+                greaterThan(1),
+              ),
+            },
+          },
         ),
       );
     });
 
-    test('log with stack trace', testOn: '!browser', () {
-      expect(
-        () {
-          final caught = catchingFunction();
-          logger.error(
-            caught.error.toString(),
-            payload: {'a': 2, 'b': 3},
-            stackTrace: caught.stackTrace,
-          );
-        },
-        prints(
+    group('package:logging', () {
+      test('shout with string message', () async {
+        final output = StringBuffer();
+        final structuredLogger = StructuredLogger(writeln: output.writeln);
+        final logger = Logger('MyClass');
+        logger.onRecord.listen(structuredLogger.handleLogRecord);
+
+        logger.log(Level.SHOUT, 'Hello');
+        await pumpEventQueue();
+
+        expect(
+          output.toString(),
           isA<String>().having(
             (s) => jsonDecode(s) as Map<String, Object?>,
             'parsed json',
             {
-              'message': 'Invalid argument(s): sample',
-              'severity': 'ERROR',
-              'a': 2,
-              'b': 3,
+              'loggerName': 'MyClass',
+              'message': 'Hello',
+              'severity': 'CRITICAL',
+            },
+          ),
+        );
+      });
+
+      test('shout with map message', () async {
+        final output = StringBuffer();
+        final structuredLogger = StructuredLogger(writeln: output.writeln);
+        final logger = Logger('MyClass');
+        logger.onRecord.listen(structuredLogger.handleLogRecord);
+
+        logger.log(Level.SHOUT, {
+          'happy': true,
+          'animals': ['cat', 'dog'],
+        });
+        await pumpEventQueue();
+
+        expect(
+          output.toString(),
+          isA<String>().having(
+            (s) => jsonDecode(s) as Map<String, Object?>,
+            'parsed json',
+            {
+              'animals': ['cat', 'dog'],
+              'happy': true,
+              'loggerName': 'MyClass',
+              'severity': 'CRITICAL',
+            },
+          ),
+        );
+      });
+
+      test('shout with string error', () async {
+        final output = StringBuffer();
+        final structuredLogger = StructuredLogger(writeln: output.writeln);
+        final logger = Logger('MyClass');
+        logger.onRecord.listen(structuredLogger.handleLogRecord);
+
+        logger.log(Level.SHOUT, 'Hello', 'something bad');
+        await pumpEventQueue();
+
+        expect(
+          output.toString(),
+          isA<String>().having(
+            (s) => jsonDecode(s) as Map<String, Object?>,
+            'parsed json',
+            {
+              'error': 'something bad',
+              'loggerName': 'MyClass',
+              'message': 'Hello',
+              'severity': 'CRITICAL',
+            },
+          ),
+        );
+      });
+
+      test('shout with map error', () async {
+        final output = StringBuffer();
+        final structuredLogger = StructuredLogger(writeln: output.writeln);
+        final logger = Logger('MyClass');
+        logger.onRecord.listen(structuredLogger.handleLogRecord);
+
+        logger.log(Level.SHOUT, 'Hello', {'line': 23, 'file': 'foo.cc'});
+        await pumpEventQueue();
+
+        expect(
+          output.toString(),
+          isA<String>().having(
+            (s) => jsonDecode(s) as Map<String, Object?>,
+            'parsed json',
+            {
+              'error': {'line': 23, 'file': 'foo.cc'},
+              'loggerName': 'MyClass',
+              'message': 'Hello',
+              'severity': 'CRITICAL',
+            },
+          ),
+        );
+      });
+
+      test('shout with stacktrace', testOn: '!browser', () async {
+        final output = StringBuffer();
+        final structuredLogger = StructuredLogger(writeln: output.writeln);
+        final logger = Logger('MyClass');
+        logger.onRecord.listen(structuredLogger.handleLogRecord);
+
+        final caught = catchingFunction();
+        logger.log(Level.SHOUT, 'Hello', null, caught.stackTrace);
+        await pumpEventQueue();
+
+        expect(
+          output.toString(),
+          isA<String>().having(
+            (s) => jsonDecode(s) as Map<String, Object?>,
+            'parsed json',
+            {
+              'loggerName': 'MyClass',
+              'message': 'Hello',
+              'severity': 'CRITICAL',
               'stack_trace': contains('logger_test.dart'),
               'logging.googleapis.com/sourceLocation': {
                 'file': endsWith('test_utils.dart'),
@@ -125,8 +212,8 @@ Payload: {foo: bar}
               },
             },
           ),
-        ),
-      );
+        );
+      });
     });
   });
 }

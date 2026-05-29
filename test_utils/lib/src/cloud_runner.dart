@@ -13,9 +13,11 @@
 // limitations under the License.
 
 import 'dart:io';
+
 import 'package:path/path.dart' as p;
-import '../random.dart';
+
 import 'cloud.dart';
+import 'random.dart';
 
 const _dockerTemplate = '''
 FROM debian:stable-slim
@@ -34,13 +36,10 @@ CMD ["/app/server"]
 String get _repoRoot {
   var dir = Directory.current.absolute;
   while (true) {
-    if (File(p.join(dir.path, 'librarian.yaml')).existsSync()) {
-      return dir.path;
-    }
+    if (File(p.join(dir.path, 'librarian.yaml')).existsSync()) return dir.path;
+
     final parent = dir.parent;
-    if (parent.path == dir.path) {
-      break;
-    }
+    if (parent.path == dir.path) break;
     dir = parent;
   }
   throw StateError(
@@ -168,7 +167,8 @@ class CloudRunner {
     ]);
   }
 
-  Future<String> _identityToken() async {
+  /// Gets OIDC ID token required to access [serverUri].
+  Future<String?> get idToken async {
     final result = await Process.run('gcloud', [
       'auth',
       'print-identity-token',
@@ -188,7 +188,7 @@ class CloudRunner {
   /// Authentication headers required to access [serverUri].
   Future<Map<String, String>> headers() async {
     if (isTestProject) {
-      return {'Authorization': 'Bearer ${await _identityToken()}'};
+      return {'Authorization': 'Bearer ${await idToken}'};
     }
     return {};
   }

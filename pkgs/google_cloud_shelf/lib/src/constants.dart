@@ -20,9 +20,10 @@ const portEnvironmentVariable = 'PORT';
 /// not set.
 const defaultListenPort = 8080;
 
-/// Standard HTTP header used by
-/// [Cloud Trace](https://cloud.google.com/trace/docs/setup).
-const cloudTraceContextHeader = 'x-cloud-trace-context';
+/// Standard HTTP header used to correlate requests with logs.
+///
+/// See https://www.w3.org/TR/trace-context/
+const cloudTraceContextHeader = 'traceparent';
 
 /// The `payload` key used to correlate log entries with Cloud Trace.
 ///

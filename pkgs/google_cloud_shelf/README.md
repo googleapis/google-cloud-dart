@@ -71,8 +71,11 @@ with the request log.
 
 <?code-excerpt "example/contextual_logging.dart (contextual-logging)"?>
 ```dart
+import 'package:google_cloud_logging/google_cloud_logging.dart';
 import 'package:google_cloud_shelf/google_cloud_shelf.dart';
 import 'package:shelf/shelf.dart';
+
+const _logger = StructuredLogger();
 
 Future<void> main() async {
   final handler = const Pipeline()
@@ -83,17 +86,19 @@ Future<void> main() async {
 }
 
 Response _userHandler(Request request) {
-  // Get the logger specific to this request context
-  final logger = currentLogger;
-
-  logger.info('Fetching user profile from database.');
+  // Structured logs generated in the context of a request will be correlated
+  // with that request in the Google Cloud Logs Explorer.
+  _logger.info('Fetching user profile from database.');
 
   // A simple print statement is also captured as an INFO log with trace
   // correlation
   print('This print statement is correlated too!');
 
   // Business logic here...
-  logger.info('User successfully retrieved.', payload: {'userId': 'user_123'});
+  _logger.info({
+    'message': 'User successfully retrieved.',
+    'userId': 'user_123',
+  });
 
   return Response.ok('User Profile');
 }

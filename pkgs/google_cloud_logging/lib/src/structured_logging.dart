@@ -12,156 +12,111 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/// @docImport 'interop.dart';
+/// @docImport 'structured_logger.dart';
+library;
+
+import 'dart:async';
+import 'dart:collection';
 import 'dart:convert';
 
 import 'package:google_cloud_logging_type/logging_type.dart' show LogSeverity;
 import 'package:google_cloud_logging_v2/logging.dart'
-    show LogEntry, LogEntrySourceLocation;
-import 'package:google_cloud_protobuf/protobuf.dart' show Struct;
+    show LogEntrySourceLocation;
 import 'package:meta/meta.dart';
 import 'package:stack_trace/stack_trace.dart';
 
-/// Converts [entry] to a JSON string formatted for Google Cloud
-/// structured logging on stdout.
+import 'traceparent.dart';
+
+/// Fields that have special meaning in structured-logging.
 ///
-/// This flattens [LogEntry.jsonPayload] into the root object and remaps special
-/// fields like `trace` and `spanId` to `logging.googleapis.com/` prefixed keys.
-String createStructuredLogFromEntry(LogEntry entry) {
-  final map = entry.toJson() as Map<String, dynamic>;
+/// See https://docs.cloud.google.com/logging/docs/structured-logging#special-payload-fields
+const _structuredLoggingFields = {
+  'severity',
+  'httpRequest',
+  'time',
+  'timestamp',
+  'timestampSeconds',
+  'timestampNanos',
+  'logging.googleapis.com/insertId',
+  'logging.googleapis.com/labels',
+  'logging.googleapis.com/operation',
+  'logging.googleapis.com/sourceLocation',
+  'logging.googleapis.com/spanId',
+  'logging.googleapis.com/trace',
+  'logging.googleapis.com/trace_sampled',
+};
 
-  if (map['logName'] == '') {
-    map.remove('logName');
-  }
-
-  if (!map.containsKey('severity')) {
-    map['severity'] = LogSeverity.$default.value;
-  }
-
-  // Flatten jsonPayload
-  if (map.containsKey('jsonPayload')) {
-    final jsonPayload = map.remove('jsonPayload');
-    if (jsonPayload is Map<String, Object?>) {
-      // Remove fields that are already in the root to prevent overriding core
-      // fields
-      for (final key in map.keys) {
-        jsonPayload.remove(key);
-      }
-      map.addAll(jsonPayload);
-    }
-  }
-
-  // Remap special fields to Google Cloud structured logging format
-  for (final MapEntry(key: sourceKey, value: destinationKey)
-      in _specialFieldsMapping.entries) {
-    if (map.containsKey(sourceKey)) {
-      map[destinationKey] = map.remove(sourceKey);
-    }
-  }
-
-  return jsonEncode(map, toEncodable: _toEncodableFallback);
-}
-
-// Special fields that need to be mapped to google cloud format
-//
-// https://docs.cloud.google.com/logging/docs/structured-logging
-const _specialFieldsMapping = {
-  'trace': 'logging.googleapis.com/trace',
-  'spanId': 'logging.googleapis.com/spanId',
-  'traceSampled': 'logging.googleapis.com/trace_sampled',
-  'sourceLocation': 'logging.googleapis.com/sourceLocation',
-  'textPayload': 'message',
+/// Filter out the top-level JSON object memebers that have special meaning
+/// in structured logging.
+Map<String, Object?> _filterReservedMembers(Map<dynamic, dynamic> m) => {
+  for (final entry in m.entries)
+    if (!_structuredLoggingFields.contains(entry.key.toString()))
+      entry.key.toString(): entry.value,
 };
 
 /// Formats a log entry for Google Cloud structured logging on stdout.
 ///
-/// Prepares the log entry by integrating the [message], [severity], and
-/// optional [payload]. If [stackTrace] is provided, it is automatically
-/// stringified and safely attached to the payload.
+/// Conforms to Google Cloud's structured logging JSON schema.
+///
+/// If [message] is a [Map], its entries are included at the top level of the
+/// output JSON payload (excluding reserved fields like `severity`). Otherwise,
+/// it is stored under the `"message"` key.
 String createStructuredLog(
   Object message,
   LogSeverity severity, {
   Map<String, Object?>? payload,
+  String? traceparent,
+  Zone? zone,
   StackTrace? stackTrace,
+  String? projectId,
 }) {
-  var actualMessage = message;
-  var actualPayload = payload;
+  final messageMap = switch (message) {
+    '' => <String, Object?>{},
+    Map() => _filterReservedMembers(message),
+    _ => {'message': message},
+  };
 
-  if (message is Map) {
-    // If the message itself is a Map, we normalize its keys to Strings and
-    // merge in any explicitly provided payload entries. Explicit payload
-    // values take precedence over values found in the message Map.
-    actualPayload = {
-      for (final entry in message.entries) entry.key.toString(): entry.value,
-      ...?payload,
-    };
-    actualMessage = actualPayload.remove('message') ?? '';
-  }
+  final result = <String, Object?>{
+    ...messageMap,
+    ...(payload ?? {}),
+    'severity': severity.value,
+    ...(traceparent == null
+        ? structuredTraceFromZone(projectId, zone)
+        : formatTraceparent(projectId, traceparent)),
+    if (stackTrace case final stackTrace?) ...{
+      'stack_trace': _formatStackTrace(stackTrace).toString(),
+      'logging.googleapis.com/sourceLocation': _sourceLocation(stackTrace),
+    },
+  };
 
-  // Add stack trace to payload as string to avoid Struct conversion failures
-  if (stackTrace != null) {
-    actualPayload = {
-      ...?actualPayload,
-      'stack_trace': formatStackTrace(stackTrace).toString(),
-    };
-  }
-
-  // Add message to payload if not empty, so it supports lists and maps
-  if (actualMessage != '') {
-    actualPayload = {...?actualPayload, 'message': actualMessage};
-  }
-
-  try {
-    final entry = LogEntry(
-      logName: '',
-      resource: null,
-      severity: severity,
-      jsonPayload: actualPayload != null && actualPayload.isNotEmpty
-          ? Struct.fromJson(_sanitize(actualPayload) as Map<dynamic, dynamic>)
-          : null,
-      sourceLocation: stackTrace != null ? _sourceLocation(stackTrace) : null,
-    );
-
-    return createStructuredLogFromEntry(entry);
-  } on FormatException catch (_) {
-    // Fallback if there are cyclic errors parsing `payload` or invalid values.
-    // We omit the payload to guarantee a safe serialization.
-    final entry = LogEntry(
-      logName: '',
-      resource: null,
-      severity: severity,
-      textPayload: actualMessage != '' ? actualMessage.toString() : null,
-      sourceLocation: stackTrace != null ? _sourceLocation(stackTrace) : null,
-    );
-    return createStructuredLogFromEntry(entry);
-  }
+  return jsonEncode(sanitize(result));
 }
 
 /// Recursively traverses [value] and ensures all values are JSON primitives
 /// (String, num, bool, null) or lists/maps of them, making it safe to pass to
-/// [Struct.fromJson].
+/// [jsonEncode].
 ///
 /// Objects that are not JSON primitives are converted using
 /// [_toEncodableFallback].
-///
-/// Throws a [FormatException] if a cyclic reference is detected.
-Object? _sanitize(Object? value, [Set<Object>? seen]) {
+@visibleForTesting
+Object? sanitize(Object? value, [Set<Object>? seen]) {
   if (value == null || value is num || value is String || value is bool) {
     return value;
   }
-  seen ??= <Object>{};
-  if (seen.contains(value)) {
-    throw const FormatException('Cyclic reference');
+  seen ??= HashSet.identity();
+  if (!seen.add(value)) {
+    return '[CIRCULAR]';
   }
-  seen.add(value);
 
   try {
     if (value is List) {
-      return value.map((e) => _sanitize(e, seen)).toList();
+      return value.map((e) => sanitize(e, seen)).toList();
     }
     if (value is Map) {
-      return value.map((k, v) => MapEntry(k.toString(), _sanitize(v, seen)));
+      return value.map((k, v) => MapEntry(k.toString(), sanitize(v, seen)));
     }
-    return _toEncodableFallback(value);
+    return sanitize(_toEncodableFallback(value), seen);
   } finally {
     seen.remove(value);
   }
@@ -193,7 +148,7 @@ LogEntrySourceLocation _sourceLocation(StackTrace trace) {
 /// Finds the first stack frame that is not considered a "folder" frame (i.e.,
 /// not core or from this package).
 Frame _debugFrame(StackTrace stackTrace) {
-  final chain = formatStackTrace(stackTrace);
+  final chain = _formatStackTrace(stackTrace);
   final stackFrame = chain.traces
       .expand((t) => t.frames)
       .firstWhere(
@@ -210,6 +165,5 @@ bool _frameFolder(Frame frame) =>
 
 /// Formats the stack trace by folding frames that belong to this package or
 /// core.
-@internal
-Chain formatStackTrace(StackTrace stackTrace) =>
+Chain _formatStackTrace(StackTrace stackTrace) =>
     Chain.forTrace(stackTrace).foldFrames(_frameFolder, terse: true);

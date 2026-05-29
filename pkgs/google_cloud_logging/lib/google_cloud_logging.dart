@@ -16,21 +16,18 @@
 ///
 /// Includes:
 ///
-/// - [CloudLogger]: for basic logging operations
+/// - [StructuredLogger]: for creating and writing structured logs
 /// - [createStructuredLog]: for creating structured logs
-/// - [createStructuredLogFromEntry]: for creating structured logs from entries
 ///
 /// Exports [LogSeverity] and [LogEntry] from other packages for easy access.
 ///
 /// @docImport 'package:google_cloud_logging_type/logging_type.dart';
 /// @docImport 'package:google_cloud_logging_v2/logging.dart';
-/// @docImport 'src/logger.dart';
+/// @docImport 'src/structured_logger.dart';
 /// @docImport 'src/structured_logging.dart';
 library;
 
 export 'package:google_cloud_logging_type/logging_type.dart' show LogSeverity;
 export 'package:google_cloud_logging_v2/logging.dart' show LogEntry;
 
-export 'src/logger.dart' show CloudLogger;
-export 'src/structured_logging.dart'
-    show createStructuredLog, createStructuredLogFromEntry;
+export 'src/structured_logger.dart';

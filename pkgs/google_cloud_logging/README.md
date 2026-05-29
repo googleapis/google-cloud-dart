@@ -9,50 +9,20 @@
 > Feel free to open [issues] for bugs and feature requests.
 
 A lightweight logging package for creating formatted logs suitable for Google
-Cloud Platform, specifically tailored for Google Cloud structured logging.
-
-## Features
-
-* **Google Cloud Structured Logging:** Utilities to construct log entries that
-  seamlessly map to Google Cloud's native structured logging schema on `stdout`.
-* **CloudLogger:** An extensible base logging class with convenience methods for
-  standard Google Cloud logging severities (`debug`, `info`, `notice`,
-  `warning`, `error`, etc.).
-* **Safe Sanitization:** Deep primitive checking to format complex object
-  payloads, preventing cyclic referencing and providing graceful string
-  fallback.
+Cloud Platform, specifically tailored for Google Cloud [structured logging].
 
 ## Usage
 
-### Structured Logging on stdout
+### Using the `StructuredLogger` directly
 
-<?code-excerpt "example/structured_stdout.dart (structured-stdout)"?>
+<?code-excerpt "example/structured_logger.dart (cloud-logger)"?>
 ```dart
 import 'package:google_cloud_logging/google_cloud_logging.dart';
 
-void main() {
-  // Create a simple structured log string
-  final logString = createStructuredLog(
-    'An informative event happened.',
-    LogSeverity.info,
-    payload: {'event_id': 123, 'status': 'success'},
-  );
-
-  // Print the formatted JSON directly to stdout
-  print(logString);
-}
-```
-
-### Using the CloudLogger
-
-<?code-excerpt "example/cloud_logger.dart (cloud-logger)"?>
-```dart
-import 'package:google_cloud_logging/google_cloud_logging.dart';
-
-const _logger = CloudLogger.printLogger();
+const _logger = StructuredLogger();
 
 void main() {
-  _logger.info('Processing item.', payload: {'itemId': 'A-987'});
+  _logger.info({'message': 'Processing item.', 'itemId': 'A-987'});
   try {
     throw Exception('Failed to connect to DB');
   } catch (error, stack) {
@@ -61,4 +31,28 @@ void main() {
 }
 ```
 
+### Using `StructuredLogger` with `package:logging`
+
+<?code-excerpt "example/cloud_logger.dart (cloud-logger)"?>
+```dart
+import 'package:google_cloud_logging/google_cloud_logging.dart';
+import 'package:logging/logging.dart';
+
+final _logger = Logger('my-service');
+
+void main() {
+  // Configure the standard logger with StructuredLogger.
+  Logger.root.onRecord.listen(const StructuredLogger().handleLogRecord);
+  Logger.root.level = Level.ALL;
+
+  _logger.info('Processing item.', {'itemId': 'A-987'});
+  try {
+    throw Exception('Failed to connect to DB');
+  } catch (error, stack) {
+    _logger.severe('Database connection failure - $error', error, stack);
+  }
+}
+```
+
 [issues]: https://github.com/googleapis/google-cloud-dart/issues
+[structured logging]: https://docs.cloud.google.com/logging/docs/structured-logging

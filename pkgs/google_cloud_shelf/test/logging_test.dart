@@ -230,9 +230,8 @@ Details:
     });
 
     test('print', () async {
-      final uniqueId = 'Hello World: ${randomAlphaNumString(20)}';
+      final uniqueId = 'print: ${randomAlphaNumString(20)}';
 
-      // Trigger a print.
       final response = await http.get(
         runner.serverUri.replace(
           path: '/print',
@@ -241,13 +240,82 @@ Details:
         headers: await runner.headers(),
       );
       expect(response.statusCode, 200);
-
       final entries = await waitForLogs('textPayload:"$uniqueId"');
 
       expect(entries, isNotEmpty);
       final entry = entries.first;
       expect(entry.textPayload, uniqueId);
       expect(entry.severity, LogSeverity.info);
+      expect(entry.trace, startsWith('projects/$projectId/traces/'));
+      expect(entry.spanId, isNotEmpty);
+    });
+
+    test('throw', () async {
+      final uniqueId = 'throw: ${randomAlphaNumString(20)}';
+
+      final response = await http.get(
+        runner.serverUri.replace(
+          path: '/throw',
+          queryParameters: {'msg': uniqueId},
+        ),
+        headers: await runner.headers(),
+      );
+      expect(response.statusCode, 500);
+      final entries = await waitForLogs(
+        'jsonPayload.message:"Exception: $uniqueId"',
+      );
+
+      expect(entries, isNotEmpty);
+      final entry = entries.first;
+      expect(entry.jsonPayload?.toJson(), {
+        'message': 'Exception: $uniqueId',
+        'stack_trace': contains('logging_server.dart'),
+      });
+      expect(entry.severity, LogSeverity.error);
+      expect(entry.trace, startsWith('projects/$projectId/traces/'));
+      expect(entry.spanId, isNotEmpty);
+    });
+
+    test('logging', () async {
+      final uniqueId = 'log: ${randomAlphaNumString(20)}';
+
+      final response = await http.get(
+        runner.serverUri.replace(
+          path: '/logging',
+          queryParameters: {'msg': uniqueId},
+        ),
+        headers: await runner.headers(),
+      );
+      expect(response.statusCode, 200);
+      final entries = await waitForLogs('jsonPayload.message:"$uniqueId"');
+
+      expect(entries, isNotEmpty);
+      final entry = entries.first;
+      expect(entry.jsonPayload?.toJson(), {
+        'loggerName': 'MyClass',
+        'message': uniqueId,
+      });
+      expect(entry.severity, LogSeverity.error);
+      expect(entry.trace, startsWith('projects/$projectId/traces/'));
+      expect(entry.spanId, isNotEmpty);
+    });
+
+    test('structured logging', () async {
+      final uniqueId = 'structured: ${randomAlphaNumString(20)}';
+
+      final response = await http.get(
+        runner.serverUri.replace(
+          path: '/structured',
+          queryParameters: {'msg': uniqueId},
+        ),
+        headers: await runner.headers(),
+      );
+      expect(response.statusCode, 200);
+      final entries = await waitForLogs('textPayload:"$uniqueId"');
+
+      expect(entries, isNotEmpty);
+      final entry = entries.first;
+      expect(entry.severity, LogSeverity.emergency);
       expect(entry.trace, startsWith('projects/$projectId/traces/'));
       expect(entry.spanId, isNotEmpty);
     });
@@ -288,7 +356,8 @@ enum _ResponseType {
     headers: {
       'content-type': contentType,
       if (includeTraceContext)
-        'x-cloud-trace-context': '0123456789abcdef0123456789abcdef/123;o=1',
+        'traceparent':
+            '00-0123456789abcdef0123456789abcdef-000000000000007b-01',
     },
   );
 }
@@ -438,32 +507,8 @@ TypeMatcher<Response> _responseScenarioFactory(
       'parsed JSON lines',
       [
         {
-          'message': 'trace me',
-          'severity': 'INFO',
-          'logging.googleapis.com/trace':
-              'projects/project-id/traces/0123456789abcdef0123456789abcdef',
-          'logging.googleapis.com/spanId': '000000000000007b',
-          'logging.googleapis.com/trace_sampled': true,
-        },
-        {
           'message': 'print me',
           'severity': 'INFO',
-          'logging.googleapis.com/trace':
-              'projects/project-id/traces/0123456789abcdef0123456789abcdef',
-          'logging.googleapis.com/spanId': '000000000000007b',
-          'logging.googleapis.com/trace_sampled': true,
-        },
-        {
-          'message': 'default me',
-          'severity': 'DEFAULT',
-          'logging.googleapis.com/trace':
-              'projects/project-id/traces/0123456789abcdef0123456789abcdef',
-          'logging.googleapis.com/spanId': '000000000000007b',
-          'logging.googleapis.com/trace_sampled': true,
-        },
-        {
-          'message': 'warning me',
-          'severity': 'WARNING',
           'logging.googleapis.com/trace':
               'projects/project-id/traces/0123456789abcdef0123456789abcdef',
           'logging.googleapis.com/spanId': '000000000000007b',
@@ -474,13 +519,7 @@ TypeMatcher<Response> _responseScenarioFactory(
     stderr: isEmpty,
   ),
   (_ResponseScenarios.successfulWithLogs, _Environment.normal) => (
-    stdout: allOf([
-      contains('trace me'),
-      contains('print me'),
-      contains('default me'),
-      contains('WARNING: warning me'),
-      endsWith('[200] /'),
-    ]),
+    stdout: allOf([contains('print me'), endsWith('[200] /')]),
     stderr: isEmpty,
   ),
 };
@@ -529,11 +568,7 @@ Future<Response> _throwNonHttpResponseError(_) =>
     throw Exception('non http error');
 
 Future<Response> _respondSuccessfullyWithLogs(_) async {
-  currentLogger.info('trace me');
   print('print me');
-  currentLogger
-    ..log('default me', LogSeverity.$default)
-    ..warning('warning me');
   return Response.ok('done', headers: {'content-type': 'text/plain'});
 }
 

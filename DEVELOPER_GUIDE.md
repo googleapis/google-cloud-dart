@@ -84,7 +84,6 @@ graph TD
   google_cloud_location --> google_cloud_rpc
   google_cloud_logging --> google_cloud_logging_type
   google_cloud_logging --> google_cloud_logging_v2
-  google_cloud_logging --> google_cloud_protobuf
   google_cloud_logging_type --> google_cloud_protobuf
   google_cloud_logging_v2 --> google_cloud_api
   google_cloud_logging_v2 --> google_cloud_logging_type

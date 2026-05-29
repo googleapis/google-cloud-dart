@@ -17,6 +17,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:google_cloud_logging/google_cloud_logging.dart';
+import 'package:google_cloud_logging/interop.dart';
 import 'package:meta/meta.dart';
 import 'package:shelf/shelf.dart';
 import 'package:stack_trace/stack_trace.dart';
@@ -24,7 +25,6 @@ import 'package:stack_trace/stack_trace.dart';
 import 'constants.dart';
 import 'http_response_exception.dart';
 import 'json_request_checking.dart';
-import 'trace_context_data.dart';
 
 /// The default message to use for internal server errors.
 ///
@@ -201,8 +201,7 @@ String _formatDetailsAsPseudoYaml(List<Map<String, Object?>> details) {
 ///
 /// [projectId] is the Google Cloud Project ID used for trace correlation.
 ///
-/// Logs messages sent to [currentLogger] and calls to [print] are formatted
-/// to include trace correlation.
+/// Calls to [print] are formatted to include trace correlation.
 ///
 /// {@macro exceptionResponseMapping}
 Middleware cloudLoggingMiddleware(String projectId) {
@@ -211,12 +210,6 @@ Middleware cloudLoggingMiddleware(String projectId) {
     // Log Viewer.
 
     final traceHeader = request.headers[cloudTraceContextHeader];
-    final traceContext = traceHeader != null
-        ? TraceContextData.tryParse(
-            projectId: projectId,
-            traceHeader: traceHeader,
-          )
-        : null;
 
     String createErrorLogEntryFromRequest(
       Object error,
@@ -226,8 +219,10 @@ Middleware cloudLoggingMiddleware(String projectId) {
     }) => createStructuredLog(
       '$error'.trim(),
       logSeverity,
-      payload: {...?traceContext?.asPayloadMap(), ...?extraPayload},
+      payload: extraPayload,
+      traceparent: traceHeader,
       stackTrace: stackTrace,
+      projectId: projectId,
     );
 
     final completer = Completer<Response>.sync();
@@ -294,22 +289,18 @@ Middleware cloudLoggingMiddleware(String projectId) {
       final logContent = createStructuredLog(
         line,
         LogSeverity.info,
-        payload: traceContext?.asPayloadMap(),
+        traceparent: traceHeader,
+        projectId: projectId,
       );
-
       // Serialize to a JSON string and output to parent zone.
       parent.print(self, logContent);
     }
 
-    final currentZone = Zone.current;
-
     Zone.current
         .fork(
           zoneValues: {
-            _loggerKey: _CloudLogger(
-              zone: currentZone,
-              traceContext: traceContext,
-            ),
+            googleCloudProjectIdZoneVariable: projectId,
+            traceparentHeaderValueZoneVariable: traceHeader,
           },
           specification: ZoneSpecification(
             handleUncaughtError: uncaughtErrorHandler,
@@ -327,49 +318,6 @@ Middleware cloudLoggingMiddleware(String projectId) {
   };
 
   return hostedLoggingMiddleware;
-}
-
-/// Returns the current [CloudLogger].
-///
-/// If called within a context configured with a [CloudLogger], the returned
-/// [CloudLogger] will be used.
-///
-/// Otherwise, the returned [CloudLogger] will simply [print] log entries,
-/// with entries having a [LogSeverity] different than
-/// [LogSeverity.$default] being prefixed as such.
-CloudLogger get currentLogger =>
-    Zone.current[_loggerKey] as CloudLogger? ?? const CloudLogger.printLogger();
-
-/// Used to represent the [CloudLogger] in [Zone] values.
-final _loggerKey = Object();
-
-/// A [CloudLogger] that prints messages using Google Cloud structured
-/// logging.
-final class _CloudLogger extends CloudLogger {
-  final Zone zone;
-
-  final TraceContextData? traceContext;
-
-  /// Creates a new [_CloudLogger] that prints structured logs to [this.zone].
-  _CloudLogger({required this.zone, this.traceContext});
-
-  /// If [message] is a [Map], it is used as the log entry payload. Otherwise,
-  /// it is passed directly to [createStructuredLog], which handles
-  /// serialization.
-  @override
-  void log(
-    Object message,
-    LogSeverity severity, {
-    Map<String, Object?>? payload,
-    StackTrace? stackTrace,
-  }) => zone.print(
-    createStructuredLog(
-      message,
-      severity,
-      payload: traceContext?.asPayloadMap(payload) ?? payload,
-      stackTrace: stackTrace,
-    ),
-  );
 }
 
 bool _frameFolder(Frame frame) =>
