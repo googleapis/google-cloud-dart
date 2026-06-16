@@ -19,7 +19,6 @@
 /// Manages lightweight user-provided functions executed in response to events.
 library;
 
-// ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
 // ignore_for_file: constant_identifier_names
@@ -27,7 +26,6 @@ library;
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: non_constant_identifier_names
 // ignore_for_file: unintended_html_in_doc_comment
-// ignore_for_file: use_null_aware_elements
 
 import 'package:google_cloud_iam_v1/iam.dart';
 import 'package:google_cloud_location/location.dart';
@@ -950,14 +948,11 @@ final class Function$ extends ProtoMessage {
   Object toJson() => {
     if (name.isNotDefault) 'name': name,
     if (description.isNotDefault) 'description': description,
-    if (buildConfig case final buildConfig?)
-      'buildConfig': buildConfig.toJson(),
-    if (serviceConfig case final serviceConfig?)
-      'serviceConfig': serviceConfig.toJson(),
-    if (eventTrigger case final eventTrigger?)
-      'eventTrigger': eventTrigger.toJson(),
+    'buildConfig': ?buildConfig?.toJson(),
+    'serviceConfig': ?serviceConfig?.toJson(),
+    'eventTrigger': ?eventTrigger?.toJson(),
     if (state.isNotDefault) 'state': state.toJson(),
-    if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
+    'updateTime': ?updateTime?.toJson(),
     if (labels.isNotDefault) 'labels': labels,
     if (stateMessages.isNotDefault)
       'stateMessages': [for (final i in stateMessages) i.toJson()],
@@ -965,7 +960,7 @@ final class Function$ extends ProtoMessage {
     if (url.isNotDefault) 'url': url,
     if (kmsKeyName.isNotDefault) 'kmsKeyName': kmsKeyName,
     if (satisfiesPzs.isNotDefault) 'satisfiesPzs': satisfiesPzs,
-    if (createTime case final createTime?) 'createTime': createTime.toJson(),
+    'createTime': ?createTime?.toJson(),
   };
 
   @override
@@ -1262,9 +1257,9 @@ final class RepoSource extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (branchName case final branchName?) 'branchName': branchName,
-    if (tagName case final tagName?) 'tagName': tagName,
-    if (commitSha case final commitSha?) 'commitSha': commitSha,
+    'branchName': ?branchName,
+    'tagName': ?tagName,
+    'commitSha': ?commitSha,
     if (projectId.isNotDefault) 'projectId': projectId,
     if (repoName.isNotDefault) 'repoName': repoName,
     if (dir.isNotDefault) 'dir': dir,
@@ -1325,10 +1320,9 @@ final class Source extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (storageSource case final storageSource?)
-      'storageSource': storageSource.toJson(),
-    if (repoSource case final repoSource?) 'repoSource': repoSource.toJson(),
-    if (gitUri case final gitUri?) 'gitUri': gitUri,
+    'storageSource': ?storageSource?.toJson(),
+    'repoSource': ?repoSource?.toJson(),
+    'gitUri': ?gitUri,
   };
 
   @override
@@ -1382,10 +1376,8 @@ final class SourceProvenance extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (resolvedStorageSource case final resolvedStorageSource?)
-      'resolvedStorageSource': resolvedStorageSource.toJson(),
-    if (resolvedRepoSource case final resolvedRepoSource?)
-      'resolvedRepoSource': resolvedRepoSource.toJson(),
+    'resolvedStorageSource': ?resolvedStorageSource?.toJson(),
+    'resolvedRepoSource': ?resolvedRepoSource?.toJson(),
     if (gitUri.isNotDefault) 'gitUri': gitUri,
   };
 
@@ -1553,16 +1545,13 @@ final class BuildConfig extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (automaticUpdatePolicy case final automaticUpdatePolicy?)
-      'automaticUpdatePolicy': automaticUpdatePolicy.toJson(),
-    if (onDeployUpdatePolicy case final onDeployUpdatePolicy?)
-      'onDeployUpdatePolicy': onDeployUpdatePolicy.toJson(),
+    'automaticUpdatePolicy': ?automaticUpdatePolicy?.toJson(),
+    'onDeployUpdatePolicy': ?onDeployUpdatePolicy?.toJson(),
     if (build.isNotDefault) 'build': build,
     if (runtime.isNotDefault) 'runtime': runtime,
     if (entryPoint.isNotDefault) 'entryPoint': entryPoint,
-    if (source case final source?) 'source': source.toJson(),
-    if (sourceProvenance case final sourceProvenance?)
-      'sourceProvenance': sourceProvenance.toJson(),
+    'source': ?source?.toJson(),
+    'sourceProvenance': ?sourceProvenance?.toJson(),
     if (workerPool.isNotDefault) 'workerPool': workerPool,
     if (environmentVariables.isNotDefault)
       'environmentVariables': environmentVariables,
@@ -2688,7 +2677,7 @@ final class CreateFunctionRequest extends ProtoMessage {
   @override
   Object toJson() => {
     'parent': parent,
-    if (function case final function?) 'function': function.toJson(),
+    'function': ?function?.toJson(),
     if (functionId.isNotDefault) 'functionId': functionId,
   };
 
@@ -2730,8 +2719,8 @@ final class UpdateFunctionRequest extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (function case final function?) 'function': function.toJson(),
-    if (updateMask case final updateMask?) 'updateMask': updateMask.toJson(),
+    'function': ?function?.toJson(),
+    'updateMask': ?updateMask?.toJson(),
   };
 
   @override
@@ -2882,8 +2871,7 @@ final class GenerateUploadUrlResponse extends ProtoMessage {
   @override
   Object toJson() => {
     if (uploadUrl.isNotDefault) 'uploadUrl': uploadUrl,
-    if (storageSource case final storageSource?)
-      'storageSource': storageSource.toJson(),
+    'storageSource': ?storageSource?.toJson(),
   };
 
   @override
@@ -3111,10 +3099,8 @@ final class ListRuntimesResponse_Runtime extends ProtoMessage {
     if (stage.isNotDefault) 'stage': stage.toJson(),
     if (warnings.isNotDefault) 'warnings': warnings,
     if (environment.isNotDefault) 'environment': environment.toJson(),
-    if (deprecationDate case final deprecationDate?)
-      'deprecationDate': deprecationDate.toJson(),
-    if (decommissionDate case final decommissionDate?)
-      'decommissionDate': decommissionDate.toJson(),
+    'deprecationDate': ?deprecationDate?.toJson(),
+    'decommissionDate': ?decommissionDate?.toJson(),
   };
 
   @override
@@ -3178,7 +3164,7 @@ final class AutomaticUpdatePolicy extends ProtoMessage {
 
   AutomaticUpdatePolicy() : super(fullyQualifiedName);
 
-  factory AutomaticUpdatePolicy.fromJson(Object? j) => AutomaticUpdatePolicy();
+  factory AutomaticUpdatePolicy.fromJson(Object? _) => AutomaticUpdatePolicy();
 
   @override
   Object toJson() => {};
@@ -3339,15 +3325,14 @@ final class OperationMetadata extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (createTime case final createTime?) 'createTime': createTime.toJson(),
-    if (endTime case final endTime?) 'endTime': endTime.toJson(),
+    'createTime': ?createTime?.toJson(),
+    'endTime': ?endTime?.toJson(),
     if (target.isNotDefault) 'target': target,
     if (verb.isNotDefault) 'verb': verb,
     if (statusDetail.isNotDefault) 'statusDetail': statusDetail,
     if (cancelRequested.isNotDefault) 'cancelRequested': cancelRequested,
     if (apiVersion.isNotDefault) 'apiVersion': apiVersion,
-    if (requestResource case final requestResource?)
-      'requestResource': requestResource.toJson(),
+    'requestResource': ?requestResource?.toJson(),
     if (stages.isNotDefault) 'stages': [for (final i in stages) i.toJson()],
     if (sourceToken.isNotDefault) 'sourceToken': sourceToken,
     if (buildName.isNotDefault) 'buildName': buildName,

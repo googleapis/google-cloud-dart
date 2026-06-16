@@ -16,7 +16,7 @@
 
 /// The Google Cloud client for the Common Operation Metadata type.
 ///
-/// Additional metadata for operations.
+/// Provides common protobuf definitions for APIs.
 library;
 
 // ignore_for_file: comment_references

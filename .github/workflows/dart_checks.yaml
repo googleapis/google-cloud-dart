@@ -26,7 +26,7 @@ on:
 env:
   DART_VERSION: 3.9.2
   GOOGLE_CLOUD_PROJECT: test-project
-  LIBRARIAN_VERSION: v0.11.1-0.20260429222509-0e24d8cd0788
+  LIBRARIAN_VERSION: v0.21.0
 name: Dart Checks
 jobs:
   analyze_and_format:

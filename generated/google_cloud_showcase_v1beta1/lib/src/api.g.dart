@@ -20,7 +20,6 @@
 /// client library generator consumption.
 library;
 
-// ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
 // ignore_for_file: constant_identifier_names
@@ -28,7 +27,6 @@ library;
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: non_constant_identifier_names
 // ignore_for_file: unintended_html_in_doc_comment
-// ignore_for_file: use_null_aware_elements
 
 import 'package:google_cloud_iam_v1/iam.dart';
 import 'package:google_cloud_location/location.dart';
@@ -112,7 +110,7 @@ final class Compliance {
         if (request.name case final $1 when $1.isNotDefault) 'name': $1,
         if (request.serverVerify case final $1 when $1.isNotDefault)
           'serverVerify': '${$1}',
-        if (request.intendedBindingUri case final $1?) 'intendedBindingUri': $1,
+        'intendedBindingUri': ?request.intendedBindingUri,
         if (request.fInt32 case final $1 when $1.isNotDefault)
           'fInt32': '${$1}',
         if (request.fInt64 case final $1 when $1.isNotDefault)
@@ -191,8 +189,7 @@ final class Compliance {
         if (request.info?.fChild?.fChild?.fBool case final $1?
             when $1.isNotDefault)
           'info.fChild.fChild.fBool': '${$1}',
-        if (request.info?.fChild?.pString case final $1?)
-          'info.fChild.pString': $1,
+        'info.fChild.pString': ?request.info?.fChild?.pString,
         if (request.info?.fChild?.pFloat case final $1?)
           'info.fChild.pFloat': '${$1}',
         if (request.info?.fChild?.pDouble case final $1?)
@@ -211,7 +208,7 @@ final class Compliance {
         if (request.info?.fChild?.pChild?.fBool case final $1?
             when $1.isNotDefault)
           'info.fChild.pChild.fBool': '${$1}',
-        if (request.info?.pString case final $1?) 'info.pString': $1,
+        'info.pString': ?request.info?.pString,
         if (request.info?.pInt32 case final $1?) 'info.pInt32': '${$1}',
         if (request.info?.pSint32 case final $1?) 'info.pSint32': '${$1}',
         if (request.info?.pSfixed32 case final $1?) 'info.pSfixed32': '${$1}',
@@ -225,7 +222,7 @@ final class Compliance {
         if (request.info?.pFloat case final $1?) 'info.pFloat': '${$1}',
         if (request.info?.pDouble case final $1?) 'info.pDouble': '${$1}',
         if (request.info?.pBool case final $1?) 'info.pBool': '${$1}',
-        if (request.info?.pKingdom case final $1?) 'info.pKingdom': $1.value,
+        'info.pKingdom': ?request.info?.pKingdom?.value,
         if (request.info?.pChild?.fString case final $1? when $1.isNotDefault)
           'info.pChild.fString': $1,
         if (request.info?.pChild?.fFloat case final $1? when $1.isNotDefault)
@@ -246,8 +243,7 @@ final class Compliance {
         if (request.info?.pChild?.fChild?.fBool case final $1?
             when $1.isNotDefault)
           'info.pChild.fChild.fBool': '${$1}',
-        if (request.info?.pChild?.pString case final $1?)
-          'info.pChild.pString': $1,
+        'info.pChild.pString': ?request.info?.pChild?.pString,
         if (request.info?.pChild?.pFloat case final $1?)
           'info.pChild.pFloat': '${$1}',
         if (request.info?.pChild?.pDouble case final $1?)
@@ -268,7 +264,7 @@ final class Compliance {
           'info.pChild.pChild.fBool': '${$1}',
         if (request.serverVerify case final $1 when $1.isNotDefault)
           'serverVerify': '${$1}',
-        if (request.intendedBindingUri case final $1?) 'intendedBindingUri': $1,
+        'intendedBindingUri': ?request.intendedBindingUri,
         if (request.fInt32 case final $1 when $1.isNotDefault)
           'fInt32': '${$1}',
         if (request.fInt64 case final $1 when $1.isNotDefault)
@@ -349,8 +345,7 @@ final class Compliance {
         if (request.info?.fChild?.fChild?.fBool case final $1?
             when $1.isNotDefault)
           'info.fChild.fChild.fBool': '${$1}',
-        if (request.info?.fChild?.pString case final $1?)
-          'info.fChild.pString': $1,
+        'info.fChild.pString': ?request.info?.fChild?.pString,
         if (request.info?.fChild?.pFloat case final $1?)
           'info.fChild.pFloat': '${$1}',
         if (request.info?.fChild?.pDouble case final $1?)
@@ -369,7 +364,7 @@ final class Compliance {
         if (request.info?.fChild?.pChild?.fBool case final $1?
             when $1.isNotDefault)
           'info.fChild.pChild.fBool': '${$1}',
-        if (request.info?.pString case final $1?) 'info.pString': $1,
+        'info.pString': ?request.info?.pString,
         if (request.info?.pInt32 case final $1?) 'info.pInt32': '${$1}',
         if (request.info?.pSint32 case final $1?) 'info.pSint32': '${$1}',
         if (request.info?.pSfixed32 case final $1?) 'info.pSfixed32': '${$1}',
@@ -383,7 +378,7 @@ final class Compliance {
         if (request.info?.pFloat case final $1?) 'info.pFloat': '${$1}',
         if (request.info?.pDouble case final $1?) 'info.pDouble': '${$1}',
         if (request.info?.pBool case final $1?) 'info.pBool': '${$1}',
-        if (request.info?.pKingdom case final $1?) 'info.pKingdom': $1.value,
+        'info.pKingdom': ?request.info?.pKingdom?.value,
         if (request.info?.pChild?.fString case final $1? when $1.isNotDefault)
           'info.pChild.fString': $1,
         if (request.info?.pChild?.fFloat case final $1? when $1.isNotDefault)
@@ -404,8 +399,7 @@ final class Compliance {
         if (request.info?.pChild?.fChild?.fBool case final $1?
             when $1.isNotDefault)
           'info.pChild.fChild.fBool': '${$1}',
-        if (request.info?.pChild?.pString case final $1?)
-          'info.pChild.pString': $1,
+        'info.pChild.pString': ?request.info?.pChild?.pString,
         if (request.info?.pChild?.pFloat case final $1?)
           'info.pChild.pFloat': '${$1}',
         if (request.info?.pChild?.pDouble case final $1?)
@@ -426,7 +420,7 @@ final class Compliance {
           'info.pChild.pChild.fBool': '${$1}',
         if (request.serverVerify case final $1 when $1.isNotDefault)
           'serverVerify': '${$1}',
-        if (request.intendedBindingUri case final $1?) 'intendedBindingUri': $1,
+        'intendedBindingUri': ?request.intendedBindingUri,
         if (request.fInt32 case final $1 when $1.isNotDefault)
           'fInt32': '${$1}',
         if (request.fInt64 case final $1 when $1.isNotDefault)
@@ -505,8 +499,7 @@ final class Compliance {
         if (request.info?.fChild?.fChild?.fBool case final $1?
             when $1.isNotDefault)
           'info.fChild.fChild.fBool': '${$1}',
-        if (request.info?.fChild?.pString case final $1?)
-          'info.fChild.pString': $1,
+        'info.fChild.pString': ?request.info?.fChild?.pString,
         if (request.info?.fChild?.pFloat case final $1?)
           'info.fChild.pFloat': '${$1}',
         if (request.info?.fChild?.pDouble case final $1?)
@@ -525,7 +518,7 @@ final class Compliance {
         if (request.info?.fChild?.pChild?.fBool case final $1?
             when $1.isNotDefault)
           'info.fChild.pChild.fBool': '${$1}',
-        if (request.info?.pString case final $1?) 'info.pString': $1,
+        'info.pString': ?request.info?.pString,
         if (request.info?.pInt32 case final $1?) 'info.pInt32': '${$1}',
         if (request.info?.pSint32 case final $1?) 'info.pSint32': '${$1}',
         if (request.info?.pSfixed32 case final $1?) 'info.pSfixed32': '${$1}',
@@ -539,7 +532,7 @@ final class Compliance {
         if (request.info?.pFloat case final $1?) 'info.pFloat': '${$1}',
         if (request.info?.pDouble case final $1?) 'info.pDouble': '${$1}',
         if (request.info?.pBool case final $1?) 'info.pBool': '${$1}',
-        if (request.info?.pKingdom case final $1?) 'info.pKingdom': $1.value,
+        'info.pKingdom': ?request.info?.pKingdom?.value,
         if (request.info?.pChild?.fString case final $1? when $1.isNotDefault)
           'info.pChild.fString': $1,
         if (request.info?.pChild?.fFloat case final $1? when $1.isNotDefault)
@@ -560,8 +553,7 @@ final class Compliance {
         if (request.info?.pChild?.fChild?.fBool case final $1?
             when $1.isNotDefault)
           'info.pChild.fChild.fBool': '${$1}',
-        if (request.info?.pChild?.pString case final $1?)
-          'info.pChild.pString': $1,
+        'info.pChild.pString': ?request.info?.pChild?.pString,
         if (request.info?.pChild?.pFloat case final $1?)
           'info.pChild.pFloat': '${$1}',
         if (request.info?.pChild?.pDouble case final $1?)
@@ -582,7 +574,7 @@ final class Compliance {
           'info.pChild.pChild.fBool': '${$1}',
         if (request.serverVerify case final $1 when $1.isNotDefault)
           'serverVerify': '${$1}',
-        if (request.intendedBindingUri case final $1?) 'intendedBindingUri': $1,
+        'intendedBindingUri': ?request.intendedBindingUri,
         if (request.fInt32 case final $1 when $1.isNotDefault)
           'fInt32': '${$1}',
         if (request.fInt64 case final $1 when $1.isNotDefault)
@@ -663,8 +655,7 @@ final class Compliance {
         if (request.info?.fChild?.fChild?.fBool case final $1?
             when $1.isNotDefault)
           'info.fChild.fChild.fBool': '${$1}',
-        if (request.info?.fChild?.pString case final $1?)
-          'info.fChild.pString': $1,
+        'info.fChild.pString': ?request.info?.fChild?.pString,
         if (request.info?.fChild?.pFloat case final $1?)
           'info.fChild.pFloat': '${$1}',
         if (request.info?.fChild?.pDouble case final $1?)
@@ -683,7 +674,7 @@ final class Compliance {
         if (request.info?.fChild?.pChild?.fBool case final $1?
             when $1.isNotDefault)
           'info.fChild.pChild.fBool': '${$1}',
-        if (request.info?.pString case final $1?) 'info.pString': $1,
+        'info.pString': ?request.info?.pString,
         if (request.info?.pInt32 case final $1?) 'info.pInt32': '${$1}',
         if (request.info?.pSint32 case final $1?) 'info.pSint32': '${$1}',
         if (request.info?.pSfixed32 case final $1?) 'info.pSfixed32': '${$1}',
@@ -697,7 +688,7 @@ final class Compliance {
         if (request.info?.pFloat case final $1?) 'info.pFloat': '${$1}',
         if (request.info?.pDouble case final $1?) 'info.pDouble': '${$1}',
         if (request.info?.pBool case final $1?) 'info.pBool': '${$1}',
-        if (request.info?.pKingdom case final $1?) 'info.pKingdom': $1.value,
+        'info.pKingdom': ?request.info?.pKingdom?.value,
         if (request.info?.pChild?.fString case final $1? when $1.isNotDefault)
           'info.pChild.fString': $1,
         if (request.info?.pChild?.fFloat case final $1? when $1.isNotDefault)
@@ -718,8 +709,7 @@ final class Compliance {
         if (request.info?.pChild?.fChild?.fBool case final $1?
             when $1.isNotDefault)
           'info.pChild.fChild.fBool': '${$1}',
-        if (request.info?.pChild?.pString case final $1?)
-          'info.pChild.pString': $1,
+        'info.pChild.pString': ?request.info?.pChild?.pString,
         if (request.info?.pChild?.pFloat case final $1?)
           'info.pChild.pFloat': '${$1}',
         if (request.info?.pChild?.pDouble case final $1?)
@@ -740,7 +730,7 @@ final class Compliance {
           'info.pChild.pChild.fBool': '${$1}',
         if (request.serverVerify case final $1 when $1.isNotDefault)
           'serverVerify': '${$1}',
-        if (request.intendedBindingUri case final $1?) 'intendedBindingUri': $1,
+        'intendedBindingUri': ?request.intendedBindingUri,
         if (request.fInt32 case final $1 when $1.isNotDefault)
           'fInt32': '${$1}',
         if (request.fInt64 case final $1 when $1.isNotDefault)
@@ -4924,16 +4914,15 @@ final class RepeatRequest extends ProtoMessage {
   @override
   Object toJson() => {
     if (name.isNotDefault) 'name': name,
-    if (info case final info?) 'info': info.toJson(),
+    'info': ?info?.toJson(),
     if (serverVerify.isNotDefault) 'serverVerify': serverVerify,
-    if (intendedBindingUri case final intendedBindingUri?)
-      'intendedBindingUri': intendedBindingUri,
+    'intendedBindingUri': ?intendedBindingUri,
     if (fInt32.isNotDefault) 'fInt32': fInt32,
     if (fInt64.isNotDefault) 'fInt64': fInt64.toString(),
     if (fDouble.isNotDefault) 'fDouble': encodeDouble(fDouble),
-    if (pInt32 case final pInt32?) 'pInt32': pInt32,
-    if (pInt64 case final pInt64?) 'pInt64': pInt64.toString(),
-    if (pDouble case final pDouble?) 'pDouble': encodeDouble(pDouble),
+    'pInt32': ?pInt32,
+    'pInt64': ?pInt64?.toString(),
+    if (pDouble case final $1?) 'pDouble': encodeDouble($1),
   };
 
   @override
@@ -4981,7 +4970,7 @@ final class RepeatResponse extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (request case final request?) 'request': request.toJson(),
+    'request': ?request?.toJson(),
     if (bindingUri.isNotDefault) 'bindingUri': bindingUri,
   };
 
@@ -5344,23 +5333,23 @@ final class ComplianceData extends ProtoMessage {
     if (fBool.isNotDefault) 'fBool': fBool,
     if (fBytes.isNotDefault) 'fBytes': encodeBytes(fBytes),
     if (fKingdom.isNotDefault) 'fKingdom': fKingdom.toJson(),
-    if (fChild case final fChild?) 'fChild': fChild.toJson(),
-    if (pString case final pString?) 'pString': pString,
-    if (pInt32 case final pInt32?) 'pInt32': pInt32,
-    if (pSint32 case final pSint32?) 'pSint32': pSint32,
-    if (pSfixed32 case final pSfixed32?) 'pSfixed32': pSfixed32,
-    if (pUint32 case final pUint32?) 'pUint32': pUint32,
-    if (pFixed32 case final pFixed32?) 'pFixed32': pFixed32,
-    if (pInt64 case final pInt64?) 'pInt64': pInt64.toString(),
-    if (pSint64 case final pSint64?) 'pSint64': pSint64.toString(),
-    if (pSfixed64 case final pSfixed64?) 'pSfixed64': pSfixed64.toString(),
-    if (pUint64 case final pUint64?) 'pUint64': pUint64.toString(),
-    if (pFixed64 case final pFixed64?) 'pFixed64': pFixed64.toString(),
-    if (pFloat case final pFloat?) 'pFloat': encodeDouble(pFloat),
-    if (pDouble case final pDouble?) 'pDouble': encodeDouble(pDouble),
-    if (pBool case final pBool?) 'pBool': pBool,
-    if (pKingdom case final pKingdom?) 'pKingdom': pKingdom.toJson(),
-    if (pChild case final pChild?) 'pChild': pChild.toJson(),
+    'fChild': ?fChild?.toJson(),
+    'pString': ?pString,
+    'pInt32': ?pInt32,
+    'pSint32': ?pSint32,
+    'pSfixed32': ?pSfixed32,
+    'pUint32': ?pUint32,
+    'pFixed32': ?pFixed32,
+    'pInt64': ?pInt64?.toString(),
+    'pSint64': ?pSint64?.toString(),
+    'pSfixed64': ?pSfixed64?.toString(),
+    'pUint64': ?pUint64?.toString(),
+    'pFixed64': ?pFixed64?.toString(),
+    if (pFloat case final $1?) 'pFloat': encodeDouble($1),
+    if (pDouble case final $1?) 'pDouble': encodeDouble($1),
+    'pBool': ?pBool,
+    'pKingdom': ?pKingdom?.toJson(),
+    'pChild': ?pChild?.toJson(),
   };
 
   @override
@@ -5537,13 +5526,13 @@ final class ComplianceDataChild extends ProtoMessage {
     if (fDouble.isNotDefault) 'fDouble': encodeDouble(fDouble),
     if (fBool.isNotDefault) 'fBool': fBool,
     if (fContinent.isNotDefault) 'fContinent': fContinent.toJson(),
-    if (fChild case final fChild?) 'fChild': fChild.toJson(),
-    if (pString case final pString?) 'pString': pString,
-    if (pFloat case final pFloat?) 'pFloat': encodeDouble(pFloat),
-    if (pDouble case final pDouble?) 'pDouble': encodeDouble(pDouble),
-    if (pBool case final pBool?) 'pBool': pBool,
+    'fChild': ?fChild?.toJson(),
+    'pString': ?pString,
+    if (pFloat case final $1?) 'pFloat': encodeDouble($1),
+    if (pDouble case final $1?) 'pDouble': encodeDouble($1),
+    'pBool': ?pBool,
     if (pContinent.isNotDefault) 'pContinent': pContinent.toJson(),
-    if (pChild case final pChild?) 'pChild': pChild.toJson(),
+    'pChild': ?pChild?.toJson(),
   };
 
   @override
@@ -5674,7 +5663,7 @@ final class EnumResponse extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (request case final request?) 'request': request.toJson(),
+    'request': ?request?.toJson(),
     if (continent.isNotDefault) 'continent': continent.toJson(),
   };
 
@@ -5760,14 +5749,13 @@ final class EchoRequest extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (content case final content?) 'content': content,
-    if (error case final error?) 'error': error.toJson(),
+    'content': ?content,
+    'error': ?error?.toJson(),
     if (severity.isNotDefault) 'severity': severity.toJson(),
     if (header.isNotDefault) 'header': header,
     if (otherHeader.isNotDefault) 'otherHeader': otherHeader,
     if (requestId.isNotDefault) 'requestId': requestId,
-    if (otherRequestId case final otherRequestId?)
-      'otherRequestId': otherRequestId,
+    'otherRequestId': ?otherRequestId,
   };
 
   @override
@@ -5924,10 +5912,8 @@ final class EchoErrorDetailsResponse extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (singleDetail case final singleDetail?)
-      'singleDetail': singleDetail.toJson(),
-    if (multipleDetails case final multipleDetails?)
-      'multipleDetails': multipleDetails.toJson(),
+    'singleDetail': ?singleDetail?.toJson(),
+    'multipleDetails': ?multipleDetails?.toJson(),
   };
 
   @override
@@ -5954,7 +5940,7 @@ final class EchoErrorDetailsResponse_SingleDetail extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {if (error case final error?) 'error': error.toJson()};
+  Object toJson() => {'error': ?error?.toJson()};
 
   @override
   String toString() => 'SingleDetail()';
@@ -5980,7 +5966,7 @@ final class EchoErrorDetailsResponse_MultipleDetails extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {if (error case final error?) 'error': error.toJson()};
+  Object toJson() => {'error': ?error?.toJson()};
 
   @override
   String toString() => 'MultipleDetails()';
@@ -6005,9 +5991,7 @@ final class ErrorWithSingleDetail extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    if (details case final details?) 'details': details.toJson(),
-  };
+  Object toJson() => {'details': ?details?.toJson()};
 
   @override
   String toString() => 'ErrorWithSingleDetail()';
@@ -6112,7 +6096,7 @@ final class FailEchoWithDetailsResponse extends ProtoMessage {
 
   FailEchoWithDetailsResponse() : super(fullyQualifiedName);
 
-  factory FailEchoWithDetailsResponse.fromJson(Object? j) =>
+  factory FailEchoWithDetailsResponse.fromJson(Object? _) =>
       FailEchoWithDetailsResponse();
 
   @override
@@ -6160,9 +6144,8 @@ final class ExpandRequest extends ProtoMessage {
   @override
   Object toJson() => {
     if (content.isNotDefault) 'content': content,
-    if (error case final error?) 'error': error.toJson(),
-    if (streamWaitTime case final streamWaitTime?)
-      'streamWaitTime': streamWaitTime.toJson(),
+    'error': ?error?.toJson(),
+    'streamWaitTime': ?streamWaitTime?.toJson(),
   };
 
   @override
@@ -6454,10 +6437,10 @@ final class WaitRequest extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (endTime case final endTime?) 'endTime': endTime.toJson(),
-    if (ttl case final ttl?) 'ttl': ttl.toJson(),
-    if (error case final error?) 'error': error.toJson(),
-    if (success case final success?) 'success': success.toJson(),
+    'endTime': ?endTime?.toJson(),
+    'ttl': ?ttl?.toJson(),
+    'error': ?error?.toJson(),
+    'success': ?success?.toJson(),
   };
 
   @override
@@ -6515,9 +6498,7 @@ final class WaitMetadata extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    if (endTime case final endTime?) 'endTime': endTime.toJson(),
-  };
+  Object toJson() => {'endTime': ?endTime?.toJson()};
 
   @override
   String toString() => 'WaitMetadata()';
@@ -6561,10 +6542,9 @@ final class BlockRequest extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (responseDelay case final responseDelay?)
-      'responseDelay': responseDelay.toJson(),
-    if (error case final error?) 'error': error.toJson(),
-    if (success case final success?) 'success': success.toJson(),
+    'responseDelay': ?responseDelay?.toJson(),
+    'error': ?error?.toJson(),
+    'success': ?success?.toJson(),
   };
 
   @override
@@ -6698,14 +6678,12 @@ final class User extends ProtoMessage {
     if (name.isNotDefault) 'name': name,
     'displayName': displayName,
     'email': email,
-    if (createTime case final createTime?) 'createTime': createTime.toJson(),
-    if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
-    if (age case final age?) 'age': age,
-    if (heightFeet case final heightFeet?)
-      'heightFeet': encodeDouble(heightFeet),
-    if (nickname case final nickname?) 'nickname': nickname,
-    if (enableNotifications case final enableNotifications?)
-      'enableNotifications': enableNotifications,
+    'createTime': ?createTime?.toJson(),
+    'updateTime': ?updateTime?.toJson(),
+    'age': ?age,
+    if (heightFeet case final $1?) 'heightFeet': encodeDouble($1),
+    'nickname': ?nickname,
+    'enableNotifications': ?enableNotifications,
   };
 
   @override
@@ -6746,7 +6724,7 @@ final class CreateUserRequest extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {if (user case final user?) 'user': user.toJson()};
+  Object toJson() => {'user': ?user?.toJson()};
 
   @override
   String toString() => 'CreateUserRequest()';
@@ -6814,8 +6792,8 @@ final class UpdateUserRequest extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (user case final user?) 'user': user.toJson(),
-    if (updateMask case final updateMask?) 'updateMask': updateMask.toJson(),
+    'user': ?user?.toJson(),
+    'updateMask': ?updateMask?.toJson(),
   };
 
   @override
@@ -7002,8 +6980,8 @@ final class Room extends ProtoMessage {
     if (name.isNotDefault) 'name': name,
     'displayName': displayName,
     if (description.isNotDefault) 'description': description,
-    if (createTime case final createTime?) 'createTime': createTime.toJson(),
-    if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
+    'createTime': ?createTime?.toJson(),
+    'updateTime': ?updateTime?.toJson(),
   };
 
   @override
@@ -7039,7 +7017,7 @@ final class CreateRoomRequest extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {if (room case final room?) 'room': room.toJson()};
+  Object toJson() => {'room': ?room?.toJson()};
 
   @override
   String toString() => 'CreateRoomRequest()';
@@ -7107,8 +7085,8 @@ final class UpdateRoomRequest extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (room case final room?) 'room': room.toJson(),
-    if (updateMask case final updateMask?) 'updateMask': updateMask.toJson(),
+    'room': ?room?.toJson(),
+    'updateMask': ?updateMask?.toJson(),
   };
 
   @override
@@ -7323,12 +7301,12 @@ final class Blurb extends ProtoMessage {
   Object toJson() => {
     if (name.isNotDefault) 'name': name,
     'user': user,
-    if (text case final text?) 'text': text,
-    if (image case final image?) 'image': encodeBytes(image),
-    if (createTime case final createTime?) 'createTime': createTime.toJson(),
-    if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
-    if (legacyRoomId case final legacyRoomId?) 'legacyRoomId': legacyRoomId,
-    if (legacyUserId case final legacyUserId?) 'legacyUserId': legacyUserId,
+    'text': ?text,
+    if (image case final $1?) 'image': encodeBytes($1),
+    'createTime': ?createTime?.toJson(),
+    'updateTime': ?updateTime?.toJson(),
+    'legacyRoomId': ?legacyRoomId,
+    'legacyUserId': ?legacyUserId,
   };
 
   @override
@@ -7376,10 +7354,7 @@ final class CreateBlurbRequest extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    'parent': parent,
-    if (blurb case final blurb?) 'blurb': blurb.toJson(),
-  };
+  Object toJson() => {'parent': parent, 'blurb': ?blurb?.toJson()};
 
   @override
   String toString() {
@@ -7450,8 +7425,8 @@ final class UpdateBlurbRequest extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (blurb case final blurb?) 'blurb': blurb.toJson(),
-    if (updateMask case final updateMask?) 'updateMask': updateMask.toJson(),
+    'blurb': ?blurb?.toJson(),
+    'updateMask': ?updateMask?.toJson(),
   };
 
   @override
@@ -7692,9 +7667,7 @@ final class SearchBlurbsMetadata extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    if (retryInfo case final retryInfo?) 'retryInfo': retryInfo.toJson(),
-  };
+  Object toJson() => {'retryInfo': ?retryInfo?.toJson()};
 
   @override
   String toString() => 'SearchBlurbsMetadata()';
@@ -7776,10 +7749,7 @@ final class StreamBlurbsRequest extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    'name': name,
-    if (expireTime case final expireTime?) 'expireTime': expireTime.toJson(),
-  };
+  Object toJson() => {'name': name, 'expireTime': ?expireTime?.toJson()};
 
   @override
   String toString() {
@@ -7821,7 +7791,7 @@ final class StreamBlurbsResponse extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (blurb case final blurb?) 'blurb': blurb.toJson(),
+    'blurb': ?blurb?.toJson(),
     if (action.isNotDefault) 'action': action.toJson(),
   };
 
@@ -7920,10 +7890,7 @@ final class ConnectRequest extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    if (config case final config?) 'config': config.toJson(),
-    if (blurb case final blurb?) 'blurb': blurb.toJson(),
-  };
+  Object toJson() => {'config': ?config?.toJson(), 'blurb': ?blurb?.toJson()};
 
   @override
   String toString() => 'ConnectRequest()';
@@ -7978,7 +7945,7 @@ final class RestError extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {if (error case final error?) 'error': error.toJson()};
+  Object toJson() => {'error': ?error?.toJson()};
 
   @override
   String toString() => 'RestError()';
@@ -8119,10 +8086,7 @@ final class Sequence_Response extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    if (status case final status?) 'status': status.toJson(),
-    if (delay case final delay?) 'delay': delay.toJson(),
-  };
+  Object toJson() => {'status': ?status?.toJson(), 'delay': ?delay?.toJson()};
 
   @override
   String toString() => 'Response()';
@@ -8224,8 +8188,8 @@ final class StreamingSequence_Response extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (status case final status?) 'status': status.toJson(),
-    if (delay case final delay?) 'delay': delay.toJson(),
+    'status': ?status?.toJson(),
+    'delay': ?delay?.toJson(),
     if (responseIndex.isNotDefault) 'responseIndex': responseIndex,
   };
 
@@ -8339,13 +8303,10 @@ final class StreamingSequenceReport_Attempt extends ProtoMessage {
   @override
   Object toJson() => {
     if (attemptNumber.isNotDefault) 'attemptNumber': attemptNumber,
-    if (attemptDeadline case final attemptDeadline?)
-      'attemptDeadline': attemptDeadline.toJson(),
-    if (responseTime case final responseTime?)
-      'responseTime': responseTime.toJson(),
-    if (attemptDelay case final attemptDelay?)
-      'attemptDelay': attemptDelay.toJson(),
-    if (status case final status?) 'status': status.toJson(),
+    'attemptDeadline': ?attemptDeadline?.toJson(),
+    'responseTime': ?responseTime?.toJson(),
+    'attemptDelay': ?attemptDelay?.toJson(),
+    'status': ?status?.toJson(),
   };
 
   @override
@@ -8458,13 +8419,10 @@ final class SequenceReport_Attempt extends ProtoMessage {
   @override
   Object toJson() => {
     if (attemptNumber.isNotDefault) 'attemptNumber': attemptNumber,
-    if (attemptDeadline case final attemptDeadline?)
-      'attemptDeadline': attemptDeadline.toJson(),
-    if (responseTime case final responseTime?)
-      'responseTime': responseTime.toJson(),
-    if (attemptDelay case final attemptDelay?)
-      'attemptDelay': attemptDelay.toJson(),
-    if (status case final status?) 'status': status.toJson(),
+    'attemptDeadline': ?attemptDeadline?.toJson(),
+    'responseTime': ?responseTime?.toJson(),
+    'attemptDelay': ?attemptDelay?.toJson(),
+    'status': ?status?.toJson(),
   };
 
   @override
@@ -8494,9 +8452,7 @@ final class CreateSequenceRequest extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    if (sequence case final sequence?) 'sequence': sequence.toJson(),
-  };
+  Object toJson() => {'sequence': ?sequence?.toJson()};
 
   @override
   String toString() => 'CreateSequenceRequest()';
@@ -8523,10 +8479,7 @@ final class CreateStreamingSequenceRequest extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    if (streamingSequence case final streamingSequence?)
-      'streamingSequence': streamingSequence.toJson(),
-  };
+  Object toJson() => {'streamingSequence': ?streamingSequence?.toJson()};
 
   @override
   String toString() => 'CreateStreamingSequenceRequest()';
@@ -8785,9 +8738,7 @@ final class CreateSessionRequest extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    if (session case final session?) 'session': session.toJson(),
-  };
+  Object toJson() => {'session': ?session?.toJson()};
 
   @override
   String toString() => 'CreateSessionRequest()';
@@ -9169,7 +9120,7 @@ final class Test_Blueprint extends ProtoMessage {
   Object toJson() => {
     if (name.isNotDefault) 'name': name,
     if (description.isNotDefault) 'description': description,
-    if (request case final request?) 'request': request.toJson(),
+    'request': ?request?.toJson(),
     if (additionalRequests.isNotDefault)
       'additionalRequests': [for (final i in additionalRequests) i.toJson()],
   };
@@ -9502,7 +9453,7 @@ final class TestRun extends ProtoMessage {
   @override
   Object toJson() => {
     if (test.isNotDefault) 'test': test,
-    if (issue case final issue?) 'issue': issue.toJson(),
+    'issue': ?issue?.toJson(),
   };
 
   @override
@@ -9616,7 +9567,7 @@ final class VerifyTestResponse extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {if (issue case final issue?) 'issue': issue.toJson()};
+  Object toJson() => {'issue': ?issue?.toJson()};
 
   @override
   String toString() => 'VerifyTestResponse()';

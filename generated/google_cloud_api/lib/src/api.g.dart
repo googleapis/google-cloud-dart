@@ -19,7 +19,6 @@
 /// Lets you define and config your API service.
 library;
 
-// ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
 // ignore_for_file: constant_identifier_names
@@ -27,7 +26,6 @@ library;
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: non_constant_identifier_names
 // ignore_for_file: unintended_html_in_doc_comment
-// ignore_for_file: use_null_aware_elements
 
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/src/encoding.dart';
@@ -154,7 +152,7 @@ final class AuthenticationRule extends ProtoMessage {
   @override
   Object toJson() => {
     if (selector.isNotDefault) 'selector': selector,
-    if (oauth case final oauth?) 'oauth': oauth.toJson(),
+    'oauth': ?oauth?.toJson(),
     if (allowWithoutCredential.isNotDefault)
       'allowWithoutCredential': allowWithoutCredential,
     if (requirements.isNotDefault)
@@ -221,9 +219,9 @@ final class JwtLocation extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (header case final header?) 'header': header,
-    if (query case final query?) 'query': query,
-    if (cookie case final cookie?) 'cookie': cookie,
+    'header': ?header,
+    'query': ?query,
+    'cookie': ?cookie,
     if (valuePrefix.isNotDefault) 'valuePrefix': valuePrefix,
   };
 
@@ -686,8 +684,8 @@ final class BackendRule extends ProtoMessage {
       'operationDeadline': encodeDouble(operationDeadline),
     if (pathTranslation.isNotDefault)
       'pathTranslation': pathTranslation.toJson(),
-    if (jwtAudience case final jwtAudience?) 'jwtAudience': jwtAudience,
-    if (disableAuth case final disableAuth?) 'disableAuth': disableAuth,
+    'jwtAudience': ?jwtAudience,
+    'disableAuth': ?disableAuth,
     if (protocol.isNotDefault) 'protocol': protocol,
     if (overridesByRequestProtocol.isNotDefault)
       'overridesByRequestProtocol': {
@@ -954,8 +952,7 @@ final class CommonLanguageSettings extends ProtoMessage {
     if (referenceDocsUri.isNotDefault) 'referenceDocsUri': referenceDocsUri,
     if (destinations.isNotDefault)
       'destinations': [for (final i in destinations) i.toJson()],
-    if (selectiveGapicGeneration case final selectiveGapicGeneration?)
-      'selectiveGapicGeneration': selectiveGapicGeneration.toJson(),
+    'selectiveGapicGeneration': ?selectiveGapicGeneration?.toJson(),
   };
 
   @override
@@ -1074,21 +1071,14 @@ final class ClientLibrarySettings extends ProtoMessage {
     if (version.isNotDefault) 'version': version,
     if (launchStage.isNotDefault) 'launchStage': launchStage.toJson(),
     if (restNumericEnums.isNotDefault) 'restNumericEnums': restNumericEnums,
-    if (javaSettings case final javaSettings?)
-      'javaSettings': javaSettings.toJson(),
-    if (cppSettings case final cppSettings?)
-      'cppSettings': cppSettings.toJson(),
-    if (phpSettings case final phpSettings?)
-      'phpSettings': phpSettings.toJson(),
-    if (pythonSettings case final pythonSettings?)
-      'pythonSettings': pythonSettings.toJson(),
-    if (nodeSettings case final nodeSettings?)
-      'nodeSettings': nodeSettings.toJson(),
-    if (dotnetSettings case final dotnetSettings?)
-      'dotnetSettings': dotnetSettings.toJson(),
-    if (rubySettings case final rubySettings?)
-      'rubySettings': rubySettings.toJson(),
-    if (goSettings case final goSettings?) 'goSettings': goSettings.toJson(),
+    'javaSettings': ?javaSettings?.toJson(),
+    'cppSettings': ?cppSettings?.toJson(),
+    'phpSettings': ?phpSettings?.toJson(),
+    'pythonSettings': ?pythonSettings?.toJson(),
+    'nodeSettings': ?nodeSettings?.toJson(),
+    'dotnetSettings': ?dotnetSettings?.toJson(),
+    'rubySettings': ?rubySettings?.toJson(),
+    'goSettings': ?goSettings?.toJson(),
   };
 
   @override
@@ -1331,7 +1321,7 @@ final class JavaSettings extends ProtoMessage {
   Object toJson() => {
     if (libraryPackage.isNotDefault) 'libraryPackage': libraryPackage,
     if (serviceClassNames.isNotDefault) 'serviceClassNames': serviceClassNames,
-    if (common case final common?) 'common': common.toJson(),
+    'common': ?common?.toJson(),
   };
 
   @override
@@ -1361,7 +1351,7 @@ final class CppSettings extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {if (common case final common?) 'common': common.toJson()};
+  Object toJson() => {'common': ?common?.toJson()};
 
   @override
   String toString() => 'CppSettings()';
@@ -1387,7 +1377,7 @@ final class PhpSettings extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {if (common case final common?) 'common': common.toJson()};
+  Object toJson() => {'common': ?common?.toJson()};
 
   @override
   String toString() => 'PhpSettings()';
@@ -1422,9 +1412,8 @@ final class PythonSettings extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (common case final common?) 'common': common.toJson(),
-    if (experimentalFeatures case final experimentalFeatures?)
-      'experimentalFeatures': experimentalFeatures.toJson(),
+    'common': ?common?.toJson(),
+    'experimentalFeatures': ?experimentalFeatures?.toJson(),
   };
 
   @override
@@ -1522,7 +1511,7 @@ final class NodeSettings extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {if (common case final common?) 'common': common.toJson()};
+  Object toJson() => {'common': ?common?.toJson()};
 
   @override
   String toString() => 'NodeSettings()';
@@ -1621,7 +1610,7 @@ final class DotnetSettings extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (common case final common?) 'common': common.toJson(),
+    'common': ?common?.toJson(),
     if (renamedServices.isNotDefault) 'renamedServices': renamedServices,
     if (renamedResources.isNotDefault) 'renamedResources': renamedResources,
     if (ignoredResources.isNotDefault) 'ignoredResources': ignoredResources,
@@ -1655,7 +1644,7 @@ final class RubySettings extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {if (common case final common?) 'common': common.toJson()};
+  Object toJson() => {'common': ?common?.toJson()};
 
   @override
   String toString() => 'RubySettings()';
@@ -1701,7 +1690,7 @@ final class GoSettings extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (common case final common?) 'common': common.toJson(),
+    'common': ?common?.toJson(),
     if (renamedServices.isNotDefault) 'renamedServices': renamedServices,
   };
 
@@ -1781,8 +1770,7 @@ final class MethodSettings extends ProtoMessage {
   @override
   Object toJson() => {
     if (selector.isNotDefault) 'selector': selector,
-    if (longRunning case final longRunning?)
-      'longRunning': longRunning.toJson(),
+    'longRunning': ?longRunning?.toJson(),
     if (autoPopulatedFields.isNotDefault)
       'autoPopulatedFields': autoPopulatedFields,
   };
@@ -1851,14 +1839,11 @@ final class MethodSettings_LongRunning extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (initialPollDelay case final initialPollDelay?)
-      'initialPollDelay': initialPollDelay.toJson(),
+    'initialPollDelay': ?initialPollDelay?.toJson(),
     if (pollDelayMultiplier.isNotDefault)
       'pollDelayMultiplier': encodeDouble(pollDelayMultiplier),
-    if (maxPollDelay case final maxPollDelay?)
-      'maxPollDelay': maxPollDelay.toJson(),
-    if (totalPollTimeout case final totalPollTimeout?)
-      'totalPollTimeout': totalPollTimeout.toJson(),
+    'maxPollDelay': ?maxPollDelay?.toJson(),
+    'totalPollTimeout': ?totalPollTimeout?.toJson(),
   };
 
   @override
@@ -2505,9 +2490,8 @@ final class Distribution extends ProtoMessage {
     if (mean.isNotDefault) 'mean': encodeDouble(mean),
     if (sumOfSquaredDeviation.isNotDefault)
       'sumOfSquaredDeviation': encodeDouble(sumOfSquaredDeviation),
-    if (range case final range?) 'range': range.toJson(),
-    if (bucketOptions case final bucketOptions?)
-      'bucketOptions': bucketOptions.toJson(),
+    'range': ?range?.toJson(),
+    'bucketOptions': ?bucketOptions?.toJson(),
     if (bucketCounts.isNotDefault)
       'bucketCounts': [for (final i in bucketCounts) i.toString()],
     if (exemplars.isNotDefault)
@@ -2618,12 +2602,9 @@ final class Distribution_BucketOptions extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (linearBuckets case final linearBuckets?)
-      'linearBuckets': linearBuckets.toJson(),
-    if (exponentialBuckets case final exponentialBuckets?)
-      'exponentialBuckets': exponentialBuckets.toJson(),
-    if (explicitBuckets case final explicitBuckets?)
-      'explicitBuckets': explicitBuckets.toJson(),
+    'linearBuckets': ?linearBuckets?.toJson(),
+    'exponentialBuckets': ?exponentialBuckets?.toJson(),
+    'explicitBuckets': ?explicitBuckets?.toJson(),
   };
 
   @override
@@ -2858,7 +2839,7 @@ final class Distribution_Exemplar extends ProtoMessage {
   @override
   Object toJson() => {
     if (value.isNotDefault) 'value': encodeDouble(value),
-    if (timestamp case final timestamp?) 'timestamp': timestamp.toJson(),
+    'timestamp': ?timestamp?.toJson(),
     if (attachments.isNotDefault)
       'attachments': [for (final i in attachments) i.toJson()],
   };
@@ -3822,12 +3803,12 @@ final class HttpRule extends ProtoMessage {
   @override
   Object toJson() => {
     if (selector.isNotDefault) 'selector': selector,
-    if (get case final get?) 'get': get,
-    if (put case final put?) 'put': put,
-    if (post case final post?) 'post': post,
-    if (delete case final delete?) 'delete': delete,
-    if (patch case final patch?) 'patch': patch,
-    if (custom case final custom?) 'custom': custom.toJson(),
+    'get': ?get,
+    'put': ?put,
+    'post': ?post,
+    'delete': ?delete,
+    'patch': ?patch,
+    'custom': ?custom?.toJson(),
     if (body.isNotDefault) 'body': body,
     if (responseBody.isNotDefault) 'responseBody': responseBody,
     if (additionalBindings.isNotDefault)
@@ -4522,7 +4503,7 @@ final class MetricDescriptor extends ProtoMessage {
     if (unit.isNotDefault) 'unit': unit,
     if (description.isNotDefault) 'description': description,
     if (displayName.isNotDefault) 'displayName': displayName,
-    if (metadata case final metadata?) 'metadata': metadata.toJson(),
+    'metadata': ?metadata?.toJson(),
     if (launchStage.isNotDefault) 'launchStage': launchStage.toJson(),
     if (monitoredResourceTypes.isNotDefault)
       'monitoredResourceTypes': monitoredResourceTypes,
@@ -4612,10 +4593,8 @@ final class MetricDescriptor_MetricDescriptorMetadata extends ProtoMessage {
   @override
   Object toJson() => {
     if (launchStage.isNotDefault) 'launchStage': launchStage.toJson(),
-    if (samplePeriod case final samplePeriod?)
-      'samplePeriod': samplePeriod.toJson(),
-    if (ingestDelay case final ingestDelay?)
-      'ingestDelay': ingestDelay.toJson(),
+    'samplePeriod': ?samplePeriod?.toJson(),
+    'ingestDelay': ?ingestDelay?.toJson(),
     if (timeSeriesResourceHierarchyLevel.isNotDefault)
       'timeSeriesResourceHierarchyLevel': [
         for (final i in timeSeriesResourceHierarchyLevel) i.toJson(),
@@ -5026,8 +5005,7 @@ final class MonitoredResourceMetadata extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (systemLabels case final systemLabels?)
-      'systemLabels': systemLabels.toJson(),
+    'systemLabels': ?systemLabels?.toJson(),
     if (userLabels.isNotDefault) 'userLabels': userLabels,
   };
 
@@ -6773,31 +6751,27 @@ final class Service extends ProtoMessage {
     if (apis.isNotDefault) 'apis': [for (final i in apis) i.toJson()],
     if (types.isNotDefault) 'types': [for (final i in types) i.toJson()],
     if (enums.isNotDefault) 'enums': [for (final i in enums) i.toJson()],
-    if (documentation case final documentation?)
-      'documentation': documentation.toJson(),
-    if (backend case final backend?) 'backend': backend.toJson(),
-    if (http case final http?) 'http': http.toJson(),
-    if (quota case final quota?) 'quota': quota.toJson(),
-    if (authentication case final authentication?)
-      'authentication': authentication.toJson(),
-    if (context case final context?) 'context': context.toJson(),
-    if (usage case final usage?) 'usage': usage.toJson(),
+    'documentation': ?documentation?.toJson(),
+    'backend': ?backend?.toJson(),
+    'http': ?http?.toJson(),
+    'quota': ?quota?.toJson(),
+    'authentication': ?authentication?.toJson(),
+    'context': ?context?.toJson(),
+    'usage': ?usage?.toJson(),
     if (endpoints.isNotDefault)
       'endpoints': [for (final i in endpoints) i.toJson()],
-    if (control case final control?) 'control': control.toJson(),
+    'control': ?control?.toJson(),
     if (logs.isNotDefault) 'logs': [for (final i in logs) i.toJson()],
     if (metrics.isNotDefault) 'metrics': [for (final i in metrics) i.toJson()],
     if (monitoredResources.isNotDefault)
       'monitoredResources': [for (final i in monitoredResources) i.toJson()],
-    if (billing case final billing?) 'billing': billing.toJson(),
-    if (logging case final logging?) 'logging': logging.toJson(),
-    if (monitoring case final monitoring?) 'monitoring': monitoring.toJson(),
-    if (systemParameters case final systemParameters?)
-      'systemParameters': systemParameters.toJson(),
-    if (sourceInfo case final sourceInfo?) 'sourceInfo': sourceInfo.toJson(),
-    if (publishing case final publishing?) 'publishing': publishing.toJson(),
-    if (configVersion case final configVersion?)
-      'configVersion': configVersion.toJson(),
+    'billing': ?billing?.toJson(),
+    'logging': ?logging?.toJson(),
+    'monitoring': ?monitoring?.toJson(),
+    'systemParameters': ?systemParameters?.toJson(),
+    'sourceInfo': ?sourceInfo?.toJson(),
+    'publishing': ?publishing?.toJson(),
+    'configVersion': ?configVersion?.toJson(),
   };
 
   @override

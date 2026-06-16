@@ -19,7 +19,6 @@
 /// Manages access control for Google Cloud Platform resources.
 library;
 
-// ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
 // ignore_for_file: constant_identifier_names
@@ -27,7 +26,6 @@ library;
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: non_constant_identifier_names
 // ignore_for_file: unintended_html_in_doc_comment
-// ignore_for_file: use_null_aware_elements
 
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/src/encoding.dart';
@@ -297,8 +295,8 @@ final class SetIamPolicyRequest extends ProtoMessage {
   @override
   Object toJson() => {
     'resource': resource,
-    if (policy case final policy?) 'policy': policy.toJson(),
-    if (updateMask case final updateMask?) 'updateMask': updateMask.toJson(),
+    'policy': ?policy?.toJson(),
+    'updateMask': ?updateMask?.toJson(),
   };
 
   @override
@@ -338,10 +336,7 @@ final class GetIamPolicyRequest extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    'resource': resource,
-    if (options case final options?) 'options': options.toJson(),
-  };
+  Object toJson() => {'resource': resource, 'options': ?options?.toJson()};
 
   @override
   String toString() {
@@ -748,7 +743,7 @@ final class Binding extends ProtoMessage {
   Object toJson() => {
     if (role.isNotDefault) 'role': role,
     if (members.isNotDefault) 'members': members,
-    if (condition case final condition?) 'condition': condition.toJson(),
+    'condition': ?condition?.toJson(),
   };
 
   @override
@@ -1046,7 +1041,7 @@ final class BindingDelta extends ProtoMessage {
     if (action.isNotDefault) 'action': action.toJson(),
     if (role.isNotDefault) 'role': role,
     if (member.isNotDefault) 'member': member,
-    if (condition case final condition?) 'condition': condition.toJson(),
+    'condition': ?condition?.toJson(),
   };
 
   @override
