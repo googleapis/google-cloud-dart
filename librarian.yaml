@@ -264,7 +264,6 @@ libraries:
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_api
   - name: google_cloud_common
     copyright_year: "2025"
-    description_override: Additional metadata for operations.
     dart:
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_common
   - name: google_cloud_firestore_v1
@@ -324,17 +323,6 @@ libraries:
     apis:
       - path: google/longrunning
     copyright_year: "2025"
-    description_override: |-
-      Defines types and an abstract service to handle long-running operations.
-
-      [Long-running operations] are a common pattern to handle methods that may take
-      a significant amount of time to execute. Many Google APIs return an `Operation`
-      message (defined in this package) that are roughly analogous to a Future. The
-      operation will eventually complete, though it may still return an error on
-      completion. The client libraries provide helpers to simplify polling of these
-      operations.
-
-      [Long-running operations]: https://google.aip.dev/151
     keep:
       - test/operation_test.dart
       - lib/src/longrunning.p.dart
@@ -347,7 +335,6 @@ libraries:
     apis:
       - path: google/protobuf
     copyright_year: "2025"
-    description_override: Core Protobuf types used by most services.
     keep:
       - lib/src/encoding.dart
       - test/any_test.dart
