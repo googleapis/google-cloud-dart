@@ -20,7 +20,7 @@
 ///
 /// [Long-running operations] are a common pattern to handle methods that may take
 /// a significant amount of time to execute. Many Google APIs return an `Operation`
-/// message (defined in this package) that are roughly analogous to a Future. The
+/// message (defined in this package) that are roughly analogous to a future. The
 /// operation will eventually complete, though it may still return an error on
 /// completion. The client libraries provide helpers to simplify polling of these
 /// operations.
@@ -28,7 +28,6 @@
 /// [Long-running operations]: https://google.aip.dev/151
 library;
 
-// ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
 // ignore_for_file: constant_identifier_names
@@ -36,7 +35,6 @@ library;
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: non_constant_identifier_names
 // ignore_for_file: unintended_html_in_doc_comment
-// ignore_for_file: use_null_aware_elements
 
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/src/encoding.dart';
@@ -559,7 +557,7 @@ final class WaitOperationRequest extends ProtoMessage {
   @override
   Object toJson() => {
     if (name.isNotDefault) 'name': name,
-    if (timeout case final timeout?) 'timeout': timeout.toJson(),
+    'timeout': ?timeout?.toJson(),
   };
 
   @override

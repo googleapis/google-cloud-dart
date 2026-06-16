@@ -26,7 +26,7 @@ Defines types and an abstract service to handle long-running operations.
 
 [Long-running operations] are a common pattern to handle methods that may take
 a significant amount of time to execute. Many Google APIs return an `Operation`
-message (defined in this package) that are roughly analogous to a Future. The
+message (defined in this package) that are roughly analogous to a future. The
 operation will eventually complete, though it may still return an error on
 completion. The client libraries provide helpers to simplify polling of these
 operations.

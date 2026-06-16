@@ -22,4 +22,4 @@ The Google Cloud client library for the Common Operation Metadata type.
 
 The Google Cloud client library for the Common Operation Metadata type.
 
-Additional metadata for operations.
+Provides common protobuf definitions for APIs.

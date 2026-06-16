@@ -26,7 +26,7 @@ on:
 env:
   DART_VERSION: 3.9.2
   GOOGLE_CLOUD_PROJECT: test-project
-  LIBRARIAN_VERSION: v0.11.1-0.20260429222509-0e24d8cd0788
+  LIBRARIAN_VERSION: v0.21.0
 name: Dart Checks
 jobs:
   analyze_and_format:
@@ -46,11 +46,30 @@ jobs:
             ${{ runner.os }}-pub-
       - run: dart pub get
       - name: Analyze
-        run: dart analyze --fatal-infos
+        run: dart analyze
       - name: Format
         run: dart format --output=none --set-exit-if-changed .
       - name: Verify Code Excerpts Up-to-Date
         run: dart run tool/update_excerpts.dart --fail-on-update
+
+  analyze_dev:
+    name: Analyze (dev SDK)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - uses: dart-lang/setup-dart@65eb853c7ba17dde3be364c3d2858773e7144260
+        with:
+          sdk: dev
+      - name: Cache Pub Dependencies
+        uses: actions/cache@v5
+        with:
+          path: ~/.pub-cache
+          key: ${{ runner.os }}-pub-dev-${{ hashFiles('**/pubspec.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-dev-
+      - run: dart pub get
+      - name: Analyze
+        run: dart analyze --fatal-infos
 
   unit_tests:
     name: Unit Tests
