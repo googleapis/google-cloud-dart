@@ -42,6 +42,7 @@ workspace:
   - pkgs/google_cloud_logging
   - pkgs/google_cloud_shelf
   - pkgs/google_cloud_storage
+  - pkgs/google_cloud_pubsub
   - test_utils
   - tests
 
