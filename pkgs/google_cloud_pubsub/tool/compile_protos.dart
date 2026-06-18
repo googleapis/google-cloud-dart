@@ -8,7 +8,9 @@ void main() async {
   }
 
   print('Compiling protos...');
-  final pluginScript = Platform.isWindows ? 'tool/protoc-gen-dart.bat' : 'tool/protoc-gen-dart.sh';
+  final pluginScript = Platform.isWindows
+      ? 'tool/protoc-gen-dart.bat'
+      : 'tool/protoc-gen-dart.sh';
   final result = Process.runSync('protoc', [
     '--plugin=protoc-gen-dart=$pluginScript',
     '--dart_out=grpc:lib/src/generated',
