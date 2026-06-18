@@ -8,18 +8,14 @@ void main() async {
   }
 
   print('Compiling protos...');
+  final pluginScript = Platform.isWindows ? 'tool/protoc-gen-dart.bat' : 'tool/protoc-gen-dart.sh';
   final result = Process.runSync('protoc', [
-    '--plugin=protoc-gen-dart=tool/protoc-gen-dart.sh',
+    '--plugin=protoc-gen-dart=$pluginScript',
     '--dart_out=grpc:lib/src/generated',
     '-I',
     'protos',
     'protos/google/pubsub/v1/pubsub.proto',
     'protos/google/pubsub/v1/schema.proto',
-    'protos/google/protobuf/timestamp.proto',
-    'protos/google/protobuf/duration.proto',
-    'protos/google/protobuf/field_mask.proto',
-    'protos/google/protobuf/struct.proto',
-    'protos/google/protobuf/empty.proto',
   ]);
 
   print(result.stdout);

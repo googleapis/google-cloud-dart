@@ -8,13 +8,14 @@
 // ignore_for_file: constant_identifier_names
 // ignore_for_file: curly_braces_in_flow_control_structures
 // ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, prefer_relative_imports
 
 import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
+import 'package:protobuf/well_known_types/google/protobuf/timestamp.pb.dart'
+    as $2;
 
-import '../../protobuf/timestamp.pb.dart' as $2;
 import 'schema.pbenum.dart';
 
 export 'package:protobuf/protobuf.dart' show GeneratedMessageGenericExtensions;
@@ -55,9 +56,7 @@ class Schema extends $pb.GeneratedMessage {
           const $pb.PackageName(_omitMessageNames ? '' : 'google.pubsub.v1'),
       createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'name')
-    ..e<Schema_Type>(2, _omitFieldNames ? '' : 'type', $pb.PbFieldType.OE,
-        defaultOrMaker: Schema_Type.TYPE_UNSPECIFIED,
-        valueOf: Schema_Type.valueOf,
+    ..aE<Schema_Type>(2, _omitFieldNames ? '' : 'type',
         enumValues: Schema_Type.values)
     ..aOS(3, _omitFieldNames ? '' : 'definition')
     ..aOS(4, _omitFieldNames ? '' : 'revisionId')
@@ -66,7 +65,7 @@ class Schema extends $pb.GeneratedMessage {
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  Schema clone() => Schema()..mergeFromMessage(this);
+  Schema clone() => deepCopy();
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   Schema copyWith(void Function(Schema) updates) =>
       super.copyWith((message) => updates(message as Schema)) as Schema;
@@ -78,7 +77,6 @@ class Schema extends $pb.GeneratedMessage {
   static Schema create() => Schema._();
   @$core.override
   Schema createEmptyInstance() => create();
-  static $pb.PbList<Schema> createRepeated() => $pb.PbList<Schema>();
   @$core.pragma('dart2js:noInline')
   static Schema getDefault() =>
       _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Schema>(create);
@@ -174,7 +172,7 @@ class CreateSchemaRequest extends $pb.GeneratedMessage {
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  CreateSchemaRequest clone() => CreateSchemaRequest()..mergeFromMessage(this);
+  CreateSchemaRequest clone() => deepCopy();
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   CreateSchemaRequest copyWith(void Function(CreateSchemaRequest) updates) =>
       super.copyWith((message) => updates(message as CreateSchemaRequest))
@@ -187,8 +185,6 @@ class CreateSchemaRequest extends $pb.GeneratedMessage {
   static CreateSchemaRequest create() => CreateSchemaRequest._();
   @$core.override
   CreateSchemaRequest createEmptyInstance() => create();
-  static $pb.PbList<CreateSchemaRequest> createRepeated() =>
-      $pb.PbList<CreateSchemaRequest>();
   @$core.pragma('dart2js:noInline')
   static CreateSchemaRequest getDefault() => _defaultInstance ??=
       $pb.GeneratedMessage.$_defaultFor<CreateSchemaRequest>(create);
@@ -263,14 +259,12 @@ class GetSchemaRequest extends $pb.GeneratedMessage {
           const $pb.PackageName(_omitMessageNames ? '' : 'google.pubsub.v1'),
       createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'name')
-    ..e<SchemaView>(2, _omitFieldNames ? '' : 'view', $pb.PbFieldType.OE,
-        defaultOrMaker: SchemaView.SCHEMA_VIEW_UNSPECIFIED,
-        valueOf: SchemaView.valueOf,
+    ..aE<SchemaView>(2, _omitFieldNames ? '' : 'view',
         enumValues: SchemaView.values)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  GetSchemaRequest clone() => GetSchemaRequest()..mergeFromMessage(this);
+  GetSchemaRequest clone() => deepCopy();
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   GetSchemaRequest copyWith(void Function(GetSchemaRequest) updates) =>
       super.copyWith((message) => updates(message as GetSchemaRequest))
@@ -283,8 +277,6 @@ class GetSchemaRequest extends $pb.GeneratedMessage {
   static GetSchemaRequest create() => GetSchemaRequest._();
   @$core.override
   GetSchemaRequest createEmptyInstance() => create();
-  static $pb.PbList<GetSchemaRequest> createRepeated() =>
-      $pb.PbList<GetSchemaRequest>();
   @$core.pragma('dart2js:noInline')
   static GetSchemaRequest getDefault() => _defaultInstance ??=
       $pb.GeneratedMessage.$_defaultFor<GetSchemaRequest>(create);
@@ -344,16 +336,14 @@ class ListSchemasRequest extends $pb.GeneratedMessage {
           const $pb.PackageName(_omitMessageNames ? '' : 'google.pubsub.v1'),
       createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'parent')
-    ..e<SchemaView>(2, _omitFieldNames ? '' : 'view', $pb.PbFieldType.OE,
-        defaultOrMaker: SchemaView.SCHEMA_VIEW_UNSPECIFIED,
-        valueOf: SchemaView.valueOf,
+    ..aE<SchemaView>(2, _omitFieldNames ? '' : 'view',
         enumValues: SchemaView.values)
-    ..a<$core.int>(3, _omitFieldNames ? '' : 'pageSize', $pb.PbFieldType.O3)
+    ..aI(3, _omitFieldNames ? '' : 'pageSize')
     ..aOS(4, _omitFieldNames ? '' : 'pageToken')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  ListSchemasRequest clone() => ListSchemasRequest()..mergeFromMessage(this);
+  ListSchemasRequest clone() => deepCopy();
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   ListSchemasRequest copyWith(void Function(ListSchemasRequest) updates) =>
       super.copyWith((message) => updates(message as ListSchemasRequest))
@@ -366,8 +356,6 @@ class ListSchemasRequest extends $pb.GeneratedMessage {
   static ListSchemasRequest create() => ListSchemasRequest._();
   @$core.override
   ListSchemasRequest createEmptyInstance() => create();
-  static $pb.PbList<ListSchemasRequest> createRepeated() =>
-      $pb.PbList<ListSchemasRequest>();
   @$core.pragma('dart2js:noInline')
   static ListSchemasRequest getDefault() => _defaultInstance ??=
       $pb.GeneratedMessage.$_defaultFor<ListSchemasRequest>(create);
@@ -445,13 +433,13 @@ class ListSchemasResponse extends $pb.GeneratedMessage {
       package:
           const $pb.PackageName(_omitMessageNames ? '' : 'google.pubsub.v1'),
       createEmptyInstance: create)
-    ..pc<Schema>(1, _omitFieldNames ? '' : 'schemas', $pb.PbFieldType.PM,
+    ..pPM<Schema>(1, _omitFieldNames ? '' : 'schemas',
         subBuilder: Schema.create)
     ..aOS(2, _omitFieldNames ? '' : 'nextPageToken')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  ListSchemasResponse clone() => ListSchemasResponse()..mergeFromMessage(this);
+  ListSchemasResponse clone() => deepCopy();
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   ListSchemasResponse copyWith(void Function(ListSchemasResponse) updates) =>
       super.copyWith((message) => updates(message as ListSchemasResponse))
@@ -464,8 +452,6 @@ class ListSchemasResponse extends $pb.GeneratedMessage {
   static ListSchemasResponse create() => ListSchemasResponse._();
   @$core.override
   ListSchemasResponse createEmptyInstance() => create();
-  static $pb.PbList<ListSchemasResponse> createRepeated() =>
-      $pb.PbList<ListSchemasResponse>();
   @$core.pragma('dart2js:noInline')
   static ListSchemasResponse getDefault() => _defaultInstance ??=
       $pb.GeneratedMessage.$_defaultFor<ListSchemasResponse>(create);
@@ -518,17 +504,14 @@ class ListSchemaRevisionsRequest extends $pb.GeneratedMessage {
           const $pb.PackageName(_omitMessageNames ? '' : 'google.pubsub.v1'),
       createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'name')
-    ..e<SchemaView>(2, _omitFieldNames ? '' : 'view', $pb.PbFieldType.OE,
-        defaultOrMaker: SchemaView.SCHEMA_VIEW_UNSPECIFIED,
-        valueOf: SchemaView.valueOf,
+    ..aE<SchemaView>(2, _omitFieldNames ? '' : 'view',
         enumValues: SchemaView.values)
-    ..a<$core.int>(3, _omitFieldNames ? '' : 'pageSize', $pb.PbFieldType.O3)
+    ..aI(3, _omitFieldNames ? '' : 'pageSize')
     ..aOS(4, _omitFieldNames ? '' : 'pageToken')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  ListSchemaRevisionsRequest clone() =>
-      ListSchemaRevisionsRequest()..mergeFromMessage(this);
+  ListSchemaRevisionsRequest clone() => deepCopy();
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   ListSchemaRevisionsRequest copyWith(
           void Function(ListSchemaRevisionsRequest) updates) =>
@@ -543,8 +526,6 @@ class ListSchemaRevisionsRequest extends $pb.GeneratedMessage {
   static ListSchemaRevisionsRequest create() => ListSchemaRevisionsRequest._();
   @$core.override
   ListSchemaRevisionsRequest createEmptyInstance() => create();
-  static $pb.PbList<ListSchemaRevisionsRequest> createRepeated() =>
-      $pb.PbList<ListSchemaRevisionsRequest>();
   @$core.pragma('dart2js:noInline')
   static ListSchemaRevisionsRequest getDefault() => _defaultInstance ??=
       $pb.GeneratedMessage.$_defaultFor<ListSchemaRevisionsRequest>(create);
@@ -620,14 +601,13 @@ class ListSchemaRevisionsResponse extends $pb.GeneratedMessage {
       package:
           const $pb.PackageName(_omitMessageNames ? '' : 'google.pubsub.v1'),
       createEmptyInstance: create)
-    ..pc<Schema>(1, _omitFieldNames ? '' : 'schemas', $pb.PbFieldType.PM,
+    ..pPM<Schema>(1, _omitFieldNames ? '' : 'schemas',
         subBuilder: Schema.create)
     ..aOS(2, _omitFieldNames ? '' : 'nextPageToken')
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  ListSchemaRevisionsResponse clone() =>
-      ListSchemaRevisionsResponse()..mergeFromMessage(this);
+  ListSchemaRevisionsResponse clone() => deepCopy();
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   ListSchemaRevisionsResponse copyWith(
           void Function(ListSchemaRevisionsResponse) updates) =>
@@ -643,8 +623,6 @@ class ListSchemaRevisionsResponse extends $pb.GeneratedMessage {
       ListSchemaRevisionsResponse._();
   @$core.override
   ListSchemaRevisionsResponse createEmptyInstance() => create();
-  static $pb.PbList<ListSchemaRevisionsResponse> createRepeated() =>
-      $pb.PbList<ListSchemaRevisionsResponse>();
   @$core.pragma('dart2js:noInline')
   static ListSchemaRevisionsResponse getDefault() => _defaultInstance ??=
       $pb.GeneratedMessage.$_defaultFor<ListSchemaRevisionsResponse>(create);
@@ -697,7 +675,7 @@ class CommitSchemaRequest extends $pb.GeneratedMessage {
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  CommitSchemaRequest clone() => CommitSchemaRequest()..mergeFromMessage(this);
+  CommitSchemaRequest clone() => deepCopy();
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   CommitSchemaRequest copyWith(void Function(CommitSchemaRequest) updates) =>
       super.copyWith((message) => updates(message as CommitSchemaRequest))
@@ -710,8 +688,6 @@ class CommitSchemaRequest extends $pb.GeneratedMessage {
   static CommitSchemaRequest create() => CommitSchemaRequest._();
   @$core.override
   CommitSchemaRequest createEmptyInstance() => create();
-  static $pb.PbList<CommitSchemaRequest> createRepeated() =>
-      $pb.PbList<CommitSchemaRequest>();
   @$core.pragma('dart2js:noInline')
   static CommitSchemaRequest getDefault() => _defaultInstance ??=
       $pb.GeneratedMessage.$_defaultFor<CommitSchemaRequest>(create);
@@ -772,8 +748,7 @@ class RollbackSchemaRequest extends $pb.GeneratedMessage {
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  RollbackSchemaRequest clone() =>
-      RollbackSchemaRequest()..mergeFromMessage(this);
+  RollbackSchemaRequest clone() => deepCopy();
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   RollbackSchemaRequest copyWith(
           void Function(RollbackSchemaRequest) updates) =>
@@ -787,8 +762,6 @@ class RollbackSchemaRequest extends $pb.GeneratedMessage {
   static RollbackSchemaRequest create() => RollbackSchemaRequest._();
   @$core.override
   RollbackSchemaRequest createEmptyInstance() => create();
-  static $pb.PbList<RollbackSchemaRequest> createRepeated() =>
-      $pb.PbList<RollbackSchemaRequest>();
   @$core.pragma('dart2js:noInline')
   static RollbackSchemaRequest getDefault() => _defaultInstance ??=
       $pb.GeneratedMessage.$_defaultFor<RollbackSchemaRequest>(create);
@@ -849,8 +822,7 @@ class DeleteSchemaRevisionRequest extends $pb.GeneratedMessage {
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  DeleteSchemaRevisionRequest clone() =>
-      DeleteSchemaRevisionRequest()..mergeFromMessage(this);
+  DeleteSchemaRevisionRequest clone() => deepCopy();
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   DeleteSchemaRevisionRequest copyWith(
           void Function(DeleteSchemaRevisionRequest) updates) =>
@@ -866,8 +838,6 @@ class DeleteSchemaRevisionRequest extends $pb.GeneratedMessage {
       DeleteSchemaRevisionRequest._();
   @$core.override
   DeleteSchemaRevisionRequest createEmptyInstance() => create();
-  static $pb.PbList<DeleteSchemaRevisionRequest> createRepeated() =>
-      $pb.PbList<DeleteSchemaRevisionRequest>();
   @$core.pragma('dart2js:noInline')
   static DeleteSchemaRevisionRequest getDefault() => _defaultInstance ??=
       $pb.GeneratedMessage.$_defaultFor<DeleteSchemaRevisionRequest>(create);
@@ -931,7 +901,7 @@ class DeleteSchemaRequest extends $pb.GeneratedMessage {
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  DeleteSchemaRequest clone() => DeleteSchemaRequest()..mergeFromMessage(this);
+  DeleteSchemaRequest clone() => deepCopy();
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   DeleteSchemaRequest copyWith(void Function(DeleteSchemaRequest) updates) =>
       super.copyWith((message) => updates(message as DeleteSchemaRequest))
@@ -944,8 +914,6 @@ class DeleteSchemaRequest extends $pb.GeneratedMessage {
   static DeleteSchemaRequest create() => DeleteSchemaRequest._();
   @$core.override
   DeleteSchemaRequest createEmptyInstance() => create();
-  static $pb.PbList<DeleteSchemaRequest> createRepeated() =>
-      $pb.PbList<DeleteSchemaRequest>();
   @$core.pragma('dart2js:noInline')
   static DeleteSchemaRequest getDefault() => _defaultInstance ??=
       $pb.GeneratedMessage.$_defaultFor<DeleteSchemaRequest>(create);
@@ -994,8 +962,7 @@ class ValidateSchemaRequest extends $pb.GeneratedMessage {
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  ValidateSchemaRequest clone() =>
-      ValidateSchemaRequest()..mergeFromMessage(this);
+  ValidateSchemaRequest clone() => deepCopy();
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   ValidateSchemaRequest copyWith(
           void Function(ValidateSchemaRequest) updates) =>
@@ -1009,8 +976,6 @@ class ValidateSchemaRequest extends $pb.GeneratedMessage {
   static ValidateSchemaRequest create() => ValidateSchemaRequest._();
   @$core.override
   ValidateSchemaRequest createEmptyInstance() => create();
-  static $pb.PbList<ValidateSchemaRequest> createRepeated() =>
-      $pb.PbList<ValidateSchemaRequest>();
   @$core.pragma('dart2js:noInline')
   static ValidateSchemaRequest getDefault() => _defaultInstance ??=
       $pb.GeneratedMessage.$_defaultFor<ValidateSchemaRequest>(create);
@@ -1062,8 +1027,7 @@ class ValidateSchemaResponse extends $pb.GeneratedMessage {
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  ValidateSchemaResponse clone() =>
-      ValidateSchemaResponse()..mergeFromMessage(this);
+  ValidateSchemaResponse clone() => deepCopy();
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   ValidateSchemaResponse copyWith(
           void Function(ValidateSchemaResponse) updates) =>
@@ -1077,8 +1041,6 @@ class ValidateSchemaResponse extends $pb.GeneratedMessage {
   static ValidateSchemaResponse create() => ValidateSchemaResponse._();
   @$core.override
   ValidateSchemaResponse createEmptyInstance() => create();
-  static $pb.PbList<ValidateSchemaResponse> createRepeated() =>
-      $pb.PbList<ValidateSchemaResponse>();
   @$core.pragma('dart2js:noInline')
   static ValidateSchemaResponse getDefault() => _defaultInstance ??=
       $pb.GeneratedMessage.$_defaultFor<ValidateSchemaResponse>(create);
@@ -1131,15 +1093,12 @@ class ValidateMessageRequest extends $pb.GeneratedMessage {
     ..aOM<Schema>(3, _omitFieldNames ? '' : 'schema', subBuilder: Schema.create)
     ..a<$core.List<$core.int>>(
         4, _omitFieldNames ? '' : 'message', $pb.PbFieldType.OY)
-    ..e<Encoding>(5, _omitFieldNames ? '' : 'encoding', $pb.PbFieldType.OE,
-        defaultOrMaker: Encoding.ENCODING_UNSPECIFIED,
-        valueOf: Encoding.valueOf,
+    ..aE<Encoding>(5, _omitFieldNames ? '' : 'encoding',
         enumValues: Encoding.values)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  ValidateMessageRequest clone() =>
-      ValidateMessageRequest()..mergeFromMessage(this);
+  ValidateMessageRequest clone() => deepCopy();
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   ValidateMessageRequest copyWith(
           void Function(ValidateMessageRequest) updates) =>
@@ -1153,15 +1112,17 @@ class ValidateMessageRequest extends $pb.GeneratedMessage {
   static ValidateMessageRequest create() => ValidateMessageRequest._();
   @$core.override
   ValidateMessageRequest createEmptyInstance() => create();
-  static $pb.PbList<ValidateMessageRequest> createRepeated() =>
-      $pb.PbList<ValidateMessageRequest>();
   @$core.pragma('dart2js:noInline')
   static ValidateMessageRequest getDefault() => _defaultInstance ??=
       $pb.GeneratedMessage.$_defaultFor<ValidateMessageRequest>(create);
   static ValidateMessageRequest? _defaultInstance;
 
+  @$pb.TagNumber(2)
+  @$pb.TagNumber(3)
   ValidateMessageRequest_SchemaSpec whichSchemaSpec() =>
       _ValidateMessageRequest_SchemaSpecByTag[$_whichOneof(0)]!;
+  @$pb.TagNumber(2)
+  @$pb.TagNumber(3)
   void clearSchemaSpec() => $_clearField($_whichOneof(0));
 
   /// Required. The name of the project in which to validate schemas.
@@ -1242,8 +1203,7 @@ class ValidateMessageResponse extends $pb.GeneratedMessage {
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
-  ValidateMessageResponse clone() =>
-      ValidateMessageResponse()..mergeFromMessage(this);
+  ValidateMessageResponse clone() => deepCopy();
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
   ValidateMessageResponse copyWith(
           void Function(ValidateMessageResponse) updates) =>
@@ -1257,8 +1217,6 @@ class ValidateMessageResponse extends $pb.GeneratedMessage {
   static ValidateMessageResponse create() => ValidateMessageResponse._();
   @$core.override
   ValidateMessageResponse createEmptyInstance() => create();
-  static $pb.PbList<ValidateMessageResponse> createRepeated() =>
-      $pb.PbList<ValidateMessageResponse>();
   @$core.pragma('dart2js:noInline')
   static ValidateMessageResponse getDefault() => _defaultInstance ??=
       $pb.GeneratedMessage.$_defaultFor<ValidateMessageResponse>(create);
