@@ -17,6 +17,7 @@ graph TD
   subgraph Tier0 ["Tier 0 (Publish First)"]
     google_cloud["google_cloud"]
     google_cloud_protobuf["protobuf"]
+    google_cloud_pubsub["pubsub"]
   end
 
   subgraph Tier1 ["Tier 1"]
@@ -32,7 +33,6 @@ graph TD
     google_cloud_language_v2["language_v2"]
     google_cloud_location["location"]
     google_cloud_longrunning["longrunning"]
-    google_cloud_pubsub["pubsub"]
     google_cloud_storage["storage"]
   end
 
@@ -85,7 +85,6 @@ graph TD
   google_cloud_location --> google_cloud_rpc
   google_cloud_logging --> google_cloud_logging_type
   google_cloud_logging --> google_cloud_logging_v2
-  google_cloud_logging --> google_cloud_protobuf
   google_cloud_logging_type --> google_cloud_protobuf
   google_cloud_logging_v2 --> google_cloud_api
   google_cloud_logging_v2 --> google_cloud_logging_type
@@ -94,7 +93,6 @@ graph TD
   google_cloud_logging_v2 --> google_cloud_rpc
   google_cloud_longrunning --> google_cloud_protobuf
   google_cloud_longrunning --> google_cloud_rpc
-
   google_cloud_rpc --> google_cloud_protobuf
   google_cloud_secretmanager_v1 --> google_cloud_iam_v1
   google_cloud_secretmanager_v1 --> google_cloud_location
