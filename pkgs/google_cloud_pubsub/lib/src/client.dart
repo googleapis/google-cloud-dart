@@ -34,12 +34,16 @@ final class PubSub {
   grpc.SubscriberClient? _subscriberClient;
   final BaseAuthenticator? _authenticator;
 
-  static String? _calculateProjectId(String? projectId, String? emulatorHost) =>
-      switch ((projectId, emulatorHost)) {
-        (final String projectId, _) => projectId,
-        (null, _?) => projectFromEnvironment ?? 'test-project',
-        (null, null) => projectFromEnvironment,
-      };
+  static String? _calculateProjectId(
+    String? projectId,
+    String? emulatorHost,
+  ) => switch ((projectId, emulatorHost)) {
+    (final String projectId, _) => projectId,
+    // When the emulator is active (emulatorHost is not null), we fall back
+    // to 'test-project' if GOOGLE_CLOUD_PROJECT is not set in the environment.
+    (null, _?) => projectFromEnvironment ?? 'test-project',
+    (null, null) => projectFromEnvironment,
+  };
 
   static ClientChannel _calculateChannel(
     String? apiEndpoint,
