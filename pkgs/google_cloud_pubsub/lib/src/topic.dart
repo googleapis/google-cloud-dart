@@ -163,6 +163,12 @@ final class Topic {
 
   /// Adds one or more messages to the topic.
   ///
+  /// Messages are not published immediately. Instead, they are placed into a
+  /// background buffer and published in batches according to the
+  /// `publishSettings.batching` configuration. If transient network errors
+  /// occur during publishing, the batch is automatically retried according to
+  /// the `publishSettings.retry` configuration.
+  ///
   /// Throws a [TopicNotFoundException] if the topic does not exist.
   ///
   /// [data] is the message content.

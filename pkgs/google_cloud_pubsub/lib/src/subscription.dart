@@ -321,8 +321,15 @@ final class Subscription {
 
   /// Acknowledges a list of messages.
   ///
-  /// This method uses the configured `ackSettings` to batch multiple
-  /// acknowledgment requests together and retry on transient errors.
+  /// This method uses the configured `ackSettings` to buffer and batch multiple
+  /// acknowledgment requests together in the background. If one or more
+  /// [streamingPull] streams are currently active, the batched acknowledgments
+  /// will be efficiently routed over the existing bidirectional stream with
+  /// near-zero latency.
+  ///
+  /// If no streaming streams are active, the client falls back to executing
+  /// standard unary `Acknowledge` RPCs, and automatically retries on transient
+  /// network errors according to the `ackSettings.retry` configuration.
   Future<void> acknowledge(List<String> ackIds) async {
     final futures = <Future<void>>[];
     for (final ackId in ackIds) {
@@ -364,8 +371,15 @@ final class Subscription {
 
   /// Modifies the ack deadline for a list of specific messages.
   ///
-  /// This method uses the configured `ackSettings` to batch multiple
-  /// modification requests together and retry on transient errors.
+  /// This method uses the configured `ackSettings` to buffer and batch multiple
+  /// modification requests together in the background. If one or more
+  /// [streamingPull] streams are currently active, the batched modifications
+  /// will be efficiently routed over the existing bidirectional stream with
+  /// near-zero latency.
+  ///
+  /// If no streaming streams are active, the client falls back to executing
+  /// standard unary `ModifyAckDeadline` RPCs, and automatically retries on
+  /// transient network errors according to the `ackSettings.retry` configuration.
   Future<void> modifyAckDeadline(
     List<String> ackIds,
     int ackDeadlineSeconds,
