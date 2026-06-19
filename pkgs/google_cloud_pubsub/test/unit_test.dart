@@ -8,8 +8,6 @@ import 'package:google_cloud_pubsub/src/generated/google/pubsub/v1/pubsub.pb.dar
     as pb;
 import 'package:google_cloud_pubsub/src/generated/google/pubsub/v1/pubsub.pbgrpc.dart'
     as generated;
-import 'package:google_cloud_pubsub/src/message.dart'
-    show createReceivedMessage;
 import 'package:grpc/grpc.dart' as grpc;
 import 'package:protobuf/well_known_types/google/protobuf/empty.pb.dart'
     as protobuf;
@@ -206,7 +204,8 @@ void main() {
     });
 
     test('streamingPull ack error propagates', () async {
-      final stream = client.subscription('sub').streamingPull();
+      final subscription = client.subscription('sub');
+      final stream = subscription.streamingPull();
 
       // Configure acknowledge to fail
       fakeSubscriber.acknowledgeBehavior = (ackIds) async {
@@ -227,7 +226,7 @@ void main() {
       final receivedMessage = await stream.first;
       expect(receivedMessage.ackId, equals('ack-1'));
 
-      final ackFuture = receivedMessage.ack();
+      final ackFuture = subscription.acknowledge([receivedMessage.ackId]);
 
       await expectLater(
         ackFuture,
@@ -245,7 +244,8 @@ void main() {
     });
 
     test('streamingPull modifyAckDeadline error propagates', () async {
-      final stream = client.subscription('sub').streamingPull();
+      final subscription = client.subscription('sub');
+      final stream = subscription.streamingPull();
 
       // Configure modifyAckDeadline to fail
       fakeSubscriber.modifyAckDeadlineBehavior = (ackIds, seconds) async {
@@ -266,7 +266,9 @@ void main() {
       final receivedMessage = await stream.first;
       expect(receivedMessage.ackId, equals('ack-2'));
 
-      final modifyDeadlineFuture = receivedMessage.modifyAckDeadline(10);
+      final modifyDeadlineFuture = subscription.modifyAckDeadline([
+        receivedMessage.ackId,
+      ], 10);
 
       await expectLater(
         modifyDeadlineFuture,
@@ -322,7 +324,7 @@ void main() {
     test('properties are correctly mapped and delegated', () {
       final publishTime = DateTime.now();
       final message = Message(data: [1, 2, 3], attributes: {'key': 'value'});
-      final receivedMessage = createReceivedMessage(
+      final receivedMessage = ReceivedMessage(
         ackId: 'ack-123',
         messageId: 'msg-456',
         publishTime: publishTime,

@@ -248,7 +248,7 @@ void main() {
       expect(receivedMessage.data, equals(data));
 
       // Ack message
-      await receivedMessage.ack();
+      await subscription.acknowledge([receivedMessage.ackId]);
     });
 
     test('streaming pull throws StreamBrokenException '

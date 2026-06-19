@@ -18,7 +18,6 @@ import 'package:grpc/grpc.dart';
 import 'package:meta/meta.dart';
 import '../google_cloud_pubsub.dart';
 import 'generated/google/pubsub/v1/pubsub.pbgrpc.dart' as grpc;
-import 'message.dart' show createReceivedMessage;
 import 'pubsub_emulator_host_vm.dart';
 import 'subscription.dart' show newSubscription, newSubscriptionName;
 import 'topic.dart' show newTopic, newTopicName;
@@ -99,19 +98,16 @@ final class PubSub {
 
   /// Turns the protobuf-generated [grpc.ReceivedMessage] into a
   /// [ReceivedMessage].
-  static ReceivedMessage _mapReceivedMessage(
-    grpc.ReceivedMessage m, {
-    FutureOr<void> Function(List<String> ackIds)? ackHandler,
-    FutureOr<void> Function(List<String> ackIds, int seconds)?
-    modifyDeadlineHandler,
-  }) => createReceivedMessage(
-    ackId: m.ackId,
-    messageId: m.message.messageId,
-    publishTime: m.message.publishTime.toDateTime(),
-    message: Message(data: m.message.data, attributes: m.message.attributes),
-    ackHandler: ackHandler,
-    modifyDeadlineHandler: modifyDeadlineHandler,
-  );
+  static ReceivedMessage _mapReceivedMessage(grpc.ReceivedMessage m) =>
+      ReceivedMessage(
+        ackId: m.ackId,
+        messageId: m.message.messageId,
+        publishTime: m.message.publishTime.toDateTime(),
+        message: Message(
+          data: m.message.data,
+          attributes: m.message.attributes,
+        ),
+      );
 
   /// Constructs a client used to communicate with [Google Cloud Pub/Sub][].
   ///
@@ -393,16 +389,7 @@ final class PubSub {
         options: await _callOptions,
       );
 
-      return response.receivedMessages
-          .map(
-            (m) => _mapReceivedMessage(
-              m,
-              ackHandler: (ackIds) => acknowledge(name, ackIds),
-              modifyDeadlineHandler: (ackIds, seconds) =>
-                  modifyAckDeadline(name, ackIds, seconds),
-            ),
-          )
-          .toList();
+      return response.receivedMessages.map(_mapReceivedMessage).toList();
     } on GrpcError catch (e) {
       if (e.code == StatusCode.notFound) {
         throw SubscriptionNotFoundException(name);
@@ -451,15 +438,7 @@ final class PubSub {
       );
       await for (final response in responseStream) {
         for (final m in response.receivedMessages) {
-          yield _mapReceivedMessage(
-            m,
-            // NOTE: Using unary RPCs for acks and deadline modifications
-            //
-            // TODO(sigurdm): implement ack/deadline pipelining.
-            ackHandler: (ackIds) => acknowledge(name, ackIds),
-            modifyDeadlineHandler: (ackIds, seconds) =>
-                modifyAckDeadline(name, ackIds, seconds),
-          );
+          yield _mapReceivedMessage(m);
         }
       }
     } on GrpcError catch (e) {
