@@ -176,25 +176,30 @@ final class PubSub {
   // Topic-related methods
 
   /// A [Topic] object with the given [unqualifiedName] in the client's project.
-  Topic topic(String unqualifiedName) => newTopic(this, unqualifiedName);
+  Topic topic(String unqualifiedName, {PublishSettings? publishSettings}) =>
+      newTopic(this, unqualifiedName, publishSettings: publishSettings);
 
   /// A [Topic] object with the given [name].
   ///
   /// The [name] must be in the format `projects/<project-id>/topics/<topic-id>`.
   /// Useful for cross-project access.
-  Topic topicName(String name) => newTopicName(this, name);
+  Topic topicName(String name, {PublishSettings? publishSettings}) =>
+      newTopicName(this, name, publishSettings: publishSettings);
 
   /// A [Subscription] object with the given [unqualifiedName] in the client's
   /// project.
-  Subscription subscription(String unqualifiedName) =>
-      newSubscription(this, unqualifiedName);
+  Subscription subscription(
+    String unqualifiedName, {
+    AckSettings? ackSettings,
+  }) => newSubscription(this, unqualifiedName, ackSettings: ackSettings);
 
   /// A [Subscription] object with the given [name].
   ///
   /// The [name] must be in the format
   /// `projects/<project-id>/subscriptions/<subscription-id>`.
   /// Useful for cross-project access.
-  Subscription subscriptionName(String name) => newSubscriptionName(this, name);
+  Subscription subscriptionName(String name, {AckSettings? ackSettings}) =>
+      newSubscriptionName(this, name, ackSettings: ackSettings);
 
   /// Creates the given topic with the given [name].
   ///

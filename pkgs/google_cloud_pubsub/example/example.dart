@@ -32,8 +32,23 @@ Future<void> main() async {
 
   try {
     // The client will use the authenticator to make authenticated requests.
-    final topic = pubsub.topic('my-topic');
+    // Topics and Subscriptions handle batching and robust retries automatically.
+    final topic = pubsub.topic(
+      'my-topic',
+      publishSettings: const PublishSettings(
+        batching: BatchingSettings(
+          maxMessages: 50,
+          maxDelay: Duration(milliseconds: 20),
+        ),
+      ),
+    );
     print('Successfully initialized client for topic: ${topic.topicId}');
+
+    // Messages published will be batched.
+    // await topic.publish([1, 2, 3]);
+
+    // Ensure pending batches are flushed.
+    topic.close();
   } finally {
     await pubsub.close();
   }

@@ -51,12 +51,23 @@ class _ModifyAckDeadlineRequest {
 }
 
 @internal
-Subscription newSubscription(PubSub pubsub, String subscriptionId) =>
-    Subscription.unqualified(pubsub, subscriptionId);
+Subscription newSubscription(
+  PubSub pubsub,
+  String subscriptionId, {
+  AckSettings? ackSettings,
+}) => Subscription.unqualified(
+  pubsub,
+  subscriptionId,
+  ackSettings: ackSettings ?? const AckSettings(),
+);
 
 @internal
-Subscription newSubscriptionName(PubSub pubsub, String name) =>
-    Subscription(pubsub, name);
+Subscription newSubscriptionName(
+  PubSub pubsub,
+  String name, {
+  AckSettings? ackSettings,
+}) =>
+    Subscription(pubsub, name, ackSettings: ackSettings ?? const AckSettings());
 
 /// A [Google Cloud Pub/Sub subscription](https://cloud.google.com/pubsub/docs/overview#subscriptions).
 final class Subscription {

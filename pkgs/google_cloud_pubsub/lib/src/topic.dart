@@ -39,11 +39,26 @@ class _PublishRequest {
 }
 
 @internal
-Topic newTopic(PubSub pubsub, String topicId) =>
-    Topic.unqualified(pubsub, topicId);
+Topic newTopic(
+  PubSub pubsub,
+  String topicId, {
+  PublishSettings? publishSettings,
+}) => Topic.unqualified(
+  pubsub,
+  topicId,
+  publishSettings: publishSettings ?? const PublishSettings(),
+);
 
 @internal
-Topic newTopicName(PubSub pubsub, String name) => Topic(pubsub, name);
+Topic newTopicName(
+  PubSub pubsub,
+  String name, {
+  PublishSettings? publishSettings,
+}) => Topic(
+  pubsub,
+  name,
+  publishSettings: publishSettings ?? const PublishSettings(),
+);
 
 /// A [Google Cloud Pub/Sub topic](https://cloud.google.com/pubsub/docs/overview#topics).
 final class Topic {
