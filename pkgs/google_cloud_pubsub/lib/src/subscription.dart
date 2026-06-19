@@ -299,7 +299,7 @@ final class Subscription {
   Future<void> acknowledgeNow(List<String> ackIds) =>
       pubsub.acknowledge(name, ackIds);
 
-  /// Acknowledges a list of messages.
+  /// Acknowledges a single message.
   ///
   /// This method uses the configured `ackSettings` to buffer and batch multiple
   /// acknowledgment requests together in the background. If one or more
@@ -314,10 +314,8 @@ final class Subscription {
   /// confirmation. If an error occurs that exhausts all retries, the error is
   /// suppressed and the message will eventually be redelivered. If you require
   /// explicit confirmation of acknowledgment, use [acknowledgeNow].
-  void acknowledge(List<String> ackIds) {
-    for (final ackId in ackIds) {
-      _ackBatcher.add(_AckRequest(ackId));
-    }
+  void acknowledge(ReceivedMessage message) {
+    _ackBatcher.add(_AckRequest(message.ackId));
   }
 
   /// Modifies the ack deadline for a list of specific messages immediately.
@@ -349,7 +347,7 @@ final class Subscription {
     return pubsub.modifyAckDeadline(name, ackIds, ackDeadlineSeconds);
   }
 
-  /// Modifies the ack deadline for a list of specific messages.
+  /// Modifies the ack deadline for a single message.
   ///
   /// This method uses the configured `ackSettings` to buffer and batch multiple
   /// modification requests together in the background. If one or more
@@ -363,7 +361,7 @@ final class Subscription {
   /// This operation is "fire-and-forget" and does not wait for server
   /// confirmation. If an error occurs that exhausts all retries, the error is
   /// suppressed. If you require explicit confirmation, use [modifyAckDeadlineNow].
-  void modifyAckDeadline(List<String> ackIds, int ackDeadlineSeconds) {
+  void modifyAckDeadline(ReceivedMessage message, int ackDeadlineSeconds) {
     if (ackDeadlineSeconds < 0) {
       throw ArgumentError.value(
         ackDeadlineSeconds,
@@ -371,11 +369,9 @@ final class Subscription {
         'Must be non-negative',
       );
     }
-    for (final ackId in ackIds) {
-      _modifyAckBatcher.add(
-        _ModifyAckDeadlineRequest(ackId, ackDeadlineSeconds),
-      );
-    }
+    _modifyAckBatcher.add(
+      _ModifyAckDeadlineRequest(message.ackId, ackDeadlineSeconds),
+    );
   }
 
   /// Closes the subscription, flushing any pending acknowledgments.

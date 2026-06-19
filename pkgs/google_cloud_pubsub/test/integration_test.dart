@@ -178,7 +178,7 @@ void main() {
       final subscription = client!.subscription(subscriptionName);
 
       expect(
-        () => subscription.acknowledge(['ack-id']),
+        () => subscription.acknowledgeNow(['ack-id']),
         throwsA(isA<SubscriptionNotFoundException>()),
       );
     });
@@ -190,7 +190,7 @@ void main() {
       final subscription = client!.subscription(subscriptionName);
 
       expect(
-        () => subscription.modifyAckDeadline(['ack-id'], 10),
+        () => subscription.modifyAckDeadlineNow(['ack-id'], 10),
         throwsA(isA<SubscriptionNotFoundException>()),
       );
     });
@@ -218,7 +218,7 @@ void main() {
       expect(messages.first.data, equals(data));
 
       // Ack message
-      subscription.acknowledge([messages.first.ackId]);
+      subscription.acknowledge(messages.first);
     });
 
     test('publish and streaming pull message', () async {
@@ -248,7 +248,7 @@ void main() {
       expect(receivedMessage.data, equals(data));
 
       // Ack message
-      subscription.acknowledge([receivedMessage.ackId]);
+      subscription.acknowledge(receivedMessage);
     });
 
     test('streaming pull throws StreamBrokenException '
@@ -299,7 +299,7 @@ void main() {
       expect(messages.first.attributes, equals(attributes));
 
       // Ack message
-      subscription.acknowledge([messages.first.ackId]);
+      subscription.acknowledge(messages.first);
     });
 
     test('publish multiple messages and pull batch', () async {
@@ -327,8 +327,9 @@ void main() {
       final receivedData = messages.map((m) => m.data).toList();
       expect(receivedData, containsAll([data1, data2]));
 
-      // Ack messages
-      subscription.acknowledge(messages.map((m) => m.ackId).toList());
+      for (final m in messages) {
+        subscription.acknowledge(m);
+      }
     });
   });
 }
