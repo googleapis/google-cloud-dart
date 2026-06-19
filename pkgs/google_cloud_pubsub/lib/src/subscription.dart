@@ -324,8 +324,7 @@ final class Subscription {
   /// This method uses the configured `ackSettings` to buffer and batch multiple
   /// acknowledgment requests together in the background. If one or more
   /// [streamingPull] streams are currently active, the batched acknowledgments
-  /// will be efficiently routed over the existing bidirectional stream with
-  /// near-zero latency.
+  /// will be efficiently routed over the existing bidirectional stream.
   ///
   /// If no streaming streams are active, the client falls back to executing
   /// standard unary `Acknowledge` RPCs, and automatically retries on transient
@@ -374,8 +373,7 @@ final class Subscription {
   /// This method uses the configured `ackSettings` to buffer and batch multiple
   /// modification requests together in the background. If one or more
   /// [streamingPull] streams are currently active, the batched modifications
-  /// will be efficiently routed over the existing bidirectional stream with
-  /// near-zero latency.
+  /// will be efficiently routed over the existing bidirectional stream.
   ///
   /// If no streaming streams are active, the client falls back to executing
   /// standard unary `ModifyAckDeadline` RPCs, and automatically retries on
