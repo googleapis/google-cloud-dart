@@ -18,6 +18,7 @@ import 'package:meta/meta.dart';
 
 import '../google_cloud_pubsub.dart';
 import 'batching.dart';
+import 'generated/google/pubsub/v1/pubsub.pbgrpc.dart' as grpc;
 import 'retry.dart';
 
 /// Settings for acknowledging messages and modifying ack deadlines.
@@ -89,6 +90,8 @@ final class Subscription {
   late final Batcher<_AckRequest> _ackBatcher;
   late final Batcher<_ModifyAckDeadlineRequest> _modifyAckBatcher;
 
+  final List<StreamController<grpc.StreamingPullRequest>> _activeStreams = [];
+
   /// A subscription with the given [subscriptionId] in the client's project.
   Subscription.unqualified(
     this.pubsub,
@@ -130,6 +133,21 @@ final class Subscription {
   Future<void> _onAckBatch(List<_AckRequest> batch) async {
     try {
       final ackIds = batch.map((e) => e.ackId).toList();
+
+      if (_activeStreams.isNotEmpty) {
+        try {
+          _activeStreams.first.add(
+            grpc.StreamingPullRequest()..ackIds.addAll(ackIds),
+          );
+          for (final req in batch) {
+            req.completer.complete();
+          }
+          return;
+        } catch (_) {
+          // Stream might be closed locally, fall back to unary
+        }
+      }
+
       await runWithRetry(
         () => pubsub.acknowledge(name, ackIds),
         settings: ackSettings.retry,
@@ -158,6 +176,25 @@ final class Subscription {
         final reqs = entry.value;
         try {
           final ackIds = reqs.map((e) => e.ackId).toList();
+
+          if (_activeStreams.isNotEmpty) {
+            try {
+              _activeStreams.first.add(
+                grpc.StreamingPullRequest()
+                  ..modifyDeadlineAckIds.addAll(ackIds)
+                  ..modifyDeadlineSeconds.addAll(
+                    List.filled(ackIds.length, deadline),
+                  ),
+              );
+              for (final req in reqs) {
+                req.completer.complete();
+              }
+              return;
+            } catch (_) {
+              // Stream might be closed locally, fall back to unary
+            }
+          }
+
           await runWithRetry(
             () => pubsub.modifyAckDeadline(name, ackIds, deadline),
             settings: ackSettings.retry,
@@ -240,7 +277,9 @@ final class Subscription {
   /// network.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.StreamingPull).
-  Stream<ReceivedMessage> streamingPull({int streamAckDeadlineSeconds = 10}) {
+  Stream<ReceivedMessage> streamingPull({
+    int streamAckDeadlineSeconds = 10,
+  }) async* {
     if (streamAckDeadlineSeconds < 10 || streamAckDeadlineSeconds > 600) {
       throw ArgumentError.value(
         streamAckDeadlineSeconds,
@@ -248,10 +287,21 @@ final class Subscription {
         'Must be between 10 and 600 seconds',
       );
     }
-    return pubsub.streamingPull(
-      name,
-      streamAckDeadlineSeconds: streamAckDeadlineSeconds,
+
+    final requestController = StreamController<grpc.StreamingPullRequest>();
+    requestController.add(
+      grpc.StreamingPullRequest()
+        ..subscription = name
+        ..streamAckDeadlineSeconds = streamAckDeadlineSeconds,
     );
+
+    _activeStreams.add(requestController);
+    try {
+      yield* pubsub.streamingPullWithStream(requestController.stream);
+    } finally {
+      _activeStreams.remove(requestController);
+      await requestController.close();
+    }
   }
 
   /// Acknowledges the messages associated with the `ack_ids` immediately.

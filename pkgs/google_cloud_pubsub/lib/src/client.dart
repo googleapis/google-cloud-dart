@@ -429,6 +429,30 @@ final class PubSub {
     }
   }
 
+  @internal
+  Stream<ReceivedMessage> streamingPullWithStream(
+    Stream<grpc.StreamingPullRequest> requestStream,
+  ) async* {
+    try {
+      final options = await _callOptions;
+      final responseStream = _subscriber.streamingPull(
+        requestStream,
+        options: options,
+      );
+      await for (final response in responseStream) {
+        for (final m in response.receivedMessages) {
+          yield _mapReceivedMessage(m);
+        }
+      }
+    } on GrpcError catch (e) {
+      throw StreamBrokenException(
+        e.code,
+        e.message ?? 'Unknown error',
+        e.trailers ?? const {},
+      );
+    }
+  }
+
   /// Establishes a stream with the server, which sends messages down to the
   /// client.
   ///
@@ -452,28 +476,12 @@ final class PubSub {
   }) async* {
     final requestController = StreamController<grpc.StreamingPullRequest>();
     try {
-      final options = await _callOptions;
       requestController.add(
         grpc.StreamingPullRequest()
           ..subscription = name
           ..streamAckDeadlineSeconds = streamAckDeadlineSeconds,
       );
-      // TODO(sigurdm): Retry on broken connections.
-      final responseStream = _subscriber.streamingPull(
-        requestController.stream,
-        options: options,
-      );
-      await for (final response in responseStream) {
-        for (final m in response.receivedMessages) {
-          yield _mapReceivedMessage(m);
-        }
-      }
-    } on GrpcError catch (e) {
-      throw StreamBrokenException(
-        e.code,
-        e.message ?? 'Unknown error',
-        e.trailers ?? const {},
-      );
+      yield* streamingPullWithStream(requestController.stream);
     } finally {
       await requestController.close();
     }
