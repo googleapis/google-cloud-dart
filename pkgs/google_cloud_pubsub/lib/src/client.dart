@@ -18,6 +18,7 @@ import 'package:grpc/grpc.dart';
 import 'package:meta/meta.dart';
 import '../google_cloud_pubsub.dart';
 import 'generated/google/pubsub/v1/pubsub.pbgrpc.dart' as grpc;
+import 'message.dart' show createReceivedMessage;
 import 'pubsub_emulator_host_vm.dart';
 import 'subscription.dart' show newSubscription, newSubscriptionName;
 import 'topic.dart' show newTopic, newTopicName;
@@ -103,7 +104,7 @@ final class PubSub {
     FutureOr<void> Function(List<String> ackIds)? ackHandler,
     FutureOr<void> Function(List<String> ackIds, int seconds)?
     modifyDeadlineHandler,
-  }) => ReceivedMessage(
+  }) => createReceivedMessage(
     ackId: m.ackId,
     messageId: m.message.messageId,
     publishTime: m.message.publishTime.toDateTime(),

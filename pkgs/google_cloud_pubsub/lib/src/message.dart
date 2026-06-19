@@ -16,6 +16,8 @@ import 'dart:async';
 
 import 'dart:typed_data';
 
+import 'package:meta/meta.dart';
+
 import 'exceptions.dart';
 import 'subscription.dart';
 
@@ -50,7 +52,7 @@ final class ReceivedMessage {
   final FutureOr<void> Function(List<String> ackIds, int seconds)?
   _modifyDeadlineHandler;
 
-  ReceivedMessage({
+  ReceivedMessage._({
     required this.ackId,
     required this.messageId,
     required this.publishTime,
@@ -108,3 +110,22 @@ final class ReceivedMessage {
     }
   }
 }
+
+/// Creates a [ReceivedMessage] for internal use.
+@internal
+ReceivedMessage createReceivedMessage({
+  required String ackId,
+  required String messageId,
+  required DateTime publishTime,
+  required Message message,
+  FutureOr<void> Function(List<String> ackIds)? ackHandler,
+  FutureOr<void> Function(List<String> ackIds, int seconds)?
+  modifyDeadlineHandler,
+}) => ReceivedMessage._(
+  ackId: ackId,
+  messageId: messageId,
+  publishTime: publishTime,
+  message: message,
+  ackHandler: ackHandler,
+  modifyDeadlineHandler: modifyDeadlineHandler,
+);
