@@ -45,10 +45,30 @@ Future<void> main() async {
     print('Successfully initialized client for topic: ${topic.topicId}');
 
     // Messages published will be batched.
-    // await topic.publish([1, 2, 3]);
+    // await topic.publish(utf8.encode('Hello World'));
+
+    // Example of using a subscription with AckSettings
+    final subscription = pubsub.subscription(
+      'my-subscription',
+      ackSettings: const AckSettings(
+        batching: BatchingSettings(
+          maxMessages: 50,
+          maxDelay: Duration(milliseconds: 20),
+        ),
+      ),
+    );
+
+    // Pull and acknowledge messages
+    // final messages = await subscription.pull(maxMessages: 10);
+    // for (final message in messages) {
+    //   print('Received: ${utf8.decode(message.message.data)}');
+    //   // Acknowledges are batched automatically in the background
+    //   await subscription.acknowledge([message.ackId]);
+    // }
 
     // Ensure pending batches are flushed.
     topic.close();
+    subscription.close();
   } finally {
     await pubsub.close();
   }
