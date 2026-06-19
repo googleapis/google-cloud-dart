@@ -17,6 +17,7 @@ graph TD
   subgraph Tier0 ["Tier 0 (Publish First)"]
     google_cloud["google_cloud"]
     google_cloud_protobuf["protobuf"]
+    google_cloud_pubsub["pubsub"]
   end
 
   subgraph Tier1 ["Tier 1"]
