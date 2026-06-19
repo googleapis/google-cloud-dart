@@ -261,21 +261,39 @@ final class PubSub {
     List<int> data, {
     Map<String, String>? attributes,
   }) async {
-    final message = grpc.PubsubMessage()..data = data;
-    if (attributes != null) {
-      message.attributes.addAll(attributes);
-    }
+    final messageIds = await publishMessages(name, [
+      Message(data: data, attributes: attributes),
+    ]);
+    return messageIds.first;
+  }
 
-    final request = grpc.PublishRequest()
-      ..topic = name
-      ..messages.add(message);
+  /// Adds multiple messages to the topic in a single RPC.
+  ///
+  /// The [name] must be in the format `projects/<project-id>/topics/<topic-id>`.
+  ///
+  /// Throws a [TopicNotFoundException] if the topic does not exist.
+  ///
+  /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Publisher.Publish).
+  Future<List<String>> publishMessages(
+    String name,
+    List<Message> messages,
+  ) async {
+    final request = grpc.PublishRequest()..topic = name;
+
+    for (final message in messages) {
+      final pbMessage = grpc.PubsubMessage()..data = message.data;
+      if (message.attributes.isNotEmpty) {
+        pbMessage.attributes.addAll(message.attributes);
+      }
+      request.messages.add(pbMessage);
+    }
 
     try {
       final response = await _publisher.publish(
         request,
         options: await _callOptions,
       );
-      return response.messageIds.first;
+      return response.messageIds;
     } on GrpcError catch (e) {
       if (e.code == StatusCode.notFound) {
         throw TopicNotFoundException(name);

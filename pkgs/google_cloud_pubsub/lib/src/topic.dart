@@ -12,9 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'dart:async';
+
 import 'package:meta/meta.dart';
 
 import '../google_cloud_pubsub.dart';
+import 'batching.dart';
+import 'retry.dart';
+
+/// Settings for publishing messages.
+class PublishSettings {
+  final BatchingSettings batching;
+  final RetrySettings retry;
+
+  const PublishSettings({
+    this.batching = const BatchingSettings(),
+    this.retry = const RetrySettings(),
+  });
+}
+
+class _PublishRequest {
+  final Message message;
+  final Completer<String> completer;
+
+  _PublishRequest(this.message, this.completer);
+}
 
 @internal
 Topic newTopic(PubSub pubsub, String topicId) =>
@@ -37,18 +59,58 @@ final class Topic {
   /// It has the format `projects/<project-id>/topics/<topic-id>`.
   final String name;
 
+  /// Settings for publishing messages.
+  final PublishSettings publishSettings;
+
+  late final Batcher<_PublishRequest> _batcher;
+
   /// A topic with the given [topicId] in the client's project.
-  Topic.unqualified(this.pubsub, String topicId)
-    : name = 'projects/${pubsub.projectId}/topics/$topicId' {
+  Topic.unqualified(
+    this.pubsub,
+    String topicId, {
+    this.publishSettings = const PublishSettings(),
+  }) : name = 'projects/${pubsub.projectId}/topics/$topicId' {
     _validateName(name);
+    _initBatcher();
   }
 
   /// A topic with the given [name].
   ///
   /// The [name] must be in the format `projects/<project-id>/topics/<topic-id>`.
   /// Useful for cross-project access.
-  Topic(this.pubsub, this.name) {
+  Topic(
+    this.pubsub,
+    this.name, {
+    this.publishSettings = const PublishSettings(),
+  }) {
     _validateName(name);
+    _initBatcher();
+  }
+
+  void _initBatcher() {
+    _batcher = Batcher<_PublishRequest>(
+      settings: publishSettings.batching,
+      itemSize: (req) => req.message.data.length, // approximate size
+      onBatch: _onBatch,
+    );
+  }
+
+  Future<void> _onBatch(List<_PublishRequest> batch) async {
+    try {
+      final messages = batch.map((e) => e.message).toList();
+      final messageIds = await runWithRetry(
+        () => pubsub.publishMessages(name, messages),
+        settings: publishSettings.retry,
+        isIdempotent: true,
+      );
+      for (var i = 0; i < batch.length; i++) {
+        batch[i].completer.complete(messageIds[i]);
+      }
+    } catch (e, st) {
+      for (final item in batch) {
+        item.completer.completeError(e, st);
+      }
+    }
   }
 
   static void _validateName(String name) {
@@ -92,7 +154,16 @@ final class Topic {
   /// [attributes] are optional attributes for the message.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Publisher.Publish).
-  // TODO(sigurdm): Support batch publishing (publishMany) for high-throughput.
-  Future<String> publish(List<int> data, {Map<String, String>? attributes}) =>
-      pubsub.publish(name, data, attributes: attributes);
+  Future<String> publish(List<int> data, {Map<String, String>? attributes}) {
+    final completer = Completer<String>();
+    _batcher.add(
+      _PublishRequest(Message(data: data, attributes: attributes), completer),
+    );
+    return completer.future;
+  }
+
+  /// Closes the topic, flushing any pending messages.
+  void close() {
+    _batcher.close();
+  }
 }

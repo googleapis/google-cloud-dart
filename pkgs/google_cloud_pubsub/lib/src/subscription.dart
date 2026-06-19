@@ -12,9 +12,43 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'dart:async';
+
 import 'package:meta/meta.dart';
 
 import '../google_cloud_pubsub.dart';
+import 'batching.dart';
+import 'retry.dart';
+
+/// Settings for acknowledging messages and modifying ack deadlines.
+class AckSettings {
+  final BatchingSettings batching;
+  final RetrySettings retry;
+
+  const AckSettings({
+    this.batching = const BatchingSettings(),
+    this.retry = const RetrySettings(),
+  });
+}
+
+class _AckRequest {
+  final String ackId;
+  final Completer<void> completer;
+
+  _AckRequest(this.ackId, this.completer);
+}
+
+class _ModifyAckDeadlineRequest {
+  final String ackId;
+  final int ackDeadlineSeconds;
+  final Completer<void> completer;
+
+  _ModifyAckDeadlineRequest(
+    this.ackId,
+    this.ackDeadlineSeconds,
+    this.completer,
+  );
+}
 
 @internal
 Subscription newSubscription(PubSub pubsub, String subscriptionId) =>
@@ -38,10 +72,20 @@ final class Subscription {
   /// It has the format `projects/<project-id>/subscriptions/<subscription-id>`.
   final String name;
 
+  /// Settings for acknowledging messages.
+  final AckSettings ackSettings;
+
+  late final Batcher<_AckRequest> _ackBatcher;
+  late final Batcher<_ModifyAckDeadlineRequest> _modifyAckBatcher;
+
   /// A subscription with the given [subscriptionId] in the client's project.
-  Subscription.unqualified(this.pubsub, String subscriptionId)
-    : name = 'projects/${pubsub.projectId}/subscriptions/$subscriptionId' {
+  Subscription.unqualified(
+    this.pubsub,
+    String subscriptionId, {
+    this.ackSettings = const AckSettings(),
+  }) : name = 'projects/${pubsub.projectId}/subscriptions/$subscriptionId' {
     _validateName(name);
+    _initBatchers();
   }
 
   /// A subscription with the given [name].
@@ -49,8 +93,75 @@ final class Subscription {
   /// The [name] must be in the format
   /// `projects/<project-id>/subscriptions/<subscription-id>`.
   /// Useful for cross-project access.
-  Subscription(this.pubsub, this.name) {
+  Subscription(
+    this.pubsub,
+    this.name, {
+    this.ackSettings = const AckSettings(),
+  }) {
     _validateName(name);
+    _initBatchers();
+  }
+
+  void _initBatchers() {
+    _ackBatcher = Batcher<_AckRequest>(
+      settings: ackSettings.batching,
+      itemSize: (req) => req.ackId.length, // Approximate size
+      onBatch: _onAckBatch,
+    );
+
+    _modifyAckBatcher = Batcher<_ModifyAckDeadlineRequest>(
+      settings: ackSettings.batching,
+      itemSize: (req) => req.ackId.length + 4, // Approximate size
+      onBatch: _onModifyAckBatch,
+    );
+  }
+
+  Future<void> _onAckBatch(List<_AckRequest> batch) async {
+    try {
+      final ackIds = batch.map((e) => e.ackId).toList();
+      await runWithRetry(
+        () => pubsub.acknowledge(name, ackIds),
+        settings: ackSettings.retry,
+        isIdempotent: true,
+      );
+      for (final req in batch) {
+        req.completer.complete();
+      }
+    } catch (e, st) {
+      for (final req in batch) {
+        req.completer.completeError(e, st);
+      }
+    }
+  }
+
+  Future<void> _onModifyAckBatch(List<_ModifyAckDeadlineRequest> batch) async {
+    // Group by ackDeadlineSeconds, as the RPC takes one deadline for all ackIds in the request.
+    final grouped = <int, List<_ModifyAckDeadlineRequest>>{};
+    for (final req in batch) {
+      grouped.putIfAbsent(req.ackDeadlineSeconds, () => []).add(req);
+    }
+
+    await Future.wait(
+      grouped.entries.map((entry) async {
+        final deadline = entry.key;
+        final reqs = entry.value;
+        try {
+          final ackIds = reqs.map((e) => e.ackId).toList();
+          await runWithRetry(
+            () => pubsub.modifyAckDeadline(name, ackIds, deadline),
+            settings: ackSettings.retry,
+            isIdempotent: true,
+          );
+          for (final req in reqs) {
+            req.completer.complete();
+          }
+        } catch (e, st) {
+          for (final req in reqs) {
+            req.completer.completeError(e, st);
+          }
+        }
+      }),
+    );
   }
 
   static void _validateName(String name) {
@@ -132,7 +243,7 @@ final class Subscription {
     );
   }
 
-  /// Acknowledges the messages associated with the `ack_ids`.
+  /// Acknowledges the messages associated with the `ack_ids` immediately.
   ///
   /// The Pub/Sub system can remove the relevant messages from the subscription.
   ///
@@ -144,10 +255,24 @@ final class Subscription {
   /// exist.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.Acknowledge).
-  Future<void> acknowledge(List<String> ackIds) =>
+  Future<void> acknowledgeNow(List<String> ackIds) =>
       pubsub.acknowledge(name, ackIds);
 
-  /// Modifies the ack deadline for a list of specific messages.
+  /// Acknowledges a list of messages.
+  ///
+  /// This method uses the configured `ackSettings` to batch multiple
+  /// acknowledgment requests together and retry on transient errors.
+  Future<void> acknowledge(List<String> ackIds) async {
+    final futures = <Future<void>>[];
+    for (final ackId in ackIds) {
+      final completer = Completer<void>();
+      _ackBatcher.add(_AckRequest(ackId, completer));
+      futures.add(completer.future);
+    }
+    await Future.wait(futures);
+  }
+
+  /// Modifies the ack deadline for a list of specific messages immediately.
   ///
   /// This method is useful to indicate that more time is needed to process a
   /// message by the subscriber, or to make the message available for redelivery
@@ -162,7 +287,10 @@ final class Subscription {
   /// exist.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.ModifyAckDeadline).
-  Future<void> modifyAckDeadline(List<String> ackIds, int ackDeadlineSeconds) {
+  Future<void> modifyAckDeadlineNow(
+    List<String> ackIds,
+    int ackDeadlineSeconds,
+  ) {
     if (ackDeadlineSeconds < 0) {
       throw ArgumentError.value(
         ackDeadlineSeconds,
@@ -171,5 +299,37 @@ final class Subscription {
       );
     }
     return pubsub.modifyAckDeadline(name, ackIds, ackDeadlineSeconds);
+  }
+
+  /// Modifies the ack deadline for a list of specific messages.
+  ///
+  /// This method uses the configured `ackSettings` to batch multiple
+  /// modification requests together and retry on transient errors.
+  Future<void> modifyAckDeadline(
+    List<String> ackIds,
+    int ackDeadlineSeconds,
+  ) async {
+    if (ackDeadlineSeconds < 0) {
+      throw ArgumentError.value(
+        ackDeadlineSeconds,
+        'ackDeadlineSeconds',
+        'Must be non-negative',
+      );
+    }
+    final futures = <Future<void>>[];
+    for (final ackId in ackIds) {
+      final completer = Completer<void>();
+      _modifyAckBatcher.add(
+        _ModifyAckDeadlineRequest(ackId, ackDeadlineSeconds, completer),
+      );
+      futures.add(completer.future);
+    }
+    await Future.wait(futures);
+  }
+
+  /// Closes the subscription, flushing any pending acknowledgments.
+  void close() {
+    _ackBatcher.close();
+    _modifyAckBatcher.close();
   }
 }
