@@ -203,7 +203,7 @@ void main() {
       await client.close();
     });
 
-    test('streamingPull ack error propagates', () async {
+    test('acknowledgeNow error propagates', () async {
       final subscription = client.subscription('sub');
       final stream = subscription.streamingPull();
 
@@ -226,7 +226,7 @@ void main() {
       final receivedMessage = await stream.first;
       expect(receivedMessage.ackId, equals('ack-1'));
 
-      final ackFuture = subscription.acknowledge([receivedMessage.ackId]);
+      final ackFuture = subscription.acknowledgeNow([receivedMessage.ackId]);
 
       await expectLater(
         ackFuture,
@@ -243,7 +243,7 @@ void main() {
       expect(fakeSubscriber.lastAckIds, equals(['ack-1']));
     });
 
-    test('streamingPull modifyAckDeadline error propagates', () async {
+    test('modifyAckDeadlineNow error propagates', () async {
       final subscription = client.subscription('sub');
       final stream = subscription.streamingPull();
 
@@ -266,7 +266,7 @@ void main() {
       final receivedMessage = await stream.first;
       expect(receivedMessage.ackId, equals('ack-2'));
 
-      final modifyDeadlineFuture = subscription.modifyAckDeadline([
+      final modifyDeadlineFuture = subscription.modifyAckDeadlineNow([
         receivedMessage.ackId,
       ], 10);
 

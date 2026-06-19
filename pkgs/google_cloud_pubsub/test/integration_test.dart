@@ -218,7 +218,7 @@ void main() {
       expect(messages.first.data, equals(data));
 
       // Ack message
-      await subscription.acknowledge([messages.first.ackId]);
+      subscription.acknowledge([messages.first.ackId]);
     });
 
     test('publish and streaming pull message', () async {
@@ -248,7 +248,7 @@ void main() {
       expect(receivedMessage.data, equals(data));
 
       // Ack message
-      await subscription.acknowledge([receivedMessage.ackId]);
+      subscription.acknowledge([receivedMessage.ackId]);
     });
 
     test('streaming pull throws StreamBrokenException '
@@ -299,7 +299,7 @@ void main() {
       expect(messages.first.attributes, equals(attributes));
 
       // Ack message
-      await subscription.acknowledge([messages.first.ackId]);
+      subscription.acknowledge([messages.first.ackId]);
     });
 
     test('publish multiple messages and pull batch', () async {
@@ -328,7 +328,7 @@ void main() {
       expect(receivedData, containsAll([data1, data2]));
 
       // Ack messages
-      await subscription.acknowledge(messages.map((m) => m.ackId).toList());
+      subscription.acknowledge(messages.map((m) => m.ackId).toList());
     });
   });
 }

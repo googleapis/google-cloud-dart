@@ -34,21 +34,15 @@ class AckSettings {
 
 class _AckRequest {
   final String ackId;
-  final Completer<void> completer;
 
-  _AckRequest(this.ackId, this.completer);
+  _AckRequest(this.ackId);
 }
 
 class _ModifyAckDeadlineRequest {
   final String ackId;
   final int ackDeadlineSeconds;
-  final Completer<void> completer;
 
-  _ModifyAckDeadlineRequest(
-    this.ackId,
-    this.ackDeadlineSeconds,
-    this.completer,
-  );
+  _ModifyAckDeadlineRequest(this.ackId, this.ackDeadlineSeconds);
 }
 
 @internal
@@ -139,9 +133,6 @@ final class Subscription {
           _activeStreams.first.add(
             grpc.StreamingPullRequest()..ackIds.addAll(ackIds),
           );
-          for (final req in batch) {
-            req.completer.complete();
-          }
           return;
         } catch (_) {
           // Stream might be closed locally, fall back to unary
@@ -153,13 +144,9 @@ final class Subscription {
         settings: ackSettings.retry,
         isIdempotent: true,
       );
-      for (final req in batch) {
-        req.completer.complete();
-      }
-    } catch (e, st) {
-      for (final req in batch) {
-        req.completer.completeError(e, st);
-      }
+    } catch (_) {
+      // ACKs are best-effort. If the unary fallback fails after retries,
+      // the error is suppressed. The messages will eventually be redelivered.
     }
   }
 
@@ -186,9 +173,6 @@ final class Subscription {
                     List.filled(ackIds.length, deadline),
                   ),
               );
-              for (final req in reqs) {
-                req.completer.complete();
-              }
               return;
             } catch (_) {
               // Stream might be closed locally, fall back to unary
@@ -200,13 +184,9 @@ final class Subscription {
             settings: ackSettings.retry,
             isIdempotent: true,
           );
-          for (final req in reqs) {
-            req.completer.complete();
-          }
-        } catch (e, st) {
-          for (final req in reqs) {
-            req.completer.completeError(e, st);
-          }
+        } catch (_) {
+          // ACKs are best-effort. If the unary fallback fails after retries,
+          // the error is suppressed.
         }
       }),
     );
@@ -329,14 +309,15 @@ final class Subscription {
   /// If no streaming streams are active, the client falls back to executing
   /// standard unary `Acknowledge` RPCs, and automatically retries on transient
   /// network errors according to the `ackSettings.retry` configuration.
-  Future<void> acknowledge(List<String> ackIds) async {
-    final futures = <Future<void>>[];
+  ///
+  /// This operation is "fire-and-forget" and does not wait for server
+  /// confirmation. If an error occurs that exhausts all retries, the error is
+  /// suppressed and the message will eventually be redelivered. If you require
+  /// explicit confirmation of acknowledgment, use [acknowledgeNow].
+  void acknowledge(List<String> ackIds) {
     for (final ackId in ackIds) {
-      final completer = Completer<void>();
-      _ackBatcher.add(_AckRequest(ackId, completer));
-      futures.add(completer.future);
+      _ackBatcher.add(_AckRequest(ackId));
     }
-    await Future.wait(futures);
   }
 
   /// Modifies the ack deadline for a list of specific messages immediately.
@@ -378,10 +359,11 @@ final class Subscription {
   /// If no streaming streams are active, the client falls back to executing
   /// standard unary `ModifyAckDeadline` RPCs, and automatically retries on
   /// transient network errors according to the `ackSettings.retry` configuration.
-  Future<void> modifyAckDeadline(
-    List<String> ackIds,
-    int ackDeadlineSeconds,
-  ) async {
+  ///
+  /// This operation is "fire-and-forget" and does not wait for server
+  /// confirmation. If an error occurs that exhausts all retries, the error is
+  /// suppressed. If you require explicit confirmation, use [modifyAckDeadlineNow].
+  void modifyAckDeadline(List<String> ackIds, int ackDeadlineSeconds) {
     if (ackDeadlineSeconds < 0) {
       throw ArgumentError.value(
         ackDeadlineSeconds,
@@ -389,15 +371,11 @@ final class Subscription {
         'Must be non-negative',
       );
     }
-    final futures = <Future<void>>[];
     for (final ackId in ackIds) {
-      final completer = Completer<void>();
       _modifyAckBatcher.add(
-        _ModifyAckDeadlineRequest(ackId, ackDeadlineSeconds, completer),
+        _ModifyAckDeadlineRequest(ackId, ackDeadlineSeconds),
       );
-      futures.add(completer.future);
     }
-    await Future.wait(futures);
   }
 
   /// Closes the subscription, flushing any pending acknowledgments.

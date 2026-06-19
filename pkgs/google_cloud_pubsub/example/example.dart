@@ -63,7 +63,7 @@ Future<void> main() async {
     // for (final message in messages) {
     //   print('Received: ${utf8.decode(message.message.data)}');
     //   // Acknowledges are batched automatically in the background
-    //   await subscription.acknowledge([message.ackId]);
+    //   subscription.acknowledge([message.ackId]);
     // }
 
     // Ensure pending batches are flushed.
