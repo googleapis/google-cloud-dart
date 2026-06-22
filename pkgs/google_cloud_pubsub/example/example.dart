@@ -32,8 +32,43 @@ Future<void> main() async {
 
   try {
     // The client will use the authenticator to make authenticated requests.
-    final topic = pubsub.topic('my-topic');
+    // Topics and Subscriptions handle batching and robust retries automatically.
+    final topic = pubsub.topic(
+      'my-topic',
+      publishSettings: const PublishSettings(
+        batching: BatchingSettings(
+          maxMessages: 50,
+          maxDelay: Duration(milliseconds: 20),
+        ),
+      ),
+    );
     print('Successfully initialized client for topic: ${topic.topicId}');
+
+    // Messages published will be batched.
+    // await topic.publish(utf8.encode('Hello World'));
+
+    // Example of using a subscription with AckSettings
+    final subscription = pubsub.subscription(
+      'my-subscription',
+      ackSettings: const AckSettings(
+        batching: BatchingSettings(
+          maxMessages: 50,
+          maxDelay: Duration(milliseconds: 20),
+        ),
+      ),
+    );
+
+    // Pull and acknowledge messages
+    // final messages = await subscription.pull(maxMessages: 10);
+    // for (final message in messages) {
+    //   print('Received: ${utf8.decode(message.message.data)}');
+    //   // Acknowledges are batched automatically in the background
+    //   subscription.acknowledge(message);
+    // }
+
+    // Ensure pending batches are flushed.
+    topic.close();
+    subscription.close();
   } finally {
     await pubsub.close();
   }

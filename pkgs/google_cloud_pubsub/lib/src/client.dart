@@ -176,25 +176,30 @@ final class PubSub {
   // Topic-related methods
 
   /// A [Topic] object with the given [unqualifiedName] in the client's project.
-  Topic topic(String unqualifiedName) => newTopic(this, unqualifiedName);
+  Topic topic(String unqualifiedName, {PublishSettings? publishSettings}) =>
+      newTopic(this, unqualifiedName, publishSettings: publishSettings);
 
   /// A [Topic] object with the given [name].
   ///
   /// The [name] must be in the format `projects/<project-id>/topics/<topic-id>`.
   /// Useful for cross-project access.
-  Topic topicName(String name) => newTopicName(this, name);
+  Topic topicName(String name, {PublishSettings? publishSettings}) =>
+      newTopicName(this, name, publishSettings: publishSettings);
 
   /// A [Subscription] object with the given [unqualifiedName] in the client's
   /// project.
-  Subscription subscription(String unqualifiedName) =>
-      newSubscription(this, unqualifiedName);
+  Subscription subscription(
+    String unqualifiedName, {
+    AckSettings? ackSettings,
+  }) => newSubscription(this, unqualifiedName, ackSettings: ackSettings);
 
   /// A [Subscription] object with the given [name].
   ///
   /// The [name] must be in the format
   /// `projects/<project-id>/subscriptions/<subscription-id>`.
   /// Useful for cross-project access.
-  Subscription subscriptionName(String name) => newSubscriptionName(this, name);
+  Subscription subscriptionName(String name, {AckSettings? ackSettings}) =>
+      newSubscriptionName(this, name, ackSettings: ackSettings);
 
   /// Creates the given topic with the given [name].
   ///
@@ -261,21 +266,39 @@ final class PubSub {
     List<int> data, {
     Map<String, String>? attributes,
   }) async {
-    final message = grpc.PubsubMessage()..data = data;
-    if (attributes != null) {
-      message.attributes.addAll(attributes);
-    }
+    final messageIds = await publishMessages(name, [
+      Message(data: data, attributes: attributes),
+    ]);
+    return messageIds.first;
+  }
 
-    final request = grpc.PublishRequest()
-      ..topic = name
-      ..messages.add(message);
+  /// Adds multiple messages to the topic in a single RPC.
+  ///
+  /// The [name] must be in the format `projects/<project-id>/topics/<topic-id>`.
+  ///
+  /// Throws a [TopicNotFoundException] if the topic does not exist.
+  ///
+  /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Publisher.Publish).
+  Future<List<String>> publishMessages(
+    String name,
+    List<Message> messages,
+  ) async {
+    final request = grpc.PublishRequest()..topic = name;
+
+    for (final message in messages) {
+      final pbMessage = grpc.PubsubMessage()..data = message.data;
+      if (message.attributes.isNotEmpty) {
+        pbMessage.attributes.addAll(message.attributes);
+      }
+      request.messages.add(pbMessage);
+    }
 
     try {
       final response = await _publisher.publish(
         request,
         options: await _callOptions,
       );
-      return response.messageIds.first;
+      return response.messageIds;
     } on GrpcError catch (e) {
       if (e.code == StatusCode.notFound) {
         throw TopicNotFoundException(name);
@@ -406,6 +429,54 @@ final class PubSub {
     }
   }
 
+  @internal
+  Stream<ReceivedMessage> streamingPullWithStream(
+    Stream<grpc.StreamingPullRequest> requestStream,
+  ) {
+    late StreamController<ReceivedMessage> controller;
+    StreamSubscription<grpc.StreamingPullResponse>? sub;
+    controller = StreamController<ReceivedMessage>(
+      onListen: () async {
+        try {
+          final options = await _callOptions;
+          final responseStream = _subscriber.streamingPull(
+            requestStream,
+            options: options,
+          );
+          sub = responseStream.listen(
+            (response) {
+              for (final m in response.receivedMessages) {
+                controller.add(_mapReceivedMessage(m));
+              }
+            },
+            onError: (Object e, StackTrace s) {
+              if (e is GrpcError) {
+                controller.addError(
+                  StreamBrokenException(
+                    e.code,
+                    e.message ?? 'Unknown error',
+                    e.trailers ?? const {},
+                  ),
+                  s,
+                );
+              } else {
+                controller.addError(e, s);
+              }
+            },
+            onDone: () {
+              controller.close();
+            },
+            cancelOnError: true,
+          );
+        } catch (e, s) {
+          controller.addError(e, s);
+        }
+      },
+      onCancel: () => sub?.cancel(),
+    );
+    return controller.stream;
+  }
+
   /// Establishes a stream with the server, which sends messages down to the
   /// client.
   ///
@@ -429,28 +500,12 @@ final class PubSub {
   }) async* {
     final requestController = StreamController<grpc.StreamingPullRequest>();
     try {
-      final options = await _callOptions;
       requestController.add(
         grpc.StreamingPullRequest()
           ..subscription = name
           ..streamAckDeadlineSeconds = streamAckDeadlineSeconds,
       );
-      // TODO(sigurdm): Retry on broken connections.
-      final responseStream = _subscriber.streamingPull(
-        requestController.stream,
-        options: options,
-      );
-      await for (final response in responseStream) {
-        for (final m in response.receivedMessages) {
-          yield _mapReceivedMessage(m);
-        }
-      }
-    } on GrpcError catch (e) {
-      throw StreamBrokenException(
-        e.code,
-        e.message ?? 'Unknown error',
-        e.trailers ?? const {},
-      );
+      yield* streamingPullWithStream(requestController.stream);
     } finally {
       await requestController.close();
     }

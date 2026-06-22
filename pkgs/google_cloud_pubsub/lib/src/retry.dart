@@ -1,0 +1,134 @@
+// Copyright 2026 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+import 'dart:math';
+
+import 'package:clock/clock.dart';
+import 'package:grpc/grpc.dart';
+import 'package:meta/meta.dart';
+
+/// Settings for configuring retry logic with exponential backoff.
+final class RetrySettings {
+  /// The maximum number of times to retry before failing.
+  ///
+  /// A `null` value indicates that the number of retries is unlimited.
+  final int? maxRetries;
+
+  /// The maximum amount of total time to retry before failing.
+  ///
+  /// A `null` value indicates that the total retry time is unlimited.
+  final Duration? maxRetryInterval;
+
+  /// The minimum amount of time to wait before retrying.
+  final Duration initialDelay;
+
+  /// The multiplier for the wait time between retries.
+  final double delayMultiplier;
+
+  /// The maximum amount of time to wait between retries.
+  ///
+  /// If the calculated exponential wait time between retries exceeds this
+  /// value, the wait time will be clamped to this value.
+  final Duration maxDelay;
+
+  const RetrySettings({
+    this.maxRetries,
+    this.initialDelay = const Duration(milliseconds: 100),
+    this.delayMultiplier = 1.3,
+    this.maxDelay = const Duration(seconds: 60),
+    this.maxRetryInterval = const Duration(minutes: 1),
+  });
+}
+
+/// Generates wait durations for exponential backoff, respecting [settings].
+///
+/// Uses `clock` to enforce [RetrySettings.maxRetryInterval].
+@internal
+Iterable<Duration> delaySequence({
+  int? maxRetries,
+  Duration? maxRetryInterval,
+  required Duration initialDelay,
+  required Duration maxDelay,
+  required double delayMultiplier,
+  Clock clock = const Clock(),
+}) sync* {
+  var reachedMax = false;
+  final noRetriesAfter = maxRetryInterval == null
+      ? null
+      : clock.fromNowBy(maxRetryInterval);
+  for (var i = 0; (maxRetries == null) || (i < maxRetries); i++) {
+    if (noRetriesAfter != null && clock.now().isAfter(noRetriesAfter)) {
+      break;
+    }
+    if (reachedMax) {
+      yield maxDelay;
+    } else {
+      final delay = initialDelay * pow(delayMultiplier, i);
+      if (delay > maxDelay) {
+        reachedMax = true;
+        yield maxDelay;
+      } else {
+        yield delay;
+      }
+    }
+  }
+}
+
+/// Runs [body] with exponential backoff retries.
+///
+/// Only transient gRPC errors are retried. If [isIdempotent] is `false`, the
+/// operation is never retried and the first error is rethrown.
+Future<T> runWithRetry<T>(
+  Future<T> Function() body, {
+  required RetrySettings settings,
+  required bool isIdempotent,
+}) async {
+  final delays = delaySequence(
+    maxRetries: settings.maxRetries,
+    maxRetryInterval: settings.maxRetryInterval,
+    initialDelay: settings.initialDelay,
+    maxDelay: settings.maxDelay,
+    delayMultiplier: settings.delayMultiplier,
+  ).iterator;
+
+  while (true) {
+    try {
+      return await body();
+    } catch (e) {
+      if (!isIdempotent) rethrow;
+
+      if (e is GrpcError) {
+        switch (e.code) {
+          case StatusCode.aborted:
+          case StatusCode.deadlineExceeded:
+          case StatusCode.internal:
+          case StatusCode.resourceExhausted:
+          case StatusCode.unavailable:
+          case StatusCode.unknown:
+            break;
+          default:
+            rethrow;
+        }
+      } else {
+        rethrow;
+      }
+
+      if (delays.moveNext()) {
+        await Future<void>.delayed(delays.current);
+      } else {
+        rethrow;
+      }
+    }
+  }
+}
