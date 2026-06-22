@@ -291,7 +291,7 @@ final class Subscription {
   /// are batched in the background and sent over the active streams. If all streams
   /// are down, they fall back to unary RPCs.
   ///
-  /// Throws an [ArgumentError] if [streamAckDeadlineSeconds] is not between 10 and 600
+  /// It is an error if [streamAckDeadlineSeconds] is not between 10 and 600
   /// seconds, or if [maxConcurrentStreams] is less than 1.
   ///
   /// The returned stream can emit:
@@ -475,7 +475,7 @@ final class Subscription {
   ///
   /// Bypasses background batching and immediately executes a unary RPC.
   ///
-  /// Throws [ArgumentError] if [ackDeadlineSeconds] is negative.
+  /// It is an error if [ackDeadlineSeconds] is negative.
   /// Throws [SubscriptionNotFoundException] if the subscription does not exist,
   /// or [PubSubOperationException] if the RPC fails.
   ///
@@ -507,7 +507,7 @@ final class Subscription {
   /// stream. Otherwise, they are sent via a unary RPC with retries configured
   /// by [AckSettings.retry].
   ///
-  /// Throws [ArgumentError] if [ackDeadlineSeconds] is negative.
+  /// It is an error if [ackDeadlineSeconds] is negative.
   ///
   /// This is a non-blocking, fire-and-forget operation. See [modifyAckDeadlineNow]
   /// for an immediate, awaitable alternative.
