@@ -23,17 +23,13 @@ import 'batching.dart';
 import 'generated/google/pubsub/v1/pubsub.pbgrpc.dart' as grpc;
 import 'retry.dart';
 
-/// Configuration settings for acknowledging messages and modifying deadlines.
-///
-/// These settings govern the behavior of the background batcher used by
-/// [Subscription.acknowledge] and [Subscription.modifyAckDeadline].
+/// Settings for background batching and retrying of acknowledgements and
+/// deadline modifications.
 class AckSettings {
-  /// Settings controlling how ACKs and deadline modifications are accumulated
-  /// and flushed in the background.
+  /// Settings controlling how requests are accumulated and flushed.
   final BatchingSettings batching;
 
-  /// The retry strategy used when the background batcher must fall back to
-  /// unary RPCs due to active gRPC streams being unavailable.
+  /// Retry strategy used when falling back to unary RPCs.
   final RetrySettings retry;
 
   const AckSettings({
@@ -137,15 +133,9 @@ final class Subscription {
     );
   }
 
-  /// Processes a batch of accumulated acknowledgments.
-  ///
-  /// It first attempts to send the batch over one of the active [streamingPull]
-  /// gRPC streams (load-balanced via round-robin). If no active streams are
-  /// available, or if all attempts fail due to concurrent stream closures,
-  /// it immediately falls back to a unary `Acknowledge` RPC wrapped in [runWithRetry].
-  ///
-  /// Since ACKs are best-effort, any exception thrown by the unary fallback
-  /// after exhausting retries is caught and suppressed.
+  // Sends a batch of ACKs. Prefers sending over active gRPC streams (round-robin),
+  // falling back to a unary RPC with retries if no streams are available.
+  // Errors are caught and suppressed since ACKs are best-effort.
   Future<void> _onAckBatch(List<_AckRequest> batch) async {
     try {
       final ackIds = batch.map((e) => e.ackId).toList();
@@ -179,18 +169,9 @@ final class Subscription {
     }
   }
 
-  /// Processes a batch of accumulated ack deadline modifications.
-  ///
-  /// It first groups the requests by their target deadline seconds, since the
-  /// RPC requires all message IDs in a single request to share the same deadline.
-  ///
-  /// For each group, it attempts to send the request over one of the active
-  /// [streamingPull] gRPC streams. If no active streams are available, or if
-  /// all attempts fail, it falls back to a unary `ModifyAckDeadline` RPC
-  /// wrapped in [runWithRetry].
-  ///
-  /// Any exception thrown by the unary fallback after exhausting retries is
-  /// caught and suppressed.
+  // Sends a batch of ack deadline modifications. Groups by deadline seconds,
+  // then sends over active streams or falls back to unary RPCs with retries.
+  // Errors are suppressed.
   Future<void> _onModifyAckBatch(List<_ModifyAckDeadlineRequest> batch) async {
     // Group by ackDeadlineSeconds, as the RPC takes one deadline for all ackIds in the request.
     final grouped = <int, List<_ModifyAckDeadlineRequest>>{};
@@ -293,39 +274,30 @@ final class Subscription {
     return pubsub.pull(name, maxMessages: maxMessages);
   }
 
-  /// Establishes a persistent, high-throughput stream with the server to receive messages.
+  /// Establishes a persistent stream with the server to receive messages.
   ///
   /// The client automatically streams acknowledgments and ack deadline modifications
-  /// back to the server. Flow control is managed by the underlying gRPC transport.
+  /// back to the server.
   ///
-  /// **Parallel Streams:**
-  /// By setting [maxConcurrentStreams] > 1, you can open multiple parallel gRPC
-  /// connections. This is highly recommended for high-throughput subscriptions to
-  /// bypass the throughput limitations of a single gRPC stream.
+  /// If [maxConcurrentStreams] is greater than 1, multiple parallel gRPC streams
+  /// are opened. This can increase throughput for high-volume subscriptions by
+  /// bypassing single-stream limitations.
   ///
-  /// **Robust Auto-Reconnection:**
-  /// If an underlying stream encounters an error (including server-initiated
-  /// disconnects for load balancing), it will automatically attempt to reconnect
-  /// in the background using exponential backoff (configured via [retry]).
-  /// Once a connection successfully yields new messages, its backoff sequence is reset.
+  /// The stream automatically reconnects on transient network errors using the
+  /// configured [retry] settings (defaulting to [AckSettings.retry]). Reconnections
+  /// use exponential backoff, which resets once a connection successfully yields messages.
   ///
-  /// **Background Batching:**
-  /// ACKs sent via [acknowledge] and deadline modifications sent via [modifyAckDeadline]
-  /// are automatically batched in the background and routed over the most optimal
-  /// active gRPC stream, load-balanced using round-robin. If all streams are
-  /// temporarily down, they immediately fall back to unary RPCs with their own retries.
+  /// ACKs and deadline modifications sent via [acknowledge] and [modifyAckDeadline]
+  /// are batched in the background and sent over the active streams. If all streams
+  /// are down, they fall back to unary RPCs.
   ///
-  /// **Preconditions:**
-  /// - [streamAckDeadlineSeconds] must be between 10 and 600 seconds (inclusive).
-  /// - [maxConcurrentStreams] must be at least 1.
+  /// Throws an [ArgumentError] if [streamAckDeadlineSeconds] is not between 10 and 600
+  /// seconds, or if [maxConcurrentStreams] is less than 1.
   ///
-  /// **Exceptions:**
-  /// - Throws [ArgumentError] if preconditions are violated.
-  /// - The returned stream will emit [SubscriptionNotFoundException] if the
-  ///   subscription does not exist on the server.
-  /// - The returned stream will emit [StreamBrokenException] if a connection
-  ///   fails permanently (exhausts all retries). If all parallel streams fail
-  ///   permanently, the returned stream will close.
+  /// The returned stream can emit:
+  /// * [SubscriptionNotFoundException] if the subscription does not exist.
+  /// * [StreamBrokenException] if a connection fails permanently (exhausts retries).
+  ///   If all parallel streams fail permanently, the stream closes.
   ///
   /// **Example:**
   /// {@example example/doc_examples.dart region=streaming_pull_example}
@@ -467,14 +439,12 @@ final class Subscription {
     return controller.stream;
   }
 
-  /// Acknowledges the given [messages] immediately and awaits confirmation.
+  /// Acknowledges [messages] immediately.
   ///
-  /// Unlike [acknowledge], this method bypasses the background batcher and
-  /// immediately executes a unary `Acknowledge` RPC on the server.
+  /// Bypasses background batching and immediately executes a unary RPC.
   ///
-  /// **Exceptions:**
-  /// - Throws [SubscriptionNotFoundException] if the subscription does not exist.
-  /// - Throws [PubSubException] (or other GrpcError wrappers) if the RPC fails.
+  /// Throws [SubscriptionNotFoundException] if the subscription does not exist,
+  /// or [PubSubOperationException] if the RPC fails.
   ///
   /// **Example:**
   /// {@example example/doc_examples.dart region=acknowledge_now_example}
@@ -483,45 +453,31 @@ final class Subscription {
   Future<void> acknowledgeNow(List<ReceivedMessage> messages) =>
       pubsub.acknowledge(name, messages.map((m) => m.ackId).toList());
 
-  /// Acknowledges the given [message] in the background.
+  /// Acknowledges [message] in the background.
   ///
-  /// This method is highly optimized for performance. It does not execute an immediate
-  /// RPC. Instead, it buffers the acknowledgment and batches it with other ACKs
-  /// in the background according to [AckSettings.batching] settings.
+  /// This method buffers the acknowledgment and batches it with others according
+  /// to [AckSettings.batching].
   ///
-  /// **Streaming Optimization:**
-  /// If a [streamingPull] stream is currently active, the batched ACKs will be
-  /// efficiently routed over the existing bidirectional gRPC stream. If no streams
-  /// are active (or they are all temporarily reconnecting), it automatically
-  /// falls back to executing a unary `Acknowledge` RPC with robust retries
-  /// (configured via [AckSettings.retry]).
+  /// If a [streamingPull] stream is active, the batched ACKs are sent over the
+  /// stream. Otherwise, they are sent via a unary RPC with retries configured
+  /// by [AckSettings.retry].
   ///
-  /// Acknowledging a message allows the Pub/Sub system to remove it from the
-  /// subscription. While best-effort, if an ACK fails permanently (even after
-  /// unary retries), the message will eventually be redelivered by the server
-  /// after its ack deadline expires.
-  ///
-  /// **Performance Considerations:**
-  /// This is a non-blocking, fire-and-forget operation (returns `void`). It is
-  /// the preferred way to acknowledge messages in high-throughput applications.
+  /// This is a non-blocking, fire-and-forget operation. If a background ACK fails
+  /// permanently, the message will eventually be redelivered by the server after
+  /// its ack deadline expires.
   ///
   /// See [acknowledgeNow] for an immediate, awaitable alternative.
   void acknowledge(ReceivedMessage message) {
     _ackBatcher.add(_AckRequest(message.ackId));
   }
 
-  /// Modifies the acknowledgment deadline for the given [messages] immediately
-  /// and awaits confirmation.
+  /// Modifies the acknowledgment deadline for [messages] immediately.
   ///
-  /// Unlike [modifyAckDeadline], this method bypasses the background batcher and
-  /// immediately executes a unary `ModifyAckDeadline` RPC on the server.
+  /// Bypasses background batching and immediately executes a unary RPC.
   ///
-  /// **Preconditions:**
-  /// - [ackDeadlineSeconds] must be between 0 and 600 seconds (inclusive).
-  ///
-  /// **Exceptions:**
-  /// - Throws [SubscriptionNotFoundException] if the subscription does not exist.
-  /// - Throws [PubSubException] if the RPC fails.
+  /// Throws [ArgumentError] if [ackDeadlineSeconds] is negative.
+  /// Throws [SubscriptionNotFoundException] if the subscription does not exist,
+  /// or [PubSubOperationException] if the RPC fails.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.ModifyAckDeadline).
   Future<void> modifyAckDeadlineNow(
@@ -542,27 +498,19 @@ final class Subscription {
     );
   }
 
-  /// Modifies the acknowledgment deadline for the given [message] in the background.
+  /// Modifies the acknowledgment deadline for [message] in the background.
   ///
-  /// This method is highly optimized for performance. It does not execute an immediate
-  /// RPC. Instead, it buffers the request and batches it with other deadline
-  /// modifications in the background according to [AckSettings.batching] settings,
+  /// Buffers and batches the request with others according to [AckSettings.batching],
   /// grouping them by [ackDeadlineSeconds].
   ///
-  /// **Streaming Optimization:**
-  /// If a [streamingPull] stream is currently active, the batched requests will be
-  /// efficiently routed over the existing bidirectional gRPC stream. If no streams
-  /// are active, it automatically falls back to executing a unary `ModifyAckDeadline`
-  /// RPC with robust retries (configured via [AckSettings.retry]).
+  /// If a [streamingPull] stream is active, the batched requests are sent over the
+  /// stream. Otherwise, they are sent via a unary RPC with retries configured
+  /// by [AckSettings.retry].
   ///
-  /// **Preconditions:**
-  /// - [ackDeadlineSeconds] must be between 0 and 600 seconds (inclusive).
+  /// Throws [ArgumentError] if [ackDeadlineSeconds] is negative.
   ///
-  /// **Performance Considerations:**
-  /// This is a non-blocking, fire-and-forget operation (returns `void`). It is
-  /// the preferred way to extend deadlines in high-throughput applications.
-  ///
-  /// See [modifyAckDeadlineNow] for an immediate, awaitable alternative.
+  /// This is a non-blocking, fire-and-forget operation. See [modifyAckDeadlineNow]
+  /// for an immediate, awaitable alternative.
   void modifyAckDeadline(ReceivedMessage message, int ackDeadlineSeconds) {
     if (ackDeadlineSeconds < 0) {
       throw ArgumentError.value(
