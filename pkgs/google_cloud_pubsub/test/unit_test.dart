@@ -240,7 +240,7 @@ void main() {
       final receivedMessage = await stream.first;
       expect(receivedMessage.ackId, equals('ack-1'));
 
-      final ackFuture = subscription.acknowledge([receivedMessage.ackId]);
+      final ackFuture = subscription.acknowledgeNow([receivedMessage]);
 
       await expectLater(
         ackFuture,
@@ -280,8 +280,8 @@ void main() {
       final receivedMessage = await stream.first;
       expect(receivedMessage.ackId, equals('ack-2'));
 
-      final modifyDeadlineFuture = subscription.modifyAckDeadline([
-        receivedMessage.ackId,
+      final modifyDeadlineFuture = subscription.modifyAckDeadlineNow([
+        receivedMessage,
       ], 10);
 
       await expectLater(

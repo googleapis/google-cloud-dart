@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'dart:async';
+
 import 'package:meta/meta.dart';
 
 import '../google_cloud_pubsub.dart';
@@ -132,7 +134,7 @@ final class Subscription {
     );
   }
 
-  /// Acknowledges the messages associated with the `ack_ids`.
+  /// Acknowledges the messages associated with the [messages] immediately.
   ///
   /// The Pub/Sub system can remove the relevant messages from the subscription.
   ///
@@ -144,10 +146,19 @@ final class Subscription {
   /// exist.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.Acknowledge).
-  Future<void> acknowledge(List<String> ackIds) =>
-      pubsub.acknowledge(name, ackIds);
+  Future<void> acknowledgeNow(List<ReceivedMessage> messages) =>
+      pubsub.acknowledge(name, messages.map((m) => m.ackId).toList());
 
-  /// Modifies the ack deadline for a list of specific messages.
+  /// Acknowledges a single message in the background.
+  ///
+  /// This operation is "fire-and-forget" and does not wait for server
+  /// confirmation. If you require explicit confirmation of acknowledgment,
+  /// use [acknowledgeNow].
+  void acknowledge(ReceivedMessage message) {
+    unawaited(acknowledgeNow([message]));
+  }
+
+  /// Modifies the ack deadline for a list of specific messages immediately.
   ///
   /// This method is useful to indicate that more time is needed to process a
   /// message by the subscriber, or to make the message available for redelivery
@@ -162,7 +173,10 @@ final class Subscription {
   /// exist.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.ModifyAckDeadline).
-  Future<void> modifyAckDeadline(List<String> ackIds, int ackDeadlineSeconds) {
+  Future<void> modifyAckDeadlineNow(
+    List<ReceivedMessage> messages,
+    int ackDeadlineSeconds,
+  ) {
     if (ackDeadlineSeconds < 0) {
       throw ArgumentError.value(
         ackDeadlineSeconds,
@@ -170,6 +184,26 @@ final class Subscription {
         'Must be non-negative',
       );
     }
-    return pubsub.modifyAckDeadline(name, ackIds, ackDeadlineSeconds);
+    return pubsub.modifyAckDeadline(
+      name,
+      messages.map((m) => m.ackId).toList(),
+      ackDeadlineSeconds,
+    );
+  }
+
+  /// Modifies the ack deadline for a single message in the background.
+  ///
+  /// This operation is "fire-and-forget" and does not wait for server
+  /// confirmation. If you require explicit confirmation, use
+  /// [modifyAckDeadlineNow].
+  void modifyAckDeadline(ReceivedMessage message, int ackDeadlineSeconds) {
+    if (ackDeadlineSeconds < 0) {
+      throw ArgumentError.value(
+        ackDeadlineSeconds,
+        'ackDeadlineSeconds',
+        'Must be non-negative',
+      );
+    }
+    unawaited(modifyAckDeadlineNow([message], ackDeadlineSeconds));
   }
 }
