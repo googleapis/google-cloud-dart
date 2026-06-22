@@ -135,28 +135,21 @@ final class Subscription {
     try {
       final ackIds = batch.map((e) => e.ackId).toList();
 
-      while (_streamingPullSubscriptionCount > 0) {
-        if (_activeStreams.isEmpty) {
-          await Future<void>.delayed(const Duration(milliseconds: 100));
-          continue;
-        }
-
-        // Simple round-robin load balancing.
-        _nextStreamIndex = (_nextStreamIndex + 1) % _activeStreams.length;
-        final stream = _activeStreams[_nextStreamIndex];
-
-        if (stream.isClosed) {
-          await Future<void>.delayed(const Duration(milliseconds: 10));
-          continue;
-        }
-
-        try {
-          stream.add(grpc.StreamingPullRequest()..ackIds.addAll(ackIds));
-          return;
-        } on StateError {
-          // ignore: avoid_catching_errors
-          // Stream was closed concurrently after the isClosed check.
-          continue;
+      if (_streamingPullSubscriptionCount > 0 && _activeStreams.isNotEmpty) {
+        final streams = List<StreamController<grpc.StreamingPullRequest>>.from(
+          _activeStreams,
+        );
+        for (var i = 0; i < streams.length; i++) {
+          _nextStreamIndex = (_nextStreamIndex + 1) % streams.length;
+          final stream = streams[_nextStreamIndex];
+          if (!stream.isClosed) {
+            try {
+              stream.add(grpc.StreamingPullRequest()..ackIds.addAll(ackIds));
+              return;
+            } on StateError {
+              // Stream was closed concurrently, try next one.
+            }
+          }
         }
       }
 
@@ -185,34 +178,29 @@ final class Subscription {
         try {
           final ackIds = reqs.map((e) => e.ackId).toList();
 
-          while (_streamingPullSubscriptionCount > 0) {
-            if (_activeStreams.isEmpty) {
-              await Future<void>.delayed(const Duration(milliseconds: 100));
-              continue;
-            }
-
-            // Simple round-robin load balancing.
-            _nextStreamIndex = (_nextStreamIndex + 1) % _activeStreams.length;
-            final stream = _activeStreams[_nextStreamIndex];
-
-            if (stream.isClosed) {
-              await Future<void>.delayed(const Duration(milliseconds: 10));
-              continue;
-            }
-
-            try {
-              stream.add(
-                grpc.StreamingPullRequest()
-                  ..modifyDeadlineAckIds.addAll(ackIds)
-                  ..modifyDeadlineSeconds.addAll(
-                    List.filled(ackIds.length, deadline),
-                  ),
-              );
-              return;
-            } on StateError {
-              // ignore: avoid_catching_errors
-              // Stream was closed concurrently after the isClosed check.
-              continue;
+          if (_streamingPullSubscriptionCount > 0 &&
+              _activeStreams.isNotEmpty) {
+            final streams =
+                List<StreamController<grpc.StreamingPullRequest>>.from(
+                  _activeStreams,
+                );
+            for (var i = 0; i < streams.length; i++) {
+              _nextStreamIndex = (_nextStreamIndex + 1) % streams.length;
+              final stream = streams[_nextStreamIndex];
+              if (!stream.isClosed) {
+                try {
+                  stream.add(
+                    grpc.StreamingPullRequest()
+                      ..modifyDeadlineAckIds.addAll(ackIds)
+                      ..modifyDeadlineSeconds.addAll(
+                        List.filled(ackIds.length, deadline),
+                      ),
+                  );
+                  return;
+                } on StateError {
+                  // Stream was closed concurrently, try next one.
+                }
+              }
             }
           }
 
