@@ -178,7 +178,14 @@ void main() {
       final subscription = client!.subscription(subscriptionName);
 
       expect(
-        () => subscription.acknowledgeNow(['ack-id']),
+        () => subscription.acknowledgeNow([
+          ReceivedMessage(
+            ackId: 'ack-id',
+            messageId: 'msg-id',
+            publishTime: DateTime.now(),
+            message: Message(data: []),
+          ),
+        ]),
         throwsA(isA<SubscriptionNotFoundException>()),
       );
     });
@@ -190,7 +197,14 @@ void main() {
       final subscription = client!.subscription(subscriptionName);
 
       expect(
-        () => subscription.modifyAckDeadlineNow(['ack-id'], 10),
+        () => subscription.modifyAckDeadlineNow([
+          ReceivedMessage(
+            ackId: 'ack-id',
+            messageId: 'msg-id',
+            publishTime: DateTime.now(),
+            message: Message(data: []),
+          ),
+        ], 10),
         throwsA(isA<SubscriptionNotFoundException>()),
       );
     });

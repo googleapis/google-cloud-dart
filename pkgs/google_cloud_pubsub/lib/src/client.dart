@@ -432,25 +432,51 @@ final class PubSub {
   @internal
   Stream<ReceivedMessage> streamingPullWithStream(
     Stream<grpc.StreamingPullRequest> requestStream,
-  ) async* {
-    try {
-      final options = await _callOptions;
-      final responseStream = _subscriber.streamingPull(
-        requestStream,
-        options: options,
-      );
-      await for (final response in responseStream) {
-        for (final m in response.receivedMessages) {
-          yield _mapReceivedMessage(m);
+  ) {
+    late StreamController<ReceivedMessage> controller;
+    StreamSubscription<grpc.StreamingPullResponse>? sub;
+    controller = StreamController<ReceivedMessage>(
+      onListen: () async {
+        try {
+          final options = await _callOptions;
+          final responseStream = _subscriber.streamingPull(
+            requestStream,
+            options: options,
+          );
+          sub = responseStream.listen(
+            (response) {
+              for (final m in response.receivedMessages) {
+                controller.add(_mapReceivedMessage(m));
+              }
+            },
+            onError: (Object e, StackTrace s) {
+              if (e is GrpcError) {
+                controller.addError(
+                  StreamBrokenException(
+                    e.code,
+                    e.message ?? 'Unknown error',
+                    e.trailers ?? const {},
+                  ),
+                  s,
+                );
+              } else {
+                controller.addError(e, s);
+              }
+            },
+            onDone: () {
+              controller.close();
+            },
+            cancelOnError: true,
+          );
+        } catch (e, s) {
+          controller.addError(e, s);
         }
-      }
-    } on GrpcError catch (e) {
-      throw StreamBrokenException(
-        e.code,
-        e.message ?? 'Unknown error',
-        e.trailers ?? const {},
-      );
-    }
+      },
+      onCancel: () {
+        return sub?.cancel();
+      },
+    );
+    return controller.stream;
   }
 
   /// Establishes a stream with the server, which sends messages down to the

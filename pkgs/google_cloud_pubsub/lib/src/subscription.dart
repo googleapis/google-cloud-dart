@@ -18,7 +18,8 @@ import 'package:meta/meta.dart';
 
 import '../google_cloud_pubsub.dart';
 import 'batching.dart';
-import 'generated/google/pubsub/v1/pubsub.pbgrpc.dart' as grpc;
+import 'package:google_cloud_pubsub/src/generated/google/pubsub/v1/pubsub.pbgrpc.dart'
+    as grpc;
 import 'retry.dart';
 
 /// Settings for acknowledging messages and modifying ack deadlines.
@@ -86,6 +87,12 @@ final class Subscription {
 
   final List<StreamController<grpc.StreamingPullRequest>> _activeStreams = [];
 
+  /// Number of active calls to [streamingPull].
+  int _streamingPullSubscriptionCount = 0;
+
+  /// Index for round-robin load balancing ACKs across active streams.
+  int _nextStreamIndex = 0;
+
   /// A subscription with the given [subscriptionId] in the client's project.
   Subscription.unqualified(
     this.pubsub,
@@ -128,14 +135,28 @@ final class Subscription {
     try {
       final ackIds = batch.map((e) => e.ackId).toList();
 
-      if (_activeStreams.isNotEmpty) {
+      while (_streamingPullSubscriptionCount > 0) {
+        if (_activeStreams.isEmpty) {
+          await Future<void>.delayed(const Duration(milliseconds: 100));
+          continue;
+        }
+
+        // Simple round-robin load balancing.
+        _nextStreamIndex = (_nextStreamIndex + 1) % _activeStreams.length;
+        final stream = _activeStreams[_nextStreamIndex];
+
+        if (stream.isClosed) {
+          await Future<void>.delayed(const Duration(milliseconds: 10));
+          continue;
+        }
+
         try {
-          _activeStreams.first.add(
-            grpc.StreamingPullRequest()..ackIds.addAll(ackIds),
-          );
+          stream.add(grpc.StreamingPullRequest()..ackIds.addAll(ackIds));
           return;
-        } catch (_) {
-          // Stream might be closed locally, fall back to unary
+        } on StateError {
+          // ignore: avoid_catching_errors
+          // Stream was closed concurrently after the isClosed check.
+          continue;
         }
       }
 
@@ -144,7 +165,7 @@ final class Subscription {
         settings: ackSettings.retry,
         isIdempotent: true,
       );
-    } catch (_) {
+    } on Exception catch (_) {
       // ACKs are best-effort. If the unary fallback fails after retries,
       // the error is suppressed. The messages will eventually be redelivered.
     }
@@ -164,9 +185,23 @@ final class Subscription {
         try {
           final ackIds = reqs.map((e) => e.ackId).toList();
 
-          if (_activeStreams.isNotEmpty) {
+          while (_streamingPullSubscriptionCount > 0) {
+            if (_activeStreams.isEmpty) {
+              await Future<void>.delayed(const Duration(milliseconds: 100));
+              continue;
+            }
+
+            // Simple round-robin load balancing.
+            _nextStreamIndex = (_nextStreamIndex + 1) % _activeStreams.length;
+            final stream = _activeStreams[_nextStreamIndex];
+
+            if (stream.isClosed) {
+              await Future<void>.delayed(const Duration(milliseconds: 10));
+              continue;
+            }
+
             try {
-              _activeStreams.first.add(
+              stream.add(
                 grpc.StreamingPullRequest()
                   ..modifyDeadlineAckIds.addAll(ackIds)
                   ..modifyDeadlineSeconds.addAll(
@@ -174,8 +209,10 @@ final class Subscription {
                   ),
               );
               return;
-            } catch (_) {
-              // Stream might be closed locally, fall back to unary
+            } on StateError {
+              // ignore: avoid_catching_errors
+              // Stream was closed concurrently after the isClosed check.
+              continue;
             }
           }
 
@@ -184,7 +221,7 @@ final class Subscription {
             settings: ackSettings.retry,
             isIdempotent: true,
           );
-        } catch (_) {
+        } on Exception catch (_) {
           // ACKs are best-effort. If the unary fallback fails after retries,
           // the error is suppressed.
         }
@@ -253,13 +290,21 @@ final class Subscription {
   /// re-establish the stream. Flow control can be achieved by configuring the
   /// underlying RPC channel.
   ///
-  /// Throws a [StreamBrokenException] if the stream is broken by the server or
-  /// network.
+  /// The [streamAckDeadlineSeconds] specifies the deadline in seconds for
+  /// acknowledging messages on the stream.
+  ///
+  /// The [maxConcurrentStreams] parameter specifies how many underlying gRPC
+  /// connections to open to maximize throughput. It defaults to 1.
+  ///
+  /// The [retry] parameter specifies the retry strategy for transient network errors.
+  /// If not provided, it defaults to the `ackSettings.retry` configuration.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.StreamingPull).
   Stream<ReceivedMessage> streamingPull({
     int streamAckDeadlineSeconds = 10,
-  }) async* {
+    int maxConcurrentStreams = 1,
+    RetrySettings? retry,
+  }) {
     if (streamAckDeadlineSeconds < 10 || streamAckDeadlineSeconds > 600) {
       throw ArgumentError.value(
         streamAckDeadlineSeconds,
@@ -267,24 +312,133 @@ final class Subscription {
         'Must be between 10 and 600 seconds',
       );
     }
+    if (maxConcurrentStreams < 1) {
+      throw ArgumentError.value(
+        maxConcurrentStreams,
+        'maxConcurrentStreams',
+        'Must be at least 1',
+      );
+    }
 
-    final requestController = StreamController<grpc.StreamingPullRequest>();
-    requestController.add(
-      grpc.StreamingPullRequest()
-        ..subscription = name
-        ..streamAckDeadlineSeconds = streamAckDeadlineSeconds,
+    final effectiveRetry = retry ?? ackSettings.retry;
+    late StreamController<ReceivedMessage> controller;
+    var isCancelled = false;
+
+    // Track active request streams and subscriptions so we can clean them up.
+    final currentSubs = <StreamSubscription<ReceivedMessage>>[];
+    final requestControllers = <StreamController<grpc.StreamingPullRequest>>[];
+
+    void connect(Iterator<Duration> delays) {
+      if (isCancelled) return;
+
+      final requestController = StreamController<grpc.StreamingPullRequest>();
+      requestController.add(
+        grpc.StreamingPullRequest()
+          ..subscription = name
+          ..streamAckDeadlineSeconds = streamAckDeadlineSeconds,
+      );
+      _activeStreams.add(requestController);
+      requestControllers.add(requestController);
+
+      var hasReceivedItem = false;
+      late StreamSubscription<ReceivedMessage> currentSub;
+      currentSub = pubsub
+          .streamingPullWithStream(requestController.stream)
+          .listen(
+            (item) {
+              hasReceivedItem = true;
+              controller.add(item);
+            },
+            onError: (Object e) {
+              _activeStreams.remove(requestController);
+              requestControllers.remove(requestController);
+              currentSubs.remove(currentSub);
+              requestController.close();
+
+              if (isCancelled) return;
+
+              Iterator<Duration> nextDelays = delays;
+              if (hasReceivedItem) {
+                nextDelays = delaySequence(
+                  maxRetries: effectiveRetry.maxRetries,
+                  maxRetryInterval: effectiveRetry.maxRetryInterval,
+                  initialDelay: effectiveRetry.initialDelay,
+                  delayMultiplier: effectiveRetry.delayMultiplier,
+                  maxDelay: effectiveRetry.maxDelay,
+                ).iterator;
+              }
+              if (nextDelays.moveNext()) {
+                Future<void>.delayed(nextDelays.current).then((_) {
+                  connect(nextDelays);
+                });
+              } else {
+                controller.addError(e);
+                // If we reach max retries on one stream, should we close the whole controller?
+                // For safety, we will close it if this is the last failing stream.
+                if (currentSubs.isEmpty) {
+                  controller.close();
+                }
+              }
+            },
+            onDone: () {
+              _activeStreams.remove(requestController);
+              requestControllers.remove(requestController);
+              currentSubs.remove(currentSub);
+              requestController.close();
+
+              if (isCancelled) return;
+
+              // Reconnect right away on graceful close.
+              // If we had a successful connection that yielded items, reset backoff.
+              var nextDelays = delays;
+              if (hasReceivedItem) {
+                nextDelays = delaySequence(
+                  maxRetries: effectiveRetry.maxRetries,
+                  maxRetryInterval: effectiveRetry.maxRetryInterval,
+                  initialDelay: effectiveRetry.initialDelay,
+                  delayMultiplier: effectiveRetry.delayMultiplier,
+                  maxDelay: effectiveRetry.maxDelay,
+                ).iterator;
+              }
+              Future.microtask(() => connect(nextDelays));
+            },
+          );
+      currentSubs.add(currentSub);
+    }
+
+    controller = StreamController<ReceivedMessage>(
+      onListen: () {
+        for (var i = 0; i < maxConcurrentStreams; i++) {
+          _streamingPullSubscriptionCount++;
+          final delays = delaySequence(
+            maxRetries: effectiveRetry.maxRetries,
+            maxRetryInterval: effectiveRetry.maxRetryInterval,
+            initialDelay: effectiveRetry.initialDelay,
+            delayMultiplier: effectiveRetry.delayMultiplier,
+            maxDelay: effectiveRetry.maxDelay,
+          ).iterator;
+          connect(delays);
+        }
+      },
+      onCancel: () async {
+        isCancelled = true;
+        for (final sub in currentSubs.toList()) {
+          await sub.cancel();
+        }
+        for (final rc in requestControllers.toList()) {
+          _activeStreams.remove(rc);
+          await rc.close();
+        }
+        currentSubs.clear();
+        requestControllers.clear();
+        _streamingPullSubscriptionCount -= maxConcurrentStreams;
+      },
     );
 
-    _activeStreams.add(requestController);
-    try {
-      yield* pubsub.streamingPullWithStream(requestController.stream);
-    } finally {
-      _activeStreams.remove(requestController);
-      await requestController.close();
-    }
+    return controller.stream;
   }
 
-  /// Acknowledges the messages associated with the `ack_ids` immediately.
+  /// Acknowledges the given [messages] immediately.
   ///
   /// The Pub/Sub system can remove the relevant messages from the subscription.
   ///
@@ -296,8 +450,8 @@ final class Subscription {
   /// exist.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.Acknowledge).
-  Future<void> acknowledgeNow(List<String> ackIds) =>
-      pubsub.acknowledge(name, ackIds);
+  Future<void> acknowledgeNow(List<ReceivedMessage> messages) =>
+      pubsub.acknowledge(name, messages.map((m) => m.ackId).toList());
 
   /// Acknowledges a single message.
   ///
@@ -334,7 +488,7 @@ final class Subscription {
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.ModifyAckDeadline).
   Future<void> modifyAckDeadlineNow(
-    List<String> ackIds,
+    List<ReceivedMessage> messages,
     int ackDeadlineSeconds,
   ) {
     if (ackDeadlineSeconds < 0) {
@@ -344,7 +498,11 @@ final class Subscription {
         'Must be non-negative',
       );
     }
-    return pubsub.modifyAckDeadline(name, ackIds, ackDeadlineSeconds);
+    return pubsub.modifyAckDeadline(
+      name,
+      messages.map((m) => m.ackId).toList(),
+      ackDeadlineSeconds,
+    );
   }
 
   /// Modifies the ack deadline for a single message.

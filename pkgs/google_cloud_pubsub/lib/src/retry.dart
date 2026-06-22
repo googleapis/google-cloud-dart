@@ -37,7 +37,7 @@ final class RetrySettings {
   });
 }
 
-@visibleForTesting
+@internal
 Iterable<Duration> delaySequence({
   int? maxRetries,
   Duration? maxRetryInterval,
