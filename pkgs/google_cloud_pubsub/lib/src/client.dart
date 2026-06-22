@@ -472,9 +472,7 @@ final class PubSub {
           controller.addError(e, s);
         }
       },
-      onCancel: () {
-        return sub?.cancel();
-      },
+      onCancel: () => sub?.cancel(),
     );
     return controller.stream;
   }

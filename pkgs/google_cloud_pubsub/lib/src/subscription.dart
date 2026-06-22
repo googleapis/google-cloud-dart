@@ -12,14 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// ignore_for_file: avoid_catching_errors
+
 import 'dart:async';
 
 import 'package:meta/meta.dart';
 
 import '../google_cloud_pubsub.dart';
 import 'batching.dart';
-import 'package:google_cloud_pubsub/src/generated/google/pubsub/v1/pubsub.pbgrpc.dart'
-    as grpc;
+import 'generated/google/pubsub/v1/pubsub.pbgrpc.dart' as grpc;
 import 'retry.dart';
 
 /// Settings for acknowledging messages and modifying ack deadlines.
