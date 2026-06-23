@@ -15,6 +15,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:google_cloud_logging/google_cloud_logging.dart';
+import 'package:google_cloud_logging/interop.dart';
 import 'package:google_cloud_logging/src/structured_logging.dart';
 import 'package:test/test.dart';
 
@@ -321,9 +322,9 @@ void main() {
           });
         },
         zoneValues: {
-          'traceparent':
+          traceparentHeaderValueZoneVariable:
               '00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01',
-          'google_cloud_project': 'zone-project',
+          googleCloudProjectIdZoneVariable: 'zone-project',
         },
       );
     });

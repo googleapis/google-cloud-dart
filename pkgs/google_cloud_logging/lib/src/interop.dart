@@ -19,7 +19,8 @@ library;
 ///
 /// This variable is looked up in the current [Zone] to correlate logs with the
 /// GCP project context. Framework middleware should set this in a forked zone.
-const googleCloudProjectIdZoneVariable = 'google_cloud_project';
+const googleCloudProjectIdZoneVariable =
+    'google_cloud_logging.google_cloud_project';
 
 /// The [String] value for the `traceparent` W3C HTTP header.
 ///
@@ -27,4 +28,4 @@ const googleCloudProjectIdZoneVariable = 'google_cloud_project';
 /// with the trace and span context of the incoming request.
 ///
 /// See https://www.w3.org/TR/trace-context/
-const traceparentHeaderValueZoneVariable = 'traceparent';
+const traceparentHeaderValueZoneVariable = 'google_cloud_logging.traceparent';

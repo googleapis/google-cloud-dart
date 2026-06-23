@@ -53,7 +53,7 @@ flowchart TD
 
     subgraph Shelf["package:google_cloud_shelf"]
         MW("cloudLoggingMiddleware")
-        Zone(["Forks Zone and sets: <br><code>Zone.current['traceparent']</code> <br><code>Zone.current['google_cloud_project']</code>"])
+        Zone(["Forks Zone and sets: <br><code>Zone.current['google_cloud_logging.traceparent']</code> <br><code>Zone.current['google_cloud_logging.google_cloud_project']</code>"])
         Handler("Request Handler <br><code>logger.info('something')</code>")
 
         Req --> MW
