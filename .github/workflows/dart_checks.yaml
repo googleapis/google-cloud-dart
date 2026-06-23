@@ -38,7 +38,7 @@ jobs:
         with:
           sdk: ${{ env.DART_VERSION }}
       - name: Cache Pub Dependencies
-        uses: actions/cache@v5
+        uses: actions/cache@2c8a9bd7457de244a408f35966fab2fb45fda9c8
         with:
           path: ~/.pub-cache
           key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.yaml') }}
@@ -61,7 +61,7 @@ jobs:
         with:
           sdk: dev
       - name: Cache Pub Dependencies
-        uses: actions/cache@v5
+        uses: actions/cache@2c8a9bd7457de244a408f35966fab2fb45fda9c8
         with:
           path: ~/.pub-cache
           key: ${{ runner.os }}-pub-dev-${{ hashFiles('**/pubspec.yaml') }}
@@ -133,6 +133,14 @@ jobs:
         uses: actions/setup-go@4a3601121dd01d1626a1e23e37211e3254c1c06c
         with:
           go-version: 1.26.1
+          cache: false
+      - name: Cache Go Librarian
+        uses: actions/cache@2c8a9bd7457de244a408f35966fab2fb45fda9c8
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-librarian-${{ env.LIBRARIAN_VERSION }}
       - name: Install Dart  # The generator uses "dart format".
         uses: dart-lang/setup-dart@65eb853c7ba17dde3be364c3d2858773e7144260
         with:
