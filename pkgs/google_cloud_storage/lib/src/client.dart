@@ -1168,6 +1168,116 @@ final class Storage {
     return objectAccessControlFromJson(j as Map<String, Object?>)!;
   }, isIdempotent: generation != null);
 
+  /// Rewrites an object from a source to a destination.
+  ///
+  /// This operation is executed entirely on Google Cloud Storage servers and
+  /// can handle objects of any size by automatically rewriting them in chunks
+  /// if necessary.
+  ///
+  /// This operation is idempotent if [ifGenerationMatch] is set.
+  ///
+  /// Throws [NotFoundException] if the source object does not exist.
+  ///
+  /// [sourceBucket] is the bucket containing the source object.
+  /// [sourceObject] is the name of the source object.
+  /// [destinationBucket] is the bucket where the rewritten object will be
+  /// placed.
+  /// [destinationObject] is the name of the destination object.
+  ///
+  /// If set, [metadata] will be applied to the destination object, overriding
+  /// any metadata copied from the source object.
+  ///
+  /// If set, [sourceGeneration] selects a specific revision of the source
+  /// object to rewrite.
+  ///
+  /// If set, [ifSourceGenerationMatch] makes the operation conditional on
+  /// whether the source object's current generation matches the given value.
+  /// If the generation does not match, a [PreconditionFailedException] is
+  /// thrown.
+  ///
+  /// If set, [ifGenerationMatch] makes the operation conditional on whether
+  /// the destination object's current generation matches the given value.
+  /// A value of [BigInt.zero] indicates that the destination object must not
+  /// already exist. If the generation does not match, a
+  /// [PreconditionFailedException] is thrown.
+  ///
+  /// [destinationPredefinedAcl] applies a predefined set of access controls
+  /// to the destination object, such as `"publicRead"`.
+  ///
+  /// [projection] controls the level of detail returned in the response. A
+  /// value of `"full"` returns all object properties, while a value of
+  /// `"noAcl"` (the default) omits the `owner` and `acl` properties.
+  ///
+  /// If set, [userProject] is the project to be billed for this request. This
+  /// argument must be set for [Requester Pays] buckets.
+  ///
+  /// If set, [maxBytesRewrittenPerCall] limits the number of bytes rewritten
+  /// in a single call. If specified the value must be an integral multiple of
+  /// 1 MiB (`1048576`).
+  ///
+  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/objects/rewrite).
+  ///
+  /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
+  Future<ObjectMetadata> rewriteObject(
+    String sourceBucket,
+    String sourceObject,
+    String destinationBucket,
+    String destinationObject, {
+    ObjectMetadata? metadata,
+    BigInt? sourceGeneration,
+    BigInt? ifSourceGenerationMatch,
+    BigInt? ifGenerationMatch,
+    String? destinationPredefinedAcl,
+    String? projection,
+    String? userProject,
+    BigInt? maxBytesRewrittenPerCall,
+    RetryRunner retry = defaultRetry,
+  }) => retry.run(() async {
+    final serviceClient = await _serviceClient;
+    String? rewriteToken;
+    ObjectMetadata? result;
+
+    do {
+      final url = _requestUrl(
+        [
+          'storage',
+          'v1',
+          'b',
+          sourceBucket,
+          'o',
+          sourceObject,
+          'rewriteTo',
+          'b',
+          destinationBucket,
+          'o',
+          destinationObject,
+        ],
+        {
+          'rewriteToken': ?rewriteToken,
+          'sourceGeneration': ?sourceGeneration?.toString(),
+          'ifSourceGenerationMatch': ?ifSourceGenerationMatch?.toString(),
+          'ifGenerationMatch': ?ifGenerationMatch?.toString(),
+          'destinationPredefinedAcl': ?destinationPredefinedAcl,
+          'projection': ?projection,
+          'userProject': ?userProject,
+          'maxBytesRewrittenPerCall': ?maxBytesRewrittenPerCall?.toString(),
+        },
+      );
+      final body = metadata == null
+          ? null
+          : _JsonEncodableWrapper(objectMetadataToJson(metadata));
+      final j =
+          await serviceClient.post(url, body: body) as Map<String, Object?>;
+      final done = j['done'] as bool;
+      rewriteToken = j['rewriteToken'] as String?;
+      if (done) {
+        result = objectMetadataFromJson(j['resource'] as Map<String, Object?>);
+      }
+    } while (result == null);
+
+    return result;
+  }, isIdempotent: ifGenerationMatch != null);
+
   /// Updates an Access Control List (ACL) entry on the specified
   /// [Google Cloud Storage object].
   ///

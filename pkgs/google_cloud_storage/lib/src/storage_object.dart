@@ -275,6 +275,83 @@ final class StorageObject {
     retry: retry,
   );
 
+  /// Rewrites this [Google Cloud Storage object][] to a [destinationObject] in
+  /// the [destinationBucket].
+  ///
+  /// If [destinationBucket] is not specified, the object is rewritten within
+  /// the same bucket.
+  ///
+  /// This operation is executed entirely on Google Cloud Storage servers and
+  /// can handle objects of any size by automatically rewriting them in chunks
+  /// if necessary.
+  ///
+  /// This operation is idempotent if [ifGenerationMatch] is set.
+  ///
+  /// Throws [NotFoundException] if the source object does not exist.
+  ///
+  /// If set, [metadata] will be applied to the destination object, overriding
+  /// any metadata copied from the source object.
+  ///
+  /// If set, [sourceGeneration] selects a specific revision of this object
+  /// to rewrite.
+  ///
+  /// If set, [ifSourceGenerationMatch] makes the operation conditional on
+  /// whether the source object's current generation matches the given value.
+  /// If the generation does not match, a [PreconditionFailedException] is
+  /// thrown.
+  ///
+  /// If set, [ifGenerationMatch] makes the operation conditional on whether
+  /// the destination object's current generation matches the given value.
+  /// A value of [BigInt.zero] indicates that the destination object must not
+  /// already exist. If the generation does not match, a
+  /// [PreconditionFailedException] is thrown.
+  ///
+  /// [destinationPredefinedAcl] applies a predefined set of access controls
+  /// to the destination object, such as `"publicRead"`.
+  ///
+  /// [projection] controls the level of detail returned in the response. A
+  /// value of `"full"` returns all object properties, while a value of
+  /// `"noAcl"` (the default) omits the `owner` and `acl` properties.
+  ///
+  /// If set, [userProject] is the project to be billed for this request. This
+  /// argument must be set for [Requester Pays] buckets.
+  ///
+  /// If set, [maxBytesRewrittenPerCall] limits the number of bytes rewritten
+  /// in a single call. If specified the value must be an integral multiple of
+  /// 1 MiB (`1048576`).
+  ///
+  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/objects/rewrite).
+  ///
+  /// [Google Cloud Storage object]: https://docs.cloud.google.com/storage/docs/json_api/v1/objects
+  /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
+  Future<ObjectMetadata> rewrite(
+    String destinationObject, {
+    String? destinationBucket,
+    ObjectMetadata? metadata,
+    BigInt? sourceGeneration,
+    BigInt? ifSourceGenerationMatch,
+    BigInt? ifGenerationMatch,
+    String? destinationPredefinedAcl,
+    String? projection,
+    String? userProject,
+    BigInt? maxBytesRewrittenPerCall,
+    RetryRunner retry = defaultRetry,
+  }) => storage.rewriteObject(
+    bucketName,
+    name,
+    destinationBucket ?? bucketName,
+    destinationObject,
+    metadata: metadata,
+    sourceGeneration: sourceGeneration,
+    ifSourceGenerationMatch: ifSourceGenerationMatch,
+    ifGenerationMatch: ifGenerationMatch,
+    destinationPredefinedAcl: destinationPredefinedAcl,
+    projection: projection,
+    userProject: userProject,
+    maxBytesRewrittenPerCall: maxBytesRewrittenPerCall,
+    retry: retry,
+  );
+
   /// Creates or updates the content of this [Google Cloud Storage object][].
   ///
   /// This operation is idempotent if `ifGenerationMatch` is set.
