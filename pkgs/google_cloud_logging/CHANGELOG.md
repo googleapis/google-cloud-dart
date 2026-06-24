@@ -1,4 +1,4 @@
-## 0.6.0-wip
+## 0.6.0
 
 - Replaced `CloudLogger` with `StructuredLogger` which writes directly to
   stdout.
