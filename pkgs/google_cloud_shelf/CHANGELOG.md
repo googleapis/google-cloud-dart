@@ -1,4 +1,4 @@
-## 0.6.0-wip
+## 0.6.0
 
 - Added the trace context to each request's `Zone` so that
   `package:google_cloud_logging` can correlate logs with
