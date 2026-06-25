@@ -1,7 +1,10 @@
 ## 0.6.0+1
 
-- Updated `README.md` to reference `StructuredLogger` instead of `currentLogger` and specify W3C `traceparent` headers.
-- Expanded doc comments on `createLoggingMiddleware` and `cloudLoggingMiddleware` to explain `Zone` variable injection and `StructuredLogger` correlation.
+- Updated `README.md` to reference `StructuredLogger` instead of
+  `currentLogger` and specify W3C `traceparent` headers.
+- Expanded doc comments on `createLoggingMiddleware` and
+  `cloudLoggingMiddleware` to explain `Zone` variable injection and
+  `StructuredLogger` correlation.
 
 ## 0.6.0
 
