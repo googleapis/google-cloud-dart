@@ -1,5 +1,5 @@
 name: google_cloud_shelf
-version: 0.6.0
+version: 0.6.0+1
 description: >-
   Shelf middleware for Google Cloud environments providing structured
   logging, trace correlation, exception mapping, and graceful shutdown

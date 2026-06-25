@@ -36,15 +36,12 @@
 ///    logging fields (`logging.googleapis.com/trace` and
 ///    `logging.googleapis.com/spanId`).
 ///
-/// For a detailed visual representation and description of this
-/// request-to-zone-to-logging flow, see the
-/// [Architecture Document][1].
+/// For more details on structured logging and Shelf request correlation, see
+/// `package:google_cloud_shelf` documentation.
 ///
 /// > [!TIP]
-/// > Application developers should not to use this library, instead use
+/// > Application developers should not use this library, instead use
 /// > `package:google_cloud_logging/google_cloud_logging.dart`.
-///
-/// [1]: https://github.com/googleapis/google-cloud-dart/tree/main/pkgs/google_cloud_logging/ARCHITECTURE.md
 ///
 /// @docImport 'dart:async';
 /// @docImport 'src/interop.dart';
