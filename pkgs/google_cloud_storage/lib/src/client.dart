@@ -1236,6 +1236,9 @@ final class Storage {
     final serviceClient = await _serviceClient;
     String? rewriteToken;
     ObjectMetadata? result;
+    var body = metadata == null
+        ? null
+        : _JsonEncodableWrapper(objectMetadataToJson(metadata));
 
     do {
       final url = _requestUrl(
@@ -1263,9 +1266,6 @@ final class Storage {
           'maxBytesRewrittenPerCall': ?maxBytesRewrittenPerCall?.toString(),
         },
       );
-      final body = metadata == null
-          ? null
-          : _JsonEncodableWrapper(objectMetadataToJson(metadata));
       final j =
           await serviceClient.post(url, body: body) as Map<String, Object?>;
       final done = j['done'] as bool;
@@ -1273,6 +1273,7 @@ final class Storage {
       if (done) {
         result = objectMetadataFromJson(j['resource'] as Map<String, Object?>);
       }
+      body = null;
     } while (result == null);
 
     return result;

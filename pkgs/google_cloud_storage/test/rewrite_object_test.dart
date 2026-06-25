@@ -355,6 +355,7 @@ void main() async {
           bucketName,
           'source.txt',
           utf8.encode(content),
+          metadata: ObjectMetadata(contentType: 'text/plain'),
           ifGenerationMatch: BigInt.zero,
         );
 
@@ -364,11 +365,13 @@ void main() async {
           'source.txt',
           bucketName,
           'dest.txt',
+          metadata: ObjectMetadata(contentType: 'application/json'),
           maxBytesRewrittenPerCall: BigInt.from(1024 * 1024),
         );
 
         expect(rewritten.name, 'dest.txt');
         expect(rewritten.bucket, bucketName);
+        expect(rewritten.contentType, 'application/json');
 
         final bytes = await storage.downloadObject(bucketName, 'dest.txt');
         expect(utf8.decode(bytes), content);
