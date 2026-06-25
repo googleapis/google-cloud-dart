@@ -1,3 +1,8 @@
+## 0.6.3-wip
+
+* Add `Storage.rewriteObject`.
+* Add `StorageObject.rewrite`.
+
 ## 0.6.2
 
 * Add retries to `uploadObjectFromSink`.
