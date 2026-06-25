@@ -148,7 +148,6 @@ final class Storage {
   /// or TLS (e.g. the emulator) then set [useAuthWithCustomEndpoint] to
   /// `false`.
   ///
-  ///
   /// [Google Cloud Storage]: https://cloud.google.com/storage
   /// [Cloud Storage for Firebase Emulator]: https://firebase.google.com/docs/emulator-suite/connect_storage
   /// [default application credentials]: https://docs.cloud.google.com/docs/authentication/application-default-credentials
