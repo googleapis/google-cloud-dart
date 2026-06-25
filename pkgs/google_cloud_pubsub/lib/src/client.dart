@@ -123,7 +123,7 @@ final class PubSub {
   /// 2. If the `PUBSUB_EMULATOR_HOST` environment variable is set (indicating
   ///    the emulator is active), it defaults to `'test-project'`.
   ///
-  /// Throws if [projectId] is not provided and cannot be
+  /// It is an error if [projectId] is not provided and cannot be
   /// inferred from the environment.
   ///
   /// For authentication, an [authenticator] can be supplied to obtain

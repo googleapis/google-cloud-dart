@@ -41,6 +41,9 @@ final class Subscription {
   final String name;
 
   /// A subscription with the given [subscriptionId] in the client's project.
+  ///
+  /// It is an error if the constructed subscription name is invalid (e.g. if
+  /// [subscriptionId] contains slashes).
   Subscription.unqualified(this.pubsub, String subscriptionId)
     : name = 'projects/${pubsub.projectId}/subscriptions/$subscriptionId' {
     _validateName(name);
@@ -48,9 +51,10 @@ final class Subscription {
 
   /// A subscription with the given [name].
   ///
-  /// The [name] must be in the format
-  /// `projects/<project-id>/subscriptions/<subscription-id>`.
   /// Useful for cross-project access.
+  ///
+  /// It is an error if [name] is not in the format
+  /// `projects/<project-id>/subscriptions/<subscription-id>`.
   Subscription(this.pubsub, this.name) {
     _validateName(name);
   }
@@ -93,6 +97,8 @@ final class Subscription {
   ///
   /// Throws a [SubscriptionNotFoundException] if the subscription does not
   /// exist.
+  ///
+  /// It is an error if [maxMessages] is less than or equal to 0.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.Pull).
   Future<List<ReceivedMessage>> pull({int maxMessages = 1}) {
@@ -172,6 +178,8 @@ final class Subscription {
   /// Throws a [SubscriptionNotFoundException] if the subscription does not
   /// exist.
   ///
+  /// It is an error if [ackDeadlineSeconds] is negative.
+  ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.ModifyAckDeadline).
   Future<void> modifyAckDeadlineNow(
     List<ReceivedMessage> messages,
@@ -196,6 +204,8 @@ final class Subscription {
   /// This operation is "fire-and-forget" and does not wait for server
   /// confirmation. If you require explicit confirmation, use
   /// [modifyAckDeadlineNow].
+  ///
+  /// It is an error if [ackDeadlineSeconds] is negative.
   void modifyAckDeadline(ReceivedMessage message, int ackDeadlineSeconds) {
     if (ackDeadlineSeconds < 0) {
       throw ArgumentError.value(

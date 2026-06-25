@@ -50,9 +50,7 @@ String? _windowsEnvironmentVariable(String name) => using((arena) {
 
   final buffer = arena<Uint16>(size).cast<Utf16>();
   final finalSize = _getEnvironmentVariableW(namePtr, buffer, size);
-  if (finalSize == 0 && size > 1) {
-    // If it failed the second time, but size was > 1 (meaning it existed and
-    // wasn't empty), then something went wrong.
+  if (finalSize == 0 || finalSize >= size) {
     return null;
   }
   // finalSize is the number of characters stored, NOT including null.

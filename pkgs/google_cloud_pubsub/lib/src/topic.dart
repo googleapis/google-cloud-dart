@@ -38,6 +38,9 @@ final class Topic {
   final String name;
 
   /// A topic with the given [topicId] in the client's project.
+  ///
+  /// It is an error if the constructed topic name is invalid (e.g. if [topicId]
+  /// contains slashes).
   Topic.unqualified(this.pubsub, String topicId)
     : name = 'projects/${pubsub.projectId}/topics/$topicId' {
     _validateName(name);
@@ -45,8 +48,10 @@ final class Topic {
 
   /// A topic with the given [name].
   ///
-  /// The [name] must be in the format `projects/<project-id>/topics/<topic-id>`.
   /// Useful for cross-project access.
+  ///
+  /// It is an error if [name] is not in the format
+  /// `projects/<project-id>/topics/<topic-id>`.
   Topic(this.pubsub, this.name) {
     _validateName(name);
   }
