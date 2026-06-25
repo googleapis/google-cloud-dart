@@ -865,7 +865,9 @@ final class Storage {
   /// If [delimiter] is set, returns results in a directory-like mode, with
   /// `'/'` being a common value for the delimiter. The result will only
   /// include objects whose names do not contain `delimiter`, or whose names
-  /// only have instances of `delimiter` in their `prefix`.
+  /// only have instances of `delimiter` in their `prefix`. Note that common
+  /// prefixes (directories) returned by the API are not included in the
+  /// returned stream.
   ///
   /// If [includeTrailingDelimiter] is `true`, then objects that end in the
   /// [delimiter] will be returned in the items list.
