@@ -3,6 +3,9 @@
 - Read the [DEVELOPER_GUIDE.md](DEVELOPER_GUIDE.md) before starting work.
 - Run `dart format .` before declaring yourself done.
 - Run `dart analyze .` and fix any issues before declaring yourself done.
+- Update the package's `CHANGELOG.md` with any new features, public API
+  changes, or bug fixes before declaring yourself done.
+- Wrap Markdown (`*.md`) files at 80 columns.
 - Update this file if you discover something useful about developing in this
   repository.
 
@@ -16,5 +19,7 @@
   environment variable, you must run the command in a shell instead of
   using the `mcp_dart_run_tests` tool. For example:
   `GOOGLE_CLOUD_PROJECT=$(gcloud config get-value project) dart test . -P google-cloud`
-  Note that this also applies to tests running against the firebase emulator if they use `projectId` (e.g. `GOOGLE_CLOUD_PROJECT=demo-project dart test -P firebase-emulator`).
+  Note that this also applies to tests running against the firebase emulator
+  if they use `projectId` (e.g. `GOOGLE_CLOUD_PROJECT=demo-project` and
+  `dart test -P firebase-emulator`).
 - Try to fix any test failures before declaring yourself done.
