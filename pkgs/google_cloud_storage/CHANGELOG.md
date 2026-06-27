@@ -1,5 +1,7 @@
 ## 0.6.3-wip
 
+* Add `prefix`, `delimiter`, and `includeTrailingDelimiter` parameters to
+  `Storage.listObjects`.
 * Add `Storage.rewriteObject`.
 * Add `StorageObject.rewrite`.
 

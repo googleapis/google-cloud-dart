@@ -862,6 +862,32 @@ final class Storage {
   /// A stream of objects contained in [bucket] in lexicographical order by
   /// name.
   ///
+  /// If [delimiter] is set, returns results in a directory-like mode, with
+  /// `'/'` being a common value for the delimiter. The result will only
+  /// include objects whose names do not contain `delimiter`, or whose names
+  /// only have instances of `delimiter` in their `prefix`. Note that common
+  /// prefixes (directories) returned by the API are not included in the
+  /// returned stream.
+  ///
+  /// For example, if a bucket contains the following objects:
+  /// * `foo/bar.txt`
+  /// * `foo/bar/baz.txt`
+  /// * `foo/qux.txt`
+  /// * `other.txt`
+  ///
+  /// ```dart
+  /// // Returns: 'foo/bar.txt' and 'foo/qux.txt'
+  /// await storage
+  ///     .listObjects('my-bucket', prefix: 'foo/', delimiter: '/')
+  ///     .toList();
+  /// ```
+  ///
+  /// If [includeTrailingDelimiter] is `true`, then objects that end in the
+  /// [delimiter] will be returned in the items list.
+  ///
+  /// If [prefix] is set, filters results to objects whose names begin with
+  /// this prefix.
+  ///
   /// If [softDeleted] is `true`, then the stream will include **only**
   /// [soft-deleted objects][]. If `false`, then the stream will not include
   /// soft-deleted objects.
@@ -887,11 +913,14 @@ final class Storage {
   /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
   Stream<ObjectMetadata> listObjects(
     String bucket, {
-    bool? softDeleted,
-    bool? versions,
-    String? projection,
-    String? userProject,
+    String? delimiter,
+    bool? includeTrailingDelimiter,
     int? maxResults,
+    String? prefix,
+    String? projection,
+    bool? softDeleted,
+    String? userProject,
+    bool? versions,
   }) async* {
     String? nextPageToken;
 
@@ -900,12 +929,15 @@ final class Storage {
       final url = _requestUrl(
         ['storage', 'v1', 'b', bucket, 'o'],
         {
-          'softDeleted': ?softDeleted?.toString(),
-          'versions': ?versions?.toString(),
+          'delimiter': ?delimiter,
+          'includeTrailingDelimiter': ?includeTrailingDelimiter?.toString(),
           'maxResults': ?maxResults?.toString(),
           'pageToken': ?nextPageToken,
+          'prefix': ?prefix,
           'projection': ?projection,
+          'softDeleted': ?softDeleted?.toString(),
           'userProject': ?userProject,
+          'versions': ?versions?.toString(),
         },
       );
       final json = await serviceClient.get(url);
