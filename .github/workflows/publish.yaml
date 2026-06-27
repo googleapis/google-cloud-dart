@@ -17,7 +17,7 @@
 name: Publish
 
 on:
-  pull_request:
+  pull_request_target:
     branches: [ main ]
   push:
     tags: [ '[A-z]+-v[0-9]+.[0-9]+.[0-9]+*' ]
