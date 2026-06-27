@@ -869,6 +869,19 @@ final class Storage {
   /// prefixes (directories) returned by the API are not included in the
   /// returned stream.
   ///
+  /// For example, if a bucket contains the following objects:
+  /// * `foo/bar.txt`
+  /// * `foo/bar/baz.txt`
+  /// * `foo/qux.txt`
+  /// * `other.txt`
+  ///
+  /// ```dart
+  /// // Returns: 'foo/bar.txt' and 'foo/qux.txt'
+  /// await storage
+  ///     .listObjects('my-bucket', prefix: 'foo/', delimiter: '/')
+  ///     .toList();
+  /// ```
+  ///
   /// If [includeTrailingDelimiter] is `true`, then objects that end in the
   /// [delimiter] will be returned in the items list.
   ///
