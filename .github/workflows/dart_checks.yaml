@@ -38,7 +38,7 @@ jobs:
         with:
           sdk: ${{ env.DART_VERSION }}
       - name: Cache Pub Dependencies
-        uses: actions/cache@2c8a9bd7457de244a408f35966fab2fb45fda9c8
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
         with:
           path: ~/.pub-cache
           key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.yaml') }}
@@ -61,7 +61,7 @@ jobs:
         with:
           sdk: dev
       - name: Cache Pub Dependencies
-        uses: actions/cache@2c8a9bd7457de244a408f35966fab2fb45fda9c8
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
         with:
           path: ~/.pub-cache
           key: ${{ runner.os }}-pub-dev-${{ hashFiles('**/pubspec.yaml') }}
@@ -103,7 +103,7 @@ jobs:
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
       - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e
-      - uses: actions/setup-java@ad2b38190b15e4d6bdf0c97fb4fca8412226d287
+      - uses: actions/setup-java@1bcf9fb12cf4aa7d266a90ae39939e61372fe520
         with:
           distribution: 'zulu'
           java-version: '25'
@@ -130,12 +130,12 @@ jobs:
           sudo unzip -x /tmp/protoc.zip
           protoc --version
       - name: Install Go
-        uses: actions/setup-go@4a3601121dd01d1626a1e23e37211e3254c1c06c
+        uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16
         with:
           go-version: 1.26.1
           cache: false
       - name: Cache Go Librarian
-        uses: actions/cache@2c8a9bd7457de244a408f35966fab2fb45fda9c8
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
         with:
           path: |
             ~/.cache/go-build
