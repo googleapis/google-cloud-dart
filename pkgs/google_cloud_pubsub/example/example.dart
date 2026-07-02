@@ -33,7 +33,7 @@ Future<void> main() async {
   try {
     // The client will use the authenticator to make authenticated requests.
     final topic = pubsub.topic('my-topic');
-    print('Successfully initialized client for topic: ${topic.topicId}');
+    print('Successfully initialized client for topic: ${topic.id}');
   } finally {
     await pubsub.close();
   }

@@ -12,16 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:meta/meta.dart';
-
 import '../google_cloud_pubsub.dart';
-
-@internal
-Topic newTopic(PubSub pubsub, String topicId) =>
-    Topic.unqualified(pubsub, topicId);
-
-@internal
-Topic newTopicName(PubSub pubsub, String name) => Topic(pubsub, name);
 
 /// A [Google Cloud Pub/Sub topic](https://cloud.google.com/pubsub/docs/overview#topics).
 final class Topic {
@@ -66,20 +57,26 @@ final class Topic {
     }
   }
 
-  /// The ID of this topic.
-  String get topicId => name.split('/').last;
+  /// The unqualified ID of this topic.
+  String get id => name.split('/').last;
 
-  /// Creates the given topic.
+  /// Creates this topic on the server.
+  ///
+  /// The topic must not already exist on the server.
+  ///
+  /// A topic must exist on the server before you can publish messages to it
+  /// or create subscriptions for it.
   ///
   /// Throws a [TopicAlreadyExistsException] if the topic already exists.
+  ///
+  /// Returns a [Topic] instance representing the created topic.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Publisher.CreateTopic).
   Future<Topic> create() => pubsub.createTopic(name);
 
-  /// Deletes the topic.
+  /// Deletes this topic on the server.
   ///
-  /// Returns `true` if the topic was deleted, or `false` if the topic did not
-  /// exist.
+  /// Throws a [TopicNotFoundException] if the topic does not exist.
   ///
   /// After a topic is deleted, a new topic may be created with the same name;
   /// this is an entirely new topic with none of the old configuration or
@@ -87,7 +84,7 @@ final class Topic {
   /// their `topic` field is set to `_deleted-topic_`.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Publisher.DeleteTopic).
-  Future<bool> delete() => pubsub.deleteTopic(name);
+  Future<void> delete() => pubsub.deleteTopic(name);
 
   /// Adds one or more messages to the topic.
   ///

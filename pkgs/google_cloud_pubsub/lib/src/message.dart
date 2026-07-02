@@ -16,7 +16,7 @@ import 'dart:typed_data';
 
 /// A Pub/Sub message.
 final class Message {
-  /// The message data.
+  /// The payload of this message.
   final Uint8List data;
 
   /// Optional attributes for this message.
@@ -29,10 +29,11 @@ final class Message {
 
 /// A message received from a subscription.
 final class ReceivedMessage {
-  /// The ack ID for this message.
+  /// The acknowledgment ID, used to identify this message when acknowledging
+  /// it or modifying its acknowledgment deadline.
   final String ackId;
 
-  /// The received message.
+  /// The message payload and attributes.
   final Message message;
 
   /// The ID of this message, assigned by the server.

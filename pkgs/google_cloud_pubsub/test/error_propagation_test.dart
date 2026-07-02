@@ -27,10 +27,11 @@ import 'package:protobuf/well_known_types/google/protobuf/empty.pb.dart'
     as protobuf;
 import 'package:protobuf/well_known_types/google/protobuf/timestamp.pb.dart'
     as pb_ts;
+import 'package:test/fake.dart';
 import 'package:test/test.dart';
 
 // A fake ResponseFuture that delegates to a standard Future.
-class FakeResponseFuture<T> implements grpc.ResponseFuture<T> {
+class FakeResponseFuture<T> extends Fake implements grpc.ResponseFuture<T> {
   final Future<T> _future;
 
   FakeResponseFuture(this._future);
@@ -71,58 +72,28 @@ class FakeResponseFuture<T> implements grpc.ResponseFuture<T> {
       _future.whenComplete(action);
 
   @override
-  dynamic noSuchMethod(Invocation invocation) {
-    if (invocation.memberName == #cancel) {
-      return Future<void>.value();
-    }
-    return super.noSuchMethod(invocation);
-  }
+  Future<void> cancel() => Future<void>.value();
 }
 
 // A fake ResponseStream that delegates to a standard Stream.
-class FakeResponseStream<T> extends Stream<T>
+class FakeResponseStream<T> extends StreamView<T>
     implements grpc.ResponseStream<T> {
-  final Stream<T> _stream;
-
-  FakeResponseStream(this._stream);
+  FakeResponseStream(super.stream);
 
   @override
-  StreamSubscription<T> listen(
-    void Function(T event)? onData, {
-    Function? onError,
-    void Function()? onDone,
-    bool? cancelOnError,
-  }) => _stream.listen(
-    onData,
-    onError: (Object e, StackTrace s) {
-      if (onError != null) {
-        if (onError is void Function(Object, StackTrace)) {
-          onError(e, s);
-        } else if (onError is void Function(Object)) {
-          onError(e);
-        } else {
-          // ignore: avoid_dynamic_calls
-          (onError as dynamic)(e, s);
-        }
-      }
-    },
-    onDone: onDone,
-    cancelOnError: cancelOnError,
-  );
+  grpc.ResponseFuture<T> get single => FakeResponseFuture(super.single);
 
   @override
-  grpc.ResponseFuture<T> get single => FakeResponseFuture(_stream.single);
+  Future<void> cancel() => Future<void>.value();
 
   @override
-  dynamic noSuchMethod(Invocation invocation) {
-    if (invocation.memberName == #cancel) {
-      return Future<void>.value();
-    }
-    return super.noSuchMethod(invocation);
-  }
+  Future<Map<String, String>> get headers => Future.value(const {});
+
+  @override
+  Future<Map<String, String>> get trailers => Future.value(const {});
 }
 
-class FakeSubscriberClient implements generated.SubscriberClient {
+class FakeSubscriberClient extends Fake implements generated.SubscriberClient {
   final StreamController<generated.StreamingPullResponse>
   streamingPullController = StreamController();
 
@@ -142,7 +113,7 @@ class FakeSubscriberClient implements generated.SubscriberClient {
     grpc.CallOptions? options,
   }) {
     // Listen to request stream to prevent sender from hanging on close()
-    request.listen((_) {}, onDone: () {});
+    unawaited(request.drain());
     return FakeResponseStream(streamingPullController.stream);
   }
 
@@ -155,8 +126,8 @@ class FakeSubscriberClient implements generated.SubscriberClient {
     lastAckIds = request.ackIds;
 
     final completer = Completer<protobuf.Empty>();
-    if (acknowledgeBehavior != null) {
-      acknowledgeBehavior!(request.ackIds)
+    if (acknowledgeBehavior case final acknowledge?) {
+      acknowledge(request.ackIds)
           .then((_) => completer.complete(protobuf.Empty()))
           .catchError(completer.completeError);
     } else {
@@ -175,8 +146,8 @@ class FakeSubscriberClient implements generated.SubscriberClient {
     lastModifyAckDeadlineSeconds = request.ackDeadlineSeconds;
 
     final completer = Completer<protobuf.Empty>();
-    if (modifyAckDeadlineBehavior != null) {
-      modifyAckDeadlineBehavior!(request.ackIds, request.ackDeadlineSeconds)
+    if (modifyAckDeadlineBehavior case final modifyAckDeadline?) {
+      modifyAckDeadline(request.ackIds, request.ackDeadlineSeconds)
           .then((_) => completer.complete(protobuf.Empty()))
           .catchError(completer.completeError);
     } else {
@@ -184,19 +155,13 @@ class FakeSubscriberClient implements generated.SubscriberClient {
     }
     return FakeResponseFuture(completer.future);
   }
-
-  @override
-  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
-class FakeClientChannel implements grpc.ClientChannel {
+class FakeClientChannel extends Fake implements grpc.ClientChannel {
   @override
   Future<void> shutdown() async {
     // No-op for testing
   }
-
-  @override
-  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
 void main() {

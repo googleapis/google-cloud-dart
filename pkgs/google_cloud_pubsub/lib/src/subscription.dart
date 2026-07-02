@@ -14,17 +14,7 @@
 
 import 'dart:async';
 
-import 'package:meta/meta.dart';
-
 import '../google_cloud_pubsub.dart';
-
-@internal
-Subscription newSubscription(PubSub pubsub, String subscriptionId) =>
-    Subscription.unqualified(pubsub, subscriptionId);
-
-@internal
-Subscription newSubscriptionName(PubSub pubsub, String name) =>
-    Subscription(pubsub, name);
 
 /// A [Google Cloud Pub/Sub subscription](https://cloud.google.com/pubsub/docs/overview#subscriptions).
 final class Subscription {
@@ -69,29 +59,34 @@ final class Subscription {
     }
   }
 
-  /// The ID of this subscription.
-  String get subscriptionId => name.split('/').last;
+  /// The unqualified ID of this subscription.
+  String get id => name.split('/').last;
 
-  /// Creates a subscription to a given topic.
+  /// Creates this subscription on the server, associating it with the [topic].
+  ///
+  /// The subscription must not already exist on the server.
+  /// The [topic] must exist on the server.
   ///
   /// Throws a [SubscriptionAlreadyExistsException] if the subscription already
   /// exists.
   /// Throws a [TopicNotFoundException] if the corresponding topic doesn't
   /// exist.
   ///
+  /// Returns a [Subscription] instance representing the created subscription.
+  ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.CreateSubscription).
   Future<Subscription> create({required String topic}) =>
       pubsub.createSubscription(name, topic: topic);
 
-  /// Deletes an existing subscription.
+  /// Deletes this subscription on the server.
   ///
   /// All messages retained in the subscription are immediately dropped.
   ///
-  /// Returns `true` if the subscription was deleted, or `false` if the
-  /// subscription did not exist.
+  /// Throws a [SubscriptionNotFoundException] if the subscription does not
+  /// exist.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.DeleteSubscription).
-  Future<bool> delete() => pubsub.deleteSubscription(name);
+  Future<void> delete() => pubsub.deleteSubscription(name);
 
   /// Pulls messages from the server.
   ///

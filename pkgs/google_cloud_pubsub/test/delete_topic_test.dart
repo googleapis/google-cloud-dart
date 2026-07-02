@@ -1,0 +1,43 @@
+// Copyright 2026 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+@TestOn('vm')
+@Tags(['firebase-emulator'])
+library;
+
+import 'package:google_cloud_pubsub/google_cloud_pubsub.dart';
+import 'package:test/test.dart';
+
+import 'test_utils.dart';
+
+void main() {
+  group('deleteTopic', () {
+    late PubSub client;
+
+    setUp(() async {
+      client = await createClient();
+    });
+
+    tearDown(() async {
+      await client.close();
+    });
+
+    test('Delete non-existent topic throws TopicNotFoundException', () async {
+      final topic = client.topic(
+        'non-existent-${DateTime.now().millisecondsSinceEpoch}',
+      );
+      expect(topic.delete(), throwsA(isA<TopicNotFoundException>()));
+    });
+  });
+}

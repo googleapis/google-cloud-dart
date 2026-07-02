@@ -73,10 +73,25 @@ String? _environmentVariable(String name) {
 /// and the emulator configuration might not be available until the application
 /// is launched.
 @internal
-String? get pubsubEmulatorHost {
+Uri? get pubSubEmulatorHost {
   final host = _environmentVariable('PUBSUB_EMULATOR_HOST');
-  if (host?.isEmpty ?? true) return null;
-  return host;
+  if (host == null || host.isEmpty) return null;
+
+  final uri = host.startsWith('http://') || host.startsWith('https://')
+      ? Uri.tryParse(host)
+      : Uri.tryParse('http://$host');
+
+  if (uri == null) return null;
+
+  // gRPC channels only require host and port. If the URI contains a path,
+  // query, or fragment, it is invalid for this purpose.
+  if ((uri.path.isNotEmpty && uri.path != '/') ||
+      uri.query.isNotEmpty ||
+      uri.fragment.isNotEmpty) {
+    return null;
+  }
+
+  return uri;
 }
 
 /// The project ID inferred from the environment.
