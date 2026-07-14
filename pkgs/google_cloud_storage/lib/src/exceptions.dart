@@ -22,3 +22,21 @@ class ChecksumValidationException implements Exception {
   @override
   String toString() => 'ChecksumValidationException: $message';
 }
+
+/// Exception thrown when an `ifMetagenerationNotMatch` precondition is not
+/// satisfied and the requested operation was therefore not performed.
+///
+/// Google Cloud Storage signals this by responding with a "304 Not Modified"
+/// status and an empty body, rather than with the "412 Precondition Failed"
+/// status used for the `ifGenerationMatch` and `ifMetagenerationMatch`
+/// preconditions.
+///
+/// See [request preconditions](https://cloud.google.com/storage/docs/request-preconditions).
+class NotModifiedException implements Exception {
+  final String message;
+
+  NotModifiedException(this.message);
+
+  @override
+  String toString() => 'NotModifiedException: $message';
+}

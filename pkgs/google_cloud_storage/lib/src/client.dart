@@ -486,6 +486,11 @@ final class Storage {
   /// value. If the metageneration does not match, a
   /// [PreconditionFailedException] is thrown.
   ///
+  /// If set, [ifMetagenerationNotMatch] makes updating the bucket metadata
+  /// conditional on whether the bucket's metageneration does *not* match the
+  /// provided value. If the metageneration does match, the bucket is left
+  /// unchanged and a [NotModifiedException] is thrown.
+  ///
   /// If set, [predefinedAcl] applies a predefined set of access controls to the
   /// bucket, such as `"publicRead"`. If [UniformBucketLevelAccess.enabled] is
   /// `true`, then setting `predefinedAcl` will result in a
@@ -518,35 +523,33 @@ final class Storage {
     String bucket,
     BucketMetadataPatchBuilder metadata, {
     BigInt? ifMetagenerationMatch,
-    // TODO(https://github.com/googleapis/google-cloud-dart/issues/115):
-    // support ifMetagenerationNotMatch.
-    //
-    // If `ifMetagenerationNotMatch` is set, the server will respond with a 304
-    // status code and an empty body. This will cause `buckets.patch` to throw
-    // `TypeError` during JSON deserialization.
+    BigInt? ifMetagenerationNotMatch,
     String? predefinedAcl,
     String? predefinedDefaultObjectAcl,
     String? projection,
     String? userProject,
     RetryRunner retry = defaultRetry,
-  }) => retry.run(() async {
-    final serviceClient = await _serviceClient;
-    final url = _requestUrl(
-      ['storage', 'v1', 'b', bucket],
-      {
-        'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
-        'predefinedAcl': ?predefinedAcl,
-        'predefinedDefaultObjectAcl': ?predefinedDefaultObjectAcl,
-        'projection': ?projection,
-        'userProject': ?userProject,
-      },
-    );
-    final j = await serviceClient.patch(
-      url,
-      body: BucketMetadataPatchBuilderJsonEncodable(metadata),
-    );
-    return bucketMetadataFromJson(j as Map<String, Object?>);
-  }, isIdempotent: ifMetagenerationMatch != null);
+  }) => _translateNotModified(
+    () => retry.run(() async {
+      final serviceClient = await _serviceClient;
+      final url = _requestUrl(
+        ['storage', 'v1', 'b', bucket],
+        {
+          'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
+          'ifMetagenerationNotMatch': ?ifMetagenerationNotMatch?.toString(),
+          'predefinedAcl': ?predefinedAcl,
+          'predefinedDefaultObjectAcl': ?predefinedDefaultObjectAcl,
+          'projection': ?projection,
+          'userProject': ?userProject,
+        },
+      );
+      final j = await serviceClient.patch(
+        url,
+        body: BucketMetadataPatchBuilderJsonEncodable(metadata),
+      );
+      return bucketMetadataFromJson(j as Map<String, Object?>);
+    }, isIdempotent: ifMetagenerationMatch != null),
+  );
 
   /// Patches an Access Control List (ACL) entry on the specified
   /// [Google Cloud Storage bucket].
@@ -1364,6 +1367,11 @@ final class Storage {
   /// generation does not match, a [PreconditionFailedException] is thrown.
   /// A value of [BigInt.zero] indicates that the object must not already exist.
   ///
+  /// If set, [ifMetagenerationNotMatch] makes updating the object content
+  /// conditional on whether the object's metageneration does *not* match the
+  /// provided value. If the metageneration does match, the object is left
+  /// unchanged and a [NotModifiedException] is thrown.
+  ///
   /// If set, `predefinedAcl` applies a predefined set of access controls to the
   /// object, such as `"publicRead"`. If [UniformBucketLevelAccess.enabled] is
   /// `true`, then setting `predefinedAcl` will result in a
@@ -1397,34 +1405,32 @@ final class Storage {
     List<int> content, {
     ObjectMetadata? metadata,
     BigInt? ifGenerationMatch,
-    // TODO(https://github.com/googleapis/google-cloud-dart/issues/115):
-    // support ifMetagenerationNotMatch.
-    //
-    // If `ifMetagenerationNotMatch` is set, the server will respond with a 304
-    // status code and an empty body. This will cause `objects.insert` to throw
-    // `TypeError` during JSON deserialization.
+    BigInt? ifMetagenerationNotMatch,
     String? predefinedAcl,
     String? projection,
     String? userProject,
     RetryRunner retry = defaultRetry,
-  }) => retry.run(
-    () async => uploadFile(
-      await _httpClient,
-      _requestUrl(
-        ['upload', 'storage', 'v1', 'b', bucket, 'o'],
-        {
-          'uploadType': 'multipart',
-          'name': name,
-          'ifGenerationMatch': ?ifGenerationMatch?.toString(),
-          'predefinedAcl': ?predefinedAcl,
-          'projection': ?projection,
-          'userProject': ?userProject,
-        },
+  }) => _translateNotModified(
+    () => retry.run(
+      () async => uploadFile(
+        await _httpClient,
+        _requestUrl(
+          ['upload', 'storage', 'v1', 'b', bucket, 'o'],
+          {
+            'uploadType': 'multipart',
+            'name': name,
+            'ifGenerationMatch': ?ifGenerationMatch?.toString(),
+            'ifMetagenerationNotMatch': ?ifMetagenerationNotMatch?.toString(),
+            'predefinedAcl': ?predefinedAcl,
+            'projection': ?projection,
+            'userProject': ?userProject,
+          },
+        ),
+        content,
+        metadata: metadata,
       ),
-      content,
-      metadata: metadata,
+      isIdempotent: ifGenerationMatch != null,
     ),
-    isIdempotent: ifGenerationMatch != null,
   );
 
   /// Creates or updates the content of a [Google Cloud Storage object][] using
@@ -1492,6 +1498,11 @@ final class Storage {
   /// generation does not match, a [PreconditionFailedException] is thrown.
   /// A value of `0` indicates that the object must not already exist.
   ///
+  /// If set, [ifMetagenerationNotMatch] makes updating the object content
+  /// conditional on whether the object's metageneration does *not* match the
+  /// provided value. If the metageneration does match, the object is left
+  /// unchanged and a [NotModifiedException] is thrown.
+  ///
   /// If set, `predefinedAcl` applies a predefined set of access controls to the
   /// object, such as `"publicRead"`. If [UniformBucketLevelAccess.enabled] is
   /// `true`, then setting `predefinedAcl` will result in a
@@ -1525,12 +1536,7 @@ final class Storage {
     String content, {
     ObjectMetadata? metadata,
     BigInt? ifGenerationMatch,
-    // TODO(https://github.com/googleapis/google-cloud-dart/issues/115):
-    // support ifMetagenerationNotMatch.
-    //
-    // If `ifMetagenerationNotMatch` is set, the server will respond with a 304
-    // status code and an empty body. This will cause `objects.insert` to throw
-    // `TypeError` during JSON deserialization.
+    BigInt? ifMetagenerationNotMatch,
     String? predefinedAcl,
     String? projection,
     String? userProject,
@@ -1547,10 +1553,29 @@ final class Storage {
       utf8.encode(content),
       metadata: md,
       ifGenerationMatch: ifGenerationMatch,
+      ifMetagenerationNotMatch: ifMetagenerationNotMatch,
       predefinedAcl: predefinedAcl,
       projection: projection,
       userProject: userProject,
       retry: retry,
+    );
+  }
+}
+
+/// Runs [operation], translating the "304 Not Modified" response that Google
+/// Cloud Storage returns for an unsatisfied `ifMetagenerationNotMatch`
+/// precondition into a [NotModifiedException].
+///
+/// A 304 response has an empty body, so it cannot be deserialized into the
+/// metadata that the operation would otherwise return.
+Future<T> _translateNotModified<T>(Future<T> Function() operation) async {
+  try {
+    return await operation();
+  } on ServiceException catch (e) {
+    if (e.statusCode != 304) rethrow;
+    throw NotModifiedException(
+      'The operation was not performed because the '
+      '"ifMetagenerationNotMatch" precondition was not satisfied.',
     );
   }
 }

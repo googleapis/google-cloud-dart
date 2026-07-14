@@ -4,6 +4,10 @@
   `Storage.listObjects`.
 * Add `Storage.rewriteObject`.
 * Add `StorageObject.rewrite`.
+* Add an `ifMetagenerationNotMatch` parameter to `Storage.patchBucket`,
+  `Storage.uploadObject`, and `Storage.uploadObjectFromString`.
+* Add `NotModifiedException`, thrown when an `ifMetagenerationNotMatch`
+  precondition is not satisfied.
 
 ## 0.6.2
 
