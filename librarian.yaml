@@ -25,8 +25,8 @@ sources:
     sha256: a030bff1e5b696affcb89240deb20a34325d9d2c23f82c1623332e820a3cf2ab
     subpath: src
   showcase:
-    commit: 7d5b4ab7839ce346428ae6882b60ce15ab493297
-    sha256: 146a5a3d26f3c8abef8862f4d6122674f2c4d0d362a5981fc283c1cc1c52339a
+    commit: e4edbeb96b139f8512720482e022c2d928b9bc52
+    sha256: 526fdbd4ef2f0b7637bb3a2b5e35838d3c077c12684e677e6e1e3bf01e801681
 default:
   output: generated/
   dart:
