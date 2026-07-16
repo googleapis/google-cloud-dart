@@ -1,4 +1,4 @@
-## 0.6.3-wip
+## 0.6.3
 
 * Add `prefix`, `delimiter`, and `includeTrailingDelimiter` parameters to
   `Storage.listObjects`.
