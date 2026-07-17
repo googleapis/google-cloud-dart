@@ -1,3 +1,9 @@
+## 0.6.4-wip
+
+* Add an `ifMetagenerationNotMatch` parameter to `Storage.patchBucket`,
+  `Storage.uploadObject`, and `Storage.uploadObjectFromString`. If the
+  precondition is not satisfied, a `NotModifiedException` is thrown.
+
 ## 0.6.3
 
 * Add `prefix`, `delimiter`, and `includeTrailingDelimiter` parameters to

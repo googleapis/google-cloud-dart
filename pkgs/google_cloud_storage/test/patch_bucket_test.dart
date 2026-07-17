@@ -914,6 +914,48 @@ void main() async {
         );
         expect(actualMetadata.metageneration, BigInt.from(2));
       });
+
+      test(
+        'ifMetagenerationNotMatch throws when the metageneration matches',
+        () async {
+          final bucketName = bucketNameWithTearDown(storage, 'pch_bkt_imnm');
+          final created = await storage.createBucket(
+            BucketMetadata(name: bucketName),
+          );
+
+          await expectLater(
+            storage.patchBucket(
+              bucketName,
+              BucketMetadataPatchBuilder()..labels = {'color': 'red'},
+              ifMetagenerationNotMatch: created.metageneration,
+            ),
+            throwsA(isA<NotModifiedException>()),
+          );
+
+          // The bucket must be left unchanged.
+          final actual = await storage.bucketMetadata(bucketName);
+          expect(actual.labels, anyOf(isNull, isEmpty));
+          expect(actual.metageneration, created.metageneration);
+        },
+      );
+
+      test(
+        'ifMetagenerationNotMatch succeeds when the metageneration differs',
+        () async {
+          final bucketName = bucketNameWithTearDown(storage, 'pch_bkt_imnm_ok');
+          final created = await storage.createBucket(
+            BucketMetadata(name: bucketName),
+          );
+
+          final actual = await storage.patchBucket(
+            bucketName,
+            BucketMetadataPatchBuilder()..labels = {'color': 'red'},
+            ifMetagenerationNotMatch: created.metageneration! + BigInt.one,
+          );
+
+          expect(actual.labels, containsPair('color', 'red'));
+        },
+      );
     });
 
     test('idempotent transport failure', () async {
