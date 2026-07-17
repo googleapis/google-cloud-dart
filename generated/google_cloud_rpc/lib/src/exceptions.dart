@@ -64,6 +64,12 @@ final class ServiceException implements Exception {
     String? responseBody,
     Status? status,
   }) => switch (response.statusCode) {
+    304 => NotModifiedException(
+      message,
+      response: response,
+      responseBody: responseBody,
+      status: status,
+    ),
     400 => BadRequestException(
       message,
       response: response,
@@ -183,7 +189,11 @@ final class ServiceException implements Exception {
   ) {
     if (responseBody == null || responseBody.isEmpty) {
       return ServiceException._fromDecodedResponse(
-        'unknown error',
+        // A "304 Not Modified" response never has a body, so there is no
+        // server-provided message to describe it.
+        response.statusCode == 304
+            ? 'the resource was not modified'
+            : 'unknown error',
         response: response,
         responseBody: responseBody,
       );
@@ -229,6 +239,22 @@ final class ServiceException implements Exception {
 
   @override
   String toString() => '$_name: $message';
+}
+
+/// Exception thrown when the server returns a "304 Not Modified" response.
+///
+/// This indicates that the requested operation was not performed because a
+/// precondition, such as `ifMetagenerationNotMatch`, was not satisfied.
+final class NotModifiedException extends ServiceException {
+  NotModifiedException(
+    super.message, {
+    required super.response,
+    required super.responseBody,
+    super.status,
+  }) : super(statusCode: 304);
+
+  @override
+  String get _name => 'NotModifiedException';
 }
 
 /// Exception thrown when the server returns a "400 Bad Request" response.

@@ -916,6 +916,85 @@ void main() async {
       });
     });
 
+    group('storage-testbench', tags: ['storage-testbench'], () {
+      late Storage testbenchStorage;
+
+      setUp(() {
+        (_, testbenchStorage) = createStorageTestbenchClient();
+      });
+
+      tearDown(() => testbenchStorage.close());
+
+      test(
+        'ifMetagenerationNotMatch throws when the metageneration matches',
+        () async {
+          final bucketName = bucketNameWithTearDown(
+            testbenchStorage,
+            'pch_bkt_imnm',
+          );
+          final created = await testbenchStorage.createBucket(
+            BucketMetadata(name: bucketName),
+          );
+
+          await expectLater(
+            testbenchStorage.patchBucket(
+              bucketName,
+              BucketMetadataPatchBuilder()..labels = {'color': 'red'},
+              ifMetagenerationNotMatch: created.metageneration,
+            ),
+            throwsA(isA<NotModifiedException>()),
+          );
+
+          // The bucket must be left unchanged.
+          final actual = await testbenchStorage.bucketMetadata(bucketName);
+          expect(actual.labels, anyOf(isNull, isEmpty));
+          expect(actual.metageneration, created.metageneration);
+        },
+      );
+
+      test(
+        'ifMetagenerationNotMatch succeeds when the metageneration differs',
+        () async {
+          final bucketName = bucketNameWithTearDown(
+            testbenchStorage,
+            'pch_bkt_imnm_ok',
+          );
+          final created = await testbenchStorage.createBucket(
+            BucketMetadata(name: bucketName),
+          );
+
+          final actual = await testbenchStorage.patchBucket(
+            bucketName,
+            BucketMetadataPatchBuilder()..labels = {'color': 'red'},
+            ifMetagenerationNotMatch: created.metageneration! + BigInt.one,
+          );
+
+          expect(actual.labels, containsPair('color', 'red'));
+        },
+      );
+    });
+
+    test('ifMetagenerationNotMatch is sent as a query parameter', () async {
+      late Uri requestUrl;
+      final mockClient = MockClient((request) async {
+        requestUrl = request.url;
+        return http.Response('', 304);
+      });
+
+      final storage = Storage(client: mockClient, projectId: 'fake project');
+
+      await expectLater(
+        storage.patchBucket(
+          'bucket',
+          BucketMetadataPatchBuilder()..labels = {'color': 'red'},
+          ifMetagenerationNotMatch: BigInt.two,
+        ),
+        throwsA(isA<NotModifiedException>()),
+      );
+
+      expect(requestUrl.queryParameters['ifMetagenerationNotMatch'], '2');
+    });
+
     test('idempotent transport failure', () async {
       var count = 0;
       final mockClient = MockClient((request) async {

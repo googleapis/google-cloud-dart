@@ -529,27 +529,25 @@ final class Storage {
     String? projection,
     String? userProject,
     RetryRunner retry = defaultRetry,
-  }) => _translateNotModified(
-    () => retry.run(() async {
-      final serviceClient = await _serviceClient;
-      final url = _requestUrl(
-        ['storage', 'v1', 'b', bucket],
-        {
-          'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
-          'ifMetagenerationNotMatch': ?ifMetagenerationNotMatch?.toString(),
-          'predefinedAcl': ?predefinedAcl,
-          'predefinedDefaultObjectAcl': ?predefinedDefaultObjectAcl,
-          'projection': ?projection,
-          'userProject': ?userProject,
-        },
-      );
-      final j = await serviceClient.patch(
-        url,
-        body: BucketMetadataPatchBuilderJsonEncodable(metadata),
-      );
-      return bucketMetadataFromJson(j as Map<String, Object?>);
-    }, isIdempotent: ifMetagenerationMatch != null),
-  );
+  }) => retry.run(() async {
+    final serviceClient = await _serviceClient;
+    final url = _requestUrl(
+      ['storage', 'v1', 'b', bucket],
+      {
+        'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
+        'ifMetagenerationNotMatch': ?ifMetagenerationNotMatch?.toString(),
+        'predefinedAcl': ?predefinedAcl,
+        'predefinedDefaultObjectAcl': ?predefinedDefaultObjectAcl,
+        'projection': ?projection,
+        'userProject': ?userProject,
+      },
+    );
+    final j = await serviceClient.patch(
+      url,
+      body: BucketMetadataPatchBuilderJsonEncodable(metadata),
+    );
+    return bucketMetadataFromJson(j as Map<String, Object?>);
+  }, isIdempotent: ifMetagenerationMatch != null);
 
   /// Patches an Access Control List (ACL) entry on the specified
   /// [Google Cloud Storage bucket].
@@ -1410,27 +1408,25 @@ final class Storage {
     String? projection,
     String? userProject,
     RetryRunner retry = defaultRetry,
-  }) => _translateNotModified(
-    () => retry.run(
-      () async => uploadFile(
-        await _httpClient,
-        _requestUrl(
-          ['upload', 'storage', 'v1', 'b', bucket, 'o'],
-          {
-            'uploadType': 'multipart',
-            'name': name,
-            'ifGenerationMatch': ?ifGenerationMatch?.toString(),
-            'ifMetagenerationNotMatch': ?ifMetagenerationNotMatch?.toString(),
-            'predefinedAcl': ?predefinedAcl,
-            'projection': ?projection,
-            'userProject': ?userProject,
-          },
-        ),
-        content,
-        metadata: metadata,
+  }) => retry.run(
+    () async => uploadFile(
+      await _httpClient,
+      _requestUrl(
+        ['upload', 'storage', 'v1', 'b', bucket, 'o'],
+        {
+          'uploadType': 'multipart',
+          'name': name,
+          'ifGenerationMatch': ?ifGenerationMatch?.toString(),
+          'ifMetagenerationNotMatch': ?ifMetagenerationNotMatch?.toString(),
+          'predefinedAcl': ?predefinedAcl,
+          'projection': ?projection,
+          'userProject': ?userProject,
+        },
       ),
-      isIdempotent: ifGenerationMatch != null,
+      content,
+      metadata: metadata,
     ),
+    isIdempotent: ifGenerationMatch != null,
   );
 
   /// Creates or updates the content of a [Google Cloud Storage object][] using
@@ -1558,24 +1554,6 @@ final class Storage {
       projection: projection,
       userProject: userProject,
       retry: retry,
-    );
-  }
-}
-
-/// Runs [operation], translating the "304 Not Modified" response that Google
-/// Cloud Storage returns for an unsatisfied `ifMetagenerationNotMatch`
-/// precondition into a [NotModifiedException].
-///
-/// A 304 response has an empty body, so it cannot be deserialized into the
-/// metadata that the operation would otherwise return.
-Future<T> _translateNotModified<T>(Future<T> Function() operation) async {
-  try {
-    return await operation();
-  } on ServiceException catch (e) {
-    if (e.statusCode != 304) rethrow;
-    throw NotModifiedException(
-      'The operation was not performed because the '
-      '"ifMetagenerationNotMatch" precondition was not satisfied.',
     );
   }
 }
