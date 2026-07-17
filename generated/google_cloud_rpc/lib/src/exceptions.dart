@@ -242,9 +242,6 @@ final class ServiceException implements Exception {
 }
 
 /// Exception thrown when the server returns a "304 Not Modified" response.
-///
-/// This indicates that the requested operation was not performed because a
-/// precondition, such as `ifMetagenerationNotMatch`, was not satisfied.
 final class NotModifiedException extends ServiceException {
   NotModifiedException(
     super.message, {

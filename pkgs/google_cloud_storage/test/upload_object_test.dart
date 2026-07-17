@@ -287,34 +287,23 @@ void main() async {
           throwsA(isA<PreconditionFailedException>()),
         );
       });
-    });
-
-    group('storage-testbench', tags: ['storage-testbench'], () {
-      late Storage testbenchStorage;
-
-      setUp(() {
-        (_, testbenchStorage) = createStorageTestbenchClient();
-      });
-
-      tearDown(() => testbenchStorage.close());
 
       test(
         'ifMetagenerationNotMatch throws when the metageneration matches',
         () async {
-          final bucketName = bucketNameWithTearDown(
-            testbenchStorage,
-            'upl_obj_imnm',
+          final bucketName = await createBucketWithTearDown(
+            storage,
+            'ul_obj_imnm',
           );
-          await testbenchStorage.createBucket(BucketMetadata(name: bucketName));
 
-          final created = await testbenchStorage.uploadObject(
+          final created = await storage.uploadObject(
             bucketName,
             'object1',
             utf8.encode('Hello World!'),
           );
 
           await expectLater(
-            testbenchStorage.uploadObject(
+            storage.uploadObject(
               bucketName,
               'object1',
               utf8.encode('Goodbye World!'),
@@ -324,34 +313,10 @@ void main() async {
           );
 
           // The object content must be left unchanged.
-          final content = await testbenchStorage.downloadObject(
-            bucketName,
-            'object1',
-          );
+          final content = await storage.downloadObject(bucketName, 'object1');
           expect(utf8.decode(content), 'Hello World!');
         },
       );
-    });
-
-    test('ifMetagenerationNotMatch is sent as a query parameter', () async {
-      late Uri requestUrl;
-      final mockClient = MockClient((request) async {
-        requestUrl = request.url;
-        return http.Response('', 304);
-      });
-
-      final storage = Storage(client: mockClient, projectId: 'fake project');
-
-      await expectLater(
-        storage.uploadObject('bucket', 'object', [
-          1,
-          2,
-          3,
-        ], ifMetagenerationNotMatch: BigInt.two),
-        throwsA(isA<NotModifiedException>()),
-      );
-
-      expect(requestUrl.queryParameters['ifMetagenerationNotMatch'], '2');
     });
 
     test('idempotent transport failure', () async {

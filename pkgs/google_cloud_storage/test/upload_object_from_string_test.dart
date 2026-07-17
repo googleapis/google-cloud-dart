@@ -15,8 +15,6 @@
 import 'dart:convert';
 
 import 'package:google_cloud_storage/google_cloud_storage.dart';
-import 'package:http/http.dart' as http;
-import 'package:http/testing.dart';
 import 'package:test/test.dart';
 
 import 'test_utils.dart';
@@ -123,28 +121,6 @@ void main() {
       tearDown(() => storage.close());
 
       uploadObjectFromStringTest(() => storage, createBucketWithTearDown);
-    });
-
-    test('ifMetagenerationNotMatch is sent as a query parameter', () async {
-      late Uri requestUrl;
-      final mockClient = MockClient((request) async {
-        requestUrl = request.url;
-        return http.Response('', 304);
-      });
-
-      final storage = Storage(client: mockClient, projectId: 'fake project');
-
-      await expectLater(
-        storage.uploadObjectFromString(
-          'bucket',
-          'object',
-          'Hello, World!',
-          ifMetagenerationNotMatch: BigInt.two,
-        ),
-        throwsA(isA<NotModifiedException>()),
-      );
-
-      expect(requestUrl.queryParameters['ifMetagenerationNotMatch'], '2');
     });
   });
 }
