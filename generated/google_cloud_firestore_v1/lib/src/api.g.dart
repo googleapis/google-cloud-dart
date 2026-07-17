@@ -1139,9 +1139,6 @@ final class TransactionOptions extends ProtoMessage {
 }
 
 /// Options for a transaction that can be used to read and write documents.
-///
-/// Firestore does not allow 3rd party auth requests to create read-write.
-/// transactions.
 final class TransactionOptions_ReadWrite extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.firestore.v1.TransactionOptions.ReadWrite';
@@ -1149,9 +1146,21 @@ final class TransactionOptions_ReadWrite extends ProtoMessage {
   /// An optional transaction to retry.
   final Uint8List retryTransaction;
 
-  TransactionOptions_ReadWrite({Uint8List? retryTransaction})
-    : retryTransaction = retryTransaction ?? Uint8List(0),
-      super(fullyQualifiedName);
+  /// Optional. The concurrency control mode to use for this transaction.
+  ///
+  /// A database is able to use different concurrency modes for different
+  /// transactions simultaneously.
+  ///
+  /// 3rd party auth requests are only allowed to create optimistic
+  /// read-write transactions and must specify that here even if the
+  /// database-level setting is already configured to optimistic.
+  final TransactionOptions_ConcurrencyMode concurrencyMode;
+
+  TransactionOptions_ReadWrite({
+    Uint8List? retryTransaction,
+    this.concurrencyMode = TransactionOptions_ConcurrencyMode.$default,
+  }) : retryTransaction = retryTransaction ?? Uint8List(0),
+       super(fullyQualifiedName);
 
   factory TransactionOptions_ReadWrite.fromJson(Object? j) {
     final json = j as Map<String, Object?>;
@@ -1160,6 +1169,10 @@ final class TransactionOptions_ReadWrite extends ProtoMessage {
         null => Uint8List(0),
         Object $1 => decodeBytes($1),
       },
+      concurrencyMode: switch (json['concurrencyMode']) {
+        null => TransactionOptions_ConcurrencyMode.$default,
+        Object $1 => TransactionOptions_ConcurrencyMode.fromJson($1),
+      },
     );
   }
 
@@ -1167,11 +1180,16 @@ final class TransactionOptions_ReadWrite extends ProtoMessage {
   Object toJson() => {
     if (retryTransaction.isNotDefault)
       'retryTransaction': encodeBytes(retryTransaction),
+    if (concurrencyMode.isNotDefault)
+      'concurrencyMode': concurrencyMode.toJson(),
   };
 
   @override
   String toString() {
-    final $contents = ['retryTransaction=$retryTransaction'].join(',');
+    final $contents = [
+      'retryTransaction=$retryTransaction',
+      'concurrencyMode=$concurrencyMode',
+    ].join(',');
     return 'ReadWrite(${$contents})';
   }
 }
@@ -1205,6 +1223,33 @@ final class TransactionOptions_ReadOnly extends ProtoMessage {
 
   @override
   String toString() => 'ReadOnly()';
+}
+
+/// The type of concurrency control mode for transactions.
+final class TransactionOptions_ConcurrencyMode extends ProtoEnum {
+  /// Start the transaction with the database-level default concurrency mode.
+  static const concurrencyModeUnspecified = TransactionOptions_ConcurrencyMode(
+    'CONCURRENCY_MODE_UNSPECIFIED',
+  );
+
+  /// Use optimistic concurrency control for the new transaction.
+  static const optimistic = TransactionOptions_ConcurrencyMode('OPTIMISTIC');
+
+  /// Use pessimistic concurrency control for the new transaction.
+  static const pessimistic = TransactionOptions_ConcurrencyMode('PESSIMISTIC');
+
+  /// The default value for [TransactionOptions_ConcurrencyMode].
+  static const $default = concurrencyModeUnspecified;
+
+  const TransactionOptions_ConcurrencyMode(super.value);
+
+  factory TransactionOptions_ConcurrencyMode.fromJson(Object? json) =>
+      TransactionOptions_ConcurrencyMode(json as String);
+
+  bool get isNotDefault => this != $default;
+
+  @override
+  String toString() => 'ConcurrencyMode.$value';
 }
 
 /// A Firestore document.
@@ -2875,12 +2920,18 @@ final class ExecutePipelineRequest extends ProtoMessage {
   /// minute timestamp within the past 7 days.
   final Timestamp? readTime;
 
+  /// Optional. Automatically commits the transaction after the pipeline has been
+  /// executed. Only permitted in combination with `transaction` or
+  /// `new_transaction`.
+  final bool autoCommitTransaction;
+
   ExecutePipelineRequest({
     required this.database,
     this.structuredPipeline,
     this.transaction,
     this.newTransaction,
     this.readTime,
+    this.autoCommitTransaction = false,
   }) : super(fullyQualifiedName);
 
   factory ExecutePipelineRequest.fromJson(Object? j) {
@@ -2906,6 +2957,10 @@ final class ExecutePipelineRequest extends ProtoMessage {
         null => null,
         Object $1 => Timestamp.fromJson($1),
       },
+      autoCommitTransaction: switch (json['autoCommitTransaction']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
     );
   }
 
@@ -2916,6 +2971,8 @@ final class ExecutePipelineRequest extends ProtoMessage {
     if (transaction case final $1?) 'transaction': encodeBytes($1),
     'newTransaction': ?newTransaction?.toJson(),
     'readTime': ?readTime?.toJson(),
+    if (autoCommitTransaction.isNotDefault)
+      'autoCommitTransaction': autoCommitTransaction,
   };
 
   @override
@@ -2923,6 +2980,7 @@ final class ExecutePipelineRequest extends ProtoMessage {
     final $contents = [
       'database=$database',
       if (transaction != null) 'transaction=$transaction',
+      'autoCommitTransaction=$autoCommitTransaction',
     ].join(',');
     return 'ExecutePipelineRequest(${$contents})';
   }
@@ -4040,6 +4098,9 @@ final class ListCollectionIdsRequest extends ProtoMessage {
   /// `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
   /// For example:
   /// `projects/my-project/databases/my-database/documents/chatrooms/my-chatroom`
+  ///
+  /// Use `projects/{project_id}/databases/{database_id}/documents` to list
+  /// top-level collections.
   final String parent;
 
   /// The maximum number of results to return.
@@ -4336,9 +4397,12 @@ final class StructuredQuery extends ProtoMessage {
 
   /// The order to apply to the query results.
   ///
-  /// Firestore allows callers to provide a full ordering, a partial ordering, or
-  /// no ordering at all. In all cases, Firestore guarantees a stable ordering
-  /// through the following rules:
+  /// Callers can provide a full ordering, a partial ordering, or no ordering at
+  /// all. While Firestore will always respect the provided order, the behavior
+  /// for queries without a full ordering is different per database edition:
+  ///
+  /// In Standard edition, Firestore guarantees a stable ordering through the
+  /// following rules:
   ///
   ///  * The `order_by` is required to reference all fields used with an
   ///    inequality filter.
@@ -4354,6 +4418,13 @@ final class StructuredQuery extends ProtoMessage {
   ///  * `WHERE a > 1` becomes `WHERE a > 1 ORDER BY a ASC, __name__ ASC`
   ///  * `WHERE __name__ > ... AND a > 1` becomes
   ///     `WHERE __name__ > ... AND a > 1 ORDER BY a ASC, __name__ ASC`
+  ///
+  /// In Enterprise edition, Firestore does not guarantee a stable ordering.
+  /// Instead it will pick the most efficient ordering based on the indexes
+  /// available at the time of query execution. This will result in a different
+  /// ordering for queries that are otherwise identical. To ensure a stable
+  /// ordering, always include a unique field in the `order_by` clause, such as
+  /// `__name__`.
   final List<StructuredQuery_Order> orderBy;
 
   /// A potential prefix of a position in the result set to start the query at.

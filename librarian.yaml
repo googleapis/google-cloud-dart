@@ -15,18 +15,18 @@ language: dart
 version: v0.21.0
 sources:
   conformance:
-    commit: db1c40f3fd8bde2be8c246b9bc3fc394c11ad5a2
-    sha256: a030bff1e5b696affcb89240deb20a34325d9d2c23f82c1623332e820a3cf2ab
+    commit: 59ab79a8fa063d66283236e2616b82870e07beef
+    sha256: 17d73a1665a67e2e72def80929ba41b68c24bdb848e194d28c5d67a2975c994e
   googleapis:
-    commit: c063f49852ce7fc08c722c87f3a6f676209985a2
-    sha256: 46a581333b5b5be41a545db13e0bd0519d1b322e5b1ed73331ad6ec9633f0e5e
+    commit: cd3e7097f1edeb8379c4b26744c9ae9172b491f3
+    sha256: f3e2af994695d848542d9d3c3fafbc4a554a05cd7c0b8609bfa3f6901c9fa249
   protobuf:
-    commit: db1c40f3fd8bde2be8c246b9bc3fc394c11ad5a2
-    sha256: a030bff1e5b696affcb89240deb20a34325d9d2c23f82c1623332e820a3cf2ab
+    commit: 59ab79a8fa063d66283236e2616b82870e07beef
+    sha256: 17d73a1665a67e2e72def80929ba41b68c24bdb848e194d28c5d67a2975c994e
     subpath: src
   showcase:
-    commit: 7d5b4ab7839ce346428ae6882b60ce15ab493297
-    sha256: 146a5a3d26f3c8abef8862f4d6122674f2c4d0d362a5981fc283c1cc1c52339a
+    commit: e25a96754f46c9ebb7d3db667b9a030434ed4cbf
+    sha256: 52314efb8c2d5eded992be1895f3e3238f17f25fcfeb96df1e478ad361be450d
 default:
   output: generated/
   dart:

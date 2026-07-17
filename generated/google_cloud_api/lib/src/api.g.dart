@@ -402,6 +402,7 @@ final class OauthRequirements extends ProtoMessage {
   /// The list of publicly documented OAuth scopes that are allowed access. An
   /// OAuth token containing any of these scopes will be accepted.
   ///
+  ///
   /// Example:
   ///
   ///      canonical_scopes: https://www.googleapis.com/auth/calendar,
@@ -570,6 +571,10 @@ final class BackendRule extends ProtoMessage {
   /// operation. The default is no deadline.
   final double operationDeadline;
 
+  /// Path translation specifies how to combine the backend address with the
+  /// request path in order to produce the appropriate forwarding URL for the
+  /// request. See `PathTranslation` for
+  /// more details.
   final BackendRule_PathTranslation pathTranslation;
 
   /// The JWT audience is used when generating a JWT ID token for the backend.
@@ -609,6 +614,13 @@ final class BackendRule extends ProtoMessage {
   /// The map between request protocol and the backend address.
   final Map<String, BackendRule> overridesByRequestProtocol;
 
+  /// The load balancing policy used for connection to the application backend.
+  ///
+  /// Defined as an arbitrary string to accomondate custom load balancing
+  /// policies supported by the underlying channel, but suggest most users use
+  /// one of the standard policies, such as the default, "RoundRobin".
+  final String loadBalancingPolicy;
+
   BackendRule({
     this.selector = '',
     this.address = '',
@@ -620,6 +632,7 @@ final class BackendRule extends ProtoMessage {
     this.disableAuth,
     this.protocol = '',
     this.overridesByRequestProtocol = const {},
+    this.loadBalancingPolicy = '',
   }) : super(fullyQualifiedName);
 
   factory BackendRule.fromJson(Object? j) {
@@ -671,6 +684,10 @@ final class BackendRule extends ProtoMessage {
           '"overridesByRequestProtocol" is not an object',
         ),
       },
+      loadBalancingPolicy: switch (json['loadBalancingPolicy']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
     );
   }
 
@@ -692,6 +709,8 @@ final class BackendRule extends ProtoMessage {
         for (final e in overridesByRequestProtocol.entries)
           e.key: e.value.toJson(),
       },
+    if (loadBalancingPolicy.isNotDefault)
+      'loadBalancingPolicy': loadBalancingPolicy,
   };
 
   @override
@@ -706,6 +725,7 @@ final class BackendRule extends ProtoMessage {
       if (jwtAudience != null) 'jwtAudience=$jwtAudience',
       if (disableAuth != null) 'disableAuth=$disableAuth',
       'protocol=$protocol',
+      'loadBalancingPolicy=$loadBalancingPolicy',
     ].join(',');
     return 'BackendRule(${$contents})';
   }
@@ -918,6 +938,8 @@ final class CommonLanguageSettings extends ProtoMessage {
   final List<ClientLibraryDestination> destinations;
 
   /// Configuration for which RPCs should be generated in the GAPIC client.
+  ///
+  /// Note: This field should not be used in most cases.
   final SelectiveGapicGeneration? selectiveGapicGeneration;
 
   CommonLanguageSettings({
@@ -1263,9 +1285,10 @@ final class JavaSettings extends ProtoMessage {
   ///
   /// Example of a YAML configuration::
   ///
-  ///  publishing:
-  ///    java_settings:
-  ///      library_package: com.google.cloud.pubsub.v1
+  ///     publishing:
+  ///       library_settings:
+  ///         java_settings:
+  ///           library_package: com.google.cloud.pubsub.v1
   final String libraryPackage;
 
   /// Configure the Java class name to use instead of the service's for its
@@ -1277,11 +1300,11 @@ final class JavaSettings extends ProtoMessage {
   ///
   /// Example of a YAML configuration::
   ///
-  ///  publishing:
-  ///    java_settings:
-  ///      service_class_names:
-  ///        - google.pubsub.v1.Publisher: TopicAdmin
-  ///        - google.pubsub.v1.Subscriber: SubscriptionAdmin
+  ///     publishing:
+  ///       java_settings:
+  ///         service_class_names:
+  ///           - google.pubsub.v1.Publisher: TopicAdmin
+  ///           - google.pubsub.v1.Subscriber: SubscriptionAdmin
   final Map<String, String> serviceClassNames;
 
   /// Some settings.
@@ -1364,7 +1387,22 @@ final class PhpSettings extends ProtoMessage {
   /// Some settings.
   final CommonLanguageSettings? common;
 
-  PhpSettings({this.common}) : super(fullyQualifiedName);
+  /// The package name to use in Php. Clobbers the php_namespace option
+  /// set in the protobuf. This should be used **only** by APIs
+  /// who have already set the language_settings.php.package_name" field
+  /// in gapic.yaml. API teams should use the protobuf php_namespace option
+  /// where possible.
+  ///
+  /// Example of a YAML configuration::
+  ///
+  ///     publishing:
+  ///       library_settings:
+  ///         php_settings:
+  ///           library_package: Google\Cloud\PubSub\V1
+  final String libraryPackage;
+
+  PhpSettings({this.common, this.libraryPackage = ''})
+    : super(fullyQualifiedName);
 
   factory PhpSettings.fromJson(Object? j) {
     final json = j as Map<String, Object?>;
@@ -1373,14 +1411,24 @@ final class PhpSettings extends ProtoMessage {
         null => null,
         Object $1 => CommonLanguageSettings.fromJson($1),
       },
+      libraryPackage: switch (json['libraryPackage']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
     );
   }
 
   @override
-  Object toJson() => {'common': ?common?.toJson()};
+  Object toJson() => {
+    'common': ?common?.toJson(),
+    if (libraryPackage.isNotDefault) 'libraryPackage': libraryPackage,
+  };
 
   @override
-  String toString() => 'PhpSettings()';
+  String toString() {
+    final $contents = ['libraryPackage=$libraryPackage'].join(',');
+    return 'PhpSettings(${$contents})';
+  }
 }
 
 /// Settings for Python client libraries.
@@ -1661,10 +1709,12 @@ final class GoSettings extends ProtoMessage {
   /// service names and values are the name to be used for the service client
   /// and call options.
   ///
-  /// publishing:
-  ///   go_settings:
-  ///     renamed_services:
-  ///       Publisher: TopicAdmin
+  /// Example:
+  ///
+  ///     publishing:
+  ///       go_settings:
+  ///         renamed_services:
+  ///           Publisher: TopicAdmin
   final Map<String, String> renamedServices;
 
   GoSettings({this.common, this.renamedServices = const {}})
@@ -1707,10 +1757,10 @@ final class MethodSettings extends ProtoMessage {
   ///
   /// Example:
   ///
-  ///    publishing:
-  ///      method_settings:
-  ///      - selector: google.storage.control.v2.StorageControl.CreateFolder
-  ///        # method settings for CreateFolder...
+  ///     publishing:
+  ///       method_settings:
+  ///       - selector: google.storage.control.v2.StorageControl.CreateFolder
+  ///         # method settings for CreateFolder...
   final String selector;
 
   /// Describes settings to use for long-running operations when generating
@@ -1719,14 +1769,14 @@ final class MethodSettings extends ProtoMessage {
   ///
   /// Example of a YAML configuration::
   ///
-  ///    publishing:
-  ///      method_settings:
-  ///      - selector: google.cloud.speech.v2.Speech.BatchRecognize
-  ///        long_running:
-  ///          initial_poll_delay: 60s # 1 minute
-  ///          poll_delay_multiplier: 1.5
-  ///          max_poll_delay: 360s # 6 minutes
-  ///          total_poll_timeout: 54000s # 90 minutes
+  ///     publishing:
+  ///       method_settings:
+  ///       - selector: google.cloud.speech.v2.Speech.BatchRecognize
+  ///         long_running:
+  ///           initial_poll_delay: 60s # 1 minute
+  ///           poll_delay_multiplier: 1.5
+  ///           max_poll_delay: 360s # 6 minutes
+  ///           total_poll_timeout: 54000s # 90 minutes
   final MethodSettings_LongRunning? longRunning;
 
   /// List of top-level fields of the request message, that should be
@@ -1735,17 +1785,31 @@ final class MethodSettings extends ProtoMessage {
   ///
   /// Example of a YAML configuration:
   ///
-  ///    publishing:
-  ///      method_settings:
-  ///      - selector: google.example.v1.ExampleService.CreateExample
-  ///        auto_populated_fields:
-  ///        - request_id
+  ///     publishing:
+  ///       method_settings:
+  ///       - selector: google.example.v1.ExampleService.CreateExample
+  ///         auto_populated_fields:
+  ///         - request_id
   final List<String> autoPopulatedFields;
+
+  /// Batching configuration for an API method in client libraries.
+  ///
+  /// Example of a YAML configuration:
+  ///
+  ///     publishing:
+  ///       method_settings:
+  ///       - selector: google.example.v1.ExampleService.BatchCreateExample
+  ///         batching:
+  ///           element_count_threshold: 1000
+  ///           request_byte_threshold: 100000000
+  ///           delay_threshold_millis: 10
+  final BatchingConfigProto? batching;
 
   MethodSettings({
     this.selector = '',
     this.longRunning,
     this.autoPopulatedFields = const [],
+    this.batching,
   }) : super(fullyQualifiedName);
 
   factory MethodSettings.fromJson(Object? j) {
@@ -1764,6 +1828,10 @@ final class MethodSettings extends ProtoMessage {
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
         _ => throw const FormatException('"autoPopulatedFields" is not a list'),
       },
+      batching: switch (json['batching']) {
+        null => null,
+        Object $1 => BatchingConfigProto.fromJson($1),
+      },
     );
   }
 
@@ -1773,6 +1841,7 @@ final class MethodSettings extends ProtoMessage {
     'longRunning': ?longRunning?.toJson(),
     if (autoPopulatedFields.isNotDefault)
       'autoPopulatedFields': autoPopulatedFields,
+    'batching': ?batching?.toJson(),
   };
 
   @override
@@ -1855,6 +1924,8 @@ final class MethodSettings_LongRunning extends ProtoMessage {
 
 /// This message is used to configure the generation of a subset of the RPCs in
 /// a service for client libraries.
+///
+/// Note: This feature should not be used in most cases.
 final class SelectiveGapicGeneration extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.api.SelectiveGapicGeneration';
@@ -1904,6 +1975,225 @@ final class SelectiveGapicGeneration extends ProtoMessage {
       'generateOmittedAsInternal=$generateOmittedAsInternal',
     ].join(',');
     return 'SelectiveGapicGeneration(${$contents})';
+  }
+}
+
+/// `BatchingConfigProto` defines the batching configuration for an API method.
+final class BatchingConfigProto extends ProtoMessage {
+  static const String fullyQualifiedName = 'google.api.BatchingConfigProto';
+
+  /// The thresholds which trigger a batched request to be sent.
+  final BatchingSettingsProto? thresholds;
+
+  /// The request and response fields used in batching.
+  final BatchingDescriptorProto? batchDescriptor;
+
+  BatchingConfigProto({this.thresholds, this.batchDescriptor})
+    : super(fullyQualifiedName);
+
+  factory BatchingConfigProto.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return BatchingConfigProto(
+      thresholds: switch (json['thresholds']) {
+        null => null,
+        Object $1 => BatchingSettingsProto.fromJson($1),
+      },
+      batchDescriptor: switch (json['batchDescriptor']) {
+        null => null,
+        Object $1 => BatchingDescriptorProto.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'thresholds': ?thresholds?.toJson(),
+    'batchDescriptor': ?batchDescriptor?.toJson(),
+  };
+
+  @override
+  String toString() => 'BatchingConfigProto()';
+}
+
+/// `BatchingSettingsProto` specifies a set of batching thresholds, each of
+/// which acts as a trigger to send a batch of messages as a request. At least
+/// one threshold must be positive nonzero.
+final class BatchingSettingsProto extends ProtoMessage {
+  static const String fullyQualifiedName = 'google.api.BatchingSettingsProto';
+
+  /// The number of elements of a field collected into a batch which, if
+  /// exceeded, causes the batch to be sent.
+  final int elementCountThreshold;
+
+  /// The aggregated size of the batched field which, if exceeded, causes the
+  /// batch to be sent. This size is computed by aggregating the sizes of the
+  /// request field to be batched, not of the entire request message.
+  final int requestByteThreshold;
+
+  /// The duration after which a batch should be sent, starting from the addition
+  /// of the first message to that batch.
+  final Duration? delayThreshold;
+
+  /// The maximum number of elements collected in a batch that could be accepted
+  /// by server.
+  final int elementCountLimit;
+
+  /// The maximum size of the request that could be accepted by server.
+  final int requestByteLimit;
+
+  /// The maximum number of elements allowed by flow control.
+  final int flowControlElementLimit;
+
+  /// The maximum size of data allowed by flow control.
+  final int flowControlByteLimit;
+
+  /// The behavior to take when the flow control limit is exceeded.
+  final FlowControlLimitExceededBehaviorProto flowControlLimitExceededBehavior;
+
+  BatchingSettingsProto({
+    this.elementCountThreshold = 0,
+    this.requestByteThreshold = 0,
+    this.delayThreshold,
+    this.elementCountLimit = 0,
+    this.requestByteLimit = 0,
+    this.flowControlElementLimit = 0,
+    this.flowControlByteLimit = 0,
+    this.flowControlLimitExceededBehavior =
+        FlowControlLimitExceededBehaviorProto.$default,
+  }) : super(fullyQualifiedName);
+
+  factory BatchingSettingsProto.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return BatchingSettingsProto(
+      elementCountThreshold: switch (json['elementCountThreshold']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      requestByteThreshold: switch (json['requestByteThreshold']) {
+        null => 0,
+        Object $1 => decodeInt64($1),
+      },
+      delayThreshold: switch (json['delayThreshold']) {
+        null => null,
+        Object $1 => Duration.fromJson($1),
+      },
+      elementCountLimit: switch (json['elementCountLimit']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      requestByteLimit: switch (json['requestByteLimit']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      flowControlElementLimit: switch (json['flowControlElementLimit']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      flowControlByteLimit: switch (json['flowControlByteLimit']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      flowControlLimitExceededBehavior:
+          switch (json['flowControlLimitExceededBehavior']) {
+            null => FlowControlLimitExceededBehaviorProto.$default,
+            Object $1 => FlowControlLimitExceededBehaviorProto.fromJson($1),
+          },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (elementCountThreshold.isNotDefault)
+      'elementCountThreshold': elementCountThreshold,
+    if (requestByteThreshold.isNotDefault)
+      'requestByteThreshold': requestByteThreshold.toString(),
+    'delayThreshold': ?delayThreshold?.toJson(),
+    if (elementCountLimit.isNotDefault) 'elementCountLimit': elementCountLimit,
+    if (requestByteLimit.isNotDefault) 'requestByteLimit': requestByteLimit,
+    if (flowControlElementLimit.isNotDefault)
+      'flowControlElementLimit': flowControlElementLimit,
+    if (flowControlByteLimit.isNotDefault)
+      'flowControlByteLimit': flowControlByteLimit,
+    if (flowControlLimitExceededBehavior.isNotDefault)
+      'flowControlLimitExceededBehavior': flowControlLimitExceededBehavior
+          .toJson(),
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      'elementCountThreshold=$elementCountThreshold',
+      'requestByteThreshold=$requestByteThreshold',
+      'elementCountLimit=$elementCountLimit',
+      'requestByteLimit=$requestByteLimit',
+      'flowControlElementLimit=$flowControlElementLimit',
+      'flowControlByteLimit=$flowControlByteLimit',
+      'flowControlLimitExceededBehavior=$flowControlLimitExceededBehavior',
+    ].join(',');
+    return 'BatchingSettingsProto(${$contents})';
+  }
+}
+
+/// `BatchingDescriptorProto` specifies the fields of the request message to be
+/// used for batching, and, optionally, the fields of the response message to be
+/// used for demultiplexing.
+final class BatchingDescriptorProto extends ProtoMessage {
+  static const String fullyQualifiedName = 'google.api.BatchingDescriptorProto';
+
+  /// The repeated field in the request message to be aggregated by batching.
+  final String batchedField;
+
+  /// A list of the fields in the request message. Two requests will be batched
+  /// together only if the values of every field specified in
+  /// `request_discriminator_fields` is equal between the two requests.
+  final List<String> discriminatorFields;
+
+  /// Optional. When present, indicates the field in the response message to be
+  /// used to demultiplex the response into multiple response messages, in
+  /// correspondence with the multiple request messages originally batched
+  /// together.
+  final String subresponseField;
+
+  BatchingDescriptorProto({
+    this.batchedField = '',
+    this.discriminatorFields = const [],
+    this.subresponseField = '',
+  }) : super(fullyQualifiedName);
+
+  factory BatchingDescriptorProto.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return BatchingDescriptorProto(
+      batchedField: switch (json['batchedField']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      discriminatorFields: switch (json['discriminatorFields']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException('"discriminatorFields" is not a list'),
+      },
+      subresponseField: switch (json['subresponseField']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (batchedField.isNotDefault) 'batchedField': batchedField,
+    if (discriminatorFields.isNotDefault)
+      'discriminatorFields': discriminatorFields,
+    if (subresponseField.isNotDefault) 'subresponseField': subresponseField,
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      'batchedField=$batchedField',
+      'subresponseField=$subresponseField',
+    ].join(',');
+    return 'BatchingDescriptorProto(${$contents})';
   }
 }
 
@@ -2332,8 +2622,8 @@ final class Control extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.Control';
 
   /// The service controller environment to use. If empty, no control plane
-  /// feature (like quota and billing) will be enabled. The recommended value for
-  /// most services is servicecontrol.googleapis.com
+  /// features (like quota and billing) will be enabled. The recommended value
+  /// for most services is servicecontrol.googleapis.com.
   final String environment;
 
   /// Defines policies applying to the API methods of the service.
@@ -5991,9 +6281,13 @@ final class ResourceReference extends ProtoMessage {
 ///       app_profile_id: profiles/prof_qux
 ///     }
 ///
-/// The routing header consists of one or multiple key-value pairs. Every key
-/// and value must be percent-encoded, and joined together in the format of
-/// `key1=value1&key2=value2`.
+/// The routing header consists of one or multiple key-value pairs. The order of
+/// the key-value pairs is undefined, the order of the `routing_parameters` in
+/// the `RoutingRule` only matters for the evaluation order of the path
+/// templates when `field` is the same. See the examples below for more details.
+///
+/// Every key and value in the routing header must be percent-encoded,
+/// and joined together in the following format: `key1=value1&key2=value2`.
 /// The examples below skip the percent-encoding for readability.
 ///
 /// Example 1
@@ -6564,8 +6858,7 @@ final class Service extends ProtoMessage {
   final List<MetricDescriptor> metrics;
 
   /// Defines the monitored resources used by this service. This is required
-  /// by the `Service.monitoring` and
-  /// `Service.logging` configurations.
+  /// by the `Service.monitoring` and `Service.logging` configurations.
   final List<MonitoredResourceDescriptor> monitoredResources;
 
   /// Billing configuration.
@@ -7065,30 +7358,6 @@ final class Usage extends ProtoMessage {
 }
 
 /// Usage configuration rules for the service.
-///
-/// NOTE: Under development.
-///
-///
-/// Use this rule to configure unregistered calls for the service. Unregistered
-/// calls are calls that do not contain consumer project identity.
-/// (Example: calls that do not contain an API key).
-/// By default, API methods do not allow unregistered calls, and each method call
-/// must be identified by a consumer project identity. Use this rule to
-/// allow/disallow unregistered calls.
-///
-/// Example of an API that wants to allow unregistered calls for entire service.
-///
-///     usage:
-///       rules:
-///       - selector: "*"
-///         allow_unregistered_calls: true
-///
-/// Example of a method that wants to allow unregistered calls.
-///
-///     usage:
-///       rules:
-///       - selector: "google.example.library.v1.LibraryService.CreateBook"
-///         allow_unregistered_calls: true
 final class UsageRule extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.UsageRule';
 
@@ -7099,8 +7368,12 @@ final class UsageRule extends ProtoMessage {
   /// details.
   final String selector;
 
-  /// If true, the selected method allows unregistered calls, e.g. calls
-  /// that don't identify any user or application.
+  /// Use this rule to configure unregistered calls for the service. Unregistered
+  /// calls are calls that do not contain consumer project identity.
+  /// (Example: calls that do not contain an API key).
+  ///
+  /// WARNING: By default, API methods do not allow unregistered calls, and each
+  /// method call must be identified by a consumer project identity.
   final bool allowUnregisteredCalls;
 
   /// If true, the selected method should skip service control and the control
@@ -7337,6 +7610,38 @@ final class ClientLibraryDestination extends ProtoEnum {
 
   @override
   String toString() => 'ClientLibraryDestination.$value';
+}
+
+/// The behavior to take when the flow control limit is exceeded.
+final class FlowControlLimitExceededBehaviorProto extends ProtoEnum {
+  /// Default behavior, system-defined.
+  static const unsetBehavior = FlowControlLimitExceededBehaviorProto(
+    'UNSET_BEHAVIOR',
+  );
+
+  /// Stop operation, raise error.
+  static const throwException = FlowControlLimitExceededBehaviorProto(
+    'THROW_EXCEPTION',
+  );
+
+  /// Pause operation until limit clears.
+  static const block = FlowControlLimitExceededBehaviorProto('BLOCK');
+
+  /// Continue operation, disregard limit.
+  static const ignore = FlowControlLimitExceededBehaviorProto('IGNORE');
+
+  /// The default value for [FlowControlLimitExceededBehaviorProto].
+  static const $default = unsetBehavior;
+
+  const FlowControlLimitExceededBehaviorProto(super.value);
+
+  factory FlowControlLimitExceededBehaviorProto.fromJson(Object? json) =>
+      FlowControlLimitExceededBehaviorProto(json as String);
+
+  bool get isNotDefault => this != $default;
+
+  @override
+  String toString() => 'FlowControlLimitExceededBehaviorProto.$value';
 }
 
 /// Classifies set of possible modifications to an object in the service
@@ -7987,6 +8292,201 @@ final class ErrorReason extends ProtoEnum {
   ///   }
   /// }
   static const overloadedCredentials = ErrorReason('OVERLOADED_CREDENTIALS');
+
+  /// The request whose associated location violates the location org policy
+  /// restrictions when creating resources in the restricted region.
+  ///
+  /// Example of an ErrorInfo when creating the Cloud Storage Bucket in the
+  /// container "projects/123" under a restricted region
+  /// "locations/asia-northeast3":
+  ///
+  ///     {
+  ///       "reason": "LOCATION_ORG_POLICY_VIOLATED",
+  ///       "domain": "googleapis.com",
+  ///       "metadata": {
+  ///         "resource": "projects/123",
+  ///         "location": "locations/asia-northeast3"
+  ///       }
+  ///     }
+  ///
+  /// This response indicates creating the Cloud Storage Bucket in
+  /// "locations/asia-northeast3" violates the location org policy restriction.
+  static const locationOrgPolicyViolated = ErrorReason(
+    'LOCATION_ORG_POLICY_VIOLATED',
+  );
+
+  /// The request is denied because it access data of regulated customers using
+  /// TLS 1.0 and 1.1.
+  ///
+  /// Example of an ErrorInfo when accessing a GCP resource "projects/123" that
+  /// is restricted by TLS Version Restriction for "pubsub.googleapis.com"
+  /// service.
+  ///
+  ///     {
+  ///       "reason": "TLS_ORG_POLICY_VIOLATED",
+  ///       "domain": "googleapis.com",
+  ///       "metadata": {
+  ///         "service": "pubsub.googleapis.com"
+  ///         "resource": "projects/123",
+  ///         "policyName": "constraints/gcp.restrictTLSVersion",
+  ///         "tlsVersion": "TLS_VERSION_1"
+  ///       }
+  ///     }
+  static const tlsOrgPolicyViolated = ErrorReason('TLS_ORG_POLICY_VIOLATED');
+
+  /// The request is denied because the associated project has exceeded the
+  /// emulator quota limit.
+  ///
+  /// Example of an ErrorInfo when the associated "projects/123" has exceeded the
+  /// emulator quota limit.
+  ///
+  ///     {
+  ///       "reason": "EMULATOR_QUOTA_EXCEEDED",
+  ///       "domain": "googleapis.com",
+  ///       "metadata": {
+  ///           "service": "pubsub.googleapis.com"
+  ///           "consumer": "projects/123"
+  ///        }
+  ///     }
+  static const emulatorQuotaExceeded = ErrorReason('EMULATOR_QUOTA_EXCEEDED');
+
+  /// The request is denied because the associated application credential header
+  /// is invalid for an Android applications.
+  ///
+  /// Example of an ErrorInfo when the request from an Android application to the
+  /// "pubsub.googleapis.com" with an invalid application credential header.
+  ///
+  ///     {
+  ///       "reason": "CREDENTIAL_ANDROID_APP_INVALID",
+  ///       "domain": "googleapis.com",
+  ///       "metadata": {
+  ///           "service": "pubsub.googleapis.com"
+  ///        }
+  ///     }
+  static const credentialAndroidAppInvalid = ErrorReason(
+    'CREDENTIAL_ANDROID_APP_INVALID',
+  );
+
+  /// The request is denied because IAM permission on resource is denied.
+  ///
+  /// Example of an ErrorInfo when the IAM permission `aiplatform.datasets.list`
+  /// is denied on resource `projects/123`.
+  ///
+  ///     {
+  ///       "reason": "IAM_PERMISSION_DENIED",
+  ///       "domain": "googleapis.com",
+  ///       "metadata": {
+  ///           "resource": "projects/123"
+  ///           "permission": "aiplatform.datasets.list"
+  ///        }
+  ///     }
+  static const iamPermissionDenied = ErrorReason('IAM_PERMISSION_DENIED');
+
+  /// The request is denied because it contains the invalid JWT token.
+  ///
+  /// Example of an ErrorInfo when the request contains an invalid JWT token for
+  /// service `storage.googleapis.com`.
+  ///
+  ///     {
+  ///       "reason": "JWT_TOKEN_INVALID",
+  ///       "domain": "googleapis.com",
+  ///       "metadata": {
+  ///           "service": "storage.googleapis.com"
+  ///        }
+  ///     }
+  static const jwtTokenInvalid = ErrorReason('JWT_TOKEN_INVALID');
+
+  /// The request is denied because it contains credential with type that is
+  /// unsupported.
+  ///
+  /// Example of an ErrorInfo when the request contains an unsupported credential
+  /// type for service `storage.googleapis.com`.
+  ///
+  ///     {
+  ///       "reason": "CREDENTIAL_TYPE_UNSUPPORTED",
+  ///       "domain": "googleapis.com",
+  ///       "metadata": {
+  ///           "service": "storage.googleapis.com"
+  ///        }
+  ///     }
+  static const credentialTypeUnsupported = ErrorReason(
+    'CREDENTIAL_TYPE_UNSUPPORTED',
+  );
+
+  /// The request is denied because it contains unsupported account type.
+  ///
+  /// Example of an ErrorInfo when the request contains an unsupported account
+  /// type for service `storage.googleapis.com`.
+  ///
+  ///     {
+  ///       "reason": "ACCOUNT_TYPE_UNSUPPORTED",
+  ///       "domain": "googleapis.com",
+  ///       "metadata": {
+  ///           "service": "storage.googleapis.com"
+  ///        }
+  ///     }
+  static const accountTypeUnsupported = ErrorReason('ACCOUNT_TYPE_UNSUPPORTED');
+
+  /// The request is denied because the API endpoint is restricted by
+  /// administrators according to the organization policy constraint.
+  /// For more information see
+  /// https://cloud.google.com/assured-workloads/docs/restrict-endpoint-usage.
+  ///
+  /// Example of an ErrorInfo when access to Google Cloud Storage service is
+  /// restricted by Restrict Endpoint Usage policy:
+  ///
+  ///     {
+  ///       "reason": "ENDPOINT_USAGE_RESTRICTION_VIOLATED",
+  ///       "domain": "googleapis.com/policies/endpointUsageRestriction",
+  ///       "metadata": {
+  ///         "policy_name": "constraints/gcp.restrictEndpointUsage",
+  ///         "checked_value": "storage.googleapis.com"
+  ///         "consumer": "organization/123"
+  ///         "service": "storage.googleapis.com"
+  ///        }
+  ///     }
+  static const endpointUsageRestrictionViolated = ErrorReason(
+    'ENDPOINT_USAGE_RESTRICTION_VIOLATED',
+  );
+
+  /// The request is denied because the TLS Cipher Suite is restricted by
+  /// administrators according to the organization policy constraint.
+  /// For more information see
+  /// https://cloud.google.com/assured-workloads/docs/restrict-tls-cipher-suites
+  ///
+  /// Example of an ErrorInfo when access to Google Cloud BigQuery service is
+  /// restricted by Restrict TLS Cipher Suites policy:
+  ///
+  ///     {
+  ///       "reason": "TLS_CIPHER_RESTRICTION_VIOLATED",
+  ///       "domain": "googleapis.com/policies/tlsCipherRestriction",
+  ///       "metadata": {
+  ///         "policy_name": "constraints/gcp.restrictTLSCipherSuites",
+  ///         "checked_value": "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
+  ///         "consumer": "organization/123"
+  ///         "service": "bigquery.googleapis.com"
+  ///        }
+  ///     }
+  static const tlsCipherRestrictionViolated = ErrorReason(
+    'TLS_CIPHER_RESTRICTION_VIOLATED',
+  );
+
+  /// The request is denied because the MCP activation check fails.
+  ///
+  /// Example of an ErrorInfo when the container "projects/123" contacting
+  /// "pubsub.googleapis.com" service which is disabled by MCP:
+  ///
+  ///     { "reason": "MCP_SERVER_DISABLED",
+  ///       "domain": "googleapis.com",
+  ///       "metadata": {
+  ///         "consumer": "projects/123",
+  ///         "service": "pubsub.googleapis.com"
+  ///       }
+  ///     }
+  ///
+  /// This response indicates the "pubsub.googleapis.com" has been disabled in
+  /// "projects/123" for MCP.
+  static const mcpServerDisabled = ErrorReason('MCP_SERVER_DISABLED');
 
   /// The default value for [ErrorReason].
   static const $default = errorReasonUnspecified;
