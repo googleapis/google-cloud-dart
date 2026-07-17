@@ -29,6 +29,7 @@ sources:
     sha256: 146a5a3d26f3c8abef8862f4d6122674f2c4d0d362a5981fc283c1cc1c52339a
 default:
   output: generated/
+  tag_format: '{name}/v{version}'
   dart:
     api_keys_environment_variables: GOOGLE_API_KEY
     issue_tracker_url: https://github.com/googleapis/google-cloud-dart/issues
