@@ -11,11 +11,18 @@ environment:
 resolution: workspace
 
 dependencies:
+  collection: ^1.19.1
+  ffi: ^2.2.0
   fixnum: ^1.1.1
+  google_cloud: '>=0.3.0 <0.6.0'
+  google_cloud_protobuf: ^0.5.0
+  google_cloud_rpc: ^0.5.0
+  googleapis_auth: ^2.0.0
   grpc: ^5.1.0
+  http: ^1.6.0
+  meta: ^1.18.1
   protobuf: ^6.0.0
 
 dev_dependencies:
-  http: ^1.6.0
   protoc_plugin: ^25.0.0
   test: ^1.24.0

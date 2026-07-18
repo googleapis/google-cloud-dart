@@ -12,7 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export 'src/generated/google/pubsub/v1/pubsub.pb.dart';
-export 'src/generated/google/pubsub/v1/pubsub.pbgrpc.dart';
-export 'src/generated/google/pubsub/v1/schema.pb.dart';
-export 'src/generated/google/pubsub/v1/schema.pbgrpc.dart';
+export 'package:grpc/grpc.dart'
+    show
+        BaseAuthenticator,
+        ComputeEngineAuthenticator,
+        ServiceAccountAuthenticator,
+        applicationDefaultCredentialsAuthenticator;
+
+export 'src/client.dart' show PubSub;
+export 'src/exceptions.dart';
+export 'src/message.dart' show Message, ReceivedMessage;
+export 'src/subscription.dart' show Subscription;
+export 'src/topic.dart' show Topic;
