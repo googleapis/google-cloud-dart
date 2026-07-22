@@ -260,20 +260,20 @@ libraries:
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_aiplatform_v1beta1
       supports_sse: true
   - name: google_cloud_api
-    keep:
-      - CHANGELOG.md
     version: 0.5.3
     apis:
       - path: google/api
     copyright_year: "2025"
+    keep:
+      - CHANGELOG.md
     dart:
       name_override: api
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_api
   - name: google_cloud_common
-    keep:
-      - CHANGELOG.md
     version: 0.5.3
     copyright_year: "2025"
+    keep:
+      - CHANGELOG.md
     dart:
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_common
   - name: google_cloud_firestore_v1
@@ -294,44 +294,44 @@ libraries:
         > [`package:google_cloud_firestore`](https://pub.dev/packages/google_cloud_firestore).
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_firestore_v1
   - name: google_cloud_functions_v2
-    keep:
-      - CHANGELOG.md
     version: 0.5.3
     copyright_year: "2025"
+    keep:
+      - CHANGELOG.md
     dart:
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_functions_v2
   - name: google_cloud_iam_v1
-    keep:
-      - CHANGELOG.md
     version: 0.5.3
     apis:
       - path: google/iam/v1
     copyright_year: "2025"
+    keep:
+      - CHANGELOG.md
     dart:
       name_override: iam
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_iam_v1
   - name: google_cloud_language_v2
-    keep:
-      - CHANGELOG.md
     version: 0.5.3
     copyright_year: "2025"
+    keep:
+      - CHANGELOG.md
     dart:
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_language_v2
   - name: google_cloud_location
-    keep:
-      - CHANGELOG.md
     version: 0.5.3
     copyright_year: "2025"
+    keep:
+      - CHANGELOG.md
     dart:
       name_override: location
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_location
   - name: google_cloud_logging_type
-    keep:
-      - CHANGELOG.md
     version: 0.5.3
     apis:
       - path: google/logging/type
     copyright_year: "2025"
+    keep:
+      - CHANGELOG.md
     dart:
       name_override: logging_type
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_logging_type
@@ -466,11 +466,11 @@ libraries:
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_showcase_v1beta1
       supports_sse: true
   - name: google_cloud_type
-    keep:
-      - CHANGELOG.md
     version: 0.5.3
     apis:
       - path: google/type
     copyright_year: "2025"
+    keep:
+      - CHANGELOG.md
     dart:
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_type
