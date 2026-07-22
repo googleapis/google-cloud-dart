@@ -63,6 +63,7 @@ libraries:
       - path: google/ai/generativelanguage/v1beta
     copyright_year: "2025"
     keep:
+      - CHANGELOG.md
       - dart_test.yaml
       - example/application_default_credentials.dart
       - example/main.dart
@@ -152,6 +153,7 @@ libraries:
     version: 0.5.3
     copyright_year: "2025"
     keep:
+      - CHANGELOG.md
       - dart_test.yaml
       - example/main.dart
       - test/generate_test.dart
@@ -258,6 +260,8 @@ libraries:
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_aiplatform_v1beta1
       supports_sse: true
   - name: google_cloud_api
+    keep:
+      - CHANGELOG.md
     version: 0.5.3
     apis:
       - path: google/api
@@ -266,6 +270,8 @@ libraries:
       name_override: api
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_api
   - name: google_cloud_common
+    keep:
+      - CHANGELOG.md
     version: 0.5.3
     copyright_year: "2025"
     dart:
@@ -276,6 +282,7 @@ libraries:
       - path: google/firestore/v1
     copyright_year: "2026"
     keep:
+      - CHANGELOG.md
       - dart_test.yaml
       - example/main.dart
       - test/firestore_test.dart
@@ -287,11 +294,15 @@ libraries:
         > [`package:google_cloud_firestore`](https://pub.dev/packages/google_cloud_firestore).
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_firestore_v1
   - name: google_cloud_functions_v2
+    keep:
+      - CHANGELOG.md
     version: 0.5.3
     copyright_year: "2025"
     dart:
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_functions_v2
   - name: google_cloud_iam_v1
+    keep:
+      - CHANGELOG.md
     version: 0.5.3
     apis:
       - path: google/iam/v1
@@ -300,17 +311,23 @@ libraries:
       name_override: iam
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_iam_v1
   - name: google_cloud_language_v2
+    keep:
+      - CHANGELOG.md
     version: 0.5.3
     copyright_year: "2025"
     dart:
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_language_v2
   - name: google_cloud_location
+    keep:
+      - CHANGELOG.md
     version: 0.5.3
     copyright_year: "2025"
     dart:
       name_override: location
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_location
   - name: google_cloud_logging_type
+    keep:
+      - CHANGELOG.md
     version: 0.5.3
     apis:
       - path: google/logging/type
@@ -325,6 +342,7 @@ libraries:
       - path: google/logging/v2
     copyright_year: "2025"
     keep:
+      - CHANGELOG.md
       - dart_test.yaml
       - test/write_log_test.dart
     dart:
@@ -336,6 +354,7 @@ libraries:
       - path: google/longrunning
     copyright_year: "2025"
     keep:
+      - CHANGELOG.md
       - test/operation_test.dart
       - lib/src/longrunning.p.dart
     dart:
@@ -349,6 +368,7 @@ libraries:
       - path: google/protobuf
     copyright_year: "2025"
     keep:
+      - CHANGELOG.md
       - lib/src/encoding.dart
       - test/any_test.dart
       - test/duration_test.dart
@@ -383,6 +403,7 @@ libraries:
     apis:
       - path: src/google/protobuf
     keep:
+      - CHANGELOG.md
       - test/serialization_test.dart
     output: generated/google_cloud_protojson_conformance
     roots:
@@ -400,6 +421,7 @@ libraries:
       - path: google/rpc
     copyright_year: "2025"
     keep:
+      - CHANGELOG.md
       - lib/exceptions.dart
       - lib/service_client.dart
       - lib/src/exceptions.dart
@@ -419,6 +441,7 @@ libraries:
     version: 0.5.3
     copyright_year: "2025"
     keep:
+      - CHANGELOG.md
       - dart_test.yaml
       - test/secret_test.dart
     dart:
@@ -430,6 +453,7 @@ libraries:
       - path: schema/google/showcase/v1beta1
     copyright_year: "2025"
     keep:
+      - CHANGELOG.md
       - dart_test.yaml
       - test/compliance_test.dart
       - test/echo_test.dart
@@ -444,6 +468,8 @@ libraries:
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_showcase_v1beta1
       supports_sse: true
   - name: google_cloud_type
+    keep:
+      - CHANGELOG.md
     version: 0.5.3
     apis:
       - path: google/type
