@@ -403,7 +403,6 @@ libraries:
     apis:
       - path: src/google/protobuf
     keep:
-      - CHANGELOG.md
       - test/serialization_test.dart
     output: generated/google_cloud_protojson_conformance
     roots:
@@ -453,7 +452,6 @@ libraries:
       - path: schema/google/showcase/v1beta1
     copyright_year: "2025"
     keep:
-      - CHANGELOG.md
       - dart_test.yaml
       - test/compliance_test.dart
       - test/echo_test.dart
