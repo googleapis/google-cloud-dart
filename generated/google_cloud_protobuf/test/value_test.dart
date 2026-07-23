@@ -106,4 +106,67 @@ void main() {
   test('decode invalid', () {
     expect(() => Value.fromJson(DateTime.now()), throwsFormatException);
   });
+
+  group('decode cyclic', () {
+    test('map referencing itself', () {
+      final map = <String, Object?>{};
+      map['x'] = map;
+
+      expect(() => Value.fromJson(map), throwsFormatException);
+    });
+
+    test('list containing itself', () {
+      final list = <Object?>[];
+      list.add(list);
+
+      expect(() => Value.fromJson(list), throwsFormatException);
+    });
+
+    test('map and list referencing each other', () {
+      final map = <String, Object?>{};
+      final list = <Object?>[map];
+      map['list'] = list;
+
+      expect(() => Value.fromJson(map), throwsFormatException);
+      expect(() => Value.fromJson(list), throwsFormatException);
+    });
+
+    test('map nested below the root', () {
+      final inner = <String, Object?>{};
+      inner['self'] = inner;
+
+      expect(
+        () => Value.fromJson({
+          'a': [
+            {'b': inner},
+          ],
+        }),
+        throwsFormatException,
+      );
+    });
+  });
+
+  group('decode repeated but acyclic', () {
+    test('map referenced by two keys', () {
+      final shared = <String, Object?>{'a': 1};
+
+      final value = Value.fromJson({'x': shared, 'y': shared});
+
+      expect(value.toJson(), {
+        'x': {'a': 1.0},
+        'y': {'a': 1.0},
+      });
+    });
+
+    test('list referenced by two elements', () {
+      final shared = <Object?>[1, 2];
+
+      final value = Value.fromJson([shared, shared]);
+
+      expect(value.toJson(), [
+        [1.0, 2.0],
+        [1.0, 2.0],
+      ]);
+    });
+  });
 }
