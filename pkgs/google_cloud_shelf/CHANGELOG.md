@@ -1,3 +1,7 @@
+## 0.6.0+2-wip
+
+- Widened the `meta` constraint from `^1.18.2` to `^1.17.0`.
+
 ## 0.6.0+1
 
 - Updated `README.md` to reference `StructuredLogger` instead of
