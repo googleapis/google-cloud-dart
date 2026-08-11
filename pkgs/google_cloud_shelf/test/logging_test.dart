@@ -315,11 +315,11 @@ Details:
           headers: await runner.headers(),
         );
         expect(response.statusCode, 200);
-        final entries = await waitForLogs('jsonPayload.message:"$uniqueId"');
+        final entries = await waitForLogs('textPayload:"$uniqueId"');
 
         expect(entries, isNotEmpty);
         final entry = entries.first;
-        expect(entry.jsonPayload?.toJson(), {'message': uniqueId});
+        expect(entry.textPayload, uniqueId);
         expect(entry.severity, LogSeverity.emergency);
         expect(entry.trace, startsWith('projects/$projectId/traces/'));
         expect(entry.spanId, isNotEmpty);

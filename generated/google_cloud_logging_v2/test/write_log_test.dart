@@ -95,22 +95,14 @@ void main() async {
           ],
         ),
       );
-      // Writes are not always committed instantly.
-      await Future<void>.delayed(const Duration(seconds: 15));
       addTearDown(
         () => logService.deleteLog(DeleteLogRequest(logName: logName)),
       );
 
-      final list = await logService.listLogEntries(
-        ListLogEntriesRequest(
-          filter: 'logName:"$logName"',
-          orderBy: 'timestamp desc',
-          resourceNames: ['projects/$projectId'],
-        ),
-      );
-      expect(list.entries, hasLength(1));
-      expect(list.entries[0].severity, LogSeverity.critical);
-      expect(list.entries[0].textPayload, 'Hello World!');
+      final list = await waitForLogs('logName:"$logName"');
+      expect(list, hasLength(1));
+      expect(list[0].severity, LogSeverity.critical);
+      expect(list[0].textPayload, 'Hello World!');
     });
   });
 }

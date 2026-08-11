@@ -76,12 +76,12 @@ Future<List<LogEntry>> waitForLogs(
       if (listResult.entries.isNotEmpty) {
         print(
           '[waitForLogs] Found ${listResult.entries.length} log entry(ies) '
-          'for "$filter" in ${elapsed.inSeconds}s (attempt $attempt).',
+          'in ${elapsed.inSeconds}s (attempt $attempt).',
         );
         return listResult.entries;
       }
       print(
-        '[waitForLogs] Waiting for logs matching "$filter"... '
+        '[waitForLogs] Waiting for logs... '
         'elapsed: ${elapsed.inSeconds}s (attempt $attempt)',
       );
       attempt++;
