@@ -61,18 +61,30 @@ Future<List<LogEntry>> waitForLogs(
       pageSize: count,
     );
 
-    final endTime = DateTime.now().add(timeout);
+    final startTime = DateTime.now();
+    final endTime = startTime.add(timeout);
 
     var first = true;
+    var attempt = 1;
     do {
       if (!first) {
         await Future<void>.delayed(const Duration(seconds: 2));
       }
       first = false;
+      final elapsed = DateTime.now().difference(startTime);
       final listResult = await loggingService.listLogEntries(request);
       if (listResult.entries.isNotEmpty) {
+        print(
+          '[waitForLogs] Found ${listResult.entries.length} log entry(ies) '
+          'for "$filter" in ${elapsed.inSeconds}s (attempt $attempt).',
+        );
         return listResult.entries;
       }
+      print(
+        '[waitForLogs] Waiting for logs matching "$filter"... '
+        'elapsed: ${elapsed.inSeconds}s (attempt $attempt)',
+      );
+      attempt++;
     } while (DateTime.now().isBefore(endTime));
     throw StateError(
       'Log entries matching "$filter" were not found within the timeout.',
