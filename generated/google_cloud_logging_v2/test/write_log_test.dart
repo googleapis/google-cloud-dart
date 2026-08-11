@@ -32,7 +32,7 @@ void main() async {
   late LoggingServiceV2 logService;
   late http.Client client;
 
-  group('LoggingServiceV2', () {
+  group('LoggingServiceV2', timeout: const Timeout(Duration(minutes: 2)), () {
     setUp(() async {
       Future<auth.AutoRefreshingAuthClient> authClient() async =>
           await auth.clientViaApplicationDefaultCredentials(
@@ -95,9 +95,13 @@ void main() async {
           ],
         ),
       );
-      addTearDown(
-        () => logService.deleteLog(DeleteLogRequest(logName: logName)),
-      );
+      addTearDown(() async {
+        try {
+          await logService.deleteLog(DeleteLogRequest(logName: logName));
+        } on NotFoundException {
+          // Ignored if the log was not indexed before test ended.
+        }
+      });
 
       final list = await waitForLogs('logName:"$logName"');
       expect(list, hasLength(1));
