@@ -15,6 +15,7 @@
 import 'dart:io';
 import 'package:google_cloud_logging_v2/logging.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
+import 'package:test/test.dart';
 
 /// A real Google test account managed by bquinlan@google.com using Rhea.
 const googleTestUser = 'daenerysstone.938939@gmail.com';
@@ -72,18 +73,18 @@ Future<List<LogEntry>> waitForLogs(
       }
       first = false;
       final elapsed = DateTime.now().difference(startTime);
+      printOnFailure(
+        '[waitForLogs] Waiting for logs matching "$filter"... '
+        'elapsed: ${elapsed.inSeconds}s (attempt $attempt)',
+      );
       final listResult = await loggingService.listLogEntries(request);
       if (listResult.entries.isNotEmpty) {
-        print(
+        printOnFailure(
           '[waitForLogs] Found ${listResult.entries.length} log entry(ies) '
-          'in ${elapsed.inSeconds}s (attempt $attempt).',
+          'for "$filter" in ${elapsed.inSeconds}s (attempt $attempt).',
         );
         return listResult.entries;
       }
-      print(
-        '[waitForLogs] Waiting for logs... '
-        'elapsed: ${elapsed.inSeconds}s (attempt $attempt)',
-      );
       attempt++;
     } while (DateTime.now().isBefore(endTime));
     throw StateError(
