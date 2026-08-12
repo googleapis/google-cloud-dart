@@ -216,110 +216,116 @@ Details:
     await Future<void>.delayed(const Duration(milliseconds: 10));
   });
 
-  group('logging server', tags: 'google-cloud', () {
-    late CloudRunner runner;
+  group(
+    'logging server',
+    tags: 'google-cloud',
+    timeout: const Timeout(Duration(minutes: 2)),
+    () {
+      late CloudRunner runner;
 
-    setUpAll(() async {
-      runner = await CloudRunner.start(
-        'pkgs/google_cloud_shelf/test/logging_server.dart',
-      );
-    });
-
-    tearDownAll(() async {
-      await runner.stop();
-    });
-
-    test('print', () async {
-      final uniqueId = 'print: ${randomAlphaNumString(20)}';
-
-      final response = await http.get(
-        runner.serverUri.replace(
-          path: '/print',
-          queryParameters: {'msg': uniqueId},
-        ),
-        headers: await runner.headers(),
-      );
-      expect(response.statusCode, 200);
-      final entries = await waitForLogs('textPayload:"$uniqueId"');
-
-      expect(entries, isNotEmpty);
-      final entry = entries.first;
-      expect(entry.textPayload, uniqueId);
-      expect(entry.severity, LogSeverity.info);
-      expect(entry.trace, startsWith('projects/$projectId/traces/'));
-      expect(entry.spanId, isNotEmpty);
-    });
-
-    test('throw', () async {
-      final uniqueId = 'throw: ${randomAlphaNumString(20)}';
-
-      final response = await http.get(
-        runner.serverUri.replace(
-          path: '/throw',
-          queryParameters: {'msg': uniqueId},
-        ),
-        headers: await runner.headers(),
-      );
-      expect(response.statusCode, 500);
-      final entries = await waitForLogs(
-        'jsonPayload.message:"Exception: $uniqueId"',
-      );
-
-      expect(entries, isNotEmpty);
-      final entry = entries.first;
-      expect(entry.jsonPayload?.toJson(), {
-        'message': 'Exception: $uniqueId',
-        'stack_trace': contains('logging_server.dart'),
+      setUpAll(() async {
+        runner = await CloudRunner.start(
+          'pkgs/google_cloud_shelf/test/logging_server.dart',
+        );
       });
-      expect(entry.severity, LogSeverity.error);
-      expect(entry.trace, startsWith('projects/$projectId/traces/'));
-      expect(entry.spanId, isNotEmpty);
-    });
 
-    test('logging', () async {
-      final uniqueId = 'log: ${randomAlphaNumString(20)}';
-
-      final response = await http.get(
-        runner.serverUri.replace(
-          path: '/logging',
-          queryParameters: {'msg': uniqueId},
-        ),
-        headers: await runner.headers(),
-      );
-      expect(response.statusCode, 200);
-      final entries = await waitForLogs('jsonPayload.message:"$uniqueId"');
-
-      expect(entries, isNotEmpty);
-      final entry = entries.first;
-      expect(entry.jsonPayload?.toJson(), {
-        'loggerName': 'MyClass',
-        'message': uniqueId,
+      tearDownAll(() async {
+        await runner.stop();
       });
-      expect(entry.severity, LogSeverity.error);
-      expect(entry.trace, startsWith('projects/$projectId/traces/'));
-      expect(entry.spanId, isNotEmpty);
-    });
 
-    test('structured logging', () async {
-      final uniqueId = 'structured: ${randomAlphaNumString(20)}';
+      test('print', () async {
+        final uniqueId = 'print: ${randomAlphaNumString(20)}';
 
-      final response = await http.get(
-        runner.serverUri.replace(
-          path: '/structured',
-          queryParameters: {'msg': uniqueId},
-        ),
-        headers: await runner.headers(),
-      );
-      expect(response.statusCode, 200);
-      final entries = await waitForLogs('textPayload:"$uniqueId"');
+        final response = await http.get(
+          runner.serverUri.replace(
+            path: '/print',
+            queryParameters: {'msg': uniqueId},
+          ),
+          headers: await runner.headers(),
+        );
+        expect(response.statusCode, 200);
+        final entries = await waitForLogs('textPayload:"$uniqueId"');
 
-      expect(entries, isNotEmpty);
-      final entry = entries.first;
-      expect(entry.severity, LogSeverity.emergency);
-      expect(entry.trace, startsWith('projects/$projectId/traces/'));
-      expect(entry.spanId, isNotEmpty);
-    });
-  });
+        expect(entries, isNotEmpty);
+        final entry = entries.first;
+        expect(entry.textPayload, uniqueId);
+        expect(entry.severity, LogSeverity.info);
+        expect(entry.trace, startsWith('projects/$projectId/traces/'));
+        expect(entry.spanId, isNotEmpty);
+      });
+
+      test('throw', () async {
+        final uniqueId = 'throw: ${randomAlphaNumString(20)}';
+
+        final response = await http.get(
+          runner.serverUri.replace(
+            path: '/throw',
+            queryParameters: {'msg': uniqueId},
+          ),
+          headers: await runner.headers(),
+        );
+        expect(response.statusCode, 500);
+        final entries = await waitForLogs(
+          'jsonPayload.message:"Exception: $uniqueId"',
+        );
+
+        expect(entries, isNotEmpty);
+        final entry = entries.first;
+        expect(entry.jsonPayload?.toJson(), {
+          'message': 'Exception: $uniqueId',
+          'stack_trace': contains('logging_server.dart'),
+        });
+        expect(entry.severity, LogSeverity.error);
+        expect(entry.trace, startsWith('projects/$projectId/traces/'));
+        expect(entry.spanId, isNotEmpty);
+      });
+
+      test('logging', () async {
+        final uniqueId = 'log: ${randomAlphaNumString(20)}';
+
+        final response = await http.get(
+          runner.serverUri.replace(
+            path: '/logging',
+            queryParameters: {'msg': uniqueId},
+          ),
+          headers: await runner.headers(),
+        );
+        expect(response.statusCode, 200);
+        final entries = await waitForLogs('jsonPayload.message:"$uniqueId"');
+
+        expect(entries, isNotEmpty);
+        final entry = entries.first;
+        expect(entry.jsonPayload?.toJson(), {
+          'loggerName': 'MyClass',
+          'message': uniqueId,
+        });
+        expect(entry.severity, LogSeverity.error);
+        expect(entry.trace, startsWith('projects/$projectId/traces/'));
+        expect(entry.spanId, isNotEmpty);
+      });
+
+      test('structured logging', () async {
+        final uniqueId = 'structured: ${randomAlphaNumString(20)}';
+
+        final response = await http.get(
+          runner.serverUri.replace(
+            path: '/structured',
+            queryParameters: {'msg': uniqueId},
+          ),
+          headers: await runner.headers(),
+        );
+        expect(response.statusCode, 200);
+        final entries = await waitForLogs('textPayload:"$uniqueId"');
+
+        expect(entries, isNotEmpty);
+        final entry = entries.first;
+        expect(entry.textPayload, uniqueId);
+        expect(entry.severity, LogSeverity.emergency);
+        expect(entry.trace, startsWith('projects/$projectId/traces/'));
+        expect(entry.spanId, isNotEmpty);
+      });
+    },
+  );
 }
 
 enum _ResponseScenarios {
