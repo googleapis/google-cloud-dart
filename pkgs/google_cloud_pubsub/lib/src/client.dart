@@ -99,16 +99,19 @@ final class PubSub {
 
   /// Turns the protobuf-generated [grpc.ReceivedMessage] into a
   /// [ReceivedMessage].
-  static ReceivedMessage _mapReceivedMessage(grpc.ReceivedMessage m) =>
-      ReceivedMessage(
-        ackId: m.ackId,
-        messageId: m.message.messageId,
-        publishTime: m.message.publishTime.toDateTime(),
-        message: Message(
-          data: m.message.data,
-          attributes: m.message.attributes,
-        ),
-      );
+  static ReceivedMessage _mapReceivedMessage(
+    grpc.ReceivedMessage m, {
+    FutureOr<void> Function(List<String> ackIds)? ackHandler,
+    FutureOr<void> Function(List<String> ackIds, int seconds)?
+    modifyDeadlineHandler,
+  }) => ReceivedMessage(
+    ackId: m.ackId,
+    messageId: m.message.messageId,
+    publishTime: m.message.publishTime.toDateTime(),
+    ackHandler: ackHandler,
+    modifyDeadlineHandler: modifyDeadlineHandler,
+    message: Message(data: m.message.data, attributes: m.message.attributes),
+  );
 
   /// Constructs a client used to communicate with [Google Cloud Pub/Sub][].
   ///
@@ -375,7 +378,16 @@ final class PubSub {
         options: await _callOptions,
       );
 
-      return response.receivedMessages.map(_mapReceivedMessage).toList();
+      return response.receivedMessages
+          .map(
+            (m) => _mapReceivedMessage(
+              m,
+              ackHandler: (ackIds) => acknowledge(subscription, ackIds),
+              modifyDeadlineHandler: (ackIds, seconds) =>
+                  modifyAckDeadline(subscription, ackIds, seconds),
+            ),
+          )
+          .toList();
     } on GrpcError catch (e) {
       throw _mapGrpcError(
         e,
@@ -417,13 +429,37 @@ final class PubSub {
           ..streamAckDeadlineSeconds = streamAckDeadlineSeconds,
       );
       // TODO(sigurdm): Retry on broken connections.
+      void handleAck(List<String> ackIds) {
+        if (!requestController.isClosed) {
+          requestController.add(
+            grpc.StreamingPullRequest()..ackIds.addAll(ackIds),
+          );
+        }
+      }
+
+      void handleModifyDeadline(List<String> ackIds, int seconds) {
+        if (!requestController.isClosed) {
+          requestController.add(
+            grpc.StreamingPullRequest()
+              ..modifyDeadlineAckIds.addAll(ackIds)
+              ..modifyDeadlineSeconds.addAll(
+                List.filled(ackIds.length, seconds),
+              ),
+          );
+        }
+      }
+
       final responseStream = _subscriber.streamingPull(
         requestController.stream,
         options: options,
       );
       await for (final response in responseStream) {
         for (final m in response.receivedMessages) {
-          yield _mapReceivedMessage(m);
+          yield _mapReceivedMessage(
+            m,
+            ackHandler: handleAck,
+            modifyDeadlineHandler: handleModifyDeadline,
+          );
         }
       }
     } on GrpcError catch (e) {
