@@ -22,9 +22,10 @@ export LIBRARIAN_VERSION=$(GOPROXY=direct go list -m -u -f '{{.Version}}' \
 echo $LIBRARIAN_VERSION
 ```
 
-Update the `LIBRARIAN_VERSION` environment variable in
-[`.github/workflows/dart_checks.yaml`](../.github/workflows/dart_checks.yaml)
-to match this version.
+Update the version in both:
+- `LIBRARIAN_VERSION` in
+  [`.github/workflows/dart_checks.yaml`](../.github/workflows/dart_checks.yaml)
+- The top-level `version` field in [`../librarian.yaml`](../librarian.yaml)
 
 ## 2. Update API sources (optional)
 
