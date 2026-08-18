@@ -1,39 +1,73 @@
 
-## Install prerequesits
+# Releasing Generated Packages
 
-dart pub global activate dart_apitool
+This document describes how to update API descriptions and release generated
+packages.
 
-# 1: Upgrade to the latest version of librarian
+## Prerequisites
+
+Install `dart_apitool` for checking API compatibility:
 
 ```bash
-export LIBRARY_VERSION=$(go list -m -u -f '{{.Version}}' github.com/googleapis/librarian@main)
-echo $LIBRARY_VERSION
+dart pub global activate dart_apitool
+```
+
+## 1. Upgrade to the latest version of Librarian
+
+Find the latest version of Librarian on `@main`:
+
+```bash
+export LIBRARIAN_VERSION=$(GOPROXY=direct go list -m -u -f '{{.Version}}' \
+  github.com/googleapis/librarian@main)
+echo $LIBRARIAN_VERSION
 ```
 
 Update the `LIBRARIAN_VERSION` environment variable in
-[.github/workflows/dart_checks.yaml](../.github/workflows/dart_checks.yaml).
+[`.github/workflows/dart_checks.yaml`](../.github/workflows/dart_checks.yaml)
+to match this version.
 
-# 2: Update API sources
+## 2. Update API sources (optional)
 
-```bash
-go run github.com/googleapis/librarian/cmd/librarian@${LIBRARIAN_VERSION} update sources.conformance sources.googleapis sources.protobuf sources.showcase
-```
-
-> [!NOTE]
-> Configuration for API source descriptions is found in the `[sources]`
-> section of the root [`../librarian.yaml`](../librarian.yaml).
-
-# 3: Regenerate the Dart packages
+Update the API source descriptions in [`../librarian.yaml`](../librarian.yaml)
+to their latest versions:
 
 ```bash
-go run github.com/googleapis/librarian/cmd/librarian@${LIBRARIAN_VERSION} generate --all
+go run github.com/googleapis/librarian/cmd/librarian@${LIBRARIAN_VERSION} \
+  update \
+  sources.conformance sources.googleapis sources.protobuf sources.showcase
 ```
 
-# 4: Create a PR and merge it
+## 3. Regenerate the Dart packages
 
-TODO: what details do I need here?
+Regenerate all packages, tidy configuration, and update documentation:
+
+```bash
+go run github.com/googleapis/librarian/cmd/librarian@${LIBRARIAN_VERSION} \
+  generate -all
+go run github.com/googleapis/librarian/cmd/librarian@${LIBRARIAN_VERSION} \
+  tidy
+dart run tool/update_docs.dart
+```
+
+## 4. Create a PR and merge it
+
+1. Verify that all tests and analysis pass locally:
+   ```bash
+   dart analyze
+   dart test
+   ```
+2. Commit the changes and open a pull request against `main`. Use a commit
+   message that describes the functionality added from the point-of-view of
+   the developer, e.g., "feat: add setup and test agentic skills".
 
 > [!TIP]
-> Steps 1-4 can and should be done multiple times (as needed) prior to
-> creating the release. Each PR will add a `CHANGELOG.md` entry to
-> affected generated packages.
+> Steps 1–4 can and should be done multiple times (as needed) prior to
+> creating a release. Each PR adds changelog entries to affected packages.
+> For example, if you update librarian to add a picture of a cat in the
+> `README.md` of the generated packages, you could perform steps 1, 2, 4 with
+> the PR title `"docs: add a picture of a cat to README.md"`. When released,
+> each package will have a `CHANGELOG.md` entry like:
+>
+> ```
+> - docs: add a picture of a cat to README.md
+> ```
