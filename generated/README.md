@@ -18,10 +18,7 @@ https://github.com/googleapis/librarian as a sibling directory to this repo,
 make your changes, then build and run Librarian locally:
 
 ```bash
-# Build the binary
 go -C ../librarian build -o ../librarian/librarian ./cmd/librarian
-
-# Run library regeneration (-f ignores the librarian version check)
 ../librarian/librarian generate -all
 ```
 
