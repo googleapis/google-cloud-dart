@@ -101,6 +101,9 @@ final class Firestore {
           'mask.fieldPaths': $1,
         if (request.transaction case final $1?) 'transaction': encodeBytes($1)!,
         if (request.readTime case final $1?) 'readTime': $1.toJson(),
+        if (request.requestOptions?.requestTags case final $1?
+            when $1.isNotDefault)
+          'requestOptions.requestTags': $1,
       },
     );
     final response = await _client.get(url);
@@ -129,6 +132,9 @@ final class Firestore {
         if (request.readTime case final $1?) 'readTime': $1.toJson(),
         if (request.showMissing case final $1 when $1.isNotDefault)
           'showMissing': '${$1}',
+        if (request.requestOptions?.requestTags case final $1?
+            when $1.isNotDefault)
+          'requestOptions.requestTags': $1,
       },
     );
     final response = await _client.get(url);
@@ -152,6 +158,9 @@ final class Firestore {
           'currentDocument.exists': '${$1}',
         if (request.currentDocument?.updateTime case final $1?)
           'currentDocument.updateTime': $1.toJson(),
+        if (request.requestOptions?.requestTags case final $1?
+            when $1.isNotDefault)
+          'requestOptions.requestTags': $1,
       },
     );
     final response = await _client.patch(url, body: request.document);
@@ -171,6 +180,9 @@ final class Firestore {
           'currentDocument.exists': '${$1}',
         if (request.currentDocument?.updateTime case final $1?)
           'currentDocument.updateTime': $1.toJson(),
+        if (request.requestOptions?.requestTags case final $1?
+            when $1.isNotDefault)
+          'requestOptions.requestTags': $1,
       },
     );
     await _client.delete(url);
@@ -356,6 +368,9 @@ final class Firestore {
           'documentId': $1,
         if (request.mask?.fieldPaths case final $1? when $1.isNotDefault)
           'mask.fieldPaths': $1,
+        if (request.requestOptions?.requestTags case final $1?
+            when $1.isNotDefault)
+          'requestOptions.requestTags': $1,
       },
     );
     final response = await _client.post(url, body: request.document);
@@ -1252,6 +1267,33 @@ final class TransactionOptions_ConcurrencyMode extends ProtoEnum {
   String toString() => 'ConcurrencyMode.$value';
 }
 
+/// Options for a server request.
+final class RequestOptions extends ProtoMessage {
+  static const String fullyQualifiedName = 'google.firestore.v1.RequestOptions';
+
+  /// The request tags for the request.
+  final List<String> requestTags;
+
+  RequestOptions({this.requestTags = const []}) : super(fullyQualifiedName);
+
+  factory RequestOptions.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return RequestOptions(
+      requestTags: switch (json['requestTags']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException('"requestTags" is not a list'),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {if (requestTags.isNotDefault) 'requestTags': requestTags};
+
+  @override
+  String toString() => 'RequestOptions()';
+}
+
 /// A Firestore document.
 ///
 /// Must not exceed 1 MiB - 4 bytes.
@@ -1856,11 +1898,15 @@ final class GetDocumentRequest extends ProtoMessage {
   /// minute timestamp within the past 7 days.
   final Timestamp? readTime;
 
+  /// Optional. Any additional options for the request.
+  final RequestOptions? requestOptions;
+
   GetDocumentRequest({
     required this.name,
     this.mask,
     this.transaction,
     this.readTime,
+    this.requestOptions,
   }) : super(fullyQualifiedName);
 
   factory GetDocumentRequest.fromJson(Object? j) {
@@ -1882,6 +1928,10 @@ final class GetDocumentRequest extends ProtoMessage {
         null => null,
         Object $1 => Timestamp.fromJson($1),
       },
+      requestOptions: switch (json['requestOptions']) {
+        null => null,
+        Object $1 => RequestOptions.fromJson($1),
+      },
     );
   }
 
@@ -1891,6 +1941,7 @@ final class GetDocumentRequest extends ProtoMessage {
     'mask': ?mask?.toJson(),
     if (transaction case final $1?) 'transaction': encodeBytes($1),
     'readTime': ?readTime?.toJson(),
+    'requestOptions': ?requestOptions?.toJson(),
   };
 
   @override
@@ -1974,6 +2025,9 @@ final class ListDocumentsRequest extends ProtoMessage {
   /// Requests with `show_missing` may not specify `where` or `order_by`.
   final bool showMissing;
 
+  /// Optional. Any additional options for the request.
+  final RequestOptions? requestOptions;
+
   ListDocumentsRequest({
     required this.parent,
     this.collectionId = '',
@@ -1984,6 +2038,7 @@ final class ListDocumentsRequest extends ProtoMessage {
     this.transaction,
     this.readTime,
     this.showMissing = false,
+    this.requestOptions,
   }) : super(fullyQualifiedName);
 
   factory ListDocumentsRequest.fromJson(Object? j) {
@@ -2025,6 +2080,10 @@ final class ListDocumentsRequest extends ProtoMessage {
         null => false,
         Object $1 => decodeBool($1),
       },
+      requestOptions: switch (json['requestOptions']) {
+        null => null,
+        Object $1 => RequestOptions.fromJson($1),
+      },
     );
   }
 
@@ -2039,6 +2098,7 @@ final class ListDocumentsRequest extends ProtoMessage {
     if (transaction case final $1?) 'transaction': encodeBytes($1),
     'readTime': ?readTime?.toJson(),
     if (showMissing.isNotDefault) 'showMissing': showMissing,
+    'requestOptions': ?requestOptions?.toJson(),
   };
 
   @override
@@ -2131,12 +2191,16 @@ final class CreateDocumentRequest extends ProtoMessage {
   /// will not be returned in the response.
   final DocumentMask? mask;
 
+  /// Optional. Any additional options for the request.
+  final RequestOptions? requestOptions;
+
   CreateDocumentRequest({
     required this.parent,
     required this.collectionId,
     this.documentId = '',
     required this.document,
     this.mask,
+    this.requestOptions,
   }) : super(fullyQualifiedName);
 
   factory CreateDocumentRequest.fromJson(Object? j) {
@@ -2162,6 +2226,10 @@ final class CreateDocumentRequest extends ProtoMessage {
         null => null,
         Object $1 => DocumentMask.fromJson($1),
       },
+      requestOptions: switch (json['requestOptions']) {
+        null => null,
+        Object $1 => RequestOptions.fromJson($1),
+      },
     );
   }
 
@@ -2172,6 +2240,7 @@ final class CreateDocumentRequest extends ProtoMessage {
     if (documentId.isNotDefault) 'documentId': documentId,
     'document': ?document?.toJson(),
     'mask': ?mask?.toJson(),
+    'requestOptions': ?requestOptions?.toJson(),
   };
 
   @override
@@ -2214,11 +2283,15 @@ final class UpdateDocumentRequest extends ProtoMessage {
   /// The request will fail if this is set and not met by the target document.
   final Precondition? currentDocument;
 
+  /// Optional. Any additional options for the request.
+  final RequestOptions? requestOptions;
+
   UpdateDocumentRequest({
     required this.document,
     this.updateMask,
     this.mask,
     this.currentDocument,
+    this.requestOptions,
   }) : super(fullyQualifiedName);
 
   factory UpdateDocumentRequest.fromJson(Object? j) {
@@ -2240,6 +2313,10 @@ final class UpdateDocumentRequest extends ProtoMessage {
         null => null,
         Object $1 => Precondition.fromJson($1),
       },
+      requestOptions: switch (json['requestOptions']) {
+        null => null,
+        Object $1 => RequestOptions.fromJson($1),
+      },
     );
   }
 
@@ -2249,6 +2326,7 @@ final class UpdateDocumentRequest extends ProtoMessage {
     'updateMask': ?updateMask?.toJson(),
     'mask': ?mask?.toJson(),
     'currentDocument': ?currentDocument?.toJson(),
+    'requestOptions': ?requestOptions?.toJson(),
   };
 
   @override
@@ -2269,8 +2347,14 @@ final class DeleteDocumentRequest extends ProtoMessage {
   /// The request will fail if this is set and not met by the target document.
   final Precondition? currentDocument;
 
-  DeleteDocumentRequest({required this.name, this.currentDocument})
-    : super(fullyQualifiedName);
+  /// Optional. Any additional options for the request.
+  final RequestOptions? requestOptions;
+
+  DeleteDocumentRequest({
+    required this.name,
+    this.currentDocument,
+    this.requestOptions,
+  }) : super(fullyQualifiedName);
 
   factory DeleteDocumentRequest.fromJson(Object? j) {
     final json = j as Map<String, Object?>;
@@ -2283,6 +2367,10 @@ final class DeleteDocumentRequest extends ProtoMessage {
         null => null,
         Object $1 => Precondition.fromJson($1),
       },
+      requestOptions: switch (json['requestOptions']) {
+        null => null,
+        Object $1 => RequestOptions.fromJson($1),
+      },
     );
   }
 
@@ -2290,6 +2378,7 @@ final class DeleteDocumentRequest extends ProtoMessage {
   Object toJson() => {
     'name': name,
     'currentDocument': ?currentDocument?.toJson(),
+    'requestOptions': ?requestOptions?.toJson(),
   };
 
   @override
@@ -2337,6 +2426,9 @@ final class BatchGetDocumentsRequest extends ProtoMessage {
   /// minute timestamp within the past 7 days.
   final Timestamp? readTime;
 
+  /// Optional. Any additional options for the request.
+  final RequestOptions? requestOptions;
+
   BatchGetDocumentsRequest({
     required this.database,
     this.documents = const [],
@@ -2344,6 +2436,7 @@ final class BatchGetDocumentsRequest extends ProtoMessage {
     this.transaction,
     this.newTransaction,
     this.readTime,
+    this.requestOptions,
   }) : super(fullyQualifiedName);
 
   factory BatchGetDocumentsRequest.fromJson(Object? j) {
@@ -2374,6 +2467,10 @@ final class BatchGetDocumentsRequest extends ProtoMessage {
         null => null,
         Object $1 => Timestamp.fromJson($1),
       },
+      requestOptions: switch (json['requestOptions']) {
+        null => null,
+        Object $1 => RequestOptions.fromJson($1),
+      },
     );
   }
 
@@ -2385,6 +2482,7 @@ final class BatchGetDocumentsRequest extends ProtoMessage {
     if (transaction case final $1?) 'transaction': encodeBytes($1),
     'newTransaction': ?newTransaction?.toJson(),
     'readTime': ?readTime?.toJson(),
+    'requestOptions': ?requestOptions?.toJson(),
   };
 
   @override
@@ -2484,8 +2582,14 @@ final class BeginTransactionRequest extends ProtoMessage {
   /// Defaults to a read-write transaction.
   final TransactionOptions? options;
 
-  BeginTransactionRequest({required this.database, this.options})
-    : super(fullyQualifiedName);
+  /// Optional. Any additional options for the request.
+  final RequestOptions? requestOptions;
+
+  BeginTransactionRequest({
+    required this.database,
+    this.options,
+    this.requestOptions,
+  }) : super(fullyQualifiedName);
 
   factory BeginTransactionRequest.fromJson(Object? j) {
     final json = j as Map<String, Object?>;
@@ -2498,11 +2602,19 @@ final class BeginTransactionRequest extends ProtoMessage {
         null => null,
         Object $1 => TransactionOptions.fromJson($1),
       },
+      requestOptions: switch (json['requestOptions']) {
+        null => null,
+        Object $1 => RequestOptions.fromJson($1),
+      },
     );
   }
 
   @override
-  Object toJson() => {'database': database, 'options': ?options?.toJson()};
+  Object toJson() => {
+    'database': database,
+    'options': ?options?.toJson(),
+    'requestOptions': ?requestOptions?.toJson(),
+  };
 
   @override
   String toString() {
@@ -2562,10 +2674,14 @@ final class CommitRequest extends ProtoMessage {
   /// If set, applies all writes in this transaction, and commits it.
   final Uint8List transaction;
 
+  /// Optional. Any additional options for the request.
+  final RequestOptions? requestOptions;
+
   CommitRequest({
     required this.database,
     this.writes = const [],
     Uint8List? transaction,
+    this.requestOptions,
   }) : transaction = transaction ?? Uint8List(0),
        super(fullyQualifiedName);
 
@@ -2585,6 +2701,10 @@ final class CommitRequest extends ProtoMessage {
         null => Uint8List(0),
         Object $1 => decodeBytes($1),
       },
+      requestOptions: switch (json['requestOptions']) {
+        null => null,
+        Object $1 => RequestOptions.fromJson($1),
+      },
     );
   }
 
@@ -2593,6 +2713,7 @@ final class CommitRequest extends ProtoMessage {
     'database': database,
     if (writes.isNotDefault) 'writes': [for (final i in writes) i.toJson()],
     if (transaction.isNotDefault) 'transaction': encodeBytes(transaction),
+    'requestOptions': ?requestOptions?.toJson(),
   };
 
   @override
@@ -2660,8 +2781,14 @@ final class RollbackRequest extends ProtoMessage {
   /// Required. The transaction to roll back.
   final Uint8List transaction;
 
-  RollbackRequest({required this.database, required this.transaction})
-    : super(fullyQualifiedName);
+  /// Optional. Any additional options for the request.
+  final RequestOptions? requestOptions;
+
+  RollbackRequest({
+    required this.database,
+    required this.transaction,
+    this.requestOptions,
+  }) : super(fullyQualifiedName);
 
   factory RollbackRequest.fromJson(Object? j) {
     final json = j as Map<String, Object?>;
@@ -2674,6 +2801,10 @@ final class RollbackRequest extends ProtoMessage {
         null => Uint8List(0),
         Object $1 => decodeBytes($1),
       },
+      requestOptions: switch (json['requestOptions']) {
+        null => null,
+        Object $1 => RequestOptions.fromJson($1),
+      },
     );
   }
 
@@ -2681,6 +2812,7 @@ final class RollbackRequest extends ProtoMessage {
   Object toJson() => {
     'database': database,
     'transaction': encodeBytes(transaction),
+    'requestOptions': ?requestOptions?.toJson(),
   };
 
   @override
@@ -2731,6 +2863,9 @@ final class RunQueryRequest extends ProtoMessage {
   /// statistics will be returned. If not, only query results will be returned.
   final ExplainOptions? explainOptions;
 
+  /// Optional. Any additional options for the request.
+  final RequestOptions? requestOptions;
+
   RunQueryRequest({
     required this.parent,
     this.structuredQuery,
@@ -2738,6 +2873,7 @@ final class RunQueryRequest extends ProtoMessage {
     this.newTransaction,
     this.readTime,
     this.explainOptions,
+    this.requestOptions,
   }) : super(fullyQualifiedName);
 
   factory RunQueryRequest.fromJson(Object? j) {
@@ -2767,6 +2903,10 @@ final class RunQueryRequest extends ProtoMessage {
         null => null,
         Object $1 => ExplainOptions.fromJson($1),
       },
+      requestOptions: switch (json['requestOptions']) {
+        null => null,
+        Object $1 => RequestOptions.fromJson($1),
+      },
     );
   }
 
@@ -2778,6 +2918,7 @@ final class RunQueryRequest extends ProtoMessage {
     'newTransaction': ?newTransaction?.toJson(),
     'readTime': ?readTime?.toJson(),
     'explainOptions': ?explainOptions?.toJson(),
+    'requestOptions': ?requestOptions?.toJson(),
   };
 
   @override
@@ -2925,6 +3066,9 @@ final class ExecutePipelineRequest extends ProtoMessage {
   /// `new_transaction`.
   final bool autoCommitTransaction;
 
+  /// Optional. Any additional options for the request.
+  final RequestOptions? requestOptions;
+
   ExecutePipelineRequest({
     required this.database,
     this.structuredPipeline,
@@ -2932,6 +3076,7 @@ final class ExecutePipelineRequest extends ProtoMessage {
     this.newTransaction,
     this.readTime,
     this.autoCommitTransaction = false,
+    this.requestOptions,
   }) : super(fullyQualifiedName);
 
   factory ExecutePipelineRequest.fromJson(Object? j) {
@@ -2961,6 +3106,10 @@ final class ExecutePipelineRequest extends ProtoMessage {
         null => false,
         Object $1 => decodeBool($1),
       },
+      requestOptions: switch (json['requestOptions']) {
+        null => null,
+        Object $1 => RequestOptions.fromJson($1),
+      },
     );
   }
 
@@ -2973,6 +3122,7 @@ final class ExecutePipelineRequest extends ProtoMessage {
     'readTime': ?readTime?.toJson(),
     if (autoCommitTransaction.isNotDefault)
       'autoCommitTransaction': autoCommitTransaction,
+    'requestOptions': ?requestOptions?.toJson(),
   };
 
   @override
@@ -3118,6 +3268,9 @@ final class RunAggregationQueryRequest extends ProtoMessage {
   /// statistics will be returned. If not, only query results will be returned.
   final ExplainOptions? explainOptions;
 
+  /// Optional. Any additional options for the request.
+  final RequestOptions? requestOptions;
+
   RunAggregationQueryRequest({
     required this.parent,
     this.structuredAggregationQuery,
@@ -3125,6 +3278,7 @@ final class RunAggregationQueryRequest extends ProtoMessage {
     this.newTransaction,
     this.readTime,
     this.explainOptions,
+    this.requestOptions,
   }) : super(fullyQualifiedName);
 
   factory RunAggregationQueryRequest.fromJson(Object? j) {
@@ -3154,6 +3308,10 @@ final class RunAggregationQueryRequest extends ProtoMessage {
         null => null,
         Object $1 => ExplainOptions.fromJson($1),
       },
+      requestOptions: switch (json['requestOptions']) {
+        null => null,
+        Object $1 => RequestOptions.fromJson($1),
+      },
     );
   }
 
@@ -3165,6 +3323,7 @@ final class RunAggregationQueryRequest extends ProtoMessage {
     'newTransaction': ?newTransaction?.toJson(),
     'readTime': ?readTime?.toJson(),
     'explainOptions': ?explainOptions?.toJson(),
+    'requestOptions': ?requestOptions?.toJson(),
   };
 
   @override
@@ -3313,6 +3472,9 @@ final class PartitionQueryRequest extends ProtoMessage {
   /// minute timestamp within the past 7 days.
   final Timestamp? readTime;
 
+  /// Optional. Any additional options for the request.
+  final RequestOptions? requestOptions;
+
   PartitionQueryRequest({
     required this.parent,
     this.structuredQuery,
@@ -3320,6 +3482,7 @@ final class PartitionQueryRequest extends ProtoMessage {
     this.pageToken = '',
     this.pageSize = 0,
     this.readTime,
+    this.requestOptions,
   }) : super(fullyQualifiedName);
 
   factory PartitionQueryRequest.fromJson(Object? j) {
@@ -3349,6 +3512,10 @@ final class PartitionQueryRequest extends ProtoMessage {
         null => null,
         Object $1 => Timestamp.fromJson($1),
       },
+      requestOptions: switch (json['requestOptions']) {
+        null => null,
+        Object $1 => RequestOptions.fromJson($1),
+      },
     );
   }
 
@@ -3361,6 +3528,7 @@ final class PartitionQueryRequest extends ProtoMessage {
     if (pageToken.isNotDefault) 'pageToken': pageToken,
     if (pageSize.isNotDefault) 'pageSize': pageSize,
     'readTime': ?readTime?.toJson(),
+    'requestOptions': ?requestOptions?.toJson(),
   };
 
   @override
@@ -3487,12 +3655,16 @@ final class WriteRequest extends ProtoMessage {
   /// Labels associated with this write request.
   final Map<String, String> labels;
 
+  /// Optional. Any additional options for the request.
+  final RequestOptions? requestOptions;
+
   WriteRequest({
     required this.database,
     this.streamId = '',
     this.writes = const [],
     Uint8List? streamToken,
     this.labels = const {},
+    this.requestOptions,
   }) : streamToken = streamToken ?? Uint8List(0),
        super(fullyQualifiedName);
 
@@ -3524,6 +3696,10 @@ final class WriteRequest extends ProtoMessage {
         },
         _ => throw const FormatException('"labels" is not an object'),
       },
+      requestOptions: switch (json['requestOptions']) {
+        null => null,
+        Object $1 => RequestOptions.fromJson($1),
+      },
     );
   }
 
@@ -3534,6 +3710,7 @@ final class WriteRequest extends ProtoMessage {
     if (writes.isNotDefault) 'writes': [for (final i in writes) i.toJson()],
     if (streamToken.isNotDefault) 'streamToken': encodeBytes(streamToken),
     if (labels.isNotDefault) 'labels': labels,
+    'requestOptions': ?requestOptions?.toJson(),
   };
 
   @override
@@ -3638,11 +3815,15 @@ final class ListenRequest extends ProtoMessage {
   /// Labels associated with this target change.
   final Map<String, String> labels;
 
+  /// Optional. Any additional options for the request.
+  final RequestOptions? requestOptions;
+
   ListenRequest({
     required this.database,
     this.addTarget,
     this.removeTarget,
     this.labels = const {},
+    this.requestOptions,
   }) : super(fullyQualifiedName);
 
   factory ListenRequest.fromJson(Object? j) {
@@ -3668,6 +3849,10 @@ final class ListenRequest extends ProtoMessage {
         },
         _ => throw const FormatException('"labels" is not an object'),
       },
+      requestOptions: switch (json['requestOptions']) {
+        null => null,
+        Object $1 => RequestOptions.fromJson($1),
+      },
     );
   }
 
@@ -3677,6 +3862,7 @@ final class ListenRequest extends ProtoMessage {
     'addTarget': ?addTarget?.toJson(),
     'removeTarget': ?removeTarget,
     if (labels.isNotDefault) 'labels': labels,
+    'requestOptions': ?requestOptions?.toJson(),
   };
 
   @override
@@ -4117,11 +4303,15 @@ final class ListCollectionIdsRequest extends ProtoMessage {
   /// minute timestamp within the past 7 days.
   final Timestamp? readTime;
 
+  /// Optional. Any additional options for the request.
+  final RequestOptions? requestOptions;
+
   ListCollectionIdsRequest({
     required this.parent,
     this.pageSize = 0,
     this.pageToken = '',
     this.readTime,
+    this.requestOptions,
   }) : super(fullyQualifiedName);
 
   factory ListCollectionIdsRequest.fromJson(Object? j) {
@@ -4143,6 +4333,10 @@ final class ListCollectionIdsRequest extends ProtoMessage {
         null => null,
         Object $1 => Timestamp.fromJson($1),
       },
+      requestOptions: switch (json['requestOptions']) {
+        null => null,
+        Object $1 => RequestOptions.fromJson($1),
+      },
     );
   }
 
@@ -4152,6 +4346,7 @@ final class ListCollectionIdsRequest extends ProtoMessage {
     if (pageSize.isNotDefault) 'pageSize': pageSize,
     if (pageToken.isNotDefault) 'pageToken': pageToken,
     'readTime': ?readTime?.toJson(),
+    'requestOptions': ?requestOptions?.toJson(),
   };
 
   @override
@@ -4230,10 +4425,14 @@ final class BatchWriteRequest extends ProtoMessage {
   /// Labels associated with this batch write.
   final Map<String, String> labels;
 
+  /// Optional. Any additional options for the request.
+  final RequestOptions? requestOptions;
+
   BatchWriteRequest({
     required this.database,
     this.writes = const [],
     this.labels = const {},
+    this.requestOptions,
   }) : super(fullyQualifiedName);
 
   factory BatchWriteRequest.fromJson(Object? j) {
@@ -4256,6 +4455,10 @@ final class BatchWriteRequest extends ProtoMessage {
         },
         _ => throw const FormatException('"labels" is not an object'),
       },
+      requestOptions: switch (json['requestOptions']) {
+        null => null,
+        Object $1 => RequestOptions.fromJson($1),
+      },
     );
   }
 
@@ -4264,6 +4467,7 @@ final class BatchWriteRequest extends ProtoMessage {
     'database': database,
     if (writes.isNotDefault) 'writes': [for (final i in writes) i.toJson()],
     if (labels.isNotDefault) 'labels': labels,
+    'requestOptions': ?requestOptions?.toJson(),
   };
 
   @override

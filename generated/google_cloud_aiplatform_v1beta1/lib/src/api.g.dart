@@ -38670,6 +38670,14 @@ final class BatchPredictionJob extends ProtoMessage {
   /// Exactly one of model and unmanaged_container_model must be set.
   final UnmanagedContainerModel? unmanagedContainerModel;
 
+  /// For Bring-Your-Own-Endpoint (BYOE), the name of the Endpoint resource that
+  /// produces the predictions via this job, must share the same ancestor
+  /// Location. Exactly one of model, unmanaged_container_model, or endpoint must
+  /// be set.
+  /// Example:
+  /// `projects/193595526740/locations/us-central1/endpoints/4203439000301600768`
+  final String endpoint;
+
   /// Required. Input configuration of the instances on which predictions are
   /// performed. The schema of any single instance may be specified via the
   /// [Model's][google.cloud.aiplatform.v1beta1.BatchPredictionJob.model]
@@ -38847,6 +38855,7 @@ final class BatchPredictionJob extends ProtoMessage {
     this.model = '',
     this.modelVersionId = '',
     this.unmanagedContainerModel,
+    this.endpoint = '',
     required this.inputConfig,
     this.instanceConfig,
     this.modelParameters,
@@ -38898,6 +38907,10 @@ final class BatchPredictionJob extends ProtoMessage {
       unmanagedContainerModel: switch (json['unmanagedContainerModel']) {
         null => null,
         Object $1 => UnmanagedContainerModel.fromJson($1),
+      },
+      endpoint: switch (json['endpoint']) {
+        null => '',
+        Object $1 => decodeString($1),
       },
       inputConfig: switch (json['inputConfig']) {
         null => null,
@@ -39032,6 +39045,7 @@ final class BatchPredictionJob extends ProtoMessage {
     if (model.isNotDefault) 'model': model,
     if (modelVersionId.isNotDefault) 'modelVersionId': modelVersionId,
     'unmanagedContainerModel': ?unmanagedContainerModel?.toJson(),
+    if (endpoint.isNotDefault) 'endpoint': endpoint,
     'inputConfig': ?inputConfig?.toJson(),
     'instanceConfig': ?instanceConfig?.toJson(),
     if (modelParameters case final $1?) 'modelParameters': $1.toJson(),
@@ -39074,6 +39088,7 @@ final class BatchPredictionJob extends ProtoMessage {
       'displayName=$displayName',
       'model=$model',
       'modelVersionId=$modelVersionId',
+      'endpoint=$endpoint',
       'serviceAccount=$serviceAccount',
       'generateExplanation=$generateExplanation',
       'state=$state',
@@ -42118,7 +42133,9 @@ final class GroundingChunk_RetrievedContext extends ProtoMessage {
   }
 }
 
-/// Chunk from Google Maps.
+/// A `Maps` chunk is a piece of evidence that comes from Google Maps,
+/// containing information about places or routes. This is used to provide
+/// the user with rich, location-based information.
 final class GroundingChunk_Maps extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GroundingChunk.Maps';
@@ -42141,12 +42158,16 @@ final class GroundingChunk_Maps extends ProtoMessage {
   /// answer, as well as uris to flag content.
   final GroundingChunk_Maps_PlaceAnswerSources? placeAnswerSources;
 
+  /// Output only. Route information.
+  final GroundingChunk_Maps_Route? route;
+
   GroundingChunk_Maps({
     this.uri,
     this.title,
     this.text,
     this.placeId,
     this.placeAnswerSources,
+    this.route,
   }) : super(fullyQualifiedName);
 
   factory GroundingChunk_Maps.fromJson(Object? j) {
@@ -42172,6 +42193,10 @@ final class GroundingChunk_Maps extends ProtoMessage {
         null => null,
         Object $1 => GroundingChunk_Maps_PlaceAnswerSources.fromJson($1),
       },
+      route: switch (json['route']) {
+        null => null,
+        Object $1 => GroundingChunk_Maps_Route.fromJson($1),
+      },
     );
   }
 
@@ -42182,6 +42207,7 @@ final class GroundingChunk_Maps extends ProtoMessage {
     'text': ?text,
     'placeId': ?placeId,
     'placeAnswerSources': ?placeAnswerSources?.toJson(),
+    'route': ?route?.toJson(),
   };
 
   @override
@@ -42287,6 +42313,62 @@ final class GroundingChunk_Maps_PlaceAnswerSources_ReviewSnippet
       'title=$title',
     ].join(',');
     return 'ReviewSnippet(${$contents})';
+  }
+}
+
+/// Route information from Google Maps.
+final class GroundingChunk_Maps_Route extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.GroundingChunk.Maps.Route';
+
+  /// The total distance of the route, in meters.
+  final int distanceMeters;
+
+  /// The total duration of the route.
+  final protobuf.Duration? duration;
+
+  /// An encoded polyline of the route. See
+  /// https://developers.google.com/maps/documentation/utilities/polylinealgorithm
+  final String encodedPolyline;
+
+  GroundingChunk_Maps_Route({
+    this.distanceMeters = 0,
+    this.duration,
+    this.encodedPolyline = '',
+  }) : super(fullyQualifiedName);
+
+  factory GroundingChunk_Maps_Route.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GroundingChunk_Maps_Route(
+      distanceMeters: switch (json['distanceMeters']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      duration: switch (json['duration']) {
+        null => null,
+        Object $1 => protobuf.Duration.fromJson($1),
+      },
+      encodedPolyline: switch (json['encodedPolyline']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (distanceMeters.isNotDefault) 'distanceMeters': distanceMeters,
+    'duration': ?duration?.toJson(),
+    if (encodedPolyline.isNotDefault) 'encodedPolyline': encodedPolyline,
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      'distanceMeters=$distanceMeters',
+      'encodedPolyline=$encodedPolyline',
+    ].join(',');
+    return 'Route(${$contents})';
   }
 }
 
@@ -114052,6 +114134,9 @@ final class ReasoningEngineSpec extends ProtoMessage {
   /// used.
   final ReasoningEngineSpec_IdentityType identityType;
 
+  /// Optional. Configuration for building container image.
+  final ReasoningEngineSpec_BuildSpec? buildSpec;
+
   ReasoningEngineSpec({
     this.sourceCodeSpec,
     this.containerSpec,
@@ -114061,6 +114146,7 @@ final class ReasoningEngineSpec extends ProtoMessage {
     this.classMethods = const [],
     this.agentFramework = '',
     this.identityType = ReasoningEngineSpec_IdentityType.$default,
+    this.buildSpec,
   }) : super(fullyQualifiedName);
 
   factory ReasoningEngineSpec.fromJson(Object? j) {
@@ -114099,6 +114185,10 @@ final class ReasoningEngineSpec extends ProtoMessage {
         null => ReasoningEngineSpec_IdentityType.$default,
         Object $1 => ReasoningEngineSpec_IdentityType.fromJson($1),
       },
+      buildSpec: switch (json['buildSpec']) {
+        null => null,
+        Object $1 => ReasoningEngineSpec_BuildSpec.fromJson($1),
+      },
     );
   }
 
@@ -114113,6 +114203,7 @@ final class ReasoningEngineSpec extends ProtoMessage {
       'classMethods': [for (final i in classMethods) i.toJson()],
     if (agentFramework.isNotDefault) 'agentFramework': agentFramework,
     if (identityType.isNotDefault) 'identityType': identityType.toJson(),
+    'buildSpec': ?buildSpec?.toJson(),
   };
 
   @override
@@ -114657,6 +114748,62 @@ final class ReasoningEngineSpec_ContainerSpec extends ProtoMessage {
   String toString() {
     final $contents = ['imageUri=$imageUri'].join(',');
     return 'ContainerSpec(${$contents})';
+  }
+}
+
+/// Specification for building container image.
+final class ReasoningEngineSpec_BuildSpec extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.ReasoningEngineSpec.BuildSpec';
+
+  /// Optional. The resource name of the Cloud Build WorkerPool to use for
+  /// the build.
+  /// Format:
+  /// `projects/{project}/locations/{location}/workerPools/{worker_pool}`
+  final String workerPool;
+
+  /// Optional. The service account that Cloud Build uses to run the build.
+  ///
+  /// This field is only applicable when `worker_pool` is specified (i.e., for
+  /// custom worker pools). If `worker_pool` is not specified, this field is
+  /// ignored and the build runs using the Google-managed service agent.
+  ///
+  /// Format: `projects/{project}/serviceAccounts/{service_account}` or
+  /// `{service_account}@{project}.iam.gserviceaccount.com`
+  final String serviceAccount;
+
+  ReasoningEngineSpec_BuildSpec({
+    this.workerPool = '',
+    this.serviceAccount = '',
+  }) : super(fullyQualifiedName);
+
+  factory ReasoningEngineSpec_BuildSpec.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ReasoningEngineSpec_BuildSpec(
+      workerPool: switch (json['workerPool']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      serviceAccount: switch (json['serviceAccount']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (workerPool.isNotDefault) 'workerPool': workerPool,
+    if (serviceAccount.isNotDefault) 'serviceAccount': serviceAccount,
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      'workerPool=$workerPool',
+      'serviceAccount=$serviceAccount',
+    ].join(',');
+    return 'BuildSpec(${$contents})';
   }
 }
 
@@ -124346,6 +124493,11 @@ final class Tool extends ProtoMessage {
   /// Parallel.ai and presented to the model for response generation
   final Tool_ParallelAiSearch? parallelAiSearch;
 
+  /// Optional. Uses Exa.ai to search for information to
+  /// answer user queries. The search results will be grounded on Exa.ai
+  /// and presented to the model for response generation
+  final Tool_ExaAiSearch? exaAiSearch;
+
   /// Optional. CodeExecution tool type.
   /// Enables the model to execute code as part of generation.
   final Tool_CodeExecution? codeExecution;
@@ -124366,6 +124518,7 @@ final class Tool extends ProtoMessage {
     this.googleMaps,
     this.enterpriseWebSearch,
     this.parallelAiSearch,
+    this.exaAiSearch,
     this.codeExecution,
     this.urlContext,
     this.computerUse,
@@ -124407,6 +124560,10 @@ final class Tool extends ProtoMessage {
         null => null,
         Object $1 => Tool_ParallelAiSearch.fromJson($1),
       },
+      exaAiSearch: switch (json['exaAiSearch']) {
+        null => null,
+        Object $1 => Tool_ExaAiSearch.fromJson($1),
+      },
       codeExecution: switch (json['codeExecution']) {
         null => null,
         Object $1 => Tool_CodeExecution.fromJson($1),
@@ -124434,6 +124591,7 @@ final class Tool extends ProtoMessage {
     'googleMaps': ?googleMaps?.toJson(),
     'enterpriseWebSearch': ?enterpriseWebSearch?.toJson(),
     'parallelAiSearch': ?parallelAiSearch?.toJson(),
+    'exaAiSearch': ?exaAiSearch?.toJson(),
     'codeExecution': ?codeExecution?.toJson(),
     'urlContext': ?urlContext?.toJson(),
     'computerUse': ?computerUse?.toJson(),
@@ -124550,6 +124708,49 @@ final class Tool_ParallelAiSearch extends ProtoMessage {
   String toString() {
     final $contents = ['apiKey=$apiKey'].join(',');
     return 'ParallelAiSearch(${$contents})';
+  }
+}
+
+/// ExaAiSearch tool type.
+/// A tool that uses the Exa.ai search engine for grounding.
+final class Tool_ExaAiSearch extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.Tool.ExaAiSearch';
+
+  /// Required. The API key for ExaAiSearch.
+  final String apiKey;
+
+  /// Optional. This field can be used to pass any parameter from the Exa.ai
+  /// Search API.
+  final protobuf.Struct? customConfigs;
+
+  Tool_ExaAiSearch({required this.apiKey, this.customConfigs})
+    : super(fullyQualifiedName);
+
+  factory Tool_ExaAiSearch.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Tool_ExaAiSearch(
+      apiKey: switch (json['apiKey']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      customConfigs: switch (json['customConfigs']) {
+        null => null,
+        Object $1 => protobuf.Struct.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'apiKey': apiKey,
+    'customConfigs': ?customConfigs?.toJson(),
+  };
+
+  @override
+  String toString() {
+    final $contents = ['apiKey=$apiKey'].join(',');
+    return 'ExaAiSearch(${$contents})';
   }
 }
 
