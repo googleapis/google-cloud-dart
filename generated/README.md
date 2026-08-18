@@ -22,6 +22,6 @@ make your changes, then build and run Librarian locally:
 go -C ../librarian build -o ../librarian/librarian ./cmd/librarian
 
 # Run library regeneration (-f ignores the librarian version check)
-../librarian/librarian generate -all -f
+../librarian/librarian generate -all
 ```
 

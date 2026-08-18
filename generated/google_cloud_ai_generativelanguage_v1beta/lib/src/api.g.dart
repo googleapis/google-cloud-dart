@@ -23,6 +23,8 @@
 /// images, audio, video, and code. You can use the Gemini API for use cases
 /// like reasoning across text and images, content generation, dialogue
 /// agents, summarization and classification systems, and more.
+///
+/// @docImport 'package:google_cloud_rpc/exceptions.dart';
 library;
 
 // ignore_for_file: camel_case_types
@@ -36,7 +38,6 @@ library;
 import 'package:google_cloud_longrunning/longrunning.dart';
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/src/encoding.dart';
-import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:google_cloud_rpc/rpc.dart';
 import 'package:google_cloud_rpc/service_client.dart';
 import 'package:google_cloud_type/type.dart';
