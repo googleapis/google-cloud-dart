@@ -2,11 +2,11 @@
 # Releasing Generated Packages
 
 This document describes how to update API descriptions and release generated
-packages.
+packages. All commands should be run from the repository root.
 
 ## Prerequisites
 
-Install `dart_apitool` for checking API compatibility:
+Install `dart_apitool` (used to identify breaking changes):
 
 ```bash
 dart pub global activate dart_apitool
@@ -54,7 +54,7 @@ dart run tool/update_docs.dart
 1. Verify that all tests and analysis pass locally:
    ```bash
    dart analyze
-   dart test
+   dart test .
    ```
 2. Commit the changes and open a pull request against `main`. Use a commit
    message that describes the functionality added from the point-of-view of
@@ -64,10 +64,11 @@ dart run tool/update_docs.dart
 > Steps 1–4 can and should be done multiple times (as needed) prior to
 > creating a release. Each PR adds changelog entries to affected packages.
 > For example, if you update librarian to add a picture of a cat in the
-> `README.md` of the generated packages, you could perform steps 1, 2, 4 with
-> the PR title `"docs: add a picture of a cat to README.md"`. When released,
-> each package will have a `CHANGELOG.md` entry like:
+> `README.md` of the generated packages, you could perform steps 1, 3, and 4
+> with the PR title `"docs: add a picture of a cat to README.md"`. When
+> released, each package will have a `CHANGELOG.md` entry like:
 >
-> ```
+> ```markdown
 > - docs: add a picture of a cat to README.md
 > ```
+
