@@ -147,6 +147,22 @@ void main() {
       expect(e.toString(), 'ServiceException: internal error');
     });
 
+    // A "304 Not Modified" response never has a body.
+    test('empty body 304', () {
+      final response = http.Response('', 304);
+      final e = ServiceException.fromHttpResponse(response, '');
+      expect(e, isA<NotModifiedException>());
+      expect(e.message, 'the resource was not modified');
+      expect(e.statusCode, 304);
+      expect(e.response, response);
+      expect(e.responseBody, '');
+      expect(e.status, isNull);
+      expect(
+        e.toString(),
+        'NotModifiedException: the resource was not modified',
+      );
+    });
+
     test('valid error 401', () {
       final response = http.Response(
         '{"error": {"message": "unauthorized"}}',

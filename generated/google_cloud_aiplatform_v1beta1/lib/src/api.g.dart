@@ -3454,6 +3454,25 @@ final class EvaluationService {
     );
   }
 
+  /// Generates rubrics for a given prompt.
+  /// A rubric represents a single testable criterion for evaluation.
+  /// One input prompt could have multiple rubrics
+  /// This RPC allows users to get suggested rubrics based on provided prompt,
+  /// which can then be reviewed and used for subsequent evaluations.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<GenerateInstanceRubricsResponse> generateInstanceRubrics(
+    GenerateInstanceRubricsRequest request,
+  ) async {
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.location}:generateInstanceRubrics',
+    );
+    final response = await _client.post(url, body: request);
+    return GenerateInstanceRubricsResponse.fromJson(response);
+  }
+
   /// Lists information about the supported locations for this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
@@ -3633,6 +3652,10 @@ base class FakeEvaluationService implements EvaluationService {
   >
   Function(EvaluateDatasetRequest request)?
   _evaluateDataset;
+  final Future<GenerateInstanceRubricsResponse> Function(
+    GenerateInstanceRubricsRequest request,
+  )?
+  _generateInstanceRubrics;
   final Future<ListLocationsResponse> Function(ListLocationsRequest request)?
   _listLocations;
   final Future<Location> Function(GetLocationRequest request)? _getLocation;
@@ -3669,6 +3692,10 @@ base class FakeEvaluationService implements EvaluationService {
     Future<Operation<EvaluateDatasetResponse, EvaluateDatasetOperationMetadata>>
     Function(EvaluateDatasetRequest request)?
     evaluateDataset,
+    Future<GenerateInstanceRubricsResponse> Function(
+      GenerateInstanceRubricsRequest request,
+    )?
+    generateInstanceRubrics,
     Future<ListLocationsResponse> Function(ListLocationsRequest request)?
     listLocations,
     Future<Location> Function(GetLocationRequest request)? getLocation,
@@ -3690,6 +3717,7 @@ base class FakeEvaluationService implements EvaluationService {
     Future<Operation> Function(WaitOperationRequest request)? waitOperation,
   }) : _evaluateInstances = evaluateInstances,
        _evaluateDataset = evaluateDataset,
+       _generateInstanceRubrics = generateInstanceRubrics,
        _listLocations = listLocations,
        _getLocation = getLocation,
        _setIamPolicy = setIamPolicy,
@@ -3738,6 +3766,27 @@ base class FakeEvaluationService implements EvaluationService {
       return evaluateDataset(request);
     }
     throw UnsupportedError('evaluateDataset');
+  }
+
+  /// Generates rubrics for a given prompt.
+  /// A rubric represents a single testable criterion for evaluation.
+  /// One input prompt could have multiple rubrics
+  /// This RPC allows users to get suggested rubrics based on provided prompt,
+  /// which can then be reviewed and used for subsequent evaluations.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<GenerateInstanceRubricsResponse> generateInstanceRubrics(
+    GenerateInstanceRubricsRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_generateInstanceRubrics case final generateInstanceRubrics?) {
+      return generateInstanceRubrics(request);
+    }
+    throw UnsupportedError('generateInstanceRubrics');
   }
 
   /// Lists information about the supported locations for this service.
@@ -25207,6 +25256,821 @@ base class FakeNotebookService implements NotebookService {
   }
 }
 
+/// This service is used to create and manage Vertex AI OnlineEvaluators.
+final class OnlineEvaluatorService {
+  static const _defaultHost = 'aiplatform.googleapis.com';
+  final Uri _endPoint;
+
+  final ServiceClient _client;
+
+  /// Creates a `OnlineEvaluatorService` using [client] for transport.
+  ///
+  /// The provided [http.Client] must be configured to provide whatever
+  /// authentication is required by `OnlineEvaluatorService`. You can do that using
+  /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
+  ///
+  /// If [endPoint] is provided then its `scheme`, `host`, and `port` are
+  /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
+  /// could be used to force the `Firestore` service to communicate with the
+  /// local emulator.
+  OnlineEvaluatorService({required http.Client client, Uri? endPoint})
+    : _client = ServiceClient(client: client),
+      _endPoint = endPoint == null
+          ? Uri.https(_defaultHost, '')
+          : Uri(
+              scheme: endPoint.scheme,
+              host: endPoint.host,
+              port: endPoint.port,
+            );
+
+  /// Creates a `OnlineEvaluatorService` that does authentication through an API key.
+  ///
+  /// If called without arguments, the API key is taken from these environment
+  /// variables:
+  ///
+  /// - `GOOGLE_API_KEY`
+  ///
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
+  ///
+  /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
+  factory OnlineEvaluatorService.fromApiKey([String? apiKey]) =>
+      OnlineEvaluatorService(client: httpClientFromApiKey(apiKey, _apiKeys));
+
+  /// Creates an OnlineEvaluator in the given project and location.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  ///
+  /// Returns an [Operation] representing the status of the long-running
+  /// operation.
+  ///
+  /// When complete, [Operation.done] will be `true`. If successful,
+  /// [Operation.responseAsMessage] will contain the operation's result.
+  Future<Operation<OnlineEvaluator, CreateOnlineEvaluatorOperationMetadata>>
+  createOnlineEvaluator(CreateOnlineEvaluatorRequest request) async {
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.parent}/onlineEvaluators',
+    );
+    final response = await _client.post(url, body: request.onlineEvaluator);
+    return Operation.fromJson(
+      response,
+      OperationHelper(
+        OnlineEvaluator.fromJson,
+        CreateOnlineEvaluatorOperationMetadata.fromJson,
+      ),
+    );
+  }
+
+  /// Gets details of an OnlineEvaluator.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<OnlineEvaluator> getOnlineEvaluator(
+    GetOnlineEvaluatorRequest request,
+  ) async {
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}');
+    final response = await _client.get(url);
+    return OnlineEvaluator.fromJson(response);
+  }
+
+  /// Updates the fields of an OnlineEvaluator.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  ///
+  /// Returns an [Operation] representing the status of the long-running
+  /// operation.
+  ///
+  /// When complete, [Operation.done] will be `true`. If successful,
+  /// [Operation.responseAsMessage] will contain the operation's result.
+  Future<Operation<OnlineEvaluator, UpdateOnlineEvaluatorOperationMetadata>>
+  updateOnlineEvaluator(UpdateOnlineEvaluatorRequest request) async {
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.onlineEvaluator!.name}',
+      queryParameters: {
+        if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
+      },
+    );
+    final response = await _client.patch(url, body: request.onlineEvaluator);
+    return Operation.fromJson(
+      response,
+      OperationHelper(
+        OnlineEvaluator.fromJson,
+        UpdateOnlineEvaluatorOperationMetadata.fromJson,
+      ),
+    );
+  }
+
+  /// Deletes an OnlineEvaluator.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  ///
+  /// Returns an [Operation] representing the status of the long-running
+  /// operation.
+  ///
+  /// When complete, [Operation.done] will be `true`. If successful,
+  /// [Operation.responseAsMessage] will contain the operation's result.
+  Future<Operation<protobuf.Empty, DeleteOnlineEvaluatorOperationMetadata>>
+  deleteOnlineEvaluator(DeleteOnlineEvaluatorRequest request) async {
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}');
+    final response = await _client.delete(url);
+    return Operation.fromJson(
+      response,
+      OperationHelper(
+        protobuf.Empty.fromJson,
+        DeleteOnlineEvaluatorOperationMetadata.fromJson,
+      ),
+    );
+  }
+
+  /// Lists the OnlineEvaluators for the given project and location.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<ListOnlineEvaluatorsResponse> listOnlineEvaluators(
+    ListOnlineEvaluatorsRequest request,
+  ) async {
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.parent}/onlineEvaluators',
+      queryParameters: {
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+        if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+        if (request.orderBy case final $1 when $1.isNotDefault) 'orderBy': $1,
+      },
+    );
+    final response = await _client.get(url);
+    return ListOnlineEvaluatorsResponse.fromJson(response);
+  }
+
+  /// Activates an OnlineEvaluator.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  ///
+  /// Returns an [Operation] representing the status of the long-running
+  /// operation.
+  ///
+  /// When complete, [Operation.done] will be `true`. If successful,
+  /// [Operation.responseAsMessage] will contain the operation's result.
+  Future<Operation<OnlineEvaluator, ActivateOnlineEvaluatorOperationMetadata>>
+  activateOnlineEvaluator(ActivateOnlineEvaluatorRequest request) async {
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}:activate');
+    final response = await _client.post(url, body: request);
+    return Operation.fromJson(
+      response,
+      OperationHelper(
+        OnlineEvaluator.fromJson,
+        ActivateOnlineEvaluatorOperationMetadata.fromJson,
+      ),
+    );
+  }
+
+  /// Suspends an OnlineEvaluator. When an OnlineEvaluator is suspended, it won't
+  /// run any evaluations until it is activated again.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  ///
+  /// Returns an [Operation] representing the status of the long-running
+  /// operation.
+  ///
+  /// When complete, [Operation.done] will be `true`. If successful,
+  /// [Operation.responseAsMessage] will contain the operation's result.
+  Future<Operation<OnlineEvaluator, SuspendOnlineEvaluatorOperationMetadata>>
+  suspendOnlineEvaluator(SuspendOnlineEvaluatorRequest request) async {
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}:suspend');
+    final response = await _client.post(url, body: request);
+    return Operation.fromJson(
+      response,
+      OperationHelper(
+        OnlineEvaluator.fromJson,
+        SuspendOnlineEvaluatorOperationMetadata.fromJson,
+      ),
+    );
+  }
+
+  /// Lists information about the supported locations for this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<ListLocationsResponse> listLocations(
+    ListLocationsRequest request,
+  ) async {
+    final url = _endPoint.replace(
+      path: '/ui/${request.name}/locations',
+      queryParameters: {
+        if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+      },
+    );
+    final response = await _client.get(url);
+    return ListLocationsResponse.fromJson(response);
+  }
+
+  /// Gets information about a location.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<Location> getLocation(GetLocationRequest request) async {
+    final url = _endPoint.replace(path: '/ui/${request.name}');
+    final response = await _client.get(url);
+    return Location.fromJson(response);
+  }
+
+  /// Sets the access control policy on the specified resource. Replaces
+  /// any existing policy.
+  ///
+  /// Can return `NOT_FOUND`, `INVALID_ARGUMENT`, and `PERMISSION_DENIED`
+  /// errors.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.resource}:setIamPolicy',
+    );
+    final response = await _client.post(url, body: request);
+    return Policy.fromJson(response);
+  }
+
+  /// Gets the access control policy for a resource. Returns an empty policy
+  /// if the resource exists and does not have a policy set.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.resource}:getIamPolicy',
+    );
+    final response = await _client.post(url, body: request);
+    return Policy.fromJson(response);
+  }
+
+  /// Returns permissions that a caller has on the specified resource. If the
+  /// resource does not exist, this will return an empty set of
+  /// permissions, not a `NOT_FOUND` error.
+  ///
+  /// Note: This operation is designed to be used for building
+  /// permission-aware UIs and command-line tools, not for authorization
+  /// checking. This operation may "fail open" without warning.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<TestIamPermissionsResponse> testIamPermissions(
+    TestIamPermissionsRequest request,
+  ) async {
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.resource}:testIamPermissions',
+    );
+    final response = await _client.post(url, body: request);
+    return TestIamPermissionsResponse.fromJson(response);
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<ListOperationsResponse> listOperations(
+    ListOperationsRequest request,
+  ) async {
+    final url = _endPoint.replace(
+      path: '/ui/${request.name}/operations',
+      queryParameters: {
+        if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+        if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+          'returnPartialSuccess': '${$1}',
+      },
+    );
+    final response = await _client.get(url);
+    return ListOperationsResponse.fromJson(response);
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  ///
+  /// This method can be used to get the current status of a long-running
+  /// operation.
+  Future<Operation<T, S>> getOperation<
+    T extends ProtoMessage,
+    S extends ProtoMessage
+  >(Operation<T, S> request) async {
+    final url = _endPoint.replace(path: '/ui/${request.name}');
+    final response = await _client.get(url);
+    return Operation.fromJson(response, request.operationHelper);
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<void> deleteOperation(DeleteOperationRequest request) async {
+    final url = _endPoint.replace(path: '/ui/${request.name}');
+    await _client.delete(url);
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<void> cancelOperation(CancelOperationRequest request) async {
+    final url = _endPoint.replace(path: '/ui/${request.name}:cancel');
+    await _client.post(url);
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<Operation> waitOperation(WaitOperationRequest request) async {
+    final url = _endPoint.replace(
+      path: '/ui/${request.name}:wait',
+      queryParameters: {
+        if (request.timeout case final $1?) 'timeout': $1.toJson(),
+      },
+    );
+    final response = await _client.post(url);
+    return Operation.fromJson(response);
+  }
+
+  /// Closes the client and cleans up any resources associated with it.
+  ///
+  /// Once [close] is called, no other methods should be called.
+  void close() => _client.close();
+}
+
+/// Testing fake for [OnlineEvaluatorService].
+base class FakeOnlineEvaluatorService implements OnlineEvaluatorService {
+  final Future<
+    Operation<OnlineEvaluator, CreateOnlineEvaluatorOperationMetadata>
+  >
+  Function(CreateOnlineEvaluatorRequest request)?
+  _createOnlineEvaluator;
+  final Future<OnlineEvaluator> Function(GetOnlineEvaluatorRequest request)?
+  _getOnlineEvaluator;
+  final Future<
+    Operation<OnlineEvaluator, UpdateOnlineEvaluatorOperationMetadata>
+  >
+  Function(UpdateOnlineEvaluatorRequest request)?
+  _updateOnlineEvaluator;
+  final Future<
+    Operation<protobuf.Empty, DeleteOnlineEvaluatorOperationMetadata>
+  >
+  Function(DeleteOnlineEvaluatorRequest request)?
+  _deleteOnlineEvaluator;
+  final Future<ListOnlineEvaluatorsResponse> Function(
+    ListOnlineEvaluatorsRequest request,
+  )?
+  _listOnlineEvaluators;
+  final Future<
+    Operation<OnlineEvaluator, ActivateOnlineEvaluatorOperationMetadata>
+  >
+  Function(ActivateOnlineEvaluatorRequest request)?
+  _activateOnlineEvaluator;
+  final Future<
+    Operation<OnlineEvaluator, SuspendOnlineEvaluatorOperationMetadata>
+  >
+  Function(SuspendOnlineEvaluatorRequest request)?
+  _suspendOnlineEvaluator;
+  final Future<ListLocationsResponse> Function(ListLocationsRequest request)?
+  _listLocations;
+  final Future<Location> Function(GetLocationRequest request)? _getLocation;
+  final Future<Policy> Function(SetIamPolicyRequest request)? _setIamPolicy;
+  final Future<Policy> Function(GetIamPolicyRequest request)? _getIamPolicy;
+  final Future<TestIamPermissionsResponse> Function(
+    TestIamPermissionsRequest request,
+  )?
+  _testIamPermissions;
+  final Future<ListOperationsResponse> Function(ListOperationsRequest request)?
+  _listOperations;
+  final Future<Operation<T, S>> Function<
+    T extends ProtoMessage,
+    S extends ProtoMessage
+  >(Operation<T, S> request)?
+  _getOperation;
+  final Future<void> Function(DeleteOperationRequest request)? _deleteOperation;
+  final Future<void> Function(CancelOperationRequest request)? _cancelOperation;
+  final Future<Operation> Function(WaitOperationRequest request)?
+  _waitOperation;
+
+  @override
+  Uri get _endPoint => throw UnsupportedError('_endPoint');
+  @override
+  ServiceClient get _client => throw UnsupportedError('_client');
+
+  bool isClosed = false;
+
+  FakeOnlineEvaluatorService({
+    Future<Operation<OnlineEvaluator, CreateOnlineEvaluatorOperationMetadata>>
+    Function(CreateOnlineEvaluatorRequest request)?
+    createOnlineEvaluator,
+    Future<OnlineEvaluator> Function(GetOnlineEvaluatorRequest request)?
+    getOnlineEvaluator,
+    Future<Operation<OnlineEvaluator, UpdateOnlineEvaluatorOperationMetadata>>
+    Function(UpdateOnlineEvaluatorRequest request)?
+    updateOnlineEvaluator,
+    Future<Operation<protobuf.Empty, DeleteOnlineEvaluatorOperationMetadata>>
+    Function(DeleteOnlineEvaluatorRequest request)?
+    deleteOnlineEvaluator,
+    Future<ListOnlineEvaluatorsResponse> Function(
+      ListOnlineEvaluatorsRequest request,
+    )?
+    listOnlineEvaluators,
+    Future<Operation<OnlineEvaluator, ActivateOnlineEvaluatorOperationMetadata>>
+    Function(ActivateOnlineEvaluatorRequest request)?
+    activateOnlineEvaluator,
+    Future<Operation<OnlineEvaluator, SuspendOnlineEvaluatorOperationMetadata>>
+    Function(SuspendOnlineEvaluatorRequest request)?
+    suspendOnlineEvaluator,
+    Future<ListLocationsResponse> Function(ListLocationsRequest request)?
+    listLocations,
+    Future<Location> Function(GetLocationRequest request)? getLocation,
+    Future<Policy> Function(SetIamPolicyRequest request)? setIamPolicy,
+    Future<Policy> Function(GetIamPolicyRequest request)? getIamPolicy,
+    Future<TestIamPermissionsResponse> Function(
+      TestIamPermissionsRequest request,
+    )?
+    testIamPermissions,
+    Future<ListOperationsResponse> Function(ListOperationsRequest request)?
+    listOperations,
+    Future<Operation<T, S>> Function<
+      T extends ProtoMessage,
+      S extends ProtoMessage
+    >(Operation<T, S> request)?
+    getOperation,
+    Future<void> Function(DeleteOperationRequest request)? deleteOperation,
+    Future<void> Function(CancelOperationRequest request)? cancelOperation,
+    Future<Operation> Function(WaitOperationRequest request)? waitOperation,
+  }) : _createOnlineEvaluator = createOnlineEvaluator,
+       _getOnlineEvaluator = getOnlineEvaluator,
+       _updateOnlineEvaluator = updateOnlineEvaluator,
+       _deleteOnlineEvaluator = deleteOnlineEvaluator,
+       _listOnlineEvaluators = listOnlineEvaluators,
+       _activateOnlineEvaluator = activateOnlineEvaluator,
+       _suspendOnlineEvaluator = suspendOnlineEvaluator,
+       _listLocations = listLocations,
+       _getLocation = getLocation,
+       _setIamPolicy = setIamPolicy,
+       _getIamPolicy = getIamPolicy,
+       _testIamPermissions = testIamPermissions,
+       _listOperations = listOperations,
+       _getOperation = getOperation,
+       _deleteOperation = deleteOperation,
+       _cancelOperation = cancelOperation,
+       _waitOperation = waitOperation;
+
+  /// Creates an OnlineEvaluator in the given project and location.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  ///
+  /// Returns an [Operation] representing the status of the long-running
+  /// operation.
+  ///
+  /// When complete, [Operation.done] will be `true`. If successful,
+  /// [Operation.responseAsMessage] will contain the operation's result.
+  @override
+  Future<Operation<OnlineEvaluator, CreateOnlineEvaluatorOperationMetadata>>
+  createOnlineEvaluator(CreateOnlineEvaluatorRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_createOnlineEvaluator case final createOnlineEvaluator?) {
+      return createOnlineEvaluator(request);
+    }
+    throw UnsupportedError('createOnlineEvaluator');
+  }
+
+  /// Gets details of an OnlineEvaluator.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<OnlineEvaluator> getOnlineEvaluator(
+    GetOnlineEvaluatorRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_getOnlineEvaluator case final getOnlineEvaluator?) {
+      return getOnlineEvaluator(request);
+    }
+    throw UnsupportedError('getOnlineEvaluator');
+  }
+
+  /// Updates the fields of an OnlineEvaluator.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  ///
+  /// Returns an [Operation] representing the status of the long-running
+  /// operation.
+  ///
+  /// When complete, [Operation.done] will be `true`. If successful,
+  /// [Operation.responseAsMessage] will contain the operation's result.
+  @override
+  Future<Operation<OnlineEvaluator, UpdateOnlineEvaluatorOperationMetadata>>
+  updateOnlineEvaluator(UpdateOnlineEvaluatorRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_updateOnlineEvaluator case final updateOnlineEvaluator?) {
+      return updateOnlineEvaluator(request);
+    }
+    throw UnsupportedError('updateOnlineEvaluator');
+  }
+
+  /// Deletes an OnlineEvaluator.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  ///
+  /// Returns an [Operation] representing the status of the long-running
+  /// operation.
+  ///
+  /// When complete, [Operation.done] will be `true`. If successful,
+  /// [Operation.responseAsMessage] will contain the operation's result.
+  @override
+  Future<Operation<protobuf.Empty, DeleteOnlineEvaluatorOperationMetadata>>
+  deleteOnlineEvaluator(DeleteOnlineEvaluatorRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_deleteOnlineEvaluator case final deleteOnlineEvaluator?) {
+      return deleteOnlineEvaluator(request);
+    }
+    throw UnsupportedError('deleteOnlineEvaluator');
+  }
+
+  /// Lists the OnlineEvaluators for the given project and location.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ListOnlineEvaluatorsResponse> listOnlineEvaluators(
+    ListOnlineEvaluatorsRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_listOnlineEvaluators case final listOnlineEvaluators?) {
+      return listOnlineEvaluators(request);
+    }
+    throw UnsupportedError('listOnlineEvaluators');
+  }
+
+  /// Activates an OnlineEvaluator.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  ///
+  /// Returns an [Operation] representing the status of the long-running
+  /// operation.
+  ///
+  /// When complete, [Operation.done] will be `true`. If successful,
+  /// [Operation.responseAsMessage] will contain the operation's result.
+  @override
+  Future<Operation<OnlineEvaluator, ActivateOnlineEvaluatorOperationMetadata>>
+  activateOnlineEvaluator(ActivateOnlineEvaluatorRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_activateOnlineEvaluator case final activateOnlineEvaluator?) {
+      return activateOnlineEvaluator(request);
+    }
+    throw UnsupportedError('activateOnlineEvaluator');
+  }
+
+  /// Suspends an OnlineEvaluator. When an OnlineEvaluator is suspended, it won't
+  /// run any evaluations until it is activated again.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  ///
+  /// Returns an [Operation] representing the status of the long-running
+  /// operation.
+  ///
+  /// When complete, [Operation.done] will be `true`. If successful,
+  /// [Operation.responseAsMessage] will contain the operation's result.
+  @override
+  Future<Operation<OnlineEvaluator, SuspendOnlineEvaluatorOperationMetadata>>
+  suspendOnlineEvaluator(SuspendOnlineEvaluatorRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_suspendOnlineEvaluator case final suspendOnlineEvaluator?) {
+      return suspendOnlineEvaluator(request);
+    }
+    throw UnsupportedError('suspendOnlineEvaluator');
+  }
+
+  /// Lists information about the supported locations for this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ListLocationsResponse> listLocations(
+    ListLocationsRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_listLocations case final listLocations?) {
+      return listLocations(request);
+    }
+    throw UnsupportedError('listLocations');
+  }
+
+  /// Gets information about a location.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Location> getLocation(GetLocationRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_getLocation case final getLocation?) {
+      return getLocation(request);
+    }
+    throw UnsupportedError('getLocation');
+  }
+
+  /// Sets the access control policy on the specified resource. Replaces
+  /// any existing policy.
+  ///
+  /// Can return `NOT_FOUND`, `INVALID_ARGUMENT`, and `PERMISSION_DENIED`
+  /// errors.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_setIamPolicy case final setIamPolicy?) {
+      return setIamPolicy(request);
+    }
+    throw UnsupportedError('setIamPolicy');
+  }
+
+  /// Gets the access control policy for a resource. Returns an empty policy
+  /// if the resource exists and does not have a policy set.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_getIamPolicy case final getIamPolicy?) {
+      return getIamPolicy(request);
+    }
+    throw UnsupportedError('getIamPolicy');
+  }
+
+  /// Returns permissions that a caller has on the specified resource. If the
+  /// resource does not exist, this will return an empty set of
+  /// permissions, not a `NOT_FOUND` error.
+  ///
+  /// Note: This operation is designed to be used for building
+  /// permission-aware UIs and command-line tools, not for authorization
+  /// checking. This operation may "fail open" without warning.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<TestIamPermissionsResponse> testIamPermissions(
+    TestIamPermissionsRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_testIamPermissions case final testIamPermissions?) {
+      return testIamPermissions(request);
+    }
+    throw UnsupportedError('testIamPermissions');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ListOperationsResponse> listOperations(
+    ListOperationsRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_listOperations case final listOperations?) {
+      return listOperations(request);
+    }
+    throw UnsupportedError('listOperations');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Operation<T, S>> getOperation<
+    T extends ProtoMessage,
+    S extends ProtoMessage
+  >(Operation<T, S> request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_getOperation case final getOperation?) {
+      return getOperation(request);
+    }
+    throw UnsupportedError('getOperation');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<void> deleteOperation(DeleteOperationRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_deleteOperation case final deleteOperation?) {
+      return deleteOperation(request);
+    }
+    throw UnsupportedError('deleteOperation');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<void> cancelOperation(CancelOperationRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_cancelOperation case final cancelOperation?) {
+      return cancelOperation(request);
+    }
+    throw UnsupportedError('cancelOperation');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Operation> waitOperation(WaitOperationRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_waitOperation case final waitOperation?) {
+      return waitOperation(request);
+    }
+    throw UnsupportedError('waitOperation');
+  }
+
+  @override
+  void close() {
+    isClosed = true;
+  }
+}
+
 /// A service for managing Vertex AI's machine learning PersistentResource.
 final class PersistentResourceService {
   static const _defaultHost = 'aiplatform.googleapis.com';
@@ -28030,6 +28894,51 @@ final class ReasoningEngineExecutionService {
         .map(HttpBody.fromJson);
   }
 
+  /// Async query using a reasoning engine.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  ///
+  /// Returns an [Operation] representing the status of the long-running
+  /// operation.
+  ///
+  /// When complete, [Operation.done] will be `true`. If successful,
+  /// [Operation.responseAsMessage] will contain the operation's result.
+  Future<
+    Operation<
+      AsyncQueryReasoningEngineResponse,
+      AsyncQueryReasoningEngineOperationMetadata
+    >
+  >
+  asyncQueryReasoningEngine(AsyncQueryReasoningEngineRequest request) async {
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}:asyncQuery');
+    final response = await _client.post(url, body: request);
+    return Operation.fromJson(
+      response,
+      OperationHelper(
+        AsyncQueryReasoningEngineResponse.fromJson,
+        AsyncQueryReasoningEngineOperationMetadata.fromJson,
+      ),
+    );
+  }
+
+  /// Cancels an AsyncQueryReasoningEngine operation.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<CancelAsyncQueryReasoningEngineResponse>
+  cancelAsyncQueryReasoningEngine(
+    CancelAsyncQueryReasoningEngineRequest request,
+  ) async {
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.name}:cancelAsyncQuery',
+    );
+    final response = await _client.post(url, body: request);
+    return CancelAsyncQueryReasoningEngineResponse.fromJson(response);
+  }
+
   /// Lists information about the supported locations for this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
@@ -28207,6 +29116,18 @@ base class FakeReasoningEngineExecutionService
   _queryReasoningEngine;
   final Stream<HttpBody> Function(StreamQueryReasoningEngineRequest request)?
   _streamQueryReasoningEngine;
+  final Future<
+    Operation<
+      AsyncQueryReasoningEngineResponse,
+      AsyncQueryReasoningEngineOperationMetadata
+    >
+  >
+  Function(AsyncQueryReasoningEngineRequest request)?
+  _asyncQueryReasoningEngine;
+  final Future<CancelAsyncQueryReasoningEngineResponse> Function(
+    CancelAsyncQueryReasoningEngineRequest request,
+  )?
+  _cancelAsyncQueryReasoningEngine;
   final Future<ListLocationsResponse> Function(ListLocationsRequest request)?
   _listLocations;
   final Future<Location> Function(GetLocationRequest request)? _getLocation;
@@ -28242,6 +29163,18 @@ base class FakeReasoningEngineExecutionService
     queryReasoningEngine,
     Stream<HttpBody> Function(StreamQueryReasoningEngineRequest request)?
     streamQueryReasoningEngine,
+    Future<
+      Operation<
+        AsyncQueryReasoningEngineResponse,
+        AsyncQueryReasoningEngineOperationMetadata
+      >
+    >
+    Function(AsyncQueryReasoningEngineRequest request)?
+    asyncQueryReasoningEngine,
+    Future<CancelAsyncQueryReasoningEngineResponse> Function(
+      CancelAsyncQueryReasoningEngineRequest request,
+    )?
+    cancelAsyncQueryReasoningEngine,
     Future<ListLocationsResponse> Function(ListLocationsRequest request)?
     listLocations,
     Future<Location> Function(GetLocationRequest request)? getLocation,
@@ -28263,6 +29196,8 @@ base class FakeReasoningEngineExecutionService
     Future<Operation> Function(WaitOperationRequest request)? waitOperation,
   }) : _queryReasoningEngine = queryReasoningEngine,
        _streamQueryReasoningEngine = streamQueryReasoningEngine,
+       _asyncQueryReasoningEngine = asyncQueryReasoningEngine,
+       _cancelAsyncQueryReasoningEngine = cancelAsyncQueryReasoningEngine,
        _listLocations = listLocations,
        _getLocation = getLocation,
        _setIamPolicy = setIamPolicy,
@@ -28305,6 +29240,675 @@ base class FakeReasoningEngineExecutionService
       return streamQueryReasoningEngine(request);
     }
     throw UnsupportedError('streamQueryReasoningEngine');
+  }
+
+  /// Async query using a reasoning engine.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  ///
+  /// Returns an [Operation] representing the status of the long-running
+  /// operation.
+  ///
+  /// When complete, [Operation.done] will be `true`. If successful,
+  /// [Operation.responseAsMessage] will contain the operation's result.
+  @override
+  Future<
+    Operation<
+      AsyncQueryReasoningEngineResponse,
+      AsyncQueryReasoningEngineOperationMetadata
+    >
+  >
+  asyncQueryReasoningEngine(AsyncQueryReasoningEngineRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_asyncQueryReasoningEngine case final asyncQueryReasoningEngine?) {
+      return asyncQueryReasoningEngine(request);
+    }
+    throw UnsupportedError('asyncQueryReasoningEngine');
+  }
+
+  /// Cancels an AsyncQueryReasoningEngine operation.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<CancelAsyncQueryReasoningEngineResponse>
+  cancelAsyncQueryReasoningEngine(
+    CancelAsyncQueryReasoningEngineRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_cancelAsyncQueryReasoningEngine
+        case final cancelAsyncQueryReasoningEngine?) {
+      return cancelAsyncQueryReasoningEngine(request);
+    }
+    throw UnsupportedError('cancelAsyncQueryReasoningEngine');
+  }
+
+  /// Lists information about the supported locations for this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ListLocationsResponse> listLocations(
+    ListLocationsRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_listLocations case final listLocations?) {
+      return listLocations(request);
+    }
+    throw UnsupportedError('listLocations');
+  }
+
+  /// Gets information about a location.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Location> getLocation(GetLocationRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_getLocation case final getLocation?) {
+      return getLocation(request);
+    }
+    throw UnsupportedError('getLocation');
+  }
+
+  /// Sets the access control policy on the specified resource. Replaces
+  /// any existing policy.
+  ///
+  /// Can return `NOT_FOUND`, `INVALID_ARGUMENT`, and `PERMISSION_DENIED`
+  /// errors.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_setIamPolicy case final setIamPolicy?) {
+      return setIamPolicy(request);
+    }
+    throw UnsupportedError('setIamPolicy');
+  }
+
+  /// Gets the access control policy for a resource. Returns an empty policy
+  /// if the resource exists and does not have a policy set.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_getIamPolicy case final getIamPolicy?) {
+      return getIamPolicy(request);
+    }
+    throw UnsupportedError('getIamPolicy');
+  }
+
+  /// Returns permissions that a caller has on the specified resource. If the
+  /// resource does not exist, this will return an empty set of
+  /// permissions, not a `NOT_FOUND` error.
+  ///
+  /// Note: This operation is designed to be used for building
+  /// permission-aware UIs and command-line tools, not for authorization
+  /// checking. This operation may "fail open" without warning.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<TestIamPermissionsResponse> testIamPermissions(
+    TestIamPermissionsRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_testIamPermissions case final testIamPermissions?) {
+      return testIamPermissions(request);
+    }
+    throw UnsupportedError('testIamPermissions');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ListOperationsResponse> listOperations(
+    ListOperationsRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_listOperations case final listOperations?) {
+      return listOperations(request);
+    }
+    throw UnsupportedError('listOperations');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Operation<T, S>> getOperation<
+    T extends ProtoMessage,
+    S extends ProtoMessage
+  >(Operation<T, S> request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_getOperation case final getOperation?) {
+      return getOperation(request);
+    }
+    throw UnsupportedError('getOperation');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<void> deleteOperation(DeleteOperationRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_deleteOperation case final deleteOperation?) {
+      return deleteOperation(request);
+    }
+    throw UnsupportedError('deleteOperation');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<void> cancelOperation(CancelOperationRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_cancelOperation case final cancelOperation?) {
+      return cancelOperation(request);
+    }
+    throw UnsupportedError('cancelOperation');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Operation> waitOperation(WaitOperationRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_waitOperation case final waitOperation?) {
+      return waitOperation(request);
+    }
+    throw UnsupportedError('waitOperation');
+  }
+
+  @override
+  void close() {
+    isClosed = true;
+  }
+}
+
+/// Manages Vertex AI's Reasoning Engine Revisions.
+final class ReasoningEngineRuntimeRevisionService {
+  static const _defaultHost = 'aiplatform.googleapis.com';
+  final Uri _endPoint;
+
+  final ServiceClient _client;
+
+  /// Creates a `ReasoningEngineRuntimeRevisionService` using [client] for transport.
+  ///
+  /// The provided [http.Client] must be configured to provide whatever
+  /// authentication is required by `ReasoningEngineRuntimeRevisionService`. You can do that using
+  /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
+  ///
+  /// If [endPoint] is provided then its `scheme`, `host`, and `port` are
+  /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
+  /// could be used to force the `Firestore` service to communicate with the
+  /// local emulator.
+  ReasoningEngineRuntimeRevisionService({
+    required http.Client client,
+    Uri? endPoint,
+  }) : _client = ServiceClient(client: client),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
+
+  /// Creates a `ReasoningEngineRuntimeRevisionService` that does authentication through an API key.
+  ///
+  /// If called without arguments, the API key is taken from these environment
+  /// variables:
+  ///
+  /// - `GOOGLE_API_KEY`
+  ///
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
+  ///
+  /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
+  factory ReasoningEngineRuntimeRevisionService.fromApiKey([String? apiKey]) =>
+      ReasoningEngineRuntimeRevisionService(
+        client: httpClientFromApiKey(apiKey, _apiKeys),
+      );
+
+  /// Gets a reasoning engine runtime revision.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<ReasoningEngineRuntimeRevision> getReasoningEngineRuntimeRevision(
+    GetReasoningEngineRuntimeRevisionRequest request,
+  ) async {
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}');
+    final response = await _client.get(url);
+    return ReasoningEngineRuntimeRevision.fromJson(response);
+  }
+
+  /// Lists runtime revisions in a reasoning engine.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<ListReasoningEngineRuntimeRevisionsResponse>
+  listReasoningEngineRuntimeRevisions(
+    ListReasoningEngineRuntimeRevisionsRequest request,
+  ) async {
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.parent}/runtimeRevisions',
+      queryParameters: {
+        if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+      },
+    );
+    final response = await _client.get(url);
+    return ListReasoningEngineRuntimeRevisionsResponse.fromJson(response);
+  }
+
+  /// Deletes a reasoning engine revision.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  ///
+  /// Returns an [Operation] representing the status of the long-running
+  /// operation.
+  ///
+  /// When complete, [Operation.done] will be `true`. If successful,
+  /// [Operation.responseAsMessage] will contain the operation's result.
+  Future<
+    Operation<
+      protobuf.Empty,
+      DeleteReasoningEngineRuntimeRevisionOperationMetadata
+    >
+  >
+  deleteReasoningEngineRuntimeRevision(
+    DeleteReasoningEngineRuntimeRevisionRequest request,
+  ) async {
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}');
+    final response = await _client.delete(url);
+    return Operation.fromJson(
+      response,
+      OperationHelper(
+        protobuf.Empty.fromJson,
+        DeleteReasoningEngineRuntimeRevisionOperationMetadata.fromJson,
+      ),
+    );
+  }
+
+  /// Lists information about the supported locations for this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<ListLocationsResponse> listLocations(
+    ListLocationsRequest request,
+  ) async {
+    final url = _endPoint.replace(
+      path: '/ui/${request.name}/locations',
+      queryParameters: {
+        if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+      },
+    );
+    final response = await _client.get(url);
+    return ListLocationsResponse.fromJson(response);
+  }
+
+  /// Gets information about a location.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<Location> getLocation(GetLocationRequest request) async {
+    final url = _endPoint.replace(path: '/ui/${request.name}');
+    final response = await _client.get(url);
+    return Location.fromJson(response);
+  }
+
+  /// Sets the access control policy on the specified resource. Replaces
+  /// any existing policy.
+  ///
+  /// Can return `NOT_FOUND`, `INVALID_ARGUMENT`, and `PERMISSION_DENIED`
+  /// errors.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.resource}:setIamPolicy',
+    );
+    final response = await _client.post(url, body: request);
+    return Policy.fromJson(response);
+  }
+
+  /// Gets the access control policy for a resource. Returns an empty policy
+  /// if the resource exists and does not have a policy set.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.resource}:getIamPolicy',
+    );
+    final response = await _client.post(url, body: request);
+    return Policy.fromJson(response);
+  }
+
+  /// Returns permissions that a caller has on the specified resource. If the
+  /// resource does not exist, this will return an empty set of
+  /// permissions, not a `NOT_FOUND` error.
+  ///
+  /// Note: This operation is designed to be used for building
+  /// permission-aware UIs and command-line tools, not for authorization
+  /// checking. This operation may "fail open" without warning.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<TestIamPermissionsResponse> testIamPermissions(
+    TestIamPermissionsRequest request,
+  ) async {
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.resource}:testIamPermissions',
+    );
+    final response = await _client.post(url, body: request);
+    return TestIamPermissionsResponse.fromJson(response);
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<ListOperationsResponse> listOperations(
+    ListOperationsRequest request,
+  ) async {
+    final url = _endPoint.replace(
+      path: '/ui/${request.name}/operations',
+      queryParameters: {
+        if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+        if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+          'returnPartialSuccess': '${$1}',
+      },
+    );
+    final response = await _client.get(url);
+    return ListOperationsResponse.fromJson(response);
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  ///
+  /// This method can be used to get the current status of a long-running
+  /// operation.
+  Future<Operation<T, S>> getOperation<
+    T extends ProtoMessage,
+    S extends ProtoMessage
+  >(Operation<T, S> request) async {
+    final url = _endPoint.replace(path: '/ui/${request.name}');
+    final response = await _client.get(url);
+    return Operation.fromJson(response, request.operationHelper);
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<void> deleteOperation(DeleteOperationRequest request) async {
+    final url = _endPoint.replace(path: '/ui/${request.name}');
+    await _client.delete(url);
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<void> cancelOperation(CancelOperationRequest request) async {
+    final url = _endPoint.replace(path: '/ui/${request.name}:cancel');
+    await _client.post(url);
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<Operation> waitOperation(WaitOperationRequest request) async {
+    final url = _endPoint.replace(
+      path: '/ui/${request.name}:wait',
+      queryParameters: {
+        if (request.timeout case final $1?) 'timeout': $1.toJson(),
+      },
+    );
+    final response = await _client.post(url);
+    return Operation.fromJson(response);
+  }
+
+  /// Closes the client and cleans up any resources associated with it.
+  ///
+  /// Once [close] is called, no other methods should be called.
+  void close() => _client.close();
+}
+
+/// Testing fake for [ReasoningEngineRuntimeRevisionService].
+base class FakeReasoningEngineRuntimeRevisionService
+    implements ReasoningEngineRuntimeRevisionService {
+  final Future<ReasoningEngineRuntimeRevision> Function(
+    GetReasoningEngineRuntimeRevisionRequest request,
+  )?
+  _getReasoningEngineRuntimeRevision;
+  final Future<ListReasoningEngineRuntimeRevisionsResponse> Function(
+    ListReasoningEngineRuntimeRevisionsRequest request,
+  )?
+  _listReasoningEngineRuntimeRevisions;
+  final Future<
+    Operation<
+      protobuf.Empty,
+      DeleteReasoningEngineRuntimeRevisionOperationMetadata
+    >
+  >
+  Function(DeleteReasoningEngineRuntimeRevisionRequest request)?
+  _deleteReasoningEngineRuntimeRevision;
+  final Future<ListLocationsResponse> Function(ListLocationsRequest request)?
+  _listLocations;
+  final Future<Location> Function(GetLocationRequest request)? _getLocation;
+  final Future<Policy> Function(SetIamPolicyRequest request)? _setIamPolicy;
+  final Future<Policy> Function(GetIamPolicyRequest request)? _getIamPolicy;
+  final Future<TestIamPermissionsResponse> Function(
+    TestIamPermissionsRequest request,
+  )?
+  _testIamPermissions;
+  final Future<ListOperationsResponse> Function(ListOperationsRequest request)?
+  _listOperations;
+  final Future<Operation<T, S>> Function<
+    T extends ProtoMessage,
+    S extends ProtoMessage
+  >(Operation<T, S> request)?
+  _getOperation;
+  final Future<void> Function(DeleteOperationRequest request)? _deleteOperation;
+  final Future<void> Function(CancelOperationRequest request)? _cancelOperation;
+  final Future<Operation> Function(WaitOperationRequest request)?
+  _waitOperation;
+
+  @override
+  Uri get _endPoint => throw UnsupportedError('_endPoint');
+  @override
+  ServiceClient get _client => throw UnsupportedError('_client');
+
+  bool isClosed = false;
+
+  FakeReasoningEngineRuntimeRevisionService({
+    Future<ReasoningEngineRuntimeRevision> Function(
+      GetReasoningEngineRuntimeRevisionRequest request,
+    )?
+    getReasoningEngineRuntimeRevision,
+    Future<ListReasoningEngineRuntimeRevisionsResponse> Function(
+      ListReasoningEngineRuntimeRevisionsRequest request,
+    )?
+    listReasoningEngineRuntimeRevisions,
+    Future<
+      Operation<
+        protobuf.Empty,
+        DeleteReasoningEngineRuntimeRevisionOperationMetadata
+      >
+    >
+    Function(DeleteReasoningEngineRuntimeRevisionRequest request)?
+    deleteReasoningEngineRuntimeRevision,
+    Future<ListLocationsResponse> Function(ListLocationsRequest request)?
+    listLocations,
+    Future<Location> Function(GetLocationRequest request)? getLocation,
+    Future<Policy> Function(SetIamPolicyRequest request)? setIamPolicy,
+    Future<Policy> Function(GetIamPolicyRequest request)? getIamPolicy,
+    Future<TestIamPermissionsResponse> Function(
+      TestIamPermissionsRequest request,
+    )?
+    testIamPermissions,
+    Future<ListOperationsResponse> Function(ListOperationsRequest request)?
+    listOperations,
+    Future<Operation<T, S>> Function<
+      T extends ProtoMessage,
+      S extends ProtoMessage
+    >(Operation<T, S> request)?
+    getOperation,
+    Future<void> Function(DeleteOperationRequest request)? deleteOperation,
+    Future<void> Function(CancelOperationRequest request)? cancelOperation,
+    Future<Operation> Function(WaitOperationRequest request)? waitOperation,
+  }) : _getReasoningEngineRuntimeRevision = getReasoningEngineRuntimeRevision,
+       _listReasoningEngineRuntimeRevisions =
+           listReasoningEngineRuntimeRevisions,
+       _deleteReasoningEngineRuntimeRevision =
+           deleteReasoningEngineRuntimeRevision,
+       _listLocations = listLocations,
+       _getLocation = getLocation,
+       _setIamPolicy = setIamPolicy,
+       _getIamPolicy = getIamPolicy,
+       _testIamPermissions = testIamPermissions,
+       _listOperations = listOperations,
+       _getOperation = getOperation,
+       _deleteOperation = deleteOperation,
+       _cancelOperation = cancelOperation,
+       _waitOperation = waitOperation;
+
+  /// Gets a reasoning engine runtime revision.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ReasoningEngineRuntimeRevision> getReasoningEngineRuntimeRevision(
+    GetReasoningEngineRuntimeRevisionRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_getReasoningEngineRuntimeRevision
+        case final getReasoningEngineRuntimeRevision?) {
+      return getReasoningEngineRuntimeRevision(request);
+    }
+    throw UnsupportedError('getReasoningEngineRuntimeRevision');
+  }
+
+  /// Lists runtime revisions in a reasoning engine.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ListReasoningEngineRuntimeRevisionsResponse>
+  listReasoningEngineRuntimeRevisions(
+    ListReasoningEngineRuntimeRevisionsRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_listReasoningEngineRuntimeRevisions
+        case final listReasoningEngineRuntimeRevisions?) {
+      return listReasoningEngineRuntimeRevisions(request);
+    }
+    throw UnsupportedError('listReasoningEngineRuntimeRevisions');
+  }
+
+  /// Deletes a reasoning engine revision.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  ///
+  /// Returns an [Operation] representing the status of the long-running
+  /// operation.
+  ///
+  /// When complete, [Operation.done] will be `true`. If successful,
+  /// [Operation.responseAsMessage] will contain the operation's result.
+  @override
+  Future<
+    Operation<
+      protobuf.Empty,
+      DeleteReasoningEngineRuntimeRevisionOperationMetadata
+    >
+  >
+  deleteReasoningEngineRuntimeRevision(
+    DeleteReasoningEngineRuntimeRevisionRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_deleteReasoningEngineRuntimeRevision
+        case final deleteReasoningEngineRuntimeRevision?) {
+      return deleteReasoningEngineRuntimeRevision(request);
+    }
+    throw UnsupportedError('deleteReasoningEngineRuntimeRevision');
   }
 
   /// Lists information about the supported locations for this service.
@@ -47507,7 +49111,17 @@ final class PublisherModelConfig extends ProtoMessage {
   /// The prediction request/response logging config.
   final PredictRequestResponseLoggingConfig? loggingConfig;
 
-  PublisherModelConfig({this.loggingConfig}) : super(fullyQualifiedName);
+  /// Optional. The model provider (publisher) for which the customer has enabled
+  /// data sharing. For publisher models that are configured to require data
+  /// sharing, a prediction request is only allowed when the model's publisher
+  /// matches this provider. Otherwise, the request is rejected.
+  final PublisherModelConfig_ModelProvider dataSharingEnabledProvider;
+
+  PublisherModelConfig({
+    this.loggingConfig,
+    this.dataSharingEnabledProvider =
+        PublisherModelConfig_ModelProvider.$default,
+  }) : super(fullyQualifiedName);
 
   factory PublisherModelConfig.fromJson(Object? j) {
     final json = j as Map<String, Object?>;
@@ -47516,14 +49130,51 @@ final class PublisherModelConfig extends ProtoMessage {
         null => null,
         Object $1 => PredictRequestResponseLoggingConfig.fromJson($1),
       },
+      dataSharingEnabledProvider: switch (json['dataSharingEnabledProvider']) {
+        null => PublisherModelConfig_ModelProvider.$default,
+        Object $1 => PublisherModelConfig_ModelProvider.fromJson($1),
+      },
     );
   }
 
   @override
-  Object toJson() => {'loggingConfig': ?loggingConfig?.toJson()};
+  Object toJson() => {
+    'loggingConfig': ?loggingConfig?.toJson(),
+    if (dataSharingEnabledProvider.isNotDefault)
+      'dataSharingEnabledProvider': dataSharingEnabledProvider.toJson(),
+  };
 
   @override
-  String toString() => 'PublisherModelConfig()';
+  String toString() {
+    final $contents = [
+      'dataSharingEnabledProvider=$dataSharingEnabledProvider',
+    ].join(',');
+    return 'PublisherModelConfig(${$contents})';
+  }
+}
+
+/// A model provider (publisher) that prediction data may be shared with.
+final class PublisherModelConfig_ModelProvider extends ProtoEnum {
+  /// Unspecified model provider.
+  static const modelProviderUnspecified = PublisherModelConfig_ModelProvider(
+    'MODEL_PROVIDER_UNSPECIFIED',
+  );
+
+  /// Anthropic.
+  static const anthropic = PublisherModelConfig_ModelProvider('ANTHROPIC');
+
+  /// The default value for [PublisherModelConfig_ModelProvider].
+  static const $default = modelProviderUnspecified;
+
+  const PublisherModelConfig_ModelProvider(super.value);
+
+  factory PublisherModelConfig_ModelProvider.fromJson(Object? json) =>
+      PublisherModelConfig_ModelProvider(json as String);
+
+  bool get isNotDefault => this != $default;
+
+  @override
+  String toString() => 'ModelProvider.$value';
 }
 
 /// Configurations (e.g. inference timeout) that are applied on your endpoints.
@@ -49471,575 +51122,533 @@ final class ErrorAnalysisAnnotation_QueryType extends ProtoEnum {
   String toString() => 'QueryType.$value';
 }
 
-/// Operation metadata for Dataset Evaluation.
-final class EvaluateDatasetOperationMetadata extends ProtoMessage {
+/// Represents data specific to multi-turn agent evaluations.
+final class AgentData extends ProtoMessage {
   static const String fullyQualifiedName =
-      'google.cloud.aiplatform.v1beta1.EvaluateDatasetOperationMetadata';
+      'google.cloud.aiplatform.v1beta1.AgentData';
 
-  /// Generic operation metadata.
-  final GenericOperationMetadata? genericMetadata;
+  /// Optional. A map containing the static configurations for each agent in the
+  /// system. Key: agent_id (matches the `author` field in events). Value: The
+  /// static configuration of the agent.
+  final Map<String, AgentConfig> agents;
 
-  EvaluateDatasetOperationMetadata({this.genericMetadata})
+  /// Optional. A chronological list of conversation turns.
+  /// Each turn represents a logical execution cycle (e.g., User Input -> Agent
+  /// Response).
+  final List<ConversationTurn> turns;
+
+  AgentData({this.agents = const {}, this.turns = const []})
     : super(fullyQualifiedName);
 
-  factory EvaluateDatasetOperationMetadata.fromJson(Object? j) {
+  factory AgentData.fromJson(Object? j) {
     final json = j as Map<String, Object?>;
-    return EvaluateDatasetOperationMetadata(
-      genericMetadata: switch (json['genericMetadata']) {
-        null => null,
-        Object $1 => GenericOperationMetadata.fromJson($1),
+    return AgentData(
+      agents: switch (json['agents']) {
+        null => {},
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): AgentConfig.fromJson(e.value),
+        },
+        _ => throw const FormatException('"agents" is not an object'),
       },
-    );
-  }
-
-  @override
-  Object toJson() => {'genericMetadata': ?genericMetadata?.toJson()};
-
-  @override
-  String toString() => 'EvaluateDatasetOperationMetadata()';
-}
-
-/// The results from an evaluation run performed by the EvaluationService.
-final class EvaluateDatasetResponse extends ProtoMessage {
-  static const String fullyQualifiedName =
-      'google.cloud.aiplatform.v1beta1.EvaluateDatasetResponse';
-
-  /// Output only. Aggregation statistics derived from results of
-  /// EvaluationService.
-  final AggregationOutput? aggregationOutput;
-
-  /// Output only. Output info for EvaluationService.
-  final OutputInfo? outputInfo;
-
-  EvaluateDatasetResponse({this.aggregationOutput, this.outputInfo})
-    : super(fullyQualifiedName);
-
-  factory EvaluateDatasetResponse.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
-    return EvaluateDatasetResponse(
-      aggregationOutput: switch (json['aggregationOutput']) {
-        null => null,
-        Object $1 => AggregationOutput.fromJson($1),
-      },
-      outputInfo: switch (json['outputInfo']) {
-        null => null,
-        Object $1 => OutputInfo.fromJson($1),
+      turns: switch (json['turns']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) ConversationTurn.fromJson(i)],
+        _ => throw const FormatException('"turns" is not a list'),
       },
     );
   }
 
   @override
   Object toJson() => {
-    'aggregationOutput': ?aggregationOutput?.toJson(),
-    'outputInfo': ?outputInfo?.toJson(),
+    if (agents.isNotDefault)
+      'agents': {for (final e in agents.entries) e.key: e.value.toJson()},
+    if (turns.isNotDefault) 'turns': [for (final i in turns) i.toJson()],
   };
 
   @override
-  String toString() => 'EvaluateDatasetResponse()';
+  String toString() => 'AgentData()';
 }
 
-/// Describes the info for output of EvaluationService.
-final class OutputInfo extends ProtoMessage {
+/// Represents configuration for an Agent.
+final class AgentConfig extends ProtoMessage {
   static const String fullyQualifiedName =
-      'google.cloud.aiplatform.v1beta1.OutputInfo';
+      'google.cloud.aiplatform.v1beta1.AgentConfig';
 
-  /// Output only. The full path of the Cloud Storage directory created, into
-  /// which the evaluation results and aggregation results are written.
-  final String? gcsOutputDirectory;
+  /// Required. Unique identifier of the agent.
+  /// This ID is used to refer to this agent, e.g., in AgentEvent.author, or in
+  /// the `sub_agents` field. It must be unique within the `agents` map.
+  final String? agentId;
 
-  OutputInfo({this.gcsOutputDirectory}) : super(fullyQualifiedName);
+  /// Optional. The type or class of the agent (e.g., "LlmAgent", "RouterAgent",
+  /// "ToolUseAgent"). Useful for the autorater to understand the expected
+  /// behavior of the agent.
+  final String agentType;
 
-  factory OutputInfo.fromJson(Object? j) {
+  /// Optional. A high-level description of the agent's role and
+  /// responsibilities. Critical for evaluating if the agent is routing tasks
+  /// correctly.
+  final String description;
+
+  /// Optional. Provides instructions for the LLM model, guiding the agent's
+  /// behavior. Can be static or dynamic. Dynamic instructions can contain
+  /// placeholders like {variable_name} that will be resolved at runtime using
+  /// the `AgentEvent.state_delta` field.
+  final String instruction;
+
+  /// Optional. The list of tools available to this agent.
+  final List<Tool> tools;
+
+  /// Optional. The list of valid agent IDs that this agent can delegate to.
+  /// This defines the directed edges in the multi-agent system graph topology.
+  final List<String> subAgents;
+
+  AgentConfig({
+    required this.agentId,
+    this.agentType = '',
+    this.description = '',
+    this.instruction = '',
+    this.tools = const [],
+    this.subAgents = const [],
+  }) : super(fullyQualifiedName);
+
+  factory AgentConfig.fromJson(Object? j) {
     final json = j as Map<String, Object?>;
-    return OutputInfo(
-      gcsOutputDirectory: switch (json['gcsOutputDirectory']) {
+    return AgentConfig(
+      agentId: switch (json['agentId']) {
         null => null,
         Object $1 => decodeString($1),
+      },
+      agentType: switch (json['agentType']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      description: switch (json['description']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      instruction: switch (json['instruction']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      tools: switch (json['tools']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Tool.fromJson(i)],
+        _ => throw const FormatException('"tools" is not a list'),
+      },
+      subAgents: switch (json['subAgents']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException('"subAgents" is not a list'),
       },
     );
   }
 
   @override
-  Object toJson() => {'gcsOutputDirectory': ?gcsOutputDirectory};
+  Object toJson() => {
+    'agentId': ?agentId,
+    if (agentType.isNotDefault) 'agentType': agentType,
+    if (description.isNotDefault) 'description': description,
+    if (instruction.isNotDefault) 'instruction': instruction,
+    if (tools.isNotDefault) 'tools': [for (final i in tools) i.toJson()],
+    if (subAgents.isNotDefault) 'subAgents': subAgents,
+  };
 
   @override
   String toString() {
     final $contents = [
-      if (gcsOutputDirectory != null) 'gcsOutputDirectory=$gcsOutputDirectory',
+      if (agentId != null) 'agentId=$agentId',
+      'agentType=$agentType',
+      'description=$description',
+      'instruction=$instruction',
     ].join(',');
-    return 'OutputInfo(${$contents})';
+    return 'AgentConfig(${$contents})';
   }
 }
 
-/// The aggregation result for the entire dataset and all metrics.
-final class AggregationOutput extends ProtoMessage {
+/// Represents a single turn/invocation in the conversation.
+final class ConversationTurn extends ProtoMessage {
   static const String fullyQualifiedName =
-      'google.cloud.aiplatform.v1beta1.AggregationOutput';
+      'google.cloud.aiplatform.v1beta1.ConversationTurn';
 
-  /// The dataset used for evaluation & aggregation.
-  final EvaluationDataset? dataset;
+  /// Required. The 0-based index of the turn in the conversation sequence.
+  final int? turnIndex;
 
-  /// One AggregationResult per metric.
-  final List<AggregationResult> aggregationResults;
+  /// Optional. A unique identifier for the turn.
+  /// Useful for referencing specific turns across systems.
+  final String turnId;
 
-  AggregationOutput({this.dataset, this.aggregationResults = const []})
-    : super(fullyQualifiedName);
+  /// Optional. The list of events that occurred during this turn.
+  final List<AgentEvent> events;
 
-  factory AggregationOutput.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
-    return AggregationOutput(
-      dataset: switch (json['dataset']) {
-        null => null,
-        Object $1 => EvaluationDataset.fromJson($1),
-      },
-      aggregationResults: switch (json['aggregationResults']) {
-        null => [],
-        List<Object?> $1 => [for (final i in $1) AggregationResult.fromJson(i)],
-        _ => throw const FormatException('"aggregationResults" is not a list'),
-      },
-    );
-  }
-
-  @override
-  Object toJson() => {
-    'dataset': ?dataset?.toJson(),
-    if (aggregationResults.isNotDefault)
-      'aggregationResults': [for (final i in aggregationResults) i.toJson()],
-  };
-
-  @override
-  String toString() => 'AggregationOutput()';
-}
-
-/// The aggregation result for a single metric.
-final class AggregationResult extends ProtoMessage {
-  static const String fullyQualifiedName =
-      'google.cloud.aiplatform.v1beta1.AggregationResult';
-
-  /// Result for pointwise metric.
-  final PointwiseMetricResult? pointwiseMetricResult;
-
-  /// Result for pairwise metric.
-  final PairwiseMetricResult? pairwiseMetricResult;
-
-  /// Results for exact match metric.
-  final ExactMatchMetricValue? exactMatchMetricValue;
-
-  /// Results for bleu metric.
-  final BleuMetricValue? bleuMetricValue;
-
-  /// Results for rouge metric.
-  final RougeMetricValue? rougeMetricValue;
-
-  /// Aggregation metric.
-  final Metric_AggregationMetric aggregationMetric;
-
-  AggregationResult({
-    this.pointwiseMetricResult,
-    this.pairwiseMetricResult,
-    this.exactMatchMetricValue,
-    this.bleuMetricValue,
-    this.rougeMetricValue,
-    this.aggregationMetric = Metric_AggregationMetric.$default,
+  ConversationTurn({
+    required this.turnIndex,
+    this.turnId = '',
+    this.events = const [],
   }) : super(fullyQualifiedName);
 
-  factory AggregationResult.fromJson(Object? j) {
+  factory ConversationTurn.fromJson(Object? j) {
     final json = j as Map<String, Object?>;
-    return AggregationResult(
-      pointwiseMetricResult: switch (json['pointwiseMetricResult']) {
+    return ConversationTurn(
+      turnIndex: switch (json['turnIndex']) {
         null => null,
-        Object $1 => PointwiseMetricResult.fromJson($1),
+        Object $1 => decodeInt($1),
       },
-      pairwiseMetricResult: switch (json['pairwiseMetricResult']) {
-        null => null,
-        Object $1 => PairwiseMetricResult.fromJson($1),
-      },
-      exactMatchMetricValue: switch (json['exactMatchMetricValue']) {
-        null => null,
-        Object $1 => ExactMatchMetricValue.fromJson($1),
-      },
-      bleuMetricValue: switch (json['bleuMetricValue']) {
-        null => null,
-        Object $1 => BleuMetricValue.fromJson($1),
-      },
-      rougeMetricValue: switch (json['rougeMetricValue']) {
-        null => null,
-        Object $1 => RougeMetricValue.fromJson($1),
-      },
-      aggregationMetric: switch (json['aggregationMetric']) {
-        null => Metric_AggregationMetric.$default,
-        Object $1 => Metric_AggregationMetric.fromJson($1),
-      },
-    );
-  }
-
-  @override
-  Object toJson() => {
-    'pointwiseMetricResult': ?pointwiseMetricResult?.toJson(),
-    'pairwiseMetricResult': ?pairwiseMetricResult?.toJson(),
-    'exactMatchMetricValue': ?exactMatchMetricValue?.toJson(),
-    'bleuMetricValue': ?bleuMetricValue?.toJson(),
-    'rougeMetricValue': ?rougeMetricValue?.toJson(),
-    if (aggregationMetric.isNotDefault)
-      'aggregationMetric': aggregationMetric.toJson(),
-  };
-
-  @override
-  String toString() {
-    final $contents = ['aggregationMetric=$aggregationMetric'].join(',');
-    return 'AggregationResult(${$contents})';
-  }
-}
-
-/// Request message for EvaluationService.EvaluateDataset.
-final class EvaluateDatasetRequest extends ProtoMessage {
-  static const String fullyQualifiedName =
-      'google.cloud.aiplatform.v1beta1.EvaluateDatasetRequest';
-
-  /// Required. The resource name of the Location to evaluate the dataset.
-  /// Format: `projects/{project}/locations/{location}`
-  final String location;
-
-  /// Required. The dataset used for evaluation.
-  final EvaluationDataset? dataset;
-
-  /// Required. The metrics used for evaluation.
-  final List<Metric> metrics;
-
-  /// Required. Config for evaluation output.
-  final OutputConfig? outputConfig;
-
-  /// Optional. Autorater config used for evaluation. Currently only publisher
-  /// Gemini models are supported. Format:
-  /// `projects/{PROJECT}/locations/{LOCATION}/publishers/google/models/{MODEL}.`
-  final AutoraterConfig? autoraterConfig;
-
-  EvaluateDatasetRequest({
-    required this.location,
-    required this.dataset,
-    required this.metrics,
-    required this.outputConfig,
-    this.autoraterConfig,
-  }) : super(fullyQualifiedName);
-
-  factory EvaluateDatasetRequest.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
-    return EvaluateDatasetRequest(
-      location: switch (json['location']) {
+      turnId: switch (json['turnId']) {
         null => '',
         Object $1 => decodeString($1),
       },
-      dataset: switch (json['dataset']) {
-        null => null,
-        Object $1 => EvaluationDataset.fromJson($1),
-      },
-      metrics: switch (json['metrics']) {
+      events: switch (json['events']) {
         null => [],
-        List<Object?> $1 => [for (final i in $1) Metric.fromJson(i)],
-        _ => throw const FormatException('"metrics" is not a list'),
-      },
-      outputConfig: switch (json['outputConfig']) {
-        null => null,
-        Object $1 => OutputConfig.fromJson($1),
-      },
-      autoraterConfig: switch (json['autoraterConfig']) {
-        null => null,
-        Object $1 => AutoraterConfig.fromJson($1),
+        List<Object?> $1 => [for (final i in $1) AgentEvent.fromJson(i)],
+        _ => throw const FormatException('"events" is not a list'),
       },
     );
   }
 
   @override
   Object toJson() => {
-    'location': location,
-    'dataset': ?dataset?.toJson(),
-    'metrics': [for (final i in metrics) i.toJson()],
-    'outputConfig': ?outputConfig?.toJson(),
-    'autoraterConfig': ?autoraterConfig?.toJson(),
+    'turnIndex': ?turnIndex,
+    if (turnId.isNotDefault) 'turnId': turnId,
+    if (events.isNotDefault) 'events': [for (final i in events) i.toJson()],
   };
 
   @override
   String toString() {
-    final $contents = ['location=$location'].join(',');
-    return 'EvaluateDatasetRequest(${$contents})';
+    final $contents = [
+      if (turnIndex != null) 'turnIndex=$turnIndex',
+      'turnId=$turnId',
+    ].join(',');
+    return 'ConversationTurn(${$contents})';
   }
 }
 
-/// Config for evaluation output.
-final class OutputConfig extends ProtoMessage {
+/// Represents a single event in the execution trace.
+final class AgentEvent extends ProtoMessage {
   static const String fullyQualifiedName =
-      'google.cloud.aiplatform.v1beta1.OutputConfig';
+      'google.cloud.aiplatform.v1beta1.AgentEvent';
 
-  /// Cloud storage destination for evaluation output.
-  final GcsDestination? gcsDestination;
+  /// Required. The ID of the agent or entity that generated this event.
+  /// Use "user" to denote events generated by the end-user.
+  final String? author;
 
-  OutputConfig({this.gcsDestination}) : super(fullyQualifiedName);
+  /// Required. The content of the event (e.g., text response, tool call, tool
+  /// response).
+  final Content? content;
 
-  factory OutputConfig.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
-    return OutputConfig(
-      gcsDestination: switch (json['gcsDestination']) {
-        null => null,
-        Object $1 => GcsDestination.fromJson($1),
-      },
-    );
-  }
+  /// Optional. The timestamp when the event occurred.
+  final protobuf.Timestamp? eventTime;
 
-  @override
-  Object toJson() => {'gcsDestination': ?gcsDestination?.toJson()};
+  /// Optional. The change in the session state caused by this event. This is a
+  /// key-value map of fields that were modified or added by the event.
+  final protobuf.Struct? stateDelta;
 
-  @override
-  String toString() => 'OutputConfig()';
-}
+  /// Optional. The list of tools that were active/available to the agent at the
+  /// time of this event. This overrides the `AgentConfig.tools` if set.
+  final List<Tool> activeTools;
 
-/// The metric used for running evaluations.
-final class Metric extends ProtoMessage {
-  static const String fullyQualifiedName =
-      'google.cloud.aiplatform.v1beta1.Metric';
-
-  /// The spec for a pre-defined metric.
-  final PredefinedMetricSpec? predefinedMetricSpec;
-
-  /// Spec for a computation based metric.
-  final ComputationBasedMetricSpec? computationBasedMetricSpec;
-
-  /// Spec for an LLM based metric.
-  final LlmbasedMetricSpec? llmBasedMetricSpec;
-
-  /// Spec for pointwise metric.
-  final PointwiseMetricSpec? pointwiseMetricSpec;
-
-  /// Spec for pairwise metric.
-  final PairwiseMetricSpec? pairwiseMetricSpec;
-
-  /// Spec for exact match metric.
-  final ExactMatchSpec? exactMatchSpec;
-
-  /// Spec for bleu metric.
-  final BleuSpec? bleuSpec;
-
-  /// Spec for rouge metric.
-  final RougeSpec? rougeSpec;
-
-  /// Optional. The aggregation metrics to use.
-  final List<Metric_AggregationMetric> aggregationMetrics;
-
-  Metric({
-    this.predefinedMetricSpec,
-    this.computationBasedMetricSpec,
-    this.llmBasedMetricSpec,
-    this.pointwiseMetricSpec,
-    this.pairwiseMetricSpec,
-    this.exactMatchSpec,
-    this.bleuSpec,
-    this.rougeSpec,
-    this.aggregationMetrics = const [],
+  AgentEvent({
+    required this.author,
+    required this.content,
+    this.eventTime,
+    this.stateDelta,
+    this.activeTools = const [],
   }) : super(fullyQualifiedName);
 
-  factory Metric.fromJson(Object? j) {
+  factory AgentEvent.fromJson(Object? j) {
     final json = j as Map<String, Object?>;
-    return Metric(
-      predefinedMetricSpec: switch (json['predefinedMetricSpec']) {
+    return AgentEvent(
+      author: switch (json['author']) {
         null => null,
-        Object $1 => PredefinedMetricSpec.fromJson($1),
+        Object $1 => decodeString($1),
       },
-      computationBasedMetricSpec: switch (json['computationBasedMetricSpec']) {
+      content: switch (json['content']) {
         null => null,
-        Object $1 => ComputationBasedMetricSpec.fromJson($1),
+        Object $1 => Content.fromJson($1),
       },
-      llmBasedMetricSpec: switch (json['llmBasedMetricSpec']) {
+      eventTime: switch (json['eventTime']) {
         null => null,
-        Object $1 => LlmbasedMetricSpec.fromJson($1),
+        Object $1 => protobuf.Timestamp.fromJson($1),
       },
-      pointwiseMetricSpec: switch (json['pointwiseMetricSpec']) {
+      stateDelta: switch (json['stateDelta']) {
         null => null,
-        Object $1 => PointwiseMetricSpec.fromJson($1),
+        Object $1 => protobuf.Struct.fromJson($1),
       },
-      pairwiseMetricSpec: switch (json['pairwiseMetricSpec']) {
-        null => null,
-        Object $1 => PairwiseMetricSpec.fromJson($1),
-      },
-      exactMatchSpec: switch (json['exactMatchSpec']) {
-        null => null,
-        Object $1 => ExactMatchSpec.fromJson($1),
-      },
-      bleuSpec: switch (json['bleuSpec']) {
-        null => null,
-        Object $1 => BleuSpec.fromJson($1),
-      },
-      rougeSpec: switch (json['rougeSpec']) {
-        null => null,
-        Object $1 => RougeSpec.fromJson($1),
-      },
-      aggregationMetrics: switch (json['aggregationMetrics']) {
+      activeTools: switch (json['activeTools']) {
         null => [],
-        List<Object?> $1 => [
-          for (final i in $1) Metric_AggregationMetric.fromJson(i),
-        ],
-        _ => throw const FormatException('"aggregationMetrics" is not a list'),
+        List<Object?> $1 => [for (final i in $1) Tool.fromJson(i)],
+        _ => throw const FormatException('"activeTools" is not a list'),
       },
     );
   }
 
   @override
   Object toJson() => {
-    'predefinedMetricSpec': ?predefinedMetricSpec?.toJson(),
-    'computationBasedMetricSpec': ?computationBasedMetricSpec?.toJson(),
-    'llmBasedMetricSpec': ?llmBasedMetricSpec?.toJson(),
-    'pointwiseMetricSpec': ?pointwiseMetricSpec?.toJson(),
-    'pairwiseMetricSpec': ?pairwiseMetricSpec?.toJson(),
-    'exactMatchSpec': ?exactMatchSpec?.toJson(),
-    'bleuSpec': ?bleuSpec?.toJson(),
-    'rougeSpec': ?rougeSpec?.toJson(),
-    if (aggregationMetrics.isNotDefault)
-      'aggregationMetrics': [for (final i in aggregationMetrics) i.toJson()],
+    'author': ?author,
+    'content': ?content?.toJson(),
+    'eventTime': ?eventTime?.toJson(),
+    'stateDelta': ?stateDelta?.toJson(),
+    if (activeTools.isNotDefault)
+      'activeTools': [for (final i in activeTools) i.toJson()],
   };
 
   @override
-  String toString() => 'Metric()';
+  String toString() {
+    final $contents = [if (author != null) 'author=$author'].join(',');
+    return 'AgentEvent(${$contents})';
+  }
 }
 
-/// The per-metric statistics on evaluation results supported by
-/// `EvaluationService.EvaluateDataset`.
-final class Metric_AggregationMetric extends ProtoEnum {
-  /// Unspecified aggregation metric.
-  static const aggregationMetricUnspecified = Metric_AggregationMetric(
-    'AGGREGATION_METRIC_UNSPECIFIED',
+/// Message representing a single testable criterion for evaluation.
+/// One input prompt could have multiple rubrics.
+final class Rubric extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.Rubric';
+
+  /// Unique identifier for the rubric.
+  /// This ID is used to refer to this rubric, e.g., in RubricVerdict.
+  final String rubricId;
+
+  /// Required. The actual testable criteria for the rubric.
+  final Rubric_Content? content;
+
+  /// Optional. A type designator for the rubric, which can inform how it's
+  /// evaluated or interpreted by systems or users.
+  /// It's recommended to use consistent, well-defined, upper snake_case strings.
+  /// Examples: "SUMMARIZATION_QUALITY", "SAFETY_HARMFUL_CONTENT",
+  /// "INSTRUCTION_ADHERENCE".
+  final String? type;
+
+  /// Optional. The relative importance of this rubric.
+  final Rubric_Importance? importance;
+
+  Rubric({this.rubricId = '', this.content, this.type, this.importance})
+    : super(fullyQualifiedName);
+
+  factory Rubric.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Rubric(
+      rubricId: switch (json['rubricId']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      content: switch (json['content']) {
+        null => null,
+        Object $1 => Rubric_Content.fromJson($1),
+      },
+      type: switch (json['type']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      importance: switch (json['importance']) {
+        null => null,
+        Object $1 => Rubric_Importance.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (rubricId.isNotDefault) 'rubricId': rubricId,
+    'content': ?content?.toJson(),
+    'type': ?type,
+    'importance': ?importance?.toJson(),
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      'rubricId=$rubricId',
+      if (type != null) 'type=$type',
+      if (importance != null) 'importance=$importance',
+    ].join(',');
+    return 'Rubric(${$contents})';
+  }
+}
+
+/// Content of the rubric, defining the testable criteria.
+final class Rubric_Content extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.Rubric.Content';
+
+  /// Evaluation criteria based on a specific property.
+  final Rubric_Content_Property? property;
+
+  Rubric_Content({this.property}) : super(fullyQualifiedName);
+
+  factory Rubric_Content.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Rubric_Content(
+      property: switch (json['property']) {
+        null => null,
+        Object $1 => Rubric_Content_Property.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {'property': ?property?.toJson()};
+
+  @override
+  String toString() => 'Content()';
+}
+
+/// Defines criteria based on a specific property.
+final class Rubric_Content_Property extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.Rubric.Content.Property';
+
+  /// Description of the property being evaluated.
+  /// Example: "The model's response is grammatically correct."
+  final String description;
+
+  Rubric_Content_Property({this.description = ''}) : super(fullyQualifiedName);
+
+  factory Rubric_Content_Property.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Rubric_Content_Property(
+      description: switch (json['description']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {if (description.isNotDefault) 'description': description};
+
+  @override
+  String toString() {
+    final $contents = ['description=$description'].join(',');
+    return 'Property(${$contents})';
+  }
+}
+
+/// Importance level of the rubric.
+final class Rubric_Importance extends ProtoEnum {
+  /// Importance is not specified.
+  static const importanceUnspecified = Rubric_Importance(
+    'IMPORTANCE_UNSPECIFIED',
   );
 
-  /// Average aggregation metric. Not supported for Pairwise metric.
-  static const average = Metric_AggregationMetric('AVERAGE');
+  /// High importance.
+  static const high = Rubric_Importance('HIGH');
 
-  /// Mode aggregation metric.
-  static const mode = Metric_AggregationMetric('MODE');
+  /// Medium importance.
+  static const medium = Rubric_Importance('MEDIUM');
 
-  /// Standard deviation aggregation metric. Not supported for pairwise metric.
-  static const standardDeviation = Metric_AggregationMetric(
-    'STANDARD_DEVIATION',
-  );
+  /// Low importance.
+  static const low = Rubric_Importance('LOW');
 
-  /// Variance aggregation metric. Not supported for pairwise metric.
-  static const variance = Metric_AggregationMetric('VARIANCE');
+  /// The default value for [Rubric_Importance].
+  static const $default = importanceUnspecified;
 
-  /// Minimum aggregation metric. Not supported for pairwise metric.
-  static const minimum = Metric_AggregationMetric('MINIMUM');
+  const Rubric_Importance(super.value);
 
-  /// Maximum aggregation metric. Not supported for pairwise metric.
-  static const maximum = Metric_AggregationMetric('MAXIMUM');
-
-  /// Median aggregation metric. Not supported for pairwise metric.
-  static const median = Metric_AggregationMetric('MEDIAN');
-
-  /// 90th percentile aggregation metric. Not supported for pairwise metric.
-  static const percentileP90 = Metric_AggregationMetric('PERCENTILE_P90');
-
-  /// 95th percentile aggregation metric. Not supported for pairwise metric.
-  static const percentileP95 = Metric_AggregationMetric('PERCENTILE_P95');
-
-  /// 99th percentile aggregation metric. Not supported for pairwise metric.
-  static const percentileP99 = Metric_AggregationMetric('PERCENTILE_P99');
-
-  /// The default value for [Metric_AggregationMetric].
-  static const $default = aggregationMetricUnspecified;
-
-  const Metric_AggregationMetric(super.value);
-
-  factory Metric_AggregationMetric.fromJson(Object? json) =>
-      Metric_AggregationMetric(json as String);
+  factory Rubric_Importance.fromJson(Object? json) =>
+      Rubric_Importance(json as String);
 
   bool get isNotDefault => this != $default;
 
   @override
-  String toString() => 'AggregationMetric.$value';
+  String toString() => 'Importance.$value';
 }
 
-/// The dataset used for evaluation.
-final class EvaluationDataset extends ProtoMessage {
+/// A group of rubrics, used for grouping rubrics based on a metric or a version.
+final class RubricGroup extends ProtoMessage {
   static const String fullyQualifiedName =
-      'google.cloud.aiplatform.v1beta1.EvaluationDataset';
+      'google.cloud.aiplatform.v1beta1.RubricGroup';
 
-  /// Cloud storage source holds the dataset. Currently only one Cloud Storage
-  /// file path is supported.
-  final GcsSource? gcsSource;
+  /// Unique identifier for the group.
+  final String groupId;
 
-  /// BigQuery source holds the dataset.
-  final BigQuerySource? bigquerySource;
+  /// Human-readable name for the group. This should be unique
+  ///  within a given context if used for display or selection.
+  ///  Example: "Instruction Following V1", "Content Quality - Summarization
+  ///  Task".
+  final String displayName;
 
-  EvaluationDataset({this.gcsSource, this.bigquerySource})
-    : super(fullyQualifiedName);
+  /// Rubrics that are part of this group.
+  final List<Rubric> rubrics;
 
-  factory EvaluationDataset.fromJson(Object? j) {
+  RubricGroup({
+    this.groupId = '',
+    this.displayName = '',
+    this.rubrics = const [],
+  }) : super(fullyQualifiedName);
+
+  factory RubricGroup.fromJson(Object? j) {
     final json = j as Map<String, Object?>;
-    return EvaluationDataset(
-      gcsSource: switch (json['gcsSource']) {
-        null => null,
-        Object $1 => GcsSource.fromJson($1),
+    return RubricGroup(
+      groupId: switch (json['groupId']) {
+        null => '',
+        Object $1 => decodeString($1),
       },
-      bigquerySource: switch (json['bigquerySource']) {
-        null => null,
-        Object $1 => BigQuerySource.fromJson($1),
+      displayName: switch (json['displayName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      rubrics: switch (json['rubrics']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Rubric.fromJson(i)],
+        _ => throw const FormatException('"rubrics" is not a list'),
       },
     );
   }
 
   @override
   Object toJson() => {
-    'gcsSource': ?gcsSource?.toJson(),
-    'bigquerySource': ?bigquerySource?.toJson(),
+    if (groupId.isNotDefault) 'groupId': groupId,
+    if (displayName.isNotDefault) 'displayName': displayName,
+    if (rubrics.isNotDefault) 'rubrics': [for (final i in rubrics) i.toJson()],
   };
 
   @override
-  String toString() => 'EvaluationDataset()';
+  String toString() {
+    final $contents = [
+      'groupId=$groupId',
+      'displayName=$displayName',
+    ].join(',');
+    return 'RubricGroup(${$contents})';
+  }
 }
 
-/// The configs for autorater. This is applicable to both EvaluateInstances and
-/// EvaluateDataset.
-final class AutoraterConfig extends ProtoMessage {
+/// Represents the verdict of an evaluation against a single rubric.
+final class RubricVerdict extends ProtoMessage {
   static const String fullyQualifiedName =
-      'google.cloud.aiplatform.v1beta1.AutoraterConfig';
+      'google.cloud.aiplatform.v1beta1.RubricVerdict';
 
-  /// Optional. Number of samples for each instance in the dataset.
-  /// If not specified, the default is 4. Minimum value is 1, maximum value
-  /// is 32.
-  final int? samplingCount;
+  /// Required. The full rubric definition that was evaluated.
+  /// Storing this ensures the verdict is self-contained and understandable,
+  /// especially if the original rubric definition changes or was dynamically
+  /// generated.
+  final Rubric? evaluatedRubric;
 
-  /// Optional. Default is true. Whether to flip the candidate and baseline
-  /// responses. This is only applicable to the pairwise metric. If enabled, also
-  /// provide PairwiseMetricSpec.candidate_response_field_name and
-  /// PairwiseMetricSpec.baseline_response_field_name. When rendering
-  /// PairwiseMetricSpec.metric_prompt_template, the candidate and baseline
-  /// fields will be flipped for half of the samples to reduce bias.
-  final bool? flipEnabled;
+  /// Required. Outcome of the evaluation against the rubric, represented as a
+  /// boolean. `true` indicates a "Pass", `false` indicates a "Fail".
+  final bool verdict;
 
-  /// Optional. The fully qualified name of the publisher model or tuned
-  /// autorater endpoint to use.
-  ///
-  /// Publisher model format:
-  /// `projects/{project}/locations/{location}/publishers/*/models/*`
-  ///
-  /// Tuned model endpoint format:
-  /// `projects/{project}/locations/{location}/endpoints/{endpoint}`
-  final String autoraterModel;
+  /// Optional. Human-readable reasoning or explanation for the verdict.
+  /// This can include specific examples or details from the evaluated content
+  /// that justify the given verdict.
+  final String? reasoning;
 
-  AutoraterConfig({
-    this.samplingCount,
-    this.flipEnabled,
-    this.autoraterModel = '',
-  }) : super(fullyQualifiedName);
+  RubricVerdict({this.evaluatedRubric, this.verdict = false, this.reasoning})
+    : super(fullyQualifiedName);
 
-  factory AutoraterConfig.fromJson(Object? j) {
+  factory RubricVerdict.fromJson(Object? j) {
     final json = j as Map<String, Object?>;
-    return AutoraterConfig(
-      samplingCount: switch (json['samplingCount']) {
+    return RubricVerdict(
+      evaluatedRubric: switch (json['evaluatedRubric']) {
         null => null,
-        Object $1 => decodeInt($1),
+        Object $1 => Rubric.fromJson($1),
       },
-      flipEnabled: switch (json['flipEnabled']) {
-        null => null,
+      verdict: switch (json['verdict']) {
+        null => false,
         Object $1 => decodeBool($1),
       },
-      autoraterModel: switch (json['autoraterModel']) {
-        null => '',
+      reasoning: switch (json['reasoning']) {
+        null => null,
         Object $1 => decodeString($1),
       },
     );
@@ -50047,19 +51656,18 @@ final class AutoraterConfig extends ProtoMessage {
 
   @override
   Object toJson() => {
-    'samplingCount': ?samplingCount,
-    'flipEnabled': ?flipEnabled,
-    if (autoraterModel.isNotDefault) 'autoraterModel': autoraterModel,
+    'evaluatedRubric': ?evaluatedRubric?.toJson(),
+    if (verdict.isNotDefault) 'verdict': verdict,
+    'reasoning': ?reasoning,
   };
 
   @override
   String toString() {
     final $contents = [
-      if (samplingCount != null) 'samplingCount=$samplingCount',
-      if (flipEnabled != null) 'flipEnabled=$flipEnabled',
-      'autoraterModel=$autoraterModel',
+      'verdict=$verdict',
+      if (reasoning != null) 'reasoning=$reasoning',
     ].join(',');
-    return 'AutoraterConfig(${$contents})';
+    return 'RubricVerdict(${$contents})';
   }
 }
 
@@ -50177,6 +51785,19 @@ final class EvaluateInstancesRequest extends ProtoMessage {
   /// Format: `projects/{project}/locations/{location}`
   final String location;
 
+  /// The metrics used for evaluation.
+  /// Currently, we only support evaluating a single metric. If multiple metrics
+  /// are provided, only the first one will be evaluated.
+  final List<Metric> metrics;
+
+  /// Optional. The metrics (either inline or registered) used for evaluation.
+  /// Currently, we only support evaluating a single metric. If multiple metrics
+  /// are provided, only the first one will be evaluated.
+  final List<MetricSource> metricSources;
+
+  /// The instance to be evaluated.
+  final EvaluationInstance? instance;
+
   /// Optional. Autorater config used for evaluation.
   final AutoraterConfig? autoraterConfig;
 
@@ -50214,6 +51835,9 @@ final class EvaluateInstancesRequest extends ProtoMessage {
     this.trajectorySingleToolUseInput,
     this.rubricBasedInstructionFollowingInput,
     required this.location,
+    this.metrics = const [],
+    this.metricSources = const [],
+    this.instance,
     this.autoraterConfig,
   }) : super(fullyQualifiedName);
 
@@ -50364,6 +51988,20 @@ final class EvaluateInstancesRequest extends ProtoMessage {
         null => '',
         Object $1 => decodeString($1),
       },
+      metrics: switch (json['metrics']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Metric.fromJson(i)],
+        _ => throw const FormatException('"metrics" is not a list'),
+      },
+      metricSources: switch (json['metricSources']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) MetricSource.fromJson(i)],
+        _ => throw const FormatException('"metricSources" is not a list'),
+      },
+      instance: switch (json['instance']) {
+        null => null,
+        Object $1 => EvaluationInstance.fromJson($1),
+      },
       autoraterConfig: switch (json['autoraterConfig']) {
         null => null,
         Object $1 => AutoraterConfig.fromJson($1),
@@ -50412,6 +52050,10 @@ final class EvaluateInstancesRequest extends ProtoMessage {
     'rubricBasedInstructionFollowingInput':
         ?rubricBasedInstructionFollowingInput?.toJson(),
     'location': location,
+    if (metrics.isNotDefault) 'metrics': [for (final i in metrics) i.toJson()],
+    if (metricSources.isNotDefault)
+      'metricSources': [for (final i in metricSources) i.toJson()],
+    'instance': ?instance?.toJson(),
     'autoraterConfig': ?autoraterConfig?.toJson(),
   };
 
@@ -50419,6 +52061,1093 @@ final class EvaluateInstancesRequest extends ProtoMessage {
   String toString() {
     final $contents = ['location=$location'].join(',');
     return 'EvaluateInstancesRequest(${$contents})';
+  }
+}
+
+/// The metric used for running evaluations.
+final class Metric extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.Metric';
+
+  /// The spec for a pre-defined metric.
+  final PredefinedMetricSpec? predefinedMetricSpec;
+
+  /// Spec for a computation based metric.
+  final ComputationBasedMetricSpec? computationBasedMetricSpec;
+
+  /// Spec for an LLM based metric.
+  final LlmbasedMetricSpec? llmBasedMetricSpec;
+
+  /// Spec for Custom Code Execution metric.
+  final CustomCodeExecutionSpec? customCodeExecutionSpec;
+
+  /// Spec for pointwise metric.
+  final PointwiseMetricSpec? pointwiseMetricSpec;
+
+  /// Spec for pairwise metric.
+  final PairwiseMetricSpec? pairwiseMetricSpec;
+
+  /// Spec for exact match metric.
+  final ExactMatchSpec? exactMatchSpec;
+
+  /// Spec for bleu metric.
+  final BleuSpec? bleuSpec;
+
+  /// Spec for rouge metric.
+  final RougeSpec? rougeSpec;
+
+  /// Optional. The aggregation metrics to use.
+  final List<Metric_AggregationMetric> aggregationMetrics;
+
+  /// Optional. Metadata about the metric, used for visualization and
+  /// organization.
+  final MetricMetadata? metadata;
+
+  Metric({
+    this.predefinedMetricSpec,
+    this.computationBasedMetricSpec,
+    this.llmBasedMetricSpec,
+    this.customCodeExecutionSpec,
+    this.pointwiseMetricSpec,
+    this.pairwiseMetricSpec,
+    this.exactMatchSpec,
+    this.bleuSpec,
+    this.rougeSpec,
+    this.aggregationMetrics = const [],
+    this.metadata,
+  }) : super(fullyQualifiedName);
+
+  factory Metric.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Metric(
+      predefinedMetricSpec: switch (json['predefinedMetricSpec']) {
+        null => null,
+        Object $1 => PredefinedMetricSpec.fromJson($1),
+      },
+      computationBasedMetricSpec: switch (json['computationBasedMetricSpec']) {
+        null => null,
+        Object $1 => ComputationBasedMetricSpec.fromJson($1),
+      },
+      llmBasedMetricSpec: switch (json['llmBasedMetricSpec']) {
+        null => null,
+        Object $1 => LlmbasedMetricSpec.fromJson($1),
+      },
+      customCodeExecutionSpec: switch (json['customCodeExecutionSpec']) {
+        null => null,
+        Object $1 => CustomCodeExecutionSpec.fromJson($1),
+      },
+      pointwiseMetricSpec: switch (json['pointwiseMetricSpec']) {
+        null => null,
+        Object $1 => PointwiseMetricSpec.fromJson($1),
+      },
+      pairwiseMetricSpec: switch (json['pairwiseMetricSpec']) {
+        null => null,
+        Object $1 => PairwiseMetricSpec.fromJson($1),
+      },
+      exactMatchSpec: switch (json['exactMatchSpec']) {
+        null => null,
+        Object $1 => ExactMatchSpec.fromJson($1),
+      },
+      bleuSpec: switch (json['bleuSpec']) {
+        null => null,
+        Object $1 => BleuSpec.fromJson($1),
+      },
+      rougeSpec: switch (json['rougeSpec']) {
+        null => null,
+        Object $1 => RougeSpec.fromJson($1),
+      },
+      aggregationMetrics: switch (json['aggregationMetrics']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) Metric_AggregationMetric.fromJson(i),
+        ],
+        _ => throw const FormatException('"aggregationMetrics" is not a list'),
+      },
+      metadata: switch (json['metadata']) {
+        null => null,
+        Object $1 => MetricMetadata.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'predefinedMetricSpec': ?predefinedMetricSpec?.toJson(),
+    'computationBasedMetricSpec': ?computationBasedMetricSpec?.toJson(),
+    'llmBasedMetricSpec': ?llmBasedMetricSpec?.toJson(),
+    'customCodeExecutionSpec': ?customCodeExecutionSpec?.toJson(),
+    'pointwiseMetricSpec': ?pointwiseMetricSpec?.toJson(),
+    'pairwiseMetricSpec': ?pairwiseMetricSpec?.toJson(),
+    'exactMatchSpec': ?exactMatchSpec?.toJson(),
+    'bleuSpec': ?bleuSpec?.toJson(),
+    'rougeSpec': ?rougeSpec?.toJson(),
+    if (aggregationMetrics.isNotDefault)
+      'aggregationMetrics': [for (final i in aggregationMetrics) i.toJson()],
+    'metadata': ?metadata?.toJson(),
+  };
+
+  @override
+  String toString() => 'Metric()';
+}
+
+/// The per-metric statistics on evaluation results supported by
+/// `EvaluationService.EvaluateDataset`.
+final class Metric_AggregationMetric extends ProtoEnum {
+  /// Unspecified aggregation metric.
+  static const aggregationMetricUnspecified = Metric_AggregationMetric(
+    'AGGREGATION_METRIC_UNSPECIFIED',
+  );
+
+  /// Average aggregation metric. Not supported for Pairwise metric.
+  static const average = Metric_AggregationMetric('AVERAGE');
+
+  /// Mode aggregation metric.
+  static const mode = Metric_AggregationMetric('MODE');
+
+  /// Standard deviation aggregation metric. Not supported for pairwise metric.
+  static const standardDeviation = Metric_AggregationMetric(
+    'STANDARD_DEVIATION',
+  );
+
+  /// Variance aggregation metric. Not supported for pairwise metric.
+  static const variance = Metric_AggregationMetric('VARIANCE');
+
+  /// Minimum aggregation metric. Not supported for pairwise metric.
+  static const minimum = Metric_AggregationMetric('MINIMUM');
+
+  /// Maximum aggregation metric. Not supported for pairwise metric.
+  static const maximum = Metric_AggregationMetric('MAXIMUM');
+
+  /// Median aggregation metric. Not supported for pairwise metric.
+  static const median = Metric_AggregationMetric('MEDIAN');
+
+  /// 90th percentile aggregation metric. Not supported for pairwise metric.
+  static const percentileP90 = Metric_AggregationMetric('PERCENTILE_P90');
+
+  /// 95th percentile aggregation metric. Not supported for pairwise metric.
+  static const percentileP95 = Metric_AggregationMetric('PERCENTILE_P95');
+
+  /// 99th percentile aggregation metric. Not supported for pairwise metric.
+  static const percentileP99 = Metric_AggregationMetric('PERCENTILE_P99');
+
+  /// The default value for [Metric_AggregationMetric].
+  static const $default = aggregationMetricUnspecified;
+
+  const Metric_AggregationMetric(super.value);
+
+  factory Metric_AggregationMetric.fromJson(Object? json) =>
+      Metric_AggregationMetric(json as String);
+
+  bool get isNotDefault => this != $default;
+
+  @override
+  String toString() => 'AggregationMetric.$value';
+}
+
+/// Metadata about the metric, used for visualization and organization.
+final class MetricMetadata extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.MetricMetadata';
+
+  /// Optional. The user-friendly name for the metric. If not set for a
+  /// registered metric, it will default to the metric's display name.
+  final String title;
+
+  /// Optional. The range of possible scores for this metric, used for plotting.
+  final MetricMetadata_ScoreRange? scoreRange;
+
+  /// Optional. Flexible metadata for user-defined attributes.
+  final protobuf.Struct? otherMetadata;
+
+  MetricMetadata({this.title = '', this.scoreRange, this.otherMetadata})
+    : super(fullyQualifiedName);
+
+  factory MetricMetadata.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return MetricMetadata(
+      title: switch (json['title']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      scoreRange: switch (json['scoreRange']) {
+        null => null,
+        Object $1 => MetricMetadata_ScoreRange.fromJson($1),
+      },
+      otherMetadata: switch (json['otherMetadata']) {
+        null => null,
+        Object $1 => protobuf.Struct.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (title.isNotDefault) 'title': title,
+    'scoreRange': ?scoreRange?.toJson(),
+    'otherMetadata': ?otherMetadata?.toJson(),
+  };
+
+  @override
+  String toString() {
+    final $contents = ['title=$title'].join(',');
+    return 'MetricMetadata(${$contents})';
+  }
+}
+
+/// The range of possible scores for this metric, used for plotting.
+final class MetricMetadata_ScoreRange extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.MetricMetadata.ScoreRange';
+
+  /// Required. The minimum value of the score range (inclusive).
+  final double? min;
+
+  /// Required. The maximum value of the score range (inclusive).
+  final double? max;
+
+  /// Optional. The distance between discrete steps in the range.
+  /// If unset, the range is assumed to be continuous.
+  final double? step;
+
+  /// Optional. The description of the score explaining the directionality etc.
+  final String description;
+
+  MetricMetadata_ScoreRange({
+    required this.min,
+    required this.max,
+    this.step,
+    this.description = '',
+  }) : super(fullyQualifiedName);
+
+  factory MetricMetadata_ScoreRange.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return MetricMetadata_ScoreRange(
+      min: switch (json['min']) {
+        null => null,
+        Object $1 => decodeDouble($1),
+      },
+      max: switch (json['max']) {
+        null => null,
+        Object $1 => decodeDouble($1),
+      },
+      step: switch (json['step']) {
+        null => null,
+        Object $1 => decodeDouble($1),
+      },
+      description: switch (json['description']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (min case final $1?) 'min': encodeDouble($1),
+    if (max case final $1?) 'max': encodeDouble($1),
+    if (step case final $1?) 'step': encodeDouble($1),
+    if (description.isNotDefault) 'description': description,
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      if (min != null) 'min=$min',
+      if (max != null) 'max=$max',
+      if (step != null) 'step=$step',
+      'description=$description',
+    ].join(',');
+    return 'ScoreRange(${$contents})';
+  }
+}
+
+/// The metric source used for evaluation.
+final class MetricSource extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.MetricSource';
+
+  /// Inline metric config.
+  final Metric? metric;
+
+  /// Resource name for registered metric.
+  final String? metricResourceName;
+
+  MetricSource({this.metric, this.metricResourceName})
+    : super(fullyQualifiedName);
+
+  factory MetricSource.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return MetricSource(
+      metric: switch (json['metric']) {
+        null => null,
+        Object $1 => Metric.fromJson($1),
+      },
+      metricResourceName: switch (json['metricResourceName']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'metric': ?metric?.toJson(),
+    'metricResourceName': ?metricResourceName,
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      if (metricResourceName != null) 'metricResourceName=$metricResourceName',
+    ].join(',');
+    return 'MetricSource(${$contents})';
+  }
+}
+
+/// A single instance to be evaluated.
+/// Instances are used to specify the input data for evaluation, from
+/// simple string comparisons to complex, multi-turn model evaluations
+final class EvaluationInstance extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.EvaluationInstance';
+
+  /// Optional. Data used to populate placeholder `prompt` in a metric prompt
+  /// template.
+  final EvaluationInstance_InstanceData? prompt;
+
+  /// Optional. Named groups of rubrics associated with the prompt.
+  /// This is used for rubric-based evaluations where rubrics can be referenced
+  /// by a key. The key could represent versions, associated metrics, etc.
+  final Map<String, RubricGroup> rubricGroups;
+
+  /// Optional. Data used to populate placeholder `response` in a metric prompt
+  /// template.
+  final EvaluationInstance_InstanceData? response;
+
+  /// Optional. Data used to populate placeholder `reference` in a metric prompt
+  /// template.
+  final EvaluationInstance_InstanceData? reference;
+
+  /// Optional. Other data used to populate placeholders based on their key.
+  /// If a key conflicts with a field in the EvaluationInstance (e.g. `prompt`),
+  /// the value of the field will take precedence over the value in other_data.
+  final EvaluationInstance_MapInstance? otherData;
+
+  /// Optional. Deprecated: Use `agent_eval_data` instead.
+  /// Data used for agent evaluation.
+  final EvaluationInstance_DeprecatedAgentData? agentData;
+
+  /// Optional. Data used for agent evaluation.
+  final AgentData? agentEvalData;
+
+  EvaluationInstance({
+    this.prompt,
+    this.rubricGroups = const {},
+    this.response,
+    this.reference,
+    this.otherData,
+    this.agentData,
+    this.agentEvalData,
+  }) : super(fullyQualifiedName);
+
+  factory EvaluationInstance.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return EvaluationInstance(
+      prompt: switch (json['prompt']) {
+        null => null,
+        Object $1 => EvaluationInstance_InstanceData.fromJson($1),
+      },
+      rubricGroups: switch (json['rubricGroups']) {
+        null => {},
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): RubricGroup.fromJson(e.value),
+        },
+        _ => throw const FormatException('"rubricGroups" is not an object'),
+      },
+      response: switch (json['response']) {
+        null => null,
+        Object $1 => EvaluationInstance_InstanceData.fromJson($1),
+      },
+      reference: switch (json['reference']) {
+        null => null,
+        Object $1 => EvaluationInstance_InstanceData.fromJson($1),
+      },
+      otherData: switch (json['otherData']) {
+        null => null,
+        Object $1 => EvaluationInstance_MapInstance.fromJson($1),
+      },
+      agentData: switch (json['agentData']) {
+        null => null,
+        Object $1 => EvaluationInstance_DeprecatedAgentData.fromJson($1),
+      },
+      agentEvalData: switch (json['agentEvalData']) {
+        null => null,
+        Object $1 => AgentData.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'prompt': ?prompt?.toJson(),
+    if (rubricGroups.isNotDefault)
+      'rubricGroups': {
+        for (final e in rubricGroups.entries) e.key: e.value.toJson(),
+      },
+    'response': ?response?.toJson(),
+    'reference': ?reference?.toJson(),
+    'otherData': ?otherData?.toJson(),
+    'agentData': ?agentData?.toJson(),
+    'agentEvalData': ?agentEvalData?.toJson(),
+  };
+
+  @override
+  String toString() => 'EvaluationInstance()';
+}
+
+/// Instance data used to populate placeholders in a metric prompt template.
+final class EvaluationInstance_InstanceData extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.EvaluationInstance.InstanceData';
+
+  /// Text data.
+  final String? text;
+
+  /// List of Gemini content data.
+  final EvaluationInstance_InstanceData_Contents? contents;
+
+  EvaluationInstance_InstanceData({this.text, this.contents})
+    : super(fullyQualifiedName);
+
+  factory EvaluationInstance_InstanceData.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return EvaluationInstance_InstanceData(
+      text: switch (json['text']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      contents: switch (json['contents']) {
+        null => null,
+        Object $1 => EvaluationInstance_InstanceData_Contents.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {'text': ?text, 'contents': ?contents?.toJson()};
+
+  @override
+  String toString() {
+    final $contents = [if (text != null) 'text=$text'].join(',');
+    return 'InstanceData(${$contents})';
+  }
+}
+
+/// List of standard Content messages from Gemini API.
+final class EvaluationInstance_InstanceData_Contents extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.EvaluationInstance.InstanceData.Contents';
+
+  /// Optional. Repeated contents.
+  final List<Content> contents;
+
+  EvaluationInstance_InstanceData_Contents({this.contents = const []})
+    : super(fullyQualifiedName);
+
+  factory EvaluationInstance_InstanceData_Contents.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return EvaluationInstance_InstanceData_Contents(
+      contents: switch (json['contents']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Content.fromJson(i)],
+        _ => throw const FormatException('"contents" is not a list'),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (contents.isNotDefault)
+      'contents': [for (final i in contents) i.toJson()],
+  };
+
+  @override
+  String toString() => 'Contents()';
+}
+
+/// Instance data specified as a map.
+final class EvaluationInstance_MapInstance extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.EvaluationInstance.MapInstance';
+
+  /// Optional. Map of instance data.
+  final Map<String, EvaluationInstance_InstanceData> mapInstance;
+
+  EvaluationInstance_MapInstance({this.mapInstance = const {}})
+    : super(fullyQualifiedName);
+
+  factory EvaluationInstance_MapInstance.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return EvaluationInstance_MapInstance(
+      mapInstance: switch (json['mapInstance']) {
+        null => {},
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): EvaluationInstance_InstanceData.fromJson(
+              e.value,
+            ),
+        },
+        _ => throw const FormatException('"mapInstance" is not an object'),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (mapInstance.isNotDefault)
+      'mapInstance': {
+        for (final e in mapInstance.entries) e.key: e.value.toJson(),
+      },
+  };
+
+  @override
+  String toString() => 'MapInstance()';
+}
+
+/// Deprecated: Use `agent_eval_data` instead.
+/// Contains data specific to agent evaluations.
+final class EvaluationInstance_DeprecatedAgentData extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.EvaluationInstance.DeprecatedAgentData';
+
+  /// A JSON string containing a list of tools available to an agent with
+  /// info such as name, description, parameters and required parameters.
+  final String? toolsText;
+
+  /// List of tools.
+  final EvaluationInstance_DeprecatedAgentData_Tools? tools;
+
+  /// A list of events.
+  final EvaluationInstance_DeprecatedAgentData_Events? events;
+
+  /// Optional. The static Agent Configuration.
+  /// This map defines the graph structure of the agent system.
+  /// Key: agent_id (matches the `author` field in events).
+  /// Value: The static configuration of the agent (tools, instructions,
+  /// sub-agents).
+  final Map<String, EvaluationInstance_DeprecatedAgentConfig> agents;
+
+  /// Optional. The chronological list of conversation turns.
+  /// Each turn represents a logical execution cycle (e.g., User Input -> Agent
+  /// Response).
+  final List<EvaluationInstance_DeprecatedAgentData_ConversationTurn> turns;
+
+  /// Optional. Deprecated:  Use `agents.developer_instruction` or
+  /// `turns.events.active_instruction` instead.
+  /// A field containing instructions from the developer for the agent.
+  final EvaluationInstance_InstanceData? developerInstruction;
+
+  /// Optional. Deprecated: Use `agent_eval_data` instead.
+  /// Agent configuration.
+  final EvaluationInstance_DeprecatedAgentConfig? agentConfig;
+
+  EvaluationInstance_DeprecatedAgentData({
+    this.toolsText,
+    this.tools,
+    this.events,
+    this.agents = const {},
+    this.turns = const [],
+    this.developerInstruction,
+    this.agentConfig,
+  }) : super(fullyQualifiedName);
+
+  factory EvaluationInstance_DeprecatedAgentData.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return EvaluationInstance_DeprecatedAgentData(
+      toolsText: switch (json['toolsText']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      tools: switch (json['tools']) {
+        null => null,
+        Object $1 => EvaluationInstance_DeprecatedAgentData_Tools.fromJson($1),
+      },
+      events: switch (json['events']) {
+        null => null,
+        Object $1 => EvaluationInstance_DeprecatedAgentData_Events.fromJson($1),
+      },
+      agents: switch (json['agents']) {
+        null => {},
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key):
+                EvaluationInstance_DeprecatedAgentConfig.fromJson(e.value),
+        },
+        _ => throw const FormatException('"agents" is not an object'),
+      },
+      turns: switch (json['turns']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1)
+            EvaluationInstance_DeprecatedAgentData_ConversationTurn.fromJson(i),
+        ],
+        _ => throw const FormatException('"turns" is not a list'),
+      },
+      developerInstruction: switch (json['developerInstruction']) {
+        null => null,
+        Object $1 => EvaluationInstance_InstanceData.fromJson($1),
+      },
+      agentConfig: switch (json['agentConfig']) {
+        null => null,
+        Object $1 => EvaluationInstance_DeprecatedAgentConfig.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'toolsText': ?toolsText,
+    'tools': ?tools?.toJson(),
+    'events': ?events?.toJson(),
+    if (agents.isNotDefault)
+      'agents': {for (final e in agents.entries) e.key: e.value.toJson()},
+    if (turns.isNotDefault) 'turns': [for (final i in turns) i.toJson()],
+    'developerInstruction': ?developerInstruction?.toJson(),
+    'agentConfig': ?agentConfig?.toJson(),
+  };
+
+  @override
+  String toString() {
+    final $contents = [if (toolsText != null) 'toolsText=$toolsText'].join(',');
+    return 'DeprecatedAgentData(${$contents})';
+  }
+}
+
+/// Represents a single turn/invocation in the conversation.
+final class EvaluationInstance_DeprecatedAgentData_ConversationTurn
+    extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.EvaluationInstance.DeprecatedAgentData.ConversationTurn';
+
+  /// Required. The 0-based index of the turn in the conversation sequence.
+  final int? turnIndex;
+
+  /// Optional. A unique identifier for the turn.
+  /// Useful for referencing specific turns across systems.
+  final String turnId;
+
+  /// Optional. The list of events that occurred during this turn.
+  final List<EvaluationInstance_DeprecatedAgentData_AgentEvent> events;
+
+  EvaluationInstance_DeprecatedAgentData_ConversationTurn({
+    required this.turnIndex,
+    this.turnId = '',
+    this.events = const [],
+  }) : super(fullyQualifiedName);
+
+  factory EvaluationInstance_DeprecatedAgentData_ConversationTurn.fromJson(
+    Object? j,
+  ) {
+    final json = j as Map<String, Object?>;
+    return EvaluationInstance_DeprecatedAgentData_ConversationTurn(
+      turnIndex: switch (json['turnIndex']) {
+        null => null,
+        Object $1 => decodeInt($1),
+      },
+      turnId: switch (json['turnId']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      events: switch (json['events']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1)
+            EvaluationInstance_DeprecatedAgentData_AgentEvent.fromJson(i),
+        ],
+        _ => throw const FormatException('"events" is not a list'),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'turnIndex': ?turnIndex,
+    if (turnId.isNotDefault) 'turnId': turnId,
+    if (events.isNotDefault) 'events': [for (final i in events) i.toJson()],
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      if (turnIndex != null) 'turnIndex=$turnIndex',
+      'turnId=$turnId',
+    ].join(',');
+    return 'ConversationTurn(${$contents})';
+  }
+}
+
+/// A single event in the execution trace.
+final class EvaluationInstance_DeprecatedAgentData_AgentEvent
+    extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.EvaluationInstance.DeprecatedAgentData.AgentEvent';
+
+  /// Required. The ID of the agent or entity that generated this event.
+  final String? author;
+
+  /// Required. The content of the event (e.g., text response, tool call,
+  /// tool response).
+  final Content? content;
+
+  /// Optional. The timestamp when the event occurred.
+  final protobuf.Timestamp? eventTime;
+
+  /// Optional. The change in the session state caused by this event. This is
+  /// a key-value map of fields that were modified or added by the event.
+  final protobuf.Struct? stateDelta;
+
+  /// Optional. The list of tools that were active/available to the agent at
+  /// the time of this event. This overrides the `AgentConfig.tools` if set.
+  final List<Tool> activeTools;
+
+  EvaluationInstance_DeprecatedAgentData_AgentEvent({
+    required this.author,
+    required this.content,
+    this.eventTime,
+    this.stateDelta,
+    this.activeTools = const [],
+  }) : super(fullyQualifiedName);
+
+  factory EvaluationInstance_DeprecatedAgentData_AgentEvent.fromJson(
+    Object? j,
+  ) {
+    final json = j as Map<String, Object?>;
+    return EvaluationInstance_DeprecatedAgentData_AgentEvent(
+      author: switch (json['author']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      content: switch (json['content']) {
+        null => null,
+        Object $1 => Content.fromJson($1),
+      },
+      eventTime: switch (json['eventTime']) {
+        null => null,
+        Object $1 => protobuf.Timestamp.fromJson($1),
+      },
+      stateDelta: switch (json['stateDelta']) {
+        null => null,
+        Object $1 => protobuf.Struct.fromJson($1),
+      },
+      activeTools: switch (json['activeTools']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Tool.fromJson(i)],
+        _ => throw const FormatException('"activeTools" is not a list'),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'author': ?author,
+    'content': ?content?.toJson(),
+    'eventTime': ?eventTime?.toJson(),
+    'stateDelta': ?stateDelta?.toJson(),
+    if (activeTools.isNotDefault)
+      'activeTools': [for (final i in activeTools) i.toJson()],
+  };
+
+  @override
+  String toString() {
+    final $contents = [if (author != null) 'author=$author'].join(',');
+    return 'AgentEvent(${$contents})';
+  }
+}
+
+/// Deprecated: Use `agent_eval_data` instead. Represents a list of tools for
+/// an agent.
+final class EvaluationInstance_DeprecatedAgentData_Tools extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.EvaluationInstance.DeprecatedAgentData.Tools';
+
+  /// Optional. List of tools: each tool can have multiple function
+  /// declarations.
+  final List<Tool> tool;
+
+  EvaluationInstance_DeprecatedAgentData_Tools({this.tool = const []})
+    : super(fullyQualifiedName);
+
+  factory EvaluationInstance_DeprecatedAgentData_Tools.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return EvaluationInstance_DeprecatedAgentData_Tools(
+      tool: switch (json['tool']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Tool.fromJson(i)],
+        _ => throw const FormatException('"tool" is not a list'),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (tool.isNotDefault) 'tool': [for (final i in tool) i.toJson()],
+  };
+
+  @override
+  String toString() => 'Tools()';
+}
+
+/// Represents a list of events for an agent.
+final class EvaluationInstance_DeprecatedAgentData_Events extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.EvaluationInstance.DeprecatedAgentData.Events';
+
+  /// Optional. A list of events.
+  final List<Content> event;
+
+  EvaluationInstance_DeprecatedAgentData_Events({this.event = const []})
+    : super(fullyQualifiedName);
+
+  factory EvaluationInstance_DeprecatedAgentData_Events.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return EvaluationInstance_DeprecatedAgentData_Events(
+      event: switch (json['event']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Content.fromJson(i)],
+        _ => throw const FormatException('"event" is not a list'),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (event.isNotDefault) 'event': [for (final i in event) i.toJson()],
+  };
+
+  @override
+  String toString() => 'Events()';
+}
+
+/// Deprecated: Use `google.cloud.aiplatform.master.AgentConfig` in
+/// `agent_eval_data` instead.
+/// Configuration for an Agent.
+final class EvaluationInstance_DeprecatedAgentConfig extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.EvaluationInstance.DeprecatedAgentConfig';
+
+  /// A JSON string containing a list of tools available to an agent with
+  /// info such as name, description, parameters and required parameters.
+  final String? toolsText;
+
+  /// List of tools.
+  final EvaluationInstance_DeprecatedAgentConfig_Tools? tools;
+
+  /// Optional. Unique identifier of the agent.
+  /// This ID is used to refer to this agent, e.g., in AgentEvent.author, or in
+  /// the `sub_agents` field. It must be unique within the `agents` map.
+  final String agentId;
+
+  /// Optional. The type or class of the agent (e.g., "LlmAgent",
+  /// "RouterAgent", "ToolUseAgent"). Useful for the autorater to understand
+  /// the expected behavior of the agent.
+  final String agentType;
+
+  /// Optional. A high-level description of the agent's role and
+  /// responsibilities. Critical for evaluating if the agent is routing tasks
+  /// correctly.
+  final String description;
+
+  /// Optional. The list of valid agent IDs (names) that this agent can
+  /// delegate to. This defines the directed edges in the agent system graph
+  /// topology.
+  final List<String> subAgents;
+
+  /// Optional. Contains instructions from the developer for the agent. Can be
+  /// static or a dynamic prompt template used with the
+  /// `AgentEvent.state_delta` field.
+  final EvaluationInstance_InstanceData? developerInstruction;
+
+  EvaluationInstance_DeprecatedAgentConfig({
+    this.toolsText,
+    this.tools,
+    this.agentId = '',
+    this.agentType = '',
+    this.description = '',
+    this.subAgents = const [],
+    this.developerInstruction,
+  }) : super(fullyQualifiedName);
+
+  factory EvaluationInstance_DeprecatedAgentConfig.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return EvaluationInstance_DeprecatedAgentConfig(
+      toolsText: switch (json['toolsText']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      tools: switch (json['tools']) {
+        null => null,
+        Object $1 => EvaluationInstance_DeprecatedAgentConfig_Tools.fromJson(
+          $1,
+        ),
+      },
+      agentId: switch (json['agentId']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      agentType: switch (json['agentType']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      description: switch (json['description']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      subAgents: switch (json['subAgents']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException('"subAgents" is not a list'),
+      },
+      developerInstruction: switch (json['developerInstruction']) {
+        null => null,
+        Object $1 => EvaluationInstance_InstanceData.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'toolsText': ?toolsText,
+    'tools': ?tools?.toJson(),
+    if (agentId.isNotDefault) 'agentId': agentId,
+    if (agentType.isNotDefault) 'agentType': agentType,
+    if (description.isNotDefault) 'description': description,
+    if (subAgents.isNotDefault) 'subAgents': subAgents,
+    'developerInstruction': ?developerInstruction?.toJson(),
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      if (toolsText != null) 'toolsText=$toolsText',
+      'agentId=$agentId',
+      'agentType=$agentType',
+      'description=$description',
+    ].join(',');
+    return 'DeprecatedAgentConfig(${$contents})';
+  }
+}
+
+/// Represents a list of tools for an agent.
+final class EvaluationInstance_DeprecatedAgentConfig_Tools
+    extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.EvaluationInstance.DeprecatedAgentConfig.Tools';
+
+  /// Optional. List of tools: each tool can have multiple function
+  /// declarations.
+  final List<Tool> tool;
+
+  EvaluationInstance_DeprecatedAgentConfig_Tools({this.tool = const []})
+    : super(fullyQualifiedName);
+
+  factory EvaluationInstance_DeprecatedAgentConfig_Tools.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return EvaluationInstance_DeprecatedAgentConfig_Tools(
+      tool: switch (json['tool']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Tool.fromJson(i)],
+        _ => throw const FormatException('"tool" is not a list'),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (tool.isNotDefault) 'tool': [for (final i in tool) i.toJson()],
+  };
+
+  @override
+  String toString() => 'Tools()';
+}
+
+/// The configs for autorater. This is applicable to both EvaluateInstances and
+/// EvaluateDataset.
+final class AutoraterConfig extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.AutoraterConfig';
+
+  /// Optional. Number of samples for each instance in the dataset.
+  /// If not specified, the default is 4. Minimum value is 1, maximum value
+  /// is 32.
+  final int? samplingCount;
+
+  /// Optional. Default is true. Whether to flip the candidate and baseline
+  /// responses. This is only applicable to the pairwise metric. If enabled, also
+  /// provide PairwiseMetricSpec.candidate_response_field_name and
+  /// PairwiseMetricSpec.baseline_response_field_name. When rendering
+  /// PairwiseMetricSpec.metric_prompt_template, the candidate and baseline
+  /// fields will be flipped for half of the samples to reduce bias.
+  final bool? flipEnabled;
+
+  /// Optional. The fully qualified name of the publisher model or tuned
+  /// autorater endpoint to use.
+  ///
+  /// Publisher model format:
+  /// `projects/{project}/locations/{location}/publishers/*/models/*`
+  ///
+  /// Tuned model endpoint format:
+  /// `projects/{project}/locations/{location}/endpoints/{endpoint}`
+  final String autoraterModel;
+
+  /// Optional. Configuration options for model generation and outputs.
+  final GenerationConfig? generationConfig;
+
+  AutoraterConfig({
+    this.samplingCount,
+    this.flipEnabled,
+    this.autoraterModel = '',
+    this.generationConfig,
+  }) : super(fullyQualifiedName);
+
+  factory AutoraterConfig.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return AutoraterConfig(
+      samplingCount: switch (json['samplingCount']) {
+        null => null,
+        Object $1 => decodeInt($1),
+      },
+      flipEnabled: switch (json['flipEnabled']) {
+        null => null,
+        Object $1 => decodeBool($1),
+      },
+      autoraterModel: switch (json['autoraterModel']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      generationConfig: switch (json['generationConfig']) {
+        null => null,
+        Object $1 => GenerationConfig.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'samplingCount': ?samplingCount,
+    'flipEnabled': ?flipEnabled,
+    if (autoraterModel.isNotDefault) 'autoraterModel': autoraterModel,
+    'generationConfig': ?generationConfig?.toJson(),
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      if (samplingCount != null) 'samplingCount=$samplingCount',
+      if (flipEnabled != null) 'flipEnabled=$flipEnabled',
+      'autoraterModel=$autoraterModel',
+    ].join(',');
+    return 'AutoraterConfig(${$contents})';
   }
 }
 
@@ -50785,14 +53514,21 @@ final class MetricResult extends ProtoMessage {
   /// Please refer to each metric's documentation for the meaning of the score.
   final double? score;
 
+  /// Output only. For rubric-based metrics, the verdicts for each rubric.
+  final List<RubricVerdict> rubricVerdicts;
+
   /// Output only. The explanation for the metric result.
   final String? explanation;
 
   /// Output only. The error status for the metric result.
   final Status? error;
 
-  MetricResult({this.score, this.explanation, this.error})
-    : super(fullyQualifiedName);
+  MetricResult({
+    this.score,
+    this.rubricVerdicts = const [],
+    this.explanation,
+    this.error,
+  }) : super(fullyQualifiedName);
 
   factory MetricResult.fromJson(Object? j) {
     final json = j as Map<String, Object?>;
@@ -50800,6 +53536,11 @@ final class MetricResult extends ProtoMessage {
       score: switch (json['score']) {
         null => null,
         Object $1 => decodeDouble($1),
+      },
+      rubricVerdicts: switch (json['rubricVerdicts']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) RubricVerdict.fromJson(i)],
+        _ => throw const FormatException('"rubricVerdicts" is not a list'),
       },
       explanation: switch (json['explanation']) {
         null => null,
@@ -50815,6 +53556,8 @@ final class MetricResult extends ProtoMessage {
   @override
   Object toJson() => {
     if (score case final $1?) 'score': encodeDouble($1),
+    if (rubricVerdicts.isNotDefault)
+      'rubricVerdicts': [for (final i in rubricVerdicts) i.toJson()],
     'explanation': ?explanation,
     'error': ?error?.toJson(),
   };
@@ -50826,6 +53569,488 @@ final class MetricResult extends ProtoMessage {
       if (explanation != null) 'explanation=$explanation',
     ].join(',');
     return 'MetricResult(${$contents})';
+  }
+}
+
+/// Request message for EvaluationService.GenerateInstanceRubrics.
+final class GenerateInstanceRubricsRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.GenerateInstanceRubricsRequest';
+
+  /// Required. The resource name of the Location to generate rubrics from.
+  /// Format: `projects/{project}/locations/{location}`
+  final String location;
+
+  /// Required. The prompt to generate rubrics from.
+  /// For single-turn queries, this is a single instance. For multi-turn queries,
+  /// this is a repeated field that contains conversation history + latest
+  /// request.
+  final List<Content> contents;
+
+  /// Optional. Specification for using the rubric generation configs of a
+  /// pre-defined metric, e.g. "generic_quality_v1" and
+  /// "instruction_following_v1". Some of the configs may be only used in rubric
+  /// generation and not supporting evaluation, e.g.
+  /// "fully_customized_generic_quality_v1". If this field is set, the
+  /// `rubric_generation_spec` field will be ignored.
+  final PredefinedMetricSpec? predefinedRubricGenerationSpec;
+
+  /// Optional. Specification for how the rubrics should be generated.
+  final RubricGenerationSpec? rubricGenerationSpec;
+
+  /// Optional. Agent configuration, required for agent-based rubric generation.
+  final EvaluationInstance_DeprecatedAgentConfig? agentConfig;
+
+  GenerateInstanceRubricsRequest({
+    required this.location,
+    required this.contents,
+    this.predefinedRubricGenerationSpec,
+    this.rubricGenerationSpec,
+    this.agentConfig,
+  }) : super(fullyQualifiedName);
+
+  factory GenerateInstanceRubricsRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GenerateInstanceRubricsRequest(
+      location: switch (json['location']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      contents: switch (json['contents']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Content.fromJson(i)],
+        _ => throw const FormatException('"contents" is not a list'),
+      },
+      predefinedRubricGenerationSpec:
+          switch (json['predefinedRubricGenerationSpec']) {
+            null => null,
+            Object $1 => PredefinedMetricSpec.fromJson($1),
+          },
+      rubricGenerationSpec: switch (json['rubricGenerationSpec']) {
+        null => null,
+        Object $1 => RubricGenerationSpec.fromJson($1),
+      },
+      agentConfig: switch (json['agentConfig']) {
+        null => null,
+        Object $1 => EvaluationInstance_DeprecatedAgentConfig.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'location': location,
+    'contents': [for (final i in contents) i.toJson()],
+    'predefinedRubricGenerationSpec': ?predefinedRubricGenerationSpec?.toJson(),
+    'rubricGenerationSpec': ?rubricGenerationSpec?.toJson(),
+    'agentConfig': ?agentConfig?.toJson(),
+  };
+
+  @override
+  String toString() {
+    final $contents = ['location=$location'].join(',');
+    return 'GenerateInstanceRubricsRequest(${$contents})';
+  }
+}
+
+/// Response message for EvaluationService.GenerateInstanceRubrics.
+final class GenerateInstanceRubricsResponse extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.GenerateInstanceRubricsResponse';
+
+  /// Output only. A list of generated rubrics.
+  final List<Rubric> generatedRubrics;
+
+  GenerateInstanceRubricsResponse({this.generatedRubrics = const []})
+    : super(fullyQualifiedName);
+
+  factory GenerateInstanceRubricsResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GenerateInstanceRubricsResponse(
+      generatedRubrics: switch (json['generatedRubrics']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Rubric.fromJson(i)],
+        _ => throw const FormatException('"generatedRubrics" is not a list'),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (generatedRubrics.isNotDefault)
+      'generatedRubrics': [for (final i in generatedRubrics) i.toJson()],
+  };
+
+  @override
+  String toString() => 'GenerateInstanceRubricsResponse()';
+}
+
+/// Request message for EvaluationService.EvaluateDataset.
+final class EvaluateDatasetRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.EvaluateDatasetRequest';
+
+  /// Required. The resource name of the Location to evaluate the dataset.
+  /// Format: `projects/{project}/locations/{location}`
+  final String location;
+
+  /// Required. The dataset used for evaluation.
+  final EvaluationDataset? dataset;
+
+  /// Required. The metrics used for evaluation.
+  final List<Metric> metrics;
+
+  /// Required. Config for evaluation output.
+  final OutputConfig? outputConfig;
+
+  /// Optional. Autorater config used for evaluation. Currently only publisher
+  /// Gemini models are supported. Format:
+  /// `projects/{PROJECT}/locations/{LOCATION}/publishers/google/models/{MODEL}.`
+  final AutoraterConfig? autoraterConfig;
+
+  EvaluateDatasetRequest({
+    required this.location,
+    required this.dataset,
+    required this.metrics,
+    required this.outputConfig,
+    this.autoraterConfig,
+  }) : super(fullyQualifiedName);
+
+  factory EvaluateDatasetRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return EvaluateDatasetRequest(
+      location: switch (json['location']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      dataset: switch (json['dataset']) {
+        null => null,
+        Object $1 => EvaluationDataset.fromJson($1),
+      },
+      metrics: switch (json['metrics']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Metric.fromJson(i)],
+        _ => throw const FormatException('"metrics" is not a list'),
+      },
+      outputConfig: switch (json['outputConfig']) {
+        null => null,
+        Object $1 => OutputConfig.fromJson($1),
+      },
+      autoraterConfig: switch (json['autoraterConfig']) {
+        null => null,
+        Object $1 => AutoraterConfig.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'location': location,
+    'dataset': ?dataset?.toJson(),
+    'metrics': [for (final i in metrics) i.toJson()],
+    'outputConfig': ?outputConfig?.toJson(),
+    'autoraterConfig': ?autoraterConfig?.toJson(),
+  };
+
+  @override
+  String toString() {
+    final $contents = ['location=$location'].join(',');
+    return 'EvaluateDatasetRequest(${$contents})';
+  }
+}
+
+/// Config for evaluation output.
+final class OutputConfig extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.OutputConfig';
+
+  /// Cloud storage destination for evaluation output.
+  final GcsDestination? gcsDestination;
+
+  OutputConfig({this.gcsDestination}) : super(fullyQualifiedName);
+
+  factory OutputConfig.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return OutputConfig(
+      gcsDestination: switch (json['gcsDestination']) {
+        null => null,
+        Object $1 => GcsDestination.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {'gcsDestination': ?gcsDestination?.toJson()};
+
+  @override
+  String toString() => 'OutputConfig()';
+}
+
+/// The dataset used for evaluation.
+final class EvaluationDataset extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.EvaluationDataset';
+
+  /// Cloud storage source holds the dataset. Currently only one Cloud Storage
+  /// file path is supported.
+  final GcsSource? gcsSource;
+
+  /// BigQuery source holds the dataset.
+  final BigQuerySource? bigquerySource;
+
+  EvaluationDataset({this.gcsSource, this.bigquerySource})
+    : super(fullyQualifiedName);
+
+  factory EvaluationDataset.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return EvaluationDataset(
+      gcsSource: switch (json['gcsSource']) {
+        null => null,
+        Object $1 => GcsSource.fromJson($1),
+      },
+      bigquerySource: switch (json['bigquerySource']) {
+        null => null,
+        Object $1 => BigQuerySource.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'gcsSource': ?gcsSource?.toJson(),
+    'bigquerySource': ?bigquerySource?.toJson(),
+  };
+
+  @override
+  String toString() => 'EvaluationDataset()';
+}
+
+/// The results from an evaluation run performed by the EvaluationService.
+final class EvaluateDatasetResponse extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.EvaluateDatasetResponse';
+
+  /// Output only. Aggregation statistics derived from results of
+  /// EvaluationService.
+  final AggregationOutput? aggregationOutput;
+
+  /// Output only. Output info for EvaluationService.
+  final OutputInfo? outputInfo;
+
+  EvaluateDatasetResponse({this.aggregationOutput, this.outputInfo})
+    : super(fullyQualifiedName);
+
+  factory EvaluateDatasetResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return EvaluateDatasetResponse(
+      aggregationOutput: switch (json['aggregationOutput']) {
+        null => null,
+        Object $1 => AggregationOutput.fromJson($1),
+      },
+      outputInfo: switch (json['outputInfo']) {
+        null => null,
+        Object $1 => OutputInfo.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'aggregationOutput': ?aggregationOutput?.toJson(),
+    'outputInfo': ?outputInfo?.toJson(),
+  };
+
+  @override
+  String toString() => 'EvaluateDatasetResponse()';
+}
+
+/// Operation metadata for Dataset Evaluation.
+final class EvaluateDatasetOperationMetadata extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.EvaluateDatasetOperationMetadata';
+
+  /// Generic operation metadata.
+  final GenericOperationMetadata? genericMetadata;
+
+  EvaluateDatasetOperationMetadata({this.genericMetadata})
+    : super(fullyQualifiedName);
+
+  factory EvaluateDatasetOperationMetadata.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return EvaluateDatasetOperationMetadata(
+      genericMetadata: switch (json['genericMetadata']) {
+        null => null,
+        Object $1 => GenericOperationMetadata.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {'genericMetadata': ?genericMetadata?.toJson()};
+
+  @override
+  String toString() => 'EvaluateDatasetOperationMetadata()';
+}
+
+/// Describes the info for output of EvaluationService.
+final class OutputInfo extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.OutputInfo';
+
+  /// Output only. The full path of the Cloud Storage directory created, into
+  /// which the evaluation results and aggregation results are written.
+  final String? gcsOutputDirectory;
+
+  OutputInfo({this.gcsOutputDirectory}) : super(fullyQualifiedName);
+
+  factory OutputInfo.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return OutputInfo(
+      gcsOutputDirectory: switch (json['gcsOutputDirectory']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {'gcsOutputDirectory': ?gcsOutputDirectory};
+
+  @override
+  String toString() {
+    final $contents = [
+      if (gcsOutputDirectory != null) 'gcsOutputDirectory=$gcsOutputDirectory',
+    ].join(',');
+    return 'OutputInfo(${$contents})';
+  }
+}
+
+/// The aggregation result for the entire dataset and all metrics.
+final class AggregationOutput extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.AggregationOutput';
+
+  /// The dataset used for evaluation & aggregation.
+  final EvaluationDataset? dataset;
+
+  /// One AggregationResult per metric.
+  final List<AggregationResult> aggregationResults;
+
+  AggregationOutput({this.dataset, this.aggregationResults = const []})
+    : super(fullyQualifiedName);
+
+  factory AggregationOutput.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return AggregationOutput(
+      dataset: switch (json['dataset']) {
+        null => null,
+        Object $1 => EvaluationDataset.fromJson($1),
+      },
+      aggregationResults: switch (json['aggregationResults']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) AggregationResult.fromJson(i)],
+        _ => throw const FormatException('"aggregationResults" is not a list'),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'dataset': ?dataset?.toJson(),
+    if (aggregationResults.isNotDefault)
+      'aggregationResults': [for (final i in aggregationResults) i.toJson()],
+  };
+
+  @override
+  String toString() => 'AggregationOutput()';
+}
+
+/// The aggregation result for a single metric.
+final class AggregationResult extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.AggregationResult';
+
+  /// Result for pointwise metric.
+  final PointwiseMetricResult? pointwiseMetricResult;
+
+  /// Result for pairwise metric.
+  final PairwiseMetricResult? pairwiseMetricResult;
+
+  /// Results for exact match metric.
+  final ExactMatchMetricValue? exactMatchMetricValue;
+
+  /// Results for bleu metric.
+  final BleuMetricValue? bleuMetricValue;
+
+  /// Results for rouge metric.
+  final RougeMetricValue? rougeMetricValue;
+
+  /// Result for code execution metric.
+  final CustomCodeExecutionResult? customCodeExecutionResult;
+
+  /// Aggregation metric.
+  final Metric_AggregationMetric aggregationMetric;
+
+  AggregationResult({
+    this.pointwiseMetricResult,
+    this.pairwiseMetricResult,
+    this.exactMatchMetricValue,
+    this.bleuMetricValue,
+    this.rougeMetricValue,
+    this.customCodeExecutionResult,
+    this.aggregationMetric = Metric_AggregationMetric.$default,
+  }) : super(fullyQualifiedName);
+
+  factory AggregationResult.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return AggregationResult(
+      pointwiseMetricResult: switch (json['pointwiseMetricResult']) {
+        null => null,
+        Object $1 => PointwiseMetricResult.fromJson($1),
+      },
+      pairwiseMetricResult: switch (json['pairwiseMetricResult']) {
+        null => null,
+        Object $1 => PairwiseMetricResult.fromJson($1),
+      },
+      exactMatchMetricValue: switch (json['exactMatchMetricValue']) {
+        null => null,
+        Object $1 => ExactMatchMetricValue.fromJson($1),
+      },
+      bleuMetricValue: switch (json['bleuMetricValue']) {
+        null => null,
+        Object $1 => BleuMetricValue.fromJson($1),
+      },
+      rougeMetricValue: switch (json['rougeMetricValue']) {
+        null => null,
+        Object $1 => RougeMetricValue.fromJson($1),
+      },
+      customCodeExecutionResult: switch (json['customCodeExecutionResult']) {
+        null => null,
+        Object $1 => CustomCodeExecutionResult.fromJson($1),
+      },
+      aggregationMetric: switch (json['aggregationMetric']) {
+        null => Metric_AggregationMetric.$default,
+        Object $1 => Metric_AggregationMetric.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'pointwiseMetricResult': ?pointwiseMetricResult?.toJson(),
+    'pairwiseMetricResult': ?pairwiseMetricResult?.toJson(),
+    'exactMatchMetricValue': ?exactMatchMetricValue?.toJson(),
+    'bleuMetricValue': ?bleuMetricValue?.toJson(),
+    'rougeMetricValue': ?rougeMetricValue?.toJson(),
+    'customCodeExecutionResult': ?customCodeExecutionResult?.toJson(),
+    if (aggregationMetric.isNotDefault)
+      'aggregationMetric': aggregationMetric.toJson(),
+  };
+
+  @override
+  String toString() {
+    final $contents = ['aggregationMetric=$aggregationMetric'].join(',');
+    return 'AggregationResult(${$contents})';
   }
 }
 
@@ -50963,6 +54188,9 @@ final class LlmbasedMetricSpec extends ProtoMessage {
   /// Refers to a key in the rubric_groups map of EvaluationInstance.
   final String? rubricGroupKey;
 
+  /// Dynamically generate rubrics using this specification.
+  final RubricGenerationSpec? rubricGenerationSpec;
+
   /// Dynamically generate rubrics using a predefined spec.
   final PredefinedMetricSpec? predefinedRubricGenerationSpec;
 
@@ -50978,13 +54206,18 @@ final class LlmbasedMetricSpec extends ProtoMessage {
   /// Optional. Optional additional configuration for the metric.
   final protobuf.Struct? additionalConfig;
 
+  /// Optional. The parser config for the metric result.
+  final EvaluationParserConfig? resultParserConfig;
+
   LlmbasedMetricSpec({
     this.rubricGroupKey,
+    this.rubricGenerationSpec,
     this.predefinedRubricGenerationSpec,
     required this.metricPromptTemplate,
     this.systemInstruction,
     this.judgeAutoraterConfig,
     this.additionalConfig,
+    this.resultParserConfig,
   }) : super(fullyQualifiedName);
 
   factory LlmbasedMetricSpec.fromJson(Object? j) {
@@ -50993,6 +54226,10 @@ final class LlmbasedMetricSpec extends ProtoMessage {
       rubricGroupKey: switch (json['rubricGroupKey']) {
         null => null,
         Object $1 => decodeString($1),
+      },
+      rubricGenerationSpec: switch (json['rubricGenerationSpec']) {
+        null => null,
+        Object $1 => RubricGenerationSpec.fromJson($1),
       },
       predefinedRubricGenerationSpec:
           switch (json['predefinedRubricGenerationSpec']) {
@@ -51015,17 +54252,23 @@ final class LlmbasedMetricSpec extends ProtoMessage {
         null => null,
         Object $1 => protobuf.Struct.fromJson($1),
       },
+      resultParserConfig: switch (json['resultParserConfig']) {
+        null => null,
+        Object $1 => EvaluationParserConfig.fromJson($1),
+      },
     );
   }
 
   @override
   Object toJson() => {
     'rubricGroupKey': ?rubricGroupKey,
+    'rubricGenerationSpec': ?rubricGenerationSpec?.toJson(),
     'predefinedRubricGenerationSpec': ?predefinedRubricGenerationSpec?.toJson(),
     'metricPromptTemplate': ?metricPromptTemplate,
     'systemInstruction': ?systemInstruction,
     'judgeAutoraterConfig': ?judgeAutoraterConfig?.toJson(),
     'additionalConfig': ?additionalConfig?.toJson(),
+    'resultParserConfig': ?resultParserConfig?.toJson(),
   };
 
   @override
@@ -51037,6 +54280,74 @@ final class LlmbasedMetricSpec extends ProtoMessage {
       if (systemInstruction != null) 'systemInstruction=$systemInstruction',
     ].join(',');
     return 'LLMBasedMetricSpec(${$contents})';
+  }
+}
+
+/// Specificies a metric that is populated by evaluating user-defined Python
+/// code.
+final class CustomCodeExecutionSpec extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.CustomCodeExecutionSpec';
+
+  /// Required. Python function.
+  /// Expected user to define the following function, e.g.:
+  ///   def evaluate(instance: dict[str, Any]) -> float:
+  /// Please include this function signature in the code snippet.
+  /// Instance is the evaluation instance, any fields populated in the instance
+  /// are available to the function as instance[field_name].
+  ///
+  /// Example:
+  ///  Example input:
+  ///  ```
+  ///  instance= EvaluationInstance(
+  ///      response=EvaluationInstance.InstanceData(text="The answer is 4."),
+  ///      reference=EvaluationInstance.InstanceData(text="4")
+  ///  )
+  ///  ```
+  ///
+  ///  Example converted input:
+  ///  ```
+  ///  {
+  ///   'response': {'text': 'The answer is 4.'},
+  ///   'reference': {'text': '4'}
+  ///  }
+  ///  ```
+  ///
+  ///  Example python function:
+  ///  ```
+  ///   def evaluate(instance: dict[str, Any]) -> float:
+  ///     if instance['response']['text'] == instance['reference']['text']:
+  ///       return 1.0
+  ///     return 0.0
+  ///  ```
+  ///
+  /// CustomCodeExecutionSpec is also supported in Batch Evaluation (EvalDataset
+  /// RPC) and Tuning Evaluation. Each line in the input jsonl file will be
+  /// converted to dict[str, Any] and passed to the evaluation function.
+  final String? evaluationFunction;
+
+  CustomCodeExecutionSpec({required this.evaluationFunction})
+    : super(fullyQualifiedName);
+
+  factory CustomCodeExecutionSpec.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CustomCodeExecutionSpec(
+      evaluationFunction: switch (json['evaluationFunction']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {'evaluationFunction': ?evaluationFunction};
+
+  @override
+  String toString() {
+    final $contents = [
+      if (evaluationFunction != null) 'evaluationFunction=$evaluationFunction',
+    ].join(',');
+    return 'CustomCodeExecutionSpec(${$contents})';
   }
 }
 
@@ -51576,6 +54887,36 @@ final class RougeMetricValue extends ProtoMessage {
   String toString() {
     final $contents = [if (score != null) 'score=$score'].join(',');
     return 'RougeMetricValue(${$contents})';
+  }
+}
+
+/// Result for custom code execution metric.
+final class CustomCodeExecutionResult extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.CustomCodeExecutionResult';
+
+  /// Output only. Custom code execution score.
+  final double? score;
+
+  CustomCodeExecutionResult({this.score}) : super(fullyQualifiedName);
+
+  factory CustomCodeExecutionResult.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CustomCodeExecutionResult(
+      score: switch (json['score']) {
+        null => null,
+        Object $1 => decodeDouble($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {if (score case final $1?) 'score': encodeDouble($1)};
+
+  @override
+  String toString() {
+    final $contents = [if (score != null) 'score=$score'].join(',');
+    return 'CustomCodeExecutionResult(${$contents})';
   }
 }
 
@@ -57221,6 +60562,214 @@ final class ContentMap_Contents extends ProtoMessage {
 
   @override
   String toString() => 'Contents()';
+}
+
+/// Config for parsing LLM responses.
+/// It can be used to parse the LLM response to be evaluated, or the LLM
+/// response from LLM-based metrics/Autoraters.
+final class EvaluationParserConfig extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.EvaluationParserConfig';
+
+  /// Optional. Use custom code to parse the LLM response.
+  final EvaluationParserConfig_CustomCodeParserConfig? customCodeParserConfig;
+
+  EvaluationParserConfig({this.customCodeParserConfig})
+    : super(fullyQualifiedName);
+
+  factory EvaluationParserConfig.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return EvaluationParserConfig(
+      customCodeParserConfig: switch (json['customCodeParserConfig']) {
+        null => null,
+        Object $1 => EvaluationParserConfig_CustomCodeParserConfig.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'customCodeParserConfig': ?customCodeParserConfig?.toJson(),
+  };
+
+  @override
+  String toString() => 'EvaluationParserConfig()';
+}
+
+/// Configuration for parsing the LLM response using custom code.
+final class EvaluationParserConfig_CustomCodeParserConfig extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.EvaluationParserConfig.CustomCodeParserConfig';
+
+  /// Required. Python function for parsing results. The function should be
+  /// defined within this string.
+  ///
+  /// The function takes a list of strings (LLM responses) and should return
+  /// either a list of dictionaries (for rubrics) or a single dictionary
+  /// (for a metric result).
+  ///
+  /// Example function signature:
+  /// def parse(responses: list[str]) -> list[dict[str, Any]] | dict[str, Any]:
+  ///
+  ///  When parsing rubrics, return a list of dictionaries, where each
+  ///  dictionary represents a Rubric.
+  ///  Example for rubrics:
+  ///  [
+  ///    {
+  ///      "content": {"property": {"description": "The response is
+  ///  factual."}},
+  ///      "type": "FACTUALITY",
+  ///      "importance": "HIGH"
+  ///    },
+  ///    {
+  ///      "content": {"property": {"description": "The response is
+  ///  fluent."}},
+  ///      "type": "FLUENCY",
+  ///      "importance": "MEDIUM"
+  ///    }
+  ///  ]
+  ///
+  ///  When parsing critique results, return a dictionary representing a
+  ///  MetricResult.
+  ///  Example for a metric result:
+  ///  {
+  ///    "score": 0.8,
+  ///    "explanation": "The model followed most instructions.",
+  ///    "rubric_verdicts": [...]
+  ///  }
+  ///
+  ///  ... code for result extraction and aggregation
+  final String? parsingFunction;
+
+  EvaluationParserConfig_CustomCodeParserConfig({required this.parsingFunction})
+    : super(fullyQualifiedName);
+
+  factory EvaluationParserConfig_CustomCodeParserConfig.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return EvaluationParserConfig_CustomCodeParserConfig(
+      parsingFunction: switch (json['parsingFunction']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {'parsingFunction': ?parsingFunction};
+
+  @override
+  String toString() {
+    final $contents = [
+      if (parsingFunction != null) 'parsingFunction=$parsingFunction',
+    ].join(',');
+    return 'CustomCodeParserConfig(${$contents})';
+  }
+}
+
+/// Specification for how rubrics should be generated.
+final class RubricGenerationSpec extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.RubricGenerationSpec';
+
+  /// Template for the prompt used to generate rubrics.
+  /// The details should be updated based on the most-recent recipe requirements.
+  final String promptTemplate;
+
+  /// Configuration for the model used in rubric generation.
+  /// Configs including sampling count and base model can be specified here.
+  /// Flipping is not supported for rubric generation.
+  final AutoraterConfig? modelConfig;
+
+  /// The type of rubric content to be generated.
+  final RubricGenerationSpec_RubricContentType rubricContentType;
+
+  /// Optional. An optional, pre-defined list of allowed types for generated
+  /// rubrics. If this field is provided, it implies `include_rubric_type` should
+  /// be true, and the generated rubric types should be chosen from this
+  /// ontology.
+  final List<String> rubricTypeOntology;
+
+  RubricGenerationSpec({
+    this.promptTemplate = '',
+    this.modelConfig,
+    this.rubricContentType = RubricGenerationSpec_RubricContentType.$default,
+    this.rubricTypeOntology = const [],
+  }) : super(fullyQualifiedName);
+
+  factory RubricGenerationSpec.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return RubricGenerationSpec(
+      promptTemplate: switch (json['promptTemplate']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      modelConfig: switch (json['modelConfig']) {
+        null => null,
+        Object $1 => AutoraterConfig.fromJson($1),
+      },
+      rubricContentType: switch (json['rubricContentType']) {
+        null => RubricGenerationSpec_RubricContentType.$default,
+        Object $1 => RubricGenerationSpec_RubricContentType.fromJson($1),
+      },
+      rubricTypeOntology: switch (json['rubricTypeOntology']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException('"rubricTypeOntology" is not a list'),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (promptTemplate.isNotDefault) 'promptTemplate': promptTemplate,
+    'modelConfig': ?modelConfig?.toJson(),
+    if (rubricContentType.isNotDefault)
+      'rubricContentType': rubricContentType.toJson(),
+    if (rubricTypeOntology.isNotDefault)
+      'rubricTypeOntology': rubricTypeOntology,
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      'promptTemplate=$promptTemplate',
+      'rubricContentType=$rubricContentType',
+    ].join(',');
+    return 'RubricGenerationSpec(${$contents})';
+  }
+}
+
+/// Specifies the type of rubric content to generate.
+final class RubricGenerationSpec_RubricContentType extends ProtoEnum {
+  /// The content type to generate is not specified.
+  static const rubricContentTypeUnspecified =
+      RubricGenerationSpec_RubricContentType('RUBRIC_CONTENT_TYPE_UNSPECIFIED');
+
+  /// Generate rubrics based on properties.
+  static const property = RubricGenerationSpec_RubricContentType('PROPERTY');
+
+  /// Generate rubrics in an NL question answer format.
+  static const nlQuestionAnswer = RubricGenerationSpec_RubricContentType(
+    'NL_QUESTION_ANSWER',
+  );
+
+  /// Generate rubrics in a unit test format.
+  static const pythonCodeAssertion = RubricGenerationSpec_RubricContentType(
+    'PYTHON_CODE_ASSERTION',
+  );
+
+  /// The default value for [RubricGenerationSpec_RubricContentType].
+  static const $default = rubricContentTypeUnspecified;
+
+  const RubricGenerationSpec_RubricContentType(super.value);
+
+  factory RubricGenerationSpec_RubricContentType.fromJson(Object? json) =>
+      RubricGenerationSpec_RubricContentType(json as String);
+
+  bool get isNotDefault => this != $default;
+
+  @override
+  String toString() => 'RubricContentType.$value';
 }
 
 /// An edge describing the relationship between an Artifact and an Execution in
@@ -97573,12 +101122,25 @@ final class CopyModelRequest extends ProtoMessage {
   /// then the Model copy will be encrypted with the provided encryption key.
   final EncryptionSpec? encryptionSpec;
 
+  /// Optional. The user-provided custom service account to use to do the copy
+  /// model. If empty, [Vertex AI Service
+  /// Agent](https://cloud.google.com/vertex-ai/docs/general/access-control#service-agents)
+  /// will be used to access resources needed to upload the model. This account
+  /// must belong to the destination project where the model is copied to,
+  /// i.e., the project specified in the `parent` field of this request and
+  /// have the Vertex AI Service Agent role in the source project.
+  ///
+  /// Requires the user copying the Model to have the
+  /// `iam.serviceAccounts.actAs` permission on this service account.
+  final String customServiceAccount;
+
   CopyModelRequest({
     this.modelId,
     this.parentModel,
     required this.parent,
     required this.sourceModel,
     this.encryptionSpec,
+    this.customServiceAccount = '',
   }) : super(fullyQualifiedName);
 
   factory CopyModelRequest.fromJson(Object? j) {
@@ -97604,6 +101166,10 @@ final class CopyModelRequest extends ProtoMessage {
         null => null,
         Object $1 => EncryptionSpec.fromJson($1),
       },
+      customServiceAccount: switch (json['customServiceAccount']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
     );
   }
 
@@ -97614,6 +101180,8 @@ final class CopyModelRequest extends ProtoMessage {
     'parent': parent,
     'sourceModel': sourceModel,
     'encryptionSpec': ?encryptionSpec?.toJson(),
+    if (customServiceAccount.isNotDefault)
+      'customServiceAccount': customServiceAccount,
   };
 
   @override
@@ -97623,6 +101191,7 @@ final class CopyModelRequest extends ProtoMessage {
       if (parentModel != null) 'parentModel=$parentModel',
       'parent=$parent',
       'sourceModel=$sourceModel',
+      'customServiceAccount=$customServiceAccount',
     ].join(',');
     return 'CopyModelRequest(${$contents})';
   }
@@ -102199,6 +105768,1098 @@ final class NotebookSoftwareConfig extends ProtoMessage {
 
   @override
   String toString() => 'NotebookSoftwareConfig()';
+}
+
+/// An OnlineEvaluator contains the configuration for an Online Evaluation.
+final class OnlineEvaluator extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.OnlineEvaluator';
+
+  /// Data source for the OnlineEvaluator, based on GCP Observability stack
+  /// (Cloud Trace & Cloud Logging).
+  final OnlineEvaluator_CloudObservability? cloudObservability;
+
+  /// Identifier. The resource name of the OnlineEvaluator.
+  /// Format: projects/{project}/locations/{location}/onlineEvaluators/{id}.
+  final String name;
+
+  /// Required. Immutable. The name of the agent that the OnlineEvaluator
+  /// evaluates periodically. This value is used to filter the traces with a
+  /// matching cloud.resource_id and link the evaluation results with relevant
+  /// dashboards/UIs.
+  ///
+  /// This field is immutable. Once set, it cannot be changed.
+  final String agentResource;
+
+  /// Required. A list of metric sources to be used for evaluating samples.
+  /// At least one MetricSource must be provided.
+  /// Right now, only predefined metrics and registered metrics are supported.
+  ///
+  /// Every registered metric must have `display_name` (or `title`) and
+  /// `score_range` defined. Otherwise, the evaluations will fail.
+  ///
+  /// The maximum number of `metric_sources` is 25.
+  final List<MetricSource> metricSources;
+
+  /// Required. Configuration for the OnlineEvaluator.
+  final OnlineEvaluator_Config? config;
+
+  /// Output only. The state of the OnlineEvaluator.
+  final OnlineEvaluator_State state;
+
+  /// Output only. Contains additional information about the state of the
+  /// OnlineEvaluator. This is used to provide more details in the event of a
+  /// failure.
+  final List<OnlineEvaluator_StateDetails> stateDetails;
+
+  /// Output only. Timestamp when the OnlineEvaluator was created.
+  final protobuf.Timestamp? createTime;
+
+  /// Output only. Timestamp when the OnlineEvaluator was last updated.
+  final protobuf.Timestamp? updateTime;
+
+  /// Optional. Human-readable name for the `OnlineEvaluator`.
+  ///
+  /// The name doesn't have to be unique.
+  ///
+  /// The name can consist of any UTF-8 characters. The maximum length is `63`
+  /// characters. If the display name exceeds max characters, an
+  /// `INVALID_ARGUMENT` error is returned.
+  final String displayName;
+
+  OnlineEvaluator({
+    this.cloudObservability,
+    this.name = '',
+    required this.agentResource,
+    required this.metricSources,
+    required this.config,
+    this.state = OnlineEvaluator_State.$default,
+    this.stateDetails = const [],
+    this.createTime,
+    this.updateTime,
+    this.displayName = '',
+  }) : super(fullyQualifiedName);
+
+  factory OnlineEvaluator.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return OnlineEvaluator(
+      cloudObservability: switch (json['cloudObservability']) {
+        null => null,
+        Object $1 => OnlineEvaluator_CloudObservability.fromJson($1),
+      },
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      agentResource: switch (json['agentResource']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      metricSources: switch (json['metricSources']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) MetricSource.fromJson(i)],
+        _ => throw const FormatException('"metricSources" is not a list'),
+      },
+      config: switch (json['config']) {
+        null => null,
+        Object $1 => OnlineEvaluator_Config.fromJson($1),
+      },
+      state: switch (json['state']) {
+        null => OnlineEvaluator_State.$default,
+        Object $1 => OnlineEvaluator_State.fromJson($1),
+      },
+      stateDetails: switch (json['stateDetails']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) OnlineEvaluator_StateDetails.fromJson(i),
+        ],
+        _ => throw const FormatException('"stateDetails" is not a list'),
+      },
+      createTime: switch (json['createTime']) {
+        null => null,
+        Object $1 => protobuf.Timestamp.fromJson($1),
+      },
+      updateTime: switch (json['updateTime']) {
+        null => null,
+        Object $1 => protobuf.Timestamp.fromJson($1),
+      },
+      displayName: switch (json['displayName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'cloudObservability': ?cloudObservability?.toJson(),
+    if (name.isNotDefault) 'name': name,
+    'agentResource': agentResource,
+    'metricSources': [for (final i in metricSources) i.toJson()],
+    'config': ?config?.toJson(),
+    if (state.isNotDefault) 'state': state.toJson(),
+    if (stateDetails.isNotDefault)
+      'stateDetails': [for (final i in stateDetails) i.toJson()],
+    'createTime': ?createTime?.toJson(),
+    'updateTime': ?updateTime?.toJson(),
+    if (displayName.isNotDefault) 'displayName': displayName,
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      'name=$name',
+      'agentResource=$agentResource',
+      'state=$state',
+      'displayName=$displayName',
+    ].join(',');
+    return 'OnlineEvaluator(${$contents})';
+  }
+}
+
+/// Data source for the OnlineEvaluator, based on GCP Observability stack
+/// (Cloud Trace & Cloud Logging).
+final class OnlineEvaluator_CloudObservability extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.OnlineEvaluator.CloudObservability';
+
+  /// Scope online evaluation to single traces.
+  final OnlineEvaluator_CloudObservability_TraceScope? traceScope;
+
+  /// Data source follows OpenTelemetry convention.
+  final OnlineEvaluator_CloudObservability_OpenTelemetry? openTelemetry;
+
+  /// Optional. Optional log view that will be used to query logs.
+  /// If empty, the `_Default` view will be used.
+  final String logView;
+
+  /// Optional. Optional trace view that will be used to query traces.
+  /// If empty, the `_Default` view will be used.
+  ///
+  /// NOTE: This field is not supported yet and will be ignored if set.
+  final String traceView;
+
+  OnlineEvaluator_CloudObservability({
+    this.traceScope,
+    this.openTelemetry,
+    this.logView = '',
+    this.traceView = '',
+  }) : super(fullyQualifiedName);
+
+  factory OnlineEvaluator_CloudObservability.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return OnlineEvaluator_CloudObservability(
+      traceScope: switch (json['traceScope']) {
+        null => null,
+        Object $1 => OnlineEvaluator_CloudObservability_TraceScope.fromJson($1),
+      },
+      openTelemetry: switch (json['openTelemetry']) {
+        null => null,
+        Object $1 => OnlineEvaluator_CloudObservability_OpenTelemetry.fromJson(
+          $1,
+        ),
+      },
+      logView: switch (json['logView']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      traceView: switch (json['traceView']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'traceScope': ?traceScope?.toJson(),
+    'openTelemetry': ?openTelemetry?.toJson(),
+    if (logView.isNotDefault) 'logView': logView,
+    if (traceView.isNotDefault) 'traceView': traceView,
+  };
+
+  @override
+  String toString() {
+    final $contents = ['logView=$logView', 'traceView=$traceView'].join(',');
+    return 'CloudObservability(${$contents})';
+  }
+}
+
+/// Defines a predicate for filtering based on a numeric value.
+final class OnlineEvaluator_CloudObservability_NumericPredicate
+    extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.OnlineEvaluator.CloudObservability.NumericPredicate';
+
+  /// Required. The comparison operator to apply.
+  final OnlineEvaluator_CloudObservability_NumericPredicate_ComparisonOperator
+  comparisonOperator;
+
+  /// Required. The value to compare against.
+  final double value;
+
+  OnlineEvaluator_CloudObservability_NumericPredicate({
+    required this.comparisonOperator,
+    required this.value,
+  }) : super(fullyQualifiedName);
+
+  factory OnlineEvaluator_CloudObservability_NumericPredicate.fromJson(
+    Object? j,
+  ) {
+    final json = j as Map<String, Object?>;
+    return OnlineEvaluator_CloudObservability_NumericPredicate(
+      comparisonOperator: switch (json['comparisonOperator']) {
+        null =>
+          OnlineEvaluator_CloudObservability_NumericPredicate_ComparisonOperator
+              .$default,
+        Object $1 =>
+          OnlineEvaluator_CloudObservability_NumericPredicate_ComparisonOperator.fromJson(
+            $1,
+          ),
+      },
+      value: switch (json['value']) {
+        null => 0,
+        Object $1 => decodeDouble($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'comparisonOperator': comparisonOperator.toJson(),
+    'value': encodeDouble(value),
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      'comparisonOperator=$comparisonOperator',
+      'value=$value',
+    ].join(',');
+    return 'NumericPredicate(${$contents})';
+  }
+}
+
+/// Comparison operators for numeric predicates.
+final class OnlineEvaluator_CloudObservability_NumericPredicate_ComparisonOperator
+    extends ProtoEnum {
+  /// Unspecified comparison operator. This value should not be used.
+  static const comparisonOperatorUnspecified =
+      OnlineEvaluator_CloudObservability_NumericPredicate_ComparisonOperator(
+        'COMPARISON_OPERATOR_UNSPECIFIED',
+      );
+
+  /// Less than.
+  static const less =
+      OnlineEvaluator_CloudObservability_NumericPredicate_ComparisonOperator(
+        'LESS',
+      );
+
+  /// Less than or equal to.
+  static const lessOrEqual =
+      OnlineEvaluator_CloudObservability_NumericPredicate_ComparisonOperator(
+        'LESS_OR_EQUAL',
+      );
+
+  /// Equal to.
+  static const equal =
+      OnlineEvaluator_CloudObservability_NumericPredicate_ComparisonOperator(
+        'EQUAL',
+      );
+
+  /// Not equal to.
+  static const notEqual =
+      OnlineEvaluator_CloudObservability_NumericPredicate_ComparisonOperator(
+        'NOT_EQUAL',
+      );
+
+  /// Greater than or equal to.
+  static const greaterOrEqual =
+      OnlineEvaluator_CloudObservability_NumericPredicate_ComparisonOperator(
+        'GREATER_OR_EQUAL',
+      );
+
+  /// Greater than.
+  static const greater =
+      OnlineEvaluator_CloudObservability_NumericPredicate_ComparisonOperator(
+        'GREATER',
+      );
+
+  /// The default value for [OnlineEvaluator_CloudObservability_NumericPredicate_ComparisonOperator].
+  static const $default = comparisonOperatorUnspecified;
+
+  const OnlineEvaluator_CloudObservability_NumericPredicate_ComparisonOperator(
+    super.value,
+  );
+
+  factory OnlineEvaluator_CloudObservability_NumericPredicate_ComparisonOperator.fromJson(
+    Object? json,
+  ) => OnlineEvaluator_CloudObservability_NumericPredicate_ComparisonOperator(
+    json as String,
+  );
+
+  bool get isNotDefault => this != $default;
+
+  @override
+  String toString() => 'ComparisonOperator.$value';
+}
+
+/// If chosen, the online evaluator will evaluate single traces matching
+/// specified `filter`.
+final class OnlineEvaluator_CloudObservability_TraceScope extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.OnlineEvaluator.CloudObservability.TraceScope';
+
+  /// Optional. A list of predicates to filter traces. Multiple predicates
+  /// are combined using AND.
+  ///
+  /// The maximum number of predicates is 10.
+  final List<OnlineEvaluator_CloudObservability_TraceScope_Predicate> filter;
+
+  OnlineEvaluator_CloudObservability_TraceScope({this.filter = const []})
+    : super(fullyQualifiedName);
+
+  factory OnlineEvaluator_CloudObservability_TraceScope.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return OnlineEvaluator_CloudObservability_TraceScope(
+      filter: switch (json['filter']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1)
+            OnlineEvaluator_CloudObservability_TraceScope_Predicate.fromJson(i),
+        ],
+        _ => throw const FormatException('"filter" is not a list'),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (filter.isNotDefault) 'filter': [for (final i in filter) i.toJson()],
+  };
+
+  @override
+  String toString() => 'TraceScope()';
+}
+
+/// Defines a single filter predicate.
+final class OnlineEvaluator_CloudObservability_TraceScope_Predicate
+    extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.OnlineEvaluator.CloudObservability.TraceScope.Predicate';
+
+  /// Filter on the duration of a trace.
+  final OnlineEvaluator_CloudObservability_NumericPredicate? duration;
+
+  /// Filter on the total token usage within a trace.
+  final OnlineEvaluator_CloudObservability_NumericPredicate? totalTokenUsage;
+
+  OnlineEvaluator_CloudObservability_TraceScope_Predicate({
+    this.duration,
+    this.totalTokenUsage,
+  }) : super(fullyQualifiedName);
+
+  factory OnlineEvaluator_CloudObservability_TraceScope_Predicate.fromJson(
+    Object? j,
+  ) {
+    final json = j as Map<String, Object?>;
+    return OnlineEvaluator_CloudObservability_TraceScope_Predicate(
+      duration: switch (json['duration']) {
+        null => null,
+        Object $1 =>
+          OnlineEvaluator_CloudObservability_NumericPredicate.fromJson($1),
+      },
+      totalTokenUsage: switch (json['totalTokenUsage']) {
+        null => null,
+        Object $1 =>
+          OnlineEvaluator_CloudObservability_NumericPredicate.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'duration': ?duration?.toJson(),
+    'totalTokenUsage': ?totalTokenUsage?.toJson(),
+  };
+
+  @override
+  String toString() => 'Predicate()';
+}
+
+/// Configuration for data source following OpenTelemetry.
+final class OnlineEvaluator_CloudObservability_OpenTelemetry
+    extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.OnlineEvaluator.CloudObservability.OpenTelemetry';
+
+  /// Required. Defines which version OTel Semantic Convention the data
+  /// follows. Can be "1.39.0" or newer.
+  final String semconvVersion;
+
+  OnlineEvaluator_CloudObservability_OpenTelemetry({
+    required this.semconvVersion,
+  }) : super(fullyQualifiedName);
+
+  factory OnlineEvaluator_CloudObservability_OpenTelemetry.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return OnlineEvaluator_CloudObservability_OpenTelemetry(
+      semconvVersion: switch (json['semconvVersion']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {'semconvVersion': semconvVersion};
+
+  @override
+  String toString() {
+    final $contents = ['semconvVersion=$semconvVersion'].join(',');
+    return 'OpenTelemetry(${$contents})';
+  }
+}
+
+/// Configuration for sampling behavior of the OnlineEvaluator.
+/// The OnlineEvaluator runs at a fixed interval of 10 minutes.
+final class OnlineEvaluator_Config extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.OnlineEvaluator.Config';
+
+  /// Random sampling method.
+  final OnlineEvaluator_Config_RandomSampling? randomSampling;
+
+  /// Optional. The maximum number of evaluations to perform per run.
+  /// If set to 0, the number is unbounded.
+  final int maxEvaluatedSamplesPerRun;
+
+  OnlineEvaluator_Config({
+    this.randomSampling,
+    this.maxEvaluatedSamplesPerRun = 0,
+  }) : super(fullyQualifiedName);
+
+  factory OnlineEvaluator_Config.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return OnlineEvaluator_Config(
+      randomSampling: switch (json['randomSampling']) {
+        null => null,
+        Object $1 => OnlineEvaluator_Config_RandomSampling.fromJson($1),
+      },
+      maxEvaluatedSamplesPerRun: switch (json['maxEvaluatedSamplesPerRun']) {
+        null => 0,
+        Object $1 => decodeInt64($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'randomSampling': ?randomSampling?.toJson(),
+    if (maxEvaluatedSamplesPerRun.isNotDefault)
+      'maxEvaluatedSamplesPerRun': maxEvaluatedSamplesPerRun.toString(),
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      'maxEvaluatedSamplesPerRun=$maxEvaluatedSamplesPerRun',
+    ].join(',');
+    return 'Config(${$contents})';
+  }
+}
+
+/// Configuration for random sampling.
+final class OnlineEvaluator_Config_RandomSampling extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.OnlineEvaluator.Config.RandomSampling';
+
+  /// Required. The percentage of traces to sample for evaluation.
+  /// Must be an integer between `1` and `100`.
+  final int percentage;
+
+  OnlineEvaluator_Config_RandomSampling({required this.percentage})
+    : super(fullyQualifiedName);
+
+  factory OnlineEvaluator_Config_RandomSampling.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return OnlineEvaluator_Config_RandomSampling(
+      percentage: switch (json['percentage']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {'percentage': percentage};
+
+  @override
+  String toString() {
+    final $contents = ['percentage=$percentage'].join(',');
+    return 'RandomSampling(${$contents})';
+  }
+}
+
+/// Contains additional information about the state of the OnlineEvaluator.
+final class OnlineEvaluator_StateDetails extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.OnlineEvaluator.StateDetails';
+
+  /// Output only. Human-readable message describing the state of the
+  /// OnlineEvaluator.
+  final String message;
+
+  OnlineEvaluator_StateDetails({this.message = ''}) : super(fullyQualifiedName);
+
+  factory OnlineEvaluator_StateDetails.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return OnlineEvaluator_StateDetails(
+      message: switch (json['message']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {if (message.isNotDefault) 'message': message};
+
+  @override
+  String toString() {
+    final $contents = ['message=$message'].join(',');
+    return 'StateDetails(${$contents})';
+  }
+}
+
+/// The state of the OnlineEvaluator.
+final class OnlineEvaluator_State extends ProtoEnum {
+  /// Default value.
+  static const stateUnspecified = OnlineEvaluator_State('STATE_UNSPECIFIED');
+
+  /// Indicates that the OnlineEvaluator is active.
+  static const active = OnlineEvaluator_State('ACTIVE');
+
+  /// Indicates that the OnlineEvaluator is suspended. In this state, the
+  /// OnlineEvaluator will not evaluate any samples.
+  static const suspended = OnlineEvaluator_State('SUSPENDED');
+
+  /// Indicates that the OnlineEvaluator is in a failed state.
+  ///
+  /// This can happen if, for example, the `log_view` or `trace_view` set on
+  /// the `CloudObservability` does not exist.
+  static const failed = OnlineEvaluator_State('FAILED');
+
+  /// Indicates that the OnlineEvaluator is in a warning state.
+  /// This can happen if, for example, some of the metrics in the
+  /// `metric_sources` are invalid. Evaluation will still run with the
+  /// remaining valid metrics.
+  static const warning = OnlineEvaluator_State('WARNING');
+
+  /// The default value for [OnlineEvaluator_State].
+  static const $default = stateUnspecified;
+
+  const OnlineEvaluator_State(super.value);
+
+  factory OnlineEvaluator_State.fromJson(Object? json) =>
+      OnlineEvaluator_State(json as String);
+
+  bool get isNotDefault => this != $default;
+
+  @override
+  String toString() => 'State.$value';
+}
+
+/// Request message for CreateOnlineEvaluator.
+final class CreateOnlineEvaluatorRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.CreateOnlineEvaluatorRequest';
+
+  /// Required. The parent resource where the OnlineEvaluator will be created.
+  /// Format: projects/{project}/locations/{location}.
+  final String parent;
+
+  /// Required. The OnlineEvaluator to create.
+  final OnlineEvaluator? onlineEvaluator;
+
+  CreateOnlineEvaluatorRequest({
+    required this.parent,
+    required this.onlineEvaluator,
+  }) : super(fullyQualifiedName);
+
+  factory CreateOnlineEvaluatorRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CreateOnlineEvaluatorRequest(
+      parent: switch (json['parent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      onlineEvaluator: switch (json['onlineEvaluator']) {
+        null => null,
+        Object $1 => OnlineEvaluator.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'parent': parent,
+    'onlineEvaluator': ?onlineEvaluator?.toJson(),
+  };
+
+  @override
+  String toString() {
+    final $contents = ['parent=$parent'].join(',');
+    return 'CreateOnlineEvaluatorRequest(${$contents})';
+  }
+}
+
+/// Metadata for the CreateOnlineEvaluator operation.
+final class CreateOnlineEvaluatorOperationMetadata extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.CreateOnlineEvaluatorOperationMetadata';
+
+  /// Common part of operation metadata.
+  final GenericOperationMetadata? genericMetadata;
+
+  CreateOnlineEvaluatorOperationMetadata({this.genericMetadata})
+    : super(fullyQualifiedName);
+
+  factory CreateOnlineEvaluatorOperationMetadata.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CreateOnlineEvaluatorOperationMetadata(
+      genericMetadata: switch (json['genericMetadata']) {
+        null => null,
+        Object $1 => GenericOperationMetadata.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {'genericMetadata': ?genericMetadata?.toJson()};
+
+  @override
+  String toString() => 'CreateOnlineEvaluatorOperationMetadata()';
+}
+
+/// Request message for GetOnlineEvaluator.
+final class GetOnlineEvaluatorRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.GetOnlineEvaluatorRequest';
+
+  /// Required. The name of the OnlineEvaluator to retrieve.
+  /// Format: projects/{project}/locations/{location}/onlineEvaluators/{id}.
+  final String name;
+
+  GetOnlineEvaluatorRequest({required this.name}) : super(fullyQualifiedName);
+
+  factory GetOnlineEvaluatorRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GetOnlineEvaluatorRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {'name': name};
+
+  @override
+  String toString() {
+    final $contents = ['name=$name'].join(',');
+    return 'GetOnlineEvaluatorRequest(${$contents})';
+  }
+}
+
+/// Request message for UpdateOnlineEvaluator.
+final class UpdateOnlineEvaluatorRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.UpdateOnlineEvaluatorRequest';
+
+  /// Required. The OnlineEvaluator to update.
+  /// Format: projects/{project}/locations/{location}/onlineEvaluators/{id}.
+  final OnlineEvaluator? onlineEvaluator;
+
+  /// Optional. Field mask is used to control which fields get updated. If the
+  /// mask is not present, all fields will be updated.
+  final protobuf.FieldMask? updateMask;
+
+  UpdateOnlineEvaluatorRequest({required this.onlineEvaluator, this.updateMask})
+    : super(fullyQualifiedName);
+
+  factory UpdateOnlineEvaluatorRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return UpdateOnlineEvaluatorRequest(
+      onlineEvaluator: switch (json['onlineEvaluator']) {
+        null => null,
+        Object $1 => OnlineEvaluator.fromJson($1),
+      },
+      updateMask: switch (json['updateMask']) {
+        null => null,
+        Object $1 => protobuf.FieldMask.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'onlineEvaluator': ?onlineEvaluator?.toJson(),
+    'updateMask': ?updateMask?.toJson(),
+  };
+
+  @override
+  String toString() => 'UpdateOnlineEvaluatorRequest()';
+}
+
+/// Metadata for the UpdateOnlineEvaluator operation.
+final class UpdateOnlineEvaluatorOperationMetadata extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.UpdateOnlineEvaluatorOperationMetadata';
+
+  /// Generic operation metadata.
+  final GenericOperationMetadata? genericMetadata;
+
+  UpdateOnlineEvaluatorOperationMetadata({this.genericMetadata})
+    : super(fullyQualifiedName);
+
+  factory UpdateOnlineEvaluatorOperationMetadata.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return UpdateOnlineEvaluatorOperationMetadata(
+      genericMetadata: switch (json['genericMetadata']) {
+        null => null,
+        Object $1 => GenericOperationMetadata.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {'genericMetadata': ?genericMetadata?.toJson()};
+
+  @override
+  String toString() => 'UpdateOnlineEvaluatorOperationMetadata()';
+}
+
+/// Request message for DeleteOnlineEvaluator.
+final class DeleteOnlineEvaluatorRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.DeleteOnlineEvaluatorRequest';
+
+  /// Required. The name of the OnlineEvaluator to delete.
+  /// Format: projects/{project}/locations/{location}/onlineEvaluators/{id}.
+  final String name;
+
+  DeleteOnlineEvaluatorRequest({required this.name})
+    : super(fullyQualifiedName);
+
+  factory DeleteOnlineEvaluatorRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return DeleteOnlineEvaluatorRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {'name': name};
+
+  @override
+  String toString() {
+    final $contents = ['name=$name'].join(',');
+    return 'DeleteOnlineEvaluatorRequest(${$contents})';
+  }
+}
+
+/// Metadata for the DeleteOnlineEvaluator operation.
+final class DeleteOnlineEvaluatorOperationMetadata extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.DeleteOnlineEvaluatorOperationMetadata';
+
+  /// Generic operation metadata.
+  final GenericOperationMetadata? genericMetadata;
+
+  DeleteOnlineEvaluatorOperationMetadata({this.genericMetadata})
+    : super(fullyQualifiedName);
+
+  factory DeleteOnlineEvaluatorOperationMetadata.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return DeleteOnlineEvaluatorOperationMetadata(
+      genericMetadata: switch (json['genericMetadata']) {
+        null => null,
+        Object $1 => GenericOperationMetadata.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {'genericMetadata': ?genericMetadata?.toJson()};
+
+  @override
+  String toString() => 'DeleteOnlineEvaluatorOperationMetadata()';
+}
+
+/// Request message for ListOnlineEvaluators.
+final class ListOnlineEvaluatorsRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.ListOnlineEvaluatorsRequest';
+
+  /// Required. The parent resource of the OnlineEvaluators to list.
+  /// Format: projects/{project}/locations/{location}.
+  final String parent;
+
+  /// Optional. The maximum number of OnlineEvaluators to return. The service may
+  /// return fewer than this value. If unspecified, at most 50 OnlineEvaluators
+  /// will be returned. The maximum value is 100; values above 100 will be
+  /// coerced to 100. Based on aip.dev/158.
+  final int pageSize;
+
+  /// Optional. A token identifying a page of results the server should return.
+  /// Based on aip.dev/158.
+  final String pageToken;
+
+  /// Optional. Standard list filter.
+  /// Supported fields:
+  ///    * `create_time`
+  ///    * `update_time`
+  ///    * `agent_resource`
+  /// Example: `create_time>"2026-01-01T00:00:00-04:00"`
+  ///    where the timestamp is in RFC 3339 format)
+  /// Based on aip.dev/160.
+  final String filter;
+
+  /// Optional. A comma-separated list of fields to order by. The default sorting
+  /// order is ascending. Use "desc" after a field name for descending. Supported
+  /// fields:
+  ///   * `create_time`
+  ///   * `update_time`
+  ///
+  /// Example: `create_time desc`.
+  /// Based on aip.dev/132.
+  final String orderBy;
+
+  ListOnlineEvaluatorsRequest({
+    required this.parent,
+    this.pageSize = 0,
+    this.pageToken = '',
+    this.filter = '',
+    this.orderBy = '',
+  }) : super(fullyQualifiedName);
+
+  factory ListOnlineEvaluatorsRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListOnlineEvaluatorsRequest(
+      parent: switch (json['parent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      pageSize: switch (json['pageSize']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      pageToken: switch (json['pageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      filter: switch (json['filter']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      orderBy: switch (json['orderBy']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'parent': parent,
+    if (pageSize.isNotDefault) 'pageSize': pageSize,
+    if (pageToken.isNotDefault) 'pageToken': pageToken,
+    if (filter.isNotDefault) 'filter': filter,
+    if (orderBy.isNotDefault) 'orderBy': orderBy,
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      'parent=$parent',
+      'pageSize=$pageSize',
+      'pageToken=$pageToken',
+      'filter=$filter',
+      'orderBy=$orderBy',
+    ].join(',');
+    return 'ListOnlineEvaluatorsRequest(${$contents})';
+  }
+}
+
+/// Response message for ListOnlineEvaluators.
+final class ListOnlineEvaluatorsResponse extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.ListOnlineEvaluatorsResponse';
+
+  /// A list of OnlineEvaluators matching the request.
+  final List<OnlineEvaluator> onlineEvaluators;
+
+  /// A token to retrieve the next page. Absence of this field indicates there
+  /// are no subsequent pages.
+  final String nextPageToken;
+
+  ListOnlineEvaluatorsResponse({
+    this.onlineEvaluators = const [],
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
+
+  factory ListOnlineEvaluatorsResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListOnlineEvaluatorsResponse(
+      onlineEvaluators: switch (json['onlineEvaluators']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) OnlineEvaluator.fromJson(i)],
+        _ => throw const FormatException('"onlineEvaluators" is not a list'),
+      },
+      nextPageToken: switch (json['nextPageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (onlineEvaluators.isNotDefault)
+      'onlineEvaluators': [for (final i in onlineEvaluators) i.toJson()],
+    if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
+  };
+
+  @override
+  String toString() {
+    final $contents = ['nextPageToken=$nextPageToken'].join(',');
+    return 'ListOnlineEvaluatorsResponse(${$contents})';
+  }
+}
+
+/// Request message for ActivateOnlineEvaluator.
+final class ActivateOnlineEvaluatorRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.ActivateOnlineEvaluatorRequest';
+
+  /// Required. The name of the OnlineEvaluator to activate.
+  /// Format: projects/{project}/locations/{location}/onlineEvaluators/{id}.
+  final String name;
+
+  ActivateOnlineEvaluatorRequest({required this.name})
+    : super(fullyQualifiedName);
+
+  factory ActivateOnlineEvaluatorRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ActivateOnlineEvaluatorRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {'name': name};
+
+  @override
+  String toString() {
+    final $contents = ['name=$name'].join(',');
+    return 'ActivateOnlineEvaluatorRequest(${$contents})';
+  }
+}
+
+/// Metadata for the ActivateOnlineEvaluator operation.
+final class ActivateOnlineEvaluatorOperationMetadata extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.ActivateOnlineEvaluatorOperationMetadata';
+
+  /// Common part of operation metadata.
+  final GenericOperationMetadata? genericMetadata;
+
+  ActivateOnlineEvaluatorOperationMetadata({this.genericMetadata})
+    : super(fullyQualifiedName);
+
+  factory ActivateOnlineEvaluatorOperationMetadata.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ActivateOnlineEvaluatorOperationMetadata(
+      genericMetadata: switch (json['genericMetadata']) {
+        null => null,
+        Object $1 => GenericOperationMetadata.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {'genericMetadata': ?genericMetadata?.toJson()};
+
+  @override
+  String toString() => 'ActivateOnlineEvaluatorOperationMetadata()';
+}
+
+/// Request message for SuspendOnlineEvaluator.
+final class SuspendOnlineEvaluatorRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.SuspendOnlineEvaluatorRequest';
+
+  /// Required. The name of the OnlineEvaluator to suspend.
+  /// Format: projects/{project}/locations/{location}/onlineEvaluators/{id}.
+  final String name;
+
+  SuspendOnlineEvaluatorRequest({required this.name})
+    : super(fullyQualifiedName);
+
+  factory SuspendOnlineEvaluatorRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return SuspendOnlineEvaluatorRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {'name': name};
+
+  @override
+  String toString() {
+    final $contents = ['name=$name'].join(',');
+    return 'SuspendOnlineEvaluatorRequest(${$contents})';
+  }
+}
+
+/// Metadata for the SuspendOnlineEvaluator operation.
+final class SuspendOnlineEvaluatorOperationMetadata extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.SuspendOnlineEvaluatorOperationMetadata';
+
+  /// Common part of operation metadata.
+  final GenericOperationMetadata? genericMetadata;
+
+  SuspendOnlineEvaluatorOperationMetadata({this.genericMetadata})
+    : super(fullyQualifiedName);
+
+  factory SuspendOnlineEvaluatorOperationMetadata.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return SuspendOnlineEvaluatorOperationMetadata(
+      genericMetadata: switch (json['genericMetadata']) {
+        null => null,
+        Object $1 => GenericOperationMetadata.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {'genericMetadata': ?genericMetadata?.toJson()};
+
+  @override
+  String toString() => 'SuspendOnlineEvaluatorOperationMetadata()';
 }
 
 /// Schema is used to define the format of input/output data. Represents a select
@@ -109355,6 +114016,9 @@ final class ReasoningEngineSpec extends ProtoMessage {
   /// Deploy from source code files with a defined entrypoint.
   final ReasoningEngineSpec_SourceCodeSpec? sourceCodeSpec;
 
+  /// Deploy from a container image with a defined entrypoint and commands.
+  final ReasoningEngineSpec_ContainerSpec? containerSpec;
+
   /// Optional. The service account that the Reasoning Engine artifact runs as.
   /// It should have "roles/storage.objectViewer" for reading the user project's
   /// Cloud Storage and "roles/aiplatform.user" for using Vertex extensions. If
@@ -109382,13 +114046,21 @@ final class ReasoningEngineSpec extends ProtoMessage {
   /// "llama-index", "custom".
   final String agentFramework;
 
+  /// Optional. The identity type to use for the Reasoning Engine. If not
+  /// specified, the `service_account` field will be used if set, otherwise the
+  /// default Vertex AI Reasoning Engine Service Agent in the project will be
+  /// used.
+  final ReasoningEngineSpec_IdentityType identityType;
+
   ReasoningEngineSpec({
     this.sourceCodeSpec,
+    this.containerSpec,
     this.serviceAccount,
     this.packageSpec,
     this.deploymentSpec,
     this.classMethods = const [],
     this.agentFramework = '',
+    this.identityType = ReasoningEngineSpec_IdentityType.$default,
   }) : super(fullyQualifiedName);
 
   factory ReasoningEngineSpec.fromJson(Object? j) {
@@ -109397,6 +114069,10 @@ final class ReasoningEngineSpec extends ProtoMessage {
       sourceCodeSpec: switch (json['sourceCodeSpec']) {
         null => null,
         Object $1 => ReasoningEngineSpec_SourceCodeSpec.fromJson($1),
+      },
+      containerSpec: switch (json['containerSpec']) {
+        null => null,
+        Object $1 => ReasoningEngineSpec_ContainerSpec.fromJson($1),
       },
       serviceAccount: switch (json['serviceAccount']) {
         null => null,
@@ -109419,18 +114095,24 @@ final class ReasoningEngineSpec extends ProtoMessage {
         null => '',
         Object $1 => decodeString($1),
       },
+      identityType: switch (json['identityType']) {
+        null => ReasoningEngineSpec_IdentityType.$default,
+        Object $1 => ReasoningEngineSpec_IdentityType.fromJson($1),
+      },
     );
   }
 
   @override
   Object toJson() => {
     'sourceCodeSpec': ?sourceCodeSpec?.toJson(),
+    'containerSpec': ?containerSpec?.toJson(),
     'serviceAccount': ?serviceAccount,
     'packageSpec': ?packageSpec?.toJson(),
     'deploymentSpec': ?deploymentSpec?.toJson(),
     if (classMethods.isNotDefault)
       'classMethods': [for (final i in classMethods) i.toJson()],
     if (agentFramework.isNotDefault) 'agentFramework': agentFramework,
+    if (identityType.isNotDefault) 'identityType': identityType.toJson(),
   };
 
   @override
@@ -109438,6 +114120,7 @@ final class ReasoningEngineSpec extends ProtoMessage {
     final $contents = [
       if (serviceAccount != null) 'serviceAccount=$serviceAccount',
       'agentFramework=$agentFramework',
+      'identityType=$identityType',
     ].join(',');
     return 'ReasoningEngineSpec(${$contents})';
   }
@@ -109944,6 +114627,74 @@ final class ReasoningEngineSpec_SourceCodeSpec_PythonSpec extends ProtoMessage {
   }
 }
 
+/// Specification for deploying from a container image.
+final class ReasoningEngineSpec_ContainerSpec extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.ReasoningEngineSpec.ContainerSpec';
+
+  /// Required. The Artifact Registry Docker image URI (e.g.,
+  /// us-central1-docker.pkg.dev/my-project/my-repo/my-image:tag) of the
+  /// container image that is to be run on each worker replica.
+  final String imageUri;
+
+  ReasoningEngineSpec_ContainerSpec({required this.imageUri})
+    : super(fullyQualifiedName);
+
+  factory ReasoningEngineSpec_ContainerSpec.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ReasoningEngineSpec_ContainerSpec(
+      imageUri: switch (json['imageUri']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {'imageUri': imageUri};
+
+  @override
+  String toString() {
+    final $contents = ['imageUri=$imageUri'].join(',');
+    return 'ContainerSpec(${$contents})';
+  }
+}
+
+/// The identity type to use for the Reasoning Engine.
+final class ReasoningEngineSpec_IdentityType extends ProtoEnum {
+  /// Default value. Use a custom service account if the `service_account`
+  /// field is set, otherwise use the default Vertex AI Reasoning Engine
+  /// Service Agent in the project. Same behavior as SERVICE_ACCOUNT.
+  static const identityTypeUnspecified = ReasoningEngineSpec_IdentityType(
+    'IDENTITY_TYPE_UNSPECIFIED',
+  );
+
+  /// Use a custom service account if the `service_account` field is set,
+  /// otherwise use the default Vertex AI Reasoning Engine Service Agent in the
+  /// project.
+  static const serviceAccount = ReasoningEngineSpec_IdentityType(
+    'SERVICE_ACCOUNT',
+  );
+
+  /// Use Agent Identity. The `service_account` field must not be set.
+  static const agentIdentity = ReasoningEngineSpec_IdentityType(
+    'AGENT_IDENTITY',
+  );
+
+  /// The default value for [ReasoningEngineSpec_IdentityType].
+  static const $default = identityTypeUnspecified;
+
+  const ReasoningEngineSpec_IdentityType(super.value);
+
+  factory ReasoningEngineSpec_IdentityType.fromJson(Object? json) =>
+      ReasoningEngineSpec_IdentityType(json as String);
+
+  bool get isNotDefault => this != $default;
+
+  @override
+  String toString() => 'IdentityType.$value';
+}
+
 /// ReasoningEngine provides a customizable runtime for models to determine
 /// which actions to take and in which order.
 final class ReasoningEngine extends ProtoMessage {
@@ -109986,6 +114737,9 @@ final class ReasoningEngine extends ProtoMessage {
   /// Labels for the ReasoningEngine.
   final Map<String, String> labels;
 
+  /// Optional. Traffic distribution configuration for the Reasoning Engine.
+  final ReasoningEngine_TrafficConfig? trafficConfig;
+
   ReasoningEngine({
     this.name = '',
     required this.displayName,
@@ -109997,6 +114751,7 @@ final class ReasoningEngine extends ProtoMessage {
     this.contextSpec,
     this.encryptionSpec,
     this.labels = const {},
+    this.trafficConfig,
   }) : super(fullyQualifiedName);
 
   factory ReasoningEngine.fromJson(Object? j) {
@@ -110046,6 +114801,10 @@ final class ReasoningEngine extends ProtoMessage {
         },
         _ => throw const FormatException('"labels" is not an object'),
       },
+      trafficConfig: switch (json['trafficConfig']) {
+        null => null,
+        Object $1 => ReasoningEngine_TrafficConfig.fromJson($1),
+      },
     );
   }
 
@@ -110061,6 +114820,7 @@ final class ReasoningEngine extends ProtoMessage {
     'contextSpec': ?contextSpec?.toJson(),
     'encryptionSpec': ?encryptionSpec?.toJson(),
     if (labels.isNotDefault) 'labels': labels,
+    'trafficConfig': ?trafficConfig?.toJson(),
   };
 
   @override
@@ -110073,6 +114833,162 @@ final class ReasoningEngine extends ProtoMessage {
     ].join(',');
     return 'ReasoningEngine(${$contents})';
   }
+}
+
+/// Traffic distribution configuration.
+final class ReasoningEngine_TrafficConfig extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.ReasoningEngine.TrafficConfig';
+
+  /// Optional. Manual traffic distribution configuration, where the user
+  /// specifies the Runtime Revision IDs and the percentage of traffic to
+  /// send to each.
+  final ReasoningEngine_TrafficConfig_TrafficSplitManual? trafficSplitManual;
+
+  /// Optional. Traffic distribution configuration, where all traffic is sent
+  /// to the latest Runtime Revision.
+  final ReasoningEngine_TrafficConfig_TrafficSplitAlwaysLatest?
+  trafficSplitAlwaysLatest;
+
+  ReasoningEngine_TrafficConfig({
+    this.trafficSplitManual,
+    this.trafficSplitAlwaysLatest,
+  }) : super(fullyQualifiedName);
+
+  factory ReasoningEngine_TrafficConfig.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ReasoningEngine_TrafficConfig(
+      trafficSplitManual: switch (json['trafficSplitManual']) {
+        null => null,
+        Object $1 => ReasoningEngine_TrafficConfig_TrafficSplitManual.fromJson(
+          $1,
+        ),
+      },
+      trafficSplitAlwaysLatest: switch (json['trafficSplitAlwaysLatest']) {
+        null => null,
+        Object $1 =>
+          ReasoningEngine_TrafficConfig_TrafficSplitAlwaysLatest.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'trafficSplitManual': ?trafficSplitManual?.toJson(),
+    'trafficSplitAlwaysLatest': ?trafficSplitAlwaysLatest?.toJson(),
+  };
+
+  @override
+  String toString() => 'TrafficConfig()';
+}
+
+/// Manual traffic distribution configuration, where the user specifies the
+/// Runtime Revision IDs and the percentage of traffic to send to each.
+final class ReasoningEngine_TrafficConfig_TrafficSplitManual
+    extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.ReasoningEngine.TrafficConfig.TrafficSplitManual';
+
+  /// A list of traffic targets for the Runtimes Revisions. The sum of
+  /// percentages must equal to 100.
+  final List<ReasoningEngine_TrafficConfig_TrafficSplitManual_Target> targets;
+
+  ReasoningEngine_TrafficConfig_TrafficSplitManual({this.targets = const []})
+    : super(fullyQualifiedName);
+
+  factory ReasoningEngine_TrafficConfig_TrafficSplitManual.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ReasoningEngine_TrafficConfig_TrafficSplitManual(
+      targets: switch (json['targets']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1)
+            ReasoningEngine_TrafficConfig_TrafficSplitManual_Target.fromJson(i),
+        ],
+        _ => throw const FormatException('"targets" is not a list'),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (targets.isNotDefault) 'targets': [for (final i in targets) i.toJson()],
+  };
+
+  @override
+  String toString() => 'TrafficSplitManual()';
+}
+
+/// A single target for the traffic split, specifying a Runtime Revision
+/// and the percentage of traffic to send to it.
+final class ReasoningEngine_TrafficConfig_TrafficSplitManual_Target
+    extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.ReasoningEngine.TrafficConfig.TrafficSplitManual.Target';
+
+  /// Required. The Runtime Revision name to which to send this portion of
+  /// traffic, if traffic allocation is by Runtime Revision.
+  final String runtimeRevisionName;
+
+  /// Required. Specifies percent of the traffic to this Runtime Revision.
+  final int percent;
+
+  ReasoningEngine_TrafficConfig_TrafficSplitManual_Target({
+    required this.runtimeRevisionName,
+    required this.percent,
+  }) : super(fullyQualifiedName);
+
+  factory ReasoningEngine_TrafficConfig_TrafficSplitManual_Target.fromJson(
+    Object? j,
+  ) {
+    final json = j as Map<String, Object?>;
+    return ReasoningEngine_TrafficConfig_TrafficSplitManual_Target(
+      runtimeRevisionName: switch (json['runtimeRevisionName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      percent: switch (json['percent']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'runtimeRevisionName': runtimeRevisionName,
+    'percent': percent,
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      'runtimeRevisionName=$runtimeRevisionName',
+      'percent=$percent',
+    ].join(',');
+    return 'Target(${$contents})';
+  }
+}
+
+/// Traffic distribution configuration, where all traffic is sent to the
+/// latest Runtime Revision.
+final class ReasoningEngine_TrafficConfig_TrafficSplitAlwaysLatest
+    extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.ReasoningEngine.TrafficConfig.TrafficSplitAlwaysLatest';
+
+  ReasoningEngine_TrafficConfig_TrafficSplitAlwaysLatest()
+    : super(fullyQualifiedName);
+
+  factory ReasoningEngine_TrafficConfig_TrafficSplitAlwaysLatest.fromJson(
+    Object? _,
+  ) => ReasoningEngine_TrafficConfig_TrafficSplitAlwaysLatest();
+
+  @override
+  Object toJson() => {};
+
+  @override
+  String toString() => 'TrafficSplitAlwaysLatest()';
 }
 
 /// Configuration for how Agent Engine sub-resources should manage context.
@@ -110485,6 +115401,517 @@ final class StreamQueryReasoningEngineRequest extends ProtoMessage {
   String toString() {
     final $contents = ['name=$name', 'classMethod=$classMethod'].join(',');
     return 'StreamQueryReasoningEngineRequest(${$contents})';
+  }
+}
+
+/// Request message for
+/// `ReasoningEngineExecutionService.AsyncQueryReasoningEngine`.
+final class AsyncQueryReasoningEngineRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.AsyncQueryReasoningEngineRequest';
+
+  /// Required. The name of the ReasoningEngine resource to use.
+  /// Format:
+  /// `projects/{project}/locations/{location}/reasoningEngines/{reasoning_engine}`
+  final String name;
+
+  /// Optional. Input Cloud Storage URI for the Async query.
+  final String inputGcsUri;
+
+  /// Optional. Output Cloud Storage URI for the Async query.
+  final String outputGcsUri;
+
+  AsyncQueryReasoningEngineRequest({
+    required this.name,
+    this.inputGcsUri = '',
+    this.outputGcsUri = '',
+  }) : super(fullyQualifiedName);
+
+  factory AsyncQueryReasoningEngineRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return AsyncQueryReasoningEngineRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      inputGcsUri: switch (json['inputGcsUri']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      outputGcsUri: switch (json['outputGcsUri']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'name': name,
+    if (inputGcsUri.isNotDefault) 'inputGcsUri': inputGcsUri,
+    if (outputGcsUri.isNotDefault) 'outputGcsUri': outputGcsUri,
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      'name=$name',
+      'inputGcsUri=$inputGcsUri',
+      'outputGcsUri=$outputGcsUri',
+    ].join(',');
+    return 'AsyncQueryReasoningEngineRequest(${$contents})';
+  }
+}
+
+/// Operation metadata message for
+/// `ReasoningEngineExecutionService.AsyncQueryReasoningEngine`.
+final class AsyncQueryReasoningEngineOperationMetadata extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.AsyncQueryReasoningEngineOperationMetadata';
+
+  /// The common part of the operation metadata.
+  final GenericOperationMetadata? genericMetadata;
+
+  AsyncQueryReasoningEngineOperationMetadata({this.genericMetadata})
+    : super(fullyQualifiedName);
+
+  factory AsyncQueryReasoningEngineOperationMetadata.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return AsyncQueryReasoningEngineOperationMetadata(
+      genericMetadata: switch (json['genericMetadata']) {
+        null => null,
+        Object $1 => GenericOperationMetadata.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {'genericMetadata': ?genericMetadata?.toJson()};
+
+  @override
+  String toString() => 'AsyncQueryReasoningEngineOperationMetadata()';
+}
+
+/// Response message for
+/// `ReasoningEngineExecutionService.AsyncQueryReasoningEngine`.
+final class AsyncQueryReasoningEngineResponse extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.AsyncQueryReasoningEngineResponse';
+
+  /// Output Cloud Storage URI for the Async query.
+  final String outputGcsUri;
+
+  AsyncQueryReasoningEngineResponse({this.outputGcsUri = ''})
+    : super(fullyQualifiedName);
+
+  factory AsyncQueryReasoningEngineResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return AsyncQueryReasoningEngineResponse(
+      outputGcsUri: switch (json['outputGcsUri']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (outputGcsUri.isNotDefault) 'outputGcsUri': outputGcsUri,
+  };
+
+  @override
+  String toString() {
+    final $contents = ['outputGcsUri=$outputGcsUri'].join(',');
+    return 'AsyncQueryReasoningEngineResponse(${$contents})';
+  }
+}
+
+/// Request message for
+/// `ReasoningEngineExecutionService.CancelAsyncQueryReasoningEngine`.
+final class CancelAsyncQueryReasoningEngineRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.CancelAsyncQueryReasoningEngineRequest';
+
+  /// Required. The name of the ReasoningEngine resource to use.
+  /// Format:
+  /// `projects/{project}/locations/{location}/reasoningEngines/{reasoning_engine}`
+  final String name;
+
+  /// Required. The name of the longrunning operation returned from
+  /// AsyncQueryReasoningEngine.
+  /// Format:
+  /// `projects/{project}/locations/{location}/operations/{operation}`
+  final String operationName;
+
+  CancelAsyncQueryReasoningEngineRequest({
+    required this.name,
+    required this.operationName,
+  }) : super(fullyQualifiedName);
+
+  factory CancelAsyncQueryReasoningEngineRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CancelAsyncQueryReasoningEngineRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      operationName: switch (json['operationName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {'name': name, 'operationName': operationName};
+
+  @override
+  String toString() {
+    final $contents = ['name=$name', 'operationName=$operationName'].join(',');
+    return 'CancelAsyncQueryReasoningEngineRequest(${$contents})';
+  }
+}
+
+/// Response message for
+/// `ReasoningEngineExecutionService.CancelAsyncQueryReasoningEngine`.
+final class CancelAsyncQueryReasoningEngineResponse extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.CancelAsyncQueryReasoningEngineResponse';
+
+  CancelAsyncQueryReasoningEngineResponse() : super(fullyQualifiedName);
+
+  factory CancelAsyncQueryReasoningEngineResponse.fromJson(Object? _) =>
+      CancelAsyncQueryReasoningEngineResponse();
+
+  @override
+  Object toJson() => {};
+
+  @override
+  String toString() => 'CancelAsyncQueryReasoningEngineResponse()';
+}
+
+/// ReasoningEngineRuntimeRevision is a specific version of the runtime related
+/// part of ReasoningEngine. Contains only the fields that are revision specific.
+final class ReasoningEngineRuntimeRevision extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.ReasoningEngineRuntimeRevision';
+
+  /// Identifier. The resource name of the ReasoningEngineRuntimeRevision.
+  /// Format:
+  /// `projects/{project}/locations/{location}/reasoningEngines/{reasoning_engine}/runtimeRevisions/{runtime_revision}`
+  final String name;
+
+  /// Immutable. Configurations of the ReasoningEngineRuntimeRevision. Contains
+  /// only revision specific fields.
+  final ReasoningEngineSpec? spec;
+
+  /// Output only. Timestamp when this ReasoningEngineRuntimeRevision was
+  /// created.
+  final protobuf.Timestamp? createTime;
+
+  /// Output only. The state of the revision.
+  final ReasoningEngineRuntimeRevision_State state;
+
+  ReasoningEngineRuntimeRevision({
+    this.name = '',
+    this.spec,
+    this.createTime,
+    this.state = ReasoningEngineRuntimeRevision_State.$default,
+  }) : super(fullyQualifiedName);
+
+  factory ReasoningEngineRuntimeRevision.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ReasoningEngineRuntimeRevision(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      spec: switch (json['spec']) {
+        null => null,
+        Object $1 => ReasoningEngineSpec.fromJson($1),
+      },
+      createTime: switch (json['createTime']) {
+        null => null,
+        Object $1 => protobuf.Timestamp.fromJson($1),
+      },
+      state: switch (json['state']) {
+        null => ReasoningEngineRuntimeRevision_State.$default,
+        Object $1 => ReasoningEngineRuntimeRevision_State.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    'spec': ?spec?.toJson(),
+    'createTime': ?createTime?.toJson(),
+    if (state.isNotDefault) 'state': state.toJson(),
+  };
+
+  @override
+  String toString() {
+    final $contents = ['name=$name', 'state=$state'].join(',');
+    return 'ReasoningEngineRuntimeRevision(${$contents})';
+  }
+}
+
+/// Possible values of the state of the revision.
+final class ReasoningEngineRuntimeRevision_State extends ProtoEnum {
+  /// The unspecified state.
+  static const stateUnspecified = ReasoningEngineRuntimeRevision_State(
+    'STATE_UNSPECIFIED',
+  );
+
+  /// Is deployed and ready to be used.
+  static const active = ReasoningEngineRuntimeRevision_State('ACTIVE');
+
+  /// Is deprecated, may not be used, only preserved for historical
+  /// purposes.
+  static const deprecated = ReasoningEngineRuntimeRevision_State('DEPRECATED');
+
+  /// The default value for [ReasoningEngineRuntimeRevision_State].
+  static const $default = stateUnspecified;
+
+  const ReasoningEngineRuntimeRevision_State(super.value);
+
+  factory ReasoningEngineRuntimeRevision_State.fromJson(Object? json) =>
+      ReasoningEngineRuntimeRevision_State(json as String);
+
+  bool get isNotDefault => this != $default;
+
+  @override
+  String toString() => 'State.$value';
+}
+
+/// Metadata associated with DeleteReasoningEngineRuntimeRevision operation.
+final class DeleteReasoningEngineRuntimeRevisionOperationMetadata
+    extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.DeleteReasoningEngineRuntimeRevisionOperationMetadata';
+
+  /// The common part of the operation metadata.
+  final GenericOperationMetadata? genericMetadata;
+
+  DeleteReasoningEngineRuntimeRevisionOperationMetadata({this.genericMetadata})
+    : super(fullyQualifiedName);
+
+  factory DeleteReasoningEngineRuntimeRevisionOperationMetadata.fromJson(
+    Object? j,
+  ) {
+    final json = j as Map<String, Object?>;
+    return DeleteReasoningEngineRuntimeRevisionOperationMetadata(
+      genericMetadata: switch (json['genericMetadata']) {
+        null => null,
+        Object $1 => GenericOperationMetadata.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {'genericMetadata': ?genericMetadata?.toJson()};
+
+  @override
+  String toString() =>
+      'DeleteReasoningEngineRuntimeRevisionOperationMetadata()';
+}
+
+/// Request message for
+/// `ReasoningEngineRuntimeRevisionService.GetReasoningEngineRuntimeRevision`.
+final class GetReasoningEngineRuntimeRevisionRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.GetReasoningEngineRuntimeRevisionRequest';
+
+  /// Required. The name of the ReasoningEngineRuntimeRevision resource.
+  /// Format:
+  /// `projects/{project}/locations/{location}/reasoningEngines/{reasoning_engine}/runtimeRevisions/{runtimeRevision}`
+  final String name;
+
+  GetReasoningEngineRuntimeRevisionRequest({required this.name})
+    : super(fullyQualifiedName);
+
+  factory GetReasoningEngineRuntimeRevisionRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GetReasoningEngineRuntimeRevisionRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {'name': name};
+
+  @override
+  String toString() {
+    final $contents = ['name=$name'].join(',');
+    return 'GetReasoningEngineRuntimeRevisionRequest(${$contents})';
+  }
+}
+
+/// Request message for
+/// `ReasoningEngineRuntimeRevisionService.ListReasoningEngineRuntimeRevisions`.
+final class ListReasoningEngineRuntimeRevisionsRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.ListReasoningEngineRuntimeRevisionsRequest';
+
+  /// Required. The resource name of the ReasoningEngine to list the
+  /// ReasoningEngineRuntimeRevisions from. Format:
+  /// `projects/{project}/locations/{location}/reasoningEngines/{reasoning_engine}`
+  final String parent;
+
+  /// Optional. The standard list filter.
+  /// More detail in [AIP-160](https://google.aip.dev/160).
+  final String filter;
+
+  /// Optional. The maximum number of ReasoningEngineRuntimeRevisions to return.
+  /// The service may return fewer than this value.
+  ///
+  /// If unspecified, at most 50 revisions will be returned.
+  ///
+  /// The maximum value is 100; values above 100 will be coerced to 100.
+  final int pageSize;
+
+  /// Optional. The standard list page token.
+  final String pageToken;
+
+  ListReasoningEngineRuntimeRevisionsRequest({
+    required this.parent,
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
+  }) : super(fullyQualifiedName);
+
+  factory ListReasoningEngineRuntimeRevisionsRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListReasoningEngineRuntimeRevisionsRequest(
+      parent: switch (json['parent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      filter: switch (json['filter']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      pageSize: switch (json['pageSize']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      pageToken: switch (json['pageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'parent': parent,
+    if (filter.isNotDefault) 'filter': filter,
+    if (pageSize.isNotDefault) 'pageSize': pageSize,
+    if (pageToken.isNotDefault) 'pageToken': pageToken,
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      'parent=$parent',
+      'filter=$filter',
+      'pageSize=$pageSize',
+      'pageToken=$pageToken',
+    ].join(',');
+    return 'ListReasoningEngineRuntimeRevisionsRequest(${$contents})';
+  }
+}
+
+/// Response message for
+/// `ReasoningEngineRuntimeRevisionService.ListReasoningEngineRuntimeRevisions`
+final class ListReasoningEngineRuntimeRevisionsResponse extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.ListReasoningEngineRuntimeRevisionsResponse';
+
+  /// List of ReasoningEngineRuntimeRevisions in the requested page.
+  final List<ReasoningEngineRuntimeRevision> reasoningEngineRuntimeRevisions;
+
+  /// A token to retrieve the next page of results.
+  /// Pass to
+  /// `ListReasoningEngineRuntimeRevisionsRequest.page_token`
+  /// to obtain that page.
+  final String nextPageToken;
+
+  ListReasoningEngineRuntimeRevisionsResponse({
+    this.reasoningEngineRuntimeRevisions = const [],
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
+
+  factory ListReasoningEngineRuntimeRevisionsResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListReasoningEngineRuntimeRevisionsResponse(
+      reasoningEngineRuntimeRevisions:
+          switch (json['reasoningEngineRuntimeRevisions']) {
+            null => [],
+            List<Object?> $1 => [
+              for (final i in $1) ReasoningEngineRuntimeRevision.fromJson(i),
+            ],
+            _ => throw const FormatException(
+              '"reasoningEngineRuntimeRevisions" is not a list',
+            ),
+          },
+      nextPageToken: switch (json['nextPageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (reasoningEngineRuntimeRevisions.isNotDefault)
+      'reasoningEngineRuntimeRevisions': [
+        for (final i in reasoningEngineRuntimeRevisions) i.toJson(),
+      ],
+    if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
+  };
+
+  @override
+  String toString() {
+    final $contents = ['nextPageToken=$nextPageToken'].join(',');
+    return 'ListReasoningEngineRuntimeRevisionsResponse(${$contents})';
+  }
+}
+
+/// Request message for
+/// `ReasoningEngineRuntimeRevisionService.DeleteReasoningEngineRuntimeRevision`.
+final class DeleteReasoningEngineRuntimeRevisionRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.DeleteReasoningEngineRuntimeRevisionRequest';
+
+  /// Required. The name of the ReasoningEngineRuntimeRevision resource to be
+  /// deleted. Format:
+  /// `projects/{project}/locations/{location}/reasoningEngines/{reasoning_engine}/runtimeRevisions/{runtime_revision}`
+  final String name;
+
+  DeleteReasoningEngineRuntimeRevisionRequest({required this.name})
+    : super(fullyQualifiedName);
+
+  factory DeleteReasoningEngineRuntimeRevisionRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return DeleteReasoningEngineRuntimeRevisionRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {'name': name};
+
+  @override
+  String toString() {
+    final $contents = ['name=$name'].join(',');
+    return 'DeleteReasoningEngineRuntimeRevisionRequest(${$contents})';
   }
 }
 
@@ -118914,6 +124341,11 @@ final class Tool extends ProtoMessage {
   /// Search and Sec4 compliance.
   final EnterpriseWebSearch? enterpriseWebSearch;
 
+  /// Optional. If specified, Vertex AI will use Parallel.ai to search for
+  /// information to answer user queries. The search results will be grounded on
+  /// Parallel.ai and presented to the model for response generation
+  final Tool_ParallelAiSearch? parallelAiSearch;
+
   /// Optional. CodeExecution tool type.
   /// Enables the model to execute code as part of generation.
   final Tool_CodeExecution? codeExecution;
@@ -118933,6 +124365,7 @@ final class Tool extends ProtoMessage {
     this.googleSearchRetrieval,
     this.googleMaps,
     this.enterpriseWebSearch,
+    this.parallelAiSearch,
     this.codeExecution,
     this.urlContext,
     this.computerUse,
@@ -118970,6 +124403,10 @@ final class Tool extends ProtoMessage {
         null => null,
         Object $1 => EnterpriseWebSearch.fromJson($1),
       },
+      parallelAiSearch: switch (json['parallelAiSearch']) {
+        null => null,
+        Object $1 => Tool_ParallelAiSearch.fromJson($1),
+      },
       codeExecution: switch (json['codeExecution']) {
         null => null,
         Object $1 => Tool_CodeExecution.fromJson($1),
@@ -118996,6 +124433,7 @@ final class Tool extends ProtoMessage {
     'googleSearchRetrieval': ?googleSearchRetrieval?.toJson(),
     'googleMaps': ?googleMaps?.toJson(),
     'enterpriseWebSearch': ?enterpriseWebSearch?.toJson(),
+    'parallelAiSearch': ?parallelAiSearch?.toJson(),
     'codeExecution': ?codeExecution?.toJson(),
     'urlContext': ?urlContext?.toJson(),
     'computerUse': ?computerUse?.toJson(),
@@ -119050,6 +124488,68 @@ final class Tool_GoogleSearch extends ProtoMessage {
       if (blockingConfidence != null) 'blockingConfidence=$blockingConfidence',
     ].join(',');
     return 'GoogleSearch(${$contents})';
+  }
+}
+
+/// ParallelAiSearch tool type.
+/// A tool that uses the Parallel.ai search engine for grounding.
+final class Tool_ParallelAiSearch extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.Tool.ParallelAiSearch';
+
+  /// Optional. The API key for ParallelAiSearch.
+  /// If an API key is not provided, the system will attempt to verify access
+  /// by checking for an active Parallel.ai subscription through the Google
+  /// Cloud Marketplace.
+  /// See https://docs.parallel.ai/search/search-quickstart for more details.
+  final String apiKey;
+
+  /// Optional. Custom configs for ParallelAiSearch.
+  /// This field can be used to pass any parameter from the Parallel.ai
+  /// Search API.
+  /// See the Parallel.ai documentation for the full list of available
+  /// parameters and their usage:
+  /// https://docs.parallel.ai/api-reference/search-beta/search
+  /// Currently only `source_policy`, `excerpts`, `max_results`, `mode`,
+  /// `fetch_policy` can be set via this field. For example:
+  /// {
+  ///   "source_policy": {
+  ///     "include_domains": ["google.com", "wikipedia.org"],
+  ///     "exclude_domains": ["example.com"]
+  ///   },
+  ///   "fetch_policy": {
+  ///     "max_age_seconds": 3600
+  ///   }
+  /// }
+  final protobuf.Struct? customConfigs;
+
+  Tool_ParallelAiSearch({this.apiKey = '', this.customConfigs})
+    : super(fullyQualifiedName);
+
+  factory Tool_ParallelAiSearch.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Tool_ParallelAiSearch(
+      apiKey: switch (json['apiKey']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      customConfigs: switch (json['customConfigs']) {
+        null => null,
+        Object $1 => protobuf.Struct.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (apiKey.isNotDefault) 'apiKey': apiKey,
+    'customConfigs': ?customConfigs?.toJson(),
+  };
+
+  @override
+  String toString() {
+    final $contents = ['apiKey=$apiKey'].join(',');
+    return 'ParallelAiSearch(${$contents})';
   }
 }
 
@@ -121881,6 +127381,9 @@ final class TuningJob extends ProtoMessage {
   /// Tuning Spec for Veo Tuning.
   final VeoTuningSpec? veoTuningSpec;
 
+  /// Tuning Spec for Veo LoRA Tuning.
+  final VeoLoraTuningSpec? veoLoraTuningSpec;
+
   /// Output only. Identifier. Resource name of a TuningJob. Format:
   /// `projects/{project}/locations/{location}/tuningJobs/{tuning_job}`
   final String name;
@@ -121986,6 +127489,7 @@ final class TuningJob extends ProtoMessage {
     this.distillationSpec,
     this.partnerModelTuningSpec,
     this.veoTuningSpec,
+    this.veoLoraTuningSpec,
     this.name = '',
     this.tunedModelDisplayName = '',
     this.description = '',
@@ -122033,6 +127537,10 @@ final class TuningJob extends ProtoMessage {
       veoTuningSpec: switch (json['veoTuningSpec']) {
         null => null,
         Object $1 => VeoTuningSpec.fromJson($1),
+      },
+      veoLoraTuningSpec: switch (json['veoLoraTuningSpec']) {
+        null => null,
+        Object $1 => VeoLoraTuningSpec.fromJson($1),
       },
       name: switch (json['name']) {
         null => '',
@@ -122128,6 +127636,7 @@ final class TuningJob extends ProtoMessage {
     'distillationSpec': ?distillationSpec?.toJson(),
     'partnerModelTuningSpec': ?partnerModelTuningSpec?.toJson(),
     'veoTuningSpec': ?veoTuningSpec?.toJson(),
+    'veoLoraTuningSpec': ?veoLoraTuningSpec?.toJson(),
     if (name.isNotDefault) 'name': name,
     if (tunedModelDisplayName.isNotDefault)
       'tunedModelDisplayName': tunedModelDisplayName,
@@ -123471,10 +128980,25 @@ final class VeoHyperParameters extends ProtoMessage {
   /// Optional. The tuning task. Either I2V or T2V.
   final VeoHyperParameters_TuningTask tuningTask;
 
+  /// Optional. The ratio of Google internal dataset to use in the training
+  /// mixture, in range of `[0, 1)`. If `0.2`, it means 20% of Google internal
+  /// dataset and 80% of user dataset will be used for training. If not set, the
+  /// default value is 0.1.
+  final double? veoDataMixtureRatio;
+
+  /// The speed of the tuning job. Only supported for Veo 3.0 models.
+  final VeoHyperParameters_TuningSpeed? tuningSpeed;
+
+  /// Optional. The adapter size for LoRA tuning.
+  final VeoHyperParameters_AdapterSize adapterSize;
+
   VeoHyperParameters({
     this.epochCount = 0,
     this.learningRateMultiplier = 0,
     this.tuningTask = VeoHyperParameters_TuningTask.$default,
+    this.veoDataMixtureRatio,
+    this.tuningSpeed,
+    this.adapterSize = VeoHyperParameters_AdapterSize.$default,
   }) : super(fullyQualifiedName);
 
   factory VeoHyperParameters.fromJson(Object? j) {
@@ -123492,6 +129016,18 @@ final class VeoHyperParameters extends ProtoMessage {
         null => VeoHyperParameters_TuningTask.$default,
         Object $1 => VeoHyperParameters_TuningTask.fromJson($1),
       },
+      veoDataMixtureRatio: switch (json['veoDataMixtureRatio']) {
+        null => null,
+        Object $1 => decodeDouble($1),
+      },
+      tuningSpeed: switch (json['tuningSpeed']) {
+        null => null,
+        Object $1 => VeoHyperParameters_TuningSpeed.fromJson($1),
+      },
+      adapterSize: switch (json['adapterSize']) {
+        null => VeoHyperParameters_AdapterSize.$default,
+        Object $1 => VeoHyperParameters_AdapterSize.fromJson($1),
+      },
     );
   }
 
@@ -123501,6 +129037,10 @@ final class VeoHyperParameters extends ProtoMessage {
     if (learningRateMultiplier.isNotDefault)
       'learningRateMultiplier': encodeDouble(learningRateMultiplier),
     if (tuningTask.isNotDefault) 'tuningTask': tuningTask.toJson(),
+    if (veoDataMixtureRatio case final $1?)
+      'veoDataMixtureRatio': encodeDouble($1),
+    'tuningSpeed': ?tuningSpeed?.toJson(),
+    if (adapterSize.isNotDefault) 'adapterSize': adapterSize.toJson(),
   };
 
   @override
@@ -123509,6 +129049,10 @@ final class VeoHyperParameters extends ProtoMessage {
       'epochCount=$epochCount',
       'learningRateMultiplier=$learningRateMultiplier',
       'tuningTask=$tuningTask',
+      if (veoDataMixtureRatio != null)
+        'veoDataMixtureRatio=$veoDataMixtureRatio',
+      if (tuningSpeed != null) 'tuningSpeed=$tuningSpeed',
+      'adapterSize=$adapterSize',
     ].join(',');
     return 'VeoHyperParameters(${$contents})';
   }
@@ -123527,6 +129071,9 @@ final class VeoHyperParameters_TuningTask extends ProtoEnum {
   /// Tuning task for text to video.
   static const tuningTaskT2V = VeoHyperParameters_TuningTask('TUNING_TASK_T2V');
 
+  /// Tuning task for reference to video.
+  static const tuningTaskR2V = VeoHyperParameters_TuningTask('TUNING_TASK_R2V');
+
   /// The default value for [VeoHyperParameters_TuningTask].
   static const $default = tuningTaskUnspecified;
 
@@ -123539,6 +129086,70 @@ final class VeoHyperParameters_TuningTask extends ProtoEnum {
 
   @override
   String toString() => 'TuningTask.$value';
+}
+
+/// The speed of the tuning job. Only supported for Veo 3.0 models.
+final class VeoHyperParameters_TuningSpeed extends ProtoEnum {
+  /// The default / unset value. For Veo 3.0 models, this defaults to FAST.
+  static const tuningSpeedUnspecified = VeoHyperParameters_TuningSpeed(
+    'TUNING_SPEED_UNSPECIFIED',
+  );
+
+  /// Regular tuning speed.
+  static const regular = VeoHyperParameters_TuningSpeed('REGULAR');
+
+  /// Fast tuning speed.
+  static const fast = VeoHyperParameters_TuningSpeed('FAST');
+
+  /// The default value for [VeoHyperParameters_TuningSpeed].
+  static const $default = tuningSpeedUnspecified;
+
+  const VeoHyperParameters_TuningSpeed(super.value);
+
+  factory VeoHyperParameters_TuningSpeed.fromJson(Object? json) =>
+      VeoHyperParameters_TuningSpeed(json as String);
+
+  bool get isNotDefault => this != $default;
+
+  @override
+  String toString() => 'TuningSpeed.$value';
+}
+
+/// Adapter size for LoRA tuning.
+final class VeoHyperParameters_AdapterSize extends ProtoEnum {
+  /// Adapter size is unspecified.
+  static const adapterSizeUnspecified = VeoHyperParameters_AdapterSize(
+    'ADAPTER_SIZE_UNSPECIFIED',
+  );
+
+  /// Adapter size 8.
+  /// This is the default adapter size for Veo LoRA tuning.
+  static const adapterSizeEight = VeoHyperParameters_AdapterSize(
+    'ADAPTER_SIZE_EIGHT',
+  );
+
+  /// Adapter size 16.
+  static const adapterSizeSixteen = VeoHyperParameters_AdapterSize(
+    'ADAPTER_SIZE_SIXTEEN',
+  );
+
+  /// Adapter size 32.
+  static const adapterSizeThirtyTwo = VeoHyperParameters_AdapterSize(
+    'ADAPTER_SIZE_THIRTY_TWO',
+  );
+
+  /// The default value for [VeoHyperParameters_AdapterSize].
+  static const $default = adapterSizeUnspecified;
+
+  const VeoHyperParameters_AdapterSize(super.value);
+
+  factory VeoHyperParameters_AdapterSize.fromJson(Object? json) =>
+      VeoHyperParameters_AdapterSize(json as String);
+
+  bool get isNotDefault => this != $default;
+
+  @override
+  String toString() => 'AdapterSize.$value';
 }
 
 /// Tuning Spec for Veo Model Tuning.
@@ -123598,6 +129209,66 @@ final class VeoTuningSpec extends ProtoMessage {
       'validationDatasetUri=$validationDatasetUri',
     ].join(',');
     return 'VeoTuningSpec(${$contents})';
+  }
+}
+
+/// Tuning Spec for Veo LoRA Model Tuning.
+final class VeoLoraTuningSpec extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.VeoLoraTuningSpec';
+
+  /// Required. Training dataset used for tuning. The dataset can be specified as
+  /// either a Cloud Storage path to a JSONL file or as the resource name of a
+  /// Vertex Multimodal Dataset.
+  final String trainingDatasetUri;
+
+  /// Optional. Validation dataset used for tuning. The dataset can be specified
+  /// as either a Cloud Storage path to a JSONL file or as the resource name of a
+  /// Vertex Multimodal Dataset.
+  final String validationDatasetUri;
+
+  /// Optional. Hyperparameters for Veo LoRA.
+  final VeoHyperParameters? hyperParameters;
+
+  VeoLoraTuningSpec({
+    required this.trainingDatasetUri,
+    this.validationDatasetUri = '',
+    this.hyperParameters,
+  }) : super(fullyQualifiedName);
+
+  factory VeoLoraTuningSpec.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return VeoLoraTuningSpec(
+      trainingDatasetUri: switch (json['trainingDatasetUri']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      validationDatasetUri: switch (json['validationDatasetUri']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      hyperParameters: switch (json['hyperParameters']) {
+        null => null,
+        Object $1 => VeoHyperParameters.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'trainingDatasetUri': trainingDatasetUri,
+    if (validationDatasetUri.isNotDefault)
+      'validationDatasetUri': validationDatasetUri,
+    'hyperParameters': ?hyperParameters?.toJson(),
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      'trainingDatasetUri=$trainingDatasetUri',
+      'validationDatasetUri=$validationDatasetUri',
+    ].join(',');
+    return 'VeoLoraTuningSpec(${$contents})';
   }
 }
 

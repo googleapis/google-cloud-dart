@@ -33,6 +33,7 @@ import 'package:google_cloud_location/location.dart';
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/src/encoding.dart';
 import 'package:google_cloud_rpc/exceptions.dart';
+import 'package:google_cloud_rpc/rpc.dart';
 import 'package:google_cloud_rpc/service_client.dart';
 import 'package:http/http.dart' as http;
 
@@ -347,6 +348,38 @@ final class SecretManagerService {
     return TestIamPermissionsResponse.fromJson(response);
   }
 
+  /// Enables the managed rotation feature for a
+  /// `Secret`. This method can only be
+  /// triggered once for a secret. In order to do further rotations, RotateSecret
+  /// should be used. This method will add a secret version and update the
+  /// password in Cloud SQL.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<SecretVersion> enableManagedRotation(
+    EnableManagedRotationRequest request,
+  ) async {
+    final url = _endPoint.replace(
+      path: '/v1/${request.parent}:enableManagedRotation',
+    );
+    final response = await _client.post(url, body: request);
+    return SecretVersion.fromJson(response);
+  }
+
+  /// Do a managed rotation for a `Secret`.
+  /// This can only be triggered after Managed rotation has been enabled.
+  /// This method will add a secret version and update the password in Cloud SQL.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<SecretVersion> rotateSecret(RotateSecretRequest request) async {
+    final url = _endPoint.replace(path: '/v1/${request.parent}:rotateSecret');
+    final response = await _client.post(url, body: request);
+    return SecretVersion.fromJson(response);
+  }
+
   /// Lists information about the supported locations for this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
@@ -418,6 +451,10 @@ base class FakeSecretManagerService implements SecretManagerService {
     TestIamPermissionsRequest request,
   )?
   _testIamPermissions;
+  final Future<SecretVersion> Function(EnableManagedRotationRequest request)?
+  _enableManagedRotation;
+  final Future<SecretVersion> Function(RotateSecretRequest request)?
+  _rotateSecret;
   final Future<ListLocationsResponse> Function(ListLocationsRequest request)?
   _listLocations;
   final Future<Location> Function(GetLocationRequest request)? _getLocation;
@@ -460,6 +497,9 @@ base class FakeSecretManagerService implements SecretManagerService {
       TestIamPermissionsRequest request,
     )?
     testIamPermissions,
+    Future<SecretVersion> Function(EnableManagedRotationRequest request)?
+    enableManagedRotation,
+    Future<SecretVersion> Function(RotateSecretRequest request)? rotateSecret,
     Future<ListLocationsResponse> Function(ListLocationsRequest request)?
     listLocations,
     Future<Location> Function(GetLocationRequest request)? getLocation,
@@ -478,6 +518,8 @@ base class FakeSecretManagerService implements SecretManagerService {
        _setIamPolicy = setIamPolicy,
        _getIamPolicy = getIamPolicy,
        _testIamPermissions = testIamPermissions,
+       _enableManagedRotation = enableManagedRotation,
+       _rotateSecret = rotateSecret,
        _listLocations = listLocations,
        _getLocation = getLocation;
 
@@ -761,6 +803,44 @@ base class FakeSecretManagerService implements SecretManagerService {
     throw UnsupportedError('testIamPermissions');
   }
 
+  /// Enables the managed rotation feature for a
+  /// `Secret`. This method can only be
+  /// triggered once for a secret. In order to do further rotations, RotateSecret
+  /// should be used. This method will add a secret version and update the
+  /// password in Cloud SQL.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<SecretVersion> enableManagedRotation(
+    EnableManagedRotationRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_enableManagedRotation case final enableManagedRotation?) {
+      return enableManagedRotation(request);
+    }
+    throw UnsupportedError('enableManagedRotation');
+  }
+
+  /// Do a managed rotation for a `Secret`.
+  /// This can only be triggered after Managed rotation has been enabled.
+  /// This method will add a secret version and update the password in Cloud SQL.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<SecretVersion> rotateSecret(RotateSecretRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_rotateSecret case final rotateSecret?) {
+      return rotateSecret(request);
+    }
+    throw UnsupportedError('rotateSecret');
+  }
+
   /// Lists information about the supported locations for this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
@@ -915,6 +995,17 @@ final class Secret extends ProtoMessage {
   /// Tags can be used to control policy evaluation for the resource.
   final Map<String, String> tags;
 
+  /// Optional. Immutable. This defines the type of the secret.
+  /// Enforces certain structural requirements on the
+  /// `SecretVersions`.
+  /// For secret of type UNSPECIFIED, the SecretVersions can be of any type.
+  final Secret_SecretType secretType;
+
+  /// Output only. Defines the policy member for the secret.
+  /// This will be used to check if the caller has the permission to perform
+  /// certain operations on the typed secret.
+  final ResourcePolicyMember? policyMember;
+
   Secret({
     this.name = '',
     this.replication,
@@ -930,6 +1021,8 @@ final class Secret extends ProtoMessage {
     this.versionDestroyTtl,
     this.customerManagedEncryption,
     this.tags = const {},
+    this.secretType = Secret_SecretType.$default,
+    this.policyMember,
   }) : super(fullyQualifiedName);
 
   factory Secret.fromJson(Object? j) {
@@ -1007,6 +1100,14 @@ final class Secret extends ProtoMessage {
         },
         _ => throw const FormatException('"tags" is not an object'),
       },
+      secretType: switch (json['secretType']) {
+        null => Secret_SecretType.$default,
+        Object $1 => Secret_SecretType.fromJson($1),
+      },
+      policyMember: switch (json['policyMember']) {
+        null => null,
+        Object $1 => ResourcePolicyMember.fromJson($1),
+      },
     );
   }
 
@@ -1029,13 +1130,60 @@ final class Secret extends ProtoMessage {
     'versionDestroyTtl': ?versionDestroyTtl?.toJson(),
     'customerManagedEncryption': ?customerManagedEncryption?.toJson(),
     if (tags.isNotDefault) 'tags': tags,
+    if (secretType.isNotDefault) 'secretType': secretType.toJson(),
+    'policyMember': ?policyMember?.toJson(),
   };
 
   @override
   String toString() {
-    final $contents = ['name=$name', 'etag=$etag'].join(',');
+    final $contents = [
+      'name=$name',
+      'etag=$etag',
+      'secretType=$secretType',
+    ].join(',');
     return 'Secret(${$contents})';
   }
+}
+
+/// This defines the various values of the type of secret can be.
+final class Secret_SecretType extends ProtoEnum {
+  /// Applicable to all secrets which do not have any restriction on the
+  /// SecretVersions.
+  static const secretTypeUnspecified = Secret_SecretType(
+    'SECRET_TYPE_UNSPECIFIED',
+  );
+
+  /// Applicable to secrets which are used for the managed rotation feature
+  /// for Cloud SQL Single User.
+  static const cloudSqlDbCredentials = Secret_SecretType(
+    'CLOUD_SQL_DB_CREDENTIALS',
+  );
+
+  /// Applicable to secrets where the payload contains an access key.
+  static const accessKey = Secret_SecretType('ACCESS_KEY');
+
+  /// Applicable to secrets where the payload contains a certificate.
+  static const certificate = Secret_SecretType('CERTIFICATE');
+
+  /// Applicable to secrets where the payload contains database credentials.
+  static const otherDbCredentials = Secret_SecretType('OTHER_DB_CREDENTIALS');
+
+  /// Applicable to secrets whose type doesn't belong to any of the above
+  /// defined types.
+  static const other = Secret_SecretType('OTHER');
+
+  /// The default value for [Secret_SecretType].
+  static const $default = secretTypeUnspecified;
+
+  const Secret_SecretType(super.value);
+
+  factory Secret_SecretType.fromJson(Object? json) =>
+      Secret_SecretType(json as String);
+
+  bool get isNotDefault => this != $default;
+
+  @override
+  String toString() => 'SecretType.$value';
 }
 
 /// A secret version resource in the Secret Manager API.
@@ -1708,8 +1856,16 @@ final class Rotation extends ProtoMessage {
   /// rotation notifications.
   final Duration? rotationPeriod;
 
-  Rotation({this.nextRotationTime, this.rotationPeriod})
-    : super(fullyQualifiedName);
+  /// Output only. The current status of the managed rotation.
+  /// This field is only applicable to Typed Secrets.
+  /// This field is set by the service and cannot be set by the user.
+  final Rotation_ManagedRotationStatus? managedRotationStatus;
+
+  Rotation({
+    this.nextRotationTime,
+    this.rotationPeriod,
+    this.managedRotationStatus,
+  }) : super(fullyQualifiedName);
 
   factory Rotation.fromJson(Object? j) {
     final json = j as Map<String, Object?>;
@@ -1722,6 +1878,10 @@ final class Rotation extends ProtoMessage {
         null => null,
         Object $1 => Duration.fromJson($1),
       },
+      managedRotationStatus: switch (json['managedRotationStatus']) {
+        null => null,
+        Object $1 => Rotation_ManagedRotationStatus.fromJson($1),
+      },
     );
   }
 
@@ -1729,10 +1889,87 @@ final class Rotation extends ProtoMessage {
   Object toJson() => {
     'nextRotationTime': ?nextRotationTime?.toJson(),
     'rotationPeriod': ?rotationPeriod?.toJson(),
+    'managedRotationStatus': ?managedRotationStatus?.toJson(),
   };
 
   @override
   String toString() => 'Rotation()';
+}
+
+/// Represents the status of a managed rotation.
+///
+/// This is applicable only to Typed Secrets. It indicates whether the
+/// rotation is active and any errors that may have occurred during the
+/// asynchronous managed rotation.
+final class Rotation_ManagedRotationStatus extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.secretmanager.v1.Rotation.ManagedRotationStatus';
+
+  /// Output only. Indicates whether the Managed Rotation is active or not.
+  final Rotation_ManagedRotationStatus_State state;
+
+  /// Output only. Displays customer-facing issues that occurred during an
+  /// asynchronous managed rotation. For example, if there are some permission
+  /// errors.
+  final Status? error;
+
+  Rotation_ManagedRotationStatus({
+    this.state = Rotation_ManagedRotationStatus_State.$default,
+    this.error,
+  }) : super(fullyQualifiedName);
+
+  factory Rotation_ManagedRotationStatus.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Rotation_ManagedRotationStatus(
+      state: switch (json['state']) {
+        null => Rotation_ManagedRotationStatus_State.$default,
+        Object $1 => Rotation_ManagedRotationStatus_State.fromJson($1),
+      },
+      error: switch (json['error']) {
+        null => null,
+        Object $1 => Status.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (state.isNotDefault) 'state': state.toJson(),
+    'error': ?error?.toJson(),
+  };
+
+  @override
+  String toString() {
+    final $contents = ['state=$state'].join(',');
+    return 'ManagedRotationStatus(${$contents})';
+  }
+}
+
+/// This defines the various states in which the managed rotation can be.
+final class Rotation_ManagedRotationStatus_State extends ProtoEnum {
+  /// Not specified. This value is unused and invalid.
+  static const stateUnspecified = Rotation_ManagedRotationStatus_State(
+    'STATE_UNSPECIFIED',
+  );
+
+  /// Indicates that the Managed rotation is ACTIVE.
+  static const active = Rotation_ManagedRotationStatus_State('ACTIVE');
+
+  /// Indicates that the Managed rotation is INACTIVE.
+  static const inactive = Rotation_ManagedRotationStatus_State('INACTIVE');
+
+  /// The default value for [Rotation_ManagedRotationStatus_State].
+  static const $default = stateUnspecified;
+
+  const Rotation_ManagedRotationStatus_State(super.value);
+
+  factory Rotation_ManagedRotationStatus_State.fromJson(Object? json) =>
+      Rotation_ManagedRotationStatus_State(json as String);
+
+  bool get isNotDefault => this != $default;
+
+  @override
+  String toString() => 'State.$value';
 }
 
 /// A secret payload resource in the Secret Manager API. This contains the
@@ -2036,6 +2273,153 @@ final class AddSecretVersionRequest extends ProtoMessage {
   String toString() {
     final $contents = ['parent=$parent'].join(',');
     return 'AddSecretVersionRequest(${$contents})';
+  }
+}
+
+/// Request message for
+/// `SecretManagerService.EnableManagedRotation`.
+final class EnableManagedRotationRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.secretmanager.v1.EnableManagedRotationRequest';
+
+  /// Required. The resource name of the
+  /// `Secret` to associate with the
+  /// `SecretVersion` in the format
+  /// `projects/*/secrets/*` or `projects/*/locations/*/secrets/*`.
+  final String parent;
+
+  /// Credentials required for Cloud SQL DB for Single user Managed Rotation.
+  final EnableManagedRotationRequest_CloudSqlsingleUserCredentials?
+  cloudSqlSingleUserCredentials;
+
+  EnableManagedRotationRequest({
+    required this.parent,
+    this.cloudSqlSingleUserCredentials,
+  }) : super(fullyQualifiedName);
+
+  factory EnableManagedRotationRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return EnableManagedRotationRequest(
+      parent: switch (json['parent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      cloudSqlSingleUserCredentials:
+          switch (json['cloudSqlSingleUserCredentials']) {
+            null => null,
+            Object $1 =>
+              EnableManagedRotationRequest_CloudSqlsingleUserCredentials.fromJson(
+                $1,
+              ),
+          },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'parent': parent,
+    'cloudSqlSingleUserCredentials': ?cloudSqlSingleUserCredentials?.toJson(),
+  };
+
+  @override
+  String toString() {
+    final $contents = ['parent=$parent'].join(',');
+    return 'EnableManagedRotationRequest(${$contents})';
+  }
+}
+
+/// These are the credentials required for Cloud SQL DB for Single user
+/// Managed Rotation.
+final class EnableManagedRotationRequest_CloudSqlsingleUserCredentials
+    extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.secretmanager.v1.EnableManagedRotationRequest.CloudSQLSingleUserCredentials';
+
+  /// Required. Instance ID of the Cloud SQL instance.
+  final String instanceId;
+
+  /// Required. Username of the Cloud SQL instance.
+  final String username;
+
+  /// Optional. Password of the Cloud SQL instance. If this is not provided,
+  /// a random password will be generated.
+  final String password;
+
+  EnableManagedRotationRequest_CloudSqlsingleUserCredentials({
+    required this.instanceId,
+    required this.username,
+    this.password = '',
+  }) : super(fullyQualifiedName);
+
+  factory EnableManagedRotationRequest_CloudSqlsingleUserCredentials.fromJson(
+    Object? j,
+  ) {
+    final json = j as Map<String, Object?>;
+    return EnableManagedRotationRequest_CloudSqlsingleUserCredentials(
+      instanceId: switch (json['instanceId']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      username: switch (json['username']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      password: switch (json['password']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'instanceId': instanceId,
+    'username': username,
+    if (password.isNotDefault) 'password': password,
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      'instanceId=$instanceId',
+      'username=$username',
+      'password=$password',
+    ].join(',');
+    return 'CloudSQLSingleUserCredentials(${$contents})';
+  }
+}
+
+/// Request message for
+/// `SecretManagerService.RotateSecret`.
+final class RotateSecretRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.secretmanager.v1.RotateSecretRequest';
+
+  /// Required. The resource name of the
+  /// `Secret` to associate with the
+  /// `SecretVersion` in the format
+  /// `projects/*/secrets/*` or `projects/*/locations/*/secrets/*`.
+  final String parent;
+
+  RotateSecretRequest({required this.parent}) : super(fullyQualifiedName);
+
+  factory RotateSecretRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return RotateSecretRequest(
+      parent: switch (json['parent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {'parent': parent};
+
+  @override
+  String toString() {
+    final $contents = ['parent=$parent'].join(',');
+    return 'RotateSecretRequest(${$contents})';
   }
 }
 
