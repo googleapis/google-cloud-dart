@@ -26,13 +26,9 @@ import 'dart:convert';
 import 'package:google_cloud_pubsub/google_cloud_pubsub.dart';
 
 void main() async {
-  // Note: You must provide an `authenticator` for authentication in production.
-  final pubSub = PubSub(
-    projectId: 'your-project-id',
-    authenticator: await applicationDefaultCredentialsAuthenticator(
-      ['https://www.googleapis.com/auth/pubsub'],
-    ),
-  );
+  // By default, `PubSub` will automatically authenticate using
+  // Application Default Credentials (ADC).
+  final pubSub = PubSub(projectId: 'your-project-id');
 
   // Create a topic.
   final topic = await pubSub.topic('put-your-topic-name-here').create();
@@ -52,7 +48,7 @@ void main() async {
     print('Received message: ${utf8.decode(receivedMessage.data)}');
 
     // Acknowledge the message.
-    await subscription.acknowledge([receivedMessage.ackId]);
+    await subscription.acknowledgeNow([receivedMessage]);
   }
 
   print(
@@ -64,7 +60,7 @@ void main() async {
   await subscription.delete();
   await topic.delete();
 
-  pubSub.close();
+  await pubSub.close();
 }
 ```
 

@@ -126,11 +126,13 @@ final class PubSub {
   /// It is an error if [projectId] is not provided and cannot be
   /// inferred from the environment.
   ///
-  /// For authentication, an [authenticator] can be supplied to obtain
+  /// For authentication, an explicit [authenticator] can be supplied to obtain
   /// and refresh access credentials for authenticating gRPC requests.
   ///
-  /// If no [authenticator] is provided, requests are made without
-  /// authentication.
+  /// If no [authenticator] is provided:
+  /// - When running against the Pub/Sub emulator, requests are made without
+  ///   authentication.
+  /// - Otherwise, Application Default Credentials (ADC) are used automatically.
   factory PubSub({
     String? projectId,
     String? apiEndpoint,
@@ -199,7 +201,7 @@ final class PubSub {
   ///
   /// The [topic] must be in the format `projects/<project-id>/topics/<topic-id>`.
   ///
-  /// Throws a [TopicAlreadyExistsException] if the topic already exists.
+  /// Throws a [ConflictException] if the topic already exists.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Publisher.CreateTopic).
   // TODO(sigurdm): Support configuring topic options (labels,
@@ -211,12 +213,7 @@ final class PubSub {
       await _publisher.createTopic(t, options: await _callOptions);
       return topicName(topic);
     } on GrpcError catch (e) {
-      throw _mapGrpcError(
-        e,
-        specificMappings: {
-          StatusCode.alreadyExists: (_) => TopicAlreadyExistsException(topic),
-        },
-      );
+      throw _mapGrpcError(e);
     }
   }
 
@@ -224,7 +221,7 @@ final class PubSub {
   ///
   /// The [topic] must be in the format `projects/<project-id>/topics/<topic-id>`.
   ///
-  /// Throws a [TopicNotFoundException] if the topic does not exist.
+  /// Throws a [NotFoundException] if the topic does not exist.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Publisher.DeleteTopic).
   Future<void> deleteTopic(String topic) async {
@@ -232,12 +229,7 @@ final class PubSub {
     try {
       await _publisher.deleteTopic(request, options: await _callOptions);
     } on GrpcError catch (e) {
-      throw _mapGrpcError(
-        e,
-        specificMappings: {
-          StatusCode.notFound: (_) => TopicNotFoundException(topic),
-        },
-      );
+      throw _mapGrpcError(e);
     }
   }
 
@@ -245,7 +237,7 @@ final class PubSub {
   ///
   /// The [topic] must be in the format `projects/<project-id>/topics/<topic-id>`.
   ///
-  /// Throws a [TopicNotFoundException] if the topic does not exist.
+  /// Throws a [NotFoundException] if the topic does not exist.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Publisher.Publish).
   // TODO(sigurdm): Support batch publishing (publishMany) for high-throughput.
@@ -270,12 +262,7 @@ final class PubSub {
       );
       return response.messageIds.first;
     } on GrpcError catch (e) {
-      throw _mapGrpcError(
-        e,
-        specificMappings: {
-          StatusCode.notFound: (_) => TopicNotFoundException(topic),
-        },
-      );
+      throw _mapGrpcError(e);
     }
   }
 
@@ -295,10 +282,8 @@ final class PubSub {
   /// `projects/<project-id>/subscriptions/<subscription-id>`.
   /// The [topic] must be in the format `projects/<project-id>/topics/<topic-id>`.
   ///
-  /// Throws a [SubscriptionAlreadyExistsException] if the subscription already
-  /// exists.
-  /// Throws a [TopicNotFoundException] if the corresponding topic doesn't
-  /// exist.
+  /// Throws a [ConflictException] if the subscription already exists.
+  /// Throws a [NotFoundException] if the corresponding topic doesn't exist.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.CreateSubscription).
   // TODO(sigurdm): Support configuring subscription options
@@ -316,14 +301,7 @@ final class PubSub {
       await _subscriber.createSubscription(sub, options: await _callOptions);
       return subscriptionName(subscription);
     } on GrpcError catch (e) {
-      throw _mapGrpcError(
-        e,
-        specificMappings: {
-          StatusCode.alreadyExists: (_) =>
-              SubscriptionAlreadyExistsException(subscription),
-          StatusCode.notFound: (_) => TopicNotFoundException(topic),
-        },
-      );
+      throw _mapGrpcError(e);
     }
   }
 
@@ -332,8 +310,7 @@ final class PubSub {
   /// The [subscription] must be in the format
   /// `projects/<project-id>/subscriptions/<subscription-id>`.
   ///
-  /// Throws a [SubscriptionNotFoundException] if the subscription does not
-  /// exist.
+  /// Throws a [NotFoundException] if the subscription does not exist.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.DeleteSubscription).
   Future<void> deleteSubscription(String subscription) async {
@@ -345,13 +322,7 @@ final class PubSub {
         options: await _callOptions,
       );
     } on GrpcError catch (e) {
-      throw _mapGrpcError(
-        e,
-        specificMappings: {
-          StatusCode.notFound: (_) =>
-              SubscriptionNotFoundException(subscription),
-        },
-      );
+      throw _mapGrpcError(e);
     }
   }
 
@@ -360,8 +331,7 @@ final class PubSub {
   /// The [subscription] must be in the format
   /// `projects/<project-id>/subscriptions/<subscription-id>`.
   ///
-  /// Throws a [SubscriptionNotFoundException] if the subscription does not
-  /// exist.
+  /// Throws a [NotFoundException] if the subscription does not exist.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.Pull).
   Future<List<ReceivedMessage>> pull(
@@ -389,13 +359,7 @@ final class PubSub {
           )
           .toList();
     } on GrpcError catch (e) {
-      throw _mapGrpcError(
-        e,
-        specificMappings: {
-          StatusCode.notFound: (_) =>
-              SubscriptionNotFoundException(subscription),
-        },
-      );
+      throw _mapGrpcError(e);
     }
   }
 
@@ -408,11 +372,11 @@ final class PubSub {
   /// The client streams acknowledgments and ack deadline modifications
   /// back to the server. If an error occurs (including when the server closes
   /// the stream with status `UNAVAILABLE` to reassign resources), the stream
-  /// will throw a [StreamBrokenException]. In this case, the caller should
+  /// will throw a [ServiceException]. In this case, the caller should
   /// re-establish the stream. Flow control can be achieved by configuring the
   /// underlying RPC channel.
   ///
-  /// Throws a [StreamBrokenException] if the stream is broken by the server or
+  /// Throws a [ServiceException] if the stream is broken by the server or
   /// network.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.StreamingPull).
@@ -463,17 +427,13 @@ final class PubSub {
         }
       }
     } on GrpcError catch (e) {
-      throw StreamBrokenException(
-        e.code,
-        e.message ?? 'Unknown error',
-        e.trailers ?? const {},
-      );
+      throw _mapGrpcError(e);
     } finally {
       await requestController.close();
     }
   }
 
-  /// Acknowledges the messages associated with the `ack_ids`.
+  /// Acknowledges the messages associated with the [ackIds].
   ///
   /// The [subscription] must be in the format
   /// `projects/<project-id>/subscriptions/<subscription-id>`.
@@ -484,8 +444,7 @@ final class PubSub {
   /// but such a message may be redelivered later. Acknowledging a message more
   /// than once will not result in an error.
   ///
-  /// Throws a [SubscriptionNotFoundException] if the subscription does not
-  /// exist.
+  /// Throws a [NotFoundException] if the subscription does not exist.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.Acknowledge).
   Future<void> acknowledge(String subscription, List<String> ackIds) async {
@@ -496,13 +455,7 @@ final class PubSub {
     try {
       await _subscriber.acknowledge(request, options: await _callOptions);
     } on GrpcError catch (e) {
-      throw _mapGrpcError(
-        e,
-        specificMappings: {
-          StatusCode.notFound: (_) =>
-              SubscriptionNotFoundException(subscription),
-        },
-      );
+      throw _mapGrpcError(e);
     }
   }
 
@@ -520,8 +473,7 @@ final class PubSub {
   /// may succeed, but those messages may have already been redelivered or
   /// made available for redelivery.
   ///
-  /// Throws a [SubscriptionNotFoundException] if the subscription does not
-  /// exist.
+  /// Throws a [NotFoundException] if the subscription does not exist.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.ModifyAckDeadline).
   Future<void> modifyAckDeadline(
@@ -537,13 +489,7 @@ final class PubSub {
     try {
       await _subscriber.modifyAckDeadline(request, options: await _callOptions);
     } on GrpcError catch (e) {
-      throw _mapGrpcError(
-        e,
-        specificMappings: {
-          StatusCode.notFound: (_) =>
-              SubscriptionNotFoundException(subscription),
-        },
-      );
+      throw _mapGrpcError(e);
     }
   }
 
@@ -570,17 +516,26 @@ final class PubSub {
   // - DeleteSchema
   // - ValidateSchema
   // - ValidateMessage
-  Exception _mapGrpcError(
-    GrpcError e, {
-    Map<int, Exception Function(GrpcError)> specificMappings = const {},
-  }) {
-    if (specificMappings[e.code] case final exceptionBuilder?) {
-      return exceptionBuilder(e);
-    }
-    return PubSubOperationException(
-      e.code,
-      e.message ?? 'Unknown error',
-      e.trailers ?? const {},
-    );
+  Exception _mapGrpcError(GrpcError e) {
+    final message = e.message ?? 'Unknown gRPC error';
+    return switch (e.code) {
+      StatusCode.invalidArgument => BadRequestException(message),
+      StatusCode.unauthenticated => UnauthorizedException(message),
+      StatusCode.permissionDenied => ForbiddenException(message),
+      StatusCode.notFound => NotFoundException(message),
+      StatusCode.alreadyExists => ConflictException(message),
+      StatusCode.aborted => ConflictException(message),
+      StatusCode.failedPrecondition => PreconditionFailedException(message),
+      StatusCode.outOfRange => RequestRangeNotSatisfiableException(message),
+      StatusCode.resourceExhausted => TooManyRequestsException(message),
+      StatusCode.cancelled => CancelledException(message),
+      StatusCode.deadlineExceeded => GatewayTimeoutException(message),
+      StatusCode.internal => InternalServerErrorException(message),
+      StatusCode.unimplemented => NotImplementedException(message),
+      StatusCode.unavailable => ServiceUnavailableException(message),
+      StatusCode.dataLoss => InternalServerErrorException(message),
+      StatusCode.unknown => InternalServerErrorException(message),
+      _ => ServiceException(message, statusCode: e.code),
+    };
   }
 }

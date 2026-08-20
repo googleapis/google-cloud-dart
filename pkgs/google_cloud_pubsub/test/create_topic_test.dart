@@ -43,20 +43,16 @@ void main() {
       await topic.delete();
     });
 
-    test(
-      'create existing topic throws TopicAlreadyExistsException',
-      () async {
-        final topicName = 'test-topic-${DateTime.now().millisecondsSinceEpoch}';
-        final topic = client.topic(topicName);
+    test('create existing topic throws ConflictException', () async {
+      final topicName = 'test-topic-${DateTime.now().millisecondsSinceEpoch}';
+      final topic = client.topic(topicName);
 
-        await topic.create();
-        addTearDown(() async => await topic.delete());
+      await topic.create();
+      addTearDown(() async => await topic.delete());
 
-        expect(topic.create(), throwsA(isA<TopicAlreadyExistsException>()));
+      expect(topic.create(), throwsA(isA<ConflictException>()));
 
-        await topic.delete();
-      },
-      retry: isEmulator ? 3 : 0,
-    );
+      await topic.delete();
+    }, retry: isEmulator ? 3 : 0);
   });
 }

@@ -155,6 +155,120 @@ class FakeSubscriberClient extends Fake implements generated.SubscriberClient {
     }
     return FakeResponseFuture(completer.future);
   }
+
+  @override
+  grpc.ResponseFuture<generated.Subscription> createSubscription(
+    generated.Subscription request, {
+    grpc.CallOptions? options,
+  }) {
+    final completer = Completer<generated.Subscription>();
+    if (createSubscriptionBehavior case final createSubscription?) {
+      createSubscription(
+        request,
+      ).then(completer.complete).catchError(completer.completeError);
+    } else {
+      completer.complete(request);
+    }
+    return FakeResponseFuture(completer.future);
+  }
+
+  Future<generated.Subscription> Function(generated.Subscription request)?
+  createSubscriptionBehavior;
+
+  @override
+  grpc.ResponseFuture<protobuf.Empty> deleteSubscription(
+    generated.DeleteSubscriptionRequest request, {
+    grpc.CallOptions? options,
+  }) {
+    final completer = Completer<protobuf.Empty>();
+    if (deleteSubscriptionBehavior case final deleteSubscription?) {
+      deleteSubscription(request)
+          .then((_) => completer.complete(protobuf.Empty()))
+          .catchError(completer.completeError);
+    } else {
+      completer.complete(protobuf.Empty());
+    }
+    return FakeResponseFuture(completer.future);
+  }
+
+  Future<void> Function(generated.DeleteSubscriptionRequest request)?
+  deleteSubscriptionBehavior;
+
+  @override
+  grpc.ResponseFuture<generated.PullResponse> pull(
+    generated.PullRequest request, {
+    grpc.CallOptions? options,
+  }) {
+    final completer = Completer<generated.PullResponse>();
+    if (pullBehavior case final pull?) {
+      pull(
+        request,
+      ).then(completer.complete).catchError(completer.completeError);
+    } else {
+      completer.complete(generated.PullResponse());
+    }
+    return FakeResponseFuture(completer.future);
+  }
+
+  Future<generated.PullResponse> Function(generated.PullRequest request)?
+  pullBehavior;
+}
+
+class FakePublisherClient extends Fake implements generated.PublisherClient {
+  Future<generated.Topic> Function(generated.Topic request)?
+  createTopicBehavior;
+  Future<void> Function(generated.DeleteTopicRequest request)?
+  deleteTopicBehavior;
+  Future<generated.PublishResponse> Function(generated.PublishRequest request)?
+  publishBehavior;
+
+  @override
+  grpc.ResponseFuture<generated.Topic> createTopic(
+    generated.Topic request, {
+    grpc.CallOptions? options,
+  }) {
+    final completer = Completer<generated.Topic>();
+    if (createTopicBehavior case final createTopic?) {
+      createTopic(
+        request,
+      ).then(completer.complete).catchError(completer.completeError);
+    } else {
+      completer.complete(request);
+    }
+    return FakeResponseFuture(completer.future);
+  }
+
+  @override
+  grpc.ResponseFuture<protobuf.Empty> deleteTopic(
+    generated.DeleteTopicRequest request, {
+    grpc.CallOptions? options,
+  }) {
+    final completer = Completer<protobuf.Empty>();
+    if (deleteTopicBehavior case final deleteTopic?) {
+      deleteTopic(request)
+          .then((_) => completer.complete(protobuf.Empty()))
+          .catchError(completer.completeError);
+    } else {
+      completer.complete(protobuf.Empty());
+    }
+    return FakeResponseFuture(completer.future);
+  }
+
+  @override
+  grpc.ResponseFuture<generated.PublishResponse> publish(
+    generated.PublishRequest request, {
+    grpc.CallOptions? options,
+  }) {
+    final completer = Completer<generated.PublishResponse>();
+    if (publishBehavior case final publish?) {
+      publish(
+        request,
+      ).then(completer.complete).catchError(completer.completeError);
+    } else {
+      completer.complete(generated.PublishResponse()..messageIds.add('msg-1'));
+    }
+    return FakeResponseFuture(completer.future);
+  }
 }
 
 class FakeClientChannel extends Fake implements grpc.ClientChannel {
@@ -167,19 +281,127 @@ class FakeClientChannel extends Fake implements grpc.ClientChannel {
 void main() {
   group('PubSub Unit Tests (Error Propagation)', () {
     late FakeSubscriberClient fakeSubscriber;
+    late FakePublisherClient fakePublisher;
     late PubSub client;
 
     setUp(() {
       fakeSubscriber = FakeSubscriberClient();
+      fakePublisher = FakePublisherClient();
       client = PubSub.testing(
         projectId: 'test-project',
         channel: FakeClientChannel(),
         subscriberClient: fakeSubscriber,
+        publisherClient: fakePublisher,
       );
     });
 
     tearDown(() async {
       await client.close();
+    });
+
+    test('createTopic error propagates as ConflictException', () async {
+      fakePublisher.createTopicBehavior = (request) async {
+        throw const grpc.GrpcError.alreadyExists('Topic already exists');
+      };
+
+      await expectLater(
+        client.createTopic('projects/test-project/topics/top'),
+        throwsA(
+          isA<ConflictException>().having(
+            (e) => e.message,
+            'message',
+            'Topic already exists',
+          ),
+        ),
+      );
+    });
+
+    test('deleteTopic error propagates as NotFoundException', () async {
+      fakePublisher.deleteTopicBehavior = (request) async {
+        throw const grpc.GrpcError.notFound('Topic not found');
+      };
+
+      await expectLater(
+        client.deleteTopic('projects/test-project/topics/top'),
+        throwsA(
+          isA<NotFoundException>().having(
+            (e) => e.message,
+            'message',
+            'Topic not found',
+          ),
+        ),
+      );
+    });
+
+    test('publish error propagates as NotFoundException', () async {
+      fakePublisher.publishBehavior = (request) async {
+        throw const grpc.GrpcError.notFound('Topic not found');
+      };
+
+      await expectLater(
+        client.publish('projects/test-project/topics/top', [1, 2, 3]),
+        throwsA(
+          isA<NotFoundException>().having(
+            (e) => e.message,
+            'message',
+            'Topic not found',
+          ),
+        ),
+      );
+    });
+
+    test('createSubscription error propagates as ConflictException', () async {
+      fakeSubscriber.createSubscriptionBehavior = (request) async {
+        throw const grpc.GrpcError.alreadyExists('Sub already exists');
+      };
+
+      await expectLater(
+        client.createSubscription(
+          'projects/test-project/subscriptions/sub',
+          topic: 'projects/test-project/topics/top',
+        ),
+        throwsA(
+          isA<ConflictException>().having(
+            (e) => e.message,
+            'message',
+            'Sub already exists',
+          ),
+        ),
+      );
+    });
+
+    test('deleteSubscription error propagates as NotFoundException', () async {
+      fakeSubscriber.deleteSubscriptionBehavior = (request) async {
+        throw const grpc.GrpcError.notFound('Sub not found');
+      };
+
+      await expectLater(
+        client.deleteSubscription('projects/test-project/subscriptions/sub'),
+        throwsA(
+          isA<NotFoundException>().having(
+            (e) => e.message,
+            'message',
+            'Sub not found',
+          ),
+        ),
+      );
+    });
+
+    test('pull error propagates as NotFoundException', () async {
+      fakeSubscriber.pullBehavior = (request) async {
+        throw const grpc.GrpcError.notFound('Sub not found');
+      };
+
+      await expectLater(
+        client.pull('projects/test-project/subscriptions/sub'),
+        throwsA(
+          isA<NotFoundException>().having(
+            (e) => e.message,
+            'message',
+            'Sub not found',
+          ),
+        ),
+      );
     });
 
     test('streamingPull ack error propagates', () async {
@@ -210,10 +432,10 @@ void main() {
       await expectLater(
         ackFuture,
         throwsA(
-          isA<SubscriptionNotFoundException>().having(
-            (e) => e.name,
-            'name',
-            'projects/test-project/subscriptions/sub',
+          isA<NotFoundException>().having(
+            (e) => e.message,
+            'message',
+            'Subscription not found',
           ),
         ),
       );
@@ -252,10 +474,10 @@ void main() {
       await expectLater(
         modifyDeadlineFuture,
         throwsA(
-          isA<SubscriptionNotFoundException>().having(
-            (e) => e.name,
-            'name',
-            'projects/test-project/subscriptions/sub',
+          isA<NotFoundException>().having(
+            (e) => e.message,
+            'message',
+            'Subscription not found',
           ),
         ),
       );
@@ -297,6 +519,51 @@ void main() {
       expect(receivedMessage.message.data, equals([1, 2, 3]));
       expect(receivedMessage.message.attributes, equals({'key': 'value'}));
     });
+
+    test(
+      'gRPC status codes map to canonical ServiceException subclasses',
+      () async {
+        final mappings = <int, Type>{
+          grpc.StatusCode.invalidArgument: BadRequestException,
+          grpc.StatusCode.unauthenticated: UnauthorizedException,
+          grpc.StatusCode.permissionDenied: ForbiddenException,
+          grpc.StatusCode.notFound: NotFoundException,
+          grpc.StatusCode.alreadyExists: ConflictException,
+          grpc.StatusCode.aborted: ConflictException,
+          grpc.StatusCode.failedPrecondition: PreconditionFailedException,
+          grpc.StatusCode.outOfRange: RequestRangeNotSatisfiableException,
+          grpc.StatusCode.resourceExhausted: TooManyRequestsException,
+          grpc.StatusCode.cancelled: CancelledException,
+          grpc.StatusCode.deadlineExceeded: GatewayTimeoutException,
+          grpc.StatusCode.internal: InternalServerErrorException,
+          grpc.StatusCode.unimplemented: NotImplementedException,
+          grpc.StatusCode.unavailable: ServiceUnavailableException,
+          grpc.StatusCode.dataLoss: InternalServerErrorException,
+          grpc.StatusCode.unknown: InternalServerErrorException,
+        };
+
+        for (final entry in mappings.entries) {
+          fakePublisher.deleteTopicBehavior = (request) async {
+            throw grpc.GrpcError.custom(
+              entry.key,
+              'Test error for code ${entry.key}',
+            );
+          };
+
+          try {
+            await client.deleteTopic('projects/test-project/topics/top');
+            fail('Should have thrown');
+          } on ServiceException catch (e) {
+            expect(
+              e.runtimeType,
+              equals(entry.value),
+              reason: 'StatusCode ${entry.key} should map to ${entry.value}',
+            );
+            expect(e.message, equals('Test error for code ${entry.key}'));
+          }
+        }
+      },
+    );
   });
 
   group('ReceivedMessage composition and delegation', () {

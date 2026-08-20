@@ -93,8 +93,6 @@ graph TD
   google_cloud_logging_v2 --> google_cloud_rpc
   google_cloud_longrunning --> google_cloud_protobuf
   google_cloud_longrunning --> google_cloud_rpc
-  google_cloud_pubsub --> google_cloud
-  google_cloud_pubsub --> google_cloud_protobuf
   google_cloud_pubsub --> google_cloud_rpc
   google_cloud_rpc --> google_cloud_protobuf
   google_cloud_secretmanager_v1 --> google_cloud_iam_v1

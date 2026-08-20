@@ -33,7 +33,7 @@ void main() {
       await client.close();
     });
 
-    test('streaming pull throws StreamBrokenException '
+    test('streaming pull throws ServiceException '
         'when subscription is deleted', () async {
       final topicName = 'test-topic-${DateTime.now().millisecondsSinceEpoch}';
       final subscriptionName =
@@ -51,7 +51,7 @@ void main() {
       // Delete subscription to break the stream
       await subscription.delete();
 
-      expect(stream.first, throwsA(isA<StreamBrokenException>()));
+      expect(stream.first, throwsA(isA<ServiceException>()));
     });
   });
 }

@@ -34,12 +34,12 @@ void main() {
     });
 
     test('pull from non-existent subscription throws '
-        'SubscriptionNotFoundException', () async {
+        'NotFoundException', () async {
       final subscriptionName =
           'non-existent-${DateTime.now().millisecondsSinceEpoch}';
       final subscription = client.subscription(subscriptionName);
 
-      expect(subscription.pull, throwsA(isA<SubscriptionNotFoundException>()));
+      expect(subscription.pull, throwsA(isA<NotFoundException>()));
     });
   });
 }

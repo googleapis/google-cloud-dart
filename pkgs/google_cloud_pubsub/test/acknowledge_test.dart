@@ -34,7 +34,7 @@ void main() {
     });
 
     test('acknowledge for non-existent subscription throws '
-        'SubscriptionNotFoundException', () async {
+        'NotFoundException', () async {
       final subscriptionName =
           'non-existent-${DateTime.now().millisecondsSinceEpoch}';
       final subscription = client.subscription(subscriptionName);
@@ -48,7 +48,7 @@ void main() {
             message: Message(data: []),
           ),
         ]),
-        throwsA(isA<SubscriptionNotFoundException>()),
+        throwsA(isA<NotFoundException>()),
       );
     });
   });

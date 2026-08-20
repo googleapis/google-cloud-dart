@@ -67,10 +67,8 @@ final class Subscription {
   /// The subscription must not already exist on the server.
   /// The [topic] must exist on the server.
   ///
-  /// Throws a [SubscriptionAlreadyExistsException] if the subscription already
-  /// exists.
-  /// Throws a [TopicNotFoundException] if the corresponding topic doesn't
-  /// exist.
+  /// Throws a [ConflictException] if the subscription already exists.
+  /// Throws a [NotFoundException] if the corresponding topic doesn't exist.
   ///
   /// Returns a [Subscription] instance representing the created subscription.
   ///
@@ -82,16 +80,14 @@ final class Subscription {
   ///
   /// All messages retained in the subscription are immediately dropped.
   ///
-  /// Throws a [SubscriptionNotFoundException] if the subscription does not
-  /// exist.
+  /// Throws a [NotFoundException] if the subscription does not exist.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.DeleteSubscription).
   Future<void> delete() => pubsub.deleteSubscription(name);
 
   /// Pulls messages from the server.
   ///
-  /// Throws a [SubscriptionNotFoundException] if the subscription does not
-  /// exist.
+  /// Throws a [NotFoundException] if the subscription does not exist.
   ///
   /// It is an error if [maxMessages] is less than or equal to 0.
   ///
@@ -113,11 +109,11 @@ final class Subscription {
   /// The client streams acknowledgments and ack deadline modifications
   /// back to the server. If an error occurs (including when the server closes
   /// the stream with status `UNAVAILABLE` to reassign resources), the stream
-  /// will throw a [StreamBrokenException]. In this case, the caller should
+  /// will throw a [ServiceException]. In this case, the caller should
   /// re-establish the stream. Flow control can be achieved by configuring the
   /// underlying RPC channel.
   ///
-  /// Throws a [StreamBrokenException] if the stream is broken by the server or
+  /// Throws a [ServiceException] if the stream is broken by the server or
   /// network.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.StreamingPull).
@@ -143,8 +139,7 @@ final class Subscription {
   /// but such a message may be redelivered later. Acknowledging a message more
   /// than once will not result in an error.
   ///
-  /// Throws a [SubscriptionNotFoundException] if the subscription does not
-  /// exist.
+  /// Throws a [NotFoundException] if the subscription does not exist.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.Acknowledge).
   Future<void> acknowledgeNow(List<ReceivedMessage> messages) =>
@@ -170,8 +165,7 @@ final class Subscription {
   /// may succeed, but those messages may have already been redelivered or
   /// made available for redelivery.
   ///
-  /// Throws a [SubscriptionNotFoundException] if the subscription does not
-  /// exist.
+  /// Throws a [NotFoundException] if the subscription does not exist.
   ///
   /// It is an error if [ackDeadlineSeconds] is negative.
   ///

@@ -67,7 +67,7 @@ final class Topic {
   /// A topic must exist on the server before you can publish messages to it
   /// or create subscriptions for it.
   ///
-  /// Throws a [TopicAlreadyExistsException] if the topic already exists.
+  /// Throws a [ConflictException] if the topic already exists.
   ///
   /// Returns a [Topic] instance representing the created topic.
   ///
@@ -76,7 +76,7 @@ final class Topic {
 
   /// Deletes this topic on the server.
   ///
-  /// Throws a [TopicNotFoundException] if the topic does not exist.
+  /// Throws a [NotFoundException] if the topic does not exist.
   ///
   /// After a topic is deleted, a new topic may be created with the same name;
   /// this is an entirely new topic with none of the old configuration or
@@ -88,7 +88,7 @@ final class Topic {
 
   /// Adds one or more messages to the topic.
   ///
-  /// Throws a [TopicNotFoundException] if the topic does not exist.
+  /// Throws a [NotFoundException] if the topic does not exist.
   ///
   /// [data] is the message content.
   /// [attributes] are optional attributes for the message.

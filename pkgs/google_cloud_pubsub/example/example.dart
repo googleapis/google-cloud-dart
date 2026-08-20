@@ -16,22 +16,13 @@ import 'dart:async';
 
 import 'package:google_cloud_pubsub/google_cloud_pubsub.dart';
 
-/// An example demonstrating how to initialize and use the [PubSub] client
-/// with Google Application Default Credentials (ADC) authentication.
+/// An example demonstrating how to initialize and use the [PubSub] client.
 Future<void> main() async {
-  // Asynchronously construct the ADC authenticator with the required Pub/Sub scope.
-  final authenticator = await applicationDefaultCredentialsAuthenticator([
-    'https://www.googleapis.com/auth/pubsub',
-  ]);
-
-  // Pass the authenticator to the PubSub client constructor.
-  final pubsub = PubSub(
-    projectId: 'my-project-id',
-    authenticator: authenticator,
-  );
+  // By default, `PubSub` will automatically authenticate using
+  // Application Default Credentials (ADC).
+  final pubsub = PubSub(projectId: 'my-project-id');
 
   try {
-    // The client will use the authenticator to make authenticated requests.
     final topic = pubsub.topic('my-topic');
     print('Successfully initialized client for topic: ${topic.id}');
   } finally {

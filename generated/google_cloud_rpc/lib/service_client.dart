@@ -176,7 +176,6 @@ class ServiceClient {
         throw ServiceException(
           'Unsupported content type: ${response.headers['content-type']}',
           statusCode: response.statusCode,
-          response: response,
         );
     }
     final lines = response.stream.toStringStream().transform(

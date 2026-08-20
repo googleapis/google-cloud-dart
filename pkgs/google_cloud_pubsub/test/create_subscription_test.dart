@@ -34,7 +34,7 @@ void main() {
     });
 
     test(
-      'create existing subscription throws SubscriptionAlreadyExistsException',
+      'create existing subscription throws ConflictException',
       () async {
         final topicName = 'test-topic-${DateTime.now().millisecondsSinceEpoch}';
         final subscriptionName =
@@ -49,7 +49,7 @@ void main() {
 
         expect(
           () => subscription.create(topic: topic.name),
-          throwsA(isA<SubscriptionAlreadyExistsException>()),
+          throwsA(isA<ConflictException>()),
         );
 
         await subscription.delete();
@@ -59,7 +59,7 @@ void main() {
     );
 
     test('create subscription for non-existent topic throws '
-        'TopicNotFoundException', () async {
+        'NotFoundException', () async {
       final subscriptionName =
           'test-sub-${DateTime.now().millisecondsSinceEpoch}';
       final subscription = client.subscription(subscriptionName);
@@ -67,7 +67,7 @@ void main() {
       expect(
         () =>
             subscription.create(topic: client.topic('non-existent-topic').name),
-        throwsA(isA<TopicNotFoundException>()),
+        throwsA(isA<NotFoundException>()),
       );
     });
   });

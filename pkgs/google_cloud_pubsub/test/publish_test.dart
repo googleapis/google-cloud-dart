@@ -35,19 +35,15 @@ void main() {
       await client.close();
     });
 
-    test(
-      'publish to non-existent topic throws TopicNotFoundException',
-      () async {
-        final topicName =
-            'non-existent-${DateTime.now().millisecondsSinceEpoch}';
-        final topic = client.topic(topicName);
+    test('publish to non-existent topic throws NotFoundException', () async {
+      final topicName = 'non-existent-${DateTime.now().millisecondsSinceEpoch}';
+      final topic = client.topic(topicName);
 
-        expect(
-          () => topic.publish(utf8.encode('Hello')),
-          throwsA(isA<TopicNotFoundException>()),
-        );
-      },
-    );
+      expect(
+        () => topic.publish(utf8.encode('Hello')),
+        throwsA(isA<NotFoundException>()),
+      );
+    });
 
     test('publish and pull message', () async {
       final topicName = 'test-topic-${DateTime.now().millisecondsSinceEpoch}';

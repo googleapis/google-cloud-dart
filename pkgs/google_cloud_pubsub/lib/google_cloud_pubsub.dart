@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+export 'package:google_cloud_rpc/exceptions.dart';
 export 'package:grpc/grpc.dart'
     show
         BaseAuthenticator,
@@ -20,7 +21,6 @@ export 'package:grpc/grpc.dart'
         applicationDefaultCredentialsAuthenticator;
 
 export 'src/client.dart' show PubSub;
-export 'src/exceptions.dart';
 export 'src/message.dart' show Message, ReceivedMessage;
 export 'src/subscription.dart' show Subscription;
 export 'src/topic.dart' show Topic;

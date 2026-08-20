@@ -33,11 +33,11 @@ void main() {
       await client.close();
     });
 
-    test('Delete non-existent topic throws TopicNotFoundException', () async {
+    test('Delete non-existent topic throws NotFoundException', () async {
       final topic = client.topic(
         'non-existent-${DateTime.now().millisecondsSinceEpoch}',
       );
-      expect(topic.delete(), throwsA(isA<TopicNotFoundException>()));
+      expect(topic.delete(), throwsA(isA<NotFoundException>()));
     });
   });
 }

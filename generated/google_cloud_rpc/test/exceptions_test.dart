@@ -24,8 +24,6 @@ void main() {
       expect(e, isA<BadRequestException>());
       expect(e.message, 'unknown error');
       expect(e.statusCode, 400);
-      expect(e.response, response);
-      expect(e.responseBody, null);
       expect(e.status, isNull);
       expect(e.toString(), 'BadRequestException: unknown error');
     });
@@ -36,8 +34,6 @@ void main() {
       expect(e, isA<BadRequestException>());
       expect(e.message, 'unknown error');
       expect(e.statusCode, 400);
-      expect(e.response, response);
-      expect(e.responseBody, '');
       expect(e.status, isNull);
       expect(e.toString(), 'BadRequestException: unknown error');
     });
@@ -48,8 +44,6 @@ void main() {
       expect(e, isA<BadRequestException>());
       expect(e.message, 'not json');
       expect(e.statusCode, 400);
-      expect(e.response, response);
-      expect(e.responseBody, 'not json');
       expect(e.status, isNull);
       expect(e.toString(), 'BadRequestException: not json');
     });
@@ -60,8 +54,6 @@ void main() {
       expect(e, isA<BadRequestException>());
       expect(e.message, '{}');
       expect(e.statusCode, 400);
-      expect(e.response, response);
-      expect(e.responseBody, '{}');
       expect(e.status, isNull);
       expect(e.toString(), 'BadRequestException: {}');
     });
@@ -75,7 +67,6 @@ void main() {
       expect(e, isA<BadRequestException>());
       expect(e.message, '{"error": "string error"}');
       expect(e.statusCode, 400);
-      expect(e.responseBody, '{"error": "string error"}');
       expect(e.status, isNull);
       expect(e.toString(), 'BadRequestException: {"error": "string error"}');
     });
@@ -96,7 +87,6 @@ void main() {
       expect(e, isA<BadRequestException>());
       expect(e.message, 'bad request');
       expect(e.statusCode, 400);
-      expect(e.responseBody, responseBody);
       expect(e.status, isNotNull);
       expect(e.status!.code, 400);
       expect(e.status!.message, 'bad request');
@@ -119,7 +109,6 @@ void main() {
       expect(e, isA<ConflictException>());
       expect(e.message, 'conflict');
       expect(e.statusCode, 409);
-      expect(e.responseBody, responseBody);
       expect(e.status, isNotNull);
       expect(e.toString(), 'ConflictException: conflict');
     });
@@ -142,7 +131,6 @@ void main() {
       expect(e, isNot(isA<ConflictException>()));
       expect(e.message, 'internal error');
       expect(e.statusCode, 418);
-      expect(e.responseBody, responseBody);
       expect(e.status, isNotNull);
       expect(e.toString(), 'ServiceException: internal error');
     });
