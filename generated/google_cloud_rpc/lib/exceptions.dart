@@ -12,6 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/// @docImport 'package:google_cloud_rpc/exceptions.dart';
+/// {@canonicalFor exceptions.ServiceException}
+/// {@canonicalFor exceptions.BadRequestException}
 /// Exceptions raised by Google API clients.
 library;
 
