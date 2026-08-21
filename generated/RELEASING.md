@@ -79,9 +79,9 @@ Update the version of each package according to semver and write a
 `CHANGELOG.md` entry for every relevant PR since the last release.
 
 1. Run librarian:
-  ```bash
-  go run github.com/googleapis/librarian/cmd/librarian@${LIBRARIAN_VERSION} bump --all
-  ```
+   ```bash
+   go run github.com/googleapis/librarian/cmd/librarian@${LIBRARIAN_VERSION} bump --all
+   ```
 2. Verify that all tests and analysis pass locally:
    ```bash
    dart analyze
