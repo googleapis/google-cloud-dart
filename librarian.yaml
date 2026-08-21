@@ -12,21 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 language: dart
-version: v0.21.0
+version: v0.38.1
 sources:
   conformance:
-    commit: 59ab79a8fa063d66283236e2616b82870e07beef
-    sha256: 17d73a1665a67e2e72def80929ba41b68c24bdb848e194d28c5d67a2975c994e
+    commit: 07eec573f37d51c5c08243b1bd04e3c79422351f
+    sha256: f888f61018e0073bc675a5efa3d9e22dec8da725e77e9c18bbaa3f71f71ced14
   googleapis:
-    commit: cd3e7097f1edeb8379c4b26744c9ae9172b491f3
-    sha256: f3e2af994695d848542d9d3c3fafbc4a554a05cd7c0b8609bfa3f6901c9fa249
+    commit: 28ba5d15234eff44241492ca72b135e1171fc537
+    sha256: 7914a988cc0da8792005bf87a7a4277aa15f85d57d1727c2eef93fce743ab4a1
   protobuf:
-    commit: 59ab79a8fa063d66283236e2616b82870e07beef
-    sha256: 17d73a1665a67e2e72def80929ba41b68c24bdb848e194d28c5d67a2975c994e
+    commit: 07eec573f37d51c5c08243b1bd04e3c79422351f
+    sha256: f888f61018e0073bc675a5efa3d9e22dec8da725e77e9c18bbaa3f71f71ced14
     subpath: src
   showcase:
-    commit: e25a96754f46c9ebb7d3db667b9a030434ed4cbf
-    sha256: 52314efb8c2d5eded992be1895f3e3238f17f25fcfeb96df1e478ad361be450d
+    commit: 0c88ce83d259310dd6f6dc8f63a93bf8592723de
+    sha256: a4ee652fc9bbf90d53148e5cb2594906a41f846f4e3518e8fd97f3b2893c7073
 default:
   output: generated/
   tag_format: '{name}-v{version}'

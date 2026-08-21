@@ -22,6 +22,19 @@ The Google Cloud client library for the Long Running Operations API.
 
 The Google Cloud client library for the Long Running Operations API.
 
+## Agent Skills
+
+This package supports [Agent Skills](https://agentskills.io/home).
+
+To add this package to your application and install the skills for use by your
+Agent, run:
+
+```shell
+dart pub add google_cloud_longrunning
+dart pub get
+dart run skills@ get
+```
+
 Defines types and an abstract service to handle long-running operations.
 
 [Long-running operations] are a common pattern to handle methods that may take

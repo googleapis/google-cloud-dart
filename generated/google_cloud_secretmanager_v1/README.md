@@ -22,5 +22,18 @@ The Google Cloud client library for the Secret Manager API.
 
 The Google Cloud client library for the Secret Manager API.
 
+## Agent Skills
+
+This package supports [Agent Skills](https://agentskills.io/home).
+
+To add this package to your application and install the skills for use by your
+Agent, run:
+
+```shell
+dart pub add google_cloud_secretmanager_v1
+dart pub get
+dart run skills@ get
+```
+
 Stores sensitive data such as API keys, passwords, and certificates.
 Provides convenience while improving security.

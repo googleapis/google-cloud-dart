@@ -18,6 +18,8 @@
 ///
 /// Showcase represents both a model API and an integration testing surface for
 /// client library generator consumption.
+///
+/// @docImport 'package:google_cloud_rpc/exceptions.dart';
 library;
 
 // ignore_for_file: camel_case_types
@@ -33,7 +35,6 @@ import 'package:google_cloud_location/location.dart';
 import 'package:google_cloud_longrunning/longrunning.dart';
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/src/encoding.dart';
-import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:google_cloud_rpc/rpc.dart';
 import 'package:google_cloud_rpc/service_client.dart';
 import 'package:http/http.dart' as http;
@@ -3366,6 +3367,433 @@ base class FakeMessaging implements Messaging {
       return streamBlurbs(request);
     }
     throw UnsupportedError('streamBlurbs');
+  }
+
+  /// Provides the `Locations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ListLocationsResponse> listLocations(
+    ListLocationsRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_listLocations case final listLocations?) {
+      return listLocations(request);
+    }
+    throw UnsupportedError('listLocations');
+  }
+
+  /// Provides the `Locations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Location> getLocation(GetLocationRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_getLocation case final getLocation?) {
+      return getLocation(request);
+    }
+    throw UnsupportedError('getLocation');
+  }
+
+  /// Provides the `IAMPolicy` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_setIamPolicy case final setIamPolicy?) {
+      return setIamPolicy(request);
+    }
+    throw UnsupportedError('setIamPolicy');
+  }
+
+  /// Provides the `IAMPolicy` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_getIamPolicy case final getIamPolicy?) {
+      return getIamPolicy(request);
+    }
+    throw UnsupportedError('getIamPolicy');
+  }
+
+  /// Provides the `IAMPolicy` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<TestIamPermissionsResponse> testIamPermissions(
+    TestIamPermissionsRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_testIamPermissions case final testIamPermissions?) {
+      return testIamPermissions(request);
+    }
+    throw UnsupportedError('testIamPermissions');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ListOperationsResponse> listOperations(
+    ListOperationsRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_listOperations case final listOperations?) {
+      return listOperations(request);
+    }
+    throw UnsupportedError('listOperations');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Operation<T, S>> getOperation<
+    T extends ProtoMessage,
+    S extends ProtoMessage
+  >(Operation<T, S> request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_getOperation case final getOperation?) {
+      return getOperation(request);
+    }
+    throw UnsupportedError('getOperation');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<void> deleteOperation(DeleteOperationRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_deleteOperation case final deleteOperation?) {
+      return deleteOperation(request);
+    }
+    throw UnsupportedError('deleteOperation');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<void> cancelOperation(CancelOperationRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_cancelOperation case final cancelOperation?) {
+      return cancelOperation(request);
+    }
+    throw UnsupportedError('cancelOperation');
+  }
+
+  @override
+  void close() {
+    isClosed = true;
+  }
+}
+
+/// A service showcasing universal resumable upload protocol support.
+final class ResumableUploadService {
+  static const _defaultHost = 'localhost:7469';
+  final Uri _endPoint;
+
+  final ServiceClient _client;
+
+  /// Creates a `ResumableUploadService` using [client] for transport.
+  ///
+  /// The provided [http.Client] must be configured to provide whatever
+  /// authentication is required by `ResumableUploadService`. You can do that using
+  /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
+  ///
+  /// If [endPoint] is provided then its `scheme`, `host`, and `port` are
+  /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
+  /// could be used to force the `Firestore` service to communicate with the
+  /// local emulator.
+  ResumableUploadService({required http.Client client, Uri? endPoint})
+    : _client = ServiceClient(client: client),
+      _endPoint = endPoint == null
+          ? Uri.https(_defaultHost, '')
+          : Uri(
+              scheme: endPoint.scheme,
+              host: endPoint.host,
+              port: endPoint.port,
+            );
+
+  /// Creates a `ResumableUploadService` that does authentication through an API key.
+  ///
+  /// If called without arguments, the API key is taken from these environment
+  /// variables:
+  ///
+  /// - `GOOGLE_API_KEY`
+  ///
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
+  ///
+  /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
+  factory ResumableUploadService.fromApiKey([String? apiKey]) =>
+      ResumableUploadService(client: httpClientFromApiKey(apiKey, _apiKeys));
+
+  /// A method with media_upload annotation enabled.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<UploadMediaResponse> uploadMedia(UploadMediaRequest request) async {
+    final url = _endPoint.replace(path: '/v1beta1/files:upload');
+    final response = await _client.post(url, body: request);
+    return UploadMediaResponse.fromJson(response);
+  }
+
+  /// Provides the `Locations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<ListLocationsResponse> listLocations(
+    ListLocationsRequest request,
+  ) async {
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.name}/locations',
+      queryParameters: {
+        if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+      },
+    );
+    final response = await _client.get(url);
+    return ListLocationsResponse.fromJson(response);
+  }
+
+  /// Provides the `Locations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<Location> getLocation(GetLocationRequest request) async {
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}');
+    final response = await _client.get(url);
+    return Location.fromJson(response);
+  }
+
+  /// Provides the `IAMPolicy` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.resource}:setIamPolicy',
+    );
+    final response = await _client.post(url, body: request);
+    return Policy.fromJson(response);
+  }
+
+  /// Provides the `IAMPolicy` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.resource}:getIamPolicy',
+      queryParameters: {
+        if (request.options?.requestedPolicyVersion case final $1?
+            when $1.isNotDefault)
+          'options.requestedPolicyVersion': '${$1}',
+      },
+    );
+    final response = await _client.get(url);
+    return Policy.fromJson(response);
+  }
+
+  /// Provides the `IAMPolicy` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<TestIamPermissionsResponse> testIamPermissions(
+    TestIamPermissionsRequest request,
+  ) async {
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.resource}:testIamPermissions',
+    );
+    final response = await _client.post(url, body: request);
+    return TestIamPermissionsResponse.fromJson(response);
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<ListOperationsResponse> listOperations(
+    ListOperationsRequest request,
+  ) async {
+    final url = _endPoint.replace(
+      path: '/v1beta1/operations',
+      queryParameters: {
+        if (request.name case final $1 when $1.isNotDefault) 'name': $1,
+        if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+        if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+          'returnPartialSuccess': '${$1}',
+      },
+    );
+    final response = await _client.get(url);
+    return ListOperationsResponse.fromJson(response);
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  ///
+  /// This method can be used to get the current status of a long-running
+  /// operation.
+  Future<Operation<T, S>> getOperation<
+    T extends ProtoMessage,
+    S extends ProtoMessage
+  >(Operation<T, S> request) async {
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}');
+    final response = await _client.get(url);
+    return Operation.fromJson(response, request.operationHelper);
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<void> deleteOperation(DeleteOperationRequest request) async {
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}');
+    await _client.delete(url);
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<void> cancelOperation(CancelOperationRequest request) async {
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}:cancel');
+    await _client.post(url);
+  }
+
+  /// Closes the client and cleans up any resources associated with it.
+  ///
+  /// Once [close] is called, no other methods should be called.
+  void close() => _client.close();
+}
+
+/// Testing fake for [ResumableUploadService].
+base class FakeResumableUploadService implements ResumableUploadService {
+  final Future<UploadMediaResponse> Function(UploadMediaRequest request)?
+  _uploadMedia;
+  final Future<ListLocationsResponse> Function(ListLocationsRequest request)?
+  _listLocations;
+  final Future<Location> Function(GetLocationRequest request)? _getLocation;
+  final Future<Policy> Function(SetIamPolicyRequest request)? _setIamPolicy;
+  final Future<Policy> Function(GetIamPolicyRequest request)? _getIamPolicy;
+  final Future<TestIamPermissionsResponse> Function(
+    TestIamPermissionsRequest request,
+  )?
+  _testIamPermissions;
+  final Future<ListOperationsResponse> Function(ListOperationsRequest request)?
+  _listOperations;
+  final Future<Operation<T, S>> Function<
+    T extends ProtoMessage,
+    S extends ProtoMessage
+  >(Operation<T, S> request)?
+  _getOperation;
+  final Future<void> Function(DeleteOperationRequest request)? _deleteOperation;
+  final Future<void> Function(CancelOperationRequest request)? _cancelOperation;
+
+  @override
+  Uri get _endPoint => throw UnsupportedError('_endPoint');
+  @override
+  ServiceClient get _client => throw UnsupportedError('_client');
+
+  bool isClosed = false;
+
+  FakeResumableUploadService({
+    Future<UploadMediaResponse> Function(UploadMediaRequest request)?
+    uploadMedia,
+    Future<ListLocationsResponse> Function(ListLocationsRequest request)?
+    listLocations,
+    Future<Location> Function(GetLocationRequest request)? getLocation,
+    Future<Policy> Function(SetIamPolicyRequest request)? setIamPolicy,
+    Future<Policy> Function(GetIamPolicyRequest request)? getIamPolicy,
+    Future<TestIamPermissionsResponse> Function(
+      TestIamPermissionsRequest request,
+    )?
+    testIamPermissions,
+    Future<ListOperationsResponse> Function(ListOperationsRequest request)?
+    listOperations,
+    Future<Operation<T, S>> Function<
+      T extends ProtoMessage,
+      S extends ProtoMessage
+    >(Operation<T, S> request)?
+    getOperation,
+    Future<void> Function(DeleteOperationRequest request)? deleteOperation,
+    Future<void> Function(CancelOperationRequest request)? cancelOperation,
+  }) : _uploadMedia = uploadMedia,
+       _listLocations = listLocations,
+       _getLocation = getLocation,
+       _setIamPolicy = setIamPolicy,
+       _getIamPolicy = getIamPolicy,
+       _testIamPermissions = testIamPermissions,
+       _listOperations = listOperations,
+       _getOperation = getOperation,
+       _deleteOperation = deleteOperation,
+       _cancelOperation = cancelOperation;
+
+  /// A method with media_upload annotation enabled.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<UploadMediaResponse> uploadMedia(UploadMediaRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_uploadMedia case final uploadMedia?) {
+      return uploadMedia(request);
+    }
+    throw UnsupportedError('uploadMedia');
   }
 
   /// Provides the `Locations` service functionality in this service.
@@ -8013,6 +8441,72 @@ final class RestError_Status extends ProtoMessage {
       'status=$status',
     ].join(',');
     return 'Status(${$contents})';
+  }
+}
+
+final class UploadMediaRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.showcase.v1beta1.UploadMediaRequest';
+
+  final String name;
+
+  UploadMediaRequest({this.name = ''}) : super(fullyQualifiedName);
+
+  factory UploadMediaRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return UploadMediaRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {if (name.isNotDefault) 'name': name};
+
+  @override
+  String toString() {
+    final $contents = ['name=$name'].join(',');
+    return 'UploadMediaRequest(${$contents})';
+  }
+}
+
+final class UploadMediaResponse extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.showcase.v1beta1.UploadMediaResponse';
+
+  final String name;
+
+  final int size;
+
+  UploadMediaResponse({this.name = '', this.size = 0})
+    : super(fullyQualifiedName);
+
+  factory UploadMediaResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return UploadMediaResponse(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      size: switch (json['size']) {
+        null => 0,
+        Object $1 => decodeInt64($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (size.isNotDefault) 'size': size.toString(),
+  };
+
+  @override
+  String toString() {
+    final $contents = ['name=$name', 'size=$size'].join(',');
+    return 'UploadMediaResponse(${$contents})';
   }
 }
 

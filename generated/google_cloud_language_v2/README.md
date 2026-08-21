@@ -22,6 +22,19 @@ The Google Cloud client library for the Cloud Natural Language API.
 
 The Google Cloud client library for the Cloud Natural Language API.
 
+## Agent Skills
+
+This package supports [Agent Skills](https://agentskills.io/home).
+
+To add this package to your application and install the skills for use by your
+Agent, run:
+
+```shell
+dart pub add google_cloud_language_v2
+dart pub get
+dart run skills@ get
+```
+
 Provides natural language understanding technologies, such as sentiment
 analysis, entity recognition, entity sentiment analysis, and other text
 annotations, to developers.

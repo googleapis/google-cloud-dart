@@ -23,5 +23,6 @@ export 'src/api.g.dart'
         FakeEcho,
         FakeIdentity,
         FakeMessaging,
+        FakeResumableUploadService,
         FakeSequenceService,
         FakeTesting;

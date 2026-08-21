@@ -18,6 +18,8 @@
 ///
 /// Stores sensitive data such as API keys, passwords, and certificates.
 /// Provides convenience while improving security.
+///
+/// @docImport 'package:google_cloud_rpc/exceptions.dart';
 library;
 
 // ignore_for_file: camel_case_types
@@ -32,7 +34,6 @@ import 'package:google_cloud_iam_v1/iam.dart';
 import 'package:google_cloud_location/location.dart';
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/src/encoding.dart';
-import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:google_cloud_rpc/rpc.dart';
 import 'package:google_cloud_rpc/service_client.dart';
 import 'package:http/http.dart' as http;

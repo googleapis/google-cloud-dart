@@ -22,4 +22,17 @@ The Google Cloud client library for the Cloud Functions API.
 
 The Google Cloud client library for the Cloud Functions API.
 
+## Agent Skills
+
+This package supports [Agent Skills](https://agentskills.io/home).
+
+To add this package to your application and install the skills for use by your
+Agent, run:
+
+```shell
+dart pub add google_cloud_functions_v2
+dart pub get
+dart run skills@ get
+```
+
 Manages lightweight user-provided functions executed in response to events.
