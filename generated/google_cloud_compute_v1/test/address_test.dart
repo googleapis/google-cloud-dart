@@ -18,7 +18,7 @@ library;
 
 import 'dart:math';
 
-import 'package:google_cloud_compute_v1/compute.dart' hide Tags;
+import 'package:google_cloud_compute_v1/compute.dart' hide Duration, Tags;
 import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
@@ -26,15 +26,22 @@ import 'package:test_utils/cloud.dart';
 void main() {
   group('addresses', () {
     late Addresses addressesService;
+    late RegionOperations operationsService;
 
     setUp(() async {
-      final client = await auth.clientViaApplicationDefaultCredentials(
-        scopes: ['https://www.googleapis.com/auth/cloud-platform'],
-      );
-      addressesService = Addresses(client: client);
+      Future<auth.AutoRefreshingAuthClient> createClient() =>
+          auth.clientViaApplicationDefaultCredentials(
+            scopes: ['https://www.googleapis.com/auth/cloud-platform'],
+          );
+
+      addressesService = Addresses(client: await createClient());
+      operationsService = RegionOperations(client: await createClient());
     });
 
-    tearDown(() => addressesService.close());
+    tearDown(() {
+      addressesService.close();
+      operationsService.close();
+    });
 
     test('create and delete address', () async {
       final addressName = 'addr-${Random().nextInt(99999999)}';
@@ -51,6 +58,20 @@ void main() {
         ),
       );
       expect(op.name, isNotEmpty);
+
+      while (true) {
+        final currentOp = await operationsService.get(
+          GetRegionOperationRequest(
+            project: projectId,
+            region: region,
+            operation: op.name!,
+          ),
+        );
+        if (currentOp.status == Operation_Status.done) {
+          break;
+        }
+        await Future<void>.delayed(const Duration(seconds: 2));
+      }
 
       addTearDown(
         () => addressesService.delete(
