@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.5.4
+
+- feat: add setup and test agentic skills  (#321)
+- fix(ci): pin gapic-showcase and stabilize cloud integration tests (#320)
+- chore: add CHANGELOG.md to existing published packages (#313)
+- chore: update cloud dependencies
+
 ## 0.5.3
 
 - chore: update librarian to v0.21.0 (#289)
