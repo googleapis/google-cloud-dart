@@ -75,8 +75,8 @@ void main() {
           // Assert request contents here.
       },
     );
-    // Instead of verifying that `functionUnderTest`, you should verify the
-    // relevant properties of the result.
+    // Instead of verifying that `functionUnderTest` completes, you should verify
+    // the relevant properties of the result.
     await expectLater(functionUnderTest(fake), completes);
   });
 }
