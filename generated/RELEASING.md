@@ -90,7 +90,7 @@ Update the version of each package according to semver and write a
 3. Commit the changes and open a pull request against `main`. The commit
    message will not appear in any `CHANGELOG.md`.
 
-## 6. Publish change packages
+## 6. Publish changed packages
 
 Publish the updated packages to [pub.dev](https://pub.dev/).
 
