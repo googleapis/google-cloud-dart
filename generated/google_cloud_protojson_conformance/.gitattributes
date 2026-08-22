@@ -1,3 +1,6 @@
+.gitattributes linguist-generated=true
+LICENSE linguist-generated=true
+README.md linguist-generated=true
+pubspec.yaml linguist-generated=true
 lib/google_cloud_protobuf_test_messages_proto3.dart linguist-generated=true
-lib/testing.dart linguist-generated=true
 lib/src/api.g.dart linguist-generated=true
