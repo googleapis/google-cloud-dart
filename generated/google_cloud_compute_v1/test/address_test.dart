@@ -43,7 +43,7 @@ void main() {
       operationsService.close();
     });
 
-    test('create and delete address', () async {
+    test('create', () async {
       final addressName = 'addr-${Random().nextInt(99999999)}';
       const region = 'us-central1';
 
@@ -53,7 +53,7 @@ void main() {
           region: region,
           addressResource: Address(
             name: addressName,
-            description: 'Test address created by automated test',
+            description: '42 Wallaby Way, Sydney',
           ),
         ),
       );
@@ -70,7 +70,7 @@ void main() {
         if (currentOp.status == Operation_Status.done) {
           break;
         }
-        await Future<void>.delayed(const Duration(seconds: 2));
+        await Future<void>.delayed(const Duration(seconds: 1));
       }
 
       addTearDown(
@@ -91,7 +91,7 @@ void main() {
         ),
       );
       expect(address.name, addressName);
-      expect(address.description, 'Test address created by automated test');
+      expect(address.description, '42 Wallaby Way, Sydney');
     });
   });
 }

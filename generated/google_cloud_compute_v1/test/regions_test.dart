@@ -32,9 +32,9 @@ void main() {
       regionsService = Regions(client: client);
     });
 
-    tearDown(() => regionsService.close());
+    tearDown(regionsService.close);
 
-    test('list and get regions', () async {
+    test('list and get', () async {
       final regionList = await regionsService.list(
         ListRegionsRequest(project: projectId),
       );
