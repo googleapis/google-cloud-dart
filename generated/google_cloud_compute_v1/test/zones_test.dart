@@ -32,7 +32,7 @@ void main() {
       zonesService = Zones(client: client);
     });
 
-    tearDown(zonesService.close);
+    tearDown(() => zonesService.close());
 
     test('list and get', () async {
       final zoneList = await zonesService.list(
