@@ -89,3 +89,32 @@ Update the version of each package according to semver and write a
    ```
 3. Commit the changes and open a pull request against `main`. The commit
    message will not appear in any `CHANGELOG.md`.
+
+## 6. Publish changed packages
+
+Publish the updated packages to [pub.dev](https://pub.dev/).
+
+1. Check that publishing is likely to succeed:
+   ```bash
+   go run github.com/googleapis/librarian/cmd/librarian@${LIBRARIAN_VERSION} publish --dry-run
+   ```
+2. Publish:
+   ```bash
+   go run github.com/googleapis/librarian/cmd/librarian@${LIBRARIAN_VERSION} publish
+   ```
+
+## 7. Tag the release
+
+Git tags are used to calculate whether a package has been changed since the
+last release.
+
+1. Create the tags locally:
+   ```bash
+   go run github.com/googleapis/librarian/cmd/librarian@${LIBRARIAN_VERSION} tag
+   ```
+2. Obtain approval to publish tags to `google-cloud-dart` from
+   [go/cloud-sdk-googleapis#aod](http://go/cloud-sdk-googleapis#aod).
+3. Push the tags:
+   ```bash
+   git push --tags
+   ```
