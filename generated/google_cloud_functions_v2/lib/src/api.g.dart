@@ -17,6 +17,8 @@
 /// The Google Cloud client for the Cloud Functions API.
 ///
 /// Manages lightweight user-provided functions executed in response to events.
+///
+/// @docImport 'package:google_cloud_rpc/exceptions.dart';
 library;
 
 // ignore_for_file: camel_case_types
@@ -32,7 +34,6 @@ import 'package:google_cloud_location/location.dart';
 import 'package:google_cloud_longrunning/longrunning.dart';
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/src/encoding.dart';
-import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:google_cloud_rpc/service_client.dart';
 import 'package:google_cloud_type/type.dart';
 import 'package:http/http.dart' as http;

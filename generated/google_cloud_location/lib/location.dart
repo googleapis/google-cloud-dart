@@ -25,4 +25,6 @@ library;
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: unintended_html_in_doc_comment
 
+export 'package:google_cloud_rpc/exceptions.dart';
+
 export 'src/api.g.dart' hide FakeLocations;

@@ -19,6 +19,8 @@
 /// Provides natural language understanding technologies, such as sentiment
 /// analysis, entity recognition, entity sentiment analysis, and other text
 /// annotations, to developers.
+///
+/// @docImport 'package:google_cloud_rpc/exceptions.dart';
 library;
 
 // ignore_for_file: camel_case_types
@@ -31,7 +33,6 @@ library;
 
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/src/encoding.dart';
-import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:google_cloud_rpc/service_client.dart';
 import 'package:http/http.dart' as http;
 

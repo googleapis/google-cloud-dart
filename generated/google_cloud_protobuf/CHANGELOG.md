@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.4
+
+- chore: add CHANGELOG.md to existing published packages (#313)
+
 ## 0.5.3
 
 - chore: update api sources (#311)

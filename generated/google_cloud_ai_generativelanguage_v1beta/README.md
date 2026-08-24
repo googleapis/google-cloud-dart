@@ -31,6 +31,19 @@ The Google Cloud client library for the Generative Language API.
 
 The Google Cloud client library for the Generative Language API.
 
+## Agent Skills
+
+This package supports [Agent Skills](https://agentskills.io/home).
+
+To add this package to your application and install the skills for use by your
+Agent, run:
+
+```shell
+dart pub add google_cloud_ai_generativelanguage_v1beta
+dart pub get
+dart run skills@ get
+```
+
 The Gemini API allows developers to build generative AI applications using
 Gemini models. Gemini is our most capable model, built from the ground up
 to be multimodal. It can generalize and seamlessly understand, operate

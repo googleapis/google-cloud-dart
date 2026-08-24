@@ -22,4 +22,17 @@ The Google Cloud client library for the Cloud Logging API.
 
 The Google Cloud client library for the Cloud Logging API.
 
+## Agent Skills
+
+This package supports [Agent Skills](https://agentskills.io/home).
+
+To add this package to your application and install the skills for use by your
+Agent, run:
+
+```shell
+dart pub add google_cloud_logging_v2
+dart pub get
+dart run skills@ get
+```
+
 Writes log entries and manages your Cloud Logging configuration.

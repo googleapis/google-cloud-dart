@@ -26,5 +26,18 @@ The Google Cloud client library for the Cloud Firestore API.
 
 The Google Cloud client library for the Cloud Firestore API.
 
+## Agent Skills
+
+This package supports [Agent Skills](https://agentskills.io/home).
+
+To add this package to your application and install the skills for use by your
+Agent, run:
+
+```shell
+dart pub add google_cloud_firestore_v1
+dart pub get
+dart run skills@ get
+```
+
 Accesses the NoSQL document database built for automatic scaling, high
 performance, and ease of application development.

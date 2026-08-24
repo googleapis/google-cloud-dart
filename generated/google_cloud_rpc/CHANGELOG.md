@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.5.4
+
+- feat: add setup and test agentic skills  (#321)
+- chore: add CHANGELOG.md to existing published packages (#313)
+- feat(storage): support ifMetagenerationNotMatch (#304)
+- chore: update cloud dependencies
+
 ## 0.5.3
 
 - feat(storage): support ifMetagenerationNotMatch (#304)

@@ -21,7 +21,6 @@ import 'package:google_cloud_api/api.dart';
 import 'package:google_cloud_logging_type/logging_type.dart';
 import 'package:google_cloud_logging_v2/logging.dart';
 import 'package:google_cloud_protobuf/protobuf.dart' as protobuf;
-import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:google_cloud_rpc/rpc.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:http/http.dart' as http;
