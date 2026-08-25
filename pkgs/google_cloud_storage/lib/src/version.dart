@@ -18,4 +18,7 @@
 // * pubspec.yaml
 // * CHANGELOG.md
 // * lib/src/version.dart (verified by test/version_test.dart)
+//
+// Note: Consider using https://pub.dev/packages/build_version or similar
+// code generator to automate generating this file from pubspec.yaml.
 const String packageVersion = '0.6.4-wip';
