@@ -40,7 +40,7 @@ Future<Uint8List> downloadFile(
 }) async {
   final response = await client.get(
     url,
-    headers: {'Accept-Encoding': 'gzip', if (headers != null) ...headers},
+    headers: {'Accept-Encoding': 'gzip', ...?headers},
   );
   if (response.statusCode < 200 || response.statusCode >= 300) {
     throw ServiceException.fromHttpResponse(response, response.body);

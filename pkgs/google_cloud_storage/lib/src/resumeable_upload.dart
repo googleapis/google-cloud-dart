@@ -127,10 +127,7 @@ class ResumableUploadSink implements StreamSink<List<int>> {
           checkStatus = false;
           final statusRes = await client.put(
             sessionUri,
-            headers: {
-              'Content-Range': 'bytes */*',
-              if (resolvedHeaders != null) ...resolvedHeaders,
-            },
+            headers: {'Content-Range': 'bytes */*', ...?resolvedHeaders},
           );
           if (statusRes.statusCode == 200 || statusRes.statusCode == 201) {
             return statusRes;
@@ -185,8 +182,8 @@ class ResumableUploadSink implements StreamSink<List<int>> {
 
         final headers = {
           'Content-Range': contentRange,
-          if (hashHeader != null) 'x-goog-hash': hashHeader,
-          if (resolvedHeaders != null) ...resolvedHeaders,
+          'x-goog-hash': ?hashHeader,
+          ...?resolvedHeaders,
         };
 
         final body = remainingBytes == 0
@@ -350,10 +347,7 @@ ResumableUploadSink uploadFileStream(
     final res = await resolvedClient.post(
       url,
       body: body,
-      headers: {
-        'Content-Type': 'application/json',
-        if (resolvedHeaders != null) ...resolvedHeaders,
-      },
+      headers: {'Content-Type': 'application/json', ...?resolvedHeaders},
     );
     if (res.statusCode < 200 || res.statusCode >= 300) {
       throw ServiceException.fromHttpResponse(res, res.body);

@@ -139,7 +139,7 @@ void main() async {
     });
 
     test(
-      'sends gccl token in x-goog-api-client header on control-plane operations',
+      'sends gccl token in x-goog-api-client on control-plane ops',
       () async {
         late http.Request actualRequest;
         final mockClient = http_testing.MockClient((request) async {
@@ -209,7 +209,7 @@ void main() async {
     );
 
     test(
-      'sends gccl token in x-goog-api-client header on uploadObjectFromSink',
+      'sends gccl token in x-goog-api-client on uploadObjectFromSink',
       () async {
         final requests = <http.Request>[];
         final mockClient = http_testing.MockClient((request) async {
@@ -233,8 +233,8 @@ void main() async {
         storage = Storage(client: mockClient, projectId: 'test-project');
         addTearDown(storage.close);
 
-        final sink = storage.uploadObjectFromSink('test-bucket', 'test-obj');
-        sink.add([1, 2, 3]);
+        final sink = storage.uploadObjectFromSink('test-bucket', 'test-obj')
+          ..add([1, 2, 3]);
         await sink.close();
 
         expect(requests, isNotEmpty);
