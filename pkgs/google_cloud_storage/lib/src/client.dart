@@ -95,7 +95,12 @@ final class Storage {
   };
 
   FutureOr<ServiceClient> get _serviceClient async =>
-      _cachedServiceClient ??= ServiceClient(client: await _httpClient);
+      _cachedServiceClient ??= ServiceClient(
+        client: await _httpClient,
+        apiClientHeader: 'gccl/$_packageVersion',
+      );
+
+  static const String _packageVersion = '0.6.4-wip';
 
   static Uri _calculateBaseUrl(
     String? apiEndpoint,

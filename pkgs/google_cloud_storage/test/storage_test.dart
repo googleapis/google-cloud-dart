@@ -15,6 +15,7 @@
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:http/http.dart' as http;
+import 'package:http/testing.dart' as http_testing;
 import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
 
@@ -127,13 +128,21 @@ void main() async {
       );
     });
 
-    test('noProject throws StateError on listBuckets', () async {
-      storage = Storage(client: http.Client(), projectId: Storage.noProject);
+    test('sends gccl token in x-goog-api-client header', () async {
+      late http.Request actualRequest;
+      final mockClient = http_testing.MockClient((request) async {
+        actualRequest = request;
+        return http.Response('{"items": []}', 200);
+      });
+
+      storage = Storage(client: mockClient, projectId: 'test-project');
       addTearDown(storage.close);
 
-      await expectLater(
-        storage.listBuckets(),
-        emitsInOrder([emitsError(isA<StateError>()), emitsDone]),
+      await storage.listBuckets().drain<Object?>();
+
+      expect(
+        actualRequest.headers['x-goog-api-client'],
+        contains('gccl/0.6.4-wip'),
       );
     });
   });

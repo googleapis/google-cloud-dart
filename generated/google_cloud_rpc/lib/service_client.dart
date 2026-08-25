@@ -39,13 +39,17 @@ const String _typeJson = 'application/json';
 class ServiceClient {
   final http.Client client;
 
+  /// An optional API client header value (e.g. `gccl/0.6.4`) to append to
+  /// `x-goog-api-client`.
+  final String? apiClientHeader;
+
   /// Creates a `ServiceClient` using [client] for transport.
   ///
   /// The provided [http.Client] must be configured to provide whatever
   /// authentication is required by the API being accessed. You can do that
   /// using
   /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
-  ServiceClient({required this.client});
+  ServiceClient({required this.client, this.apiClientHeader});
 
   Future<Map<String, dynamic>> get(Uri url) => _makeRequest(url, 'GET');
 
@@ -102,8 +106,11 @@ class ServiceClient {
     if (requestBody != null) {
       request.body = requestBody._asEncodedJson;
     }
+    final clientHeader = apiClientHeader == null
+        ? _clientName
+        : '$_clientName $apiClientHeader';
     request.headers.addAll({
-      _clientKey: _clientName,
+      _clientKey: clientHeader,
       if (requestBody != null) _contentTypeKey: _typeJson,
     });
 
@@ -141,8 +148,11 @@ class ServiceClient {
     if (body != null) {
       request.body = body._asEncodedJson;
     }
+    final clientHeader = apiClientHeader == null
+        ? _clientName
+        : '$_clientName $apiClientHeader';
     request.headers.addAll({
-      _clientKey: _clientName,
+      _clientKey: clientHeader,
       if (body != null) _contentTypeKey: _typeJson,
     });
 

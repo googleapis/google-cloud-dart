@@ -1,5 +1,6 @@
 ## 0.6.4-wip
 
+* Send `gccl/<version>` in `x-goog-api-client` request header for API usage attribution.
 * Add an `ifMetagenerationNotMatch` parameter to `Storage.patchBucket`,
   `Storage.uploadObject`, and `Storage.uploadObjectFromString`. If the
   precondition is not satisfied, a `NotModifiedException` is thrown.

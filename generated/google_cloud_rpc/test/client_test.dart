@@ -61,6 +61,25 @@ void main() {
           expect(actualRequest.body, isEmpty);
         });
       }
+
+      test('appends apiClientHeader when provided', () async {
+        late Request customRequest;
+        final customService = ServiceClient(
+          client: MockClient((request) async {
+            customRequest = request;
+            return Response('', 200);
+          }),
+          apiClientHeader: 'gccl/0.6.4-wip',
+        );
+
+        await customService.get(sampleUrl);
+
+        expect(customRequest.headers, {
+          'x-goog-api-client': matches(
+            r'^gl-dart/(3\.\d+\.\d+)|0 gax/0.2.0 rest/0.2.0 gapic/0.2.0 gccl/0.6.4-wip$',
+          ),
+        });
+      });
     });
 
     group('requests with body', () {
