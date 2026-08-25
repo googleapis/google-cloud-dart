@@ -16,10 +16,9 @@ export 'web.dart' if (dart.library.io) 'vm.dart' show clientDartVersion;
 
 /// The version of this package.
 //
-// Keep these versions in sync:
-// * CHANGELOG.yaml
-// * pubspec.yaml
-// * lib/src/versions.dart
-/// The format is either `major.minor.patch` or the special value `0`, which
-/// indicates that the version is unknown.
-const gaxVersion = '0.2.0';
+// TODO: consider using package:build_version or similar to automate
+// syncing with pubspec.yaml.
+const packageVersion = '0.5.5-wip';
+
+@Deprecated('Use packageVersion instead')
+const gaxVersion = packageVersion;

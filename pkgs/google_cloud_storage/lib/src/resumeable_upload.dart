@@ -59,6 +59,7 @@ class ResumableUploadSink implements StreamSink<List<int>> {
   final _closedCompleter = Completer<ObjectMetadata>();
   final FutureOr<http.Client> _client;
   final RetryRunner _retry;
+  final FutureOr<Map<String, String>>? _headers;
 
   /// The metadata of the uploaded object.
   ///
@@ -106,6 +107,7 @@ class ResumableUploadSink implements StreamSink<List<int>> {
   ) async {
     final sessionUri = await _sessionUri;
     final client = await _client;
+    final resolvedHeaders = await _headers;
 
     var loopExpectedByte = _nextExpectedByte;
     var needsStatusCheck = false;
@@ -125,7 +127,10 @@ class ResumableUploadSink implements StreamSink<List<int>> {
           checkStatus = false;
           final statusRes = await client.put(
             sessionUri,
-            headers: {'Content-Range': 'bytes */*'},
+            headers: {
+              'Content-Range': 'bytes */*',
+              if (resolvedHeaders != null) ...resolvedHeaders,
+            },
           );
           if (statusRes.statusCode == 200 || statusRes.statusCode == 201) {
             return statusRes;
@@ -178,11 +183,11 @@ class ResumableUploadSink implements StreamSink<List<int>> {
         final size = isLast ? '$newEnd' : '*';
         final contentRange = 'bytes $range/$size';
 
-        final headers = {'Content-Range': contentRange};
-        if (hashHeader != null) {
-          assert(isLast);
-          headers['x-goog-hash'] = hashHeader;
-        }
+        final headers = {
+          'Content-Range': contentRange,
+          if (hashHeader != null) 'x-goog-hash': hashHeader,
+          if (resolvedHeaders != null) ...resolvedHeaders,
+        };
 
         final body = remainingBytes == 0
             ? const <int>[]
@@ -232,7 +237,12 @@ class ResumableUploadSink implements StreamSink<List<int>> {
     _nextExpectedByte += flushPoint;
   }
 
-  ResumableUploadSink._(this._client, this._locationResponse, this._retry);
+  ResumableUploadSink._(
+    this._client,
+    this._locationResponse,
+    this._retry, {
+    FutureOr<Map<String, String>>? headers,
+  }) : _headers = headers;
 
   @override
   void add(List<int> event) {
@@ -318,6 +328,7 @@ ResumableUploadSink uploadFileStream(
   FutureOr<http.Client> client,
   Uri url, {
   ObjectMetadata? metadata,
+  FutureOr<Map<String, String>>? headers,
   required bool isIdempotent,
   required RetryRunner retry,
 }) {
@@ -335,10 +346,14 @@ ResumableUploadSink uploadFileStream(
 
   final response = retry.run(() async {
     final resolvedClient = await client;
+    final resolvedHeaders = await headers;
     final res = await resolvedClient.post(
       url,
       body: body,
-      headers: {'Content-Type': 'application/json'},
+      headers: {
+        'Content-Type': 'application/json',
+        if (resolvedHeaders != null) ...resolvedHeaders,
+      },
     );
     if (res.statusCode < 200 || res.statusCode >= 300) {
       throw ServiceException.fromHttpResponse(res, res.body);
@@ -346,5 +361,5 @@ ResumableUploadSink uploadFileStream(
     return res;
   }, isIdempotent: isIdempotent);
 
-  return ResumableUploadSink._(client, response, retry);
+  return ResumableUploadSink._(client, response, retry, headers: headers);
 }

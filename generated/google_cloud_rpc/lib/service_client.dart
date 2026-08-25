@@ -30,7 +30,7 @@ const String _clientKey = 'x-goog-api-client';
 
 // ignore: prefer_const_declarations
 final String _clientName =
-    'gl-dart/$clientDartVersion gax/$gaxVersion rest/$gaxVersion gapic/$gaxVersion';
+    'gl-dart/$clientDartVersion gax/$packageVersion rest/$packageVersion gapic/$packageVersion';
 
 const String _contentTypeKey = 'content-type';
 const String _typeJson = 'application/json';
@@ -50,6 +50,12 @@ class ServiceClient {
   /// using
   /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
   ServiceClient({required this.client, this.apiClientHeader});
+
+  /// The `x-goog-api-client` header value sent with every request.
+  String get clientHeader =>
+      apiClientHeader != null && apiClientHeader!.trim().isNotEmpty
+      ? '$_clientName ${apiClientHeader!.trim()}'
+      : _clientName;
 
   Future<Map<String, dynamic>> get(Uri url) => _makeRequest(url, 'GET');
 
@@ -106,9 +112,6 @@ class ServiceClient {
     if (requestBody != null) {
       request.body = requestBody._asEncodedJson;
     }
-    final clientHeader = apiClientHeader == null
-        ? _clientName
-        : '$_clientName $apiClientHeader';
     request.headers.addAll({
       _clientKey: clientHeader,
       if (requestBody != null) _contentTypeKey: _typeJson,
@@ -148,9 +151,6 @@ class ServiceClient {
     if (body != null) {
       request.body = body._asEncodedJson;
     }
-    final clientHeader = apiClientHeader == null
-        ? _clientName
-        : '$_clientName $apiClientHeader';
     request.headers.addAll({
       _clientKey: clientHeader,
       if (body != null) _contentTypeKey: _typeJson,

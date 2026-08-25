@@ -30,7 +30,8 @@ class TestMessage extends JsonEncodable {
 }
 
 final sampleUrl = Uri.https('example.org', '/path');
-const apiHeaderPattern = r'gl-dart/(3\.\d+\.\d+)|0 gax/0.2.0';
+const apiHeaderPattern =
+    r'gl-dart/(?:3\.\d+\.\d+|0) gax/0\.5\.5-wip rest/0\.5\.5-wip gapic/0\.5\.5-wip';
 
 void main() {
   group('non-streaming', () {
@@ -76,7 +77,32 @@ void main() {
 
         expect(customRequest.headers, {
           'x-goog-api-client': matches(
-            r'^gl-dart/(?:3\.\d+\.\d+|0) gax/0\.2\.0 rest/0\.2\.0 gapic/0\.2\.0 gccl/0\.6\.4-wip$',
+            r'^gl-dart/(?:3\.\d+\.\d+|0) gax/0\.5\.5-wip rest/0\.5\.5-wip gapic/0\.5\.5-wip gccl/0\.6\.4-wip$',
+          ),
+        });
+        expect(
+          customService.clientHeader,
+          matches(
+            r'^gl-dart/(?:3\.\d+\.\d+|0) gax/0\.5\.5-wip rest/0\.5\.5-wip gapic/0\.5\.5-wip gccl/0\.6\.4-wip$',
+          ),
+        );
+      });
+
+      test('trims apiClientHeader and ignores whitespace-only header', () async {
+        late Request customRequest;
+        final customService = ServiceClient(
+          client: MockClient((request) async {
+            customRequest = request;
+            return Response('', 200);
+          }),
+          apiClientHeader: '   ',
+        );
+
+        await customService.get(sampleUrl);
+
+        expect(customRequest.headers, {
+          'x-goog-api-client': matches(
+            r'^gl-dart/(?:3\.\d+\.\d+|0) gax/0\.5\.5-wip rest/0\.5\.5-wip gapic/0\.5\.5-wip$',
           ),
         });
       });

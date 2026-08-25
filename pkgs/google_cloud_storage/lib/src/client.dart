@@ -736,8 +736,9 @@ final class Storage {
     BigInt? ifMetagenerationMatch,
     String? userProject,
     RetryRunner retry = defaultRetry,
-  }) => retry.run(
-    () async => downloadFile(
+  }) => retry.run(() async {
+    final serviceClient = await _serviceClient;
+    return downloadFile(
       await _httpClient,
       _requestUrl(
         ['storage', 'v1', 'b', bucket, 'o', object],
@@ -749,9 +750,9 @@ final class Storage {
           'userProject': ?userProject,
         },
       ),
-    ),
-    isIdempotent: true,
-  );
+      headers: {'x-goog-api-client': serviceClient.clientHeader},
+    );
+  }, isIdempotent: true);
 
   /// Returns the ACL entry for the specified entity on the specified
   /// [Google Cloud Storage object].
@@ -1412,8 +1413,9 @@ final class Storage {
     String? projection,
     String? userProject,
     RetryRunner retry = defaultRetry,
-  }) => retry.run(
-    () async => uploadFile(
+  }) => retry.run(() async {
+    final serviceClient = await _serviceClient;
+    return uploadFile(
       await _httpClient,
       _requestUrl(
         ['upload', 'storage', 'v1', 'b', bucket, 'o'],
@@ -1429,9 +1431,9 @@ final class Storage {
       ),
       content,
       metadata: metadata,
-    ),
-    isIdempotent: ifGenerationMatch != null,
-  );
+      headers: {'x-goog-api-client': serviceClient.clientHeader},
+    );
+  }, isIdempotent: ifGenerationMatch != null);
 
   /// Creates or updates the content of a [Google Cloud Storage object][] using
   /// a [StreamSink].
@@ -1481,6 +1483,12 @@ final class Storage {
     ),
     isIdempotent: ifGenerationMatch != null,
     metadata: metadata,
+    headers: switch (_serviceClient) {
+      final Future<ServiceClient> f => f.then(
+        (sc) => {'x-goog-api-client': sc.clientHeader},
+      ),
+      final ServiceClient sc => {'x-goog-api-client': sc.clientHeader},
+    },
     retry: retry,
   );
 

@@ -53,6 +53,7 @@ Future<ObjectMetadata> uploadFile(
   Uri url,
   List<int> data, {
   ObjectMetadata? metadata,
+  Map<String, String>? headers,
 }) async {
   final boundary = _boundaryString();
 
@@ -89,6 +90,9 @@ Future<ObjectMetadata> uploadFile(
   final request = http.Request('POST', url);
   request.headers['Content-Type'] = 'multipart/related; boundary=$boundary';
   request.headers['Content-Length'] = bodyBytes.length.toString();
+  if (headers != null) {
+    request.headers.addAll(headers);
+  }
   request.bodyBytes = bodyBytes;
 
   final response = await client.send(request);
