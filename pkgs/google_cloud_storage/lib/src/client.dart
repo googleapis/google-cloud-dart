@@ -37,6 +37,7 @@ import 'object_metadata_patch_builder.dart'
 import 'resumeable_upload.dart';
 import 'storage_emulator_host_web.dart'
     if (dart.library.io) 'storage_emulator_host_vm.dart';
+import 'version.dart';
 
 class _JsonEncodableWrapper implements JsonEncodable {
   final Object json;
@@ -97,10 +98,8 @@ final class Storage {
   FutureOr<ServiceClient> get _serviceClient async =>
       _cachedServiceClient ??= ServiceClient(
         client: await _httpClient,
-        apiClientHeader: 'gccl/$_packageVersion',
+        apiClientHeader: 'gccl/$packageVersion',
       );
-
-  static const String _packageVersion = '0.6.4-wip';
 
   static Uri _calculateBaseUrl(
     String? apiEndpoint,
