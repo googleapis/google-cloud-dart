@@ -88,7 +88,7 @@ void main() {
         );
       });
 
-      test('trims apiClientHeader and ignores whitespace-only header', () async {
+      test('trims apiClientHeader and ignores whitespace', () async {
         late Request customRequest;
         final customService = ServiceClient(
           client: MockClient((request) async {
