@@ -128,6 +128,16 @@ void main() async {
       );
     });
 
+    test('noProject throws StateError on listBuckets', () async {
+      storage = Storage(client: http.Client(), projectId: Storage.noProject);
+      addTearDown(storage.close);
+
+      await expectLater(
+        storage.listBuckets(),
+        emitsInOrder([emitsError(isA<StateError>()), emitsDone]),
+      );
+    });
+
     test('sends gccl token in x-goog-api-client header', () async {
       late http.Request actualRequest;
       final mockClient = http_testing.MockClient((request) async {

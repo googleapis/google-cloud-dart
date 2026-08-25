@@ -76,7 +76,7 @@ void main() {
 
         expect(customRequest.headers, {
           'x-goog-api-client': matches(
-            r'^gl-dart/(3\.\d+\.\d+)|0 gax/0.2.0 rest/0.2.0 gapic/0.2.0 gccl/0.6.4-wip$',
+            r'^gl-dart/(?:3\.\d+\.\d+|0) gax/0\.2\.0 rest/0\.2\.0 gapic/0\.2\.0 gccl/0\.6\.4-wip$',
           ),
         });
       });
