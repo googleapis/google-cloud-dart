@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.5-wip
+
+- feat: add optional `apiClientHeader` parameter to `ServiceClient`.
+
 ## 0.5.4
 
 - feat: add setup and test agentic skills  (#321)
