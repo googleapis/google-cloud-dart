@@ -29,8 +29,11 @@ export 'src/web.dart'
 const String _clientKey = 'x-goog-api-client';
 
 // ignore: prefer_const_declarations
-final String _clientName =
+final String _baseClientName =
     'gl-dart/$clientDartVersion gax/$packageVersion rest/$packageVersion';
+
+// ignore: prefer_const_declarations
+final String _clientName = '$_baseClientName gapic/$packageVersion';
 
 const String _contentTypeKey = 'content-type';
 const String _typeJson = 'application/json';
@@ -39,8 +42,8 @@ const String _typeJson = 'application/json';
 class ServiceClient {
   final http.Client client;
 
-  /// An optional API client header value (e.g. `gccl/0.6.4`) to append to
-  /// `x-goog-api-client`.
+  /// An optional API client header value (e.g. `gccl/0.6.4` or `gapic/0.1.0`)
+  /// to append to `x-goog-api-client`.
   final String? apiClientHeader;
 
   /// Creates a `ServiceClient` using [client] for transport.
@@ -52,10 +55,16 @@ class ServiceClient {
   ServiceClient({required this.client, this.apiClientHeader});
 
   /// The `x-goog-api-client` header value sent with every request.
-  String get clientHeader =>
-      apiClientHeader != null && apiClientHeader!.trim().isNotEmpty
-      ? '$_clientName ${apiClientHeader!.trim()}'
-      : _clientName;
+  String get clientHeader {
+    if (apiClientHeader != null && apiClientHeader!.trim().isNotEmpty) {
+      final custom = apiClientHeader!.trim();
+      if (custom.startsWith('gccl/') || custom.startsWith('gapic/')) {
+        return '$_baseClientName $custom';
+      }
+      return '$_clientName $custom';
+    }
+    return _clientName;
+  }
 
   Future<Map<String, dynamic>> get(Uri url) => _makeRequest(url, 'GET');
 

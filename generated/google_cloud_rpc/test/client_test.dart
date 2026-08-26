@@ -31,7 +31,7 @@ class TestMessage extends JsonEncodable {
 
 final sampleUrl = Uri.https('example.org', '/path');
 const apiHeaderPattern =
-    r'^gl-dart/(?:3\.\d+\.\d+|0) gax/0\.5\.5-wip rest/0\.5\.5-wip$';
+    r'^gl-dart/(?:3\.\d+\.\d+|0) gax/0\.5\.5-wip rest/0\.5\.5-wip gapic/0\.5\.5-wip$';
 
 void main() {
   group('non-streaming', () {
@@ -63,55 +63,61 @@ void main() {
         });
       }
 
-      test('appends gccl apiClientHeader when provided', () async {
-        late Request customRequest;
-        final customService = ServiceClient(
-          client: MockClient((request) async {
-            customRequest = request;
-            return Response('', 200);
-          }),
-          apiClientHeader: 'gccl/0.6.4-wip',
-        );
+      test(
+        'appends gccl apiClientHeader when provided (replacing default gapic)',
+        () async {
+          late Request customRequest;
+          final customService = ServiceClient(
+            client: MockClient((request) async {
+              customRequest = request;
+              return Response('', 200);
+            }),
+            apiClientHeader: 'gccl/0.6.4-wip',
+          );
 
-        await customService.get(sampleUrl);
+          await customService.get(sampleUrl);
 
-        expect(customRequest.headers, {
-          'x-goog-api-client': matches(
-            r'^gl-dart/(?:3\.\d+\.\d+|0) gax/0\.5\.5-wip rest/0\.5\.5-wip gccl/0\.6\.4-wip$',
-          ),
-        });
-        expect(
-          customService.clientHeader,
-          matches(
-            r'^gl-dart/(?:3\.\d+\.\d+|0) gax/0\.5\.5-wip rest/0\.5\.5-wip gccl/0\.6\.4-wip$',
-          ),
-        );
-      });
+          expect(customRequest.headers, {
+            'x-goog-api-client': matches(
+              r'^gl-dart/(?:3\.\d+\.\d+|0) gax/0\.5\.5-wip rest/0\.5\.5-wip gccl/0\.6\.4-wip$',
+            ),
+          });
+          expect(
+            customService.clientHeader,
+            matches(
+              r'^gl-dart/(?:3\.\d+\.\d+|0) gax/0\.5\.5-wip rest/0\.5\.5-wip gccl/0\.6\.4-wip$',
+            ),
+          );
+        },
+      );
 
-      test('appends gapic apiClientHeader when provided', () async {
-        late Request customRequest;
-        final customService = ServiceClient(
-          client: MockClient((request) async {
-            customRequest = request;
-            return Response('', 200);
-          }),
-          apiClientHeader: 'gapic/0.1.0',
-        );
+      test(
+        'appends gapic apiClientHeader when provided (replacing default gapic)',
+        () async {
+          late Request customRequest;
+          final customService = ServiceClient(
+            client: MockClient((request) async {
+              customRequest = request;
+              return Response('', 200);
+            }),
+            apiClientHeader: 'gapic/0.1.0',
+          );
 
-        await customService.get(sampleUrl);
+          await customService.get(sampleUrl);
 
-        expect(customRequest.headers, {
-          'x-goog-api-client': matches(
-            r'^gl-dart/(?:3\.\d+\.\d+|0) gax/0\.5\.5-wip rest/0\.5\.5-wip gapic/0\.1\.0$',
-          ),
-        });
-        expect(
-          customService.clientHeader,
-          matches(
-            r'^gl-dart/(?:3\.\d+\.\d+|0) gax/0\.5\.5-wip rest/0\.5\.5-wip gapic/0\.1\.0$',
-          ),
-        );
-      });
+          expect(customRequest.headers, {
+            'x-goog-api-client': matches(
+              r'^gl-dart/(?:3\.\d+\.\d+|0) gax/0\.5\.5-wip rest/0\.5\.5-wip gapic/0\.1\.0$',
+            ),
+          });
+          expect(
+            customService.clientHeader,
+            matches(
+              r'^gl-dart/(?:3\.\d+\.\d+|0) gax/0\.5\.5-wip rest/0\.5\.5-wip gapic/0\.1\.0$',
+            ),
+          );
+        },
+      );
 
       test('trims apiClientHeader and ignores whitespace', () async {
         late Request customRequest;
@@ -127,7 +133,7 @@ void main() {
 
         expect(customRequest.headers, {
           'x-goog-api-client': matches(
-            r'^gl-dart/(?:3\.\d+\.\d+|0) gax/0\.5\.5-wip rest/0\.5\.5-wip$',
+            r'^gl-dart/(?:3\.\d+\.\d+|0) gax/0\.5\.5-wip rest/0\.5\.5-wip gapic/0\.5\.5-wip$',
           ),
         });
       });
