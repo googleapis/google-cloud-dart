@@ -75,7 +75,7 @@ class ServiceClient {
   ServiceClient({required this.client, this.gapicVersion, this.gcclVersion});
 
   /// The `x-goog-api-client` header value sent with every request.
-  String get _clientHeader {
+  String get clientHeader {
     final buffer = StringBuffer(_baseClientName);
     final gapic = gapicVersion?.trim();
     final hasGapic = gapic != null && gapic.isNotEmpty;
@@ -149,7 +149,7 @@ class ServiceClient {
       request.body = requestBody._asEncodedJson;
     }
     request.headers.addAll({
-      _clientKey: _clientHeader,
+      _clientKey: clientHeader,
       if (requestBody != null) _contentTypeKey: _typeJson,
     });
 
@@ -188,7 +188,7 @@ class ServiceClient {
       request.body = body._asEncodedJson;
     }
     request.headers.addAll({
-      _clientKey: _clientHeader,
+      _clientKey: clientHeader,
       if (body != null) _contentTypeKey: _typeJson,
     });
 
