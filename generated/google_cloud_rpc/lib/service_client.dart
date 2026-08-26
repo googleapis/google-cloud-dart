@@ -30,7 +30,7 @@ const String _clientKey = 'x-goog-api-client';
 
 // ignore: prefer_const_declarations
 final String _clientName =
-    'gl-dart/$clientDartVersion gax/$packageVersion rest/$packageVersion gapic/$packageVersion';
+    'gl-dart/$clientDartVersion gax/$packageVersion rest/$packageVersion';
 
 const String _contentTypeKey = 'content-type';
 const String _typeJson = 'application/json';
