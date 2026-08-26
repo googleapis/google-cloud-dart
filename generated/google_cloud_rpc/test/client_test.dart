@@ -63,70 +63,96 @@ void main() {
         });
       }
 
-      test(
-        'appends gccl apiClientHeader when provided (replacing default gapic)',
-        () async {
-          late Request customRequest;
-          final customService = ServiceClient(
-            client: MockClient((request) async {
-              customRequest = request;
-              return Response('', 200);
-            }),
-            apiClientHeader: 'gccl/0.6.4-wip',
-          );
-
-          await customService.get(sampleUrl);
-
-          expect(customRequest.headers, {
-            'x-goog-api-client': matches(
-              r'^gl-dart/(?:3\.\d+\.\d+|0) gax/0\.5\.5-wip rest/0\.5\.5-wip gccl/0\.6\.4-wip$',
-            ),
-          });
-          expect(
-            customService.clientHeader,
-            matches(
-              r'^gl-dart/(?:3\.\d+\.\d+|0) gax/0\.5\.5-wip rest/0\.5\.5-wip gccl/0\.6\.4-wip$',
-            ),
-          );
-        },
-      );
-
-      test(
-        'appends gapic apiClientHeader when provided (replacing default gapic)',
-        () async {
-          late Request customRequest;
-          final customService = ServiceClient(
-            client: MockClient((request) async {
-              customRequest = request;
-              return Response('', 200);
-            }),
-            apiClientHeader: 'gapic/0.1.0',
-          );
-
-          await customService.get(sampleUrl);
-
-          expect(customRequest.headers, {
-            'x-goog-api-client': matches(
-              r'^gl-dart/(?:3\.\d+\.\d+|0) gax/0\.5\.5-wip rest/0\.5\.5-wip gapic/0\.1\.0$',
-            ),
-          });
-          expect(
-            customService.clientHeader,
-            matches(
-              r'^gl-dart/(?:3\.\d+\.\d+|0) gax/0\.5\.5-wip rest/0\.5\.5-wip gapic/0\.1\.0$',
-            ),
-          );
-        },
-      );
-
-      test('trims apiClientHeader and ignores whitespace', () async {
+      test('appends gccl token when gcclVersion provided '
+          '(replacing default gapic)', () async {
         late Request customRequest;
         final customService = ServiceClient(
           client: MockClient((request) async {
             customRequest = request;
             return Response('', 200);
           }),
-          apiClientHeader: '   ',
+          gcclVersion: '0.6.4-wip',
+        );
+
+        await customService.get(sampleUrl);
+
+        expect(customRequest.headers, {
+          'x-goog-api-client': matches(
+            r'^gl-dart/(?:3\.\d+\.\d+|0) gax/0\.5\.5-wip rest/0\.5\.5-wip gccl/0\.6\.4-wip$',
+          ),
+        });
+        expect(
+          customService.clientHeader,
+          matches(
+            r'^gl-dart/(?:3\.\d+\.\d+|0) gax/0\.5\.5-wip rest/0\.5\.5-wip gccl/0\.6\.4-wip$',
+          ),
+        );
+      });
+
+      test('appends gapic token when gapicVersion provided '
+          '(replacing default gapic)', () async {
+        late Request customRequest;
+        final customService = ServiceClient(
+          client: MockClient((request) async {
+            customRequest = request;
+            return Response('', 200);
+          }),
+          gapicVersion: '0.1.0',
+        );
+
+        await customService.get(sampleUrl);
+
+        expect(customRequest.headers, {
+          'x-goog-api-client': matches(
+            r'^gl-dart/(?:3\.\d+\.\d+|0) gax/0\.5\.5-wip rest/0\.5\.5-wip gapic/0\.1\.0$',
+          ),
+        });
+        expect(
+          customService.clientHeader,
+          matches(
+            r'^gl-dart/(?:3\.\d+\.\d+|0) gax/0\.5\.5-wip rest/0\.5\.5-wip gapic/0\.1\.0$',
+          ),
+        );
+      });
+
+      test(
+        'appends both gapic and gccl tokens when both versions provided',
+        () async {
+          late Request customRequest;
+          final customService = ServiceClient(
+            client: MockClient((request) async {
+              customRequest = request;
+              return Response('', 200);
+            }),
+            gapicVersion: '0.1.0',
+            gcclVersion: '0.2.0',
+          );
+
+          await customService.get(sampleUrl);
+
+          expect(customRequest.headers, {
+            'x-goog-api-client': matches(
+              r'^gl-dart/(?:3\.\d+\.\d+|0) gax/0\.5\.5-wip rest/0\.5\.5-wip gapic/0\.1\.0 gccl/0\.2\.0$',
+            ),
+          });
+          expect(
+            customService.clientHeader,
+            matches(
+              r'^gl-dart/(?:3\.\d+\.\d+|0) gax/0\.5\.5-wip rest/0\.5\.5-wip gapic/0\.1\.0 gccl/0\.2\.0$',
+            ),
+          );
+        },
+      );
+
+      test('trims gapicVersion and gcclVersion and ignores whitespace', () async {
+        late Request customRequest;
+        final customService = ServiceClient(
+          client: MockClient((request) async {
+            customRequest = request;
+            return Response('', 200);
+          }),
+          gapicVersion: '   ',
+          gcclVersion: '   ',
         );
 
         await customService.get(sampleUrl);

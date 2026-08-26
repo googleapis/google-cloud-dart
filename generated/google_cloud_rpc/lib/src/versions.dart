@@ -19,6 +19,3 @@ export 'web.dart' if (dart.library.io) 'vm.dart' show clientDartVersion;
 // TODO: consider using package:build_version or similar to automate
 // syncing with pubspec.yaml.
 const packageVersion = '0.5.5-wip';
-
-@Deprecated('Use packageVersion instead')
-const gaxVersion = packageVersion;

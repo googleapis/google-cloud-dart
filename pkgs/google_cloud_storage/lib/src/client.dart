@@ -100,11 +100,8 @@ final class Storage {
     return _createServiceClient();
   }
 
-  Future<ServiceClient> _createServiceClient() async =>
-      _cachedServiceClient = ServiceClient(
-        client: await _httpClient,
-        apiClientHeader: 'gccl/$packageVersion',
-      );
+  Future<ServiceClient> _createServiceClient() async => _cachedServiceClient =
+      ServiceClient(client: await _httpClient, gcclVersion: packageVersion);
 
   static Uri _calculateBaseUrl(
     String? apiEndpoint,

@@ -31,8 +31,6 @@ const String _clientKey = 'x-goog-api-client';
 String get _baseClientName =>
     'gl-dart/$clientDartVersion gax/$packageVersion rest/$packageVersion';
 
-String get _clientName => '$_baseClientName gapic/$packageVersion';
-
 const String _contentTypeKey = 'content-type';
 const String _typeJson = 'application/json';
 
@@ -40,28 +38,60 @@ const String _typeJson = 'application/json';
 class ServiceClient {
   final http.Client client;
 
-  /// An optional API client header value (e.g. `gccl/0.6.4` or `gapic/0.1.0`)
-  /// to append to `x-goog-api-client`.
-  final String? apiClientHeader;
+  /// The version of the GAPIC-generated client library (e.g. `0.1.0`),
+  /// which will be formatted as `gapic/<version>` in the `x-goog-api-client`
+  /// header.
+  ///
+  /// Set this for client libraries that were generated completely by
+  /// automation.
+  final String? gapicVersion;
+
+  /// The version of the hand-written client library (e.g. `0.6.4`),
+  /// which will be formatted as `gccl/<version>` in the `x-goog-api-client`
+  /// header.
+  ///
+  /// Set this if the client library includes hand-written components.
+  final String? gcclVersion;
 
   /// Creates a `ServiceClient` using [client] for transport.
+  ///
+  /// If [gapicVersion] is set, `gapic/<version>` is included in the
+  /// `x-goog-api-client` header.
+  ///
+  /// If [gcclVersion] is set, `gccl/<version>` is included in the
+  /// `x-goog-api-client` header.
+  ///
+  /// Both [gapicVersion] and [gcclVersion] should be set if the library
+  /// includes both automatically-generated and hand-written components.
+  /// For example, `package:google_cloud_firestore` (hand-written) wraps
+  /// `package:google_cloud_firestore_v1` (generated).
   ///
   /// The provided [http.Client] must be configured to provide whatever
   /// authentication is required by the API being accessed. You can do that
   /// using
   /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
-  ServiceClient({required this.client, this.apiClientHeader});
+  ServiceClient({required this.client, this.gapicVersion, this.gcclVersion});
 
   /// The `x-goog-api-client` header value sent with every request.
   String get clientHeader {
-    if (apiClientHeader != null && apiClientHeader!.trim().isNotEmpty) {
-      final custom = apiClientHeader!.trim();
-      if (custom.startsWith('gccl/') || custom.startsWith('gapic/')) {
-        return '$_baseClientName $custom';
-      }
-      return '$_clientName $custom';
+    final buffer = StringBuffer(_baseClientName);
+    final gapic = gapicVersion?.trim();
+    final hasGapic = gapic != null && gapic.isNotEmpty;
+    final gccl = gcclVersion?.trim();
+    final hasGccl = gccl != null && gccl.isNotEmpty;
+
+    if (hasGapic) {
+      buffer.write(' gapic/$gapic');
+    } else if (!hasGccl) {
+      // Default fallback to packageVersion for un-updated generated clients.
+      buffer.write(' gapic/$packageVersion');
     }
-    return _clientName;
+
+    if (hasGccl) {
+      buffer.write(' gccl/$gccl');
+    }
+
+    return buffer.toString();
   }
 
   Future<Map<String, dynamic>> get(Uri url) => _makeRequest(url, 'GET');
