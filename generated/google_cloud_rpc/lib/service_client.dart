@@ -28,12 +28,10 @@ export 'src/web.dart'
 
 const String _clientKey = 'x-goog-api-client';
 
-// ignore: prefer_const_declarations
-final String _baseClientName =
+String get _baseClientName =>
     'gl-dart/$clientDartVersion gax/$packageVersion rest/$packageVersion';
 
-// ignore: prefer_const_declarations
-final String _clientName = '$_baseClientName gapic/$packageVersion';
+String get _clientName => '$_baseClientName gapic/$packageVersion';
 
 const String _contentTypeKey = 'content-type';
 const String _typeJson = 'application/json';

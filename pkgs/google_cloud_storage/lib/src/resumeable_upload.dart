@@ -180,6 +180,9 @@ class ResumableUploadSink implements StreamSink<List<int>> {
         final size = isLast ? '$newEnd' : '*';
         final contentRange = 'bytes $range/$size';
 
+        if (hashHeader != null) {
+          assert(isLast);
+        }
         final headers = {
           'Content-Range': contentRange,
           'x-goog-hash': ?hashHeader,

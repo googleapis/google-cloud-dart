@@ -88,11 +88,11 @@ Future<ObjectMetadata> uploadFile(
   final bodyBytes = multipartBody.takeBytes();
 
   final request = http.Request('POST', url);
-  request.headers['Content-Type'] = 'multipart/related; boundary=$boundary';
-  request.headers['Content-Length'] = bodyBytes.length.toString();
   if (headers != null) {
     request.headers.addAll(headers);
   }
+  request.headers['Content-Type'] = 'multipart/related; boundary=$boundary';
+  request.headers['Content-Length'] = bodyBytes.length.toString();
   request.bodyBytes = bodyBytes;
 
   final response = await client.send(request);
