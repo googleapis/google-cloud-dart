@@ -68,7 +68,8 @@ final class Firestore {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   Firestore({required http.Client client, Uri? endPoint, String? gcclVersion})
     : _client = ServiceClient(
         client: client,

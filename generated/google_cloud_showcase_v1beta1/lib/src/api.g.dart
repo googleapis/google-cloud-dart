@@ -64,7 +64,8 @@ final class Compliance {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   Compliance({required http.Client client, Uri? endPoint, String? gcclVersion})
     : _client = ServiceClient(
         client: client,
@@ -1412,7 +1413,8 @@ final class Echo {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   Echo({required http.Client client, Uri? endPoint, String? gcclVersion})
     : _client = ServiceClient(
         client: client,
@@ -2181,7 +2183,8 @@ final class Identity {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   Identity({required http.Client client, Uri? endPoint, String? gcclVersion})
     : _client = ServiceClient(
         client: client,
@@ -2745,7 +2748,8 @@ final class Messaging {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   Messaging({required http.Client client, Uri? endPoint, String? gcclVersion})
     : _client = ServiceClient(
         client: client,
@@ -3568,7 +3572,8 @@ final class ResumableUploadService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   ResumableUploadService({
     required http.Client client,
     Uri? endPoint,
@@ -4006,7 +4011,8 @@ final class SequenceService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   SequenceService({
     required http.Client client,
     Uri? endPoint,
@@ -4634,7 +4640,8 @@ final class Testing {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   Testing({required http.Client client, Uri? endPoint, String? gcclVersion})
     : _client = ServiceClient(
         client: client,

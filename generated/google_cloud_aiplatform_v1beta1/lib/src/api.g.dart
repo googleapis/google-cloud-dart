@@ -65,7 +65,8 @@ final class DatasetService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   DatasetService({
     required http.Client client,
     Uri? endPoint,
@@ -1571,7 +1572,8 @@ final class DeploymentResourcePoolService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   DeploymentResourcePoolService({
     required http.Client client,
     Uri? endPoint,
@@ -2390,7 +2392,8 @@ final class EndpointService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   EndpointService({
     required http.Client client,
     Uri? endPoint,
@@ -3423,7 +3426,8 @@ final class EvaluationService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   EvaluationService({
     required http.Client client,
     Uri? endPoint,
@@ -4027,7 +4031,8 @@ final class ExampleStoreService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   ExampleStoreService({
     required http.Client client,
     Uri? endPoint,
@@ -4877,7 +4882,8 @@ final class ExtensionExecutionService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   ExtensionExecutionService({
     required http.Client client,
     Uri? endPoint,
@@ -5406,7 +5412,8 @@ final class ExtensionRegistryService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   ExtensionRegistryService({
     required http.Client client,
     Uri? endPoint,
@@ -6087,7 +6094,8 @@ final class FeatureOnlineStoreAdminService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   FeatureOnlineStoreAdminService({
     required http.Client client,
     Uri? endPoint,
@@ -7204,7 +7212,8 @@ final class FeatureOnlineStoreService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   FeatureOnlineStoreService({
     required http.Client client,
     Uri? endPoint,
@@ -7791,7 +7800,8 @@ final class FeatureRegistryService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   FeatureRegistryService({
     required http.Client client,
     Uri? endPoint,
@@ -9223,7 +9233,8 @@ final class FeaturestoreOnlineServingService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   FeaturestoreOnlineServingService({
     required http.Client client,
     Uri? endPoint,
@@ -9822,7 +9833,8 @@ final class FeaturestoreService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   FeaturestoreService({
     required http.Client client,
     Uri? endPoint,
@@ -11467,7 +11479,8 @@ final class GenAiCacheService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   GenAiCacheService({
     required http.Client client,
     Uri? endPoint,
@@ -12115,7 +12128,8 @@ final class GenAiTuningService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   GenAiTuningService({
     required http.Client client,
     Uri? endPoint,
@@ -12789,7 +12803,8 @@ final class IndexEndpointService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   IndexEndpointService({
     required http.Client client,
     Uri? endPoint,
@@ -13662,7 +13677,8 @@ final class IndexService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   IndexService({
     required http.Client client,
     Uri? endPoint,
@@ -14497,7 +14513,8 @@ final class JobService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   JobService({required http.Client client, Uri? endPoint, String? gcclVersion})
     : _client = ServiceClient(
         client: client,
@@ -16581,7 +16598,8 @@ final class LlmUtilityService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   LlmUtilityService({
     required http.Client client,
     Uri? endPoint,
@@ -17076,7 +17094,8 @@ final class MatchService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   MatchService({
     required http.Client client,
     Uri? endPoint,
@@ -17613,7 +17632,8 @@ final class MemoryBankService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   MemoryBankService({
     required http.Client client,
     Uri? endPoint,
@@ -18411,7 +18431,8 @@ final class MetadataService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   MetadataService({
     required http.Client client,
     Uri? endPoint,
@@ -20312,7 +20333,8 @@ final class MigrationService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   MigrationService({
     required http.Client client,
     Uri? endPoint,
@@ -20891,7 +20913,8 @@ final class ModelGardenService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   ModelGardenService({
     required http.Client client,
     Uri? endPoint,
@@ -21744,7 +21767,8 @@ final class ModelMonitoringService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   ModelMonitoringService({
     required http.Client client,
     Uri? endPoint,
@@ -22738,7 +22762,8 @@ final class ModelService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   ModelService({
     required http.Client client,
     Uri? endPoint,
@@ -24161,7 +24186,8 @@ final class NotebookService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   NotebookService({
     required http.Client client,
     Uri? endPoint,
@@ -25535,7 +25561,8 @@ final class OnlineEvaluatorService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   OnlineEvaluatorService({
     required http.Client client,
     Uri? endPoint,
@@ -26360,7 +26387,8 @@ final class PersistentResourceService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   PersistentResourceService({
     required http.Client client,
     Uri? endPoint,
@@ -27152,7 +27180,8 @@ final class PipelineService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   PipelineService({
     required http.Client client,
     Uri? endPoint,
@@ -28226,7 +28255,8 @@ final class PredictionService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   PredictionService({
     required http.Client client,
     Uri? endPoint,
@@ -29142,7 +29172,8 @@ final class ReasoningEngineExecutionService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   ReasoningEngineExecutionService({
     required http.Client client,
     Uri? endPoint,
@@ -29793,7 +29824,8 @@ final class ReasoningEngineRuntimeRevisionService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   ReasoningEngineRuntimeRevisionService({
     required http.Client client,
     Uri? endPoint,
@@ -30424,7 +30456,8 @@ final class ReasoningEngineService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   ReasoningEngineService({
     required http.Client client,
     Uri? endPoint,
@@ -31142,7 +31175,8 @@ final class ScheduleService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   ScheduleService({
     required http.Client client,
     Uri? endPoint,
@@ -31883,7 +31917,8 @@ final class SessionService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   SessionService({
     required http.Client client,
     Uri? endPoint,
@@ -32646,7 +32681,8 @@ final class SpecialistPoolService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   SpecialistPoolService({
     required http.Client client,
     Uri? endPoint,
@@ -33359,7 +33395,8 @@ final class TensorboardService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   TensorboardService({
     required http.Client client,
     Uri? endPoint,
@@ -35235,7 +35272,8 @@ final class VertexRagDataService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   VertexRagDataService({
     required http.Client client,
     Uri? endPoint,
@@ -36850,7 +36888,8 @@ final class VertexRagService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   VertexRagService({
     required http.Client client,
     Uri? endPoint,
@@ -37542,7 +37581,8 @@ final class VizierService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   VizierService({
     required http.Client client,
     Uri? endPoint,

@@ -61,7 +61,8 @@ final class LoggingServiceV2 {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   LoggingServiceV2({
     required http.Client client,
     Uri? endPoint,
@@ -472,7 +473,8 @@ final class ConfigServiceV2 {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   ConfigServiceV2({
     required http.Client client,
     Uri? endPoint,
@@ -2014,7 +2016,8 @@ final class MetricsServiceV2 {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   MetricsServiceV2({
     required http.Client client,
     Uri? endPoint,

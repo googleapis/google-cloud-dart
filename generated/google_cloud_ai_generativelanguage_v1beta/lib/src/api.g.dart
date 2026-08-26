@@ -69,7 +69,8 @@ final class CacheService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   CacheService({
     required http.Client client,
     Uri? endPoint,
@@ -484,7 +485,8 @@ final class DiscussService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   DiscussService({
     required http.Client client,
     Uri? endPoint,
@@ -789,7 +791,8 @@ final class FileService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   FileService({required http.Client client, Uri? endPoint, String? gcclVersion})
     : _client = ServiceClient(
         client: client,
@@ -1168,7 +1171,8 @@ final class GenerativeService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   GenerativeService({
     required http.Client client,
     Uri? endPoint,
@@ -1643,7 +1647,8 @@ final class ModelService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   ModelService({
     required http.Client client,
     Uri? endPoint,
@@ -2157,7 +2162,8 @@ final class PermissionService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   PermissionService({
     required http.Client client,
     Uri? endPoint,
@@ -2600,7 +2606,8 @@ final class PredictionService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   PredictionService({
     required http.Client client,
     Uri? endPoint,
@@ -2911,7 +2918,8 @@ final class RetrieverService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   RetrieverService({
     required http.Client client,
     Uri? endPoint,
@@ -3810,7 +3818,8 @@ final class TextService {
   /// local emulator.
   ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
-  /// `x-google-api-client` header.
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   TextService({required http.Client client, Uri? endPoint, String? gcclVersion})
     : _client = ServiceClient(
         client: client,
