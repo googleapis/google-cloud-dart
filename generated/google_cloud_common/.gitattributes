@@ -4,4 +4,4 @@ README.md linguist-generated=true
 pubspec.yaml linguist-generated=true
 lib/common.dart linguist-generated=true
 lib/src/api.g.dart linguist-generated=true
-lib/src/version.dart
+lib/src/version.dart linguist-generated=true
