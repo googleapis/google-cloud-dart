@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.5
+
+- feat: track library version usage (#330)
+- fix(dart): remove emptying `testing.dart` files (#327)
+- chore: update cloud dependencies
+
 ## 0.5.4
 
 - feat: add setup and test agentic skills  (#321)
