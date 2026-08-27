@@ -47,7 +47,7 @@ void main() {
 
   group('ServiceAccountCredentials', () {
     test('fromServiceAccountInfo creates valid credentials', () async {
-      final info = <String, Object?>{
+      final info = {
         'type': 'service_account',
         'project_id': 'test-project',
         'private_key_id': 'key-id-123',
@@ -89,7 +89,7 @@ void main() {
     test(
       'fromServiceAccountInfo uses default token_uri and universe_domain',
       () async {
-        final info = <String, Object?>{
+        final info = {
           'type': 'service_account',
           'private_key': privateKeyPem,
           'client_email': 'test@test-project.iam.gserviceaccount.com',
@@ -112,7 +112,7 @@ void main() {
     );
 
     test('fromServiceAccountInfo throws on missing type', () async {
-      final info = <String, Object?>{
+      final info = {
         'private_key': privateKeyPem,
         'client_email': 'test@test-project.iam.gserviceaccount.com',
       };
@@ -124,7 +124,7 @@ void main() {
     });
 
     test('fromServiceAccountInfo throws on invalid type', () async {
-      final info = <String, Object?>{
+      final info = {
         'type': 'authorized_user',
         'private_key': privateKeyPem,
         'client_email': 'test@test-project.iam.gserviceaccount.com',
@@ -137,7 +137,7 @@ void main() {
     });
 
     test('fromServiceAccountInfo throws on missing client_email', () async {
-      final info = <String, Object?>{
+      final info = {
         'type': 'service_account',
         'private_key': privateKeyPem,
       };
@@ -149,7 +149,7 @@ void main() {
     });
 
     test('fromServiceAccountInfo throws on missing private_key', () async {
-      final info = <String, Object?>{
+      final info = {
         'type': 'service_account',
         'client_email': 'test@test-project.iam.gserviceaccount.com',
       };

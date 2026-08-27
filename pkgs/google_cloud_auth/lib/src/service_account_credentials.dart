@@ -18,6 +18,19 @@ import 'dart:typed_data';
 
 import 'package:webcrypto/webcrypto.dart';
 
+Uint8List _parsePemPkcs8Key(String pemString) {
+  final lines = pemString
+      .split('\n')
+      .map((l) => l.trim())
+      .where((l) => l.isNotEmpty && !l.startsWith('-----'))
+      .join();
+  try {
+    return Uint8List.fromList(base64.decode(lines));
+  } on FormatException catch (e) {
+    throw FormatException('Invalid PEM encoding in private key: $e');
+  }
+}
+
 /// Credentials for a Google Cloud service account.
 ///
 /// Service accounts are used for server-to-server communication, such as
@@ -67,48 +80,48 @@ final class ServiceAccountCredentials {
     final file = File(path);
     final contents = await file.readAsString();
     final json = jsonDecode(contents);
-    if (json is! Map<String, Object?> && json is! Map<String, dynamic>) {
+    if (json is! Map<String, String>) {
       throw const FormatException(
         'Service account file does not contain a JSON object.',
       );
     }
-    return fromServiceAccountInfo((json as Map).cast<String, Object?>());
+    return fromServiceAccountInfo(json);
   }
 
   /// Creates a [ServiceAccountCredentials] instance from parsed service
   /// account JSON [info].
   static Future<ServiceAccountCredentials> fromServiceAccountInfo(
-    Map<String, Object?> info,
+    Map<String, String?> info,
   ) async {
-    final type = info['type'] as String?;
+    final type = info['type'];
     if (type != 'service_account') {
       throw const FormatException(
         "The service account info does not have the 'service_account' type.",
       );
     }
 
-    final clientEmail = info['client_email'] as String?;
+    final clientEmail = info['client_email'];
     if (clientEmail == null || clientEmail.isEmpty) {
       throw const FormatException(
         "Missing required 'client_email' in service account info.",
       );
     }
 
-    final privateKeyPem = info['private_key'] as String?;
+    final privateKeyPem = info['private_key'];
     if (privateKeyPem == null || privateKeyPem.isEmpty) {
       throw const FormatException(
         "Missing required 'private_key' in service account info.",
       );
     }
 
-    final privateKeyId = info['private_key_id'] as String?;
-    final clientId = info['client_id'] as String?;
-    final projectId = info['project_id'] as String?;
-    final quotaProjectId = info['quota_project_id'] as String?;
+    final privateKeyId = info['private_key_id'];
+    final clientId = info['client_id'];
+    final projectId = info['project_id'];
+    final quotaProjectId = info['quota_project_id'];
     final universeDomain =
-        info['universe_domain'] as String? ?? 'googleapis.com';
+        info['universe_domain'] ?? 'googleapis.com';
 
-    final tokenUriStr = info['token_uri'] as String?;
+    final tokenUriStr = info['token_uri'];
     final tokenUri = tokenUriStr != null ? Uri.parse(tokenUriStr) : null;
 
     final pkcs8Bytes = _parsePemPkcs8Key(privateKeyPem);
@@ -135,12 +148,12 @@ final class ServiceAccountCredentials {
     String jsonString,
   ) async {
     final json = jsonDecode(jsonString);
-    if (json is! Map<String, Object?> && json is! Map<String, dynamic>) {
+    if (json is! Map<String, String>) {
       throw const FormatException(
         'Service account string does not contain a JSON object.',
       );
     }
-    return fromServiceAccountInfo((json as Map).cast<String, Object?>());
+    return fromServiceAccountInfo(json);
   }
 
   /// Creates a [ServiceAccountCredentials] instance from PKCS#8 private key
@@ -183,15 +196,3 @@ final class ServiceAccountCredentials {
   Future<Uint8List> sign(List<int> message) => _privateKey.signBytes(message);
 }
 
-Uint8List _parsePemPkcs8Key(String pemString) {
-  final lines = pemString
-      .split('\n')
-      .map((l) => l.trim())
-      .where((l) => l.isNotEmpty && !l.startsWith('-----'))
-      .join();
-  try {
-    return Uint8List.fromList(base64.decode(lines));
-  } on FormatException catch (e) {
-    throw FormatException('Invalid PEM encoding in private key: $e');
-  }
-}
