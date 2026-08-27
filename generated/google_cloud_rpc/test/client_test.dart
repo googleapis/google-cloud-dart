@@ -18,6 +18,7 @@ import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:google_cloud_rpc/rpc.dart';
 import 'package:google_cloud_rpc/service_client.dart';
+import 'package:google_cloud_rpc/src/version.dart';
 import 'package:http/http.dart';
 import 'package:http/testing.dart';
 import 'package:test/test.dart';
@@ -30,7 +31,10 @@ class TestMessage extends JsonEncodable {
 }
 
 final sampleUrl = Uri.https('example.org', '/path');
-const apiHeaderPattern = r'gl-dart/(3\.\d+\.\d+)|0 gax/0.2.0';
+final apiBaseHeaderPattern =
+    r'^gl-dart/(?:3\.\d+\.\d+|0) ' +
+    RegExp.escape('gax/$packageVersion ') +
+    RegExp.escape('rest/$packageVersion');
 
 void main() {
   group('non-streaming', () {
@@ -56,12 +60,87 @@ void main() {
           expect(actualRequest.method, method);
           expect(actualRequest.url, sampleUrl);
           expect(actualRequest.headers, {
-            'x-goog-api-client': matches(apiHeaderPattern),
+            'x-goog-api-client': matches(apiBaseHeaderPattern),
           });
           expect(actualRequest.body, isEmpty);
         });
       }
     });
+
+    test('appends gccl token when gcclVersion provided', () async {
+      late Request customRequest;
+      final customService = ServiceClient(
+        client: MockClient((request) async {
+          customRequest = request;
+          return Response('', 200);
+        }),
+        gcclVersion: '0.6.4-wip',
+      );
+
+      await customService.get(sampleUrl);
+
+      expect(customRequest.headers, {
+        'x-goog-api-client': matches(
+          apiBaseHeaderPattern + RegExp.escape(' gccl/0.6.4-wip'),
+        ),
+      });
+      expect(
+        customService.clientHeader,
+        matches(apiBaseHeaderPattern + RegExp.escape(' gccl/0.6.4-wip')),
+      );
+    });
+
+    test('appends gapic token when gapicVersion provided', () async {
+      late Request customRequest;
+      final customService = ServiceClient(
+        client: MockClient((request) async {
+          customRequest = request;
+          return Response('', 200);
+        }),
+        gapicVersion: '0.1.0',
+      );
+
+      await customService.get(sampleUrl);
+
+      expect(customRequest.headers, {
+        'x-goog-api-client': matches(
+          apiBaseHeaderPattern + RegExp.escape(' gapic/0.1.0'),
+        ),
+      });
+      expect(
+        customService.clientHeader,
+        matches(apiBaseHeaderPattern + RegExp.escape(' gapic/0.1.0')),
+      );
+    });
+
+    test(
+      'appends both gapic and gccl tokens when both versions provided',
+      () async {
+        late Request customRequest;
+        final customService = ServiceClient(
+          client: MockClient((request) async {
+            customRequest = request;
+            return Response('', 200);
+          }),
+          gapicVersion: '0.1.0',
+          gcclVersion: '0.2.0',
+        );
+
+        await customService.get(sampleUrl);
+
+        expect(customRequest.headers, {
+          'x-goog-api-client': matches(
+            apiBaseHeaderPattern + RegExp.escape(' gapic/0.1.0 gccl/0.2.0'),
+          ),
+        });
+        expect(
+          customService.clientHeader,
+          matches(
+            apiBaseHeaderPattern + RegExp.escape(' gapic/0.1.0 gccl/0.2.0'),
+          ),
+        );
+      },
+    );
 
     group('requests with body', () {
       late Request actualRequest;
@@ -84,7 +163,7 @@ void main() {
           expect(actualRequest.url, sampleUrl);
           expect(actualRequest.headers, {
             'content-type': 'application/json',
-            'x-goog-api-client': matches(apiHeaderPattern),
+            'x-goog-api-client': matches(apiBaseHeaderPattern),
           });
           expect(actualRequest.body, '"<test payload>"');
         });
@@ -221,7 +300,7 @@ void main() {
           expect(actualRequest.method, method);
           expect(actualRequest.url, Uri.parse('http://example.com/'));
           expect(actualRequest.headers, {
-            'x-goog-api-client': matches(apiHeaderPattern),
+            'x-goog-api-client': matches(apiBaseHeaderPattern),
           });
           expect(actualRequest.body, isEmpty);
         });
@@ -257,7 +336,7 @@ void main() {
           expect(actualRequest.method, method);
           expect(actualRequest.url, Uri.parse('http://example.com/?alt=sse'));
           expect(actualRequest.headers, {
-            'x-goog-api-client': matches(apiHeaderPattern),
+            'x-goog-api-client': matches(apiBaseHeaderPattern),
           });
           expect(actualRequest.body, isEmpty);
         });
@@ -293,7 +372,7 @@ void main() {
           expect(actualRequest.url, Uri.parse('http://example.com/?alt=sse'));
           expect(actualRequest.headers, {
             'content-type': 'application/json',
-            'x-goog-api-client': matches(apiHeaderPattern),
+            'x-goog-api-client': matches(apiBaseHeaderPattern),
           });
           expect(actualRequest.body, '"<test payload>"');
         });

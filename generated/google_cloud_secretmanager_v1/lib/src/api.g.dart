@@ -38,6 +38,8 @@ import 'package:google_cloud_rpc/rpc.dart';
 import 'package:google_cloud_rpc/service_client.dart';
 import 'package:http/http.dart' as http;
 
+import 'version.dart';
+
 const _apiKeys = ['GOOGLE_API_KEY'];
 
 /// Secret Manager Service
@@ -63,15 +65,26 @@ final class SecretManagerService {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  SecretManagerService({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  SecretManagerService({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `SecretManagerService` that does authentication through an API key.
   ///
