@@ -25,7 +25,7 @@ on:
 # We use a specific Dart SDK version here in order to have hermetic,
 # reproducable builds (formatting can change between SDK versions, ...).
 env:
-  DART_VERSION: 3.9.2
+  DART_VERSION: 3.10.9
   GOOGLE_CLOUD_PROJECT: test-project
   LIBRARIAN_VERSION: v0.38.1-0.20260822002353-7e1065dccdcd
 name: Dart Checks
