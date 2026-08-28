@@ -26,7 +26,7 @@ on:
 # reproducible builds (formatting can change between SDK versions, ...).
 env:
   DART_VERSION: 3.13.2
-  LIBRARIAN_VERSION: v0.38.1-0.20260822002353-7e1065dccdcd
+  LIBRARIAN_VERSION: v0.39.1-0.20260827211949-1cdc9901f973
 name: Generators
 jobs:
   generator:
