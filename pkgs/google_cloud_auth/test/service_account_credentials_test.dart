@@ -156,6 +156,23 @@ void main() {
       );
     });
 
+    test(
+      'fromServiceAccountInfo throws on non-string optional fields',
+      () async {
+        final info = <String, Object?>{
+          'type': 'service_account',
+          'private_key': privateKeyPem,
+          'client_email': 'test@test-project.iam.gserviceaccount.com',
+          'private_key_id': 12345,
+        };
+
+        expect(
+          () => ServiceAccountCredentials.fromServiceAccountInfo(info),
+          throwsFormatException,
+        );
+      },
+    );
+
     test('fromServiceAccountFile loads credentials from file', () async {
       final creds = await ServiceAccountCredentials.fromServiceAccountFile(
         'test/test-project-db470-b6405252fba0.json',
