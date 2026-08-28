@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import 'dart:convert';
+import 'dart:isolate';
 import 'dart:math';
 import 'dart:typed_data';
 
@@ -174,8 +175,14 @@ void main() {
     );
 
     test('fromServiceAccountFile loads credentials from file', () async {
+      final packageUri = await Isolate.resolvePackageUri(
+        Uri.parse('package:google_cloud_auth/'),
+      );
+      final testServiceAccountFilePath = packageUri!
+          .resolve('../test/test-project-db470-b6405252fba0.json')
+          .toFilePath();
       final creds = await ServiceAccountCredentials.fromServiceAccountFile(
-        'test/test-project-db470-b6405252fba0.json',
+        testServiceAccountFilePath,
       );
 
       expect(
