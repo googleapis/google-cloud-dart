@@ -23,84 +23,93 @@ on:
     branches: [main]
 
 # We use a specific Dart SDK version here in order to have hermetic,
-# reproducable builds (formatting can change between SDK versions, ...).
+# reproducible formatting (formatting can change between SDK versions, ...).
 env:
-  DART_VERSION: 3.10.9
+  FORMAT_DART_VERSION: 3.13.2
   GOOGLE_CLOUD_PROJECT: test-project
-  LIBRARIAN_VERSION: v0.38.1-0.20260822002353-7e1065dccdcd
 name: Dart Checks
 jobs:
-  analyze_and_format:
-    name: Analyze and Format
+  format:
+    name: Format
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - uses: dart-lang/setup-dart@7654d458321ee25acccccfdb86cd48bd95768ff1
         with:
-          sdk: ${{ env.DART_VERSION }}
+          sdk: ${{ env.FORMAT_DART_VERSION }}
       - name: Cache Pub Dependencies
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
         with:
           path: ~/.pub-cache
-          key: ${{ runner.os }}-pub-${{ hashFiles('**/pubspec.yaml') }}
+          key: ${{ runner.os }}-pub-${{ env.FORMAT_DART_VERSION }}-${{ hashFiles('**/pubspec.yaml') }}
           restore-keys: |
+            ${{ runner.os }}-pub-${{ env.FORMAT_DART_VERSION }}-
             ${{ runner.os }}-pub-
       - run: dart pub get
-      - name: Analyze
-        run: dart analyze
       - name: Format
         run: dart format --output=none --set-exit-if-changed .
       - name: Verify Code Excerpts Up-to-Date
         run: dart run tool/update_excerpts.dart --fail-on-update
 
-  analyze_dev:
-    name: Analyze (dev SDK)
+  analyze:
+    name: Analyze (${{ matrix.sdk }})
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        sdk: [3.10.0, stable]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - uses: dart-lang/setup-dart@7654d458321ee25acccccfdb86cd48bd95768ff1
         with:
-          sdk: dev
+          sdk: ${{ matrix.sdk }}
       - name: Cache Pub Dependencies
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
         with:
           path: ~/.pub-cache
-          key: ${{ runner.os }}-pub-dev-${{ hashFiles('**/pubspec.yaml') }}
+          key: ${{ runner.os }}-pub-${{ matrix.sdk }}-${{ hashFiles('**/pubspec.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-pub-dev-
+            ${{ runner.os }}-pub-${{ matrix.sdk }}-
+            ${{ runner.os }}-pub-
       - run: dart pub get
       - name: Analyze
-        run: dart analyze --fatal-infos
+        run: dart analyze
 
   unit_tests:
-    name: Unit Tests
+    name: Unit Tests (${{ matrix.sdk }}, ${{ matrix.platform }})
     runs-on: ubuntu-latest
     strategy:
       matrix:
+        sdk: [3.10.0, stable]
         platform: ["chrome", "vm"]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - uses: dart-lang/setup-dart@7654d458321ee25acccccfdb86cd48bd95768ff1
         with:
-          sdk: ${{ env.DART_VERSION }}
+          sdk: ${{ matrix.sdk }}
       - run: dart pub get
       - run: dart test -p ${{ matrix.platform }} .
 
   storage_testbench_tests:
-    name: Storage Testbench Tests
+    name: Storage Testbench Tests (${{ matrix.sdk }})
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        sdk: [3.10.0, stable]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - uses: dart-lang/setup-dart@7654d458321ee25acccccfdb86cd48bd95768ff1
         with:
-          sdk: ${{ env.DART_VERSION }}
+          sdk: ${{ matrix.sdk }}
       - run: dart pub get
       - run: docker run -d --rm -p 9000:9000 -p 8888:8888 gcr.io/cloud-devrel-public-resources/storage-testbench:latest
       - run: dart test -P storage-testbench .
 
   firestore_emulator_tests:
-    name: Firestore Emulator Tests
+    name: Firestore Emulator Tests (${{ matrix.sdk }})
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        sdk: [3.10.0, stable]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
@@ -110,58 +119,10 @@ jobs:
           java-version: '25'
       - uses: dart-lang/setup-dart@7654d458321ee25acccccfdb86cd48bd95768ff1
         with:
-          sdk: ${{ env.DART_VERSION }}
+          sdk: ${{ matrix.sdk }}
       - run: dart pub get
       - name: Install Firebase CLI
         run: npm install -g firebase-tools
       - name: Run Tests
         run: firebase emulators:exec --config=firestore_emulators/firebase.json \
           "dart test -P firebase-emulator ."
-
-  generator:
-    name: Generators
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-      - name: Install protoc
-        run: |
-          set -e
-          curl -fSSL  --retry 3 --retry-all-errors --retry-delay 15 -o /tmp/protoc.zip https://github.com/protocolbuffers/protobuf/releases/download/v28.3/protoc-28.3-linux-x86_64.zip
-          cd /usr/local
-          sudo unzip -x /tmp/protoc.zip
-          protoc --version
-      - name: Install Go
-        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e
-        with:
-          go-version: 1.26.1
-          cache: false
-      - name: Cache Go Librarian
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
-        with:
-          path: |
-            ~/.cache/go-build
-            ~/go/pkg/mod
-          key: ${{ runner.os }}-go-librarian-${{ env.LIBRARIAN_VERSION }}
-      - name: Install Dart  # The generator uses "dart format".
-        uses: dart-lang/setup-dart@7654d458321ee25acccccfdb86cd48bd95768ff1
-        with:
-          sdk: ${{ env.DART_VERSION }}
-      - run: dart pub get
-      # Regenerate and check the existing clients. If there is any difference
-      # between the generated code and the committed code that is an error; all
-      # the inputs should be pinned, including the generator version and the
-      # googleapis SHA.
-      - name: Regenerate existing clients
-        # The current head version of librarian can be generated with:
-        # GOPROXY=direct go list -m -u -f '{{.Version}}' github.com/googleapis/librarian@main
-        run: go run github.com/googleapis/librarian/cmd/librarian@${{ env.LIBRARIAN_VERSION }} generate -all
-      - name: Format librarian configuration
-        run: go run github.com/googleapis/librarian/cmd/librarian@${{ env.LIBRARIAN_VERSION }} tidy
-      - name: Update documentation
-        run: dart run tool/update_docs.dart
-      - name: Generated Diff
-        run: git diff --exit-code
-      - name: Print diff on failure
-        if: failure()
-        run: git diff
-

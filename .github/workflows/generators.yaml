@@ -1,0 +1,77 @@
+# Copyright 2025 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+permissions:
+  contents: read
+
+# Run on PRs and pushes to the default branch.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# We use a specific Dart SDK version here in order to have hermetic,
+# reproducible builds (formatting can change between SDK versions, ...).
+env:
+  DART_VERSION: 3.13.2
+  LIBRARIAN_VERSION: v0.38.1-0.20260822002353-7e1065dccdcd
+name: Generators
+jobs:
+  generator:
+    name: Generators
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - name: Install protoc
+        run: |
+          set -e
+          curl -fSSL  --retry 3 --retry-all-errors --retry-delay 15 -o /tmp/protoc.zip https://github.com/protocolbuffers/protobuf/releases/download/v28.3/protoc-28.3-linux-x86_64.zip
+          cd /usr/local
+          sudo unzip -x /tmp/protoc.zip
+          protoc --version
+      - name: Install Go
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e
+        with:
+          go-version: 1.26.1
+          cache: false
+      - name: Cache Go Librarian
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-librarian-${{ env.LIBRARIAN_VERSION }}
+      - name: Install Dart  # The generator uses "dart format".
+        uses: dart-lang/setup-dart@7654d458321ee25acccccfdb86cd48bd95768ff1
+        with:
+          sdk: ${{ env.DART_VERSION }}
+      - run: dart pub get
+      # Regenerate and check the existing clients. If there is any difference
+      # between the generated code and the committed code that is an error; all
+      # the inputs should be pinned, including the generator version and the
+      # googleapis SHA.
+      - name: Regenerate existing clients
+        # The current head version of librarian can be generated with:
+        # GOPROXY=direct go list -m -u -f '{{.Version}}' github.com/googleapis/librarian@main
+        run: go run github.com/googleapis/librarian/cmd/librarian@${{ env.LIBRARIAN_VERSION }} generate -all
+      - name: Format librarian configuration
+        run: go run github.com/googleapis/librarian/cmd/librarian@${{ env.LIBRARIAN_VERSION }} tidy
+      - name: Update documentation
+        run: dart run tool/update_docs.dart
+      - name: Generated Diff
+        run: git diff --exit-code
+      - name: Print diff on failure
+        if: failure()
+        run: git diff

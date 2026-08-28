@@ -188,7 +188,6 @@ final class ServiceAccountCredentials {
     );
   }
 
-
   /// Signs [message] using RSASSA-PKCS1-v1_5 with SHA-256 and the private key.
   Future<Uint8List> sign(List<int> message) => _privateKey.signBytes(message);
 }
