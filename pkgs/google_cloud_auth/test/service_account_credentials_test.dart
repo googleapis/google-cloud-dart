@@ -158,7 +158,7 @@ void main() {
     });
 
     test(
-      'fromServiceAccountInfo throws on non-string optional fields',
+      'fromServiceAccountInfo throws on non-string private_key_id',
       () async {
         final info = <String, Object?>{
           'type': 'service_account',
@@ -173,6 +173,82 @@ void main() {
         );
       },
     );
+
+    test('fromServiceAccountInfo throws on non-string client_id', () async {
+      final info = <String, Object?>{
+        'type': 'service_account',
+        'private_key': privateKeyPem,
+        'client_email': 'test@test-project.iam.gserviceaccount.com',
+        'client_id': 12345,
+      };
+
+      expect(
+        () => ServiceAccountCredentials.fromServiceAccountInfo(info),
+        throwsFormatException,
+      );
+    });
+
+    test('fromServiceAccountInfo throws on non-string project_id', () async {
+      final info = <String, Object?>{
+        'type': 'service_account',
+        'private_key': privateKeyPem,
+        'client_email': 'test@test-project.iam.gserviceaccount.com',
+        'project_id': 12345,
+      };
+
+      expect(
+        () => ServiceAccountCredentials.fromServiceAccountInfo(info),
+        throwsFormatException,
+      );
+    });
+
+    test(
+      'fromServiceAccountInfo throws on non-string quota_project_id',
+      () async {
+        final info = <String, Object?>{
+          'type': 'service_account',
+          'private_key': privateKeyPem,
+          'client_email': 'test@test-project.iam.gserviceaccount.com',
+          'quota_project_id': 12345,
+        };
+
+        expect(
+          () => ServiceAccountCredentials.fromServiceAccountInfo(info),
+          throwsFormatException,
+        );
+      },
+    );
+
+    test(
+      'fromServiceAccountInfo throws on non-string universe_domain',
+      () async {
+        final info = <String, Object?>{
+          'type': 'service_account',
+          'private_key': privateKeyPem,
+          'client_email': 'test@test-project.iam.gserviceaccount.com',
+          'universe_domain': 12345,
+        };
+
+        expect(
+          () => ServiceAccountCredentials.fromServiceAccountInfo(info),
+          throwsFormatException,
+        );
+      },
+    );
+
+    test('fromServiceAccountInfo throws on non-string token_uri', () async {
+      final info = <String, Object?>{
+        'type': 'service_account',
+        'private_key': privateKeyPem,
+        'client_email': 'test@test-project.iam.gserviceaccount.com',
+        'token_uri': 12345,
+      };
+
+      expect(
+        () => ServiceAccountCredentials.fromServiceAccountInfo(info),
+        throwsFormatException,
+      );
+    });
 
     test('fromServiceAccountFile loads credentials from file', () async {
       final packageUri = await Isolate.resolvePackageUri(
