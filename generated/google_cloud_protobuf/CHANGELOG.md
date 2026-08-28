@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.5.5
+
+- feat: track library version usage (#330)
+- fix(dart): remove emptying `testing.dart` files (#327)
+
 ## 0.5.4
 
 - chore: add CHANGELOG.md to existing published packages (#313)

@@ -17,4 +17,4 @@
 // ignore_for_file: lines_longer_than_80_chars
 
 /// The version of the google_cloud_firestore_v1 client library.
-const packageVersion = '0.5.4';
+const packageVersion = '0.5.5';
