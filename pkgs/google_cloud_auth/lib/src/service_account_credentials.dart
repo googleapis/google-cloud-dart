@@ -159,7 +159,7 @@ final class ServiceAccountCredentials {
     return fromServiceAccountInfo(json.cast<String, dynamic>());
   }
 
-  /// Creates a [ServiceAccountCredentials] instance from PKCS#8 private key
+  /// Creates a [ServiceAccountCredentials] instance from a PKCS#8 private key
   /// PEM string.
   static Future<ServiceAccountCredentials> fromPkcs8({
     required String clientEmail,
@@ -189,11 +189,6 @@ final class ServiceAccountCredentials {
     );
   }
 
-  /// The email address of the service account used for signing.
-  String get signerEmail => clientEmail;
-
-  /// The email address of the service account.
-  String get serviceAccountEmail => clientEmail;
 
   /// Signs [message] using RSASSA-PKCS1-v1_5 with SHA-256 and the private key.
   Future<Uint8List> sign(List<int> message) => _privateKey.signBytes(message);
