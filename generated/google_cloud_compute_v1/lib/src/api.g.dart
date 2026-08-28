@@ -34,6 +34,8 @@ import 'package:google_cloud_protobuf/src/encoding.dart';
 import 'package:google_cloud_rpc/service_client.dart';
 import 'package:http/http.dart' as http;
 
+import 'version.dart';
+
 const _apiKeys = ['GOOGLE_API_KEY'];
 
 ///
@@ -56,15 +58,26 @@ final class AcceleratorTypes {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  AcceleratorTypes({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  AcceleratorTypes({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `AcceleratorTypes` that does authentication through an API key.
   ///
@@ -261,8 +274,16 @@ final class Addresses {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  Addresses({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  Addresses({required http.Client client, Uri? endPoint, String? gcclVersion})
+    : _client = ServiceClient(
+        client: client,
+        gapicVersion: packageVersion,
+        gcclVersion: gcclVersion,
+      ),
       _endPoint = endPoint == null
           ? Uri.https(_defaultHost, '')
           : Uri(
@@ -647,8 +668,16 @@ final class Advice {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  Advice({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  Advice({required http.Client client, Uri? endPoint, String? gcclVersion})
+    : _client = ServiceClient(
+        client: client,
+        gapicVersion: packageVersion,
+        gcclVersion: gcclVersion,
+      ),
       _endPoint = endPoint == null
           ? Uri.https(_defaultHost, '')
           : Uri(
@@ -764,8 +793,16 @@ final class Autoscalers {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  Autoscalers({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  Autoscalers({required http.Client client, Uri? endPoint, String? gcclVersion})
+    : _client = ServiceClient(
+        client: client,
+        gapicVersion: packageVersion,
+        gcclVersion: gcclVersion,
+      ),
       _endPoint = endPoint == null
           ? Uri.https(_defaultHost, '')
           : Uri(
@@ -1156,15 +1193,26 @@ final class BackendBuckets {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  BackendBuckets({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  BackendBuckets({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `BackendBuckets` that does authentication through an API key.
   ///
@@ -1817,15 +1865,26 @@ final class BackendServices {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  BackendServices({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  BackendServices({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `BackendServices` that does authentication through an API key.
   ///
@@ -2651,15 +2710,26 @@ final class CrossSiteNetworks {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  CrossSiteNetworks({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  CrossSiteNetworks({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `CrossSiteNetworks` that does authentication through an API key.
   ///
@@ -2919,8 +2989,16 @@ final class DiskTypes {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  DiskTypes({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  DiskTypes({required http.Client client, Uri? endPoint, String? gcclVersion})
+    : _client = ServiceClient(
+        client: client,
+        gapicVersion: packageVersion,
+        gcclVersion: gcclVersion,
+      ),
       _endPoint = endPoint == null
           ? Uri.https(_defaultHost, '')
           : Uri(
@@ -3118,8 +3196,16 @@ final class Disks {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  Disks({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  Disks({required http.Client client, Uri? endPoint, String? gcclVersion})
+    : _client = ServiceClient(
+        client: client,
+        gapicVersion: packageVersion,
+        gcclVersion: gcclVersion,
+      ),
       _endPoint = endPoint == null
           ? Uri.https(_defaultHost, '')
           : Uri(
@@ -4015,15 +4101,26 @@ final class ExternalVpnGateways {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  ExternalVpnGateways({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  ExternalVpnGateways({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `ExternalVpnGateways` that does authentication through an API key.
   ///
@@ -4334,15 +4431,26 @@ final class FirewallPolicies {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  FirewallPolicies({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  FirewallPolicies({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `FirewallPolicies` that does authentication through an API key.
   ///
@@ -5122,8 +5230,16 @@ final class Firewalls {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  Firewalls({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  Firewalls({required http.Client client, Uri? endPoint, String? gcclVersion})
+    : _client = ServiceClient(
+        client: client,
+        gapicVersion: packageVersion,
+        gcclVersion: gcclVersion,
+      ),
       _endPoint = endPoint == null
           ? Uri.https(_defaultHost, '')
           : Uri(
@@ -5451,15 +5567,26 @@ final class ForwardingRules {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  ForwardingRules({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  ForwardingRules({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `ForwardingRules` that does authentication through an API key.
   ///
@@ -5853,15 +5980,26 @@ final class FutureReservations {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  FutureReservations({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  FutureReservations({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `FutureReservations` that does authentication through an API key.
   ///
@@ -6210,15 +6348,26 @@ final class GlobalAddresses {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  GlobalAddresses({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  GlobalAddresses({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `GlobalAddresses` that does authentication through an API key.
   ///
@@ -6534,15 +6683,26 @@ final class GlobalForwardingRules {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  GlobalForwardingRules({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  GlobalForwardingRules({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `GlobalForwardingRules` that does authentication through an API key.
   ///
@@ -6900,15 +7060,26 @@ final class GlobalNetworkEndpointGroups {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  GlobalNetworkEndpointGroups({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  GlobalNetworkEndpointGroups({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `GlobalNetworkEndpointGroups` that does authentication through an API key.
   ///
@@ -7322,15 +7493,26 @@ final class GlobalOperations {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  GlobalOperations({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  GlobalOperations({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `GlobalOperations` that does authentication through an API key.
   ///
@@ -7625,15 +7807,26 @@ final class GlobalOrganizationOperations {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  GlobalOrganizationOperations({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  GlobalOrganizationOperations({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `GlobalOrganizationOperations` that does authentication through an API key.
   ///
@@ -7826,15 +8019,26 @@ final class GlobalPublicDelegatedPrefixes {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  GlobalPublicDelegatedPrefixes({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  GlobalPublicDelegatedPrefixes({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `GlobalPublicDelegatedPrefixes` that does authentication through an API key.
   ///
@@ -8130,15 +8334,26 @@ final class GlobalVmExtensionPolicies {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  GlobalVmExtensionPolicies({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  GlobalVmExtensionPolicies({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `GlobalVmExtensionPolicies` that does authentication through an API key.
   ///
@@ -8480,15 +8695,26 @@ final class HealthChecks {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  HealthChecks({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  HealthChecks({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `HealthChecks` that does authentication through an API key.
   ///
@@ -8870,8 +9096,16 @@ final class Hosts {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  Hosts({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  Hosts({required http.Client client, Uri? endPoint, String? gcclVersion})
+    : _client = ServiceClient(
+        client: client,
+        gapicVersion: packageVersion,
+        gcclVersion: gcclVersion,
+      ),
       _endPoint = endPoint == null
           ? Uri.https(_defaultHost, '')
           : Uri(
@@ -9044,15 +9278,26 @@ final class ImageFamilyViews {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  ImageFamilyViews({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  ImageFamilyViews({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `ImageFamilyViews` that does authentication through an API key.
   ///
@@ -9145,8 +9390,16 @@ final class Images {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  Images({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  Images({required http.Client client, Uri? endPoint, String? gcclVersion})
+    : _client = ServiceClient(
+        client: client,
+        gapicVersion: packageVersion,
+        gcclVersion: gcclVersion,
+      ),
       _endPoint = endPoint == null
           ? Uri.https(_defaultHost, '')
           : Uri(
@@ -9637,10 +9890,19 @@ final class InstanceGroupManagerResizeRequests {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   InstanceGroupManagerResizeRequests({
     required http.Client client,
     Uri? endPoint,
-  }) : _client = ServiceClient(client: client),
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
        _endPoint = endPoint == null
            ? Uri.https(_defaultHost, '')
            : Uri(
@@ -9946,15 +10208,26 @@ final class InstanceGroupManagers {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  InstanceGroupManagers({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  InstanceGroupManagers({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `InstanceGroupManagers` that does authentication through an API key.
   ///
@@ -11514,15 +11787,26 @@ final class InstanceGroups {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  InstanceGroups({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  InstanceGroups({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `InstanceGroups` that does authentication through an API key.
   ///
@@ -12057,15 +12341,26 @@ final class InstanceSettingsService {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  InstanceSettingsService({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  InstanceSettingsService({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `InstanceSettingsService` that does authentication through an API key.
   ///
@@ -12195,15 +12490,26 @@ final class InstanceTemplates {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  InstanceTemplates({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  InstanceTemplates({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `InstanceTemplates` that does authentication through an API key.
   ///
@@ -12619,8 +12925,16 @@ final class Instances {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  Instances({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  Instances({required http.Client client, Uri? endPoint, String? gcclVersion})
+    : _client = ServiceClient(
+        client: client,
+        gapicVersion: packageVersion,
+        gcclVersion: gcclVersion,
+      ),
       _endPoint = endPoint == null
           ? Uri.https(_defaultHost, '')
           : Uri(
@@ -14937,15 +15251,26 @@ final class InstantSnapshotGroups {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  InstantSnapshotGroups({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  InstantSnapshotGroups({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `InstantSnapshotGroups` that does authentication through an API key.
   ///
@@ -15309,15 +15634,26 @@ final class InstantSnapshots {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  InstantSnapshots({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  InstantSnapshots({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `InstantSnapshots` that does authentication through an API key.
   ///
@@ -15773,15 +16109,26 @@ final class InterconnectAttachmentGroups {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  InterconnectAttachmentGroups({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  InterconnectAttachmentGroups({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `InterconnectAttachmentGroups` that does authentication through an API key.
   ///
@@ -16267,15 +16614,26 @@ final class InterconnectAttachments {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  InterconnectAttachments({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  InterconnectAttachments({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `InterconnectAttachments` that does authentication through an API key.
   ///
@@ -16657,15 +17015,26 @@ final class InterconnectGroups {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  InterconnectGroups({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  InterconnectGroups({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `InterconnectGroups` that does authentication through an API key.
   ///
@@ -17145,15 +17514,26 @@ final class InterconnectLocations {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  InterconnectLocations({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  InterconnectLocations({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `InterconnectLocations` that does authentication through an API key.
   ///
@@ -17307,15 +17687,26 @@ final class InterconnectRemoteLocations {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  InterconnectRemoteLocations({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  InterconnectRemoteLocations({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `InterconnectRemoteLocations` that does authentication through an API key.
   ///
@@ -17472,15 +17863,26 @@ final class Interconnects {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  Interconnects({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  Interconnects({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `Interconnects` that does authentication through an API key.
   ///
@@ -17868,15 +18270,26 @@ final class LicenseCodes {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  LicenseCodes({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  LicenseCodes({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `LicenseCodes` that does authentication through an API key.
   ///
@@ -18116,8 +18529,16 @@ final class Licenses {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  Licenses({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  Licenses({required http.Client client, Uri? endPoint, String? gcclVersion})
+    : _client = ServiceClient(
+        client: client,
+        gapicVersion: packageVersion,
+        gcclVersion: gcclVersion,
+      ),
       _endPoint = endPoint == null
           ? Uri.https(_defaultHost, '')
           : Uri(
@@ -18535,15 +18956,26 @@ final class MachineImages {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  MachineImages({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  MachineImages({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `MachineImages` that does authentication through an API key.
   ///
@@ -18918,15 +19350,26 @@ final class MachineTypes {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  MachineTypes({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  MachineTypes({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `MachineTypes` that does authentication through an API key.
   ///
@@ -19118,15 +19561,26 @@ final class NetworkAttachments {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  NetworkAttachments({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  NetworkAttachments({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `NetworkAttachments` that does authentication through an API key.
   ///
@@ -19578,15 +20032,26 @@ final class NetworkEdgeSecurityServices {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  NetworkEdgeSecurityServices({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  NetworkEdgeSecurityServices({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `NetworkEdgeSecurityServices` that does authentication through an API key.
   ///
@@ -19889,15 +20354,26 @@ final class NetworkEndpointGroups {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  NetworkEndpointGroups({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  NetworkEndpointGroups({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `NetworkEndpointGroups` that does authentication through an API key.
   ///
@@ -20410,15 +20886,26 @@ final class NetworkFirewallPolicies {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  NetworkFirewallPolicies({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  NetworkFirewallPolicies({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `NetworkFirewallPolicies` that does authentication through an API key.
   ///
@@ -21421,15 +21908,26 @@ final class NetworkProfiles {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  NetworkProfiles({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  NetworkProfiles({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `NetworkProfiles` that does authentication through an API key.
   ///
@@ -21570,8 +22068,16 @@ final class Networks {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  Networks({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  Networks({required http.Client client, Uri? endPoint, String? gcclVersion})
+    : _client = ServiceClient(
+        client: client,
+        gapicVersion: packageVersion,
+        gcclVersion: gcclVersion,
+      ),
       _endPoint = endPoint == null
           ? Uri.https(_defaultHost, '')
           : Uri(
@@ -22154,8 +22660,16 @@ final class NodeGroups {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  NodeGroups({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  NodeGroups({required http.Client client, Uri? endPoint, String? gcclVersion})
+    : _client = ServiceClient(
+        client: client,
+        gapicVersion: packageVersion,
+        gcclVersion: gcclVersion,
+      ),
       _endPoint = endPoint == null
           ? Uri.https(_defaultHost, '')
           : Uri(
@@ -22840,15 +23354,26 @@ final class NodeTemplates {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  NodeTemplates({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  NodeTemplates({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `NodeTemplates` that does authentication through an API key.
   ///
@@ -23235,8 +23760,16 @@ final class NodeTypes {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  NodeTypes({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  NodeTypes({required http.Client client, Uri? endPoint, String? gcclVersion})
+    : _client = ServiceClient(
+        client: client,
+        gapicVersion: packageVersion,
+        gcclVersion: gcclVersion,
+      ),
       _endPoint = endPoint == null
           ? Uri.https(_defaultHost, '')
           : Uri(
@@ -23434,15 +23967,26 @@ final class OrganizationSecurityPolicies {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  OrganizationSecurityPolicies({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  OrganizationSecurityPolicies({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `OrganizationSecurityPolicies` that does authentication through an API key.
   ///
@@ -24384,15 +24928,26 @@ final class PacketMirrorings {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  PacketMirrorings({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  PacketMirrorings({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `PacketMirrorings` that does authentication through an API key.
   ///
@@ -24749,15 +25304,26 @@ final class PreviewFeatures {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  PreviewFeatures({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  PreviewFeatures({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `PreviewFeatures` that does authentication through an API key.
   ///
@@ -24927,8 +25493,16 @@ final class Projects {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  Projects({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  Projects({required http.Client client, Uri? endPoint, String? gcclVersion})
+    : _client = ServiceClient(
+        client: client,
+        gapicVersion: packageVersion,
+        gcclVersion: gcclVersion,
+      ),
       _endPoint = endPoint == null
           ? Uri.https(_defaultHost, '')
           : Uri(
@@ -25613,15 +26187,26 @@ final class PublicAdvertisedPrefixes {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  PublicAdvertisedPrefixes({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  PublicAdvertisedPrefixes({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `PublicAdvertisedPrefixes` that does authentication through an API key.
   ///
@@ -25976,15 +26561,26 @@ final class PublicDelegatedPrefixes {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  PublicDelegatedPrefixes({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  PublicDelegatedPrefixes({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `PublicDelegatedPrefixes` that does authentication through an API key.
   ///
@@ -26397,15 +26993,26 @@ final class RegionAutoscalers {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  RegionAutoscalers({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  RegionAutoscalers({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `RegionAutoscalers` that does authentication through an API key.
   ///
@@ -26742,15 +27349,26 @@ final class RegionBackendBuckets {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  RegionBackendBuckets({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  RegionBackendBuckets({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `RegionBackendBuckets` that does authentication through an API key.
   ///
@@ -27193,15 +27811,26 @@ final class RegionBackendServices {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  RegionBackendServices({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  RegionBackendServices({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `RegionBackendServices` that does authentication through an API key.
   ///
@@ -27800,15 +28429,26 @@ final class RegionCommitments {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  RegionCommitments({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  RegionCommitments({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `RegionCommitments` that does authentication through an API key.
   ///
@@ -28078,15 +28718,26 @@ final class RegionCompositeHealthChecks {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  RegionCompositeHealthChecks({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  RegionCompositeHealthChecks({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `RegionCompositeHealthChecks` that does authentication through an API key.
   ///
@@ -28527,15 +29178,26 @@ final class RegionDiskTypes {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  RegionDiskTypes({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  RegionDiskTypes({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `RegionDiskTypes` that does authentication through an API key.
   ///
@@ -28667,8 +29329,16 @@ final class RegionDisks {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  RegionDisks({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  RegionDisks({required http.Client client, Uri? endPoint, String? gcclVersion})
+    : _client = ServiceClient(
+        client: client,
+        gapicVersion: packageVersion,
+        gcclVersion: gcclVersion,
+      ),
       _endPoint = endPoint == null
           ? Uri.https(_defaultHost, '')
           : Uri(
@@ -29473,15 +30143,26 @@ final class RegionHealthAggregationPolicies {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  RegionHealthAggregationPolicies({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  RegionHealthAggregationPolicies({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `RegionHealthAggregationPolicies` that does authentication through an API key.
   ///
@@ -29884,15 +30565,26 @@ final class RegionHealthCheckServices {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  RegionHealthCheckServices({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  RegionHealthCheckServices({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `RegionHealthCheckServices` that does authentication through an API key.
   ///
@@ -30284,15 +30976,26 @@ final class RegionHealthChecks {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  RegionHealthChecks({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  RegionHealthChecks({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `RegionHealthChecks` that does authentication through an API key.
   ///
@@ -30620,15 +31323,26 @@ final class RegionHealthSources {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  RegionHealthSources({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  RegionHealthSources({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `RegionHealthSources` that does authentication through an API key.
   ///
@@ -31029,10 +31743,19 @@ final class RegionInstanceGroupManagerResizeRequests {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
   RegionInstanceGroupManagerResizeRequests({
     required http.Client client,
     Uri? endPoint,
-  }) : _client = ServiceClient(client: client),
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
        _endPoint = endPoint == null
            ? Uri.https(_defaultHost, '')
            : Uri(
@@ -31341,15 +32064,26 @@ final class RegionInstanceGroupManagers {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  RegionInstanceGroupManagers({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  RegionInstanceGroupManagers({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `RegionInstanceGroupManagers` that does authentication through an API key.
   ///
@@ -32833,15 +33567,26 @@ final class RegionInstanceGroups {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  RegionInstanceGroups({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  RegionInstanceGroups({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `RegionInstanceGroups` that does authentication through an API key.
   ///
@@ -33132,15 +33877,26 @@ final class RegionInstanceTemplates {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  RegionInstanceTemplates({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  RegionInstanceTemplates({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `RegionInstanceTemplates` that does authentication through an API key.
   ///
@@ -33363,15 +34119,26 @@ final class RegionInstances {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  RegionInstances({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  RegionInstances({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `RegionInstances` that does authentication through an API key.
   ///
@@ -33469,15 +34236,26 @@ final class RegionInstantSnapshotGroups {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  RegionInstantSnapshotGroups({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  RegionInstantSnapshotGroups({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `RegionInstantSnapshotGroups` that does authentication through an API key.
   ///
@@ -33862,15 +34640,26 @@ final class RegionInstantSnapshots {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  RegionInstantSnapshots({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  RegionInstantSnapshots({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `RegionInstantSnapshots` that does authentication through an API key.
   ///
@@ -34287,15 +35076,26 @@ final class RegionNetworkEndpointGroups {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  RegionNetworkEndpointGroups({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  RegionNetworkEndpointGroups({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `RegionNetworkEndpointGroups` that does authentication through an API key.
   ///
@@ -34709,15 +35509,26 @@ final class RegionNetworkFirewallPolicies {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  RegionNetworkFirewallPolicies({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  RegionNetworkFirewallPolicies({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `RegionNetworkFirewallPolicies` that does authentication through an API key.
   ///
@@ -35565,15 +36376,26 @@ final class RegionNotificationEndpoints {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  RegionNotificationEndpoints({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  RegionNotificationEndpoints({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `RegionNotificationEndpoints` that does authentication through an API key.
   ///
@@ -35914,15 +36736,26 @@ final class RegionOperations {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  RegionOperations({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  RegionOperations({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `RegionOperations` that does authentication through an API key.
   ///
@@ -36159,15 +36992,26 @@ final class RegionSecurityPolicies {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  RegionSecurityPolicies({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  RegionSecurityPolicies({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `RegionSecurityPolicies` that does authentication through an API key.
   ///
@@ -36663,15 +37507,26 @@ final class RegionSnapshotSettings {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  RegionSnapshotSettings({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  RegionSnapshotSettings({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `RegionSnapshotSettings` that does authentication through an API key.
   ///
@@ -36806,15 +37661,26 @@ final class RegionSnapshots {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  RegionSnapshots({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  RegionSnapshots({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `RegionSnapshots` that does authentication through an API key.
   ///
@@ -37241,15 +38107,26 @@ final class RegionSslCertificates {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  RegionSslCertificates({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  RegionSslCertificates({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `RegionSslCertificates` that does authentication through an API key.
   ///
@@ -37472,15 +38349,26 @@ final class RegionSslPolicies {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  RegionSslPolicies({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  RegionSslPolicies({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `RegionSslPolicies` that does authentication through an API key.
   ///
@@ -37773,15 +38661,26 @@ final class RegionTargetHttpProxies {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  RegionTargetHttpProxies({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  RegionTargetHttpProxies({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `RegionTargetHttpProxies` that does authentication through an API key.
   ///
@@ -38046,15 +38945,26 @@ final class RegionTargetHttpsProxies {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  RegionTargetHttpsProxies({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  RegionTargetHttpsProxies({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `RegionTargetHttpsProxies` that does authentication through an API key.
   ///
@@ -38409,15 +39319,26 @@ final class RegionTargetTcpProxies {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  RegionTargetTcpProxies({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  RegionTargetTcpProxies({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `RegionTargetTcpProxies` that does authentication through an API key.
   ///
@@ -38636,15 +39557,26 @@ final class RegionUrlMaps {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  RegionUrlMaps({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  RegionUrlMaps({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `RegionUrlMaps` that does authentication through an API key.
   ///
@@ -38967,8 +39899,16 @@ final class RegionZones {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  RegionZones({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  RegionZones({required http.Client client, Uri? endPoint, String? gcclVersion})
+    : _client = ServiceClient(
+        client: client,
+        gapicVersion: packageVersion,
+        gcclVersion: gcclVersion,
+      ),
       _endPoint = endPoint == null
           ? Uri.https(_defaultHost, '')
           : Uri(
@@ -39075,8 +40015,16 @@ final class Regions {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  Regions({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  Regions({required http.Client client, Uri? endPoint, String? gcclVersion})
+    : _client = ServiceClient(
+        client: client,
+        gapicVersion: packageVersion,
+        gcclVersion: gcclVersion,
+      ),
       _endPoint = endPoint == null
           ? Uri.https(_defaultHost, '')
           : Uri(
@@ -39281,15 +40229,26 @@ final class ReliabilityRisks {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  ReliabilityRisks({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  ReliabilityRisks({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `ReliabilityRisks` that does authentication through an API key.
   ///
@@ -39429,15 +40388,26 @@ final class ReservationBlocks {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  ReservationBlocks({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  ReservationBlocks({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `ReservationBlocks` that does authentication through an API key.
   ///
@@ -39766,15 +40736,26 @@ final class ReservationSlots {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  ReservationSlots({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  ReservationSlots({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `ReservationSlots` that does authentication through an API key.
   ///
@@ -39999,15 +40980,26 @@ final class ReservationSubBlocks {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  ReservationSubBlocks({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  ReservationSubBlocks({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `ReservationSubBlocks` that does authentication through an API key.
   ///
@@ -40421,15 +41413,26 @@ final class Reservations {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  Reservations({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  Reservations({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `Reservations` that does authentication through an API key.
   ///
@@ -40937,15 +41940,26 @@ final class ResourcePolicies {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  ResourcePolicies({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  ResourcePolicies({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `ResourcePolicies` that does authentication through an API key.
   ///
@@ -41375,15 +42389,26 @@ final class RolloutPlans {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  RolloutPlans({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  RolloutPlans({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `RolloutPlans` that does authentication through an API key.
   ///
@@ -41581,8 +42606,16 @@ final class Rollouts {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  Rollouts({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  Rollouts({required http.Client client, Uri? endPoint, String? gcclVersion})
+    : _client = ServiceClient(
+        client: client,
+        gapicVersion: packageVersion,
+        gcclVersion: gcclVersion,
+      ),
       _endPoint = endPoint == null
           ? Uri.https(_defaultHost, '')
           : Uri(
@@ -41891,8 +42924,16 @@ final class Routers {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  Routers({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  Routers({required http.Client client, Uri? endPoint, String? gcclVersion})
+    : _client = ServiceClient(
+        client: client,
+        gapicVersion: packageVersion,
+        gcclVersion: gcclVersion,
+      ),
       _endPoint = endPoint == null
           ? Uri.https(_defaultHost, '')
           : Uri(
@@ -42867,8 +43908,16 @@ final class Routes {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  Routes({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  Routes({required http.Client client, Uri? endPoint, String? gcclVersion})
+    : _client = ServiceClient(
+        client: client,
+        gapicVersion: packageVersion,
+        gcclVersion: gcclVersion,
+      ),
       _endPoint = endPoint == null
           ? Uri.https(_defaultHost, '')
           : Uri(
@@ -43116,15 +44165,26 @@ final class SecurityPolicies {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  SecurityPolicies({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  SecurityPolicies({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `SecurityPolicies` that does authentication through an API key.
   ///
@@ -43701,15 +44761,26 @@ final class ServiceAttachments {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  ServiceAttachments({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  ServiceAttachments({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `ServiceAttachments` that does authentication through an API key.
   ///
@@ -44164,15 +45235,26 @@ final class SnapshotSettingsService {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  SnapshotSettingsService({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  SnapshotSettingsService({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `SnapshotSettingsService` that does authentication through an API key.
   ///
@@ -44300,8 +45382,16 @@ final class Snapshots {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  Snapshots({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  Snapshots({required http.Client client, Uri? endPoint, String? gcclVersion})
+    : _client = ServiceClient(
+        client: client,
+        gapicVersion: packageVersion,
+        gcclVersion: gcclVersion,
+      ),
       _endPoint = endPoint == null
           ? Uri.https(_defaultHost, '')
           : Uri(
@@ -44726,15 +45816,26 @@ final class SslCertificates {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  SslCertificates({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  SslCertificates({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `SslCertificates` that does authentication through an API key.
   ///
@@ -45001,8 +46102,16 @@ final class SslPolicies {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  SslPolicies({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  SslPolicies({required http.Client client, Uri? endPoint, String? gcclVersion})
+    : _client = ServiceClient(
+        client: client,
+        gapicVersion: packageVersion,
+        gcclVersion: gcclVersion,
+      ),
       _endPoint = endPoint == null
           ? Uri.https(_defaultHost, '')
           : Uri(
@@ -45355,15 +46464,26 @@ final class StoragePoolTypes {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  StoragePoolTypes({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  StoragePoolTypes({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `StoragePoolTypes` that does authentication through an API key.
   ///
@@ -45560,15 +46680,26 @@ final class StoragePools {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  StoragePools({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  StoragePools({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `StoragePools` that does authentication through an API key.
   ///
@@ -46057,8 +47188,16 @@ final class Subnetworks {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  Subnetworks({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  Subnetworks({required http.Client client, Uri? endPoint, String? gcclVersion})
+    : _client = ServiceClient(
+        client: client,
+        gapicVersion: packageVersion,
+        gcclVersion: gcclVersion,
+      ),
       _endPoint = endPoint == null
           ? Uri.https(_defaultHost, '')
           : Uri(
@@ -46637,15 +47776,26 @@ final class TargetGrpcProxies {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  TargetGrpcProxies({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  TargetGrpcProxies({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `TargetGrpcProxies` that does authentication through an API key.
   ///
@@ -46893,15 +48043,26 @@ final class TargetHttpProxies {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  TargetHttpProxies({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  TargetHttpProxies({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `TargetHttpProxies` that does authentication through an API key.
   ///
@@ -47251,15 +48412,26 @@ final class TargetHttpsProxies {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  TargetHttpsProxies({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  TargetHttpsProxies({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `TargetHttpsProxies` that does authentication through an API key.
   ///
@@ -47800,15 +48972,26 @@ final class TargetInstances {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  TargetInstances({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  TargetInstances({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `TargetInstances` that does authentication through an API key.
   ///
@@ -48168,8 +49351,16 @@ final class TargetPools {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  TargetPools({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  TargetPools({required http.Client client, Uri? endPoint, String? gcclVersion})
+    : _client = ServiceClient(
+        client: client,
+        gapicVersion: packageVersion,
+        gcclVersion: gcclVersion,
+      ),
       _endPoint = endPoint == null
           ? Uri.https(_defaultHost, '')
           : Uri(
@@ -48777,15 +49968,26 @@ final class TargetSslProxies {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  TargetSslProxies({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  TargetSslProxies({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `TargetSslProxies` that does authentication through an API key.
   ///
@@ -49259,15 +50461,26 @@ final class TargetTcpProxies {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  TargetTcpProxies({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  TargetTcpProxies({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `TargetTcpProxies` that does authentication through an API key.
   ///
@@ -49667,15 +50880,26 @@ final class TargetVpnGateways {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  TargetVpnGateways({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  TargetVpnGateways({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `TargetVpnGateways` that does authentication through an API key.
   ///
@@ -49989,8 +51213,16 @@ final class UrlMaps {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  UrlMaps({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  UrlMaps({required http.Client client, Uri? endPoint, String? gcclVersion})
+    : _client = ServiceClient(
+        client: client,
+        gapicVersion: packageVersion,
+        gcclVersion: gcclVersion,
+      ),
       _endPoint = endPoint == null
           ? Uri.https(_defaultHost, '')
           : Uri(
@@ -50470,8 +51702,16 @@ final class VpnGateways {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  VpnGateways({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  VpnGateways({required http.Client client, Uri? endPoint, String? gcclVersion})
+    : _client = ServiceClient(
+        client: client,
+        gapicVersion: packageVersion,
+        gcclVersion: gcclVersion,
+      ),
       _endPoint = endPoint == null
           ? Uri.https(_defaultHost, '')
           : Uri(
@@ -50863,8 +52103,16 @@ final class VpnTunnels {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  VpnTunnels({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  VpnTunnels({required http.Client client, Uri? endPoint, String? gcclVersion})
+    : _client = ServiceClient(
+        client: client,
+        gapicVersion: packageVersion,
+        gcclVersion: gcclVersion,
+      ),
       _endPoint = endPoint == null
           ? Uri.https(_defaultHost, '')
           : Uri(
@@ -51169,8 +52417,16 @@ final class WireGroups {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  WireGroups({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  WireGroups({required http.Client client, Uri? endPoint, String? gcclVersion})
+    : _client = ServiceClient(
+        client: client,
+        gapicVersion: packageVersion,
+        gcclVersion: gcclVersion,
+      ),
       _endPoint = endPoint == null
           ? Uri.https(_defaultHost, '')
           : Uri(
@@ -51421,15 +52677,26 @@ final class ZoneOperations {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  ZoneOperations({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  ZoneOperations({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `ZoneOperations` that does authentication through an API key.
   ///
@@ -51664,15 +52931,26 @@ final class ZoneVmExtensionPolicies {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  ZoneVmExtensionPolicies({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
-      _endPoint = endPoint == null
-          ? Uri.https(_defaultHost, '')
-          : Uri(
-              scheme: endPoint.scheme,
-              host: endPoint.host,
-              port: endPoint.port,
-            );
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  ZoneVmExtensionPolicies({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
 
   /// Creates a `ZoneVmExtensionPolicies` that does authentication through an API key.
   ///
@@ -51927,8 +53205,16 @@ final class Zones {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  Zones({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  Zones({required http.Client client, Uri? endPoint, String? gcclVersion})
+    : _client = ServiceClient(
+        client: client,
+        gapicVersion: packageVersion,
+        gcclVersion: gcclVersion,
+      ),
       _endPoint = endPoint == null
           ? Uri.https(_defaultHost, '')
           : Uri(

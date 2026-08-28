@@ -437,7 +437,6 @@ libraries:
       - lib/exceptions.dart
       - lib/service_client.dart
       - lib/src/exceptions.dart
-      - lib/src/versions.dart
       - lib/src/vm.dart
       - lib/src/web.dart
       - test/client_test.dart

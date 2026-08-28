@@ -18,7 +18,8 @@ import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:http/http.dart' as http;
 
 import 'exceptions.dart';
-import 'src/versions.dart';
+import 'src/version.dart';
+import 'src/web.dart' if (dart.library.io) 'src/vm.dart' show clientDartVersion;
 
 export 'dart:typed_data' show Uint8List;
 
@@ -29,8 +30,8 @@ export 'src/web.dart'
 const String _clientKey = 'x-goog-api-client';
 
 // ignore: prefer_const_declarations
-final String _clientName =
-    'gl-dart/$clientDartVersion gax/$gaxVersion rest/$gaxVersion gapic/$gaxVersion';
+String get _baseClientName =>
+    'gl-dart/$clientDartVersion gax/$packageVersion rest/$packageVersion';
 
 const String _contentTypeKey = 'content-type';
 const String _typeJson = 'application/json';
@@ -39,13 +40,58 @@ const String _typeJson = 'application/json';
 class ServiceClient {
   final http.Client client;
 
+  /// The version of the GAPIC-generated client library (e.g. `0.1.0`),
+  /// which will be formatted as `gapic/<version>` in the `x-goog-api-client`
+  /// header.
+  ///
+  /// Set this for client libraries that were generated completely by
+  /// automation.
+  final String? gapicVersion;
+
+  /// The version of the hand-written client library (e.g. `0.6.4`),
+  /// which will be formatted as `gccl/<version>` in the `x-goog-api-client`
+  /// header.
+  ///
+  /// Set this if the client library includes hand-written components.
+  final String? gcclVersion;
+
   /// Creates a `ServiceClient` using [client] for transport.
   ///
   /// The provided [http.Client] must be configured to provide whatever
   /// authentication is required by the API being accessed. You can do that
   /// using
   /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
-  ServiceClient({required this.client});
+  ///
+  /// If [gapicVersion] is set, `gapic/<version>` is included in the
+  /// `x-goog-api-client` header.
+  ///
+  /// If [gcclVersion] is set, `gccl/<version>` is included in the
+  /// `x-goog-api-client` header.
+  ///
+  /// Both [gapicVersion] and [gcclVersion] should be set if the library
+  /// includes both automatically-generated and hand-written components.
+  /// For example, `package:google_cloud_firestore` (hand-written) wraps
+  /// `package:google_cloud_firestore_v1` (generated).
+  ServiceClient({required this.client, this.gapicVersion, this.gcclVersion});
+
+  /// The `x-goog-api-client` header value sent with every request.
+  String get clientHeader {
+    final buffer = StringBuffer(_baseClientName);
+    final gapic = gapicVersion?.trim();
+    final hasGapic = gapic != null && gapic.isNotEmpty;
+    final gccl = gcclVersion?.trim();
+    final hasGccl = gccl != null && gccl.isNotEmpty;
+
+    if (hasGapic) {
+      buffer.write(' gapic/$gapic');
+    }
+
+    if (hasGccl) {
+      buffer.write(' gccl/$gccl');
+    }
+
+    return buffer.toString();
+  }
 
   Future<Map<String, dynamic>> get(Uri url) => _makeRequest(url, 'GET');
 
@@ -103,7 +149,7 @@ class ServiceClient {
       request.body = requestBody._asEncodedJson;
     }
     request.headers.addAll({
-      _clientKey: _clientName,
+      _clientKey: clientHeader,
       if (requestBody != null) _contentTypeKey: _typeJson,
     });
 
@@ -142,7 +188,7 @@ class ServiceClient {
       request.body = body._asEncodedJson;
     }
     request.headers.addAll({
-      _clientKey: _clientName,
+      _clientKey: clientHeader,
       if (body != null) _contentTypeKey: _typeJson,
     });
 
@@ -176,7 +222,6 @@ class ServiceClient {
         throw ServiceException(
           'Unsupported content type: ${response.headers['content-type']}',
           statusCode: response.statusCode,
-          response: response,
         );
     }
     final lines = response.stream.toStringStream().transform(
