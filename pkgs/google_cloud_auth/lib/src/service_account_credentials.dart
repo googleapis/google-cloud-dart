@@ -19,8 +19,7 @@ import 'dart:typed_data';
 import 'package:webcrypto/webcrypto.dart';
 
 Uint8List _parsePemPkcs8Key(String pemString) {
-  final lines = pemString
-      .split('\n')
+  final lines = LineSplitter.split(pemString)
       .map((l) => l.trim())
       .where((l) => l.isNotEmpty && !l.startsWith('-----'))
       .join();
@@ -79,7 +78,7 @@ final class ServiceAccountCredentials {
     Uri? tokenUri,
     this.universeDomain = 'googleapis.com',
   }) : _privateKey = privateKey,
-       tokenUri = tokenUri ?? Uri.parse('https://oauth2.googleapis.com/token');
+       tokenUri = tokenUri ?? Uri.https('oauth2.googleapis.com', '/token');
 
   /// Creates a [ServiceAccountCredentials] instance from a service account
   /// JSON file at [path].
@@ -151,12 +150,12 @@ final class ServiceAccountCredentials {
     String jsonString,
   ) async {
     final json = jsonDecode(jsonString);
-    if (json is! Map) {
+    if (json is! Map<String, dynamic>) {
       throw const FormatException(
         'Service account string does not contain a JSON object.',
       );
     }
-    return fromServiceAccountInfo(json.cast<String, dynamic>());
+    return fromServiceAccountInfo(json);
   }
 
   /// Creates a [ServiceAccountCredentials] instance from a PKCS#8 private key
