@@ -23,8 +23,30 @@ Future<void> main() async {
   final pubsub = PubSub(projectId: 'my-project-id');
 
   try {
-    final topic = pubsub.topic('my-topic');
+    final topic = pubsub.topic(
+      'my-topic',
+      publishSettings: const PublishSettings(
+        batching: BatchingSettings(
+          maxMessages: 50,
+          maxDelay: Duration(milliseconds: 20),
+        ),
+      ),
+    );
     print('Successfully initialized client for topic: ${topic.id}');
+
+    final subscription = pubsub.subscription(
+      'my-subscription',
+      ackSettings: const AckSettings(
+        batching: BatchingSettings(
+          maxMessages: 50,
+          maxDelay: Duration(milliseconds: 20),
+        ),
+      ),
+    );
+    print('Successfully initialized subscription: ${subscription.id}');
+
+    topic.close();
+    subscription.close();
   } finally {
     await pubsub.close();
   }

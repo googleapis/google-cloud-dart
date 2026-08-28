@@ -95,7 +95,8 @@ class FakeResponseStream<T> extends StreamView<T>
 
 class FakeSubscriberClient extends Fake implements generated.SubscriberClient {
   final StreamController<generated.StreamingPullResponse>
-  streamingPullController = StreamController();
+  streamingPullController = StreamController.broadcast();
+  int streamingPullCallCount = 0;
 
   bool acknowledgeCalled = false;
   List<String>? lastAckIds;
@@ -112,6 +113,7 @@ class FakeSubscriberClient extends Fake implements generated.SubscriberClient {
     Stream<generated.StreamingPullRequest> request, {
     grpc.CallOptions? options,
   }) {
+    streamingPullCallCount++;
     // Listen to request stream to prevent sender from hanging on close()
     unawaited(request.drain());
     return FakeResponseStream(streamingPullController.stream);
@@ -564,6 +566,72 @@ void main() {
         }
       },
     );
+
+    test('streamingPull auto-reconnects on transient error', () async {
+      final subscription = client.subscription('sub');
+      final stream = subscription.streamingPull();
+
+      final results = <ReceivedMessage>[];
+      final sub = stream.listen(results.add);
+
+      // Push first message
+      Timer(const Duration(milliseconds: 10), () {
+        fakeSubscriber.streamingPullController.add(
+          generated.StreamingPullResponse()
+            ..receivedMessages.add(
+              generated.ReceivedMessage()
+                ..message = (pb.PubsubMessage()..messageId = 'msg-1'),
+            ),
+        );
+      });
+
+      // Push a retryable error
+      Timer(const Duration(milliseconds: 20), () {
+        fakeSubscriber.streamingPullController.addError(
+          const grpc.GrpcError.unavailable('Transient error'),
+        );
+      });
+
+      // Push second message after reconnect
+      Timer(const Duration(milliseconds: 1500), () {
+        fakeSubscriber.streamingPullController.add(
+          generated.StreamingPullResponse()
+            ..receivedMessages.add(
+              generated.ReceivedMessage()
+                ..message = (pb.PubsubMessage()..messageId = 'msg-2'),
+            ),
+        );
+      });
+
+      // Wait enough time for reconnect and second message
+      await Future<void>.delayed(const Duration(seconds: 2));
+
+      await sub.cancel();
+
+      expect(results.length, equals(2));
+      expect(results[0].messageId, equals('msg-1'));
+      expect(results[1].messageId, equals('msg-2'));
+    });
+
+    test('streamingPull maxConcurrentStreams parameter validation', () {
+      final subscription = client.subscription('sub');
+      expect(
+        () => subscription.streamingPull(maxConcurrentStreams: 0),
+        throwsArgumentError,
+      );
+    });
+
+    test('streamingPull opens maxConcurrentStreams', () async {
+      final subscription = client.subscription('sub');
+      final sub = subscription
+          .streamingPull(maxConcurrentStreams: 3)
+          .listen((_) {});
+
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+      expect(fakeSubscriber.streamingPullCallCount, equals(3));
+
+      await sub.cancel();
+    });
   });
 
   group('ReceivedMessage composition and delegation', () {

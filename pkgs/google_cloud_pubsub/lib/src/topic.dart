@@ -12,7 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'dart:async';
+
 import '../google_cloud_pubsub.dart';
+import 'batching.dart';
+import 'retry.dart';
+
+/// Settings for publishing messages.
+class PublishSettings {
+  final BatchingSettings batching;
+  final RetrySettings retry;
+
+  const PublishSettings({
+    this.batching = const BatchingSettings(),
+    this.retry = const RetrySettings(),
+  });
+}
+
+class _PublishRequest {
+  final Message message;
+  final Completer<String> completer;
+
+  _PublishRequest(this.message, this.completer);
+}
 
 /// A [Google Cloud Pub/Sub topic](https://cloud.google.com/pubsub/docs/overview#topics).
 final class Topic {
@@ -28,13 +50,23 @@ final class Topic {
   /// It has the format `projects/<project-id>/topics/<topic-id>`.
   final String name;
 
+  /// Settings for publishing messages.
+  final PublishSettings publishSettings;
+
+  late final Batcher<_PublishRequest> _batcher;
+
   /// A topic with the given [topicId] in the client's project.
   ///
   /// It is an error if the constructed topic name is invalid (e.g. if [topicId]
   /// contains slashes).
-  Topic.unqualified(this.pubsub, String topicId)
-    : name = 'projects/${pubsub.projectId}/topics/$topicId' {
+  Topic.unqualified(
+    this.pubsub,
+    String topicId, {
+    PublishSettings? publishSettings,
+  }) : publishSettings = publishSettings ?? const PublishSettings(),
+       name = 'projects/${pubsub.projectId}/topics/$topicId' {
     _validateName(name);
+    _initBatcher();
   }
 
   /// A topic with the given [name].
@@ -43,8 +75,36 @@ final class Topic {
   ///
   /// It is an error if [name] is not in the format
   /// `projects/<project-id>/topics/<topic-id>`.
-  Topic(this.pubsub, this.name) {
+  Topic(this.pubsub, this.name, {PublishSettings? publishSettings})
+    : publishSettings = publishSettings ?? const PublishSettings() {
     _validateName(name);
+    _initBatcher();
+  }
+
+  void _initBatcher() {
+    _batcher = Batcher<_PublishRequest>(
+      settings: publishSettings.batching,
+      itemSize: (req) => req.message.data.length,
+      onBatch: _onBatch,
+    );
+  }
+
+  Future<void> _onBatch(List<_PublishRequest> batch) async {
+    try {
+      final messages = batch.map((e) => e.message).toList();
+      final messageIds = await runWithRetry(
+        () => pubsub.publishMessages(name, messages),
+        settings: publishSettings.retry,
+        isIdempotent: true,
+      );
+      for (var i = 0; i < batch.length; i++) {
+        batch[i].completer.complete(messageIds[i]);
+      }
+    } catch (e, st) {
+      for (final item in batch) {
+        item.completer.completeError(e, st);
+      }
+    }
   }
 
   static void _validateName(String name) {
@@ -88,13 +148,28 @@ final class Topic {
 
   /// Adds one or more messages to the topic.
   ///
+  /// Messages are placed into a background buffer and published in batches
+  /// according to the [publishSettings] batching configuration. If transient
+  /// network errors occur during publishing, the batch is automatically
+  /// retried according to [publishSettings] retry configuration.
+  ///
   /// Throws a [NotFoundException] if the topic does not exist.
+  /// Throws a [ServiceException] if publishing fails after retries.
   ///
   /// [data] is the message content.
   /// [attributes] are optional attributes for the message.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Publisher.Publish).
-  // TODO(sigurdm): Support batch publishing (publishMany) for high-throughput.
-  Future<String> publish(List<int> data, {Map<String, String>? attributes}) =>
-      pubsub.publish(name, data, attributes: attributes);
+  Future<String> publish(List<int> data, {Map<String, String>? attributes}) {
+    final completer = Completer<String>();
+    _batcher.add(
+      _PublishRequest(Message(data: data, attributes: attributes), completer),
+    );
+    return completer.future;
+  }
+
+  /// Closes the topic, flushing any pending messages.
+  void close() {
+    _batcher.close();
+  }
 }

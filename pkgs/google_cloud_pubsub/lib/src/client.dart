@@ -176,26 +176,35 @@ final class PubSub {
   // Topic-related methods
 
   /// A [Topic] object with the given [unqualifiedName] in the client's project.
-  Topic topic(String unqualifiedName) =>
-      Topic.unqualified(this, unqualifiedName);
+  Topic topic(String unqualifiedName, {PublishSettings? publishSettings}) =>
+      Topic.unqualified(
+        this,
+        unqualifiedName,
+        publishSettings: publishSettings,
+      );
 
   /// A [Topic] object with the given [name].
   ///
   /// The [name] must be in the format `projects/<project-id>/topics/<topic-id>`.
   /// Useful for cross-project access.
-  Topic topicName(String name) => Topic(this, name);
+  Topic topicName(String name, {PublishSettings? publishSettings}) =>
+      Topic(this, name, publishSettings: publishSettings);
 
   /// A [Subscription] object with the given [unqualifiedName] in the client's
   /// project.
-  Subscription subscription(String unqualifiedName) =>
-      Subscription.unqualified(this, unqualifiedName);
+  Subscription subscription(
+    String unqualifiedName, {
+    AckSettings? ackSettings,
+  }) =>
+      Subscription.unqualified(this, unqualifiedName, ackSettings: ackSettings);
 
   /// A [Subscription] object with the given [name].
   ///
   /// The [name] must be in the format
   /// `projects/<project-id>/subscriptions/<subscription-id>`.
   /// Useful for cross-project access.
-  Subscription subscriptionName(String name) => Subscription(this, name);
+  Subscription subscriptionName(String name, {AckSettings? ackSettings}) =>
+      Subscription(this, name, ackSettings: ackSettings);
 
   /// Creates the given topic with the given [topic].
   ///
@@ -246,21 +255,39 @@ final class PubSub {
     List<int> data, {
     Map<String, String>? attributes,
   }) async {
-    final message = grpc.PubsubMessage()..data = data;
-    if (attributes != null) {
-      message.attributes.addAll(attributes);
-    }
+    final messageIds = await publishMessages(topic, [
+      Message(data: data, attributes: attributes),
+    ]);
+    return messageIds.first;
+  }
 
-    final request = grpc.PublishRequest()
-      ..topic = topic
-      ..messages.add(message);
+  /// Adds multiple messages to the topic in a single RPC.
+  ///
+  /// The [topic] must be in the format `projects/<project-id>/topics/<topic-id>`.
+  ///
+  /// Throws a [NotFoundException] if the topic does not exist.
+  ///
+  /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Publisher.Publish).
+  Future<List<String>> publishMessages(
+    String topic,
+    List<Message> messages,
+  ) async {
+    final request = grpc.PublishRequest()..topic = topic;
+
+    for (final message in messages) {
+      final pbMessage = grpc.PubsubMessage()..data = message.data;
+      if (message.attributes.isNotEmpty) {
+        pbMessage.attributes.addAll(message.attributes);
+      }
+      request.messages.add(pbMessage);
+    }
 
     try {
       final response = await _publisher.publish(
         request,
         options: await _callOptions,
       );
-      return response.messageIds.first;
+      return response.messageIds;
     } on GrpcError catch (e) {
       throw _mapGrpcError(e);
     }
@@ -379,6 +406,63 @@ final class PubSub {
   /// Throws a [ServiceException] if the stream is broken by the server or
   /// network.
   ///
+  @internal
+  Stream<ReceivedMessage> streamingPullWithStream(
+    Stream<grpc.StreamingPullRequest> requestStream,
+  ) {
+    late StreamController<ReceivedMessage> controller;
+    StreamSubscription<grpc.StreamingPullResponse>? sub;
+    controller = StreamController<ReceivedMessage>(
+      onListen: () async {
+        try {
+          final options = await _callOptions;
+          final responseStream = _subscriber.streamingPull(
+            requestStream,
+            options: options,
+          );
+          sub = responseStream.listen(
+            (response) {
+              for (final m in response.receivedMessages) {
+                controller.add(_mapReceivedMessage(m));
+              }
+            },
+            onError: (Object e, StackTrace s) {
+              if (e is GrpcError) {
+                controller.addError(_mapGrpcError(e), s);
+              } else {
+                controller.addError(e, s);
+              }
+            },
+            onDone: () {
+              controller.close();
+            },
+            cancelOnError: true,
+          );
+        } catch (e, s) {
+          controller.addError(e, s);
+        }
+      },
+      onCancel: () => sub?.cancel(),
+    );
+    return controller.stream;
+  }
+
+  /// Establishes a stream with the server, which sends messages down to the
+  /// client.
+  ///
+  /// The [subscription] must be in the format
+  /// `projects/<project-id>/subscriptions/<subscription-id>`.
+  ///
+  /// The client streams acknowledgments and ack deadline modifications
+  /// back to the server. If an error occurs (including when the server closes
+  /// the stream with status `UNAVAILABLE` to reassign resources), the stream
+  /// will throw a [ServiceException]. In this case, the caller should
+  /// re-establish the stream. Flow control can be achieved by configuring the
+  /// underlying RPC channel.
+  ///
+  /// Throws a [ServiceException] if the stream is broken by the server or
+  /// network.
+  ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.StreamingPull).
   Stream<ReceivedMessage> streamingPull(
     String subscription, {
@@ -386,48 +470,12 @@ final class PubSub {
   }) async* {
     final requestController = StreamController<grpc.StreamingPullRequest>();
     try {
-      final options = await _callOptions;
       requestController.add(
         grpc.StreamingPullRequest()
           ..subscription = subscription
           ..streamAckDeadlineSeconds = streamAckDeadlineSeconds,
       );
-      // TODO(sigurdm): Retry on broken connections.
-      void handleAck(List<String> ackIds) {
-        if (!requestController.isClosed) {
-          requestController.add(
-            grpc.StreamingPullRequest()..ackIds.addAll(ackIds),
-          );
-        }
-      }
-
-      void handleModifyDeadline(List<String> ackIds, int seconds) {
-        if (!requestController.isClosed) {
-          requestController.add(
-            grpc.StreamingPullRequest()
-              ..modifyDeadlineAckIds.addAll(ackIds)
-              ..modifyDeadlineSeconds.addAll(
-                List.filled(ackIds.length, seconds),
-              ),
-          );
-        }
-      }
-
-      final responseStream = _subscriber.streamingPull(
-        requestController.stream,
-        options: options,
-      );
-      await for (final response in responseStream) {
-        for (final m in response.receivedMessages) {
-          yield _mapReceivedMessage(
-            m,
-            ackHandler: handleAck,
-            modifyDeadlineHandler: handleModifyDeadline,
-          );
-        }
-      }
-    } on GrpcError catch (e) {
-      throw _mapGrpcError(e);
+      yield* streamingPullWithStream(requestController.stream);
     } finally {
       await requestController.close();
     }

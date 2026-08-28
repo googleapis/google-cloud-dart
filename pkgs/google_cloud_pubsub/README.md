@@ -30,15 +30,30 @@ void main() async {
   // Application Default Credentials (ADC).
   final pubSub = PubSub(projectId: 'your-project-id');
 
-  // Create a topic.
-  final topic = await pubSub.topic('put-your-topic-name-here').create();
+  // Create a topic (with optional batching and retry settings).
+  final topic = await pubSub
+      .topic(
+        'put-your-topic-name-here',
+        publishSettings: const PublishSettings(
+          batching: BatchingSettings(
+            maxMessages: 100,
+            maxDelay: Duration(milliseconds: 10),
+          ),
+        ),
+      )
+      .create();
 
   // Create a subscription to that topic.
   final subscription = await pubSub
-      .subscription('put-your-subscription-name-here')
+      .subscription(
+        'put-your-subscription-name-here',
+        ackSettings: const AckSettings(
+          batching: BatchingSettings(maxDelay: Duration(milliseconds: 50)),
+        ),
+      )
       .create(topic: topic.name);
 
-  // Publish a message.
+  // Publish a message. This is automatically batched and retried.
   await topic.publish(utf8.encode('message 1'));
 
   // Pull messages from the subscription.
@@ -47,8 +62,8 @@ void main() async {
   for (final receivedMessage in messages) {
     print('Received message: ${utf8.decode(receivedMessage.data)}');
 
-    // Acknowledge the message.
-    await subscription.acknowledgeNow([receivedMessage]);
+    // Acknowledge the message in the background.
+    subscription.acknowledge(receivedMessage);
   }
 
   print(
@@ -56,7 +71,10 @@ void main() async {
     'https://pubsub.googleapis.com/v1/${topic.name}',
   );
 
-  // Clean up.
+  // Clean up and flush any pending batches.
+  subscription.close();
+  topic.close();
+
   await subscription.delete();
   await topic.delete();
 
