@@ -39,8 +39,6 @@ void main() {
 
       await topic.create();
       addTearDown(() async => await topic.delete());
-
-      await topic.delete();
     });
 
     test('create existing topic throws ConflictException', () async {
@@ -51,8 +49,6 @@ void main() {
       addTearDown(() async => await topic.delete());
 
       expect(topic.create(), throwsA(isA<ConflictException>()));
-
-      await topic.delete();
     }, retry: isEmulator ? 3 : 0);
   });
 }

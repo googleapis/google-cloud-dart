@@ -51,9 +51,6 @@ void main() {
           () => subscription.create(topic: topic.name),
           throwsA(isA<ConflictException>()),
         );
-
-        await subscription.delete();
-        await topic.delete();
       },
       retry: isEmulator ? 3 : 0,
     );
