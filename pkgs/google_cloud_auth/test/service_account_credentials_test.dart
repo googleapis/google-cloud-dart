@@ -13,7 +13,6 @@
 // limitations under the License.
 
 import 'dart:convert';
-import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 
@@ -158,31 +157,25 @@ void main() {
     });
 
     test('fromServiceAccountFile loads credentials from file', () async {
-      final tempDir = await Directory.systemTemp.createTemp('sa_test_');
-      final tempFile = File('${tempDir.path}/service_account.json');
-      addTearDown(() async {
-        await tempDir.delete(recursive: true);
-      });
-
-      final info = <String, Object?>{
-        'type': 'service_account',
-        'project_id': 'file-project',
-        'private_key_id': 'key-id-file',
-        'private_key': privateKeyPem,
-        'client_email': 'file@file-project.iam.gserviceaccount.com',
-      };
-      await tempFile.writeAsString(jsonEncode(info));
-
       final creds = await ServiceAccountCredentials.fromServiceAccountFile(
-        tempFile.path,
+        'test/test-project-db470-b6405252fba0.json',
       );
 
       expect(
         creds.clientEmail,
-        equals('file@file-project.iam.gserviceaccount.com'),
+        equals('testkey@test-project.iam.gserviceaccount.com'),
       );
-      expect(creds.projectId, equals('file-project'));
-      expect(creds.privateKeyId, equals('key-id-file'));
+      expect(creds.projectId, equals('test-project'));
+      expect(
+        creds.privateKeyId,
+        equals('b6405252fba05768ca6b5f57a80ee58aad2dd354'),
+      );
+      expect(creds.clientId, equals('114569939335839849739'));
+      expect(
+        creds.tokenUri,
+        equals(Uri.parse('https://oauth2.googleapis.com/token')),
+      );
+      expect(creds.universeDomain, equals('googleapis.com'));
     }, testOn: 'vm');
 
     test('fromServiceAccountString loads credentials from string', () async {
