@@ -12,15 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export 'package:google_cloud_rpc/exceptions.dart';
-export 'package:grpc/grpc.dart'
-    show
-        BaseAuthenticator,
-        ComputeEngineAuthenticator,
-        ServiceAccountAuthenticator,
-        applicationDefaultCredentialsAuthenticator;
+import 'dart:async';
 
-export 'src/client.dart' show PubSub;
-export 'src/message.dart' show Message, ReceivedMessage;
-export 'src/subscription.dart' show Subscription;
-export 'src/topic.dart' show Topic;
+import 'package:google_cloud_pubsub/google_cloud_pubsub.dart';
+
+/// An example demonstrating how to initialize and use the [PubSub] client.
+Future<void> main() async {
+  // By default, `PubSub` will automatically authenticate using
+  // Application Default Credentials (ADC).
+  final pubsub = PubSub(projectId: 'my-project-id');
+
+  try {
+    final topic = pubsub.topic('my-topic');
+    print('Successfully initialized client for topic: ${topic.id}');
+  } finally {
+    await pubsub.close();
+  }
+}

@@ -92,11 +92,7 @@ void main() {
     test('first try fails, unretryable failure', () async {
       expect(
         () => const ExponentialRetry().run<int>(
-          () => throw BadRequestException(
-            'bad request',
-            response: http.Response('bad request', 400),
-            responseBody: '',
-          ),
+          () => throw BadRequestException('bad request'),
           isIdempotent: true,
         ),
         throwsA(isA<BadRequestException>()),

@@ -198,9 +198,9 @@ void main() {
         () => service.post(sampleUrl),
         throwsA(
           isA<InternalServerErrorException>().having(
-            (e) => e.responseBody,
-            'responseBody',
-            '',
+            (e) => e.message,
+            'message',
+            'unknown error',
           ),
         ),
       );
@@ -215,9 +215,9 @@ void main() {
         () => service.post(sampleUrl),
         throwsA(
           isA<InternalServerErrorException>().having(
-            (e) => e.responseBody,
-            'responseBody',
-            isNull,
+            (e) => e.message,
+            'message',
+            'unknown error',
           ),
         ),
       );
@@ -236,8 +236,7 @@ void main() {
           isA<BadRequestException>()
               .having((e) => e.message, 'message', 'failure')
               .having((e) => e.statusCode, 'statusCode', 400)
-              .having((e) => e.status?.toJson(), 'status', status.toJson())
-              .having((e) => e.responseBody, 'responseBody', responseBody),
+              .having((e) => e.status?.toJson(), 'status', status.toJson()),
         ),
       );
     });
@@ -251,8 +250,8 @@ void main() {
         () => service.post(sampleUrl),
         throwsA(
           isA<BadRequestException>().having(
-            (e) => e.responseBody,
-            'responseBody',
+            (e) => e.message,
+            'message',
             '"Hello!"',
           ),
         ),
@@ -411,9 +410,9 @@ void main() {
         emitsInOrder([
           emitsError(
             isA<InternalServerErrorException>().having(
-              (e) => e.responseBody,
-              'responseBody',
-              '',
+              (e) => e.message,
+              'message',
+              'unknown error',
             ),
           ),
           emitsDone,
@@ -431,9 +430,9 @@ void main() {
         emitsInOrder([
           emitsError(
             isA<InternalServerErrorException>().having(
-              (e) => e.responseBody,
-              'responseBody',
-              isNull,
+              (e) => e.message,
+              'message',
+              'unknown error',
             ),
           ),
           emitsDone,
@@ -452,9 +451,11 @@ void main() {
         service.postStreaming(sampleUrl, enableSse: true),
         emitsInOrder([
           emitsError(
-            isA<BadRequestException>()
-                .having((e) => e.status?.toJson(), 'status', status.toJson())
-                .having((e) => e.responseBody, 'responseBody', responseBody),
+            isA<BadRequestException>().having(
+              (e) => e.status?.toJson(),
+              'status',
+              status.toJson(),
+            ),
           ),
           emitsDone,
         ]),
@@ -471,8 +472,8 @@ void main() {
         emitsInOrder([
           emitsError(
             isA<BadRequestException>().having(
-              (e) => e.responseBody,
-              'responseBody',
+              (e) => e.message,
+              'message',
               '"Hello!"',
             ),
           ),
