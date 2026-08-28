@@ -1,5 +1,5 @@
 name: google_cloud_shelf
-version: 0.6.0-wip
+version: 0.6.0+2
 description: >-
   Shelf middleware for Google Cloud environments providing structured
   logging, trace correlation, exception mapping, and graceful shutdown
@@ -12,9 +12,9 @@ environment:
   sdk: ^3.9.0
 
 dependencies:
-  google_cloud_logging: ^0.6.0-wip
+  google_cloud_logging: ^0.6.0
   http: ^1.6.0
-  meta: ^1.18.2
+  meta: ^1.17.0
   shelf: ^1.4.2
   stack_trace: ^1.12.1
 

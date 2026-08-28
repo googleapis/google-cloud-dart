@@ -17,14 +17,12 @@
 /// Includes:
 ///
 /// - [StructuredLogger]: for creating and writing structured logs
-/// - [createStructuredLog]: for creating structured logs
 ///
 /// Exports [LogSeverity] and [LogEntry] from other packages for easy access.
 ///
 /// @docImport 'package:google_cloud_logging_type/logging_type.dart';
 /// @docImport 'package:google_cloud_logging_v2/logging.dart';
 /// @docImport 'src/structured_logger.dart';
-/// @docImport 'src/structured_logging.dart';
 library;
 
 export 'package:google_cloud_logging_type/logging_type.dart' show LogSeverity;

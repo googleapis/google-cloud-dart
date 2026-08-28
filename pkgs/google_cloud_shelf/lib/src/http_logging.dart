@@ -45,6 +45,13 @@ const internalServerErrorMessage = 'Internal Server Error';
 /// [cloudLoggingMiddleware] (which delegates request logs to the Cloud host
 /// infrastructure to prevent duplicate logging, but formats error/uncaught logs
 /// in GCP's structured format).
+///
+/// When [projectId] is provided, this middleware extracts the W3C `traceparent`
+/// header from incoming requests and forks a new [Zone] with
+/// [googleCloudProjectIdZoneVariable] and
+/// [traceparentHeaderValueZoneVariable]. Logs written using [StructuredLogger]
+/// (from `package:google_cloud_logging`) or standard [print] inside the request
+/// handler implicitly read these zone variables to correlate with the request.
 Middleware createLoggingMiddleware({String? projectId}) => projectId == null
     ? errorLoggingMiddleware
     : cloudLoggingMiddleware(projectId);
@@ -201,7 +208,13 @@ String _formatDetailsAsPseudoYaml(List<Map<String, Object?>> details) {
 ///
 /// [projectId] is the Google Cloud Project ID used for trace correlation.
 ///
-/// Calls to [print] are formatted to include trace correlation.
+/// This middleware extracts the W3C `traceparent` header from incoming requests
+/// and forks a new [Zone] containing [googleCloudProjectIdZoneVariable] and
+/// [traceparentHeaderValueZoneVariable].
+///
+/// Logs written using [StructuredLogger] (from `package:google_cloud_logging`)
+/// or calls to [print] inside the handler are formatted to include trace
+/// correlation.
 ///
 /// {@macro exceptionResponseMapping}
 Middleware cloudLoggingMiddleware(String projectId) {

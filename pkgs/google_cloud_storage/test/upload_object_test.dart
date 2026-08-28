@@ -287,6 +287,36 @@ void main() async {
           throwsA(isA<PreconditionFailedException>()),
         );
       });
+
+      test(
+        'ifMetagenerationNotMatch throws when the metageneration matches',
+        () async {
+          final bucketName = await createBucketWithTearDown(
+            storage,
+            'ul_obj_imnm',
+          );
+
+          final created = await storage.uploadObject(
+            bucketName,
+            'object1',
+            utf8.encode('Hello World!'),
+          );
+
+          await expectLater(
+            storage.uploadObject(
+              bucketName,
+              'object1',
+              utf8.encode('Goodbye World!'),
+              ifMetagenerationNotMatch: created.metageneration,
+            ),
+            throwsA(isA<NotModifiedException>()),
+          );
+
+          // The object content must be left unchanged.
+          final content = await storage.downloadObject(bucketName, 'object1');
+          expect(utf8.decode(content), 'Hello World!');
+        },
+      );
     });
 
     test('idempotent transport failure', () async {

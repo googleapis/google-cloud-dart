@@ -22,6 +22,19 @@ The Google Cloud client library for the Cloud Metadata API.
 
 The Google Cloud client library for the Cloud Metadata API.
 
+## Agent Skills
+
+This package supports [Agent Skills](https://agentskills.io/home).
+
+To add this package to your application and install the skills for use by your
+Agent, run:
+
+```shell
+dart pub add google_cloud_location
+dart pub get
+dart run skills@ get
+```
+
 This API provides static metadata about Google Cloud Platform. Currently,
 it only provides basic information about Google Cloud locations, such as
 zones, regions, and countries.

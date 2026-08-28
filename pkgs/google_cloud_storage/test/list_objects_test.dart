@@ -166,5 +166,77 @@ void main() async {
         ]),
       );
     });
+
+    test('prefix', () async {
+      final bucketName = await createBucketWithTearDown(
+        storage,
+        'list_objects_prefix',
+      );
+
+      await storage.uploadObject(bucketName, 'a/1.txt', [1]);
+      await storage.uploadObject(bucketName, 'a/2.txt', [2]);
+      await storage.uploadObject(bucketName, 'b/1.txt', [3]);
+
+      await expectLater(
+        storage.listObjects(bucketName, prefix: 'a/').map((b) => b.name),
+        emitsInOrder([emits('a/1.txt'), emits('a/2.txt'), emitsDone]),
+      );
+    });
+
+    test('delimiter', () async {
+      final bucketName = await createBucketWithTearDown(
+        storage,
+        'list_objects_delimiter',
+      );
+
+      await storage.uploadObject(bucketName, 'a/1.txt', [1]);
+      await storage.uploadObject(bucketName, 'a/b/2.txt', [2]);
+      await storage.uploadObject(bucketName, 'c.txt', [3]);
+
+      await expectLater(
+        storage.listObjects(bucketName, delimiter: '/').map((b) => b.name),
+        emitsInOrder([emits('c.txt'), emitsDone]),
+      );
+
+      // `'a/b/2.txt'` should not be returned because it contains the delimiter.
+      await expectLater(
+        storage
+            .listObjects(bucketName, prefix: 'a/', delimiter: '/')
+            .map((b) => b.name),
+        emitsInOrder([emits('a/1.txt'), emitsDone]),
+      );
+    });
+
+    test('includeTrailingDelimiter', () async {
+      final bucketName = await createBucketWithTearDown(
+        storage,
+        'list_objects_trailing',
+      );
+
+      await storage.uploadObject(bucketName, 'dir/', const []);
+      await storage.uploadObject(bucketName, 'dir/file.txt', [1]);
+
+      await expectLater(
+        storage
+            .listObjects(
+              bucketName,
+              delimiter: '/',
+              includeTrailingDelimiter: false,
+            )
+            .map((b) => b.name),
+        emitsDone,
+      );
+
+      await expectLater(
+        storage
+            .listObjects(
+              bucketName,
+              delimiter: '/',
+              includeTrailingDelimiter: true,
+            )
+            .map((b) => b.name),
+        emitsInOrder([emits('dir/'), emitsDone]),
+      );
+    });
   });
 }

@@ -1,4 +1,14 @@
-## 0.6.0-wip
+## 0.6.0+2
+
+- Widened the `meta` constraint from `^1.18.2` to `^1.17.0`.
+
+## 0.6.0+1
+
+- Removed unexported `createStructuredLog` from library doc comment.
+- Fixed grammatical error and broken `ARCHITECTURE.md` link in `interop.dart` doc comments.
+- Fixed doc comment typo in `traceparent.dart`.
+
+## 0.6.0
 
 - Replaced `CloudLogger` with `StructuredLogger` which writes directly to
   stdout.

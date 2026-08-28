@@ -31,6 +31,19 @@ The Google Cloud client library for the Vertex AI API.
 
 The Google Cloud client library for the Vertex AI API.
 
+## Agent Skills
+
+This package supports [Agent Skills](https://agentskills.io/home).
+
+To add this package to your application and install the skills for use by your
+Agent, run:
+
+```shell
+dart pub add google_cloud_aiplatform_v1beta1
+dart pub get
+dart run skills@ get
+```
+
 Train high-quality custom machine learning models with minimal machine
 learning expertise and effort.
 

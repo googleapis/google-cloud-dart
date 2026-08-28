@@ -50,7 +50,7 @@ final _traceParentRegex = RegExp(
   caseSensitive: false,
 );
 
-/// Parsers a `'traceparent'` header.
+/// Parses a `'traceparent'` header.
 ///
 /// See https://www.w3.org/TR/trace-context/
 @visibleForTesting

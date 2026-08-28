@@ -1,3 +1,7 @@
+.gitattributes linguist-generated=true
+LICENSE linguist-generated=true
+README.md linguist-generated=true
+pubspec.yaml linguist-generated=true
 lib/api.dart linguist-generated=true
-lib/testing.dart linguist-generated=true
 lib/src/api.g.dart linguist-generated=true
+lib/src/version.dart linguist-generated=true

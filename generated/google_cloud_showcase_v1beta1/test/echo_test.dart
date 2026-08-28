@@ -19,7 +19,6 @@
 library;
 
 import 'package:google_cloud_protobuf/protobuf.dart' as protobuf;
-import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:google_cloud_rpc/rpc.dart';
 import 'package:google_cloud_showcase_v1beta1/showcase.dart';
 import 'package:http/http.dart' as http;

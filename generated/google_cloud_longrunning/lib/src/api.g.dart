@@ -26,6 +26,8 @@
 /// operations.
 ///
 /// [Long-running operations]: https://google.aip.dev/151
+///
+/// @docImport 'package:google_cloud_rpc/exceptions.dart';
 library;
 
 // ignore_for_file: camel_case_types
@@ -38,10 +40,11 @@ library;
 
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/src/encoding.dart';
-import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:google_cloud_rpc/rpc.dart';
 import 'package:google_cloud_rpc/service_client.dart';
 import 'package:http/http.dart' as http;
+
+import 'version.dart';
 
 part 'longrunning.p.dart';
 
@@ -72,8 +75,16 @@ final class Operations {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  Operations({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  Operations({required http.Client client, Uri? endPoint, String? gcclVersion})
+    : _client = ServiceClient(
+        client: client,
+        gapicVersion: packageVersion,
+        gcclVersion: gcclVersion,
+      ),
       _endPoint = endPoint == null
           ? Uri.https(_defaultHost, '')
           : Uri(

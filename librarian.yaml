@@ -12,35 +12,36 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 language: dart
-version: v0.21.0
+version: v0.38.1
 sources:
   conformance:
-    commit: db1c40f3fd8bde2be8c246b9bc3fc394c11ad5a2
-    sha256: a030bff1e5b696affcb89240deb20a34325d9d2c23f82c1623332e820a3cf2ab
+    commit: 07eec573f37d51c5c08243b1bd04e3c79422351f
+    sha256: f888f61018e0073bc675a5efa3d9e22dec8da725e77e9c18bbaa3f71f71ced14
   googleapis:
-    commit: c063f49852ce7fc08c722c87f3a6f676209985a2
-    sha256: 46a581333b5b5be41a545db13e0bd0519d1b322e5b1ed73331ad6ec9633f0e5e
+    commit: 28ba5d15234eff44241492ca72b135e1171fc537
+    sha256: 7914a988cc0da8792005bf87a7a4277aa15f85d57d1727c2eef93fce743ab4a1
   protobuf:
-    commit: db1c40f3fd8bde2be8c246b9bc3fc394c11ad5a2
-    sha256: a030bff1e5b696affcb89240deb20a34325d9d2c23f82c1623332e820a3cf2ab
+    commit: 07eec573f37d51c5c08243b1bd04e3c79422351f
+    sha256: f888f61018e0073bc675a5efa3d9e22dec8da725e77e9c18bbaa3f71f71ced14
     subpath: src
   showcase:
-    commit: 7d5b4ab7839ce346428ae6882b60ce15ab493297
-    sha256: 146a5a3d26f3c8abef8862f4d6122674f2c4d0d362a5981fc283c1cc1c52339a
+    commit: 0c88ce83d259310dd6f6dc8f63a93bf8592723de
+    sha256: a4ee652fc9bbf90d53148e5cb2594906a41f846f4e3518e8fd97f3b2893c7073
 default:
   output: generated/
+  tag_format: '{name}-v{version}'
   dart:
     api_keys_environment_variables: GOOGLE_API_KEY
     issue_tracker_url: https://github.com/googleapis/google-cloud-dart/issues
     packages:
-      package:google_cloud_api: ^0.5.3
-      package:google_cloud_iam_v1: ^0.5.3
-      package:google_cloud_location: ^0.5.3
-      package:google_cloud_logging_type: ^0.5.3
-      package:google_cloud_longrunning: ^0.5.3
-      package:google_cloud_protobuf: ^0.5.3
-      package:google_cloud_rpc: ^0.5.3
-      package:google_cloud_type: ^0.5.3
+      package:google_cloud_api: ^0.5.4
+      package:google_cloud_iam_v1: ^0.5.4
+      package:google_cloud_location: ^0.5.4
+      package:google_cloud_logging_type: ^0.5.4
+      package:google_cloud_longrunning: ^0.5.4
+      package:google_cloud_protobuf: ^0.5.4
+      package:google_cloud_rpc: ^0.5.4
+      package:google_cloud_type: ^0.5.4
       package:googleapis_auth: ^2.0.0
       package:http: ^1.3.0
     prefixes:
@@ -55,13 +56,14 @@ default:
       proto:google.protobuf: package:google_cloud_protobuf/protobuf.dart
       proto:google.rpc: package:google_cloud_rpc/rpc.dart
       proto:google.type: package:google_cloud_type/type.dart
-    version: 0.5.3
 libraries:
   - name: google_cloud_ai_generativelanguage_v1beta
+    version: 0.5.4
     apis:
       - path: google/ai/generativelanguage/v1beta
     copyright_year: "2025"
     keep:
+      - CHANGELOG.md
       - dart_test.yaml
       - example/application_default_credentials.dart
       - example/main.dart
@@ -148,8 +150,10 @@ libraries:
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_ai_generativelanguage_v1beta
       supports_sse: true
   - name: google_cloud_aiplatform_v1beta1
+    version: 0.5.4
     copyright_year: "2025"
     keep:
+      - CHANGELOG.md
       - dart_test.yaml
       - example/main.dart
       - test/generate_test.dart
@@ -256,21 +260,42 @@ libraries:
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_aiplatform_v1beta1
       supports_sse: true
   - name: google_cloud_api
+    version: 0.5.4
     apis:
       - path: google/api
     copyright_year: "2025"
+    keep:
+      - CHANGELOG.md
     dart:
       name_override: api
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_api
   - name: google_cloud_common
+    version: 0.5.4
     copyright_year: "2025"
+    keep:
+      - CHANGELOG.md
     dart:
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_common
+  - name: google_cloud_compute_v1
+    version: 0.1.0
+    copyright_year: "2026"
+    keep:
+      - CHANGELOG.md
+      - dart_test.yaml
+      - example/main.dart
+      - test/address_test.dart
+      - test/regions_test.dart
+      - test/zones_test.dart
+    dart:
+      dev_dependencies: googleapis_auth,test,test_utils
+      repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_compute_v1
   - name: google_cloud_firestore_v1
+    version: 0.5.4
     apis:
       - path: google/firestore/v1
     copyright_year: "2026"
     keep:
+      - CHANGELOG.md
       - dart_test.yaml
       - example/main.dart
       - test/firestore_test.dart
@@ -282,48 +307,67 @@ libraries:
         > [`package:google_cloud_firestore`](https://pub.dev/packages/google_cloud_firestore).
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_firestore_v1
   - name: google_cloud_functions_v2
+    version: 0.5.4
     copyright_year: "2025"
+    keep:
+      - CHANGELOG.md
     dart:
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_functions_v2
   - name: google_cloud_iam_v1
+    version: 0.5.4
     apis:
       - path: google/iam/v1
     copyright_year: "2025"
+    keep:
+      - CHANGELOG.md
     dart:
       name_override: iam
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_iam_v1
   - name: google_cloud_language_v2
+    version: 0.5.4
     copyright_year: "2025"
+    keep:
+      - CHANGELOG.md
     dart:
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_language_v2
   - name: google_cloud_location
+    version: 0.5.4
     copyright_year: "2025"
+    keep:
+      - CHANGELOG.md
     dart:
       name_override: location
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_location
   - name: google_cloud_logging_type
+    version: 0.5.4
     apis:
       - path: google/logging/type
     copyright_year: "2025"
+    keep:
+      - CHANGELOG.md
     dart:
       name_override: logging_type
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_logging_type
       title_override: Logging types
   - name: google_cloud_logging_v2
+    version: 0.5.4
     apis:
       - path: google/logging/v2
     copyright_year: "2025"
     keep:
+      - CHANGELOG.md
       - dart_test.yaml
       - test/write_log_test.dart
     dart:
       dev_dependencies: googleapis_auth,test,test_utils
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_logging_v2
   - name: google_cloud_longrunning
+    version: 0.5.4
     apis:
       - path: google/longrunning
     copyright_year: "2025"
     keep:
+      - CHANGELOG.md
       - test/operation_test.dart
       - lib/src/longrunning.p.dart
     dart:
@@ -332,10 +376,12 @@ libraries:
       part_file: longrunning.p.dart
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_longrunning
   - name: google_cloud_protobuf
+    version: 0.5.4
     apis:
       - path: google/protobuf
     copyright_year: "2025"
     keep:
+      - CHANGELOG.md
       - lib/src/encoding.dart
       - test/any_test.dart
       - test/duration_test.dart
@@ -366,6 +412,7 @@ libraries:
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_protobuf
       title_override: Core Protobuf Types
   - name: google_cloud_protobuf_test_messages_proto3
+    version: 0.5.3
     apis:
       - path: src/google/protobuf
     keep:
@@ -381,14 +428,15 @@ libraries:
       library_path_override: google_cloud_protobuf_test_messages_proto3.dart
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_protojson_conformance
   - name: google_cloud_rpc
+    version: 0.5.4
     apis:
       - path: google/rpc
     copyright_year: "2025"
     keep:
+      - CHANGELOG.md
       - lib/exceptions.dart
       - lib/service_client.dart
       - lib/src/exceptions.dart
-      - lib/src/versions.dart
       - lib/src/vm.dart
       - lib/src/web.dart
       - test/client_test.dart
@@ -401,14 +449,17 @@ libraries:
       part_file: rpc.p.dart
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_rpc
   - name: google_cloud_secretmanager_v1
+    version: 0.5.4
     copyright_year: "2025"
     keep:
+      - CHANGELOG.md
       - dart_test.yaml
       - test/secret_test.dart
     dart:
       dev_dependencies: googleapis_auth,test,test_utils
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_secretmanager_v1
   - name: google_cloud_showcase_v1beta1
+    version: 0.5.3
     apis:
       - path: schema/google/showcase/v1beta1
     copyright_year: "2025"
@@ -427,8 +478,11 @@ libraries:
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_showcase_v1beta1
       supports_sse: true
   - name: google_cloud_type
+    version: 0.5.4
     apis:
       - path: google/type
     copyright_year: "2025"
+    keep:
+      - CHANGELOG.md
     dart:
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_type

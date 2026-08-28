@@ -148,7 +148,6 @@ final class Storage {
   /// or TLS (e.g. the emulator) then set [useAuthWithCustomEndpoint] to
   /// `false`.
   ///
-  ///
   /// [Google Cloud Storage]: https://cloud.google.com/storage
   /// [Cloud Storage for Firebase Emulator]: https://firebase.google.com/docs/emulator-suite/connect_storage
   /// [default application credentials]: https://docs.cloud.google.com/docs/authentication/application-default-credentials
@@ -487,6 +486,11 @@ final class Storage {
   /// value. If the metageneration does not match, a
   /// [PreconditionFailedException] is thrown.
   ///
+  /// If set, [ifMetagenerationNotMatch] makes updating the bucket metadata
+  /// conditional on whether the bucket's metageneration does *not* match the
+  /// provided value. If the metageneration does match, the bucket is left
+  /// unchanged and a [NotModifiedException] is thrown.
+  ///
   /// If set, [predefinedAcl] applies a predefined set of access controls to the
   /// bucket, such as `"publicRead"`. If [UniformBucketLevelAccess.enabled] is
   /// `true`, then setting `predefinedAcl` will result in a
@@ -519,12 +523,7 @@ final class Storage {
     String bucket,
     BucketMetadataPatchBuilder metadata, {
     BigInt? ifMetagenerationMatch,
-    // TODO(https://github.com/googleapis/google-cloud-dart/issues/115):
-    // support ifMetagenerationNotMatch.
-    //
-    // If `ifMetagenerationNotMatch` is set, the server will respond with a 304
-    // status code and an empty body. This will cause `buckets.patch` to throw
-    // `TypeError` during JSON deserialization.
+    BigInt? ifMetagenerationNotMatch,
     String? predefinedAcl,
     String? predefinedDefaultObjectAcl,
     String? projection,
@@ -536,6 +535,7 @@ final class Storage {
       ['storage', 'v1', 'b', bucket],
       {
         'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
+        'ifMetagenerationNotMatch': ?ifMetagenerationNotMatch?.toString(),
         'predefinedAcl': ?predefinedAcl,
         'predefinedDefaultObjectAcl': ?predefinedDefaultObjectAcl,
         'projection': ?projection,
@@ -863,6 +863,32 @@ final class Storage {
   /// A stream of objects contained in [bucket] in lexicographical order by
   /// name.
   ///
+  /// If [delimiter] is set, returns results in a directory-like mode, with
+  /// `'/'` being a common value for the delimiter. The result will only
+  /// include objects whose names do not contain `delimiter`, or whose names
+  /// only have instances of `delimiter` in their `prefix`. Note that common
+  /// prefixes (directories) returned by the API are not included in the
+  /// returned stream.
+  ///
+  /// For example, if a bucket contains the following objects:
+  /// * `foo/bar.txt`
+  /// * `foo/bar/baz.txt`
+  /// * `foo/qux.txt`
+  /// * `other.txt`
+  ///
+  /// ```dart
+  /// // Returns: 'foo/bar.txt' and 'foo/qux.txt'
+  /// await storage
+  ///     .listObjects('my-bucket', prefix: 'foo/', delimiter: '/')
+  ///     .toList();
+  /// ```
+  ///
+  /// If [includeTrailingDelimiter] is `true`, then objects that end in the
+  /// [delimiter] will be returned in the items list.
+  ///
+  /// If [prefix] is set, filters results to objects whose names begin with
+  /// this prefix.
+  ///
   /// If [softDeleted] is `true`, then the stream will include **only**
   /// [soft-deleted objects][]. If `false`, then the stream will not include
   /// soft-deleted objects.
@@ -888,11 +914,14 @@ final class Storage {
   /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
   Stream<ObjectMetadata> listObjects(
     String bucket, {
-    bool? softDeleted,
-    bool? versions,
-    String? projection,
-    String? userProject,
+    String? delimiter,
+    bool? includeTrailingDelimiter,
     int? maxResults,
+    String? prefix,
+    String? projection,
+    bool? softDeleted,
+    String? userProject,
+    bool? versions,
   }) async* {
     String? nextPageToken;
 
@@ -901,12 +930,15 @@ final class Storage {
       final url = _requestUrl(
         ['storage', 'v1', 'b', bucket, 'o'],
         {
-          'softDeleted': ?softDeleted?.toString(),
-          'versions': ?versions?.toString(),
+          'delimiter': ?delimiter,
+          'includeTrailingDelimiter': ?includeTrailingDelimiter?.toString(),
           'maxResults': ?maxResults?.toString(),
           'pageToken': ?nextPageToken,
+          'prefix': ?prefix,
           'projection': ?projection,
+          'softDeleted': ?softDeleted?.toString(),
           'userProject': ?userProject,
+          'versions': ?versions?.toString(),
         },
       );
       final json = await serviceClient.get(url);
@@ -1168,6 +1200,117 @@ final class Storage {
     return objectAccessControlFromJson(j as Map<String, Object?>)!;
   }, isIdempotent: generation != null);
 
+  /// Rewrites an object from a source to a destination.
+  ///
+  /// This operation is executed entirely on Google Cloud Storage servers and
+  /// can handle objects of any size by automatically rewriting them in chunks
+  /// if necessary.
+  ///
+  /// This operation is idempotent if [ifGenerationMatch] is set.
+  ///
+  /// Throws [NotFoundException] if the source object does not exist.
+  ///
+  /// [sourceBucket] is the bucket containing the source object.
+  /// [sourceObject] is the name of the source object.
+  /// [destinationBucket] is the bucket where the rewritten object will be
+  /// placed.
+  /// [destinationObject] is the name of the destination object.
+  ///
+  /// If set, [metadata] will be applied to the destination object, overriding
+  /// any metadata copied from the source object.
+  ///
+  /// If set, [sourceGeneration] selects a specific revision of the source
+  /// object to rewrite.
+  ///
+  /// If set, [ifSourceGenerationMatch] makes the operation conditional on
+  /// whether the source object's current generation matches the given value.
+  /// If the generation does not match, a [PreconditionFailedException] is
+  /// thrown.
+  ///
+  /// If set, [ifGenerationMatch] makes the operation conditional on whether
+  /// the destination object's current generation matches the given value.
+  /// A value of [BigInt.zero] indicates that the destination object must not
+  /// already exist. If the generation does not match, a
+  /// [PreconditionFailedException] is thrown.
+  ///
+  /// [destinationPredefinedAcl] applies a predefined set of access controls
+  /// to the destination object, such as `"publicRead"`.
+  ///
+  /// [projection] controls the level of detail returned in the response. A
+  /// value of `"full"` returns all object properties, while a value of
+  /// `"noAcl"` (the default) omits the `owner` and `acl` properties.
+  ///
+  /// If set, [userProject] is the project to be billed for this request. This
+  /// argument must be set for [Requester Pays] buckets.
+  ///
+  /// If set, [maxBytesRewrittenPerCall] limits the number of bytes rewritten
+  /// in a single call. If specified the value must be an integral multiple of
+  /// 1 MiB (`1048576`).
+  ///
+  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/objects/rewrite).
+  ///
+  /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
+  Future<ObjectMetadata> rewriteObject(
+    String sourceBucket,
+    String sourceObject,
+    String destinationBucket,
+    String destinationObject, {
+    ObjectMetadata? metadata,
+    BigInt? sourceGeneration,
+    BigInt? ifSourceGenerationMatch,
+    BigInt? ifGenerationMatch,
+    String? destinationPredefinedAcl,
+    String? projection,
+    String? userProject,
+    BigInt? maxBytesRewrittenPerCall,
+    RetryRunner retry = defaultRetry,
+  }) => retry.run(() async {
+    final serviceClient = await _serviceClient;
+    String? rewriteToken;
+    ObjectMetadata? result;
+    var body = metadata == null
+        ? null
+        : _JsonEncodableWrapper(objectMetadataToJson(metadata));
+
+    do {
+      final url = _requestUrl(
+        [
+          'storage',
+          'v1',
+          'b',
+          sourceBucket,
+          'o',
+          sourceObject,
+          'rewriteTo',
+          'b',
+          destinationBucket,
+          'o',
+          destinationObject,
+        ],
+        {
+          'rewriteToken': ?rewriteToken,
+          'sourceGeneration': ?sourceGeneration?.toString(),
+          'ifSourceGenerationMatch': ?ifSourceGenerationMatch?.toString(),
+          'ifGenerationMatch': ?ifGenerationMatch?.toString(),
+          'destinationPredefinedAcl': ?destinationPredefinedAcl,
+          'projection': ?projection,
+          'userProject': ?userProject,
+          'maxBytesRewrittenPerCall': ?maxBytesRewrittenPerCall?.toString(),
+        },
+      );
+      final j =
+          await serviceClient.post(url, body: body) as Map<String, Object?>;
+      final done = j['done'] as bool;
+      rewriteToken = j['rewriteToken'] as String?;
+      if (done) {
+        result = objectMetadataFromJson(j['resource'] as Map<String, Object?>);
+      }
+      body = null;
+    } while (result == null);
+
+    return result;
+  }, isIdempotent: ifGenerationMatch != null);
+
   /// Updates an Access Control List (ACL) entry on the specified
   /// [Google Cloud Storage object].
   ///
@@ -1222,6 +1365,11 @@ final class Storage {
   /// generation does not match, a [PreconditionFailedException] is thrown.
   /// A value of [BigInt.zero] indicates that the object must not already exist.
   ///
+  /// If set, [ifMetagenerationNotMatch] makes updating the object content
+  /// conditional on whether the object's metageneration does *not* match the
+  /// provided value. If the metageneration does match, the object is left
+  /// unchanged and a [NotModifiedException] is thrown.
+  ///
   /// If set, `predefinedAcl` applies a predefined set of access controls to the
   /// object, such as `"publicRead"`. If [UniformBucketLevelAccess.enabled] is
   /// `true`, then setting `predefinedAcl` will result in a
@@ -1255,12 +1403,7 @@ final class Storage {
     List<int> content, {
     ObjectMetadata? metadata,
     BigInt? ifGenerationMatch,
-    // TODO(https://github.com/googleapis/google-cloud-dart/issues/115):
-    // support ifMetagenerationNotMatch.
-    //
-    // If `ifMetagenerationNotMatch` is set, the server will respond with a 304
-    // status code and an empty body. This will cause `objects.insert` to throw
-    // `TypeError` during JSON deserialization.
+    BigInt? ifMetagenerationNotMatch,
     String? predefinedAcl,
     String? projection,
     String? userProject,
@@ -1274,6 +1417,7 @@ final class Storage {
           'uploadType': 'multipart',
           'name': name,
           'ifGenerationMatch': ?ifGenerationMatch?.toString(),
+          'ifMetagenerationNotMatch': ?ifMetagenerationNotMatch?.toString(),
           'predefinedAcl': ?predefinedAcl,
           'projection': ?projection,
           'userProject': ?userProject,
@@ -1350,6 +1494,11 @@ final class Storage {
   /// generation does not match, a [PreconditionFailedException] is thrown.
   /// A value of `0` indicates that the object must not already exist.
   ///
+  /// If set, [ifMetagenerationNotMatch] makes updating the object content
+  /// conditional on whether the object's metageneration does *not* match the
+  /// provided value. If the metageneration does match, the object is left
+  /// unchanged and a [NotModifiedException] is thrown.
+  ///
   /// If set, `predefinedAcl` applies a predefined set of access controls to the
   /// object, such as `"publicRead"`. If [UniformBucketLevelAccess.enabled] is
   /// `true`, then setting `predefinedAcl` will result in a
@@ -1383,12 +1532,7 @@ final class Storage {
     String content, {
     ObjectMetadata? metadata,
     BigInt? ifGenerationMatch,
-    // TODO(https://github.com/googleapis/google-cloud-dart/issues/115):
-    // support ifMetagenerationNotMatch.
-    //
-    // If `ifMetagenerationNotMatch` is set, the server will respond with a 304
-    // status code and an empty body. This will cause `objects.insert` to throw
-    // `TypeError` during JSON deserialization.
+    BigInt? ifMetagenerationNotMatch,
     String? predefinedAcl,
     String? projection,
     String? userProject,
@@ -1405,6 +1549,7 @@ final class Storage {
       utf8.encode(content),
       metadata: md,
       ifGenerationMatch: ifGenerationMatch,
+      ifMetagenerationNotMatch: ifMetagenerationNotMatch,
       predefinedAcl: predefinedAcl,
       projection: projection,
       userProject: userProject,

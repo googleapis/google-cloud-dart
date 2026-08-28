@@ -36,7 +36,7 @@ class ShowcaseServer {
     // able to kill it.
     final result = await Process.run('go', [
       'install',
-      'github.com/googleapis/gapic-showcase/cmd/gapic-showcase@latest',
+      'github.com/googleapis/gapic-showcase/cmd/gapic-showcase@v0.40.0',
     ]);
     if (result.exitCode != 0) {
       throw Exception('showcase installation failed ${result.stderr}');

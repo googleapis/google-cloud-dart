@@ -26,9 +26,9 @@ mapping, and graceful shutdown orchestration.
   (`createLoggingMiddleware`, `cloudLoggingMiddleware`,
   `errorLoggingMiddleware`) that automatically formats application and error
   logs in GCP's native structured format.
-* **Trace Correlation:** Automatically parses Google Cloud trace context
-  headers (`X-Cloud-Trace-Context`). Any log entry emitted using
-  `currentLogger` or standard `print()` within request execution is correlated
+* **Trace Correlation:** Automatically parses W3C trace context
+  headers (`traceparent`). Any log entry emitted using
+  `StructuredLogger` or standard `print()` within request execution is correlated
   and nested directly under the HTTP request log entry in the Cloud Logging
   viewer.
 * **Standardized HTTP Exception Mapping:** Throw client-safe exceptions in your
@@ -65,7 +65,7 @@ Future<void> main() async {
 ### 2. Contextual Logging & Trace Correlation
 
 Enable request-log nesting in the Google Cloud Console by providing a
-`projectId` to `createLoggingMiddleware`. Any logs written to `currentLogger`
+`projectId` to `createLoggingMiddleware`. Any logs written using `StructuredLogger`
 or sent to standard `print()` inside the handler's execution flow are grouped
 with the request log.
 

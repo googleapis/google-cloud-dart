@@ -18,6 +18,8 @@
 ///
 /// Accesses the NoSQL document database built for automatic scaling, high
 /// performance, and ease of application development.
+///
+/// @docImport 'package:google_cloud_rpc/exceptions.dart';
 library;
 
 // ignore_for_file: camel_case_types
@@ -31,11 +33,12 @@ library;
 import 'package:google_cloud_longrunning/longrunning.dart';
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/src/encoding.dart';
-import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:google_cloud_rpc/rpc.dart';
 import 'package:google_cloud_rpc/service_client.dart';
 import 'package:google_cloud_type/type.dart';
 import 'package:http/http.dart' as http;
+
+import 'version.dart';
 
 const _apiKeys = ['GOOGLE_API_KEY'];
 
@@ -63,8 +66,16 @@ final class Firestore {
   /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
-  Firestore({required http.Client client, Uri? endPoint})
-    : _client = ServiceClient(client: client),
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  Firestore({required http.Client client, Uri? endPoint, String? gcclVersion})
+    : _client = ServiceClient(
+        client: client,
+        gapicVersion: packageVersion,
+        gcclVersion: gcclVersion,
+      ),
       _endPoint = endPoint == null
           ? Uri.https(_defaultHost, '')
           : Uri(
@@ -101,6 +112,9 @@ final class Firestore {
           'mask.fieldPaths': $1,
         if (request.transaction case final $1?) 'transaction': encodeBytes($1)!,
         if (request.readTime case final $1?) 'readTime': $1.toJson(),
+        if (request.requestOptions?.requestTags case final $1?
+            when $1.isNotDefault)
+          'requestOptions.requestTags': $1,
       },
     );
     final response = await _client.get(url);
@@ -129,6 +143,9 @@ final class Firestore {
         if (request.readTime case final $1?) 'readTime': $1.toJson(),
         if (request.showMissing case final $1 when $1.isNotDefault)
           'showMissing': '${$1}',
+        if (request.requestOptions?.requestTags case final $1?
+            when $1.isNotDefault)
+          'requestOptions.requestTags': $1,
       },
     );
     final response = await _client.get(url);
@@ -152,6 +169,9 @@ final class Firestore {
           'currentDocument.exists': '${$1}',
         if (request.currentDocument?.updateTime case final $1?)
           'currentDocument.updateTime': $1.toJson(),
+        if (request.requestOptions?.requestTags case final $1?
+            when $1.isNotDefault)
+          'requestOptions.requestTags': $1,
       },
     );
     final response = await _client.patch(url, body: request.document);
@@ -171,6 +191,9 @@ final class Firestore {
           'currentDocument.exists': '${$1}',
         if (request.currentDocument?.updateTime case final $1?)
           'currentDocument.updateTime': $1.toJson(),
+        if (request.requestOptions?.requestTags case final $1?
+            when $1.isNotDefault)
+          'requestOptions.requestTags': $1,
       },
     );
     await _client.delete(url);
@@ -356,6 +379,9 @@ final class Firestore {
           'documentId': $1,
         if (request.mask?.fieldPaths case final $1? when $1.isNotDefault)
           'mask.fieldPaths': $1,
+        if (request.requestOptions?.requestTags case final $1?
+            when $1.isNotDefault)
+          'requestOptions.requestTags': $1,
       },
     );
     final response = await _client.post(url, body: request.document);
@@ -1139,9 +1165,6 @@ final class TransactionOptions extends ProtoMessage {
 }
 
 /// Options for a transaction that can be used to read and write documents.
-///
-/// Firestore does not allow 3rd party auth requests to create read-write.
-/// transactions.
 final class TransactionOptions_ReadWrite extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.firestore.v1.TransactionOptions.ReadWrite';
@@ -1149,9 +1172,21 @@ final class TransactionOptions_ReadWrite extends ProtoMessage {
   /// An optional transaction to retry.
   final Uint8List retryTransaction;
 
-  TransactionOptions_ReadWrite({Uint8List? retryTransaction})
-    : retryTransaction = retryTransaction ?? Uint8List(0),
-      super(fullyQualifiedName);
+  /// Optional. The concurrency control mode to use for this transaction.
+  ///
+  /// A database is able to use different concurrency modes for different
+  /// transactions simultaneously.
+  ///
+  /// 3rd party auth requests are only allowed to create optimistic
+  /// read-write transactions and must specify that here even if the
+  /// database-level setting is already configured to optimistic.
+  final TransactionOptions_ConcurrencyMode concurrencyMode;
+
+  TransactionOptions_ReadWrite({
+    Uint8List? retryTransaction,
+    this.concurrencyMode = TransactionOptions_ConcurrencyMode.$default,
+  }) : retryTransaction = retryTransaction ?? Uint8List(0),
+       super(fullyQualifiedName);
 
   factory TransactionOptions_ReadWrite.fromJson(Object? j) {
     final json = j as Map<String, Object?>;
@@ -1160,6 +1195,10 @@ final class TransactionOptions_ReadWrite extends ProtoMessage {
         null => Uint8List(0),
         Object $1 => decodeBytes($1),
       },
+      concurrencyMode: switch (json['concurrencyMode']) {
+        null => TransactionOptions_ConcurrencyMode.$default,
+        Object $1 => TransactionOptions_ConcurrencyMode.fromJson($1),
+      },
     );
   }
 
@@ -1167,11 +1206,16 @@ final class TransactionOptions_ReadWrite extends ProtoMessage {
   Object toJson() => {
     if (retryTransaction.isNotDefault)
       'retryTransaction': encodeBytes(retryTransaction),
+    if (concurrencyMode.isNotDefault)
+      'concurrencyMode': concurrencyMode.toJson(),
   };
 
   @override
   String toString() {
-    final $contents = ['retryTransaction=$retryTransaction'].join(',');
+    final $contents = [
+      'retryTransaction=$retryTransaction',
+      'concurrencyMode=$concurrencyMode',
+    ].join(',');
     return 'ReadWrite(${$contents})';
   }
 }
@@ -1205,6 +1249,60 @@ final class TransactionOptions_ReadOnly extends ProtoMessage {
 
   @override
   String toString() => 'ReadOnly()';
+}
+
+/// The type of concurrency control mode for transactions.
+final class TransactionOptions_ConcurrencyMode extends ProtoEnum {
+  /// Start the transaction with the database-level default concurrency mode.
+  static const concurrencyModeUnspecified = TransactionOptions_ConcurrencyMode(
+    'CONCURRENCY_MODE_UNSPECIFIED',
+  );
+
+  /// Use optimistic concurrency control for the new transaction.
+  static const optimistic = TransactionOptions_ConcurrencyMode('OPTIMISTIC');
+
+  /// Use pessimistic concurrency control for the new transaction.
+  static const pessimistic = TransactionOptions_ConcurrencyMode('PESSIMISTIC');
+
+  /// The default value for [TransactionOptions_ConcurrencyMode].
+  static const $default = concurrencyModeUnspecified;
+
+  const TransactionOptions_ConcurrencyMode(super.value);
+
+  factory TransactionOptions_ConcurrencyMode.fromJson(Object? json) =>
+      TransactionOptions_ConcurrencyMode(json as String);
+
+  bool get isNotDefault => this != $default;
+
+  @override
+  String toString() => 'ConcurrencyMode.$value';
+}
+
+/// Options for a server request.
+final class RequestOptions extends ProtoMessage {
+  static const String fullyQualifiedName = 'google.firestore.v1.RequestOptions';
+
+  /// The request tags for the request.
+  final List<String> requestTags;
+
+  RequestOptions({this.requestTags = const []}) : super(fullyQualifiedName);
+
+  factory RequestOptions.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return RequestOptions(
+      requestTags: switch (json['requestTags']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException('"requestTags" is not a list'),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {if (requestTags.isNotDefault) 'requestTags': requestTags};
+
+  @override
+  String toString() => 'RequestOptions()';
 }
 
 /// A Firestore document.
@@ -1811,11 +1909,15 @@ final class GetDocumentRequest extends ProtoMessage {
   /// minute timestamp within the past 7 days.
   final Timestamp? readTime;
 
+  /// Optional. Any additional options for the request.
+  final RequestOptions? requestOptions;
+
   GetDocumentRequest({
     required this.name,
     this.mask,
     this.transaction,
     this.readTime,
+    this.requestOptions,
   }) : super(fullyQualifiedName);
 
   factory GetDocumentRequest.fromJson(Object? j) {
@@ -1837,6 +1939,10 @@ final class GetDocumentRequest extends ProtoMessage {
         null => null,
         Object $1 => Timestamp.fromJson($1),
       },
+      requestOptions: switch (json['requestOptions']) {
+        null => null,
+        Object $1 => RequestOptions.fromJson($1),
+      },
     );
   }
 
@@ -1846,6 +1952,7 @@ final class GetDocumentRequest extends ProtoMessage {
     'mask': ?mask?.toJson(),
     if (transaction case final $1?) 'transaction': encodeBytes($1),
     'readTime': ?readTime?.toJson(),
+    'requestOptions': ?requestOptions?.toJson(),
   };
 
   @override
@@ -1929,6 +2036,9 @@ final class ListDocumentsRequest extends ProtoMessage {
   /// Requests with `show_missing` may not specify `where` or `order_by`.
   final bool showMissing;
 
+  /// Optional. Any additional options for the request.
+  final RequestOptions? requestOptions;
+
   ListDocumentsRequest({
     required this.parent,
     this.collectionId = '',
@@ -1939,6 +2049,7 @@ final class ListDocumentsRequest extends ProtoMessage {
     this.transaction,
     this.readTime,
     this.showMissing = false,
+    this.requestOptions,
   }) : super(fullyQualifiedName);
 
   factory ListDocumentsRequest.fromJson(Object? j) {
@@ -1980,6 +2091,10 @@ final class ListDocumentsRequest extends ProtoMessage {
         null => false,
         Object $1 => decodeBool($1),
       },
+      requestOptions: switch (json['requestOptions']) {
+        null => null,
+        Object $1 => RequestOptions.fromJson($1),
+      },
     );
   }
 
@@ -1994,6 +2109,7 @@ final class ListDocumentsRequest extends ProtoMessage {
     if (transaction case final $1?) 'transaction': encodeBytes($1),
     'readTime': ?readTime?.toJson(),
     if (showMissing.isNotDefault) 'showMissing': showMissing,
+    'requestOptions': ?requestOptions?.toJson(),
   };
 
   @override
@@ -2086,12 +2202,16 @@ final class CreateDocumentRequest extends ProtoMessage {
   /// will not be returned in the response.
   final DocumentMask? mask;
 
+  /// Optional. Any additional options for the request.
+  final RequestOptions? requestOptions;
+
   CreateDocumentRequest({
     required this.parent,
     required this.collectionId,
     this.documentId = '',
     required this.document,
     this.mask,
+    this.requestOptions,
   }) : super(fullyQualifiedName);
 
   factory CreateDocumentRequest.fromJson(Object? j) {
@@ -2117,6 +2237,10 @@ final class CreateDocumentRequest extends ProtoMessage {
         null => null,
         Object $1 => DocumentMask.fromJson($1),
       },
+      requestOptions: switch (json['requestOptions']) {
+        null => null,
+        Object $1 => RequestOptions.fromJson($1),
+      },
     );
   }
 
@@ -2127,6 +2251,7 @@ final class CreateDocumentRequest extends ProtoMessage {
     if (documentId.isNotDefault) 'documentId': documentId,
     'document': ?document?.toJson(),
     'mask': ?mask?.toJson(),
+    'requestOptions': ?requestOptions?.toJson(),
   };
 
   @override
@@ -2169,11 +2294,15 @@ final class UpdateDocumentRequest extends ProtoMessage {
   /// The request will fail if this is set and not met by the target document.
   final Precondition? currentDocument;
 
+  /// Optional. Any additional options for the request.
+  final RequestOptions? requestOptions;
+
   UpdateDocumentRequest({
     required this.document,
     this.updateMask,
     this.mask,
     this.currentDocument,
+    this.requestOptions,
   }) : super(fullyQualifiedName);
 
   factory UpdateDocumentRequest.fromJson(Object? j) {
@@ -2195,6 +2324,10 @@ final class UpdateDocumentRequest extends ProtoMessage {
         null => null,
         Object $1 => Precondition.fromJson($1),
       },
+      requestOptions: switch (json['requestOptions']) {
+        null => null,
+        Object $1 => RequestOptions.fromJson($1),
+      },
     );
   }
 
@@ -2204,6 +2337,7 @@ final class UpdateDocumentRequest extends ProtoMessage {
     'updateMask': ?updateMask?.toJson(),
     'mask': ?mask?.toJson(),
     'currentDocument': ?currentDocument?.toJson(),
+    'requestOptions': ?requestOptions?.toJson(),
   };
 
   @override
@@ -2224,8 +2358,14 @@ final class DeleteDocumentRequest extends ProtoMessage {
   /// The request will fail if this is set and not met by the target document.
   final Precondition? currentDocument;
 
-  DeleteDocumentRequest({required this.name, this.currentDocument})
-    : super(fullyQualifiedName);
+  /// Optional. Any additional options for the request.
+  final RequestOptions? requestOptions;
+
+  DeleteDocumentRequest({
+    required this.name,
+    this.currentDocument,
+    this.requestOptions,
+  }) : super(fullyQualifiedName);
 
   factory DeleteDocumentRequest.fromJson(Object? j) {
     final json = j as Map<String, Object?>;
@@ -2238,6 +2378,10 @@ final class DeleteDocumentRequest extends ProtoMessage {
         null => null,
         Object $1 => Precondition.fromJson($1),
       },
+      requestOptions: switch (json['requestOptions']) {
+        null => null,
+        Object $1 => RequestOptions.fromJson($1),
+      },
     );
   }
 
@@ -2245,6 +2389,7 @@ final class DeleteDocumentRequest extends ProtoMessage {
   Object toJson() => {
     'name': name,
     'currentDocument': ?currentDocument?.toJson(),
+    'requestOptions': ?requestOptions?.toJson(),
   };
 
   @override
@@ -2292,6 +2437,9 @@ final class BatchGetDocumentsRequest extends ProtoMessage {
   /// minute timestamp within the past 7 days.
   final Timestamp? readTime;
 
+  /// Optional. Any additional options for the request.
+  final RequestOptions? requestOptions;
+
   BatchGetDocumentsRequest({
     required this.database,
     this.documents = const [],
@@ -2299,6 +2447,7 @@ final class BatchGetDocumentsRequest extends ProtoMessage {
     this.transaction,
     this.newTransaction,
     this.readTime,
+    this.requestOptions,
   }) : super(fullyQualifiedName);
 
   factory BatchGetDocumentsRequest.fromJson(Object? j) {
@@ -2329,6 +2478,10 @@ final class BatchGetDocumentsRequest extends ProtoMessage {
         null => null,
         Object $1 => Timestamp.fromJson($1),
       },
+      requestOptions: switch (json['requestOptions']) {
+        null => null,
+        Object $1 => RequestOptions.fromJson($1),
+      },
     );
   }
 
@@ -2340,6 +2493,7 @@ final class BatchGetDocumentsRequest extends ProtoMessage {
     if (transaction case final $1?) 'transaction': encodeBytes($1),
     'newTransaction': ?newTransaction?.toJson(),
     'readTime': ?readTime?.toJson(),
+    'requestOptions': ?requestOptions?.toJson(),
   };
 
   @override
@@ -2439,8 +2593,14 @@ final class BeginTransactionRequest extends ProtoMessage {
   /// Defaults to a read-write transaction.
   final TransactionOptions? options;
 
-  BeginTransactionRequest({required this.database, this.options})
-    : super(fullyQualifiedName);
+  /// Optional. Any additional options for the request.
+  final RequestOptions? requestOptions;
+
+  BeginTransactionRequest({
+    required this.database,
+    this.options,
+    this.requestOptions,
+  }) : super(fullyQualifiedName);
 
   factory BeginTransactionRequest.fromJson(Object? j) {
     final json = j as Map<String, Object?>;
@@ -2453,11 +2613,19 @@ final class BeginTransactionRequest extends ProtoMessage {
         null => null,
         Object $1 => TransactionOptions.fromJson($1),
       },
+      requestOptions: switch (json['requestOptions']) {
+        null => null,
+        Object $1 => RequestOptions.fromJson($1),
+      },
     );
   }
 
   @override
-  Object toJson() => {'database': database, 'options': ?options?.toJson()};
+  Object toJson() => {
+    'database': database,
+    'options': ?options?.toJson(),
+    'requestOptions': ?requestOptions?.toJson(),
+  };
 
   @override
   String toString() {
@@ -2517,10 +2685,14 @@ final class CommitRequest extends ProtoMessage {
   /// If set, applies all writes in this transaction, and commits it.
   final Uint8List transaction;
 
+  /// Optional. Any additional options for the request.
+  final RequestOptions? requestOptions;
+
   CommitRequest({
     required this.database,
     this.writes = const [],
     Uint8List? transaction,
+    this.requestOptions,
   }) : transaction = transaction ?? Uint8List(0),
        super(fullyQualifiedName);
 
@@ -2540,6 +2712,10 @@ final class CommitRequest extends ProtoMessage {
         null => Uint8List(0),
         Object $1 => decodeBytes($1),
       },
+      requestOptions: switch (json['requestOptions']) {
+        null => null,
+        Object $1 => RequestOptions.fromJson($1),
+      },
     );
   }
 
@@ -2548,6 +2724,7 @@ final class CommitRequest extends ProtoMessage {
     'database': database,
     if (writes.isNotDefault) 'writes': [for (final i in writes) i.toJson()],
     if (transaction.isNotDefault) 'transaction': encodeBytes(transaction),
+    'requestOptions': ?requestOptions?.toJson(),
   };
 
   @override
@@ -2615,8 +2792,14 @@ final class RollbackRequest extends ProtoMessage {
   /// Required. The transaction to roll back.
   final Uint8List transaction;
 
-  RollbackRequest({required this.database, required this.transaction})
-    : super(fullyQualifiedName);
+  /// Optional. Any additional options for the request.
+  final RequestOptions? requestOptions;
+
+  RollbackRequest({
+    required this.database,
+    required this.transaction,
+    this.requestOptions,
+  }) : super(fullyQualifiedName);
 
   factory RollbackRequest.fromJson(Object? j) {
     final json = j as Map<String, Object?>;
@@ -2629,6 +2812,10 @@ final class RollbackRequest extends ProtoMessage {
         null => Uint8List(0),
         Object $1 => decodeBytes($1),
       },
+      requestOptions: switch (json['requestOptions']) {
+        null => null,
+        Object $1 => RequestOptions.fromJson($1),
+      },
     );
   }
 
@@ -2636,6 +2823,7 @@ final class RollbackRequest extends ProtoMessage {
   Object toJson() => {
     'database': database,
     'transaction': encodeBytes(transaction),
+    'requestOptions': ?requestOptions?.toJson(),
   };
 
   @override
@@ -2686,6 +2874,9 @@ final class RunQueryRequest extends ProtoMessage {
   /// statistics will be returned. If not, only query results will be returned.
   final ExplainOptions? explainOptions;
 
+  /// Optional. Any additional options for the request.
+  final RequestOptions? requestOptions;
+
   RunQueryRequest({
     required this.parent,
     this.structuredQuery,
@@ -2693,6 +2884,7 @@ final class RunQueryRequest extends ProtoMessage {
     this.newTransaction,
     this.readTime,
     this.explainOptions,
+    this.requestOptions,
   }) : super(fullyQualifiedName);
 
   factory RunQueryRequest.fromJson(Object? j) {
@@ -2722,6 +2914,10 @@ final class RunQueryRequest extends ProtoMessage {
         null => null,
         Object $1 => ExplainOptions.fromJson($1),
       },
+      requestOptions: switch (json['requestOptions']) {
+        null => null,
+        Object $1 => RequestOptions.fromJson($1),
+      },
     );
   }
 
@@ -2733,6 +2929,7 @@ final class RunQueryRequest extends ProtoMessage {
     'newTransaction': ?newTransaction?.toJson(),
     'readTime': ?readTime?.toJson(),
     'explainOptions': ?explainOptions?.toJson(),
+    'requestOptions': ?requestOptions?.toJson(),
   };
 
   @override
@@ -2875,12 +3072,22 @@ final class ExecutePipelineRequest extends ProtoMessage {
   /// minute timestamp within the past 7 days.
   final Timestamp? readTime;
 
+  /// Optional. Automatically commits the transaction after the pipeline has been
+  /// executed. Only permitted in combination with `transaction` or
+  /// `new_transaction`.
+  final bool autoCommitTransaction;
+
+  /// Optional. Any additional options for the request.
+  final RequestOptions? requestOptions;
+
   ExecutePipelineRequest({
     required this.database,
     this.structuredPipeline,
     this.transaction,
     this.newTransaction,
     this.readTime,
+    this.autoCommitTransaction = false,
+    this.requestOptions,
   }) : super(fullyQualifiedName);
 
   factory ExecutePipelineRequest.fromJson(Object? j) {
@@ -2906,6 +3113,14 @@ final class ExecutePipelineRequest extends ProtoMessage {
         null => null,
         Object $1 => Timestamp.fromJson($1),
       },
+      autoCommitTransaction: switch (json['autoCommitTransaction']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+      requestOptions: switch (json['requestOptions']) {
+        null => null,
+        Object $1 => RequestOptions.fromJson($1),
+      },
     );
   }
 
@@ -2916,6 +3131,9 @@ final class ExecutePipelineRequest extends ProtoMessage {
     if (transaction case final $1?) 'transaction': encodeBytes($1),
     'newTransaction': ?newTransaction?.toJson(),
     'readTime': ?readTime?.toJson(),
+    if (autoCommitTransaction.isNotDefault)
+      'autoCommitTransaction': autoCommitTransaction,
+    'requestOptions': ?requestOptions?.toJson(),
   };
 
   @override
@@ -2923,6 +3141,7 @@ final class ExecutePipelineRequest extends ProtoMessage {
     final $contents = [
       'database=$database',
       if (transaction != null) 'transaction=$transaction',
+      'autoCommitTransaction=$autoCommitTransaction',
     ].join(',');
     return 'ExecutePipelineRequest(${$contents})';
   }
@@ -3060,6 +3279,9 @@ final class RunAggregationQueryRequest extends ProtoMessage {
   /// statistics will be returned. If not, only query results will be returned.
   final ExplainOptions? explainOptions;
 
+  /// Optional. Any additional options for the request.
+  final RequestOptions? requestOptions;
+
   RunAggregationQueryRequest({
     required this.parent,
     this.structuredAggregationQuery,
@@ -3067,6 +3289,7 @@ final class RunAggregationQueryRequest extends ProtoMessage {
     this.newTransaction,
     this.readTime,
     this.explainOptions,
+    this.requestOptions,
   }) : super(fullyQualifiedName);
 
   factory RunAggregationQueryRequest.fromJson(Object? j) {
@@ -3096,6 +3319,10 @@ final class RunAggregationQueryRequest extends ProtoMessage {
         null => null,
         Object $1 => ExplainOptions.fromJson($1),
       },
+      requestOptions: switch (json['requestOptions']) {
+        null => null,
+        Object $1 => RequestOptions.fromJson($1),
+      },
     );
   }
 
@@ -3107,6 +3334,7 @@ final class RunAggregationQueryRequest extends ProtoMessage {
     'newTransaction': ?newTransaction?.toJson(),
     'readTime': ?readTime?.toJson(),
     'explainOptions': ?explainOptions?.toJson(),
+    'requestOptions': ?requestOptions?.toJson(),
   };
 
   @override
@@ -3255,6 +3483,9 @@ final class PartitionQueryRequest extends ProtoMessage {
   /// minute timestamp within the past 7 days.
   final Timestamp? readTime;
 
+  /// Optional. Any additional options for the request.
+  final RequestOptions? requestOptions;
+
   PartitionQueryRequest({
     required this.parent,
     this.structuredQuery,
@@ -3262,6 +3493,7 @@ final class PartitionQueryRequest extends ProtoMessage {
     this.pageToken = '',
     this.pageSize = 0,
     this.readTime,
+    this.requestOptions,
   }) : super(fullyQualifiedName);
 
   factory PartitionQueryRequest.fromJson(Object? j) {
@@ -3291,6 +3523,10 @@ final class PartitionQueryRequest extends ProtoMessage {
         null => null,
         Object $1 => Timestamp.fromJson($1),
       },
+      requestOptions: switch (json['requestOptions']) {
+        null => null,
+        Object $1 => RequestOptions.fromJson($1),
+      },
     );
   }
 
@@ -3303,6 +3539,7 @@ final class PartitionQueryRequest extends ProtoMessage {
     if (pageToken.isNotDefault) 'pageToken': pageToken,
     if (pageSize.isNotDefault) 'pageSize': pageSize,
     'readTime': ?readTime?.toJson(),
+    'requestOptions': ?requestOptions?.toJson(),
   };
 
   @override
@@ -3429,12 +3666,16 @@ final class WriteRequest extends ProtoMessage {
   /// Labels associated with this write request.
   final Map<String, String> labels;
 
+  /// Optional. Any additional options for the request.
+  final RequestOptions? requestOptions;
+
   WriteRequest({
     required this.database,
     this.streamId = '',
     this.writes = const [],
     Uint8List? streamToken,
     this.labels = const {},
+    this.requestOptions,
   }) : streamToken = streamToken ?? Uint8List(0),
        super(fullyQualifiedName);
 
@@ -3466,6 +3707,10 @@ final class WriteRequest extends ProtoMessage {
         },
         _ => throw const FormatException('"labels" is not an object'),
       },
+      requestOptions: switch (json['requestOptions']) {
+        null => null,
+        Object $1 => RequestOptions.fromJson($1),
+      },
     );
   }
 
@@ -3476,6 +3721,7 @@ final class WriteRequest extends ProtoMessage {
     if (writes.isNotDefault) 'writes': [for (final i in writes) i.toJson()],
     if (streamToken.isNotDefault) 'streamToken': encodeBytes(streamToken),
     if (labels.isNotDefault) 'labels': labels,
+    'requestOptions': ?requestOptions?.toJson(),
   };
 
   @override
@@ -3580,11 +3826,15 @@ final class ListenRequest extends ProtoMessage {
   /// Labels associated with this target change.
   final Map<String, String> labels;
 
+  /// Optional. Any additional options for the request.
+  final RequestOptions? requestOptions;
+
   ListenRequest({
     required this.database,
     this.addTarget,
     this.removeTarget,
     this.labels = const {},
+    this.requestOptions,
   }) : super(fullyQualifiedName);
 
   factory ListenRequest.fromJson(Object? j) {
@@ -3610,6 +3860,10 @@ final class ListenRequest extends ProtoMessage {
         },
         _ => throw const FormatException('"labels" is not an object'),
       },
+      requestOptions: switch (json['requestOptions']) {
+        null => null,
+        Object $1 => RequestOptions.fromJson($1),
+      },
     );
   }
 
@@ -3619,6 +3873,7 @@ final class ListenRequest extends ProtoMessage {
     'addTarget': ?addTarget?.toJson(),
     'removeTarget': ?removeTarget,
     if (labels.isNotDefault) 'labels': labels,
+    'requestOptions': ?requestOptions?.toJson(),
   };
 
   @override
@@ -4040,6 +4295,9 @@ final class ListCollectionIdsRequest extends ProtoMessage {
   /// `projects/{project_id}/databases/{database_id}/documents/{document_path}`.
   /// For example:
   /// `projects/my-project/databases/my-database/documents/chatrooms/my-chatroom`
+  ///
+  /// Use `projects/{project_id}/databases/{database_id}/documents` to list
+  /// top-level collections.
   final String parent;
 
   /// The maximum number of results to return.
@@ -4056,11 +4314,15 @@ final class ListCollectionIdsRequest extends ProtoMessage {
   /// minute timestamp within the past 7 days.
   final Timestamp? readTime;
 
+  /// Optional. Any additional options for the request.
+  final RequestOptions? requestOptions;
+
   ListCollectionIdsRequest({
     required this.parent,
     this.pageSize = 0,
     this.pageToken = '',
     this.readTime,
+    this.requestOptions,
   }) : super(fullyQualifiedName);
 
   factory ListCollectionIdsRequest.fromJson(Object? j) {
@@ -4082,6 +4344,10 @@ final class ListCollectionIdsRequest extends ProtoMessage {
         null => null,
         Object $1 => Timestamp.fromJson($1),
       },
+      requestOptions: switch (json['requestOptions']) {
+        null => null,
+        Object $1 => RequestOptions.fromJson($1),
+      },
     );
   }
 
@@ -4091,6 +4357,7 @@ final class ListCollectionIdsRequest extends ProtoMessage {
     if (pageSize.isNotDefault) 'pageSize': pageSize,
     if (pageToken.isNotDefault) 'pageToken': pageToken,
     'readTime': ?readTime?.toJson(),
+    'requestOptions': ?requestOptions?.toJson(),
   };
 
   @override
@@ -4169,10 +4436,14 @@ final class BatchWriteRequest extends ProtoMessage {
   /// Labels associated with this batch write.
   final Map<String, String> labels;
 
+  /// Optional. Any additional options for the request.
+  final RequestOptions? requestOptions;
+
   BatchWriteRequest({
     required this.database,
     this.writes = const [],
     this.labels = const {},
+    this.requestOptions,
   }) : super(fullyQualifiedName);
 
   factory BatchWriteRequest.fromJson(Object? j) {
@@ -4195,6 +4466,10 @@ final class BatchWriteRequest extends ProtoMessage {
         },
         _ => throw const FormatException('"labels" is not an object'),
       },
+      requestOptions: switch (json['requestOptions']) {
+        null => null,
+        Object $1 => RequestOptions.fromJson($1),
+      },
     );
   }
 
@@ -4203,6 +4478,7 @@ final class BatchWriteRequest extends ProtoMessage {
     'database': database,
     if (writes.isNotDefault) 'writes': [for (final i in writes) i.toJson()],
     if (labels.isNotDefault) 'labels': labels,
+    'requestOptions': ?requestOptions?.toJson(),
   };
 
   @override
@@ -4336,9 +4612,12 @@ final class StructuredQuery extends ProtoMessage {
 
   /// The order to apply to the query results.
   ///
-  /// Firestore allows callers to provide a full ordering, a partial ordering, or
-  /// no ordering at all. In all cases, Firestore guarantees a stable ordering
-  /// through the following rules:
+  /// Callers can provide a full ordering, a partial ordering, or no ordering at
+  /// all. While Firestore will always respect the provided order, the behavior
+  /// for queries without a full ordering is different per database edition:
+  ///
+  /// In Standard edition, Firestore guarantees a stable ordering through the
+  /// following rules:
   ///
   ///  * The `order_by` is required to reference all fields used with an
   ///    inequality filter.
@@ -4354,6 +4633,13 @@ final class StructuredQuery extends ProtoMessage {
   ///  * `WHERE a > 1` becomes `WHERE a > 1 ORDER BY a ASC, __name__ ASC`
   ///  * `WHERE __name__ > ... AND a > 1` becomes
   ///     `WHERE __name__ > ... AND a > 1 ORDER BY a ASC, __name__ ASC`
+  ///
+  /// In Enterprise edition, Firestore does not guarantee a stable ordering.
+  /// Instead it will pick the most efficient ordering based on the indexes
+  /// available at the time of query execution. This will result in a different
+  /// ordering for queries that are otherwise identical. To ensure a stable
+  /// ordering, always include a unique field in the `order_by` clause, such as
+  /// `__name__`.
   final List<StructuredQuery_Order> orderBy;
 
   /// A potential prefix of a position in the result set to start the query at.
