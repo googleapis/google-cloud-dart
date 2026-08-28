@@ -151,12 +151,12 @@ final class ServiceAccountCredentials {
     String jsonString,
   ) async {
     final json = jsonDecode(jsonString);
-    if (json is! Map) {
+    if (json is! Map<String, dynamic>) {
       throw const FormatException(
         'Service account string does not contain a JSON object.',
       );
     }
-    return fromServiceAccountInfo(json.cast<String, dynamic>());
+    return fromServiceAccountInfo(json);
   }
 
   /// Creates a [ServiceAccountCredentials] instance from PKCS#8 private key
