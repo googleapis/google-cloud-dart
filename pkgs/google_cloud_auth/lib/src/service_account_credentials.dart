@@ -19,8 +19,7 @@ import 'dart:typed_data';
 import 'package:webcrypto/webcrypto.dart';
 
 Uint8List _parsePemPkcs8Key(String pemString) {
-  final lines = pemString
-      .split('\n')
+  final lines = LineSplitter.split(pemString)
       .map((l) => l.trim())
       .where((l) => l.isNotEmpty && !l.startsWith('-----'))
       .join();
