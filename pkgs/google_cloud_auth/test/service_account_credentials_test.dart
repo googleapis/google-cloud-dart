@@ -137,10 +137,7 @@ void main() {
     });
 
     test('fromServiceAccountInfo throws on missing client_email', () async {
-      final info = {
-        'type': 'service_account',
-        'private_key': privateKeyPem,
-      };
+      final info = {'type': 'service_account', 'private_key': privateKeyPem};
 
       expect(
         () => ServiceAccountCredentials.fromServiceAccountInfo(info),

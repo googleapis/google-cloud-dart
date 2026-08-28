@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// #docregion main
 import 'dart:convert';
 import 'dart:io';
 
@@ -44,3 +45,5 @@ Future<void> main(List<String> args) async {
     'Sample Signature (b64): ${base64.encode(signature).substring(0, 32)}...',
   );
 }
+
+// #enddocregion main

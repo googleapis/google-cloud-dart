@@ -1,7 +1,7 @@
-[![pub package](https://img.shields.io/pub/v/google_cloud_storage.svg)](https://pub.dev/packages/google_cloud_storage)
-[![package publisher](https://img.shields.io/pub/publisher/google_cloud_storage.svg)](https://pub.dev/packages/google_cloud_storage/publisher)
+[![pub package](https://img.shields.io/pub/v/google_cloud_auth.svg)](https://pub.dev/packages/google_cloud_auth)
+[![package publisher](https://img.shields.io/pub/publisher/google_cloud_auth.svg)](https://pub.dev/packages/google_cloud_auth/publisher)
 
-A Dart client for Google Cloud Storage.
+Authentication and credential management for Google Cloud.
 
 > [!NOTE]
 > This package is currently experimental and published under the
@@ -17,83 +17,49 @@ A Dart client for Google Cloud Storage.
 > feedback, suggestions, and comments, please file an issue in the
 > [bug tracker](https://github.com/googleapis/google-cloud-dart/issues).
 
-## Using Google Cloud Storage
+## Features
 
-All access to Google Cloud Storage is made through the `Storage` class.
+- **Service Account Credentials**: Load service account credentials from a JSON
+  file, JSON string, parsed map, or PKCS#8 PEM private key.
+- **Cryptographic Signing**: Sign arbitrary payloads using RSASSA-PKCS1-v1_5
+  with SHA-256 using the service account private key.
+
+## Usage
+
+### Loading Service Account Credentials
 
 <?code-excerpt "example/main.dart (main)"?>
 ```dart
-import 'package:google_cloud_storage/google_cloud_storage.dart';
+import 'dart:convert';
+import 'dart:io';
 
-void main() async {
-  // By default, the `Storage` class will use the currently configured project
-  // and automatically attempt to authenticate using Application Default
-  // Credentials.
-  final storage = Storage();
+import 'package:google_cloud_auth/google_cloud_auth.dart';
 
-  // Create a bucket.
-  final bucket = await storage.createBucket(
-    BucketMetadata(
-      name: 'put-your-bucket-name-here',
-      defaultObjectAcl: [
-        ObjectAccessControl(entity: 'allUsers', role: 'READER'),
-      ],
-    ),
+Future<void> main(List<String> args) async {
+  if (args.isEmpty) {
+    stderr.writeln(
+      'Usage: dart run example/main.dart <path-to-service-account.json>',
+    );
+    exitCode = 1;
+    return;
+  }
+
+  final path = args.first;
+  final credentials = await ServiceAccountCredentials.fromServiceAccountFile(
+    path,
   );
-  await storage.uploadObjectFromString(
-    bucket.name!,
-    'index.html',
-    '<h1>Hello World!</h1>',
-    metadata: ObjectMetadata(contentType: 'text/html'),
-  );
+
+  print('Service Account Email : ${credentials.clientEmail}');
+  print('Project ID            : ${credentials.projectId ?? '(not set)'}');
+  print('Client ID             : ${credentials.clientId ?? '(not set)'}');
+  print('Private Key ID        : ${credentials.privateKeyId ?? '(not set)'}');
+  print('Token URI             : ${credentials.tokenUri}');
+  print('Universe Domain       : ${credentials.universeDomain}');
+
+  final sampleMessage = utf8.encode('Hello from google_cloud_auth');
+  final signature = await credentials.sign(sampleMessage);
   print(
-    'Your website is available at:\n'
-    'https://storage.googleapis.com/${bucket.name}/index.html',
+    'Sample Signature (b64): ${base64.encode(signature).substring(0, 32)}...',
   );
-  storage.close();
 }
 ```
-
-> [!NOTE]
-> You must [set up authentication][] before using this package outside of 
-> Google Cloud.
-
-## Retries
-
-By default, most [idempotent Google Cloud Storage operations][] are retried if
-they fail with a transient error (such as a network failure).
-
-The documentation for each `Storage` method indicates whether the operation is
-idempotent.
-
-You can control the retry behavior using the `retry` parameter on each method.
-
-For example:
-
-<?code-excerpt "example/retry.dart (retry)"?>
-```dart
-import 'package:google_cloud_storage/google_cloud_storage.dart';
-
-void main() async {
-  final storage = Storage();
-
-  // This operation is only idempotent if `ifMetagenerationMatch` is provided.
-  await storage.patchBucket(
-    'my-bucket',
-    BucketMetadataPatchBuilder()..labels = {'key': 'value'},
-    ifMetagenerationMatch: BigInt.from(1),
-    retry: const ExponentialRetry(maxRetries: 2),
-  );
-
-  storage.close();
-}
-```
-
-## Feature Planning
-
-<a href="https://github.com/orgs/googleapis/projects/37/views/1"
-   target="_blank"
-   rel="noopener noreferrer">Open Planning Board...</a>
-
-[set up authentication]: https://docs.cloud.google.com/storage/docs/reference/libraries#authentication
-[idempotent Google Cloud Storage operations]: https://docs.cloud.google.com/storage/docs/retry-strategy#idempotency
