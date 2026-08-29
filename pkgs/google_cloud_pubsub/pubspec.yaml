@@ -13,7 +13,7 @@ resolution: workspace
 dependencies:
   ffi: ^2.2.0
   fixnum: ^1.1.1
-  google_cloud_rpc: ^0.5.3
+  google_cloud_rpc: ^0.6.0
   grpc: ^5.1.0
   meta: ^1.18.1
   protobuf: ^6.0.0
