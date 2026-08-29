@@ -27,7 +27,7 @@ env:
   FORMAT_DART_VERSION: 3.13.2
   GOOGLE_CLOUD_PROJECT: test-project
   LIBRARIAN_VERSION: v0.39.1-0.20260827211949-1cdc9901f973
-  MINIMUM_DART_VERSION: &MINIMUM_DART_VERSION 3.9.0
+  MINIMUM_DART_TEST_VERSION: &MINIMUM_DART_TEST_VERSION 3.10.1
 name: Dart Checks
 jobs:
   format:
@@ -57,7 +57,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        sdk: [*MINIMUM_DART_VERSION, stable]
+        sdk: [*MINIMUM_DART_TEST_VERSION, stable]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - uses: dart-lang/setup-dart@7654d458321ee25acccccfdb86cd48bd95768ff1
@@ -80,7 +80,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        sdk: [*MINIMUM_DART_VERSION, stable]
+        sdk: [*MINIMUM_DART_TEST_VERSION, stable]
         platform: ["chrome", "vm"]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
@@ -95,7 +95,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        sdk: [*MINIMUM_DART_VERSION, stable]
+        sdk: [*MINIMUM_DART_TEST_VERSION, stable]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - uses: dart-lang/setup-dart@7654d458321ee25acccccfdb86cd48bd95768ff1
@@ -110,7 +110,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        sdk: [*MINIMUM_DART_VERSION, stable]
+        sdk: [*MINIMUM_DART_TEST_VERSION, stable]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
