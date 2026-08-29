@@ -31,61 +31,45 @@ String _pkcs8ToPem(Uint8List pkcs8Bytes) {
   return lines.join('\n');
 }
 
+final _isDart313OrLater = () {
+  if (!const bool.fromEnvironment('dart.library.io')) return true;
+  final versionStr = Platform.version.split(' ').first;
+  final parts = versionStr.split('.').map(int.tryParse).toList();
+  if (parts.length >= 2 && parts[0] != null && parts[1] != null) {
+    if (parts[0]! > 3) return true;
+    if (parts[0]! == 3 && parts[1]! >= 13) return true;
+  }
+  return false;
+}();
+
 void main() {
   late KeyPair<RsassaPkcs1V15PrivateKey, RsassaPkcs1V15PublicKey> testKeyPair;
   late String privateKeyPem;
 
-  setUpAll(() async {
-    testKeyPair = await RsassaPkcs1V15PrivateKey.generateKey(
-      2048,
-      BigInt.from(65537),
-      Hash.sha256,
-    );
-    final pkcs8Bytes = await testKeyPair.privateKey.exportPkcs8Key();
-    privateKeyPem = _pkcs8ToPem(pkcs8Bytes);
-  });
+  group(
+    'ServiceAccountCredentials',
+    () {
+      setUpAll(() async {
+        testKeyPair = await RsassaPkcs1V15PrivateKey.generateKey(
+          2048,
+          BigInt.from(65537),
+          Hash.sha256,
+        );
+        final pkcs8Bytes = await testKeyPair.privateKey.exportPkcs8Key();
+        privateKeyPem = _pkcs8ToPem(pkcs8Bytes);
+      });
 
-  group('ServiceAccountCredentials', () {
-    test('fromServiceAccountInfo creates valid credentials', () async {
-      final info = {
-        'type': 'service_account',
-        'project_id': 'test-project',
-        'private_key_id': 'key-id-123',
-        'private_key': privateKeyPem,
-        'client_email': 'test@test-project.iam.gserviceaccount.com',
-        'client_id': 'client-123',
-        'token_uri': 'https://oauth2.googleapis.com/custom_token',
-        'universe_domain': 'custom.domain.com',
-        'quota_project_id': 'quota-project',
-      };
-
-      final creds = await ServiceAccountCredentials.fromServiceAccountInfo(
-        info,
-      );
-
-      expect(
-        creds.clientEmail,
-        equals('test@test-project.iam.gserviceaccount.com'),
-      );
-
-      expect(creds.clientId, equals('client-123'));
-      expect(creds.privateKeyId, equals('key-id-123'));
-      expect(creds.projectId, equals('test-project'));
-      expect(creds.quotaProjectId, equals('quota-project'));
-      expect(
-        creds.tokenUri,
-        equals(Uri.parse('https://oauth2.googleapis.com/custom_token')),
-      );
-      expect(creds.universeDomain, equals('custom.domain.com'));
-    });
-
-    test(
-      'fromServiceAccountInfo uses default token_uri and universe_domain',
-      () async {
+      test('fromServiceAccountInfo creates valid credentials', () async {
         final info = {
           'type': 'service_account',
+          'project_id': 'test-project',
+          'private_key_id': 'key-id-123',
           'private_key': privateKeyPem,
           'client_email': 'test@test-project.iam.gserviceaccount.com',
+          'client_id': 'client-123',
+          'token_uri': 'https://oauth2.googleapis.com/custom_token',
+          'universe_domain': 'custom.domain.com',
+          'quota_project_id': 'quota-project',
         };
 
         final creds = await ServiceAccountCredentials.fromServiceAccountInfo(
@@ -93,165 +77,194 @@ void main() {
         );
 
         expect(
+          creds.clientEmail,
+          equals('test@test-project.iam.gserviceaccount.com'),
+        );
+
+        expect(creds.clientId, equals('client-123'));
+        expect(creds.privateKeyId, equals('key-id-123'));
+        expect(creds.projectId, equals('test-project'));
+        expect(creds.quotaProjectId, equals('quota-project'));
+        expect(
           creds.tokenUri,
-          equals(Uri.parse('https://oauth2.googleapis.com/token')),
+          equals(Uri.parse('https://oauth2.googleapis.com/custom_token')),
         );
-        expect(creds.universeDomain, equals('googleapis.com'));
-        expect(creds.clientId, isNull);
-        expect(creds.privateKeyId, isNull);
-        expect(creds.projectId, isNull);
-        expect(creds.quotaProjectId, isNull);
-      },
-    );
-
-    test('fromServiceAccountInfo throws on missing type', () async {
-      final info = {
-        'private_key': privateKeyPem,
-        'client_email': 'test@test-project.iam.gserviceaccount.com',
-      };
-
-      expect(
-        () => ServiceAccountCredentials.fromServiceAccountInfo(info),
-        throwsFormatException,
-      );
-    });
-
-    test('fromServiceAccountInfo throws on invalid type', () async {
-      final info = {
-        'type': 'authorized_user',
-        'private_key': privateKeyPem,
-        'client_email': 'test@test-project.iam.gserviceaccount.com',
-      };
-
-      expect(
-        () => ServiceAccountCredentials.fromServiceAccountInfo(info),
-        throwsFormatException,
-      );
-    });
-
-    test('fromServiceAccountInfo throws on missing client_email', () async {
-      final info = {'type': 'service_account', 'private_key': privateKeyPem};
-
-      expect(
-        () => ServiceAccountCredentials.fromServiceAccountInfo(info),
-        throwsFormatException,
-      );
-    });
-
-    test('fromServiceAccountInfo throws on missing private_key', () async {
-      final info = {
-        'type': 'service_account',
-        'client_email': 'test@test-project.iam.gserviceaccount.com',
-      };
-
-      expect(
-        () => ServiceAccountCredentials.fromServiceAccountInfo(info),
-        throwsFormatException,
-      );
-    });
-
-    test(
-      'fromServiceAccountInfo throws on non-string private_key_id',
-      () async {
-        final info = <String, Object?>{
-          'type': 'service_account',
-          'private_key': privateKeyPem,
-          'client_email': 'test@test-project.iam.gserviceaccount.com',
-          'private_key_id': 12345,
-        };
-
-        expect(
-          () => ServiceAccountCredentials.fromServiceAccountInfo(info),
-          throwsFormatException,
-        );
-      },
-    );
-
-    test('fromServiceAccountInfo throws on non-string client_id', () async {
-      final info = <String, Object?>{
-        'type': 'service_account',
-        'private_key': privateKeyPem,
-        'client_email': 'test@test-project.iam.gserviceaccount.com',
-        'client_id': 12345,
-      };
-
-      expect(
-        () => ServiceAccountCredentials.fromServiceAccountInfo(info),
-        throwsFormatException,
-      );
-    });
-
-    test('fromServiceAccountInfo throws on non-string project_id', () async {
-      final info = <String, Object?>{
-        'type': 'service_account',
-        'private_key': privateKeyPem,
-        'client_email': 'test@test-project.iam.gserviceaccount.com',
-        'project_id': 12345,
-      };
-
-      expect(
-        () => ServiceAccountCredentials.fromServiceAccountInfo(info),
-        throwsFormatException,
-      );
-    });
-
-    test(
-      'fromServiceAccountInfo throws on non-string quota_project_id',
-      () async {
-        final info = <String, Object?>{
-          'type': 'service_account',
-          'private_key': privateKeyPem,
-          'client_email': 'test@test-project.iam.gserviceaccount.com',
-          'quota_project_id': 12345,
-        };
-
-        expect(
-          () => ServiceAccountCredentials.fromServiceAccountInfo(info),
-          throwsFormatException,
-        );
-      },
-    );
-
-    test(
-      'fromServiceAccountInfo throws on non-string universe_domain',
-      () async {
-        final info = <String, Object?>{
-          'type': 'service_account',
-          'private_key': privateKeyPem,
-          'client_email': 'test@test-project.iam.gserviceaccount.com',
-          'universe_domain': 12345,
-        };
-
-        expect(
-          () => ServiceAccountCredentials.fromServiceAccountInfo(info),
-          throwsFormatException,
-        );
-      },
-    );
-
-    test('fromServiceAccountInfo throws on non-string token_uri', () async {
-      final info = <String, Object?>{
-        'type': 'service_account',
-        'private_key': privateKeyPem,
-        'client_email': 'test@test-project.iam.gserviceaccount.com',
-        'token_uri': 12345,
-      };
-
-      expect(
-        () => ServiceAccountCredentials.fromServiceAccountInfo(info),
-        throwsFormatException,
-      );
-    });
-
-    test('fromServiceAccountFile loads credentials from file', () async {
-      final tempDir = await Directory.systemTemp.createTemp('sa_test_');
-      final tempFile = File('${tempDir.path}/service_account.json');
-      addTearDown(() async {
-        await tempDir.delete(recursive: true);
+        expect(creds.universeDomain, equals('custom.domain.com'));
       });
 
-      // This string was taken from a real key dump.
-      const jsonString = r'''
+      test(
+        'fromServiceAccountInfo uses default token_uri and universe_domain',
+        () async {
+          final info = {
+            'type': 'service_account',
+            'private_key': privateKeyPem,
+            'client_email': 'test@test-project.iam.gserviceaccount.com',
+          };
+
+          final creds = await ServiceAccountCredentials.fromServiceAccountInfo(
+            info,
+          );
+
+          expect(
+            creds.tokenUri,
+            equals(Uri.parse('https://oauth2.googleapis.com/token')),
+          );
+          expect(creds.universeDomain, equals('googleapis.com'));
+          expect(creds.clientId, isNull);
+          expect(creds.privateKeyId, isNull);
+          expect(creds.projectId, isNull);
+          expect(creds.quotaProjectId, isNull);
+        },
+      );
+
+      test('fromServiceAccountInfo throws on missing type', () async {
+        final info = {
+          'private_key': privateKeyPem,
+          'client_email': 'test@test-project.iam.gserviceaccount.com',
+        };
+
+        expect(
+          () => ServiceAccountCredentials.fromServiceAccountInfo(info),
+          throwsFormatException,
+        );
+      });
+
+      test('fromServiceAccountInfo throws on invalid type', () async {
+        final info = {
+          'type': 'authorized_user',
+          'private_key': privateKeyPem,
+          'client_email': 'test@test-project.iam.gserviceaccount.com',
+        };
+
+        expect(
+          () => ServiceAccountCredentials.fromServiceAccountInfo(info),
+          throwsFormatException,
+        );
+      });
+
+      test('fromServiceAccountInfo throws on missing client_email', () async {
+        final info = {'type': 'service_account', 'private_key': privateKeyPem};
+
+        expect(
+          () => ServiceAccountCredentials.fromServiceAccountInfo(info),
+          throwsFormatException,
+        );
+      });
+
+      test('fromServiceAccountInfo throws on missing private_key', () async {
+        final info = {
+          'type': 'service_account',
+          'client_email': 'test@test-project.iam.gserviceaccount.com',
+        };
+
+        expect(
+          () => ServiceAccountCredentials.fromServiceAccountInfo(info),
+          throwsFormatException,
+        );
+      });
+
+      test(
+        'fromServiceAccountInfo throws on non-string private_key_id',
+        () async {
+          final info = <String, Object?>{
+            'type': 'service_account',
+            'private_key': privateKeyPem,
+            'client_email': 'test@test-project.iam.gserviceaccount.com',
+            'private_key_id': 12345,
+          };
+
+          expect(
+            () => ServiceAccountCredentials.fromServiceAccountInfo(info),
+            throwsFormatException,
+          );
+        },
+      );
+
+      test('fromServiceAccountInfo throws on non-string client_id', () async {
+        final info = <String, Object?>{
+          'type': 'service_account',
+          'private_key': privateKeyPem,
+          'client_email': 'test@test-project.iam.gserviceaccount.com',
+          'client_id': 12345,
+        };
+
+        expect(
+          () => ServiceAccountCredentials.fromServiceAccountInfo(info),
+          throwsFormatException,
+        );
+      });
+
+      test('fromServiceAccountInfo throws on non-string project_id', () async {
+        final info = <String, Object?>{
+          'type': 'service_account',
+          'private_key': privateKeyPem,
+          'client_email': 'test@test-project.iam.gserviceaccount.com',
+          'project_id': 12345,
+        };
+
+        expect(
+          () => ServiceAccountCredentials.fromServiceAccountInfo(info),
+          throwsFormatException,
+        );
+      });
+
+      test(
+        'fromServiceAccountInfo throws on non-string quota_project_id',
+        () async {
+          final info = <String, Object?>{
+            'type': 'service_account',
+            'private_key': privateKeyPem,
+            'client_email': 'test@test-project.iam.gserviceaccount.com',
+            'quota_project_id': 12345,
+          };
+
+          expect(
+            () => ServiceAccountCredentials.fromServiceAccountInfo(info),
+            throwsFormatException,
+          );
+        },
+      );
+
+      test(
+        'fromServiceAccountInfo throws on non-string universe_domain',
+        () async {
+          final info = <String, Object?>{
+            'type': 'service_account',
+            'private_key': privateKeyPem,
+            'client_email': 'test@test-project.iam.gserviceaccount.com',
+            'universe_domain': 12345,
+          };
+
+          expect(
+            () => ServiceAccountCredentials.fromServiceAccountInfo(info),
+            throwsFormatException,
+          );
+        },
+      );
+
+      test('fromServiceAccountInfo throws on non-string token_uri', () async {
+        final info = <String, Object?>{
+          'type': 'service_account',
+          'private_key': privateKeyPem,
+          'client_email': 'test@test-project.iam.gserviceaccount.com',
+          'token_uri': 12345,
+        };
+
+        expect(
+          () => ServiceAccountCredentials.fromServiceAccountInfo(info),
+          throwsFormatException,
+        );
+      });
+
+      test('fromServiceAccountFile loads credentials from file', () async {
+        final tempDir = await Directory.systemTemp.createTemp('sa_test_');
+        final tempFile = File('${tempDir.path}/service_account.json');
+        addTearDown(() async {
+          await tempDir.delete(recursive: true);
+        });
+
+        // This string was taken from a real key dump.
+        const jsonString = r'''
 {
   "type": "service_account",
   "project_id": "test-project",
@@ -266,115 +279,119 @@ void main() {
   "universe_domain": "googleapis.com"
 }
 ''';
-      await tempFile.writeAsString(jsonString);
+        await tempFile.writeAsString(jsonString);
 
-      final creds = await ServiceAccountCredentials.fromServiceAccountFile(
-        tempFile.path,
-      );
-
-      expect(
-        creds.clientEmail,
-        equals('testkey@test-project.iam.gserviceaccount.com'),
-      );
-      expect(creds.projectId, equals('test-project'));
-      expect(
-        creds.privateKeyId,
-        equals('b6405252fba05768ca6b5f57a80ee58aad2dd354'),
-      );
-      expect(creds.clientId, equals('114569939335839849739'));
-      expect(
-        creds.tokenUri,
-        equals(Uri.parse('https://oauth2.googleapis.com/token')),
-      );
-      expect(creds.universeDomain, equals('googleapis.com'));
-    }, testOn: 'vm');
-
-    test('fromServiceAccountString loads credentials from string', () async {
-      final info = <String, Object?>{
-        'type': 'service_account',
-        'project_id': 'string-project',
-        'private_key': privateKeyPem,
-        'client_email': 'string@string-project.iam.gserviceaccount.com',
-      };
-
-      final creds = await ServiceAccountCredentials.fromServiceAccountString(
-        jsonEncode(info),
-      );
-
-      expect(
-        creds.clientEmail,
-        equals('string@string-project.iam.gserviceaccount.com'),
-      );
-      expect(creds.projectId, equals('string-project'));
-    });
-
-    test('fromPkcs8 creates valid credentials', () async {
-      final creds = await ServiceAccountCredentials.fromPkcs8(
-        clientEmail: 'pkcs8@project.iam.gserviceaccount.com',
-        privateKeyPkcs8: privateKeyPem,
-        privateKeyId: 'pkcs8-key',
-        projectId: 'pkcs8-project',
-      );
-
-      expect(
-        creds.clientEmail,
-        equals('pkcs8@project.iam.gserviceaccount.com'),
-      );
-      expect(creds.projectId, equals('pkcs8-project'));
-      expect(creds.privateKeyId, equals('pkcs8-key'));
-    });
-
-    group('sign', () {
-      test('signs message and signature is valid with public key', () async {
-        final creds = await ServiceAccountCredentials.fromPkcs8(
-          clientEmail: 'test@example.com',
-          privateKeyPkcs8: privateKeyPem,
+        final creds = await ServiceAccountCredentials.fromServiceAccountFile(
+          tempFile.path,
         );
 
-        final message = utf8.encode('Hello Google Cloud!');
-        final signature = await creds.sign(message);
-
-        expect(signature, isNotEmpty);
-
-        final isValid = await testKeyPair.publicKey.verifyBytes(
-          signature,
-          message,
+        expect(
+          creds.clientEmail,
+          equals('testkey@test-project.iam.gserviceaccount.com'),
         );
-        expect(isValid, isTrue);
+        expect(creds.projectId, equals('test-project'));
+        expect(
+          creds.privateKeyId,
+          equals('b6405252fba05768ca6b5f57a80ee58aad2dd354'),
+        );
+        expect(creds.clientId, equals('114569939335839849739'));
+        expect(
+          creds.tokenUri,
+          equals(Uri.parse('https://oauth2.googleapis.com/token')),
+        );
+        expect(creds.universeDomain, equals('googleapis.com'));
+      }, testOn: 'vm');
+
+      test('fromServiceAccountString loads credentials from string', () async {
+        final info = <String, Object?>{
+          'type': 'service_account',
+          'project_id': 'string-project',
+          'private_key': privateKeyPem,
+          'client_email': 'string@string-project.iam.gserviceaccount.com',
+        };
+
+        final creds = await ServiceAccountCredentials.fromServiceAccountString(
+          jsonEncode(info),
+        );
+
+        expect(
+          creds.clientEmail,
+          equals('string@string-project.iam.gserviceaccount.com'),
+        );
+        expect(creds.projectId, equals('string-project'));
       });
 
-      test('signature fails for modified message', () async {
+      test('fromPkcs8 creates valid credentials', () async {
         final creds = await ServiceAccountCredentials.fromPkcs8(
-          clientEmail: 'test@example.com',
+          clientEmail: 'pkcs8@project.iam.gserviceaccount.com',
           privateKeyPkcs8: privateKeyPem,
+          privateKeyId: 'pkcs8-key',
+          projectId: 'pkcs8-project',
         );
 
-        final message = utf8.encode('Hello Google Cloud!');
-        final signature = await creds.sign(message);
-
-        final tamperedMessage = utf8.encode('Hello Google Cloud?');
-        final isValid = await testKeyPair.publicKey.verifyBytes(
-          signature,
-          tamperedMessage,
+        expect(
+          creds.clientEmail,
+          equals('pkcs8@project.iam.gserviceaccount.com'),
         );
-        expect(isValid, isFalse);
+        expect(creds.projectId, equals('pkcs8-project'));
+        expect(creds.privateKeyId, equals('pkcs8-key'));
       });
 
-      test('signs Uint8List message directly', () async {
-        final creds = await ServiceAccountCredentials.fromPkcs8(
-          clientEmail: 'test@example.com',
-          privateKeyPkcs8: privateKeyPem,
-        );
+      group('sign', () {
+        test('signs message and signature is valid with public key', () async {
+          final creds = await ServiceAccountCredentials.fromPkcs8(
+            clientEmail: 'test@example.com',
+            privateKeyPkcs8: privateKeyPem,
+          );
 
-        final message = Uint8List.fromList([1, 2, 3, 4, 5]);
-        final signature = await creds.sign(message);
+          final message = utf8.encode('Hello Google Cloud!');
+          final signature = await creds.sign(message);
 
-        final isValid = await testKeyPair.publicKey.verifyBytes(
-          signature,
-          message,
-        );
-        expect(isValid, isTrue);
+          expect(signature, isNotEmpty);
+
+          final isValid = await testKeyPair.publicKey.verifyBytes(
+            signature,
+            message,
+          );
+          expect(isValid, isTrue);
+        });
+
+        test('signature fails for modified message', () async {
+          final creds = await ServiceAccountCredentials.fromPkcs8(
+            clientEmail: 'test@example.com',
+            privateKeyPkcs8: privateKeyPem,
+          );
+
+          final message = utf8.encode('Hello Google Cloud!');
+          final signature = await creds.sign(message);
+
+          final tamperedMessage = utf8.encode('Hello Google Cloud?');
+          final isValid = await testKeyPair.publicKey.verifyBytes(
+            signature,
+            tamperedMessage,
+          );
+          expect(isValid, isFalse);
+        });
+
+        test('signs Uint8List message directly', () async {
+          final creds = await ServiceAccountCredentials.fromPkcs8(
+            clientEmail: 'test@example.com',
+            privateKeyPkcs8: privateKeyPem,
+          );
+
+          final message = Uint8List.fromList([1, 2, 3, 4, 5]);
+          final signature = await creds.sign(message);
+
+          final isValid = await testKeyPair.publicKey.verifyBytes(
+            signature,
+            message,
+          );
+          expect(isValid, isTrue);
+        });
       });
-    });
-  });
+    },
+    skip: _isDart313OrLater
+        ? null
+        : 'Requires Dart 3.13 or later for native assets',
+  );
 }

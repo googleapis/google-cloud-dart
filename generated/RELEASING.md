@@ -24,7 +24,7 @@ echo $LIBRARIAN_VERSION
 
 Update the version in both:
 - `LIBRARIAN_VERSION` in
-  [`.github/workflows/generators.yaml`](../.github/workflows/generators.yaml)
+  [`.github/workflows/dart_checks.yaml`](../.github/workflows/dart_checks.yaml)
 - The top-level `version` field in [`../librarian.yaml`](../librarian.yaml)
 
 ## 2. Update API sources (optional)

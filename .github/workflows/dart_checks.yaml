@@ -27,6 +27,8 @@ on:
 env:
   FORMAT_DART_VERSION: 3.13.2
   GOOGLE_CLOUD_PROJECT: test-project
+  LIBRARIAN_VERSION: v0.39.1-0.20260827211949-1cdc9901f973
+  MINIMUM_DART_VERSION: &MINIMUM_DART_VERSION 3.9.0
 name: Dart Checks
 jobs:
   format:
@@ -56,7 +58,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        sdk: [3.10.0, stable]
+        sdk: [*MINIMUM_DART_VERSION, stable]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - uses: dart-lang/setup-dart@7654d458321ee25acccccfdb86cd48bd95768ff1
@@ -79,7 +81,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        sdk: [3.10.0, stable]
+        sdk: [*MINIMUM_DART_VERSION, stable]
         platform: ["chrome", "vm"]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
@@ -94,7 +96,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        sdk: [3.10.0, stable]
+        sdk: [*MINIMUM_DART_VERSION, stable]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - uses: dart-lang/setup-dart@7654d458321ee25acccccfdb86cd48bd95768ff1
@@ -109,7 +111,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        sdk: [3.10.0, stable]
+        sdk: [*MINIMUM_DART_VERSION, stable]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
@@ -126,3 +128,51 @@ jobs:
       - name: Run Tests
         run: firebase emulators:exec --config=firestore_emulators/firebase.json \
           "dart test -P firebase-emulator ."
+
+  generator:
+    name: Generators
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - name: Install protoc
+        run: |
+          set -e
+          curl -fSSL  --retry 3 --retry-all-errors --retry-delay 15 -o /tmp/protoc.zip https://github.com/protocolbuffers/protobuf/releases/download/v28.3/protoc-28.3-linux-x86_64.zip
+          cd /usr/local
+          sudo unzip -x /tmp/protoc.zip
+          protoc --version
+      - name: Install Go
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e
+        with:
+          go-version: 1.26.1
+          cache: false
+      - name: Cache Go Librarian
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-librarian-${{ env.LIBRARIAN_VERSION }}
+      - name: Install Dart  # The generator uses "dart format".
+        uses: dart-lang/setup-dart@7654d458321ee25acccccfdb86cd48bd95768ff1
+        with:
+          sdk: ${{ env.FORMAT_DART_VERSION }}
+      - run: dart pub get
+      # Regenerate and check the existing clients. If there is any difference
+      # between the generated code and the committed code that is an error; all
+      # the inputs should be pinned, including the generator version and the
+      # googleapis SHA.
+      - name: Regenerate existing clients
+        # The current head version of librarian can be generated with:
+        # GOPROXY=direct go list -m -u -f '{{.Version}}' github.com/googleapis/librarian@main
+        run: go run github.com/googleapis/librarian/cmd/librarian@${{ env.LIBRARIAN_VERSION }} generate -all
+      - name: Format librarian configuration
+        run: go run github.com/googleapis/librarian/cmd/librarian@${{ env.LIBRARIAN_VERSION }} tidy
+      - name: Update documentation
+        run: dart run tool/update_docs.dart
+      - name: Generated Diff
+        run: git diff --exit-code
+      - name: Print diff on failure
+        if: failure()
+        run: git diff
+
