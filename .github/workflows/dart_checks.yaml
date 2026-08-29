@@ -22,9 +22,8 @@ on:
   pull_request:
     branches: [main]
 
-# We use a specific Dart SDK version here in order to have hermetic,
-# reproducible formatting (formatting can change between SDK versions, ...).
 env:
+  # Formatting changes between SDK versions so fix the SDK version used for `dart format`.
   FORMAT_DART_VERSION: 3.13.2
   GOOGLE_CLOUD_PROJECT: test-project
   LIBRARIAN_VERSION: v0.39.1-0.20260827211949-1cdc9901f973
