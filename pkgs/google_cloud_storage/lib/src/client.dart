@@ -95,12 +95,7 @@ final class Storage {
     (null, null) => defaultProjectId(),
   };
 
-  FutureOr<ServiceClient> get _serviceClient {
-    if (_cachedServiceClient case final client?) return client;
-    return _createServiceClient();
-  }
-
-  Future<ServiceClient> _createServiceClient() async => _cachedServiceClient =
+  FutureOr<ServiceClient> get _serviceClient async => _cachedServiceClient ??=
       ServiceClient(client: await _httpClient, gcclVersion: packageVersion);
 
   static Uri _calculateBaseUrl(
