@@ -39,6 +39,10 @@ String? _optionalString(Map<String, dynamic> info, String key) {
   return value;
 }
 
+// Design based on:
+// - https://github.com/googleapis/google-cloud-java/blob/main/google-auth-library-java/oauth2_http/java/com/google/auth/oauth2/ServiceAccountCredentials.java
+// - https://github.com/googleapis/google-cloud-python/blob/main/packages/google-auth/google/oauth2/service_account.py
+
 /// Credentials for a Google Cloud service account.
 ///
 /// Service accounts are used for server-to-server communication, such as
@@ -64,6 +68,8 @@ final class ServiceAccountCredentials {
   final Uri tokenUri;
 
   /// The universe domain for the service account.
+  /// 
+  /// See [Universes, regions, and zones](https://docs.cloud.google.com/docs/overview#universes_regions_and_zones).
   final String universeDomain;
 
   final RsassaPkcs1V15PrivateKey _privateKey;
