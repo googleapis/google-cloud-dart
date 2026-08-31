@@ -83,7 +83,7 @@ libraries:
         > Dart command-line, cloud, and server applications should use
         > [Genkit](https://pub.dev/packages/genkit), which provides access to
         > Gemini API, Vertex AI, and
-        > [many other](https://genkit.dev/docs/js/integrations/model-providers/).
+        > [many others](https://genkit.dev/docs/js/integrations/model-providers/).
       readme_quickstart_text: |-
         ## Quickstart
 
@@ -172,7 +172,7 @@ libraries:
         > Dart command-line, cloud, and server applications should use
         > [Genkit](https://pub.dev/packages/genkit), which provides access to
         > Gemini API, Vertex AI, and
-        > [many other](https://genkit.dev/docs/js/integrations/model-providers/).
+        > [many others](https://genkit.dev/docs/js/integrations/model-providers/).
       readme_quickstart_text: |-
         ## Quickstart
 
