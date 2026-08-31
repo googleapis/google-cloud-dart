@@ -78,7 +78,7 @@ final class ServiceAccountCredentials {
     Uri? tokenUri,
     this.universeDomain = 'googleapis.com',
   }) : _privateKey = privateKey,
-       tokenUri = tokenUri ?? Uri.https('oauth2.googleapis.com', '/token');
+       tokenUri = tokenUri ?? Uri.https('oauth2.$universeDomain', '/token');
 
   /// Creates a [ServiceAccountCredentials] instance from a service account
   /// JSON file at [path].

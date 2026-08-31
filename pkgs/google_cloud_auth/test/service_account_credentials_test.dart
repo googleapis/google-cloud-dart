@@ -117,6 +117,26 @@ void main() {
         },
       );
 
+      test('fromServiceAccountInfo interpolates custom universe_domain in '
+          'default token_uri', () async {
+        final info = {
+          'type': 'service_account',
+          'private_key': privateKeyPem,
+          'client_email': 'test@test-project.iam.gserviceaccount.com',
+          'universe_domain': 'custom.domain.com',
+        };
+
+        final creds = await ServiceAccountCredentials.fromServiceAccountInfo(
+          info,
+        );
+
+        expect(
+          creds.tokenUri,
+          equals(Uri.parse('https://oauth2.custom.domain.com/token')),
+        );
+        expect(creds.universeDomain, equals('custom.domain.com'));
+      });
+
       test('fromServiceAccountInfo throws on missing type', () async {
         final info = {
           'private_key': privateKeyPem,
@@ -335,7 +355,29 @@ void main() {
         );
         expect(creds.projectId, equals('pkcs8-project'));
         expect(creds.privateKeyId, equals('pkcs8-key'));
+        expect(
+          creds.tokenUri,
+          equals(Uri.parse('https://oauth2.googleapis.com/token')),
+        );
+        expect(creds.universeDomain, equals('googleapis.com'));
       });
+
+      test(
+        'fromPkcs8 interpolates custom universeDomain in default tokenUri',
+        () async {
+          final creds = await ServiceAccountCredentials.fromPkcs8(
+            clientEmail: 'pkcs8@project.iam.gserviceaccount.com',
+            privateKeyPkcs8: privateKeyPem,
+            universeDomain: 'custom.domain.com',
+          );
+
+          expect(
+            creds.tokenUri,
+            equals(Uri.parse('https://oauth2.custom.domain.com/token')),
+          );
+          expect(creds.universeDomain, equals('custom.domain.com'));
+        },
+      );
 
       group('sign', () {
         test('signs message and signature is valid with public key', () async {
