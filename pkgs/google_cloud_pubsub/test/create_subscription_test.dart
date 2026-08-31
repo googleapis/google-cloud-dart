@@ -33,23 +33,27 @@ void main() {
       await client.close();
     });
 
-    test('create existing subscription throws ConflictException', () async {
-      final topicName = 'test-topic-${DateTime.now().millisecondsSinceEpoch}';
-      final subscriptionName =
-          'test-sub-${DateTime.now().millisecondsSinceEpoch}';
-      final topic = client.topic(topicName);
-      final subscription = client.subscription(subscriptionName);
+    test(
+      'create existing subscription throws ConflictException',
+      () async {
+        final topicName = 'test-topic-${DateTime.now().millisecondsSinceEpoch}';
+        final subscriptionName =
+            'test-sub-${DateTime.now().millisecondsSinceEpoch}';
+        final topic = client.topic(topicName);
+        final subscription = client.subscription(subscriptionName);
 
-      await topic.create();
-      addTearDown(() async => await topic.delete());
-      await subscription.create(topic: topic.name);
-      addTearDown(() async => await subscription.delete());
+        await topic.create();
+        addTearDown(() async => await topic.delete());
+        await subscription.create(topic: topic.name);
+        addTearDown(() async => await subscription.delete());
 
-      expect(
-        () => subscription.create(topic: topic.name),
-        throwsA(isA<ConflictException>()),
-      );
-    }, retry: isEmulator ? 3 : 0);
+        expect(
+          () => subscription.create(topic: topic.name),
+          throwsA(isA<ConflictException>()),
+        );
+      },
+      retry: isEmulator ? 3 : 0,
+    );
 
     test('create subscription for non-existent topic throws '
         'NotFoundException', () async {

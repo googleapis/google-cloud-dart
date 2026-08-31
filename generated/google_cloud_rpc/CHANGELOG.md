@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.6.0
+## 0.5.5
 
 - feat: track library version usage (#330)
 - fix(dart): remove emptying `testing.dart` files (#327)

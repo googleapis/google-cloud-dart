@@ -442,7 +442,6 @@ libraries:
       - test/client_test.dart
       - test/exceptions_test.dart
       - test/status_test.dart
-      - test/version_test.dart
       - lib/src/rpc.p.dart
     dart:
       dependencies: googleapis_auth,http

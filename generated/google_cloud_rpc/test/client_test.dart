@@ -142,25 +142,6 @@ void main() {
       },
     );
 
-    test('trims gapicVersion and gcclVersion and ignores whitespace', () async {
-      late Request customRequest;
-      final customService = ServiceClient(
-        client: MockClient((request) async {
-          customRequest = request;
-          return Response('', 200);
-        }),
-        gapicVersion: '   ',
-        gcclVersion: '   ',
-      );
-
-      await customService.get(sampleUrl);
-
-      expect(customRequest.headers, {
-        'x-goog-api-client': matches(apiBaseHeaderPattern),
-      });
-      expect(customService.clientHeader, matches(apiBaseHeaderPattern));
-    });
-
     group('requests with body', () {
       late Request actualRequest;
       final service = ServiceClient(
