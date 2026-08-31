@@ -87,6 +87,24 @@ Iterable<Duration> delaySequence({
   }
 }
 
+bool _isRetryable(Exception e) => switch (e) {
+  GrpcError(:final code) => switch (code) {
+    StatusCode.aborted ||
+    StatusCode.deadlineExceeded ||
+    StatusCode.internal ||
+    StatusCode.resourceExhausted ||
+    StatusCode.unavailable ||
+    StatusCode.unknown => true,
+    _ => false,
+  },
+  ServiceUnavailableException() ||
+  GatewayTimeoutException() ||
+  TooManyRequestsException() ||
+  InternalServerErrorException() ||
+  ConflictException() => true,
+  _ => false,
+};
+
 /// Runs [body] with exponential backoff retries.
 ///
 /// Only transient gRPC errors and retryable [ServiceException]s are retried.
@@ -108,30 +126,8 @@ Future<T> runWithRetry<T>(
   while (true) {
     try {
       return await body();
-    } catch (e) {
-      if (!isIdempotent) rethrow;
-
-      if (e is GrpcError) {
-        switch (e.code) {
-          case StatusCode.aborted:
-          case StatusCode.deadlineExceeded:
-          case StatusCode.internal:
-          case StatusCode.resourceExhausted:
-          case StatusCode.unavailable:
-          case StatusCode.unknown:
-            break;
-          default:
-            rethrow;
-        }
-      } else if (e is ServiceUnavailableException ||
-          e is GatewayTimeoutException ||
-          e is TooManyRequestsException ||
-          e is InternalServerErrorException ||
-          e is ConflictException) {
-        // Retryable service exceptions
-      } else {
-        rethrow;
-      }
+    } on Exception catch (e) {
+      if (!isIdempotent || !_isRetryable(e)) rethrow;
 
       if (delays.moveNext()) {
         await Future<void>.delayed(delays.current);
