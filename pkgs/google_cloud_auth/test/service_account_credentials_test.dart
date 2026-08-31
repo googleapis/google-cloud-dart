@@ -31,7 +31,7 @@ String _pkcs8ToPem(Uint8List pkcs8Bytes) {
   return lines.join('\n');
 }
 
-final _isDart313OrLater = () {
+final _canUseWebCrypto = () {
   if (!const bool.fromEnvironment('dart.library.io')) return true;
   final versionStr = Platform.version.split(' ').first;
   final parts = versionStr.split('.').map(int.tryParse).toList();
@@ -474,7 +474,7 @@ void main() {
         });
       });
     },
-    skip: _isDart313OrLater
+    skip: _canUseWebCrypto
         ? null
         : 'Requires Dart 3.13 or later for native assets',
   );
