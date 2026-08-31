@@ -68,7 +68,7 @@ final class ServiceAccountCredentials {
   final Uri tokenUri;
 
   /// The universe domain for the service account.
-  /// 
+  ///
   /// See [Universes, regions, and zones](https://docs.cloud.google.com/docs/overview#universes_regions_and_zones).
   final String universeDomain;
 
