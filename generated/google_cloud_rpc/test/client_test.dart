@@ -18,6 +18,7 @@ import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:google_cloud_rpc/rpc.dart';
 import 'package:google_cloud_rpc/service_client.dart';
+import 'package:google_cloud_rpc/src/version.dart';
 import 'package:http/http.dart';
 import 'package:http/testing.dart';
 import 'package:test/test.dart';
@@ -30,8 +31,10 @@ class TestMessage extends JsonEncodable {
 }
 
 final sampleUrl = Uri.https('example.org', '/path');
-const apiHeaderPattern =
-    r'^gl-dart/(?:3\.\d+\.\d+|0) gax/0\.5\.5-wip rest/0\.5\.5-wip gapic/0\.5\.5-wip$';
+final apiBaseHeaderPattern =
+    r'^gl-dart/(?:3\.\d+\.\d+|0) ' +
+    RegExp.escape('gax/$packageVersion ') +
+    RegExp.escape('rest/$packageVersion');
 
 void main() {
   group('non-streaming', () {
@@ -57,40 +60,62 @@ void main() {
           expect(actualRequest.method, method);
           expect(actualRequest.url, sampleUrl);
           expect(actualRequest.headers, {
-            'x-goog-api-client': matches(apiHeaderPattern),
+            'x-goog-api-client': matches(apiBaseHeaderPattern),
           });
           expect(actualRequest.body, isEmpty);
         });
       }
+    });
 
-      test('appends gccl token when gcclVersion provided '
-          '(replacing default gapic)', () async {
-        late Request customRequest;
-        final customService = ServiceClient(
-          client: MockClient((request) async {
-            customRequest = request;
-            return Response('', 200);
-          }),
-          gcclVersion: '0.6.4-wip',
-        );
+    test('appends gccl token when gcclVersion provided', () async {
+      late Request customRequest;
+      final customService = ServiceClient(
+        client: MockClient((request) async {
+          customRequest = request;
+          return Response('', 200);
+        }),
+        gcclVersion: '0.6.4-wip',
+      );
 
-        await customService.get(sampleUrl);
+      await customService.get(sampleUrl);
 
-        expect(customRequest.headers, {
-          'x-goog-api-client': matches(
-            r'^gl-dart/(?:3\.\d+\.\d+|0) gax/0\.5\.5-wip rest/0\.5\.5-wip gccl/0\.6\.4-wip$',
-          ),
-        });
-        expect(
-          customService.clientHeader,
-          matches(
-            r'^gl-dart/(?:3\.\d+\.\d+|0) gax/0\.5\.5-wip rest/0\.5\.5-wip gccl/0\.6\.4-wip$',
-          ),
-        );
+      expect(customRequest.headers, {
+        'x-goog-api-client': matches(
+          apiBaseHeaderPattern + RegExp.escape(' gccl/0.6.4-wip'),
+        ),
       });
+      expect(
+        customService.clientHeader,
+        matches(apiBaseHeaderPattern + RegExp.escape(' gccl/0.6.4-wip')),
+      );
+    });
 
-      test('appends gapic token when gapicVersion provided '
-          '(replacing default gapic)', () async {
+    test('appends gapic token when gapicVersion provided', () async {
+      late Request customRequest;
+      final customService = ServiceClient(
+        client: MockClient((request) async {
+          customRequest = request;
+          return Response('', 200);
+        }),
+        gapicVersion: '0.1.0',
+      );
+
+      await customService.get(sampleUrl);
+
+      expect(customRequest.headers, {
+        'x-goog-api-client': matches(
+          apiBaseHeaderPattern + RegExp.escape(' gapic/0.1.0'),
+        ),
+      });
+      expect(
+        customService.clientHeader,
+        matches(apiBaseHeaderPattern + RegExp.escape(' gapic/0.1.0')),
+      );
+    });
+
+    test(
+      'appends both gapic and gccl tokens when both versions provided',
+      () async {
         late Request customRequest;
         final customService = ServiceClient(
           client: MockClient((request) async {
@@ -98,71 +123,42 @@ void main() {
             return Response('', 200);
           }),
           gapicVersion: '0.1.0',
+          gcclVersion: '0.2.0',
         );
 
         await customService.get(sampleUrl);
 
         expect(customRequest.headers, {
           'x-goog-api-client': matches(
-            r'^gl-dart/(?:3\.\d+\.\d+|0) gax/0\.5\.5-wip rest/0\.5\.5-wip gapic/0\.1\.0$',
+            apiBaseHeaderPattern + RegExp.escape(' gapic/0.1.0 gccl/0.2.0'),
           ),
         });
         expect(
           customService.clientHeader,
           matches(
-            r'^gl-dart/(?:3\.\d+\.\d+|0) gax/0\.5\.5-wip rest/0\.5\.5-wip gapic/0\.1\.0$',
+            apiBaseHeaderPattern + RegExp.escape(' gapic/0.1.0 gccl/0.2.0'),
           ),
         );
-      });
+      },
+    );
 
-      test(
-        'appends both gapic and gccl tokens when both versions provided',
-        () async {
-          late Request customRequest;
-          final customService = ServiceClient(
-            client: MockClient((request) async {
-              customRequest = request;
-              return Response('', 200);
-            }),
-            gapicVersion: '0.1.0',
-            gcclVersion: '0.2.0',
-          );
-
-          await customService.get(sampleUrl);
-
-          expect(customRequest.headers, {
-            'x-goog-api-client': matches(
-              r'^gl-dart/(?:3\.\d+\.\d+|0) gax/0\.5\.5-wip rest/0\.5\.5-wip gapic/0\.1\.0 gccl/0\.2\.0$',
-            ),
-          });
-          expect(
-            customService.clientHeader,
-            matches(
-              r'^gl-dart/(?:3\.\d+\.\d+|0) gax/0\.5\.5-wip rest/0\.5\.5-wip gapic/0\.1\.0 gccl/0\.2\.0$',
-            ),
-          );
-        },
+    test('trims gapicVersion and gcclVersion and ignores whitespace', () async {
+      late Request customRequest;
+      final customService = ServiceClient(
+        client: MockClient((request) async {
+          customRequest = request;
+          return Response('', 200);
+        }),
+        gapicVersion: '   ',
+        gcclVersion: '   ',
       );
 
-      test('trims gapicVersion and gcclVersion and ignores whitespace', () async {
-        late Request customRequest;
-        final customService = ServiceClient(
-          client: MockClient((request) async {
-            customRequest = request;
-            return Response('', 200);
-          }),
-          gapicVersion: '   ',
-          gcclVersion: '   ',
-        );
+      await customService.get(sampleUrl);
 
-        await customService.get(sampleUrl);
-
-        expect(customRequest.headers, {
-          'x-goog-api-client': matches(
-            r'^gl-dart/(?:3\.\d+\.\d+|0) gax/0\.5\.5-wip rest/0\.5\.5-wip gapic/0\.5\.5-wip$',
-          ),
-        });
+      expect(customRequest.headers, {
+        'x-goog-api-client': matches(apiBaseHeaderPattern),
       });
+      expect(customService.clientHeader, matches(apiBaseHeaderPattern));
     });
 
     group('requests with body', () {
@@ -186,7 +182,7 @@ void main() {
           expect(actualRequest.url, sampleUrl);
           expect(actualRequest.headers, {
             'content-type': 'application/json',
-            'x-goog-api-client': matches(apiHeaderPattern),
+            'x-goog-api-client': matches(apiBaseHeaderPattern),
           });
           expect(actualRequest.body, '"<test payload>"');
         });
@@ -221,9 +217,9 @@ void main() {
         () => service.post(sampleUrl),
         throwsA(
           isA<InternalServerErrorException>().having(
-            (e) => e.responseBody,
-            'responseBody',
-            '',
+            (e) => e.message,
+            'message',
+            'unknown error',
           ),
         ),
       );
@@ -238,9 +234,9 @@ void main() {
         () => service.post(sampleUrl),
         throwsA(
           isA<InternalServerErrorException>().having(
-            (e) => e.responseBody,
-            'responseBody',
-            isNull,
+            (e) => e.message,
+            'message',
+            'unknown error',
           ),
         ),
       );
@@ -259,8 +255,7 @@ void main() {
           isA<BadRequestException>()
               .having((e) => e.message, 'message', 'failure')
               .having((e) => e.statusCode, 'statusCode', 400)
-              .having((e) => e.status?.toJson(), 'status', status.toJson())
-              .having((e) => e.responseBody, 'responseBody', responseBody),
+              .having((e) => e.status?.toJson(), 'status', status.toJson()),
         ),
       );
     });
@@ -274,8 +269,8 @@ void main() {
         () => service.post(sampleUrl),
         throwsA(
           isA<BadRequestException>().having(
-            (e) => e.responseBody,
-            'responseBody',
+            (e) => e.message,
+            'message',
             '"Hello!"',
           ),
         ),
@@ -323,7 +318,7 @@ void main() {
           expect(actualRequest.method, method);
           expect(actualRequest.url, Uri.parse('http://example.com/'));
           expect(actualRequest.headers, {
-            'x-goog-api-client': matches(apiHeaderPattern),
+            'x-goog-api-client': matches(apiBaseHeaderPattern),
           });
           expect(actualRequest.body, isEmpty);
         });
@@ -359,7 +354,7 @@ void main() {
           expect(actualRequest.method, method);
           expect(actualRequest.url, Uri.parse('http://example.com/?alt=sse'));
           expect(actualRequest.headers, {
-            'x-goog-api-client': matches(apiHeaderPattern),
+            'x-goog-api-client': matches(apiBaseHeaderPattern),
           });
           expect(actualRequest.body, isEmpty);
         });
@@ -395,7 +390,7 @@ void main() {
           expect(actualRequest.url, Uri.parse('http://example.com/?alt=sse'));
           expect(actualRequest.headers, {
             'content-type': 'application/json',
-            'x-goog-api-client': matches(apiHeaderPattern),
+            'x-goog-api-client': matches(apiBaseHeaderPattern),
           });
           expect(actualRequest.body, '"<test payload>"');
         });
@@ -434,9 +429,9 @@ void main() {
         emitsInOrder([
           emitsError(
             isA<InternalServerErrorException>().having(
-              (e) => e.responseBody,
-              'responseBody',
-              '',
+              (e) => e.message,
+              'message',
+              'unknown error',
             ),
           ),
           emitsDone,
@@ -454,9 +449,9 @@ void main() {
         emitsInOrder([
           emitsError(
             isA<InternalServerErrorException>().having(
-              (e) => e.responseBody,
-              'responseBody',
-              isNull,
+              (e) => e.message,
+              'message',
+              'unknown error',
             ),
           ),
           emitsDone,
@@ -475,9 +470,11 @@ void main() {
         service.postStreaming(sampleUrl, enableSse: true),
         emitsInOrder([
           emitsError(
-            isA<BadRequestException>()
-                .having((e) => e.status?.toJson(), 'status', status.toJson())
-                .having((e) => e.responseBody, 'responseBody', responseBody),
+            isA<BadRequestException>().having(
+              (e) => e.status?.toJson(),
+              'status',
+              status.toJson(),
+            ),
           ),
           emitsDone,
         ]),
@@ -494,8 +491,8 @@ void main() {
         emitsInOrder([
           emitsError(
             isA<BadRequestException>().having(
-              (e) => e.responseBody,
-              'responseBody',
+              (e) => e.message,
+              'message',
               '"Hello!"',
             ),
           ),

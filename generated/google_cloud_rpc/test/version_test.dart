@@ -17,12 +17,12 @@ library;
 
 import 'dart:io';
 
-import 'package:google_cloud_rpc/src/versions.dart';
+import 'package:google_cloud_rpc/src/version.dart';
 import 'package:test/test.dart';
 
 void main() {
   // Note: Consider using https://pub.dev/packages/build_version or similar
-  // code generator to automate generating `lib/src/versions.dart` from `pubspec.yaml`.
+  // code generator to automate generating `lib/src/version.dart` from `pubspec.yaml`.
   test('packageVersion matches pubspec.yaml', () {
     final pkgPubspec = File('generated/google_cloud_rpc/pubspec.yaml');
     final pubspecFile = pkgPubspec.existsSync()
@@ -46,7 +46,7 @@ void main() {
       packageVersion,
       pubspecVersion,
       reason:
-          'packageVersion in lib/src/versions.dart ($packageVersion) must match '
+          'packageVersion in lib/src/version.dart ($packageVersion) must match '
           'version in pubspec.yaml ($pubspecVersion).',
     );
   });

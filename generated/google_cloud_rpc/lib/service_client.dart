@@ -18,7 +18,8 @@ import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:http/http.dart' as http;
 
 import 'exceptions.dart';
-import 'src/versions.dart';
+import 'src/version.dart';
+import 'src/web.dart' if (dart.library.io) 'src/vm.dart' show clientDartVersion;
 
 export 'dart:typed_data' show Uint8List;
 
@@ -28,6 +29,7 @@ export 'src/web.dart'
 
 const String _clientKey = 'x-goog-api-client';
 
+// ignore: prefer_const_declarations
 String get _baseClientName =>
     'gl-dart/$clientDartVersion gax/$packageVersion rest/$packageVersion';
 
@@ -55,6 +57,11 @@ class ServiceClient {
 
   /// Creates a `ServiceClient` using [client] for transport.
   ///
+  /// The provided [http.Client] must be configured to provide whatever
+  /// authentication is required by the API being accessed. You can do that
+  /// using
+  /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
+  ///
   /// If [gapicVersion] is set, `gapic/<version>` is included in the
   /// `x-goog-api-client` header.
   ///
@@ -65,11 +72,6 @@ class ServiceClient {
   /// includes both automatically-generated and hand-written components.
   /// For example, `package:google_cloud_firestore` (hand-written) wraps
   /// `package:google_cloud_firestore_v1` (generated).
-  ///
-  /// The provided [http.Client] must be configured to provide whatever
-  /// authentication is required by the API being accessed. You can do that
-  /// using
-  /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
   ServiceClient({required this.client, this.gapicVersion, this.gcclVersion});
 
   /// The `x-goog-api-client` header value sent with every request.
@@ -82,9 +84,6 @@ class ServiceClient {
 
     if (hasGapic) {
       buffer.write(' gapic/$gapic');
-    } else if (!hasGccl) {
-      // Default fallback to packageVersion for un-updated generated clients.
-      buffer.write(' gapic/$packageVersion');
     }
 
     if (hasGccl) {
@@ -223,7 +222,6 @@ class ServiceClient {
         throw ServiceException(
           'Unsupported content type: ${response.headers['content-type']}',
           statusCode: response.statusCode,
-          response: response,
         );
     }
     final lines = response.stream.toStringStream().transform(

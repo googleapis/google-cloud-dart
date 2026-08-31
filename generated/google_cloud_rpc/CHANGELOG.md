@@ -1,8 +1,10 @@
 # Changelog
 
-## 0.5.5-wip
+## 0.6.0
 
-- feat: add optional `apiClientHeader` parameter to `ServiceClient`.
+- feat: track library version usage (#330)
+- fix(dart): remove emptying `testing.dart` files (#327)
+- chore: update cloud dependencies
 
 ## 0.5.4
 

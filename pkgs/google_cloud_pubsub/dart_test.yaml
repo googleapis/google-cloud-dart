@@ -16,3 +16,11 @@
 platforms: [vm]
 
 test-randomize-ordering-seed: random
+
+tags:
+  firebase-emulator:
+exclude_tags: firebase-emulator
+
+presets:
+  firebase-emulator:
+    include_tags: firebase-emulator
