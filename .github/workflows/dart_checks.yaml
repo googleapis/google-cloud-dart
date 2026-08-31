@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-      - uses: dart-lang/setup-dart@7654d458321ee25acccccfdb86cd48bd95768ff1
+      - uses: dart-lang/setup-dart@6afc89df92d6eb3834022f73cd65adc8cdfcb92d
         with:
           sdk: ${{ env.FORMAT_DART_VERSION }}
       - name: Cache Pub Dependencies
@@ -60,7 +60,7 @@ jobs:
         sdk: [*MINIMUM_DART_TEST_VERSION, stable]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-      - uses: dart-lang/setup-dart@7654d458321ee25acccccfdb86cd48bd95768ff1
+      - uses: dart-lang/setup-dart@6afc89df92d6eb3834022f73cd65adc8cdfcb92d
         with:
           sdk: ${{ matrix.sdk }}
       - name: Cache Pub Dependencies
@@ -84,7 +84,7 @@ jobs:
         platform: ["chrome", "vm"]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-      - uses: dart-lang/setup-dart@7654d458321ee25acccccfdb86cd48bd95768ff1
+      - uses: dart-lang/setup-dart@6afc89df92d6eb3834022f73cd65adc8cdfcb92d
         with:
           sdk: ${{ matrix.sdk }}
       - run: dart pub get
@@ -98,7 +98,7 @@ jobs:
         sdk: [*MINIMUM_DART_TEST_VERSION, stable]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-      - uses: dart-lang/setup-dart@7654d458321ee25acccccfdb86cd48bd95768ff1
+      - uses: dart-lang/setup-dart@6afc89df92d6eb3834022f73cd65adc8cdfcb92d
         with:
           sdk: ${{ matrix.sdk }}
       - run: dart pub get
@@ -114,11 +114,11 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
-      - uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961
+      - uses: actions/setup-java@dd06d9cba3e5552c54d9f8ea23572deb30010f7c
         with:
           distribution: 'zulu'
           java-version: '25'
-      - uses: dart-lang/setup-dart@7654d458321ee25acccccfdb86cd48bd95768ff1
+      - uses: dart-lang/setup-dart@6afc89df92d6eb3834022f73cd65adc8cdfcb92d
         with:
           sdk: ${{ matrix.sdk }}
       - run: dart pub get
@@ -153,7 +153,7 @@ jobs:
             ~/go/pkg/mod
           key: ${{ runner.os }}-go-librarian-${{ env.LIBRARIAN_VERSION }}
       - name: Install Dart  # The generator uses "dart format".
-        uses: dart-lang/setup-dart@7654d458321ee25acccccfdb86cd48bd95768ff1
+        uses: dart-lang/setup-dart@6afc89df92d6eb3834022f73cd65adc8cdfcb92d
         with:
           sdk: ${{ env.FORMAT_DART_VERSION }}
       - run: dart pub get
