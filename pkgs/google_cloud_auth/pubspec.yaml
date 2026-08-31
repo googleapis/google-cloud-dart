@@ -24,7 +24,6 @@ environment:
 resolution: workspace
 
 dependencies:
-  meta: ^1.16.0
   webcrypto: ^0.6.0
 
 dev_dependencies:

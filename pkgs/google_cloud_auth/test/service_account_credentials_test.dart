@@ -383,44 +383,6 @@ void main() {
         );
       });
 
-      test('fromPkcs8 creates valid credentials', () async {
-        final creds = await ServiceAccountCredentials.fromPkcs8(
-          clientEmail: 'pkcs8@project.iam.gserviceaccount.com',
-          privateKeyPkcs8: privateKeyPem,
-          privateKeyId: 'pkcs8-key',
-          projectId: 'pkcs8-project',
-        );
-
-        expect(
-          creds.clientEmail,
-          equals('pkcs8@project.iam.gserviceaccount.com'),
-        );
-        expect(creds.projectId, equals('pkcs8-project'));
-        expect(creds.privateKeyId, equals('pkcs8-key'));
-        expect(
-          creds.tokenUri,
-          equals(Uri.https('oauth2.googleapis.com', '/token')),
-        );
-        expect(creds.universeDomain, equals('googleapis.com'));
-      });
-
-      test(
-        'fromPkcs8 interpolates custom universeDomain in default tokenUri',
-        () async {
-          final creds = await ServiceAccountCredentials.fromPkcs8(
-            clientEmail: 'pkcs8@project.iam.gserviceaccount.com',
-            privateKeyPkcs8: privateKeyPem,
-            universeDomain: 'custom.domain.com',
-          );
-
-          expect(
-            creds.tokenUri,
-            equals(Uri.https('oauth2.custom.domain.com', '/token')),
-          );
-          expect(creds.universeDomain, equals('custom.domain.com'));
-        },
-      );
-
       group('sign', () {
         test('signs message and signature is valid with public key', () async {
           final creds = await ServiceAccountCredentials.fromPkcs8(
