@@ -17,6 +17,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:google_cloud_storage/google_cloud_storage.dart';
+import 'package:google_cloud_storage/src/version.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:test/test.dart';
@@ -281,5 +282,27 @@ void main() async {
 
     final actualData = await storage.downloadObject('bucket', 'object');
     expect(actualData, utf8.encode('Hello World!'));
+  });
+
+  test('sends gccl token in x-goog-api-client header', () async {
+    late http.Request actualRequest;
+    final mockClient = MockClient((request) async {
+      actualRequest = request;
+      return http.Response.bytes(
+        [1, 2, 3],
+        200,
+        headers: {'x-goog-stored-content-encoding': 'identity'},
+      );
+    });
+
+    final storage = Storage(client: mockClient, projectId: 'test-project');
+    addTearDown(storage.close);
+
+    await storage.downloadObject('test-bucket', 'test-obj');
+
+    expect(
+      actualRequest.headers['x-goog-api-client'],
+      contains('gccl/$packageVersion'),
+    );
   });
 }

@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@TestOn('vm')
-@Tags(['google-cloud'])
-library;
-
 import 'package:google_cloud_storage/google_cloud_storage.dart';
+import 'package:google_cloud_storage/src/version.dart';
+import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
 import 'package:test/test.dart';
 
 import 'test_utils.dart';
@@ -25,72 +24,92 @@ void main() async {
   late Storage storage;
 
   group('list buckets', () {
-    setUp(() {
-      storage = Storage();
-    });
+    group('google-cloud', tags: ['google-cloud'], testOn: 'vm', () {
+      setUp(() {
+        storage = Storage();
+      });
 
-    tearDown(() => storage.close());
+      tearDown(() => storage.close());
 
-    test('no buckets', () async {
-      expect(storage.listBuckets(prefix: 'nobuckethasthisprefix'), emitsDone);
-    });
+      test('no buckets', () async {
+        expect(storage.listBuckets(prefix: 'nobuckethasthisprefix'), emitsDone);
+      });
 
-    test('single bucket', () async {
-      final bucketName = await createBucketWithTearDown(
-        storage,
-        'list_buckets_single_bkt',
-      );
+      test('single bucket', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'list_buckets_single_bkt',
+        );
 
-      await expectLater(
-        storage.listBuckets(prefix: bucketName).map((b) => b.name),
-        emitsInOrder([emits(bucketName), emitsDone]),
-      );
-    });
+        await expectLater(
+          storage.listBuckets(prefix: bucketName).map((b) => b.name),
+          emitsInOrder([emits(bucketName), emitsDone]),
+        );
+      });
 
-    test('soft deleted bucket', () async {
-      final prefix = 'sft_del_bkt_${randomBucketCharacters(5)}';
-      final softDeletedBucket = await storage.createBucket(
-        BucketMetadata(
-          name: testBucketName('${prefix}_soft'),
-          softDeletePolicy: BucketSoftDeletePolicy(
-            retentionDurationSeconds: const Duration(days: 7).inSeconds,
+      test('soft deleted bucket', () async {
+        final prefix = 'sft_del_bkt_${randomBucketCharacters(5)}';
+        final softDeletedBucket = await storage.createBucket(
+          BucketMetadata(
+            name: testBucketName('${prefix}_soft'),
+            softDeletePolicy: BucketSoftDeletePolicy(
+              retentionDurationSeconds: const Duration(days: 7).inSeconds,
+            ),
           ),
-        ),
-      );
-      await storage.deleteBucket(softDeletedBucket.name!);
+        );
+        await storage.deleteBucket(softDeletedBucket.name!);
 
-      final nonSoftDeletedBucket = await storage.createBucket(
-        BucketMetadata(name: testBucketName('${prefix}_no_soft')),
-      );
-      addTearDown(() => storage.deleteBucket(nonSoftDeletedBucket.name!));
+        final nonSoftDeletedBucket = await storage.createBucket(
+          BucketMetadata(name: testBucketName('${prefix}_no_soft')),
+        );
+        addTearDown(() => storage.deleteBucket(nonSoftDeletedBucket.name!));
 
-      await expectLater(
-        storage
-            .listBuckets(prefix: prefix, softDeleted: true)
-            .map((b) => b.name),
-        emitsInOrder([emits(softDeletedBucket.name), emitsDone]),
-      );
+        await expectLater(
+          storage
+              .listBuckets(prefix: prefix, softDeleted: true)
+              .map((b) => b.name),
+          emitsInOrder([emits(softDeletedBucket.name), emitsDone]),
+        );
+      });
+
+      test('pagination', () async {
+        final prefix = 'page_bkt_${randomBucketCharacters(5)}';
+
+        final bucket1 = await createBucketWithTearDown(storage, '${prefix}_1');
+        final bucket2 = await createBucketWithTearDown(storage, '${prefix}_2');
+        final bucket3 = await createBucketWithTearDown(storage, '${prefix}_3');
+        final bucket4 = await createBucketWithTearDown(storage, '${prefix}_4');
+        final bucket5 = await createBucketWithTearDown(storage, '${prefix}_5');
+
+        await expectLater(
+          storage.listBuckets(prefix: prefix, maxResults: 2).map((b) => b.name),
+          emitsInOrder([
+            emits(bucket1),
+            emits(bucket2),
+            emits(bucket3),
+            emits(bucket4),
+            emits(bucket5),
+            emitsDone,
+          ]),
+        );
+      });
     });
 
-    test('pagination', () async {
-      final prefix = 'page_bkt_${randomBucketCharacters(5)}';
+    test('sends gccl token in x-goog-api-client on listBuckets', () async {
+      late http.Request actualRequest;
+      final mockClient = MockClient((request) async {
+        actualRequest = request;
+        return http.Response('{"items": []}', 200);
+      });
 
-      final bucket1 = await createBucketWithTearDown(storage, '${prefix}_1');
-      final bucket2 = await createBucketWithTearDown(storage, '${prefix}_2');
-      final bucket3 = await createBucketWithTearDown(storage, '${prefix}_3');
-      final bucket4 = await createBucketWithTearDown(storage, '${prefix}_4');
-      final bucket5 = await createBucketWithTearDown(storage, '${prefix}_5');
+      storage = Storage(client: mockClient, projectId: 'test-project');
+      addTearDown(storage.close);
 
-      await expectLater(
-        storage.listBuckets(prefix: prefix, maxResults: 2).map((b) => b.name),
-        emitsInOrder([
-          emits(bucket1),
-          emits(bucket2),
-          emits(bucket3),
-          emits(bucket4),
-          emits(bucket5),
-          emitsDone,
-        ]),
+      await storage.listBuckets().drain<Object?>();
+
+      expect(
+        actualRequest.headers['x-goog-api-client'],
+        contains('gccl/$packageVersion'),
       );
     });
   });

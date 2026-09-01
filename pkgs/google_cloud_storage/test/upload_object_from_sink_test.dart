@@ -20,6 +20,7 @@ import 'dart:typed_data';
 import 'package:crypto/crypto.dart' as crypto;
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 import 'package:google_cloud_storage/src/crc32c.dart';
+import 'package:google_cloud_storage/src/version.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:test/test.dart';
@@ -788,5 +789,45 @@ void main() {
         expect(responses, isEmpty);
       },
     );
+
+    test('sends gccl token in x-goog-api-client', () async {
+      final actualRequests = <http.Request>[];
+      final mockClient = MockClient((request) async {
+        actualRequests.add(request);
+        if (request.method == 'POST') {
+          return http.Response(
+            '',
+            200,
+            headers: {
+              'location': 'https://storage.googleapis.com/upload-session',
+            },
+          );
+        } else {
+          return http.Response(
+            '{"name": "test-obj", "bucket": "test-bucket"}',
+            200,
+          );
+        }
+      });
+
+      final storage = Storage(client: mockClient, projectId: 'test-project');
+      addTearDown(storage.close);
+
+      final sink = storage.uploadObjectFromSink('test-bucket', 'test-obj')
+        ..add([1, 2, 3]);
+      await sink.close();
+
+      expect(actualRequests, isNotEmpty);
+      expect(
+        actualRequests,
+        everyElement(
+          predicate<http.Request>(
+            (r) => r.headers['x-goog-api-client']!.contains(
+              'gccl/$packageVersion',
+            ),
+          ),
+        ),
+      );
+    });
   });
 }

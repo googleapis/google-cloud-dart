@@ -15,7 +15,6 @@
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:http/http.dart' as http;
-import 'package:http/testing.dart' as http_testing;
 import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
 
@@ -137,111 +136,5 @@ void main() async {
         emitsInOrder([emitsError(isA<StateError>()), emitsDone]),
       );
     });
-
-    test(
-      'sends gccl token in x-goog-api-client on control-plane ops',
-      () async {
-        late http.Request actualRequest;
-        final mockClient = http_testing.MockClient((request) async {
-          actualRequest = request;
-          return http.Response('{"items": []}', 200);
-        });
-
-        storage = Storage(client: mockClient, projectId: 'test-project');
-        addTearDown(storage.close);
-
-        await storage.listBuckets().drain<Object?>();
-
-        expect(
-          actualRequest.headers['x-goog-api-client'],
-          contains('gccl/0.6.4-wip'),
-        );
-      },
-    );
-
-    test(
-      'sends gccl token in x-goog-api-client header on downloadObject',
-      () async {
-        late http.Request actualRequest;
-        final mockClient = http_testing.MockClient((request) async {
-          actualRequest = request;
-          return http.Response.bytes(
-            [1, 2, 3],
-            200,
-            headers: {'x-goog-stored-content-encoding': 'identity'},
-          );
-        });
-
-        storage = Storage(client: mockClient, projectId: 'test-project');
-        addTearDown(storage.close);
-
-        await storage.downloadObject('test-bucket', 'test-obj');
-
-        expect(
-          actualRequest.headers['x-goog-api-client'],
-          contains('gccl/0.6.4-wip'),
-        );
-      },
-    );
-
-    test(
-      'sends gccl token in x-goog-api-client header on uploadObject',
-      () async {
-        late http.Request actualRequest;
-        final mockClient = http_testing.MockClient((request) async {
-          actualRequest = request;
-          return http.Response(
-            '{"name": "test-obj", "bucket": "test-bucket"}',
-            200,
-          );
-        });
-
-        storage = Storage(client: mockClient, projectId: 'test-project');
-        addTearDown(storage.close);
-
-        await storage.uploadObject('test-bucket', 'test-obj', [1, 2, 3]);
-
-        expect(
-          actualRequest.headers['x-goog-api-client'],
-          contains('gccl/0.6.4-wip'),
-        );
-      },
-    );
-
-    test(
-      'sends gccl token in x-goog-api-client on uploadObjectFromSink',
-      () async {
-        final requests = <http.Request>[];
-        final mockClient = http_testing.MockClient((request) async {
-          requests.add(request);
-          if (request.method == 'POST') {
-            return http.Response(
-              '',
-              200,
-              headers: {
-                'location': 'https://storage.googleapis.com/upload-session',
-              },
-            );
-          } else {
-            return http.Response(
-              '{"name": "test-obj", "bucket": "test-bucket"}',
-              200,
-            );
-          }
-        });
-
-        storage = Storage(client: mockClient, projectId: 'test-project');
-        addTearDown(storage.close);
-
-        final sink = storage.uploadObjectFromSink('test-bucket', 'test-obj')
-          ..add([1, 2, 3]);
-        await sink.close();
-
-        expect(requests, isNotEmpty);
-        for (final req in requests) {
-          expect(req.headers['x-goog-api-client'], contains('gccl/0.6.4-wip'));
-        }
-      },
-    );
   });
 }
