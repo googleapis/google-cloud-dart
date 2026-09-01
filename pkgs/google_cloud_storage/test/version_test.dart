@@ -31,7 +31,7 @@ void main() {
     final pubspecFile = File.fromUri(pkgUri!.resolve('../pubspec.yaml'));
     expect(pubspecFile.existsSync(), isTrue, reason: 'pubspec.yaml must exist');
 
-    final content = await pubspecFile.readAsString();
+    final content = pubspecFile.readAsStringSync();
     final match = RegExp(
       r'^version:\s*(\S+)',
       multiLine: true,
