@@ -18,7 +18,9 @@ set -e
 
 # Install Dart SDK using the process detailed here:
 # https://dart.dev/get-dart#install
-apt-get update && apt-get install -y apt-transport-https curl gnupg
+
+# Used to build webcrypto: cmake, g++
+apt-get update && apt-get install -y apt-transport-https cmake curl g++ gnupg
 curl -fsSL https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/dart.gpg
 echo 'deb [signed-by=/usr/share/keyrings/dart.gpg] https://storage.googleapis.com/download.dartlang.org/linux/debian stable main' > /etc/apt/sources.list.d/dart.list
 apt-get update && apt-get install -y dart
