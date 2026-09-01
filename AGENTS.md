@@ -9,6 +9,11 @@
 - Update this file if you discover something useful about developing in this
   repository.
 
+## Style
+
+- Prefer the use of `Uri.https(...)` over `Uri.parse(...)` when the scheme is
+  known to be https.
+
 ## Testing instructions
 
 - Run `dart test` frequently.
