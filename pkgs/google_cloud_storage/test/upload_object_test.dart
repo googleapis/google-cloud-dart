@@ -16,6 +16,7 @@ import 'dart:convert';
 
 import 'package:google_cloud_protobuf/protobuf.dart' as protobuf;
 import 'package:google_cloud_storage/google_cloud_storage.dart';
+import 'package:google_cloud_storage/src/version.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:test/test.dart';
@@ -399,6 +400,27 @@ void main() async {
         throwsA(isA<http.ClientException>()),
       );
       expect(responses, isEmpty);
+    });
+
+    test('sends gccl token in x-goog-api-client header', () async {
+      late http.Request actualRequest;
+      final mockClient = MockClient((request) async {
+        actualRequest = request;
+        return http.Response(
+          '{"name": "test-obj", "bucket": "test-bucket"}',
+          200,
+        );
+      });
+
+      final storage = Storage(client: mockClient, projectId: 'test-project');
+      addTearDown(storage.close);
+
+      await storage.uploadObject('test-bucket', 'test-obj', [1, 2, 3]);
+
+      expect(
+        actualRequest.headers['x-goog-api-client'],
+        contains('gccl/$packageVersion'),
+      );
     });
   });
 }
