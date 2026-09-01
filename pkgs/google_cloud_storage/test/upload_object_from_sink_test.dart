@@ -821,11 +821,10 @@ void main() {
       expect(
         actualRequests,
         everyElement(
-          predicate<http.Request>(
-            (r) => r.headers['x-goog-api-client']!.contains(
+          (http.Request r) =>
+              r.headers['x-goog-api-client']!.contains(
               'gccl/$packageVersion',
             ),
-          ),
         ),
       );
     });
