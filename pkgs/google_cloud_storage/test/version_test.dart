@@ -16,19 +16,22 @@
 library;
 
 import 'dart:io';
+import 'dart:isolate';
 
 import 'package:google_cloud_storage/src/version.dart';
 import 'package:test/test.dart';
 
 void main() {
-  test('packageVersion matches pubspec.yaml', () {
-    final pkgPubspec = File('pkgs/google_cloud_storage/pubspec.yaml');
-    final pubspecFile = pkgPubspec.existsSync()
-        ? pkgPubspec
-        : File('pubspec.yaml');
+  test('packageVersion matches pubspec.yaml', () async {
+    final pkgUri = await Isolate.resolvePackageUri(
+      Uri.parse('package:google_cloud_storage/google_cloud_storage.dart'),
+    );
+    expect(pkgUri, isNotNull, reason: 'package URI must resolve');
+
+    final pubspecFile = File.fromUri(pkgUri!.resolve('../pubspec.yaml'));
     expect(pubspecFile.existsSync(), isTrue, reason: 'pubspec.yaml must exist');
 
-    final content = pubspecFile.readAsStringSync();
+    final content = await pubspecFile.readAsString();
     final match = RegExp(
       r'^version:\s*(\S+)',
       multiLine: true,
