@@ -6,12 +6,13 @@ The Google Cloud client library for the Generative Language API.
 
 > [!TIP]
 > Flutter applications should use
-> [Firebase AI Logic](https://firebase.google.com/products/firebase-ai-logic).
+> [Firebase AI Logic](https://firebase.google.com/products/firebase-ai-logic),
+> which provides client-side access to the Gemini API and Vertex AI.
 >
-> The Generative Language API is meant for Dart command-line, cloud, and server applications.
-> For mobile and web applications, see instead
-> [Firebase AI Logic](https://firebase.google.com/products/firebase-ai-logic), which provides
-> client-side access to both the Gemini Developer API and Vertex AI.
+> Dart command-line, cloud, and server applications should use
+> [Genkit](https://pub.dev/packages/genkit), which provides access to
+> Gemini API, Vertex AI, and
+> [many others](https://genkit.dev/docs/js/integrations/model-providers/).
 
 > [!NOTE]
 > This package is currently experimental and published under the
