@@ -21,8 +21,6 @@ import 'package:google_cloud_storage/src/version.dart';
 import 'package:test/test.dart';
 
 void main() {
-  // Note: Consider using https://pub.dev/packages/build_version or similar
-  // code generator to automate generating `lib/src/version.dart` from `pubspec.yaml`.
   test('packageVersion matches pubspec.yaml', () {
     final pkgPubspec = File('pkgs/google_cloud_storage/pubspec.yaml');
     final pubspecFile = pkgPubspec.existsSync()
