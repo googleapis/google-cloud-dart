@@ -822,9 +822,7 @@ void main() {
         actualRequests,
         everyElement(
           (http.Request r) =>
-              r.headers['x-goog-api-client']!.contains(
-              'gccl/$packageVersion',
-            ),
+              r.headers['x-goog-api-client']!.contains('gccl/$packageVersion'),
         ),
       );
     });
