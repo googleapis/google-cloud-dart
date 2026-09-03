@@ -1,5 +1,7 @@
 ## 0.1.0-wip
 
+- Added `@TestOn('vm')` platform annotations to all tests to skip browser runs.
+- Removed invalid stream drain calls during streaming pull connection teardown.
 - Failed attached completers with `completeError` when unary ACK or deadline
   modification fallback fails in `Subscription`.
 - Verified `stream.hasListener` before buffering ACKs and deadline

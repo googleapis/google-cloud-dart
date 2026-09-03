@@ -375,10 +375,7 @@ final class Subscription {
       requestControllers.clear();
       for (final rc in rcsToClose) {
         _activeStreams.remove(rc);
-        if (!rc.hasListener) {
-          unawaited(rc.stream.drain<void>());
-        }
-        await rc.close();
+        unawaited(rc.close());
       }
     }
 
@@ -439,10 +436,7 @@ final class Subscription {
         currentSubs.remove(currentSub);
         unawaited(currentSub.cancel());
         stopwatch.stop();
-        if (!requestController.hasListener) {
-          unawaited(requestController.stream.drain<void>());
-        }
-        requestController.close();
+        unawaited(requestController.close());
       }
 
       currentSub = pubsub
