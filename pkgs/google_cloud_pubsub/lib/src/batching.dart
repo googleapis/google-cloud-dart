@@ -43,8 +43,11 @@ class Batcher<T> {
   final Future<void> Function(List<T>) onBatch;
 
   final List<T> _buffer = [];
+  final Set<Future<void>> _inFlight = {};
   int _currentSizeBytes = 0;
   Timer? _timer;
+  bool _isClosed = false;
+  Future<void>? _closeFuture;
 
   Batcher({
     required this.settings,
@@ -52,8 +55,16 @@ class Batcher<T> {
     required this.onBatch,
   });
 
+  /// Whether this batcher is closed.
+  bool get isClosed => _isClosed;
+
   /// Adds an item to the batch.
+  ///
+  /// It is an error if called on a closed [Batcher].
   void add(T item) {
+    if (_isClosed) {
+      throw StateError('Cannot add items to a closed Batcher.');
+    }
     _buffer.add(item);
     _currentSizeBytes += itemSize(item);
 
@@ -75,15 +86,27 @@ class Batcher<T> {
     _buffer.clear();
     _currentSizeBytes = 0;
 
-    // Fire and forget
-    onBatch(batch).catchError((_) {
-      // Errors should be handled by onBatch (e.g. failing the completers for
-      // the items).
-    });
+    final future = onBatch(batch);
+    _inFlight.add(future);
+    future
+        .whenComplete(() {
+          _inFlight.remove(future);
+        })
+        .catchError((_) {
+          // Errors should be handled by onBatch (e.g. failing the
+          // completers for the items).
+        });
   }
 
-  /// Closes the batcher, flushing any remaining items immediately.
-  void close() {
+  /// Closes the batcher, flushing any remaining items immediately and waiting
+  /// for in-flight batches to complete.
+  Future<void> close() => _closeFuture ??= _doClose();
+
+  Future<void> _doClose() async {
+    _isClosed = true;
     _flush();
+    while (_inFlight.isNotEmpty) {
+      await Future.wait(_inFlight.map((f) => f.catchError((_) {})));
+    }
   }
 }

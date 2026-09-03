@@ -67,12 +67,15 @@ final class ReceivedMessage {
   /// If this message was received via `pull`, it will call the unary
   /// acknowledge endpoint.
   /// If it was received via `streamingPull`, it will send an acknowledgment
-  /// request over the existing stream.
+  /// request over the stream or route it through the subscription batcher.
+  ///
+  /// It is an error if no acknowledge handler is configured for this message.
   Future<void> acknowledge() async {
     final handler = _ackHandler;
-    if (handler != null) {
-      await handler([ackId]);
+    if (handler == null) {
+      throw StateError('No acknowledge handler configured for this message.');
     }
+    await handler([ackId]);
   }
 
   /// Modifies the ack deadline for this message.
@@ -81,10 +84,20 @@ final class ReceivedMessage {
   /// time this method is called. For example, if [seconds] is 10, the new ack
   /// deadline is 10 seconds from now. Specifying 0 makes the message
   /// immediately available for redelivery.
+  ///
+  /// It is an error if [seconds] is negative.
+  /// It is an error if no modify-ack-deadline handler is configured for this
+  /// message.
   Future<void> modifyAckDeadline(int seconds) async {
-    final handler = _modifyDeadlineHandler;
-    if (handler != null) {
-      await handler([ackId], seconds);
+    if (seconds < 0) {
+      throw ArgumentError.value(seconds, 'seconds', 'Must be non-negative');
     }
+    final handler = _modifyDeadlineHandler;
+    if (handler == null) {
+      throw StateError(
+        'No modify-ack-deadline handler configured for this message.',
+      );
+    }
+    await handler([ackId], seconds);
   }
 }

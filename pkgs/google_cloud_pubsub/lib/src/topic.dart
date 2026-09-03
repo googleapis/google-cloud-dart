@@ -13,13 +13,14 @@
 // limitations under the License.
 
 import 'dart:async';
+import 'dart:convert';
 
 import '../google_cloud_pubsub.dart';
 import 'batching.dart';
 import 'retry.dart';
 
 /// Settings for publishing messages.
-class PublishSettings {
+final class PublishSettings {
   final BatchingSettings batching;
   final RetrySettings retry;
 
@@ -54,6 +55,8 @@ final class Topic {
   final PublishSettings publishSettings;
 
   late final Batcher<_PublishRequest> _batcher;
+  bool _isClosed = false;
+  Future<void>? _closeFuture;
 
   /// A topic with the given [topicId] in the client's project.
   ///
@@ -84,7 +87,14 @@ final class Topic {
   void _initBatcher() {
     _batcher = Batcher<_PublishRequest>(
       settings: publishSettings.batching,
-      itemSize: (req) => req.message.data.length,
+      itemSize: (req) {
+        var size = req.message.data.length;
+        for (final entry in req.message.attributes.entries) {
+          size +=
+              utf8.encode(entry.key).length + utf8.encode(entry.value).length;
+        }
+        return size;
+      },
       onBatch: _onBatch,
     );
   }
@@ -98,11 +108,26 @@ final class Topic {
         isIdempotent: true,
       );
       for (var i = 0; i < batch.length; i++) {
-        batch[i].completer.complete(messageIds[i]);
+        if (i < messageIds.length) {
+          if (!batch[i].completer.isCompleted) {
+            batch[i].completer.complete(messageIds[i]);
+          }
+        } else {
+          if (!batch[i].completer.isCompleted) {
+            batch[i].completer.completeError(
+              StateError(
+                'Server returned fewer message IDs (${messageIds.length}) '
+                'than published messages (${batch.length}).',
+              ),
+            );
+          }
+        }
       }
     } catch (e, st) {
       for (final item in batch) {
-        item.completer.completeError(e, st);
+        if (!item.completer.isCompleted) {
+          item.completer.completeError(e, st);
+        }
       }
     }
   }
@@ -153,6 +178,7 @@ final class Topic {
   /// network errors occur during publishing, the batch is automatically
   /// retried according to [publishSettings] retry configuration.
   ///
+  /// It is an error if called on a closed [Topic].
   /// Throws a [NotFoundException] if the topic does not exist.
   /// Throws a [ServiceException] if publishing fails after retries.
   ///
@@ -161,6 +187,9 @@ final class Topic {
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Publisher.Publish).
   Future<String> publish(List<int> data, {Map<String, String>? attributes}) {
+    if (_isClosed) {
+      throw StateError('Cannot publish to a closed Topic.');
+    }
     final completer = Completer<String>();
     _batcher.add(
       _PublishRequest(Message(data: data, attributes: attributes), completer),
@@ -168,8 +197,10 @@ final class Topic {
     return completer.future;
   }
 
-  /// Closes the topic, flushing any pending messages.
-  void close() {
-    _batcher.close();
+  /// Closes the topic, flushing any pending messages and waiting for in-flight
+  /// batches to complete.
+  Future<void> close() {
+    _isClosed = true;
+    return _closeFuture ??= _batcher.close();
   }
 }

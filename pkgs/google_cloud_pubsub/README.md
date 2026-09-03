@@ -72,8 +72,8 @@ void main() async {
   );
 
   // Clean up and flush any pending batches.
-  subscription.close();
-  topic.close();
+  await subscription.close();
+  await topic.close();
 
   await subscription.delete();
   await topic.delete();

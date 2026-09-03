@@ -45,8 +45,8 @@ Future<void> main() async {
     );
     print('Successfully initialized subscription: ${subscription.id}');
 
-    topic.close();
-    subscription.close();
+    await topic.close();
+    await subscription.close();
   } finally {
     await pubsub.close();
   }

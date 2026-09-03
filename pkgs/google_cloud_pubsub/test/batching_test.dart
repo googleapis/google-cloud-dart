@@ -76,5 +76,50 @@ void main() {
       final result = await completer.future;
       expect(result, [1, 2]);
     });
+
+    test('close flushes pending items and awaits in-flight batches', () async {
+      final inFlightCompleter = Completer<void>();
+      var batchStarted = false;
+      var batchCompleted = false;
+
+      final batcher = Batcher<int>(
+        settings: const BatchingSettings(
+          maxMessages: 10,
+          maxDelay: Duration(seconds: 10),
+        ),
+        itemSize: (i) => 1,
+        onBatch: (batch) async {
+          batchStarted = true;
+          await inFlightCompleter.future;
+          batchCompleted = true;
+        },
+      )..add(42);
+
+      var closeFinished = false;
+      final closeFuture = batcher.close().then((_) {
+        closeFinished = true;
+      });
+
+      await Future<void>.delayed(const Duration(milliseconds: 10));
+      expect(batchStarted, isTrue);
+      expect(closeFinished, isFalse);
+
+      inFlightCompleter.complete();
+      await closeFuture;
+
+      expect(batchCompleted, isTrue);
+      expect(closeFinished, isTrue);
+    });
+
+    test('calling add after close throws StateError', () async {
+      final batcher = Batcher<int>(
+        settings: const BatchingSettings(maxMessages: 10),
+        itemSize: (i) => 1,
+        onBatch: (_) async {},
+      );
+
+      await batcher.close();
+      expect(() => batcher.add(1), throwsStateError);
+    });
   });
 }

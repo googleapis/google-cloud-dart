@@ -408,10 +408,14 @@ final class PubSub {
   ///
   @internal
   Stream<ReceivedMessage> streamingPullWithStream(
-    Stream<grpc.StreamingPullRequest> requestStream,
-  ) {
+    Stream<grpc.StreamingPullRequest> requestStream, {
+    FutureOr<void> Function(List<String> ackIds)? ackHandler,
+    FutureOr<void> Function(List<String> ackIds, int seconds)?
+    modifyDeadlineHandler,
+  }) {
     late StreamController<ReceivedMessage> controller;
     StreamSubscription<grpc.StreamingPullResponse>? sub;
+    var isPaused = false;
     controller = StreamController<ReceivedMessage>(
       onListen: () async {
         try {
@@ -423,7 +427,13 @@ final class PubSub {
           sub = responseStream.listen(
             (response) {
               for (final m in response.receivedMessages) {
-                controller.add(_mapReceivedMessage(m));
+                controller.add(
+                  _mapReceivedMessage(
+                    m,
+                    ackHandler: ackHandler,
+                    modifyDeadlineHandler: modifyDeadlineHandler,
+                  ),
+                );
               }
             },
             onError: (Object e, StackTrace s) {
@@ -438,9 +448,20 @@ final class PubSub {
             },
             cancelOnError: true,
           );
+          if (isPaused) {
+            sub?.pause();
+          }
         } catch (e, s) {
           controller.addError(e, s);
         }
+      },
+      onPause: () {
+        isPaused = true;
+        sub?.pause();
+      },
+      onResume: () {
+        isPaused = false;
+        sub?.resume();
       },
       onCancel: () => sub?.cancel(),
     );
@@ -475,7 +496,31 @@ final class PubSub {
           ..subscription = subscription
           ..streamAckDeadlineSeconds = streamAckDeadlineSeconds,
       );
-      yield* streamingPullWithStream(requestController.stream);
+      yield* streamingPullWithStream(
+        requestController.stream,
+        ackHandler: (ackIds) async {
+          if (!requestController.isClosed) {
+            requestController.add(
+              grpc.StreamingPullRequest()..ackIds.addAll(ackIds),
+            );
+            return;
+          }
+          await acknowledge(subscription, ackIds);
+        },
+        modifyDeadlineHandler: (ackIds, seconds) async {
+          if (!requestController.isClosed) {
+            requestController.add(
+              grpc.StreamingPullRequest()
+                ..modifyDeadlineAckIds.addAll(ackIds)
+                ..modifyDeadlineSeconds.addAll(
+                  List.filled(ackIds.length, seconds),
+                ),
+            );
+            return;
+          }
+          await modifyAckDeadline(subscription, ackIds, seconds);
+        },
+      );
     } finally {
       await requestController.close();
     }

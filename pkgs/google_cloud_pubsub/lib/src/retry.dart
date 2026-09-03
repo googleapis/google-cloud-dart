@@ -19,6 +19,9 @@ import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:grpc/grpc.dart';
 import 'package:meta/meta.dart';
 
+const _sentinel = Object();
+const _defaultTotalTimeout = Duration(minutes: 1);
+
 /// Settings for configuring retry logic with exponential backoff.
 final class RetrySettings {
   /// The maximum number of times to retry before failing.
@@ -29,7 +32,11 @@ final class RetrySettings {
   /// The maximum amount of total time to retry before failing.
   ///
   /// A `null` value indicates that the total retry time is unlimited.
-  final Duration? maxRetryInterval;
+  final Duration? totalTimeout;
+
+  /// Deprecated: Use [totalTimeout] instead.
+  @Deprecated('Use totalTimeout instead')
+  Duration? get maxRetryInterval => totalTimeout;
 
   /// The minimum amount of time to wait before retrying.
   final Duration initialDelay;
@@ -48,62 +55,88 @@ final class RetrySettings {
     this.initialDelay = const Duration(milliseconds: 100),
     this.delayMultiplier = 1.3,
     this.maxDelay = const Duration(seconds: 60),
-    this.maxRetryInterval = const Duration(minutes: 1),
-  });
+    Duration? totalTimeout = _defaultTotalTimeout,
+    @Deprecated('Use totalTimeout instead') Duration? maxRetryInterval,
+  }) : totalTimeout = maxRetryInterval ?? totalTimeout;
+
+  /// Creates a copy of this [RetrySettings] with the given fields replaced.
+  RetrySettings copyWith({
+    Object? maxRetries = _sentinel,
+    Object? totalTimeout = _sentinel,
+    Duration? initialDelay,
+    double? delayMultiplier,
+    Duration? maxDelay,
+  }) => RetrySettings(
+    maxRetries: identical(maxRetries, _sentinel)
+        ? this.maxRetries
+        : maxRetries as int?,
+    totalTimeout: identical(totalTimeout, _sentinel)
+        ? this.totalTimeout
+        : totalTimeout as Duration?,
+    initialDelay: initialDelay ?? this.initialDelay,
+    delayMultiplier: delayMultiplier ?? this.delayMultiplier,
+    maxDelay: maxDelay ?? this.maxDelay,
+  );
 }
 
 /// Generates wait durations for exponential backoff according to
 /// [RetrySettings].
 ///
-/// Uses `clock` to enforce [RetrySettings.maxRetryInterval].
+/// Uses `clock` to enforce [totalTimeout].
 @internal
 Iterable<Duration> delaySequence({
   int? maxRetries,
-  Duration? maxRetryInterval,
+  Duration? totalTimeout = const Duration(minutes: 1),
+  @Deprecated('Use totalTimeout instead') Duration? maxRetryInterval,
   required Duration initialDelay,
   required Duration maxDelay,
   required double delayMultiplier,
   Clock clock = const Clock(),
+  Random? random,
 }) sync* {
+  final timeout = maxRetryInterval ?? totalTimeout;
+  final noRetriesAfter = timeout == null ? null : clock.fromNowBy(timeout);
+  final rng = random ?? Random();
   var reachedMax = false;
-  final noRetriesAfter = maxRetryInterval == null
-      ? null
-      : clock.fromNowBy(maxRetryInterval);
   for (var i = 0; (maxRetries == null) || (i < maxRetries); i++) {
     if (noRetriesAfter != null && clock.now().isAfter(noRetriesAfter)) {
       break;
     }
-    if (reachedMax) {
-      yield maxDelay;
-    } else {
-      final delay = initialDelay * pow(delayMultiplier, i);
-      if (delay > maxDelay) {
-        reachedMax = true;
-        yield maxDelay;
-      } else {
-        yield delay;
-      }
+    final baseDelay = reachedMax
+        ? maxDelay
+        : initialDelay * pow(delayMultiplier, i);
+    if (!reachedMax && baseDelay >= maxDelay) {
+      reachedMax = true;
     }
+    final effectiveBase = reachedMax ? maxDelay : baseDelay;
+    final jitterFactor = 0.8 + 0.4 * rng.nextDouble();
+    yield Duration(
+      microseconds: (effectiveBase.inMicroseconds * jitterFactor).round(),
+    );
   }
 }
 
-bool _isRetryable(Exception e) => switch (e) {
-  GrpcError(:final code) => switch (code) {
-    StatusCode.aborted ||
-    StatusCode.deadlineExceeded ||
-    StatusCode.internal ||
-    StatusCode.resourceExhausted ||
-    StatusCode.unavailable ||
-    StatusCode.unknown => true,
+/// Returns whether [e] is considered a retryable error.
+@internal
+bool isRetryable(Object e) {
+  if (e is! Exception) return false;
+  return switch (e) {
+    GrpcError(:final code) => switch (code) {
+      StatusCode.aborted ||
+      StatusCode.deadlineExceeded ||
+      StatusCode.internal ||
+      StatusCode.resourceExhausted ||
+      StatusCode.unavailable ||
+      StatusCode.unknown => true,
+      _ => false,
+    },
+    ServiceUnavailableException() ||
+    GatewayTimeoutException() ||
+    TooManyRequestsException() ||
+    InternalServerErrorException() => true,
     _ => false,
-  },
-  ServiceUnavailableException() ||
-  GatewayTimeoutException() ||
-  TooManyRequestsException() ||
-  InternalServerErrorException() ||
-  ConflictException() => true,
-  _ => false,
-};
+  };
+}
 
 /// Runs [body] with exponential backoff retries.
 ///
@@ -117,7 +150,7 @@ Future<T> runWithRetry<T>(
 }) async {
   final delays = delaySequence(
     maxRetries: settings.maxRetries,
-    maxRetryInterval: settings.maxRetryInterval,
+    totalTimeout: settings.totalTimeout,
     initialDelay: settings.initialDelay,
     maxDelay: settings.maxDelay,
     delayMultiplier: settings.delayMultiplier,
@@ -127,7 +160,7 @@ Future<T> runWithRetry<T>(
     try {
       return await body();
     } on Exception catch (e) {
-      if (!isIdempotent || !_isRetryable(e)) rethrow;
+      if (!isIdempotent || !isRetryable(e)) rethrow;
 
       if (delays.moveNext()) {
         await Future<void>.delayed(delays.current);
