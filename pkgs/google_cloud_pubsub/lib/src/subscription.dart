@@ -79,6 +79,8 @@ final class Subscription {
   /// bidirectional streaming pull connections instead of making separate unary
   /// RPCs.
   final List<StreamController<grpc.StreamingPullRequest>> _activeStreams = [];
+  final Set<StreamController<ReceivedMessage>> _activeStreamingPullControllers =
+      {};
 
   /// Index for round-robin load balancing ACKs across active streams.
   int _nextStreamIndex = 0;
@@ -134,7 +136,7 @@ final class Subscription {
       for (var i = 0; i < _activeStreams.length; i++) {
         final index = (startIndex + i) % _activeStreams.length;
         final stream = _activeStreams[index];
-        if (!stream.isClosed) {
+        if (!stream.isClosed && stream.hasListener) {
           try {
             stream.add(grpc.StreamingPullRequest()..ackIds.addAll(ackIds));
             _nextStreamIndex = (index + 1) % _activeStreams.length;
@@ -163,12 +165,13 @@ final class Subscription {
           req.completer!.complete();
         }
       }
-    } catch (_) {
+    } catch (e, st) {
       // ACKs are best-effort. If the unary fallback fails after retries,
-      // the error is suppressed. The messages will eventually be redelivered.
+      // the error is suppressed for fire-and-forget, but attached completers
+      // must receive the error.
       for (final req in batch) {
         if (req.completer != null && !req.completer!.isCompleted) {
-          req.completer!.complete();
+          req.completer!.completeError(e, st);
         }
       }
     }
@@ -194,7 +197,7 @@ final class Subscription {
           for (var i = 0; i < _activeStreams.length; i++) {
             final index = (startIndex + i) % _activeStreams.length;
             final stream = _activeStreams[index];
-            if (!stream.isClosed) {
+            if (!stream.isClosed && stream.hasListener) {
               try {
                 stream.add(
                   grpc.StreamingPullRequest()
@@ -229,12 +232,13 @@ final class Subscription {
               req.completer!.complete();
             }
           }
-        } catch (_) {
-          // ACKs are best-effort. If the unary fallback fails after retries,
-          // the error is suppressed.
+        } catch (e, st) {
+          // ACKs are best-effort. If the unary fallback fails after
+          // retries, the error is suppressed for fire-and-forget, but
+          // attached completers must receive the error.
           for (final req in reqs) {
             if (req.completer != null && !req.completer!.isCompleted) {
-              req.completer!.complete();
+              req.completer!.completeError(e, st);
             }
           }
         }
@@ -310,7 +314,9 @@ final class Subscription {
   /// It is an error if [streamAckDeadlineSeconds] is not between 10 and 600
   /// seconds, or if [maxConcurrentStreams] is less than 1.
   ///
-  /// Throws a [NotFoundException] if the subscription does not exist.
+  /// Any errors (such as a [NotFoundException] if the subscription does not
+  /// exist, or non-retryable errors) are emitted asynchronously on the returned
+  /// [Stream] rather than thrown synchronously.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.StreamingPull).
   Stream<ReceivedMessage> streamingPull({
@@ -336,8 +342,15 @@ final class Subscription {
     if (_isClosed) {
       throw StateError('Cannot stream messages on a closed Subscription.');
     }
-    final effectiveRetry =
-        retry ?? ackSettings.retry.copyWith(totalTimeout: null);
+    final RetrySettings effectiveRetry;
+    if (retry != null) {
+      effectiveRetry = retry.hasExplicitTotalTimeout
+          ? retry
+          : retry.copyWith(totalTimeout: null);
+    } else {
+      effectiveRetry = ackSettings.retry.copyWith(totalTimeout: null);
+    }
+
     late StreamController<ReceivedMessage> controller;
     var isCancelled = false;
     var isPaused = false;
@@ -362,6 +375,9 @@ final class Subscription {
       requestControllers.clear();
       for (final rc in rcsToClose) {
         _activeStreams.remove(rc);
+        if (!rc.hasListener) {
+          unawaited(rc.stream.drain<void>());
+        }
         await rc.close();
       }
     }
@@ -402,7 +418,7 @@ final class Subscription {
     }
 
     void connect(Iterator<Duration> delays) {
-      if (isCancelled || controller.isClosed) return;
+      if (_isClosed || isCancelled || controller.isClosed) return;
 
       final requestController = StreamController<grpc.StreamingPullRequest>()
         ..add(
@@ -421,6 +437,11 @@ final class Subscription {
         _activeStreams.remove(requestController);
         requestControllers.remove(requestController);
         currentSubs.remove(currentSub);
+        unawaited(currentSub.cancel());
+        stopwatch.stop();
+        if (!requestController.hasListener) {
+          unawaited(requestController.stream.drain<void>());
+        }
         requestController.close();
       }
 
@@ -437,12 +458,13 @@ final class Subscription {
             },
             onError: (Object e, StackTrace st) async {
               cleanupCurrentConnection();
-              if (isCancelled || controller.isClosed) return;
+              if (_isClosed || isCancelled || controller.isClosed) return;
 
               if (!isRetryable(e)) {
                 controller.addError(e, st);
                 await cancelAll();
                 activeOrReconnectingStreams = 0;
+                _activeStreamingPullControllers.remove(controller);
                 await controller.close();
                 return;
               }
@@ -460,10 +482,12 @@ final class Subscription {
                   maxDelay: effectiveRetry.maxDelay,
                 ).iterator;
               }
+              if (_isClosed || isCancelled || controller.isClosed) return;
               if (nextDelays.moveNext()) {
                 late Timer timer;
                 timer = Timer(nextDelays.current, () {
                   reconnectTimers.remove(timer);
+                  if (_isClosed || isCancelled || controller.isClosed) return;
                   connect(nextDelays);
                 });
                 reconnectTimers.add(timer);
@@ -472,13 +496,14 @@ final class Subscription {
                 controller.addError(e, st);
                 if (activeOrReconnectingStreams == 0) {
                   await cancelAll();
+                  _activeStreamingPullControllers.remove(controller);
                   await controller.close();
                 }
               }
             },
             onDone: () async {
               cleanupCurrentConnection();
-              if (isCancelled || controller.isClosed) return;
+              if (_isClosed || isCancelled || controller.isClosed) return;
 
               var nextDelays = delays;
               final wasHealthy =
@@ -493,10 +518,12 @@ final class Subscription {
                   maxDelay: effectiveRetry.maxDelay,
                 ).iterator;
               }
+              if (_isClosed || isCancelled || controller.isClosed) return;
               if (nextDelays.moveNext()) {
                 late Timer timer;
                 timer = Timer(nextDelays.current, () {
                   reconnectTimers.remove(timer);
+                  if (_isClosed || isCancelled || controller.isClosed) return;
                   connect(nextDelays);
                 });
                 reconnectTimers.add(timer);
@@ -504,6 +531,7 @@ final class Subscription {
                 activeOrReconnectingStreams--;
                 if (activeOrReconnectingStreams == 0) {
                   await cancelAll();
+                  _activeStreamingPullControllers.remove(controller);
                   await controller.close();
                 }
               }
@@ -543,10 +571,12 @@ final class Subscription {
       },
       onCancel: () async {
         isCancelled = true;
+        _activeStreamingPullControllers.remove(controller);
         await cancelAll();
       },
     );
 
+    _activeStreamingPullControllers.add(controller);
     return controller.stream;
   }
 
@@ -652,9 +682,18 @@ final class Subscription {
   /// deadline modifications and waiting for in-flight batches to complete.
   Future<void> close() {
     _isClosed = true;
-    return _closeFuture ??= Future.wait([
-      _ackBatcher.close(),
-      _modifyAckBatcher.close(),
-    ]);
+    return _closeFuture ??= () async {
+      final controllers = _activeStreamingPullControllers.toList();
+      _activeStreamingPullControllers.clear();
+      for (final controller in controllers) {
+        if (controller.onCancel case final onCancel?) {
+          await onCancel();
+        }
+        if (!controller.isClosed) {
+          await controller.close();
+        }
+      }
+      await Future.wait([_ackBatcher.close(), _modifyAckBatcher.close()]);
+    }();
   }
 }

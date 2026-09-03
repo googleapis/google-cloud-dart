@@ -549,7 +549,7 @@ void main() {
           grpc.StatusCode.internal: InternalServerErrorException,
           grpc.StatusCode.unimplemented: NotImplementedException,
           grpc.StatusCode.unavailable: ServiceUnavailableException,
-          grpc.StatusCode.dataLoss: InternalServerErrorException,
+          grpc.StatusCode.dataLoss: ServiceException,
           grpc.StatusCode.unknown: InternalServerErrorException,
         };
 

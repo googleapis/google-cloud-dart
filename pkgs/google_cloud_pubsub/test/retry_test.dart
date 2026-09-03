@@ -17,6 +17,7 @@ import 'dart:math';
 import 'package:clock/clock.dart';
 import 'package:google_cloud_pubsub/google_cloud_pubsub.dart';
 import 'package:google_cloud_pubsub/src/retry.dart';
+import 'package:google_cloud_rpc/rpc.dart';
 import 'package:grpc/grpc.dart' as grpc;
 import 'package:test/test.dart';
 
@@ -126,6 +127,64 @@ void main() {
       expect(isRetryable(ArgumentError('argument error')), isFalse);
       expect(isRetryable('string error'), isFalse);
     });
+
+    test('StatusCode.aborted is retryable for raw and mapped exceptions', () {
+      expect(isRetryable(const grpc.GrpcError.aborted('aborted')), isTrue);
+      expect(
+        isRetryable(
+          ConflictException(
+            'aborted',
+            status: Status(code: grpc.StatusCode.aborted, message: 'aborted'),
+          ),
+        ),
+        isTrue,
+      );
+      expect(
+        isRetryable(
+          ServiceException('aborted', statusCode: grpc.StatusCode.aborted),
+        ),
+        isTrue,
+      );
+      // Plain ConflictException without aborted is NOT retryable
+      expect(isRetryable(ConflictException('conflict')), isFalse);
+    });
+
+    test(
+      'StatusCode.dataLoss is NOT retryable for raw and mapped exceptions',
+      () {
+        expect(
+          isRetryable(
+            const grpc.GrpcError.custom(grpc.StatusCode.dataLoss, 'data loss'),
+          ),
+          isFalse,
+        );
+        expect(
+          isRetryable(
+            ServiceException(
+              'data loss',
+              statusCode: grpc.StatusCode.dataLoss,
+              status: Status(
+                code: grpc.StatusCode.dataLoss,
+                message: 'data loss',
+              ),
+            ),
+          ),
+          isFalse,
+        );
+        expect(
+          isRetryable(
+            InternalServerErrorException(
+              'data loss',
+              status: Status(
+                code: grpc.StatusCode.dataLoss,
+                message: 'data loss',
+              ),
+            ),
+          ),
+          isFalse,
+        );
+      },
+    );
   });
 
   group('RetrySettings', () {
@@ -156,6 +215,34 @@ void main() {
 
       final unlimited = settings.copyWith(totalTimeout: null);
       expect(unlimited.totalTimeout, isNull);
+    });
+
+    test('parameter assertions', () {
+      expect(
+        () => RetrySettings(maxRetries: -1),
+        throwsA(isA<AssertionError>()),
+      );
+      expect(
+        () => RetrySettings(delayMultiplier: 0.5),
+        throwsA(isA<AssertionError>()),
+      );
+      expect(
+        () => RetrySettings(initialDelay: Duration.zero),
+        throwsA(isA<AssertionError>()),
+      );
+      expect(
+        () => RetrySettings(maxDelay: Duration.zero),
+        throwsA(isA<AssertionError>()),
+      );
+      expect(
+        () => RetrySettings(totalTimeout: Duration.zero),
+        throwsA(isA<AssertionError>()),
+      );
+      // ignore: deprecated_member_use_from_same_package
+      expect(
+        () => RetrySettings(maxRetryInterval: Duration.zero),
+        throwsA(isA<AssertionError>()),
+      );
     });
   });
 

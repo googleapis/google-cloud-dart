@@ -31,7 +31,12 @@ final class BatchingSettings {
     this.maxMessages = 100,
     this.maxBytes = 1024 * 1024, // 1 MB
     this.maxDelay = const Duration(milliseconds: 10),
-  });
+  }) : assert(maxMessages > 0, 'maxMessages must be greater than 0'),
+       assert(maxBytes > 0, 'maxBytes must be greater than 0'),
+       assert(
+         !identical(maxDelay, Duration.zero),
+         'maxDelay must be greater than zero',
+       );
 }
 
 /// Generic batcher that accumulates items of type [T] and fires batches of [T]

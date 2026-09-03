@@ -122,4 +122,29 @@ void main() {
       expect(() => batcher.add(1), throwsStateError);
     });
   });
+
+  group('BatchingSettings', () {
+    test('parameter assertions', () {
+      expect(
+        () => BatchingSettings(maxMessages: 0),
+        throwsA(isA<AssertionError>()),
+      );
+      expect(
+        () => BatchingSettings(maxMessages: -1),
+        throwsA(isA<AssertionError>()),
+      );
+      expect(
+        () => BatchingSettings(maxBytes: 0),
+        throwsA(isA<AssertionError>()),
+      );
+      expect(
+        () => BatchingSettings(maxBytes: -10),
+        throwsA(isA<AssertionError>()),
+      );
+      expect(
+        () => BatchingSettings(maxDelay: Duration.zero),
+        throwsA(isA<AssertionError>()),
+      );
+    });
+  });
 }

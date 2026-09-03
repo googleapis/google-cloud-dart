@@ -14,6 +14,7 @@
 
 import 'dart:async';
 
+import 'package:google_cloud_rpc/rpc.dart';
 import 'package:grpc/grpc.dart';
 import 'package:meta/meta.dart';
 import '../google_cloud_pubsub.dart';
@@ -88,11 +89,12 @@ final class PubSub {
     required ClientChannel channel,
     grpc.SubscriberClient? subscriberClient,
     grpc.PublisherClient? publisherClient,
+    FutureOr<BaseAuthenticator>? authenticator,
   }) => PubSub._(
     projectId,
     channel,
     false,
-    null,
+    authenticator,
     subscriberClient: subscriberClient,
     publisherClient: publisherClient,
   );
@@ -399,12 +401,13 @@ final class PubSub {
   /// The client streams acknowledgments and ack deadline modifications
   /// back to the server. If an error occurs (including when the server closes
   /// the stream with status `UNAVAILABLE` to reassign resources), the stream
-  /// will throw a [ServiceException]. In this case, the caller should
+  /// will emit a [ServiceException]. In this case, the caller should
   /// re-establish the stream. Flow control can be achieved by configuring the
   /// underlying RPC channel.
   ///
-  /// Throws a [ServiceException] if the stream is broken by the server or
-  /// network.
+  /// Any errors (such as a [ServiceException] if the stream is broken by
+  /// the server or network) are emitted asynchronously on the returned
+  /// stream rather than thrown synchronously.
   ///
   @internal
   Stream<ReceivedMessage> streamingPullWithStream(
@@ -416,14 +419,17 @@ final class PubSub {
     late StreamController<ReceivedMessage> controller;
     StreamSubscription<grpc.StreamingPullResponse>? sub;
     var isPaused = false;
+    var isCancelled = false;
     controller = StreamController<ReceivedMessage>(
       onListen: () async {
         try {
           final options = await _callOptions;
+          if (isCancelled) return;
           final responseStream = _subscriber.streamingPull(
             requestStream,
             options: options,
           );
+          if (isCancelled) return;
           sub = responseStream.listen(
             (response) {
               for (final m in response.receivedMessages) {
@@ -452,7 +458,9 @@ final class PubSub {
             sub?.pause();
           }
         } catch (e, s) {
-          controller.addError(e, s);
+          if (!isCancelled && !controller.isClosed) {
+            controller.addError(e, s);
+          }
         }
       },
       onPause: () {
@@ -463,7 +471,10 @@ final class PubSub {
         isPaused = false;
         sub?.resume();
       },
-      onCancel: () => sub?.cancel(),
+      onCancel: () {
+        isCancelled = true;
+        return sub?.cancel();
+      },
     );
     return controller.stream;
   }
@@ -477,12 +488,13 @@ final class PubSub {
   /// The client streams acknowledgments and ack deadline modifications
   /// back to the server. If an error occurs (including when the server closes
   /// the stream with status `UNAVAILABLE` to reassign resources), the stream
-  /// will throw a [ServiceException]. In this case, the caller should
+  /// will emit a [ServiceException]. In this case, the caller should
   /// re-establish the stream. Flow control can be achieved by configuring the
   /// underlying RPC channel.
   ///
-  /// Throws a [ServiceException] if the stream is broken by the server or
-  /// network.
+  /// Any errors (such as a [ServiceException] if the stream is broken by
+  /// the server or network) are emitted asynchronously on the returned
+  /// stream rather than thrown synchronously.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.StreamingPull).
   Stream<ReceivedMessage> streamingPull(
@@ -499,7 +511,7 @@ final class PubSub {
       yield* streamingPullWithStream(
         requestController.stream,
         ackHandler: (ackIds) async {
-          if (!requestController.isClosed) {
+          if (!requestController.isClosed && requestController.hasListener) {
             requestController.add(
               grpc.StreamingPullRequest()..ackIds.addAll(ackIds),
             );
@@ -508,7 +520,7 @@ final class PubSub {
           await acknowledge(subscription, ackIds);
         },
         modifyDeadlineHandler: (ackIds, seconds) async {
-          if (!requestController.isClosed) {
+          if (!requestController.isClosed && requestController.hasListener) {
             requestController.add(
               grpc.StreamingPullRequest()
                 ..modifyDeadlineAckIds.addAll(ackIds)
@@ -617,7 +629,10 @@ final class PubSub {
       StatusCode.permissionDenied => ForbiddenException(message),
       StatusCode.notFound => NotFoundException(message),
       StatusCode.alreadyExists => ConflictException(message),
-      StatusCode.aborted => ConflictException(message),
+      StatusCode.aborted => ConflictException(
+        message,
+        status: Status(code: StatusCode.aborted, message: message),
+      ),
       StatusCode.failedPrecondition => PreconditionFailedException(message),
       StatusCode.outOfRange => RequestRangeNotSatisfiableException(message),
       StatusCode.resourceExhausted => TooManyRequestsException(message),
@@ -626,7 +641,11 @@ final class PubSub {
       StatusCode.internal => InternalServerErrorException(message),
       StatusCode.unimplemented => NotImplementedException(message),
       StatusCode.unavailable => ServiceUnavailableException(message),
-      StatusCode.dataLoss => InternalServerErrorException(message),
+      StatusCode.dataLoss => ServiceException(
+        message,
+        statusCode: e.code,
+        status: Status(code: StatusCode.dataLoss, message: message),
+      ),
       StatusCode.unknown => InternalServerErrorException(message),
       _ => ServiceException(message, statusCode: e.code),
     };

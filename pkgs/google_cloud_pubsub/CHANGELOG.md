@@ -1,5 +1,22 @@
 ## 0.1.0-wip
 
+- Failed attached completers with `completeError` when unary ACK or deadline
+  modification fallback fails in `Subscription`.
+- Verified `stream.hasListener` before buffering ACKs and deadline
+  modifications into gRPC request controllers, falling back to unary RPCs.
+- Prevented zombie reconnections on closed subscriptions and cancelled all
+  active streaming pull controllers in `Subscription.close()`.
+- Prevented async cancellation race in `PubSub.streamingPullWithStream` when
+  canceled while awaiting call options.
+- Cleaned up `StreamSubscription` and stopped `Stopwatch` on stream reconnects.
+- Aligned error classification so `StatusCode.aborted` is retryable across raw
+  `GrpcError` and mapped exceptions, while `StatusCode.dataLoss` is non-retryable
+  across both.
+- Defaulted `totalTimeout` in custom `RetrySettings` passed to `streamingPull` to
+  `null` (indefinite reconnection) unless explicitly specified.
+- Added constructor assertions in `BatchingSettings` and `RetrySettings`.
+- Documented asynchronous error emission on streaming methods and `StateError`
+  on `ReceivedMessage.acknowledge()` and `modifyAckDeadline()`.
 - Initial release of the experimental Google Cloud Pub/Sub client.
 - Supports basic topic and subscription management.
 - Supports publishing and pulling messages (including streaming pull).

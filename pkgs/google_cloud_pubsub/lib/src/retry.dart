@@ -21,6 +21,7 @@ import 'package:meta/meta.dart';
 
 const _sentinel = Object();
 const _defaultTotalTimeout = Duration(minutes: 1);
+const _sentinelTimeout = Duration(microseconds: -1);
 
 /// Settings for configuring retry logic with exponential backoff.
 final class RetrySettings {
@@ -50,14 +51,77 @@ final class RetrySettings {
   /// value, the wait time will be clamped to this value.
   final Duration maxDelay;
 
+  final bool _hasExplicitTotalTimeout;
+
+  /// Whether [totalTimeout] (or [maxRetryInterval]) was explicitly specified.
+  @internal
+  bool get hasExplicitTotalTimeout => _hasExplicitTotalTimeout;
+
   const RetrySettings({
     this.maxRetries,
     this.initialDelay = const Duration(milliseconds: 100),
     this.delayMultiplier = 1.3,
     this.maxDelay = const Duration(seconds: 60),
-    Duration? totalTimeout = _defaultTotalTimeout,
+    Duration? totalTimeout = _sentinelTimeout,
     @Deprecated('Use totalTimeout instead') Duration? maxRetryInterval,
-  }) : totalTimeout = maxRetryInterval ?? totalTimeout;
+  }) : totalTimeout =
+           maxRetryInterval ??
+           (identical(totalTimeout, _sentinelTimeout)
+               ? _defaultTotalTimeout
+               : totalTimeout),
+       _hasExplicitTotalTimeout =
+           !identical(totalTimeout, _sentinelTimeout) ||
+           maxRetryInterval != null,
+       assert(
+         maxRetries == null || maxRetries >= 0,
+         'maxRetries must be non-negative',
+       ),
+       assert(
+         !identical(initialDelay, Duration.zero),
+         'initialDelay must be greater than zero',
+       ),
+       assert(delayMultiplier >= 1.0, 'delayMultiplier must be at least 1.0'),
+       assert(
+         !identical(maxDelay, Duration.zero),
+         'maxDelay must be greater than zero',
+       ),
+       assert(
+         maxRetryInterval == null ||
+             !identical(maxRetryInterval, Duration.zero),
+         'maxRetryInterval must be greater than zero',
+       ),
+       assert(
+         identical(totalTimeout, _sentinelTimeout) ||
+             totalTimeout == null ||
+             !identical(totalTimeout, Duration.zero),
+         'totalTimeout must be greater than zero',
+       );
+
+  const RetrySettings._internal({
+    required this.maxRetries,
+    required this.totalTimeout,
+    required this.initialDelay,
+    required this.delayMultiplier,
+    required this.maxDelay,
+    required bool hasExplicitTotalTimeout,
+  }) : _hasExplicitTotalTimeout = hasExplicitTotalTimeout,
+       assert(
+         maxRetries == null || maxRetries >= 0,
+         'maxRetries must be non-negative',
+       ),
+       assert(
+         !identical(initialDelay, Duration.zero),
+         'initialDelay must be greater than zero',
+       ),
+       assert(delayMultiplier >= 1.0, 'delayMultiplier must be at least 1.0'),
+       assert(
+         !identical(maxDelay, Duration.zero),
+         'maxDelay must be greater than zero',
+       ),
+       assert(
+         totalTimeout == null || !identical(totalTimeout, Duration.zero),
+         'totalTimeout must be greater than zero',
+       );
 
   /// Creates a copy of this [RetrySettings] with the given fields replaced.
   RetrySettings copyWith({
@@ -66,7 +130,7 @@ final class RetrySettings {
     Duration? initialDelay,
     double? delayMultiplier,
     Duration? maxDelay,
-  }) => RetrySettings(
+  }) => RetrySettings._internal(
     maxRetries: identical(maxRetries, _sentinel)
         ? this.maxRetries
         : maxRetries as int?,
@@ -76,6 +140,8 @@ final class RetrySettings {
     initialDelay: initialDelay ?? this.initialDelay,
     delayMultiplier: delayMultiplier ?? this.delayMultiplier,
     maxDelay: maxDelay ?? this.maxDelay,
+    hasExplicitTotalTimeout:
+        !identical(totalTimeout, _sentinel) || _hasExplicitTotalTimeout,
   );
 }
 
@@ -130,10 +196,15 @@ bool isRetryable(Object e) {
       StatusCode.unknown => true,
       _ => false,
     },
+    ConflictException(:final status) when status?.code == StatusCode.aborted =>
+      true,
+    ServiceException(:final statusCode) when statusCode == StatusCode.aborted =>
+      true,
     ServiceUnavailableException() ||
     GatewayTimeoutException() ||
-    TooManyRequestsException() ||
-    InternalServerErrorException() => true,
+    TooManyRequestsException() => true,
+    InternalServerErrorException(:final status) =>
+      status?.code != StatusCode.dataLoss,
     _ => false,
   };
 }

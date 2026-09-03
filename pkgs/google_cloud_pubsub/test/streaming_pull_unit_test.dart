@@ -127,19 +127,39 @@ class FakeSubscriberClient extends Fake implements generated.SubscriberClient {
     return FakeResponseFuture(completer.future);
   }
 
+  Future<void> Function(List<String> ackIds, int seconds)?
+  modifyAckDeadlineBehavior;
+
   @override
   grpc.ResponseFuture<protobuf.Empty> modifyAckDeadline(
     generated.ModifyAckDeadlineRequest request, {
     grpc.CallOptions? options,
   }) {
     unaryModifyDeadlineCalls.add((request.ackIds, request.ackDeadlineSeconds));
-    return FakeResponseFuture(Future.value(protobuf.Empty()));
+    final completer = Completer<protobuf.Empty>();
+    if (modifyAckDeadlineBehavior case final behavior?) {
+      behavior(request.ackIds, request.ackDeadlineSeconds)
+          .then((_) => completer.complete(protobuf.Empty()))
+          .catchError(completer.completeError);
+    } else {
+      completer.complete(protobuf.Empty());
+    }
+    return FakeResponseFuture(completer.future);
   }
 }
 
 class FakeClientChannel extends Fake implements grpc.ClientChannel {
   @override
   Future<void> shutdown() async {}
+}
+
+class DelayedAuthenticator extends Fake implements grpc.BaseAuthenticator {
+  final Completer<void> completer = Completer<void>();
+
+  @override
+  Future<void> authenticate(Map<String, String> metadata, String uri) async {
+    await completer.future;
+  }
 }
 
 void main() {
@@ -581,6 +601,245 @@ void main() {
         () => subscription.modifyAckDeadlineNow([msg], 10),
         throwsStateError,
       );
+    });
+
+    test(
+      'message.acknowledge() propagates error when unary fallback fails',
+      () async {
+        fakeSubscriber.acknowledgeBehavior = (ackIds) async {
+          throw const grpc.GrpcError.internal('Unary ack failure');
+        };
+
+        final subscription = client.subscription(
+          'test-sub',
+          ackSettings: const AckSettings(
+            batching: BatchingSettings(
+              maxMessages: 1,
+              maxDelay: Duration(milliseconds: 1),
+            ),
+            retry: RetrySettings(maxRetries: 0),
+          ),
+        );
+
+        final stream = subscription.streamingPull();
+        final receivedList = <ReceivedMessage>[];
+        final sub = stream.listen(receivedList.add);
+
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+        fakeSubscriber.connections.first.emitMessage(
+          'ack-fail-1',
+          'msg-fail-1',
+        );
+
+        await Future<void>.delayed(const Duration(milliseconds: 20));
+        expect(receivedList.length, equals(1));
+
+        final message = receivedList.first;
+
+        // Cancel the stream first so _activeStreams is empty and ACK
+        // must use unary fallback.
+        await sub.cancel();
+
+        await expectLater(
+          message.acknowledge(),
+          throwsA(isA<InternalServerErrorException>()),
+        );
+
+        await subscription.close();
+      },
+    );
+
+    test(
+      'message.modifyAckDeadline() propagates error when unary fallback fails',
+      () async {
+        fakeSubscriber.modifyAckDeadlineBehavior = (ackIds, seconds) async {
+          throw const grpc.GrpcError.internal('Unary mod failure');
+        };
+
+        final subscription = client.subscription(
+          'test-sub',
+          ackSettings: const AckSettings(
+            batching: BatchingSettings(
+              maxMessages: 1,
+              maxDelay: Duration(milliseconds: 1),
+            ),
+            retry: RetrySettings(maxRetries: 0),
+          ),
+        );
+
+        final stream = subscription.streamingPull();
+        final receivedList = <ReceivedMessage>[];
+        final sub = stream.listen(receivedList.add);
+
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+        fakeSubscriber.connections.first.emitMessage(
+          'ack-fail-2',
+          'msg-fail-2',
+        );
+
+        await Future<void>.delayed(const Duration(milliseconds: 20));
+        expect(receivedList.length, equals(1));
+
+        final message = receivedList.first;
+
+        // Cancel the stream first so _activeStreams is empty and modify
+        // must use unary fallback.
+        await sub.cancel();
+
+        await expectLater(
+          message.modifyAckDeadline(10),
+          throwsA(isA<InternalServerErrorException>()),
+        );
+
+        await subscription.close();
+      },
+    );
+
+    test('Subscription.close() stops active streaming pull controllers '
+        'and prevents reconnects', () async {
+      final subscription = client.subscription(
+        'test-sub',
+        ackSettings: const AckSettings(
+          retry: RetrySettings(
+            maxRetries: 10,
+            initialDelay: Duration(milliseconds: 10),
+          ),
+        ),
+      );
+
+      final stream = subscription.streamingPull();
+      var isDone = false;
+      stream.listen(
+        (_) {},
+        onDone: () {
+          isDone = true;
+        },
+      );
+
+      await Future<void>.delayed(const Duration(milliseconds: 10));
+      expect(fakeSubscriber.connections.length, equals(1));
+
+      await subscription.close();
+
+      expect(isDone, isTrue);
+      final countAfterClose = fakeSubscriber.connections.length;
+
+      // Simulate error on the previous connection response controller
+      fakeSubscriber.connections.first.responseController.addError(
+        const grpc.GrpcError.unavailable('Simulated connection dropped'),
+      );
+
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+      // No new connections should be spawned after close
+      expect(fakeSubscriber.connections.length, equals(countAfterClose));
+    });
+
+    test('cancellation during stream initialization (_callOptions) '
+        'does not leak connections', () async {
+      final delayedAuth = DelayedAuthenticator();
+      final clientWithDelayedAuth = PubSub.testing(
+        projectId: 'test-project',
+        channel: FakeClientChannel(),
+        subscriberClient: fakeSubscriber,
+        authenticator: delayedAuth,
+      );
+
+      final requestController =
+          StreamController<generated.StreamingPullRequest>();
+      final stream = clientWithDelayedAuth.streamingPullWithStream(
+        requestController.stream,
+      );
+
+      final sub = stream.listen((_) {});
+      // Cancel immediately while _callOptions is in-flight
+      await sub.cancel();
+
+      // Now complete the authenticator
+      delayedAuth.completer.complete();
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+
+      // Fake subscriber should not have received a streamingPull call
+      expect(fakeSubscriber.connections.isEmpty, isTrue);
+
+      if (!requestController.hasListener) {
+        unawaited(requestController.stream.drain<void>());
+      }
+      await requestController.close();
+      await clientWithDelayedAuth.close();
+    });
+
+    test('stream without listener is skipped during ACK batching and '
+        'falls back to unary', () async {
+      final subscription = client.subscription(
+        'test-sub',
+        ackSettings: const AckSettings(
+          batching: BatchingSettings(
+            maxMessages: 1,
+            maxDelay: Duration(milliseconds: 1),
+          ),
+          retry: RetrySettings(maxRetries: 0),
+        ),
+      );
+
+      // Start streaming pull to establish active stream
+      final stream = subscription.streamingPull();
+      final receivedList = <ReceivedMessage>[];
+      final sub = stream.listen(receivedList.add);
+
+      await Future<void>.delayed(const Duration(milliseconds: 10));
+      expect(fakeSubscriber.connections.length, equals(1));
+      fakeSubscriber.connections.first.emitMessage(
+        'ack-stream-skip',
+        'msg-stream-skip',
+      );
+
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+      expect(receivedList.length, equals(1));
+      final message = receivedList.first;
+
+      // Cancel stream listener so controller hasListener == false
+      await sub.cancel();
+
+      // Acknowledge should skip unlistened stream and invoke unary ack
+      await message.acknowledge();
+
+      expect(fakeSubscriber.acknowledgeCalled, isTrue);
+      expect(
+        fakeSubscriber.unaryAckCalls.any(
+          (call) => call.contains('ack-stream-skip'),
+        ),
+        isTrue,
+      );
+
+      await subscription.close();
+    });
+
+    test('custom RetrySettings without explicit totalTimeout defaults '
+        'totalTimeout to null', () async {
+      final subscription = client.subscription('test-sub');
+
+      // Without explicit totalTimeout, totalTimeout defaults to null
+      const customRetry = RetrySettings(
+        maxRetries: 5,
+        initialDelay: Duration(milliseconds: 10),
+      );
+      expect(customRetry.hasExplicitTotalTimeout, isFalse);
+
+      final stream = subscription.streamingPull(retry: customRetry);
+      final sub = stream.listen((_) {});
+
+      await Future<void>.delayed(const Duration(milliseconds: 10));
+      expect(fakeSubscriber.connections.length, equals(1));
+
+      // When explicit totalTimeout is provided, hasExplicitTotalTimeout is true
+      const explicitTimeoutRetry = RetrySettings(
+        maxRetries: 5,
+        totalTimeout: Duration(minutes: 5),
+      );
+      expect(explicitTimeoutRetry.hasExplicitTotalTimeout, isTrue);
+
+      await sub.cancel();
+      await subscription.close();
     });
   });
 }

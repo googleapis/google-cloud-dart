@@ -15,6 +15,8 @@
 import 'dart:async';
 import 'dart:typed_data';
 
+import 'subscription.dart';
+
 /// A Pub/Sub message.
 final class Message {
   /// The payload of this message.
@@ -69,7 +71,9 @@ final class ReceivedMessage {
   /// If it was received via `streamingPull`, it will send an acknowledgment
   /// request over the stream or route it through the subscription batcher.
   ///
-  /// It is an error if no acknowledge handler is configured for this message.
+  /// Throws a [StateError] if no acknowledge handler is configured for this
+  /// message (e.g. if the message was constructed manually without a handler,
+  /// or if the underlying [Subscription] is closed).
   Future<void> acknowledge() async {
     final handler = _ackHandler;
     if (handler == null) {
@@ -85,9 +89,9 @@ final class ReceivedMessage {
   /// deadline is 10 seconds from now. Specifying 0 makes the message
   /// immediately available for redelivery.
   ///
-  /// It is an error if [seconds] is negative.
-  /// It is an error if no modify-ack-deadline handler is configured for this
-  /// message.
+  /// Throws an [ArgumentError] if [seconds] is negative.
+  /// Throws a [StateError] if no modify-ack-deadline handler is configured for
+  /// this message, or if the underlying [Subscription] is closed.
   Future<void> modifyAckDeadline(int seconds) async {
     if (seconds < 0) {
       throw ArgumentError.value(seconds, 'seconds', 'Must be non-negative');
