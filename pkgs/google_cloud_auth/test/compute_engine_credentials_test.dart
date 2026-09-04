@@ -638,18 +638,23 @@ void main() async {
         );
       });
 
-      test('signs message using ComputeEngineCredentials', () async {
-        final creds = await ComputeEngineCredentials.create();
-        expect(creds.clientEmail, contains('@'));
+      test(
+        'signs message using ComputeEngineCredentials',
+        tags: ['google-cloud'],
+        skip: isOnGce ? null : 'Not running on Google Compute Engine',
+        () async {
+          final creds = await ComputeEngineCredentials.create();
+          expect(creds.clientEmail, contains('@'));
 
-        final message = utf8.encode(
-          'Hello from ComputeEngineCredentials test!',
-        );
-        final signature = await creds.sign(message);
+          final message = utf8.encode(
+            'Hello from ComputeEngineCredentials test!',
+          );
+          final signature = await creds.sign(message);
 
-        expect(signature, isNotEmpty);
-        expect(signature.length, greaterThan(64));
-      }, skip: isOnGce ? null : 'Not running on Google Compute Engine');
+          expect(signature, isNotEmpty);
+          expect(signature.length, greaterThan(64));
+        },
+      );
     });
   });
 }
