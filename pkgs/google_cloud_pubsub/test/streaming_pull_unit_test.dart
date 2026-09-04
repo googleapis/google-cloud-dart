@@ -954,5 +954,95 @@ void main() {
 
       await sub.cancel();
     });
+
+    test('streamingPullWithStream emits error and closes controller on '
+        'mid-stream error', () async {
+      final reqController = StreamController<generated.StreamingPullRequest>();
+      final stream = client.streamingPullWithStream(reqController.stream);
+
+      final errors = <Object>[];
+      final items = <ReceivedMessage>[];
+      var isDone = false;
+      final sub = stream.listen(
+        items.add,
+        onError: errors.add,
+        onDone: () => isDone = true,
+      );
+
+      await Future<void>.delayed(const Duration(milliseconds: 10));
+      expect(fakeSubscriber.connections.length, equals(1));
+      final conn = fakeSubscriber.connections.first
+        ..emitMessage('ack-mid-stream', 'msg-mid-stream');
+      await Future<void>.delayed(const Duration(milliseconds: 10));
+
+      expect(items.length, equals(1));
+      expect(items.first.ackId, equals('ack-mid-stream'));
+
+      // Emit mid-stream gRPC error on response stream
+      conn.responseController.addError(
+        const grpc.GrpcError.unavailable('Transient mid-stream drop'),
+      );
+
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+
+      expect(errors.length, equals(1));
+      expect(errors.first, isA<ServiceException>());
+      expect(isDone, isTrue);
+
+      await sub.cancel();
+      unawaited(reqController.close());
+    });
+
+    test('multi-stream teardown on non-retryable error does not emit duplicate '
+        'errors or leave orphaned timers', () async {
+      final subscription = client.subscription('test-sub');
+      final stream = subscription.streamingPull(
+        maxConcurrentStreams: 4,
+        retry: RetrySettings(
+          maxRetries: 5,
+          initialDelay: const Duration(milliseconds: 20),
+        ),
+      );
+
+      final errors = <Object>[];
+      var isDone = false;
+      final sub = stream.listen(
+        (_) {},
+        onError: errors.add,
+        onDone: () => isDone = true,
+      );
+
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+      expect(fakeSubscriber.connections.length, equals(4));
+
+      // Inject non-retryable error on conn[0], concurrent non-retryable error
+      // on conn[1] (tests duplicate error suppression), concurrent
+      // transient retryable error on conn[2] (tests orphaned timer
+      // suppression), and concurrent normal closure on conn[3] (tests onDone).
+      fakeSubscriber.connections[0].responseController.addError(
+        const grpc.GrpcError.notFound('Subscription not found'),
+      );
+      fakeSubscriber.connections[1].responseController.addError(
+        const grpc.GrpcError.notFound('Subscription not found'),
+      );
+      fakeSubscriber.connections[2].responseController.addError(
+        const grpc.GrpcError.unavailable('Transient drop'),
+      );
+      unawaited(fakeSubscriber.connections[3].responseController.close());
+
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+
+      expect(errors.length, equals(1));
+      expect(errors.first, isA<NotFoundException>());
+      expect(isDone, isTrue);
+
+      // Wait beyond the retry backoff duration (20ms) to verify that no
+      // orphaned reconnect timers fired.
+      await Future<void>.delayed(const Duration(milliseconds: 60));
+      expect(fakeSubscriber.connections.length, equals(4));
+
+      await sub.cancel();
+      await subscription.close();
+    });
   });
 }

@@ -1,5 +1,18 @@
 ## 0.1.0-wip
 
+- Preserved configured `publishSettings` and `ackSettings` when calling
+  `Topic.create()` and `Subscription.create()`, returning `this`.
+- Cleanly closed stream controller with `unawaited(controller.close())` on
+  mid-stream gRPC errors in `PubSub.streamingPullWithStream` to prevent
+  downstream consumers from hanging.
+- Aligned default `maxMessages` in `PubSub.pull` to 100 to match
+  `Subscription.pull`.
+- Synchronously set `isCancelled = true` before stream cancellation in
+  `Subscription.streamingPull` teardown on non-retryable errors or exhausted
+  retries to prevent duplicate errors and orphaned reconnect timers.
+- Harmonized error messages in `BatchingSettings` to 'Must be greater than
+  zero'.
+
 - Closed stream controller on setup failure in `PubSub.streamingPullWithStream`
   to prevent consumers from hanging.
 - Added immediate no-op on empty collections for `PubSub.publishMessages`,
@@ -31,9 +44,10 @@
 - Aligned error classification so `StatusCode.aborted` is retryable across
   raw `GrpcError` and mapped exceptions, while `StatusCode.dataLoss` is
   non-retryable across both.
-- Defaulted `totalTimeout` in custom `RetrySettings` passed to
-  `streamingPull` to `null` (indefinite reconnection) unless explicitly
-  specified.
+- Clarified reconnection timeout in `Subscription.streamingPull`: omitting retry
+  defaults to unlimited reconnection timeout (`totalTimeout: null`), while
+  custom `RetrySettings` retain their configured `totalTimeout` (default 1
+  minute) unless explicitly overridden.
 - Replaced constructor assertions in `BatchingSettings` and `RetrySettings`
   with always-on parameter validation, and updated `PublishSettings` and
   `AckSettings` constructors to default to newly created instances.

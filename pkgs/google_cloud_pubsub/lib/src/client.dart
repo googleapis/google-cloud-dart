@@ -361,12 +361,14 @@ final class PubSub {
   /// The [subscription] must be in the format
   /// `projects/<project-id>/subscriptions/<subscription-id>`.
   ///
+  /// It is an error if [maxMessages] is not greater than 0.
+  ///
   /// Throws a [NotFoundException] if the subscription does not exist.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.Pull).
   Future<List<ReceivedMessage>> pull(
     String subscription, {
-    int maxMessages = 1,
+    int maxMessages = 100,
   }) async {
     if (maxMessages <= 0) {
       throw ArgumentError.value(
@@ -455,6 +457,7 @@ final class PubSub {
               } else {
                 controller.addError(e, s);
               }
+              unawaited(controller.close());
             },
             onDone: () {
               controller.close();

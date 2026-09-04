@@ -187,5 +187,78 @@ void main() {
         throwsA(isA<ArgumentError>()),
       );
     });
+
+    test('parameter validation error messages are harmonized', () {
+      expect(
+        () => BatchingSettings(maxMessages: 0),
+        throwsA(
+          isA<ArgumentError>().having(
+            (e) => e.message,
+            'message',
+            'Must be greater than zero',
+          ),
+        ),
+      );
+      expect(
+        () => BatchingSettings(maxMessages: -1),
+        throwsA(
+          isA<ArgumentError>().having(
+            (e) => e.message,
+            'message',
+            'Must be greater than zero',
+          ),
+        ),
+      );
+      expect(
+        () => BatchingSettings(maxBytes: 0),
+        throwsA(
+          isA<ArgumentError>().having(
+            (e) => e.message,
+            'message',
+            'Must be greater than zero',
+          ),
+        ),
+      );
+      expect(
+        () => BatchingSettings(maxBytes: -10),
+        throwsA(
+          isA<ArgumentError>().having(
+            (e) => e.message,
+            'message',
+            'Must be greater than zero',
+          ),
+        ),
+      );
+      expect(
+        () => BatchingSettings(maxDelay: Duration.zero),
+        throwsA(
+          isA<ArgumentError>().having(
+            (e) => e.message,
+            'message',
+            'Must be greater than zero',
+          ),
+        ),
+      );
+      expect(
+        () => BatchingSettings(maxDelay: const Duration(milliseconds: -1)),
+        throwsA(
+          isA<ArgumentError>().having(
+            (e) => e.message,
+            'message',
+            'Must be greater than zero',
+          ),
+        ),
+      );
+      expect(
+        () => BatchingSettings(maxDelay: const Duration(seconds: -10)),
+        throwsA(
+          isA<ArgumentError>().having(
+            (e) => e.message,
+            'message',
+            'Must be greater than zero',
+          ),
+        ),
+      );
+    });
   });
 }

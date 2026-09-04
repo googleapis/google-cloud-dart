@@ -271,8 +271,10 @@ final class Subscription {
   /// Returns a [Subscription] instance representing the created subscription.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.CreateSubscription).
-  Future<Subscription> create({required String topic}) =>
-      pubsub.createSubscription(name, topic: topic);
+  Future<Subscription> create({required String topic}) async {
+    await pubsub.createSubscription(name, topic: topic);
+    return this;
+  }
 
   /// Deletes this subscription on the server.
   ///
@@ -282,6 +284,9 @@ final class Subscription {
   Future<void> delete() => pubsub.deleteSubscription(name);
 
   /// Pulls up to [maxMessages] from this subscription.
+  ///
+  /// It is an error if [maxMessages] is not greater than 0.
+  /// It is an error if called on a closed [Subscription].
   ///
   /// Throws a [NotFoundException] if the subscription does not exist.
   ///
@@ -311,7 +316,9 @@ final class Subscription {
   ///
   /// The stream automatically reconnects on transient network errors using the
   /// configured [retry] settings (defaulting to [AckSettings.retry] with
-  /// unlimited total duration).
+  /// unlimited total duration). Custom [RetrySettings] retain their configured
+  /// [RetrySettings.totalTimeout] (which defaults to 1 minute) unless
+  /// `totalTimeout: null` is passed for unlimited reconnection duration.
   /// Reconnections use exponential backoff, which resets once a connection
   /// has been sustained and healthy (>= 15 seconds) or successfully yields
   /// messages.
@@ -454,6 +461,7 @@ final class Subscription {
         if (_isClosed || isCancelled || controller.isClosed) return;
 
         if (error != null && !isRetryable(error)) {
+          isCancelled = true;
           controller.addError(error, stackTrace);
           await cancelAll();
           activeOrReconnectingStreams = 0;
@@ -489,6 +497,7 @@ final class Subscription {
             controller.addError(error, stackTrace);
           }
           if (activeOrReconnectingStreams == 0) {
+            isCancelled = true;
             await cancelAll();
             _activeStreamingPullControllers.remove(controller);
             await controller.close();

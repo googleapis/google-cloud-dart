@@ -76,6 +76,12 @@ class FakePublisherClient extends Fake implements generated.PublisherClient {
     }
     return FakeResponseFuture(completer.future);
   }
+
+  @override
+  grpc.ResponseFuture<generated.Topic> createTopic(
+    generated.Topic request, {
+    grpc.CallOptions? options,
+  }) => FakeResponseFuture(Future.value(request));
 }
 
 class FakeClientChannel extends Fake implements grpc.ClientChannel {
@@ -280,6 +286,17 @@ void main() {
         await topic.close();
       },
     );
+
+    test('Topic.create() returns this and preserves publishSettings', () async {
+      final customSettings = PublishSettings(
+        batching: BatchingSettings(maxMessages: 42),
+      );
+      final topic = client.topic('my-topic', publishSettings: customSettings);
+      final created = await topic.create();
+      expect(identical(created, topic), isTrue);
+      expect(created.publishSettings, same(customSettings));
+      expect(created.publishSettings.batching.maxMessages, equals(42));
+    });
   });
 
   group('Message and ReceivedMessage toString', () {

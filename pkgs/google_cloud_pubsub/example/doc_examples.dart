@@ -26,6 +26,7 @@ Future<void> streamingPullExample(PubSub pubsub) async {
     streamAckDeadlineSeconds: 30,
     retry: RetrySettings(
       maxRetries: 10,
+      totalTimeout: null,
       initialDelay: const Duration(seconds: 1),
       maxDelay: const Duration(seconds: 30),
     ),

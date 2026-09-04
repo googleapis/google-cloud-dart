@@ -85,6 +85,12 @@ class FakePublisherClient extends Fake implements generated.PublisherClient {
     }
     return FakeResponseFuture(completer.future);
   }
+
+  @override
+  grpc.ResponseFuture<generated.Topic> createTopic(
+    generated.Topic request, {
+    grpc.CallOptions? options,
+  }) => FakeResponseFuture(Future.value(request));
 }
 
 class FakeSubscriberClient extends Fake implements generated.SubscriberClient {
@@ -137,6 +143,12 @@ class FakeSubscriberClient extends Fake implements generated.SubscriberClient {
     lastMaxMessages = request.maxMessages;
     return FakeResponseFuture(Future.value(generated.PullResponse()));
   }
+
+  @override
+  grpc.ResponseFuture<generated.Subscription> createSubscription(
+    generated.Subscription request, {
+    grpc.CallOptions? options,
+  }) => FakeResponseFuture(Future.value(request));
 }
 
 class FakeClientChannel extends Fake implements grpc.ClientChannel {
@@ -303,6 +315,17 @@ void main() {
         expect(fakePublisher.publishCalled, isFalse);
       },
     );
+
+    test('Topic.create() returns this and preserves publishSettings', () async {
+      final customSettings = PublishSettings(
+        batching: BatchingSettings(maxMessages: 42),
+      );
+      final topic = client.topic('my-topic', publishSettings: customSettings);
+      final created = await topic.create();
+      expect(identical(created, topic), isTrue);
+      expect(created.publishSettings, same(customSettings));
+      expect(created.publishSettings.batching.maxMessages, equals(42));
+    });
   });
 
   group('Subscription Lifecycle & Batcher', () {
@@ -410,6 +433,22 @@ void main() {
 
         await sub.modifyAckDeadlineNow([], 10);
         expect(fakeSubscriber.modifyAckDeadlineCalled, isFalse);
+      },
+    );
+
+    test(
+      'Subscription.create() returns this and preserves ackSettings',
+      () async {
+        final customSettings = AckSettings(
+          batching: BatchingSettings(maxMessages: 42),
+        );
+        final sub = client.subscription('my-sub', ackSettings: customSettings);
+        final created = await sub.create(
+          topic: 'projects/test-project/topics/my-topic',
+        );
+        expect(identical(created, sub), isTrue);
+        expect(created.ackSettings, same(customSettings));
+        expect(created.ackSettings.batching.maxMessages, equals(42));
       },
     );
   });
@@ -522,6 +561,19 @@ void main() {
         ),
         throwsA(isA<ArgumentError>()),
       );
+    });
+
+    test('PubSub.pull defaults to maxMessages 100', () async {
+      await client.pull('projects/test-project/subscriptions/my-sub');
+      expect(fakeSubscriber.pullCalled, isTrue);
+      expect(fakeSubscriber.lastMaxMessages, equals(100));
+    });
+
+    test('Subscription.pull defaults to maxMessages 100', () async {
+      final sub = client.subscription('my-sub');
+      await sub.pull();
+      expect(fakeSubscriber.pullCalled, isTrue);
+      expect(fakeSubscriber.lastMaxMessages, equals(100));
     });
   });
 }

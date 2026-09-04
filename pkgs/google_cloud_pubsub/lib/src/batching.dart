@@ -42,11 +42,15 @@ final class BatchingSettings {
       throw ArgumentError.value(
         maxMessages,
         'maxMessages',
-        'Must be greater than 0',
+        'Must be greater than zero',
       );
     }
     if (maxBytes <= 0) {
-      throw ArgumentError.value(maxBytes, 'maxBytes', 'Must be greater than 0');
+      throw ArgumentError.value(
+        maxBytes,
+        'maxBytes',
+        'Must be greater than zero',
+      );
     }
     if (maxDelay <= Duration.zero) {
       throw ArgumentError.value(

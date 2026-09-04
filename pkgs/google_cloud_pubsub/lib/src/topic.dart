@@ -159,7 +159,10 @@ final class Topic {
   /// Returns a [Topic] instance representing the created topic.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Publisher.CreateTopic).
-  Future<Topic> create() => pubsub.createTopic(name);
+  Future<Topic> create() async {
+    await pubsub.createTopic(name);
+    return this;
+  }
 
   /// Deletes this topic on the server.
   ///
