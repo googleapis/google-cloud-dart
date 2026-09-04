@@ -41,9 +41,6 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
   @override
   final String clientEmail;
 
-  /// The Google Cloud project ID associated with the instance, if available.
-  final String? projectId;
-
   /// The universe domain for the service account.
   final String universeDomain;
 
@@ -58,7 +55,6 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
 
   ComputeEngineCredentials._({
     required this.clientEmail,
-    required this.projectId,
     required this.universeDomain,
     required this.metadataHost,
     required http.Client client,
@@ -120,7 +116,6 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
   static Future<ComputeEngineCredentials> create({
     http.Client? client,
     String? clientEmail,
-    String? projectId,
     String? universeDomain,
     String? metadataHost,
   }) async {
@@ -156,28 +151,6 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
         }
       }
 
-      var resolvedProjectId = projectId;
-      if (resolvedProjectId == null || resolvedProjectId.isEmpty) {
-        try {
-          final projectUri = Uri.http(
-            host,
-            '/computeMetadata/v1/project/project-id',
-          );
-          final response = await httpClient.get(
-            projectUri,
-            headers: _metadataFlavorHeader,
-          );
-          if (response.statusCode == 200) {
-            final trimmed = response.body.trim();
-            if (trimmed.isNotEmpty) {
-              resolvedProjectId = trimmed;
-            }
-          }
-        } catch (_) {
-          // Project ID is optional.
-        }
-      }
-
       var resolvedUniverseDomain = universeDomain;
       if (resolvedUniverseDomain == null || resolvedUniverseDomain.isEmpty) {
         final universeUri = Uri.http(
@@ -210,7 +183,6 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
 
       return ComputeEngineCredentials._(
         clientEmail: resolvedEmail,
-        projectId: resolvedProjectId,
         universeDomain: resolvedUniverseDomain,
         metadataHost: host,
         client: httpClient,

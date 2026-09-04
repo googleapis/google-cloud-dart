@@ -48,16 +48,13 @@ void main() {
     });
 
     group('create', () {
-      test('fetches email, project ID, and universe domain', () async {
+      test('fetches email and universe domain', () async {
         final mockClient = MockClient((request) async {
           expect(request.headers['metadata-flavor'], 'Google');
           final path = request.url.path;
           if (path ==
               '/computeMetadata/v1/instance/service-accounts/default/email') {
             return http.Response('sa@test.iam.gserviceaccount.com', 200);
-          }
-          if (path == '/computeMetadata/v1/project/project-id') {
-            return http.Response('my-gcp-project', 200);
           }
           if (path == '/computeMetadata/v1/universe/universe-domain') {
             return http.Response('custom.domain.com', 200);
@@ -71,11 +68,10 @@ void main() {
         );
 
         expect(creds.clientEmail, 'sa@test.iam.gserviceaccount.com');
-        expect(creds.projectId, 'my-gcp-project');
         expect(creds.universeDomain, 'custom.domain.com');
       });
 
-      test('uses explicitly provided email and project ID', () async {
+      test('uses explicitly provided email and universe domain', () async {
         var metadataCalled = false;
         final mockClient = MockClient((request) async {
           metadataCalled = true;
@@ -85,13 +81,11 @@ void main() {
         final creds = await ComputeEngineCredentials.create(
           client: mockClient,
           clientEmail: 'explicit@iam.gserviceaccount.com',
-          projectId: 'explicit-project',
           universeDomain: 'explicit.domain.com',
           metadataHost: 'test-metadata',
         );
 
         expect(creds.clientEmail, 'explicit@iam.gserviceaccount.com');
-        expect(creds.projectId, 'explicit-project');
         expect(creds.universeDomain, 'explicit.domain.com');
         expect(metadataCalled, isFalse);
       });
