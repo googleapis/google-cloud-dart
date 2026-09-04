@@ -23,7 +23,9 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:test/test.dart';
 
-void main() {
+void main() async {
+  final isOnGce = await ComputeEngineCredentials.isOnComputeEngine();
+
   group('ComputeEngineCredentials', () {
     group('create', () {
       test('explicitly provided email and universe domain', () async {
@@ -635,6 +637,19 @@ void main() {
           ),
         );
       });
+
+      test('signs message using ComputeEngineCredentials', () async {
+        final creds = await ComputeEngineCredentials.create();
+        expect(creds.clientEmail, contains('@'));
+
+        final message = utf8.encode(
+          'Hello from ComputeEngineCredentials test!',
+        );
+        final signature = await creds.sign(message);
+
+        expect(signature, isNotEmpty);
+        expect(signature.length, greaterThan(64));
+      }, skip: isOnGce ? null : 'Not running on Google Compute Engine');
     });
   });
 }
