@@ -53,6 +53,10 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
 
   String? _cachedAccessToken;
   DateTime? _accessTokenExpiry;
+  
+  /// The active request to fetch a new token. This is used to prevent
+  /// multiple concurrent requests from fetching new tokens at the same time.
+  Future<String>? _activeTokenRequest;
 
   ComputeEngineCredentials._({
     required this.clientEmail,
@@ -67,6 +71,8 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
   ///
   /// If the cached token is expired or if [forceRefresh] is `true`, then a new
   /// token is fetched.
+  /// 
+  /// It is safe to call this method concurrently.
   Future<String> getAccessToken({bool forceRefresh = false}) async {
     if (!forceRefresh &&
         _cachedAccessToken != null &&
@@ -78,6 +84,12 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
       }
     }
 
+    return await (_activeTokenRequest ??= _fetchAccessToken().whenComplete(() {
+      _activeTokenRequest = null;
+    }));
+  }
+
+  Future<String> _fetchAccessToken() async {
     final tokenUri = Uri.http(
       metadataHost,
       '/computeMetadata/v1/instance/service-accounts/default/token',

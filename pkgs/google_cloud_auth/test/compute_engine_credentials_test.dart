@@ -15,6 +15,7 @@
 @TestOn('vm')
 library;
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
@@ -224,6 +225,104 @@ void main() async {
         expect(token3, 'token-2');
         expect(callCount, 2);
       });
+
+      test('shares active request among concurrent callers', () async {
+        final completer = Completer<http.Response>();
+        var callCount = 0;
+
+        final mockClient = MockClient((request) {
+          if (request.url.path.endsWith('/token')) {
+            callCount++;
+            return completer.future;
+          }
+          return Future.value(http.Response('Not found', 404));
+        });
+
+        final creds = await ComputeEngineCredentials.create(
+          client: mockClient,
+          clientEmail: 'sa@test.com',
+          universeDomain: 'googleapis.com',
+          metadataHost: 'test-metadata',
+        );
+
+        final future1 = creds.getAccessToken();
+        final future2 = creds.getAccessToken();
+        final future3 = creds.getAccessToken(forceRefresh: true);
+
+        await pumpEventQueue();
+        expect(callCount, 1);
+
+        completer.complete(
+          http.Response(
+            jsonEncode({
+              'access_token': 'shared-token-123',
+              'expires_in': 3600,
+              'token_type': 'Bearer',
+            }),
+            200,
+          ),
+        );
+
+        final results = await Future.wait([future1, future2, future3]);
+        expect(results, [
+          'shared-token-123',
+          'shared-token-123',
+          'shared-token-123',
+        ]);
+        expect(callCount, 1);
+      });
+
+      test(
+        'clears active request on failure so subsequent call retries',
+        () async {
+          final completer = Completer<http.Response>();
+          var callCount = 0;
+
+          final mockClient = MockClient((request) {
+            if (request.url.path.endsWith('/token')) {
+              callCount++;
+              if (callCount == 1) {
+                return completer.future;
+              }
+              return Future.value(
+                http.Response(
+                  jsonEncode({
+                    'access_token': 'recovered-token',
+                    'expires_in': 3600,
+                    'token_type': 'Bearer',
+                  }),
+                  200,
+                ),
+              );
+            }
+            return Future.value(http.Response('Not found', 404));
+          });
+
+          final creds = await ComputeEngineCredentials.create(
+            client: mockClient,
+            clientEmail: 'sa@test.com',
+            universeDomain: 'googleapis.com',
+            metadataHost: 'test-metadata',
+          );
+
+          final future1 = creds.getAccessToken();
+          final future2 = creds.getAccessToken();
+
+          await pumpEventQueue();
+          expect(callCount, 1);
+
+          completer.complete(http.Response('Internal Server Error', 500));
+
+          await expectLater(future1, throwsA(isA<CredentialException>()));
+          await expectLater(future2, throwsA(isA<CredentialException>()));
+          expect(callCount, 1);
+
+          // Subsequent call should initiate a new request
+          final token = await creds.getAccessToken();
+          expect(token, 'recovered-token');
+          expect(callCount, 2);
+        },
+      );
 
       test('throws CredentialException on HTTP error', () async {
         final mockClient = MockClient((request) async {
