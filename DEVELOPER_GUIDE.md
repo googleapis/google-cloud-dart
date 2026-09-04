@@ -16,6 +16,7 @@ The dependency graph for the current set of packages:
 graph TD
   subgraph Tier0 ["Tier 0 (Publish First)"]
     google_cloud["google_cloud"]
+    google_cloud_auth["auth"]
     google_cloud_protobuf["protobuf"]
   end
 
