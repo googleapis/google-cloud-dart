@@ -30,9 +30,6 @@ import 'service_account_signer.dart';
 
 /// Credentials for Google Compute Engine, Cloud Run, Cloud Functions, and
 /// other environments providing a Google Cloud metadata server.
-///
-/// Signs messages using the Google Cloud Identity and Access Management (IAM)
-/// credentials API (`signBlob`).
 final class ComputeEngineCredentials implements ServiceAccountSigner {
   static const _defaultMetadataHost = 'metadata.google.internal';
   static const _metadataFlavorHeader = {'Metadata-Flavor': 'Google'};
@@ -73,6 +70,8 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
   /// token is fetched.
   ///
   /// It is safe to call this method concurrently.
+  ///
+  /// Throws [CredentialException] on failure.
   Future<String> getAccessToken({bool forceRefresh = false}) async {
     if (!forceRefresh &&
         _cachedAccessToken != null &&
@@ -133,6 +132,8 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
 
   /// Creates a [ComputeEngineCredentials] instance, discovering configuration
   /// from the Compute Engine metadata server.
+  ///
+  /// Throws [CredentialException] on failure.
   static Future<ComputeEngineCredentials> create({
     http.Client? client,
     String? clientEmail,
@@ -278,6 +279,8 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
 
   /// Signs [message] using the Identity and Access Management (IAM)
   /// `signBlob` API.
+  ///
+  /// Throws [CredentialException] on failure.
   @override
   Future<Uint8List> sign(List<int> message) async {
     final signBlobUrl = Uri(

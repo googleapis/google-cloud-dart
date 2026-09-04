@@ -29,8 +29,9 @@ abstract interface class ServiceAccountSigner {
   /// The email address of the service account associated with the signer.
   String get clientEmail;
 
-  /// Signs [message] using RSASSA-PKCS1-v1_5 with SHA-256 and the private key
-  /// associated with the service account.
+  /// Signs [message].
+  ///
+  /// Throws [SigningException] on failure.
   Future<Uint8List> sign(List<int> message);
 }
 
