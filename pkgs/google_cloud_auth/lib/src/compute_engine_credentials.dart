@@ -188,6 +188,11 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
           universeUri,
           headers: _metadataFlavorHeader,
         );
+        // 404 indicates an older metadata server without universe-domain
+        // support, and early versions returned an empty string for the default
+        // universe; both default to 'googleapis.com'.
+        // See:
+        // https://github.com/googleapis/google-auth-library-java/blob/9ac2d4340ebc6a8582b898e97f65aeed3c1776d6/oauth2_http/java/com/google/auth/oauth2/ComputeEngineCredentials.java#L282
         if (response.statusCode == 200) {
           final trimmed = response.body.trim();
           resolvedUniverseDomain = trimmed.isNotEmpty
