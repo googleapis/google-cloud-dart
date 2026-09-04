@@ -265,6 +265,14 @@ void main() {
         () => RetrySettings(totalTimeout: const Duration(seconds: -1)),
         throwsA(isA<ArgumentError>()),
       );
+      expect(
+        () => RetrySettings(totalTimeout: const Duration(microseconds: -1)),
+        throwsA(isA<ArgumentError>()),
+      );
+      expect(
+        () => RetrySettings(totalTimeout: 'invalid'),
+        throwsA(isA<ArgumentError>()),
+      );
       // ignore: deprecated_member_use_from_same_package
       expect(
         () => RetrySettings(maxRetryInterval: Duration.zero),
@@ -297,6 +305,10 @@ void main() {
       );
       expect(
         () => base.copyWith(maxRetries: -5),
+        throwsA(isA<ArgumentError>()),
+      );
+      expect(
+        () => base.copyWith(maxRetries: 'invalid'),
         throwsA(isA<ArgumentError>()),
       );
       expect(
@@ -333,6 +345,14 @@ void main() {
       );
       expect(
         () => base.copyWith(totalTimeout: const Duration(seconds: -1)),
+        throwsA(isA<ArgumentError>()),
+      );
+      expect(
+        () => base.copyWith(totalTimeout: const Duration(microseconds: -1)),
+        throwsA(isA<ArgumentError>()),
+      );
+      expect(
+        () => base.copyWith(totalTimeout: 'invalid'),
         throwsA(isA<ArgumentError>()),
       );
 

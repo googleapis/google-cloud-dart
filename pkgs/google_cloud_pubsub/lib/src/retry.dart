@@ -21,7 +21,6 @@ import 'package:meta/meta.dart';
 
 const _sentinel = Object();
 const _defaultTotalTimeout = Duration(minutes: 1);
-const _sentinelTimeout = Duration(microseconds: -1);
 
 /// Settings for configuring retry logic with exponential backoff.
 final class RetrySettings {
@@ -66,21 +65,23 @@ final class RetrySettings {
   /// - [maxDelay] is not greater than [Duration.zero].
   /// - [totalTimeout] (or deprecated [maxRetryInterval]) is not greater than
   ///   [Duration.zero].
+  /// - [totalTimeout] is not a [Duration] or `null`.
   RetrySettings({
     this.maxRetries,
     this.initialDelay = const Duration(milliseconds: 100),
     this.delayMultiplier = 1.3,
     this.maxDelay = const Duration(seconds: 60),
-    Duration? totalTimeout = _sentinelTimeout,
+    Object? totalTimeout = _sentinel,
     @Deprecated('Use totalTimeout instead') Duration? maxRetryInterval,
   }) : totalTimeout =
            maxRetryInterval ??
-           (identical(totalTimeout, _sentinelTimeout)
+           (identical(totalTimeout, _sentinel)
                ? _defaultTotalTimeout
-               : totalTimeout),
+               : totalTimeout is Duration?
+               ? totalTimeout
+               : null),
        _hasExplicitTotalTimeout =
-           !identical(totalTimeout, _sentinelTimeout) ||
-           maxRetryInterval != null {
+           !identical(totalTimeout, _sentinel) || maxRetryInterval != null {
     if (maxRetries != null && maxRetries! < 0) {
       throw ArgumentError.value(
         maxRetries,
@@ -116,11 +117,18 @@ final class RetrySettings {
         'Must be greater than zero',
       );
     }
-    if (!identical(totalTimeout, _sentinelTimeout) &&
+    if (totalTimeout != _sentinel &&
         totalTimeout != null &&
-        totalTimeout <= Duration.zero) {
+        totalTimeout is! Duration) {
       throw ArgumentError.value(
         totalTimeout,
+        'totalTimeout',
+        'Must be a Duration or null',
+      );
+    }
+    if (this.totalTimeout != null && this.totalTimeout! <= Duration.zero) {
+      throw ArgumentError.value(
+        this.totalTimeout,
         'totalTimeout',
         'Must be greater than zero',
       );
@@ -181,19 +189,37 @@ final class RetrySettings {
     Duration? initialDelay,
     double? delayMultiplier,
     Duration? maxDelay,
-  }) => RetrySettings._internal(
-    maxRetries: identical(maxRetries, _sentinel)
-        ? this.maxRetries
-        : maxRetries as int?,
-    totalTimeout: identical(totalTimeout, _sentinel)
-        ? this.totalTimeout
-        : totalTimeout as Duration?,
-    initialDelay: initialDelay ?? this.initialDelay,
-    delayMultiplier: delayMultiplier ?? this.delayMultiplier,
-    maxDelay: maxDelay ?? this.maxDelay,
-    hasExplicitTotalTimeout:
-        !identical(totalTimeout, _sentinel) || _hasExplicitTotalTimeout,
-  );
+  }) {
+    if (maxRetries != _sentinel && maxRetries != null && maxRetries is! int) {
+      throw ArgumentError.value(
+        maxRetries,
+        'maxRetries',
+        'Must be an int or null',
+      );
+    }
+    if (totalTimeout != _sentinel &&
+        totalTimeout != null &&
+        totalTimeout is! Duration) {
+      throw ArgumentError.value(
+        totalTimeout,
+        'totalTimeout',
+        'Must be a Duration or null',
+      );
+    }
+    return RetrySettings._internal(
+      maxRetries: identical(maxRetries, _sentinel)
+          ? this.maxRetries
+          : maxRetries as int?,
+      totalTimeout: identical(totalTimeout, _sentinel)
+          ? this.totalTimeout
+          : totalTimeout as Duration?,
+      initialDelay: initialDelay ?? this.initialDelay,
+      delayMultiplier: delayMultiplier ?? this.delayMultiplier,
+      maxDelay: maxDelay ?? this.maxDelay,
+      hasExplicitTotalTimeout:
+          !identical(totalTimeout, _sentinel) || _hasExplicitTotalTimeout,
+    );
+  }
 }
 
 /// Generates wait durations for exponential backoff according to
