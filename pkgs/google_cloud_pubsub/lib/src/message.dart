@@ -15,6 +15,8 @@
 import 'dart:async';
 import 'dart:typed_data';
 
+import 'subscription.dart';
+
 /// A Pub/Sub message.
 final class Message {
   /// The payload of this message.
@@ -26,6 +28,10 @@ final class Message {
   Message({required List<int> data, Map<String, String>? attributes})
     : data = data is Uint8List ? data : Uint8List.fromList(data),
       attributes = attributes ?? const {};
+
+  @override
+  String toString() =>
+      'Message(data: ${data.length} bytes, attributes: $attributes)';
 }
 
 /// A message received from a subscription.
@@ -67,12 +73,17 @@ final class ReceivedMessage {
   /// If this message was received via `pull`, it will call the unary
   /// acknowledge endpoint.
   /// If it was received via `streamingPull`, it will send an acknowledgment
-  /// request over the existing stream.
+  /// request over the stream or route it through the subscription batcher.
+  ///
+  /// It is an error if no acknowledge handler is configured for this message
+  /// (e.g. if the message was constructed manually without a handler, or if the
+  /// underlying [Subscription] is closed).
   Future<void> acknowledge() async {
     final handler = _ackHandler;
-    if (handler != null) {
-      await handler([ackId]);
+    if (handler == null) {
+      throw StateError('No acknowledge handler configured for this message.');
     }
+    await handler([ackId]);
   }
 
   /// Modifies the ack deadline for this message.
@@ -81,10 +92,29 @@ final class ReceivedMessage {
   /// time this method is called. For example, if [seconds] is 10, the new ack
   /// deadline is 10 seconds from now. Specifying 0 makes the message
   /// immediately available for redelivery.
+  ///
+  /// It is an error if [seconds] is negative.
+  ///
+  /// It is an error if no modify-ack-deadline handler is configured for this
+  /// message, or if the underlying [Subscription] is closed.
   Future<void> modifyAckDeadline(int seconds) async {
-    final handler = _modifyDeadlineHandler;
-    if (handler != null) {
-      await handler([ackId], seconds);
+    if (seconds < 0) {
+      throw ArgumentError.value(seconds, 'seconds', 'Must be non-negative');
     }
+    final handler = _modifyDeadlineHandler;
+    if (handler == null) {
+      throw StateError(
+        'No modify-ack-deadline handler configured for this message.',
+      );
+    }
+    await handler([ackId], seconds);
   }
+
+  @override
+  String toString() =>
+      'ReceivedMessage('
+      'messageId: $messageId, '
+      'ackId: $ackId, '
+      'publishTime: $publishTime, '
+      'message: $message)';
 }
