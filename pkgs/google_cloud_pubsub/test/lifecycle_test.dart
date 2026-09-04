@@ -63,12 +63,14 @@ class FakeResponseFuture<T> extends Fake implements grpc.ResponseFuture<T> {
 class FakePublisherClient extends Fake implements generated.PublisherClient {
   Future<generated.PublishResponse> Function(generated.PublishRequest request)?
   publishBehavior;
+  bool publishCalled = false;
 
   @override
   grpc.ResponseFuture<generated.PublishResponse> publish(
     generated.PublishRequest request, {
     grpc.CallOptions? options,
   }) {
+    publishCalled = true;
     final completer = Completer<generated.PublishResponse>();
     if (publishBehavior case final publish?) {
       publish(
@@ -90,6 +92,13 @@ class FakeSubscriberClient extends Fake implements generated.SubscriberClient {
   bool acknowledgeCalled = false;
   List<String>? lastAckIds;
 
+  bool modifyAckDeadlineCalled = false;
+  List<String>? lastModifyAckDeadlineIds;
+  int? lastModifyAckDeadlineSeconds;
+
+  bool pullCalled = false;
+  int? lastMaxMessages;
+
   @override
   grpc.ResponseFuture<protobuf.Empty> acknowledge(
     generated.AcknowledgeRequest request, {
@@ -106,6 +115,27 @@ class FakeSubscriberClient extends Fake implements generated.SubscriberClient {
       completer.complete(protobuf.Empty());
     }
     return FakeResponseFuture(completer.future);
+  }
+
+  @override
+  grpc.ResponseFuture<protobuf.Empty> modifyAckDeadline(
+    generated.ModifyAckDeadlineRequest request, {
+    grpc.CallOptions? options,
+  }) {
+    modifyAckDeadlineCalled = true;
+    lastModifyAckDeadlineIds = request.ackIds;
+    lastModifyAckDeadlineSeconds = request.ackDeadlineSeconds;
+    return FakeResponseFuture(Future.value(protobuf.Empty()));
+  }
+
+  @override
+  grpc.ResponseFuture<generated.PullResponse> pull(
+    generated.PullRequest request, {
+    grpc.CallOptions? options,
+  }) {
+    pullCalled = true;
+    lastMaxMessages = request.maxMessages;
+    return FakeResponseFuture(Future.value(generated.PullResponse()));
   }
 }
 
@@ -261,6 +291,18 @@ void main() {
         await topic.close();
       },
     );
+
+    test(
+      'PubSub.publishMessages with empty list returns immediately',
+      () async {
+        final messageIds = await client.publishMessages(
+          'projects/test-project/topics/my-topic',
+          [],
+        );
+        expect(messageIds, isEmpty);
+        expect(fakePublisher.publishCalled, isFalse);
+      },
+    );
   });
 
   group('Subscription Lifecycle & Batcher', () {
@@ -339,6 +381,147 @@ void main() {
       expect(() => sub.modifyAckDeadline(msg, 10), throwsStateError);
       expect(() => sub.acknowledgeNow([msg]), throwsStateError);
       expect(() => sub.modifyAckDeadlineNow([msg], 10), throwsStateError);
+      expect(sub.pull, throwsStateError);
+    });
+
+    test('Subscription.pull validation and closed check', () async {
+      final sub = client.subscription('my-sub');
+
+      expect(() => sub.pull(maxMessages: 0), throwsArgumentError);
+      expect(() => sub.pull(maxMessages: -1), throwsArgumentError);
+      expect(
+        () => client.pull(
+          'projects/test-project/subscriptions/my-sub',
+          maxMessages: 0,
+        ),
+        throwsArgumentError,
+      );
+
+      await sub.close();
+      expect(sub.pull, throwsStateError);
+    });
+
+    test(
+      'empty list no-ops for acknowledgeNow and modifyAckDeadlineNow',
+      () async {
+        final sub = client.subscription('my-sub');
+        await sub.acknowledgeNow([]);
+        expect(fakeSubscriber.acknowledgeCalled, isFalse);
+
+        await sub.modifyAckDeadlineNow([], 10);
+        expect(fakeSubscriber.modifyAckDeadlineCalled, isFalse);
+      },
+    );
+  });
+
+  group('PubSub Client Empty List No-Ops & Parameter Validation', () {
+    late FakePublisherClient fakePublisher;
+    late FakeSubscriberClient fakeSubscriber;
+    late PubSub client;
+
+    setUp(() {
+      fakePublisher = FakePublisherClient();
+      fakeSubscriber = FakeSubscriberClient();
+      client = PubSub.testing(
+        projectId: 'test-project',
+        channel: FakeClientChannel(),
+        publisherClient: fakePublisher,
+        subscriberClient: fakeSubscriber,
+      );
+    });
+
+    tearDown(() async {
+      await client.close();
+    });
+
+    test(
+      'publishMessages with empty list returns empty without calling backend',
+      () async {
+        final result = await client.publishMessages(
+          'projects/test-project/topics/my-topic',
+          [],
+        );
+        expect(result, isEmpty);
+        expect(fakePublisher.publishCalled, isFalse);
+      },
+    );
+
+    test(
+      'acknowledge with empty list returns without calling backend',
+      () async {
+        await client.acknowledge(
+          'projects/test-project/subscriptions/my-sub',
+          [],
+        );
+        expect(fakeSubscriber.acknowledgeCalled, isFalse);
+      },
+    );
+
+    test(
+      'modifyAckDeadline with empty list returns without calling backend',
+      () async {
+        await client.modifyAckDeadline(
+          'projects/test-project/subscriptions/my-sub',
+          [],
+          10,
+        );
+        expect(fakeSubscriber.modifyAckDeadlineCalled, isFalse);
+      },
+    );
+
+    test('modifyAckDeadline validates ackDeadlineSeconds >= 0', () {
+      expect(
+        () => client.modifyAckDeadline(
+          'projects/test-project/subscriptions/my-sub',
+          ['ack-1'],
+          -1,
+        ),
+        throwsA(isA<ArgumentError>()),
+      );
+      expect(
+        () => client.modifyAckDeadline(
+          'projects/test-project/subscriptions/my-sub',
+          [],
+          -1,
+        ),
+        throwsA(isA<ArgumentError>()),
+      );
+    });
+
+    test(
+      'streamingPull validates streamAckDeadlineSeconds between 10 and 600',
+      () {
+        expect(
+          () => client.streamingPull(
+            'projects/test-project/subscriptions/my-sub',
+            streamAckDeadlineSeconds: 9,
+          ),
+          throwsA(isA<ArgumentError>()),
+        );
+        expect(
+          () => client.streamingPull(
+            'projects/test-project/subscriptions/my-sub',
+            streamAckDeadlineSeconds: 601,
+          ),
+          throwsA(isA<ArgumentError>()),
+        );
+      },
+    );
+    test('pull validates maxMessages > 0', () {
+      expect(
+        () => client.pull(
+          'projects/test-project/subscriptions/my-sub',
+          maxMessages: 0,
+        ),
+        throwsA(isA<ArgumentError>()),
+      );
+      expect(
+        () => client.pull(
+          'projects/test-project/subscriptions/my-sub',
+          maxMessages: -1,
+        ),
+        throwsA(isA<ArgumentError>()),
+      );
     });
   });
 }

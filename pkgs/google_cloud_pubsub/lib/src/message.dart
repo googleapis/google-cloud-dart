@@ -28,6 +28,10 @@ final class Message {
   Message({required List<int> data, Map<String, String>? attributes})
     : data = data is Uint8List ? data : Uint8List.fromList(data),
       attributes = attributes ?? const {};
+
+  @override
+  String toString() =>
+      'Message(data: ${data.length} bytes, attributes: $attributes)';
 }
 
 /// A message received from a subscription.
@@ -105,4 +109,12 @@ final class ReceivedMessage {
     }
     await handler([ackId], seconds);
   }
+
+  @override
+  String toString() =>
+      'ReceivedMessage('
+      'messageId: $messageId, '
+      'ackId: $ackId, '
+      'publishTime: $publishTime, '
+      'message: $message)';
 }

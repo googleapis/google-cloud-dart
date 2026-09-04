@@ -1,5 +1,22 @@
 ## 0.1.0-wip
 
+- Closed stream controller on setup failure in `PubSub.streamingPullWithStream`
+  to prevent consumers from hanging.
+- Added immediate no-op on empty collections for `PubSub.publishMessages`,
+  `PubSub.acknowledge`, `PubSub.modifyAckDeadline`,
+  `Subscription.acknowledgeNow`, and `Subscription.modifyAckDeadlineNow`.
+- Added parameter validation for `PubSub.pull` and `Subscription.pull`
+  (`maxMessages > 0`), `PubSub.streamingPull` (`streamAckDeadlineSeconds`),
+  and `PubSub.modifyAckDeadline` (`ackDeadlineSeconds >= 0`).
+- Inverted `Subscription.close()` teardown order to flush batchers over active
+  streams before tearing down stream controllers.
+- Calculated realistic item sizes for ACK and modify ack deadline batchers.
+- Protected `Batcher._flush` against synchronous throws from `onBatch`.
+- Made `Batcher`, `_AckRequest`, `_ModifyAckDeadlineRequest`, and
+  `_PublishRequest` final classes.
+- Included `BadGatewayException` and `RequestTimeoutException` in `isRetryable`.
+- Implemented informative `toString()` on `Message` and `ReceivedMessage`.
+
 - Added `@TestOn('vm')` platform annotations to all tests to skip browser runs.
 - Removed invalid stream drain calls during streaming pull connection teardown.
 - Failed attached completers with `completeError` when unary ACK or deadline
@@ -11,22 +28,23 @@
 - Prevented async cancellation race in `PubSub.streamingPullWithStream` when
   canceled while awaiting call options.
 - Cleaned up `StreamSubscription` and stopped `Stopwatch` on stream reconnects.
-- Aligned error classification so `StatusCode.aborted` is retryable across raw
-  `GrpcError` and mapped exceptions, while `StatusCode.dataLoss` is non-retryable
-  across both.
-- Defaulted `totalTimeout` in custom `RetrySettings` passed to `streamingPull` to
-  `null` (indefinite reconnection) unless explicitly specified.
-- Replaced constructor assertions in `BatchingSettings` and `RetrySettings` with
-  always-on parameter validation, and updated `PublishSettings` and `AckSettings`
-  constructors to default to newly created instances.
+- Aligned error classification so `StatusCode.aborted` is retryable across
+  raw `GrpcError` and mapped exceptions, while `StatusCode.dataLoss` is
+  non-retryable across both.
+- Defaulted `totalTimeout` in custom `RetrySettings` passed to
+  `streamingPull` to `null` (indefinite reconnection) unless explicitly
+  specified.
+- Replaced constructor assertions in `BatchingSettings` and `RetrySettings`
+  with always-on parameter validation, and updated `PublishSettings` and
+  `AckSettings` constructors to default to newly created instances.
 - Documented asynchronous error emission on streaming methods and error
   conditions on `ReceivedMessage.acknowledge()` and `modifyAckDeadline()`.
 - Initial release of the experimental Google Cloud Pub/Sub client.
 - Supports basic topic and subscription management.
 - Supports publishing and pulling messages (including streaming pull).
 - Added exponential backoff retry support with randomized jitter.
-- Renamed `RetrySettings.maxRetryInterval` to `totalTimeout` (with deprecated
-  getter and constructor parameter for backwards compatibility).
+- Named parameter `totalTimeout` in `RetrySettings` for maximum overall retry
+  duration.
 - Excluded deterministic errors including `ALREADY_EXISTS` (gRPC code 6 and
   `ConflictException`) from automatic retries.
 - Made `PublishSettings` and `AckSettings` final classes.
@@ -42,7 +60,7 @@
 - Wired `ReceivedMessage.acknowledge()` and `modifyAckDeadline()` on streaming
   pull, throwing `StateError` if no handler is configured.
 - Filtered fatal/non-retryable errors in `streamingPull` to fail immediately.
-- Supported idle stream reconnection on healthy connections (> 15s) and
+- Supported idle stream reconnection on healthy connections (>= 15s) and
   reconnection backoff delays on stream completion (`onDone`).
 - Supported backpressure pause and resume forwarding on streaming pull.
 - Protected multi-stream concurrency when individual parallel streams drop.

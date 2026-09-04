@@ -33,7 +33,7 @@ Future<void> streamingPullExample(PubSub pubsub) async {
 
   final listener = stream.listen(
     (ReceivedMessage message) {
-      print('Received message: ${message.message.data}');
+      print('Received message: ${message.data}');
 
       // Acknowledge the message. This buffers the ACK in the background
       // and batches it with others, sending it over one of the active

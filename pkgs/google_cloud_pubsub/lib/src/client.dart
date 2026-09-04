@@ -274,6 +274,7 @@ final class PubSub {
     String topic,
     List<Message> messages,
   ) async {
+    if (messages.isEmpty) return Future.value(<String>[]);
     final request = grpc.PublishRequest()..topic = topic;
 
     for (final message in messages) {
@@ -367,6 +368,13 @@ final class PubSub {
     String subscription, {
     int maxMessages = 1,
   }) async {
+    if (maxMessages <= 0) {
+      throw ArgumentError.value(
+        maxMessages,
+        'maxMessages',
+        'Must be greater than 0',
+      );
+    }
     final request = grpc.PullRequest()
       ..subscription = subscription
       ..maxMessages = maxMessages;
@@ -429,7 +437,6 @@ final class PubSub {
             requestStream,
             options: options,
           );
-          if (isCancelled) return;
           sub = responseStream.listen(
             (response) {
               for (final m in response.receivedMessages) {
@@ -459,7 +466,12 @@ final class PubSub {
           }
         } catch (e, s) {
           if (!isCancelled && !controller.isClosed) {
-            controller.addError(e, s);
+            if (e is GrpcError) {
+              controller.addError(_mapGrpcError(e), s);
+            } else {
+              controller.addError(e, s);
+            }
+            await controller.close();
           }
         }
       },
@@ -496,10 +508,30 @@ final class PubSub {
   /// the server or network) are emitted asynchronously on the returned
   /// stream rather than thrown synchronously.
   ///
+  /// It is an error if [streamAckDeadlineSeconds] is not between 10 and 600
+  /// seconds.
+  ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.StreamingPull).
   Stream<ReceivedMessage> streamingPull(
     String subscription, {
     int streamAckDeadlineSeconds = 10,
+  }) {
+    if (streamAckDeadlineSeconds < 10 || streamAckDeadlineSeconds > 600) {
+      throw ArgumentError.value(
+        streamAckDeadlineSeconds,
+        'streamAckDeadlineSeconds',
+        'Must be between 10 and 600 seconds',
+      );
+    }
+    return _streamingPull(
+      subscription,
+      streamAckDeadlineSeconds: streamAckDeadlineSeconds,
+    );
+  }
+
+  Stream<ReceivedMessage> _streamingPull(
+    String subscription, {
+    required int streamAckDeadlineSeconds,
   }) async* {
     final requestController = StreamController<grpc.StreamingPullRequest>();
     try {
@@ -534,7 +566,7 @@ final class PubSub {
         },
       );
     } finally {
-      await requestController.close();
+      unawaited(requestController.close());
     }
   }
 
@@ -553,6 +585,7 @@ final class PubSub {
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.Acknowledge).
   Future<void> acknowledge(String subscription, List<String> ackIds) async {
+    if (ackIds.isEmpty) return Future.value();
     final request = grpc.AcknowledgeRequest()
       ..subscription = subscription
       ..ackIds.addAll(ackIds);
@@ -578,6 +611,8 @@ final class PubSub {
   /// may succeed, but those messages may have already been redelivered or
   /// made available for redelivery.
   ///
+  /// It is an error if [ackDeadlineSeconds] is negative.
+  ///
   /// Throws a [NotFoundException] if the subscription does not exist.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.ModifyAckDeadline).
@@ -586,6 +621,14 @@ final class PubSub {
     List<String> ackIds,
     int ackDeadlineSeconds,
   ) async {
+    if (ackDeadlineSeconds < 0) {
+      throw ArgumentError.value(
+        ackDeadlineSeconds,
+        'ackDeadlineSeconds',
+        'Must be non-negative',
+      );
+    }
+    if (ackIds.isEmpty) return Future.value();
     final request = grpc.ModifyAckDeadlineRequest()
       ..subscription = subscription
       ..ackIds.addAll(ackIds)

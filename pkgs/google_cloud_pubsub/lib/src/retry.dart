@@ -20,7 +20,6 @@ import 'package:grpc/grpc.dart';
 import 'package:meta/meta.dart';
 
 const _sentinel = Object();
-const _defaultTotalTimeout = Duration(minutes: 1);
 
 /// Settings for configuring retry logic with exponential backoff.
 final class RetrySettings {
@@ -34,10 +33,6 @@ final class RetrySettings {
   /// A `null` value indicates that the total retry time is unlimited.
   final Duration? totalTimeout;
 
-  /// Deprecated: Use [totalTimeout] instead.
-  @Deprecated('Use totalTimeout instead')
-  Duration? get maxRetryInterval => totalTimeout;
-
   /// The minimum amount of time to wait before retrying.
   final Duration initialDelay;
 
@@ -50,90 +45,27 @@ final class RetrySettings {
   /// value, the wait time will be clamped to this value.
   final Duration maxDelay;
 
-  final bool _hasExplicitTotalTimeout;
-
-  /// Whether [totalTimeout] (or [maxRetryInterval]) was explicitly specified.
-  @internal
-  bool get hasExplicitTotalTimeout => _hasExplicitTotalTimeout;
-
   /// Creates a new [RetrySettings] instance.
   ///
   /// It is an error if:
   /// - [maxRetries] is negative.
   /// - [initialDelay] is not greater than [Duration.zero].
-  /// - [delayMultiplier] is less than 1.0.
+  /// - [delayMultiplier] is less than 1.0 or not finite.
   /// - [maxDelay] is not greater than [Duration.zero].
-  /// - [totalTimeout] (or deprecated [maxRetryInterval]) is not greater than
-  ///   [Duration.zero].
-  /// - [totalTimeout] is not a [Duration] or `null`.
+  /// - [totalTimeout] is not greater than [Duration.zero].
   RetrySettings({
-    this.maxRetries,
-    this.initialDelay = const Duration(milliseconds: 100),
-    this.delayMultiplier = 1.3,
-    this.maxDelay = const Duration(seconds: 60),
-    Object? totalTimeout = _sentinel,
-    @Deprecated('Use totalTimeout instead') Duration? maxRetryInterval,
-  }) : totalTimeout =
-           maxRetryInterval ??
-           (identical(totalTimeout, _sentinel)
-               ? _defaultTotalTimeout
-               : totalTimeout is Duration?
-               ? totalTimeout
-               : null),
-       _hasExplicitTotalTimeout =
-           !identical(totalTimeout, _sentinel) || maxRetryInterval != null {
-    if (maxRetries != null && maxRetries! < 0) {
-      throw ArgumentError.value(
-        maxRetries,
-        'maxRetries',
-        'Must be non-negative',
-      );
-    }
-    if (initialDelay <= Duration.zero) {
-      throw ArgumentError.value(
-        initialDelay,
-        'initialDelay',
-        'Must be greater than zero',
-      );
-    }
-    if (delayMultiplier < 1.0 || delayMultiplier.isNaN) {
-      throw ArgumentError.value(
-        delayMultiplier,
-        'delayMultiplier',
-        'Must be at least 1.0',
-      );
-    }
-    if (maxDelay <= Duration.zero) {
-      throw ArgumentError.value(
-        maxDelay,
-        'maxDelay',
-        'Must be greater than zero',
-      );
-    }
-    if (maxRetryInterval != null && maxRetryInterval <= Duration.zero) {
-      throw ArgumentError.value(
-        maxRetryInterval,
-        'maxRetryInterval',
-        'Must be greater than zero',
-      );
-    }
-    if (totalTimeout != _sentinel &&
-        totalTimeout != null &&
-        totalTimeout is! Duration) {
-      throw ArgumentError.value(
-        totalTimeout,
-        'totalTimeout',
-        'Must be a Duration or null',
-      );
-    }
-    if (this.totalTimeout != null && this.totalTimeout! <= Duration.zero) {
-      throw ArgumentError.value(
-        this.totalTimeout,
-        'totalTimeout',
-        'Must be greater than zero',
-      );
-    }
-  }
+    int? maxRetries,
+    Duration? totalTimeout = const Duration(minutes: 1),
+    Duration initialDelay = const Duration(milliseconds: 100),
+    double delayMultiplier = 1.3,
+    Duration maxDelay = const Duration(seconds: 60),
+  }) : this._internal(
+         maxRetries: maxRetries,
+         totalTimeout: totalTimeout,
+         initialDelay: initialDelay,
+         delayMultiplier: delayMultiplier,
+         maxDelay: maxDelay,
+       );
 
   RetrySettings._internal({
     required this.maxRetries,
@@ -141,8 +73,7 @@ final class RetrySettings {
     required this.initialDelay,
     required this.delayMultiplier,
     required this.maxDelay,
-    required bool hasExplicitTotalTimeout,
-  }) : _hasExplicitTotalTimeout = hasExplicitTotalTimeout {
+  }) {
     if (maxRetries != null && maxRetries! < 0) {
       throw ArgumentError.value(
         maxRetries,
@@ -157,7 +88,7 @@ final class RetrySettings {
         'Must be greater than zero',
       );
     }
-    if (delayMultiplier < 1.0 || delayMultiplier.isNaN) {
+    if (delayMultiplier < 1.0 || !delayMultiplier.isFinite) {
       throw ArgumentError.value(
         delayMultiplier,
         'delayMultiplier',
@@ -216,8 +147,6 @@ final class RetrySettings {
       initialDelay: initialDelay ?? this.initialDelay,
       delayMultiplier: delayMultiplier ?? this.delayMultiplier,
       maxDelay: maxDelay ?? this.maxDelay,
-      hasExplicitTotalTimeout:
-          !identical(totalTimeout, _sentinel) || _hasExplicitTotalTimeout,
     );
   }
 }
@@ -225,20 +154,20 @@ final class RetrySettings {
 /// Generates wait durations for exponential backoff according to
 /// [RetrySettings].
 ///
-/// Uses `clock` to enforce [totalTimeout].
+/// Uses [clock] to enforce [totalTimeout].
 @internal
 Iterable<Duration> delaySequence({
   int? maxRetries,
   Duration? totalTimeout = const Duration(minutes: 1),
-  @Deprecated('Use totalTimeout instead') Duration? maxRetryInterval,
   required Duration initialDelay,
   required Duration maxDelay,
   required double delayMultiplier,
   Clock clock = const Clock(),
   Random? random,
 }) sync* {
-  final timeout = maxRetryInterval ?? totalTimeout;
-  final noRetriesAfter = timeout == null ? null : clock.fromNowBy(timeout);
+  final noRetriesAfter = totalTimeout == null
+      ? null
+      : clock.fromNowBy(totalTimeout);
   final rng = random ?? Random();
   var reachedMax = false;
   for (var i = 0; (maxRetries == null) || (i < maxRetries); i++) {
@@ -275,8 +204,10 @@ bool isRetryable(Object e) {
     },
     ConflictException(:final status) when status?.code == StatusCode.aborted =>
       true,
-    ServiceException(:final statusCode) when statusCode == StatusCode.aborted =>
+    ServiceException(:final status) when status?.code == StatusCode.aborted =>
       true,
+    BadGatewayException() ||
+    RequestTimeoutException() ||
     ServiceUnavailableException() ||
     GatewayTimeoutException() ||
     TooManyRequestsException() => true,

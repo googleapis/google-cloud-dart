@@ -281,4 +281,34 @@ void main() {
       },
     );
   });
+
+  group('Message and ReceivedMessage toString', () {
+    test('Message toString returns informative string', () {
+      final msg = Message(data: [1, 2, 3], attributes: {'env': 'test'});
+      expect(
+        msg.toString(),
+        equals('Message(data: 3 bytes, attributes: {env: test})'),
+      );
+    });
+
+    test('ReceivedMessage toString returns informative string', () {
+      final now = DateTime.now();
+      final rMsg = ReceivedMessage(
+        ackId: 'ack-123',
+        messageId: 'msg-456',
+        publishTime: now,
+        message: Message(data: [1, 2], attributes: {'a': 'b'}),
+      );
+      expect(
+        rMsg.toString(),
+        equals(
+          'ReceivedMessage('
+          'messageId: msg-456, '
+          'ackId: ack-123, '
+          'publishTime: $now, '
+          'message: Message(data: 2 bytes, attributes: {a: b}))',
+        ),
+      );
+    });
+  });
 }

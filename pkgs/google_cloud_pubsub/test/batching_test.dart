@@ -124,6 +124,29 @@ void main() {
       await batcher.close();
       expect(() => batcher.add(1), throwsStateError);
     });
+
+    test('synchronous throws from onBatch are safely caught', () async {
+      var threw = false;
+      final batcher = Batcher<int>(
+        settings: BatchingSettings(
+          maxMessages: 1,
+          maxDelay: const Duration(milliseconds: 10),
+        ),
+        itemSize: (i) => 1,
+        onBatch: (batch) {
+          threw = true;
+          throw Exception('sync throw in onBatch');
+        },
+      );
+
+      // add(1) triggers immediate flush because maxMessages: 1.
+      // Should not throw synchronously from add.
+      expect(() => batcher.add(1), returnsNormally);
+      expect(threw, isTrue);
+
+      // close() should complete without unhandled exception
+      await expectLater(batcher.close(), completes);
+    });
   });
 
   group('BatchingSettings', () {

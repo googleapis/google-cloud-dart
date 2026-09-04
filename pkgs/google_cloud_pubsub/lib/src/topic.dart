@@ -19,9 +19,12 @@ import '../google_cloud_pubsub.dart';
 import 'batching.dart';
 import 'retry.dart';
 
-/// Settings for publishing messages.
+/// Settings for background batching and retrying of published messages.
 final class PublishSettings {
+  /// Settings controlling how requests are accumulated and flushed.
   final BatchingSettings batching;
+
+  /// Settings controlling retries when flushing a batch over a unary RPC.
   final RetrySettings retry;
 
   PublishSettings({BatchingSettings? batching, RetrySettings? retry})
@@ -29,7 +32,7 @@ final class PublishSettings {
       retry = retry ?? RetrySettings();
 }
 
-class _PublishRequest {
+final class _PublishRequest {
   final Message message;
   final Completer<String> completer;
 

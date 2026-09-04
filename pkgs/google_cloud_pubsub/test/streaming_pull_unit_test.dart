@@ -165,6 +165,22 @@ class DelayedAuthenticator extends Fake implements grpc.BaseAuthenticator {
   }
 }
 
+class ThrowingSubscriberClient extends Fake
+    implements generated.SubscriberClient {
+  @override
+  grpc.ResponseStream<generated.StreamingPullResponse> streamingPull(
+    Stream<generated.StreamingPullRequest> request, {
+    grpc.CallOptions? options,
+  }) {
+    throw StateError('setup failure');
+  }
+}
+
+class ThrowingAuthenticator extends Fake implements grpc.BaseAuthenticator {
+  @override
+  grpc.CallOptions get toCallOptions => throw Exception('auth failure');
+}
+
 void main() {
   group('Streaming Pull & ReceivedMessage', () {
     late FakeSubscriberClient fakeSubscriber;
@@ -817,32 +833,126 @@ void main() {
       await subscription.close();
     });
 
-    test('custom RetrySettings without explicit totalTimeout defaults '
-        'totalTimeout to null', () async {
-      final subscription = client.subscription('test-sub');
+    test(
+      'custom RetrySettings is respected directly in streamingPull',
+      () async {
+        final subscription = client.subscription('test-sub');
 
-      // Without explicit totalTimeout, totalTimeout defaults to null
-      final customRetry = RetrySettings(
-        maxRetries: 5,
-        initialDelay: const Duration(milliseconds: 10),
+        final customRetry = RetrySettings(
+          maxRetries: 5,
+          totalTimeout: const Duration(minutes: 5),
+          initialDelay: const Duration(milliseconds: 10),
+        );
+        expect(customRetry.totalTimeout, equals(const Duration(minutes: 5)));
+
+        final stream = subscription.streamingPull(retry: customRetry);
+        final sub = stream.listen((_) {});
+
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+        expect(fakeSubscriber.connections.length, equals(1));
+
+        await sub.cancel();
+        await subscription.close();
+      },
+    );
+
+    test(
+      'streamingPullWithStream closes controller when setup fails',
+      () async {
+        final clientWithFailure = PubSub.testing(
+          projectId: 'test-project',
+          channel: FakeClientChannel(),
+          subscriberClient: ThrowingSubscriberClient(),
+        );
+        final reqController =
+            StreamController<generated.StreamingPullRequest>();
+        final stream = clientWithFailure.streamingPullWithStream(
+          reqController.stream,
+        );
+
+        final errors = <Object>[];
+        var isDone = false;
+        stream.listen((_) {}, onError: errors.add, onDone: () => isDone = true);
+
+        await Future<void>.delayed(const Duration(milliseconds: 20));
+        expect(errors.length, equals(1));
+        expect(errors.first, isA<StateError>());
+        expect(isDone, isTrue);
+
+        unawaited(reqController.close());
+        await clientWithFailure.close();
+      },
+    );
+
+    test(
+      'streamingPullWithStream closes controller when _callOptions fails',
+      () async {
+        final clientWithAuthFailure = PubSub.testing(
+          projectId: 'test-project',
+          channel: FakeClientChannel(),
+          subscriberClient: fakeSubscriber,
+          authenticator: ThrowingAuthenticator(),
+        );
+        final reqController =
+            StreamController<generated.StreamingPullRequest>();
+        final stream = clientWithAuthFailure.streamingPullWithStream(
+          reqController.stream,
+        );
+
+        final errors = <Object>[];
+        var isDone = false;
+        stream.listen((_) {}, onError: errors.add, onDone: () => isDone = true);
+
+        await Future<void>.delayed(const Duration(milliseconds: 20));
+        expect(errors.length, equals(1));
+        expect(isDone, isTrue);
+
+        unawaited(reqController.close());
+        await clientWithAuthFailure.close();
+      },
+    );
+
+    test('Subscription.close() flushes batchers over active stream before '
+        'closing streams', () async {
+      final subscription = client.subscription(
+        'test-sub',
+        ackSettings: AckSettings(
+          batching: BatchingSettings(
+            maxMessages: 100,
+            maxDelay: const Duration(seconds: 10),
+          ),
+          retry: RetrySettings(maxRetries: 0),
+        ),
       );
-      expect(customRetry.hasExplicitTotalTimeout, isFalse);
 
-      final stream = subscription.streamingPull(retry: customRetry);
+      final stream = subscription.streamingPull();
       final sub = stream.listen((_) {});
 
-      await Future<void>.delayed(const Duration(milliseconds: 10));
+      await Future<void>.delayed(const Duration(milliseconds: 20));
       expect(fakeSubscriber.connections.length, equals(1));
 
-      // When explicit totalTimeout is provided, hasExplicitTotalTimeout is true
-      final explicitTimeoutRetry = RetrySettings(
-        maxRetries: 5,
-        totalTimeout: const Duration(minutes: 5),
+      final msg = ReceivedMessage(
+        ackId: 'ack-close-test',
+        messageId: 'msg-close-test',
+        publishTime: DateTime.now(),
+        message: Message(data: [1, 2, 3]),
       );
-      expect(explicitTimeoutRetry.hasExplicitTotalTimeout, isTrue);
+
+      subscription.acknowledge(msg);
+
+      // Close the subscription. It should flush batchers over active stream
+      // before closing streams.
+      await subscription.close();
+
+      final conn = fakeSubscriber.connections.first;
+      final streamAckedIds = conn.recordedRequests
+          .expand((req) => req.ackIds)
+          .toList();
+
+      expect(streamAckedIds, contains('ack-close-test'));
+      expect(fakeSubscriber.unaryAckCalls, isEmpty);
 
       await sub.cancel();
-      await subscription.close();
     });
   });
 }

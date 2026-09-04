@@ -144,12 +144,21 @@ void main() {
       );
       expect(
         isRetryable(
-          ServiceException('aborted', statusCode: grpc.StatusCode.aborted),
+          ServiceException(
+            'aborted',
+            statusCode: 500,
+            status: Status(code: grpc.StatusCode.aborted, message: 'aborted'),
+          ),
         ),
         isTrue,
       );
       // Plain ConflictException without aborted is NOT retryable
       expect(isRetryable(ConflictException('conflict')), isFalse);
+    });
+
+    test('BadGatewayException and RequestTimeoutException are retryable', () {
+      expect(isRetryable(BadGatewayException('bad gateway')), isTrue);
+      expect(isRetryable(RequestTimeoutException('request timeout')), isTrue);
     });
 
     test(
@@ -191,30 +200,13 @@ void main() {
   });
 
   group('RetrySettings', () {
-    test('defaults and backwards compatibility with maxRetryInterval', () {
+    test('defaults', () {
       final settings = RetrySettings();
       expect(settings.totalTimeout, equals(const Duration(minutes: 1)));
       expect(settings.initialDelay, equals(const Duration(milliseconds: 100)));
       expect(settings.delayMultiplier, equals(1.3));
       expect(settings.maxDelay, equals(const Duration(seconds: 60)));
       expect(settings.maxRetries, isNull);
-
-      // ignore: deprecated_member_use_from_same_package
-      expect(settings.maxRetryInterval, equals(const Duration(minutes: 1)));
-
-      // ignore: deprecated_member_use_from_same_package
-      final deprecatedSettings = RetrySettings(
-        maxRetryInterval: const Duration(seconds: 30),
-      );
-      expect(
-        deprecatedSettings.totalTimeout,
-        equals(const Duration(seconds: 30)),
-      );
-      // ignore: deprecated_member_use_from_same_package
-      expect(
-        deprecatedSettings.maxRetryInterval,
-        equals(const Duration(seconds: 30)),
-      );
 
       final unlimited = settings.copyWith(totalTimeout: null);
       expect(unlimited.totalTimeout, isNull);
@@ -270,17 +262,19 @@ void main() {
         throwsA(isA<ArgumentError>()),
       );
       expect(
-        () => RetrySettings(totalTimeout: 'invalid'),
+        () => RetrySettings(delayMultiplier: double.infinity),
         throwsA(isA<ArgumentError>()),
       );
-      // ignore: deprecated_member_use_from_same_package
       expect(
-        () => RetrySettings(maxRetryInterval: Duration.zero),
+        () => RetrySettings(delayMultiplier: double.nan),
         throwsA(isA<ArgumentError>()),
       );
-      // ignore: deprecated_member_use_from_same_package
       expect(
-        () => RetrySettings(maxRetryInterval: const Duration(seconds: -1)),
+        () => RetrySettings().copyWith(totalTimeout: 'invalid'),
+        throwsA(isA<ArgumentError>()),
+      );
+      expect(
+        () => RetrySettings().copyWith(maxRetries: 'invalid'),
         throwsA(isA<ArgumentError>()),
       );
     });
@@ -321,6 +315,14 @@ void main() {
       );
       expect(
         () => base.copyWith(delayMultiplier: 0.99),
+        throwsA(isA<ArgumentError>()),
+      );
+      expect(
+        () => base.copyWith(delayMultiplier: double.infinity),
+        throwsA(isA<ArgumentError>()),
+      );
+      expect(
+        () => base.copyWith(delayMultiplier: double.nan),
         throwsA(isA<ArgumentError>()),
       );
       expect(

@@ -33,14 +33,14 @@ final class AckSettings {
       retry = retry ?? RetrySettings();
 }
 
-class _AckRequest {
+final class _AckRequest {
   final String ackId;
   final Completer<void>? completer;
 
   _AckRequest(this.ackId, [this.completer]);
 }
 
-class _ModifyAckDeadlineRequest {
+final class _ModifyAckDeadlineRequest {
   final String ackId;
   final int ackDeadlineSeconds;
   final Completer<void>? completer;
@@ -57,6 +57,7 @@ final class Subscription {
   static final RegExp _subscriptionNameRegExp = RegExp(
     r'^projects/[^/]+/subscriptions/[^/]+$',
   );
+  static const _healthyConnectionThreshold = Duration(seconds: 15);
 
   /// The [PubSub] client associated with this subscription.
   final PubSub pubsub;
@@ -115,12 +116,12 @@ final class Subscription {
   void _initBatchers() {
     _ackBatcher = Batcher<_AckRequest>(
       settings: ackSettings.batching,
-      itemSize: (_) => 1,
+      itemSize: (req) => req.ackId.length,
       onBatch: _onAckBatch,
     );
     _modifyAckBatcher = Batcher<_ModifyAckDeadlineRequest>(
       settings: ackSettings.batching,
-      itemSize: (_) => 1,
+      itemSize: (req) => req.ackId.length,
       onBatch: _onModifyAckDeadlineBatch,
     );
   }
@@ -285,8 +286,19 @@ final class Subscription {
   /// Throws a [NotFoundException] if the subscription does not exist.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.Pull).
-  Future<List<ReceivedMessage>> pull({int maxMessages = 100}) =>
-      pubsub.pull(name, maxMessages: maxMessages);
+  Future<List<ReceivedMessage>> pull({int maxMessages = 100}) {
+    if (_isClosed) {
+      throw StateError('Cannot pull messages on a closed Subscription.');
+    }
+    if (maxMessages <= 0) {
+      throw ArgumentError.value(
+        maxMessages,
+        'maxMessages',
+        'Must be greater than 0',
+      );
+    }
+    return pubsub.pull(name, maxMessages: maxMessages);
+  }
 
   /// Establishes a bidirectional streaming pull connection to receive
   /// messages.
@@ -301,7 +313,7 @@ final class Subscription {
   /// configured [retry] settings (defaulting to [AckSettings.retry] with
   /// unlimited total duration).
   /// Reconnections use exponential backoff, which resets once a connection
-  /// has been sustained and healthy (> 15 seconds) or successfully yields
+  /// has been sustained and healthy (>= 15 seconds) or successfully yields
   /// messages.
   ///
   /// ACKs and deadline modifications sent via [acknowledge],
@@ -341,14 +353,8 @@ final class Subscription {
     if (_isClosed) {
       throw StateError('Cannot stream messages on a closed Subscription.');
     }
-    final RetrySettings effectiveRetry;
-    if (retry != null) {
-      effectiveRetry = retry.hasExplicitTotalTimeout
-          ? retry
-          : retry.copyWith(totalTimeout: null);
-    } else {
-      effectiveRetry = ackSettings.retry.copyWith(totalTimeout: null);
-    }
+    final effectiveRetry =
+        retry ?? ackSettings.retry.copyWith(totalTimeout: null);
 
     late StreamController<ReceivedMessage> controller;
     var isCancelled = false;
@@ -384,6 +390,7 @@ final class Subscription {
           'Cannot acknowledge messages on a closed Subscription.',
         );
       }
+      if (ackIds.isEmpty) return;
       final futures = <Future<void>>[];
       for (final ackId in ackIds) {
         final completer = Completer<void>();
@@ -402,6 +409,7 @@ final class Subscription {
       if (seconds < 0) {
         throw ArgumentError.value(seconds, 'seconds', 'Must be non-negative');
       }
+      if (ackIds.isEmpty) return;
       final futures = <Future<void>>[];
       for (final ackId in ackIds) {
         final completer = Completer<void>();
@@ -438,6 +446,56 @@ final class Subscription {
         unawaited(requestController.close());
       }
 
+      Future<void> scheduleReconnect({
+        Object? error,
+        StackTrace? stackTrace,
+      }) async {
+        cleanupCurrentConnection();
+        if (_isClosed || isCancelled || controller.isClosed) return;
+
+        if (error != null && !isRetryable(error)) {
+          controller.addError(error, stackTrace);
+          await cancelAll();
+          activeOrReconnectingStreams = 0;
+          _activeStreamingPullControllers.remove(controller);
+          await controller.close();
+          return;
+        }
+
+        var nextDelays = delays;
+        final wasHealthy =
+            hasReceivedItem || stopwatch.elapsed >= _healthyConnectionThreshold;
+        if (wasHealthy) {
+          nextDelays = delaySequence(
+            maxRetries: effectiveRetry.maxRetries,
+            totalTimeout: effectiveRetry.totalTimeout,
+            initialDelay: effectiveRetry.initialDelay,
+            delayMultiplier: effectiveRetry.delayMultiplier,
+            maxDelay: effectiveRetry.maxDelay,
+          ).iterator;
+        }
+        if (_isClosed || isCancelled || controller.isClosed) return;
+        if (nextDelays.moveNext()) {
+          late Timer timer;
+          timer = Timer(nextDelays.current, () {
+            reconnectTimers.remove(timer);
+            if (_isClosed || isCancelled || controller.isClosed) return;
+            connect(nextDelays);
+          });
+          reconnectTimers.add(timer);
+        } else {
+          activeOrReconnectingStreams--;
+          if (error != null) {
+            controller.addError(error, stackTrace);
+          }
+          if (activeOrReconnectingStreams == 0) {
+            await cancelAll();
+            _activeStreamingPullControllers.remove(controller);
+            await controller.close();
+          }
+        }
+      }
+
       currentSub = pubsub
           .streamingPullWithStream(
             requestController.stream,
@@ -449,86 +507,9 @@ final class Subscription {
               hasReceivedItem = true;
               controller.add(message);
             },
-            onError: (Object e, StackTrace st) async {
-              cleanupCurrentConnection();
-              if (_isClosed || isCancelled || controller.isClosed) return;
-
-              if (!isRetryable(e)) {
-                controller.addError(e, st);
-                await cancelAll();
-                activeOrReconnectingStreams = 0;
-                _activeStreamingPullControllers.remove(controller);
-                await controller.close();
-                return;
-              }
-
-              var nextDelays = delays;
-              final wasHealthy =
-                  hasReceivedItem ||
-                  stopwatch.elapsed >= const Duration(seconds: 15);
-              if (wasHealthy) {
-                nextDelays = delaySequence(
-                  maxRetries: effectiveRetry.maxRetries,
-                  totalTimeout: effectiveRetry.totalTimeout,
-                  initialDelay: effectiveRetry.initialDelay,
-                  delayMultiplier: effectiveRetry.delayMultiplier,
-                  maxDelay: effectiveRetry.maxDelay,
-                ).iterator;
-              }
-              if (_isClosed || isCancelled || controller.isClosed) return;
-              if (nextDelays.moveNext()) {
-                late Timer timer;
-                timer = Timer(nextDelays.current, () {
-                  reconnectTimers.remove(timer);
-                  if (_isClosed || isCancelled || controller.isClosed) return;
-                  connect(nextDelays);
-                });
-                reconnectTimers.add(timer);
-              } else {
-                activeOrReconnectingStreams--;
-                controller.addError(e, st);
-                if (activeOrReconnectingStreams == 0) {
-                  await cancelAll();
-                  _activeStreamingPullControllers.remove(controller);
-                  await controller.close();
-                }
-              }
-            },
-            onDone: () async {
-              cleanupCurrentConnection();
-              if (_isClosed || isCancelled || controller.isClosed) return;
-
-              var nextDelays = delays;
-              final wasHealthy =
-                  hasReceivedItem ||
-                  stopwatch.elapsed >= const Duration(seconds: 15);
-              if (wasHealthy) {
-                nextDelays = delaySequence(
-                  maxRetries: effectiveRetry.maxRetries,
-                  totalTimeout: effectiveRetry.totalTimeout,
-                  initialDelay: effectiveRetry.initialDelay,
-                  delayMultiplier: effectiveRetry.delayMultiplier,
-                  maxDelay: effectiveRetry.maxDelay,
-                ).iterator;
-              }
-              if (_isClosed || isCancelled || controller.isClosed) return;
-              if (nextDelays.moveNext()) {
-                late Timer timer;
-                timer = Timer(nextDelays.current, () {
-                  reconnectTimers.remove(timer);
-                  if (_isClosed || isCancelled || controller.isClosed) return;
-                  connect(nextDelays);
-                });
-                reconnectTimers.add(timer);
-              } else {
-                activeOrReconnectingStreams--;
-                if (activeOrReconnectingStreams == 0) {
-                  await cancelAll();
-                  _activeStreamingPullControllers.remove(controller);
-                  await controller.close();
-                }
-              }
-            },
+            onError: (Object e, StackTrace st) =>
+                scheduleReconnect(error: e, stackTrace: st),
+            onDone: scheduleReconnect,
           );
 
       if (isPaused) {
@@ -586,6 +567,7 @@ final class Subscription {
     if (_isClosed) {
       throw StateError('Cannot acknowledge messages on a closed Subscription.');
     }
+    if (messages.isEmpty) return Future.value();
     return pubsub.acknowledge(name, messages.map((m) => m.ackId).toList());
   }
 
@@ -635,6 +617,7 @@ final class Subscription {
     if (_isClosed) {
       throw StateError('Cannot modify ack deadline on a closed Subscription.');
     }
+    if (messages.isEmpty) return Future.value();
     return pubsub.modifyAckDeadline(
       name,
       messages.map((m) => m.ackId).toList(),
@@ -676,6 +659,7 @@ final class Subscription {
   Future<void> close() {
     _isClosed = true;
     return _closeFuture ??= () async {
+      await Future.wait([_ackBatcher.close(), _modifyAckBatcher.close()]);
       final controllers = _activeStreamingPullControllers.toList();
       _activeStreamingPullControllers.clear();
       for (final controller in controllers) {
@@ -686,7 +670,6 @@ final class Subscription {
           await controller.close();
         }
       }
-      await Future.wait([_ackBatcher.close(), _modifyAckBatcher.close()]);
     }();
   }
 }

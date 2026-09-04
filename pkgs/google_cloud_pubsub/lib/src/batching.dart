@@ -61,7 +61,7 @@ final class BatchingSettings {
 /// Generic batcher that accumulates items of type [T] and fires batches of [T]
 /// according to [BatchingSettings].
 @internal
-class Batcher<T> {
+final class Batcher<T> {
   final BatchingSettings settings;
   final int Function(T) itemSize;
   final Future<void> Function(List<T>) onBatch;
@@ -110,7 +110,7 @@ class Batcher<T> {
     _buffer.clear();
     _currentSizeBytes = 0;
 
-    final future = onBatch(batch);
+    final future = Future.sync(() => onBatch(batch));
     _inFlight.add(future);
     future
         .whenComplete(() {
