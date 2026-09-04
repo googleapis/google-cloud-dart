@@ -66,11 +66,11 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
   }) : _client = client,
        _ownsClient = ownsClient;
 
-  /// Returns the current access token for the service account, refreshing
-  /// it from the metadata server if expired.
-  Future<String> getAccessToken() => _getAccessToken();
-
-  Future<String> _getAccessToken({bool forceRefresh = false}) async {
+  /// Returns a non-expired current OAuth2 access token for the service account.
+  ///
+  /// If the cached token is expired or if [forceRefresh] is `true`, then a new
+  /// token is fetched.
+  Future<String> getAccessToken({bool forceRefresh = false}) async {
     if (!forceRefresh &&
         _cachedAccessToken != null &&
         _accessTokenExpiry != null) {
@@ -180,25 +180,27 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
 
       var resolvedUniverseDomain = universeDomain;
       if (resolvedUniverseDomain == null || resolvedUniverseDomain.isEmpty) {
-        try {
-          final universeUri = Uri.http(
-            host,
-            '/computeMetadata/v1/universe/universe-domain',
+        final universeUri = Uri.http(
+          host,
+          '/computeMetadata/v1/universe/universe-domain',
+        );
+        final response = await httpClient.get(
+          universeUri,
+          headers: _metadataFlavorHeader,
+        );
+        if (response.statusCode == 200) {
+          final trimmed = response.body.trim();
+          resolvedUniverseDomain = trimmed.isNotEmpty
+              ? trimmed
+              : 'googleapis.com';
+        } else if (response.statusCode == 404) {
+          resolvedUniverseDomain = 'googleapis.com';
+        } else {
+          throw SigningException(
+            'Failed to get universe domain from metadata server: '
+            'HTTP ${response.statusCode} ${response.body}',
           );
-          final response = await httpClient.get(
-            universeUri,
-            headers: _metadataFlavorHeader,
-          );
-          if (response.statusCode == 200) {
-            final trimmed = response.body.trim();
-            if (trimmed.isNotEmpty) {
-              resolvedUniverseDomain = trimmed;
-            }
-          }
-        } catch (_) {
-          // Universe domain is optional; default to googleapis.com.
         }
-        resolvedUniverseDomain ??= 'googleapis.com';
       }
 
       return ComputeEngineCredentials._(
@@ -265,7 +267,7 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
     );
     final requestBody = jsonEncode({'payload': base64.encode(message)});
 
-    var token = await _getAccessToken();
+    var token = await getAccessToken();
     var attempts = 0;
     var refreshedToken = false;
 
@@ -299,7 +301,7 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
       // If token expired (401), retry once with a freshly requested token.
       if (response.statusCode == 401 && !refreshedToken) {
         refreshedToken = true;
-        token = await _getAccessToken(forceRefresh: true);
+        token = await getAccessToken(forceRefresh: true);
         continue;
       }
 

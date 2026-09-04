@@ -118,6 +118,82 @@ void main() {
           );
         },
       );
+
+      test('defaults universe domain to googleapis.com on 404', () async {
+        final mockClient = MockClient((request) async {
+          final path = request.url.path;
+          if (path ==
+              '/computeMetadata/v1/instance/service-accounts/default/email') {
+            return http.Response('sa@test.iam.gserviceaccount.com', 200);
+          }
+          if (path == '/computeMetadata/v1/universe/universe-domain') {
+            return http.Response('Not found', 404);
+          }
+          return http.Response('Not found', 404);
+        });
+
+        final creds = await ComputeEngineCredentials.create(
+          client: mockClient,
+          metadataHost: 'test-metadata',
+        );
+
+        expect(creds.universeDomain, 'googleapis.com');
+      });
+
+      test(
+        'defaults universe domain to googleapis.com on empty response',
+        () async {
+          final mockClient = MockClient((request) async {
+            final path = request.url.path;
+            if (path ==
+                '/computeMetadata/v1/instance/service-accounts/default/email') {
+              return http.Response('sa@test.iam.gserviceaccount.com', 200);
+            }
+            if (path == '/computeMetadata/v1/universe/universe-domain') {
+              return http.Response('   ', 200);
+            }
+            return http.Response('Not found', 404);
+          });
+
+          final creds = await ComputeEngineCredentials.create(
+            client: mockClient,
+            metadataHost: 'test-metadata',
+          );
+
+          expect(creds.universeDomain, 'googleapis.com');
+        },
+      );
+
+      test(
+        'throws SigningException on metadata server error for universe domain',
+        () async {
+          final mockClient = MockClient((request) async {
+            final path = request.url.path;
+            if (path ==
+                '/computeMetadata/v1/instance/service-accounts/default/email') {
+              return http.Response('sa@test.iam.gserviceaccount.com', 200);
+            }
+            if (path == '/computeMetadata/v1/universe/universe-domain') {
+              return http.Response('Internal error', 500);
+            }
+            return http.Response('Not found', 404);
+          });
+
+          expect(
+            () => ComputeEngineCredentials.create(
+              client: mockClient,
+              metadataHost: 'test-metadata',
+            ),
+            throwsA(
+              isA<SigningException>().having(
+                (e) => e.message,
+                'message',
+                contains('Failed to get universe domain'),
+              ),
+            ),
+          );
+        },
+      );
     });
 
     group('isOnComputeEngine', () {

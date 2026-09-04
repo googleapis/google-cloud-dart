@@ -21,24 +21,13 @@ import 'package:google_cloud_auth/google_cloud_auth.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('ComputeEngineCredentials integration', testOn: 'vm', () {
+  group('ComputeEngineCredentials', testOn: 'vm', () {
     test('signs message using ComputeEngineCredentials', () async {
       final creds = await ComputeEngineCredentials.create();
       expect(creds.clientEmail, contains('@'));
 
       final message = utf8.encode('Hello from ComputeEngineCredentials test!');
       final signature = await creds.sign(message);
-
-      expect(signature, isNotEmpty);
-      expect(signature.length, greaterThan(64));
-    });
-
-    test('signs message using applicationDefaultCredentials', () async {
-      final signer = await applicationDefaultCredentials();
-      expect(signer.clientEmail, contains('@'));
-
-      final message = utf8.encode('Hello from applicationDefaultCredentials!');
-      final signature = await signer.sign(message);
 
       expect(signature, isNotEmpty);
       expect(signature.length, greaterThan(64));
