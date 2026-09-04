@@ -14,6 +14,8 @@
 
 import 'dart:typed_data';
 
+import 'credential_exception.dart';
+
 // Design based on:
 // - https://github.com/googleapis/google-cloud-java/blob/main/google-auth-library-java/credentials/java/com/google/auth/ServiceAccountSigner.java
 // - https://github.com/googleapis/google-cloud-python/blob/main/packages/google-auth/google/auth/credentials.py
@@ -33,17 +35,15 @@ abstract interface class ServiceAccountSigner {
 }
 
 /// Exception thrown when cryptographic signing fails.
-class SigningException implements Exception {
-  /// A message describing the error.
-  final String message;
-
-  /// The underlying cause of the error, if any.
-  final Object? cause;
-
-  SigningException(this.message, [this.cause]);
+class SigningException extends CredentialException {
+  SigningException(
+    super.message, {
+    super.innerException,
+    super.innerStackTrace,
+  });
 
   @override
-  String toString() => cause == null
+  String toString() => innerException == null
       ? 'SigningException: $message'
-      : 'SigningException: $message (caused by: $cause)';
+      : 'SigningException: $message (caused by: $innerException)';
 }

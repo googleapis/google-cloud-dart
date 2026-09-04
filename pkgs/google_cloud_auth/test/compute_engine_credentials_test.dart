@@ -69,7 +69,7 @@ void main() {
       });
 
       test(
-        'throws SigningException on metadata server error for email',
+        'throws CredentialException on metadata server error for email',
         () async {
           final mockClient = MockClient(
             (request) async => http.Response('Internal server error', 500),
@@ -81,7 +81,7 @@ void main() {
               metadataHost: 'test-metadata',
             ),
             throwsA(
-              isA<SigningException>().having(
+              isA<CredentialException>().having(
                 (e) => e.message,
                 'message',
                 contains('Failed to get default service account email'),
@@ -90,6 +90,32 @@ void main() {
           );
         },
       );
+
+      test('throws CredentialException on network error for email', () async {
+        final mockClient = MockClient(
+          (request) async => throw http.ClientException('Connection reset'),
+        );
+
+        expect(
+          () => ComputeEngineCredentials.create(
+            client: mockClient,
+            metadataHost: 'test-metadata',
+          ),
+          throwsA(
+            isA<CredentialException>()
+                .having(
+                  (e) => e.message,
+                  'message',
+                  contains('Failed to get default service account email'),
+                )
+                .having(
+                  (e) => e.innerException,
+                  'innerException',
+                  isA<http.ClientException>(),
+                ),
+          ),
+        );
+      });
 
       test('empty universe-domain', () async {
         final mockClient = MockClient((request) async {
@@ -127,36 +153,168 @@ void main() {
         expect(creds.universeDomain, 'googleapis.com');
       });
 
-      test(
-        'throws SigningException on metadata server error for universe domain',
-        () async {
-          final mockClient = MockClient((request) async {
-            final path = request.url.path;
-            if (path ==
-                '/computeMetadata/v1/instance/service-accounts/default/email') {
-              return http.Response('sa@test.iam.gserviceaccount.com', 200);
-            }
-            if (path == '/computeMetadata/v1/universe/universe-domain') {
-              return http.Response('Internal error', 500);
-            }
-            return http.Response('Not found', 404);
-          });
+      test('throws CredentialException on metadata server error for universe '
+          'domain', () async {
+        final mockClient = MockClient((request) async {
+          final path = request.url.path;
+          if (path ==
+              '/computeMetadata/v1/instance/service-accounts/default/email') {
+            return http.Response('sa@test.iam.gserviceaccount.com', 200);
+          }
+          if (path == '/computeMetadata/v1/universe/universe-domain') {
+            return http.Response('Internal error', 500);
+          }
+          return http.Response('Not found', 404);
+        });
 
-          expect(
-            () => ComputeEngineCredentials.create(
-              client: mockClient,
-              metadataHost: 'test-metadata',
+        expect(
+          () => ComputeEngineCredentials.create(
+            client: mockClient,
+            metadataHost: 'test-metadata',
+          ),
+          throwsA(
+            isA<CredentialException>().having(
+              (e) => e.message,
+              'message',
+              contains('Failed to get universe domain'),
             ),
-            throwsA(
-              isA<SigningException>().having(
-                (e) => e.message,
-                'message',
-                contains('Failed to get universe domain'),
-              ),
+          ),
+        );
+      });
+    });
+
+    group('getAccessToken', () {
+      test('fetches and caches access token', () async {
+        var callCount = 0;
+        final mockClient = MockClient((request) async {
+          if (request.url.path.endsWith('/token')) {
+            callCount++;
+            return http.Response(
+              jsonEncode({
+                'access_token': 'token-$callCount',
+                'expires_in': 3600,
+                'token_type': 'Bearer',
+              }),
+              200,
+            );
+          }
+          return http.Response('Not found', 404);
+        });
+
+        final creds = await ComputeEngineCredentials.create(
+          client: mockClient,
+          clientEmail: 'sa@test.com',
+          universeDomain: 'googleapis.com',
+          metadataHost: 'test-metadata',
+        );
+
+        final token1 = await creds.getAccessToken();
+        expect(token1, 'token-1');
+        expect(callCount, 1);
+
+        // Cached
+        final token2 = await creds.getAccessToken();
+        expect(token2, 'token-1');
+        expect(callCount, 1);
+
+        // Force refresh
+        final token3 = await creds.getAccessToken(forceRefresh: true);
+        expect(token3, 'token-2');
+        expect(callCount, 2);
+      });
+
+      test('throws CredentialException on HTTP error', () async {
+        final mockClient = MockClient((request) async {
+          if (request.url.path.endsWith('/token')) {
+            return http.Response('Unauthorized', 401);
+          }
+          return http.Response('Not found', 404);
+        });
+
+        final creds = await ComputeEngineCredentials.create(
+          client: mockClient,
+          clientEmail: 'sa@test.com',
+          universeDomain: 'googleapis.com',
+          metadataHost: 'test-metadata',
+        );
+
+        expect(
+          creds.getAccessToken,
+          throwsA(
+            isA<CredentialException>().having(
+              (e) => e.message,
+              'message',
+              contains('HTTP 401'),
             ),
-          );
-        },
-      );
+          ),
+        );
+      });
+
+      test('throws CredentialException on network error', () async {
+        final mockClient = MockClient((request) async {
+          if (request.url.path.endsWith('/token')) {
+            throw http.ClientException('Network down');
+          }
+          return http.Response('Not found', 404);
+        });
+
+        final creds = await ComputeEngineCredentials.create(
+          client: mockClient,
+          clientEmail: 'sa@test.com',
+          universeDomain: 'googleapis.com',
+          metadataHost: 'test-metadata',
+        );
+
+        expect(
+          creds.getAccessToken,
+          throwsA(
+            isA<CredentialException>()
+                .having(
+                  (e) => e.message,
+                  'message',
+                  contains('Failed to get access token'),
+                )
+                .having(
+                  (e) => e.innerException,
+                  'innerException',
+                  isA<http.ClientException>(),
+                ),
+          ),
+        );
+      });
+
+      test('throws CredentialException on invalid JSON', () async {
+        final mockClient = MockClient((request) async {
+          if (request.url.path.endsWith('/token')) {
+            return http.Response('not valid json', 200);
+          }
+          return http.Response('Not found', 404);
+        });
+
+        final creds = await ComputeEngineCredentials.create(
+          client: mockClient,
+          clientEmail: 'sa@test.com',
+          universeDomain: 'googleapis.com',
+          metadataHost: 'test-metadata',
+        );
+
+        expect(
+          creds.getAccessToken,
+          throwsA(
+            isA<CredentialException>()
+                .having(
+                  (e) => e.message,
+                  'message',
+                  contains('Failed to parse token response'),
+                )
+                .having(
+                  (e) => e.innerException,
+                  'innerException',
+                  isA<FormatException>(),
+                ),
+          ),
+        );
+      });
     });
 
     group('isOnComputeEngine', () {
@@ -431,6 +589,52 @@ void main() {
           );
         },
       );
+
+      test('throws SigningException on network error from signBlob', () async {
+        final message = utf8.encode('Test network error');
+
+        final mockClient = MockClient((request) async {
+          if (request.url.path.endsWith('/token')) {
+            return http.Response(
+              jsonEncode({
+                'access_token': 'token-123',
+                'expires_in': 3600,
+                'token_type': 'Bearer',
+              }),
+              200,
+            );
+          }
+
+          if (request.url.path.endsWith(':signBlob')) {
+            throw http.ClientException('Connection reset by peer');
+          }
+
+          return http.Response('Not found', 404);
+        });
+
+        final creds = await ComputeEngineCredentials.create(
+          client: mockClient,
+          clientEmail: 'sa@test.iam.gserviceaccount.com',
+          metadataHost: 'test-metadata',
+        );
+
+        expect(
+          () => creds.sign(message),
+          throwsA(
+            isA<SigningException>()
+                .having(
+                  (e) => e.message,
+                  'message',
+                  contains('Failed to sign message via IAM signBlob API'),
+                )
+                .having(
+                  (e) => e.innerException,
+                  'innerException',
+                  isA<http.ClientException>(),
+                ),
+          ),
+        );
+      });
     });
   });
 }

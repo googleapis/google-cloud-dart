@@ -20,6 +20,7 @@ import 'dart:typed_data';
 
 import 'package:http/http.dart' as http;
 
+import 'credential_exception.dart';
 import 'service_account_signer.dart';
 
 // Design based on:
@@ -81,13 +82,19 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
       metadataHost,
       '/computeMetadata/v1/instance/service-accounts/default/token',
     );
-    final response = await _client.get(
-      tokenUri,
-      headers: _metadataFlavorHeader,
-    );
+    final http.Response response;
+    try {
+      response = await _client.get(tokenUri, headers: _metadataFlavorHeader);
+    } on Exception catch (e, stackTrace) {
+      throw CredentialException(
+        'Failed to get access token from Compute Engine metadata server: $e',
+        innerException: e,
+        innerStackTrace: stackTrace,
+      );
+    }
 
     if (response.statusCode != 200) {
-      throw SigningException(
+      throw CredentialException(
         'Failed to get access token from Compute Engine metadata server: '
         'HTTP ${response.statusCode} ${response.body}',
       );
@@ -103,10 +110,11 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
       _cachedAccessToken = accessToken;
       _accessTokenExpiry = DateTime.now().add(Duration(seconds: expiresIn));
       return accessToken;
-    } on FormatException catch (e) {
-      throw SigningException(
+    } on FormatException catch (e, stackTrace) {
+      throw CredentialException(
         'Failed to parse token response from metadata server: $e',
-        e,
+        innerException: e,
+        innerStackTrace: stackTrace,
       );
     }
   }
@@ -133,19 +141,29 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
           host,
           '/computeMetadata/v1/instance/service-accounts/default/email',
         );
-        final response = await httpClient.get(
-          emailUri,
-          headers: _metadataFlavorHeader,
-        );
+        final http.Response response;
+        try {
+          response = await httpClient.get(
+            emailUri,
+            headers: _metadataFlavorHeader,
+          );
+        } on Exception catch (e, stackTrace) {
+          throw CredentialException(
+            'Failed to get default service account email from metadata server: '
+            '$e',
+            innerException: e,
+            innerStackTrace: stackTrace,
+          );
+        }
         if (response.statusCode != 200) {
-          throw SigningException(
+          throw CredentialException(
             'Failed to get default service account email from metadata server: '
             'HTTP ${response.statusCode} ${response.body}',
           );
         }
         resolvedEmail = response.body.trim();
         if (resolvedEmail.isEmpty) {
-          throw SigningException(
+          throw CredentialException(
             'Empty service account email received from metadata server.',
           );
         }
@@ -157,10 +175,19 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
           host,
           '/computeMetadata/v1/universe/universe-domain',
         );
-        final response = await httpClient.get(
-          universeUri,
-          headers: _metadataFlavorHeader,
-        );
+        final http.Response response;
+        try {
+          response = await httpClient.get(
+            universeUri,
+            headers: _metadataFlavorHeader,
+          );
+        } on Exception catch (e, stackTrace) {
+          throw CredentialException(
+            'Failed to get universe domain from metadata server: $e',
+            innerException: e,
+            innerStackTrace: stackTrace,
+          );
+        }
         // 404 indicates an older metadata server without universe-domain
         // support, and early versions returned an empty string for the default
         // universe; both default to 'googleapis.com'.
@@ -174,7 +201,7 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
         } else if (response.statusCode == 404) {
           resolvedUniverseDomain = 'googleapis.com';
         } else {
-          throw SigningException(
+          throw CredentialException(
             'Failed to get universe domain from metadata server: '
             'HTTP ${response.statusCode} ${response.body}',
           );
@@ -253,14 +280,23 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
 
     while (true) {
       attempts++;
-      final response = await _client.post(
-        signBlobUrl,
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Content-Type': 'application/json',
-        },
-        body: requestBody,
-      );
+      final http.Response response;
+      try {
+        response = await _client.post(
+          signBlobUrl,
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'application/json',
+          },
+          body: requestBody,
+        );
+      } on Exception catch (e, stackTrace) {
+        throw SigningException(
+          'Failed to sign message via IAM signBlob API: $e',
+          innerException: e,
+          innerStackTrace: stackTrace,
+        );
+      }
 
       if (response.statusCode == 200) {
         try {
@@ -270,10 +306,11 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
             throw const FormatException("Missing 'signedBlob' in response");
           }
           return Uint8List.fromList(base64.decode(signedBlob));
-        } on FormatException catch (e) {
+        } on FormatException catch (e, stackTrace) {
           throw SigningException(
             'Failed to parse signBlob response: ${e.message}',
-            e,
+            innerException: e,
+            innerStackTrace: stackTrace,
           );
         }
       }
