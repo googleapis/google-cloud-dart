@@ -29,7 +29,7 @@ final class BatchingSettings {
 
   /// Creates a new [BatchingSettings] instance.
   ///
-  /// Throws [ArgumentError] if:
+  /// It is an error if:
   /// - [maxMessages] is not greater than 0.
   /// - [maxBytes] is not greater than 0.
   /// - [maxDelay] is not greater than [Duration.zero].

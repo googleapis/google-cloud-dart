@@ -71,9 +71,9 @@ final class ReceivedMessage {
   /// If it was received via `streamingPull`, it will send an acknowledgment
   /// request over the stream or route it through the subscription batcher.
   ///
-  /// Throws a [StateError] if no acknowledge handler is configured for this
-  /// message (e.g. if the message was constructed manually without a handler,
-  /// or if the underlying [Subscription] is closed).
+  /// It is an error if no acknowledge handler is configured for this message
+  /// (e.g. if the message was constructed manually without a handler, or if the
+  /// underlying [Subscription] is closed).
   Future<void> acknowledge() async {
     final handler = _ackHandler;
     if (handler == null) {
@@ -89,9 +89,10 @@ final class ReceivedMessage {
   /// deadline is 10 seconds from now. Specifying 0 makes the message
   /// immediately available for redelivery.
   ///
-  /// Throws an [ArgumentError] if [seconds] is negative.
-  /// Throws a [StateError] if no modify-ack-deadline handler is configured for
-  /// this message, or if the underlying [Subscription] is closed.
+  /// It is an error if [seconds] is negative.
+  ///
+  /// It is an error if no modify-ack-deadline handler is configured for this
+  /// message, or if the underlying [Subscription] is closed.
   Future<void> modifyAckDeadline(int seconds) async {
     if (seconds < 0) {
       throw ArgumentError.value(seconds, 'seconds', 'Must be non-negative');

@@ -59,7 +59,7 @@ final class RetrySettings {
 
   /// Creates a new [RetrySettings] instance.
   ///
-  /// Throws [ArgumentError] if:
+  /// It is an error if:
   /// - [maxRetries] is negative.
   /// - [initialDelay] is not greater than [Duration.zero].
   /// - [delayMultiplier] is less than 1.0.
@@ -174,7 +174,7 @@ final class RetrySettings {
 
   /// Creates a copy of this [RetrySettings] with the given fields replaced.
   ///
-  /// Throws [ArgumentError] if any replaced parameter violates its constraints.
+  /// It is an error if any replaced parameter violates its constraints.
   RetrySettings copyWith({
     Object? maxRetries = _sentinel,
     Object? totalTimeout = _sentinel,

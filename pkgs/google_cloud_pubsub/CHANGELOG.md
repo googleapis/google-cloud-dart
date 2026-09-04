@@ -17,10 +17,10 @@
 - Defaulted `totalTimeout` in custom `RetrySettings` passed to `streamingPull` to
   `null` (indefinite reconnection) unless explicitly specified.
 - Replaced constructor assertions in `BatchingSettings` and `RetrySettings` with
-  always-on `ArgumentError` parameter validation, and updated `PublishSettings`
-  and `AckSettings` constructors to default to newly created instances.
-- Documented asynchronous error emission on streaming methods and `StateError`
-  on `ReceivedMessage.acknowledge()` and `modifyAckDeadline()`.
+  always-on parameter validation, and updated `PublishSettings` and `AckSettings`
+  constructors to default to newly created instances.
+- Documented asynchronous error emission on streaming methods and error
+  conditions on `ReceivedMessage.acknowledge()` and `modifyAckDeadline()`.
 - Initial release of the experimental Google Cloud Pub/Sub client.
 - Supports basic topic and subscription management.
 - Supports publishing and pulling messages (including streaming pull).
