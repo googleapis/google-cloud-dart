@@ -196,6 +196,9 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
     }
   }
 
+  // Equivalent of:
+  // - https://github.com/googleapis/google-auth-library-java/blob/9ac2d4340ebc6a8582b898e97f65aeed3c1776d6/oauth2_http/java/com/google/auth/oauth2/ComputeEngineCredentials.java#L595-L613
+  // - https://github.com/googleapis/google-auth-library-python/blob/2ea24b03436765fa3cf279ce148482ff6332136b/google/auth/compute_engine/_metadata.py#L122-L144
   /// Checks if the application is running in an environment with an accessible
   /// Compute Engine metadata server.
   static Future<bool> isOnComputeEngine({

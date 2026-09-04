@@ -25,29 +25,26 @@ import 'package:test/test.dart';
 
 void main() {
   group('ComputeEngineCredentials', () {
-    test('implements ServiceAccountSigner', () async {
-      final mockClient = MockClient((request) async {
-        if (request.url.path.endsWith('/email')) {
-          return http.Response(
-            'test-sa@project.iam.gserviceaccount.com',
-            200,
-            headers: {'metadata-flavor': 'Google'},
-          );
-        }
-        return http.Response('Not found', 404);
+    group('create', () {
+      test('explicitly provided email and universe domain', () async {
+        var metadataCalled = false;
+        final mockClient = MockClient((request) async {
+          metadataCalled = true;
+          return http.Response('Not found', 404);
+        });
+
+        final creds = await ComputeEngineCredentials.create(
+          client: mockClient,
+          clientEmail: 'explicit@iam.gserviceaccount.com',
+          universeDomain: 'explicit.domain.com',
+          metadataHost: 'test-metadata',
+        );
+
+        expect(creds.clientEmail, 'explicit@iam.gserviceaccount.com');
+        expect(creds.universeDomain, 'explicit.domain.com');
+        expect(metadataCalled, isFalse);
       });
 
-      final creds = await ComputeEngineCredentials.create(
-        client: mockClient,
-        metadataHost: 'test-metadata',
-      );
-
-      expect(creds, isA<ServiceAccountSigner>());
-      expect(creds.clientEmail, 'test-sa@project.iam.gserviceaccount.com');
-      expect(creds.universeDomain, 'googleapis.com');
-    });
-
-    group('create', () {
       test('fetches email and universe domain', () async {
         final mockClient = MockClient((request) async {
           expect(request.headers['metadata-flavor'], 'Google');
@@ -69,25 +66,6 @@ void main() {
 
         expect(creds.clientEmail, 'sa@test.iam.gserviceaccount.com');
         expect(creds.universeDomain, 'custom.domain.com');
-      });
-
-      test('uses explicitly provided email and universe domain', () async {
-        var metadataCalled = false;
-        final mockClient = MockClient((request) async {
-          metadataCalled = true;
-          return http.Response('Not found', 404);
-        });
-
-        final creds = await ComputeEngineCredentials.create(
-          client: mockClient,
-          clientEmail: 'explicit@iam.gserviceaccount.com',
-          universeDomain: 'explicit.domain.com',
-          metadataHost: 'test-metadata',
-        );
-
-        expect(creds.clientEmail, 'explicit@iam.gserviceaccount.com');
-        expect(creds.universeDomain, 'explicit.domain.com');
-        expect(metadataCalled, isFalse);
       });
 
       test(
@@ -113,50 +91,41 @@ void main() {
         },
       );
 
-      test('defaults universe domain to googleapis.com on 404', () async {
+      test('empty universe-domain', () async {
         final mockClient = MockClient((request) async {
-          final path = request.url.path;
-          if (path ==
-              '/computeMetadata/v1/instance/service-accounts/default/email') {
-            return http.Response('sa@test.iam.gserviceaccount.com', 200);
+          if (request.url.path.endsWith('/universe-domain')) {
+            return http.Response('', 200);
           }
-          if (path == '/computeMetadata/v1/universe/universe-domain') {
-            return http.Response('Not found', 404);
-          }
-          return http.Response('Not found', 404);
+          fail('Unexpected request: $request');
         });
 
         final creds = await ComputeEngineCredentials.create(
           client: mockClient,
+          clientEmail: 'test-sa@project.iam.gserviceaccount.com',
           metadataHost: 'test-metadata',
         );
 
+        expect(creds, isA<ServiceAccountSigner>());
         expect(creds.universeDomain, 'googleapis.com');
       });
 
-      test(
-        'defaults universe domain to googleapis.com on empty response',
-        () async {
-          final mockClient = MockClient((request) async {
-            final path = request.url.path;
-            if (path ==
-                '/computeMetadata/v1/instance/service-accounts/default/email') {
-              return http.Response('sa@test.iam.gserviceaccount.com', 200);
-            }
-            if (path == '/computeMetadata/v1/universe/universe-domain') {
-              return http.Response('   ', 200);
-            }
+      test('not found universe-domain', () async {
+        final mockClient = MockClient((request) async {
+          if (request.url.path.endsWith('/universe-domain')) {
             return http.Response('Not found', 404);
-          });
+          }
+          fail('Unexpected request: $request');
+        });
 
-          final creds = await ComputeEngineCredentials.create(
-            client: mockClient,
-            metadataHost: 'test-metadata',
-          );
+        final creds = await ComputeEngineCredentials.create(
+          client: mockClient,
+          clientEmail: 'test-sa@project.iam.gserviceaccount.com',
+          metadataHost: 'test-metadata',
+        );
 
-          expect(creds.universeDomain, 'googleapis.com');
-        },
-      );
+        expect(creds, isA<ServiceAccountSigner>());
+        expect(creds.universeDomain, 'googleapis.com');
+      });
 
       test(
         'throws SigningException on metadata server error for universe domain',
@@ -252,8 +221,7 @@ void main() {
     });
 
     group('sign', () {
-      test('signs message via IAM signBlob API and returns '
-          'signature', () async {
+      test('happy path', () async {
         final expectedMessage = utf8.encode('Hello, Cloud!');
         final mockSignatureBytes = Uint8List.fromList([10, 20, 30, 40, 50]);
         var tokenCallCount = 0;
@@ -366,7 +334,7 @@ void main() {
         expect(tokenCount, 2);
       });
 
-      test('retries on 500 error from IAM signBlob API', () async {
+      test('retries on 500 error', () async {
         final message = utf8.encode('Test retry');
         final mockSignatureBytes = Uint8List.fromList([7, 8, 9]);
         var signBlobAttempts = 0;
