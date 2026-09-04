@@ -53,7 +53,7 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
 
   String? _cachedAccessToken;
   DateTime? _accessTokenExpiry;
-  
+
   /// The active request to fetch a new token. This is used to prevent
   /// multiple concurrent requests from fetching new tokens at the same time.
   Future<String>? _activeTokenRequest;
@@ -71,7 +71,7 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
   ///
   /// If the cached token is expired or if [forceRefresh] is `true`, then a new
   /// token is fetched.
-  /// 
+  ///
   /// It is safe to call this method concurrently.
   Future<String> getAccessToken({bool forceRefresh = false}) async {
     if (!forceRefresh &&
@@ -280,9 +280,16 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
   /// `signBlob` API.
   @override
   Future<Uint8List> sign(List<int> message) async {
-    final signBlobUrl = Uri.https(
-      'iamcredentials.$universeDomain',
-      '/v1/projects/-/serviceAccounts/$clientEmail:signBlob',
+    final signBlobUrl = Uri(
+      scheme: 'https',
+      host: 'iamcredentials.$universeDomain',
+      pathSegments: [
+        'v1',
+        'projects',
+        '-',
+        'serviceAccounts',
+        '$clientEmail:signBlob',
+      ],
     );
     final requestBody = jsonEncode({'payload': base64.encode(message)});
 
