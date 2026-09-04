@@ -57,7 +57,16 @@ final class RetrySettings {
   @internal
   bool get hasExplicitTotalTimeout => _hasExplicitTotalTimeout;
 
-  const RetrySettings({
+  /// Creates a new [RetrySettings] instance.
+  ///
+  /// Throws [ArgumentError] if:
+  /// - [maxRetries] is negative.
+  /// - [initialDelay] is not greater than [Duration.zero].
+  /// - [delayMultiplier] is less than 1.0.
+  /// - [maxDelay] is not greater than [Duration.zero].
+  /// - [totalTimeout] (or deprecated [maxRetryInterval]) is not greater than
+  ///   [Duration.zero].
+  RetrySettings({
     this.maxRetries,
     this.initialDelay = const Duration(milliseconds: 100),
     this.delayMultiplier = 1.3,
@@ -71,59 +80,101 @@ final class RetrySettings {
                : totalTimeout),
        _hasExplicitTotalTimeout =
            !identical(totalTimeout, _sentinelTimeout) ||
-           maxRetryInterval != null,
-       assert(
-         maxRetries == null || maxRetries >= 0,
-         'maxRetries must be non-negative',
-       ),
-       assert(
-         !identical(initialDelay, Duration.zero),
-         'initialDelay must be greater than zero',
-       ),
-       assert(delayMultiplier >= 1.0, 'delayMultiplier must be at least 1.0'),
-       assert(
-         !identical(maxDelay, Duration.zero),
-         'maxDelay must be greater than zero',
-       ),
-       assert(
-         maxRetryInterval == null ||
-             !identical(maxRetryInterval, Duration.zero),
-         'maxRetryInterval must be greater than zero',
-       ),
-       assert(
-         identical(totalTimeout, _sentinelTimeout) ||
-             totalTimeout == null ||
-             !identical(totalTimeout, Duration.zero),
-         'totalTimeout must be greater than zero',
-       );
+           maxRetryInterval != null {
+    if (maxRetries != null && maxRetries! < 0) {
+      throw ArgumentError.value(
+        maxRetries,
+        'maxRetries',
+        'Must be non-negative',
+      );
+    }
+    if (initialDelay <= Duration.zero) {
+      throw ArgumentError.value(
+        initialDelay,
+        'initialDelay',
+        'Must be greater than zero',
+      );
+    }
+    if (delayMultiplier < 1.0 || delayMultiplier.isNaN) {
+      throw ArgumentError.value(
+        delayMultiplier,
+        'delayMultiplier',
+        'Must be at least 1.0',
+      );
+    }
+    if (maxDelay <= Duration.zero) {
+      throw ArgumentError.value(
+        maxDelay,
+        'maxDelay',
+        'Must be greater than zero',
+      );
+    }
+    if (maxRetryInterval != null && maxRetryInterval <= Duration.zero) {
+      throw ArgumentError.value(
+        maxRetryInterval,
+        'maxRetryInterval',
+        'Must be greater than zero',
+      );
+    }
+    if (!identical(totalTimeout, _sentinelTimeout) &&
+        totalTimeout != null &&
+        totalTimeout <= Duration.zero) {
+      throw ArgumentError.value(
+        totalTimeout,
+        'totalTimeout',
+        'Must be greater than zero',
+      );
+    }
+  }
 
-  const RetrySettings._internal({
+  RetrySettings._internal({
     required this.maxRetries,
     required this.totalTimeout,
     required this.initialDelay,
     required this.delayMultiplier,
     required this.maxDelay,
     required bool hasExplicitTotalTimeout,
-  }) : _hasExplicitTotalTimeout = hasExplicitTotalTimeout,
-       assert(
-         maxRetries == null || maxRetries >= 0,
-         'maxRetries must be non-negative',
-       ),
-       assert(
-         !identical(initialDelay, Duration.zero),
-         'initialDelay must be greater than zero',
-       ),
-       assert(delayMultiplier >= 1.0, 'delayMultiplier must be at least 1.0'),
-       assert(
-         !identical(maxDelay, Duration.zero),
-         'maxDelay must be greater than zero',
-       ),
-       assert(
-         totalTimeout == null || !identical(totalTimeout, Duration.zero),
-         'totalTimeout must be greater than zero',
-       );
+  }) : _hasExplicitTotalTimeout = hasExplicitTotalTimeout {
+    if (maxRetries != null && maxRetries! < 0) {
+      throw ArgumentError.value(
+        maxRetries,
+        'maxRetries',
+        'Must be non-negative',
+      );
+    }
+    if (initialDelay <= Duration.zero) {
+      throw ArgumentError.value(
+        initialDelay,
+        'initialDelay',
+        'Must be greater than zero',
+      );
+    }
+    if (delayMultiplier < 1.0 || delayMultiplier.isNaN) {
+      throw ArgumentError.value(
+        delayMultiplier,
+        'delayMultiplier',
+        'Must be at least 1.0',
+      );
+    }
+    if (maxDelay <= Duration.zero) {
+      throw ArgumentError.value(
+        maxDelay,
+        'maxDelay',
+        'Must be greater than zero',
+      );
+    }
+    if (totalTimeout != null && totalTimeout! <= Duration.zero) {
+      throw ArgumentError.value(
+        totalTimeout,
+        'totalTimeout',
+        'Must be greater than zero',
+      );
+    }
+  }
 
   /// Creates a copy of this [RetrySettings] with the given fields replaced.
+  ///
+  /// Throws [ArgumentError] if any replaced parameter violates its constraints.
   RetrySettings copyWith({
     Object? maxRetries = _sentinel,
     Object? totalTimeout = _sentinel,

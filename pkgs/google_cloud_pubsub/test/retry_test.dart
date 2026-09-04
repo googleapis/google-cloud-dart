@@ -192,7 +192,7 @@ void main() {
 
   group('RetrySettings', () {
     test('defaults and backwards compatibility with maxRetryInterval', () {
-      const settings = RetrySettings();
+      final settings = RetrySettings();
       expect(settings.totalTimeout, equals(const Duration(minutes: 1)));
       expect(settings.initialDelay, equals(const Duration(milliseconds: 100)));
       expect(settings.delayMultiplier, equals(1.3));
@@ -203,8 +203,8 @@ void main() {
       expect(settings.maxRetryInterval, equals(const Duration(minutes: 1)));
 
       // ignore: deprecated_member_use_from_same_package
-      const deprecatedSettings = RetrySettings(
-        maxRetryInterval: Duration(seconds: 30),
+      final deprecatedSettings = RetrySettings(
+        maxRetryInterval: const Duration(seconds: 30),
       );
       expect(
         deprecatedSettings.totalTimeout,
@@ -220,32 +220,130 @@ void main() {
       expect(unlimited.totalTimeout, isNull);
     });
 
-    test('parameter assertions', () {
+    test('parameter validation throws ArgumentError for invalid values', () {
       expect(
         () => RetrySettings(maxRetries: -1),
-        throwsA(isA<AssertionError>()),
+        throwsA(isA<ArgumentError>()),
+      );
+      expect(
+        () => RetrySettings(maxRetries: -10),
+        throwsA(isA<ArgumentError>()),
+      );
+      expect(
+        () => RetrySettings(delayMultiplier: -1.0),
+        throwsA(isA<ArgumentError>()),
+      );
+      expect(
+        () => RetrySettings(delayMultiplier: 0.0),
+        throwsA(isA<ArgumentError>()),
       );
       expect(
         () => RetrySettings(delayMultiplier: 0.5),
-        throwsA(isA<AssertionError>()),
+        throwsA(isA<ArgumentError>()),
       );
       expect(
         () => RetrySettings(initialDelay: Duration.zero),
-        throwsA(isA<AssertionError>()),
+        throwsA(isA<ArgumentError>()),
+      );
+      expect(
+        () => RetrySettings(initialDelay: const Duration(seconds: -1)),
+        throwsA(isA<ArgumentError>()),
       );
       expect(
         () => RetrySettings(maxDelay: Duration.zero),
-        throwsA(isA<AssertionError>()),
+        throwsA(isA<ArgumentError>()),
+      );
+      expect(
+        () => RetrySettings(maxDelay: const Duration(seconds: -1)),
+        throwsA(isA<ArgumentError>()),
       );
       expect(
         () => RetrySettings(totalTimeout: Duration.zero),
-        throwsA(isA<AssertionError>()),
+        throwsA(isA<ArgumentError>()),
+      );
+      expect(
+        () => RetrySettings(totalTimeout: const Duration(seconds: -1)),
+        throwsA(isA<ArgumentError>()),
       );
       // ignore: deprecated_member_use_from_same_package
       expect(
         () => RetrySettings(maxRetryInterval: Duration.zero),
-        throwsA(isA<AssertionError>()),
+        throwsA(isA<ArgumentError>()),
       );
+      // ignore: deprecated_member_use_from_same_package
+      expect(
+        () => RetrySettings(maxRetryInterval: const Duration(seconds: -1)),
+        throwsA(isA<ArgumentError>()),
+      );
+    });
+
+    test('valid parameter edge cases succeed', () {
+      final zeroRetries = RetrySettings(maxRetries: 0);
+      expect(zeroRetries.maxRetries, equals(0));
+
+      final minMultiplier = RetrySettings(delayMultiplier: 1.0);
+      expect(minMultiplier.delayMultiplier, equals(1.0));
+
+      final nullTimeout = RetrySettings(totalTimeout: null);
+      expect(nullTimeout.totalTimeout, isNull);
+    });
+
+    test('copyWith parameter validation throws ArgumentError', () {
+      final base = RetrySettings();
+
+      expect(
+        () => base.copyWith(maxRetries: -1),
+        throwsA(isA<ArgumentError>()),
+      );
+      expect(
+        () => base.copyWith(maxRetries: -5),
+        throwsA(isA<ArgumentError>()),
+      );
+      expect(
+        () => base.copyWith(delayMultiplier: -1.0),
+        throwsA(isA<ArgumentError>()),
+      );
+      expect(
+        () => base.copyWith(delayMultiplier: 0.0),
+        throwsA(isA<ArgumentError>()),
+      );
+      expect(
+        () => base.copyWith(delayMultiplier: 0.99),
+        throwsA(isA<ArgumentError>()),
+      );
+      expect(
+        () => base.copyWith(initialDelay: Duration.zero),
+        throwsA(isA<ArgumentError>()),
+      );
+      expect(
+        () => base.copyWith(initialDelay: const Duration(milliseconds: -10)),
+        throwsA(isA<ArgumentError>()),
+      );
+      expect(
+        () => base.copyWith(maxDelay: Duration.zero),
+        throwsA(isA<ArgumentError>()),
+      );
+      expect(
+        () => base.copyWith(maxDelay: const Duration(seconds: -1)),
+        throwsA(isA<ArgumentError>()),
+      );
+      expect(
+        () => base.copyWith(totalTimeout: Duration.zero),
+        throwsA(isA<ArgumentError>()),
+      );
+      expect(
+        () => base.copyWith(totalTimeout: const Duration(seconds: -1)),
+        throwsA(isA<ArgumentError>()),
+      );
+
+      final updated = base.copyWith(
+        maxRetries: 0,
+        delayMultiplier: 1.0,
+        totalTimeout: null,
+      );
+      expect(updated.maxRetries, equals(0));
+      expect(updated.delayMultiplier, equals(1.0));
+      expect(updated.totalTimeout, isNull);
     });
   });
 
@@ -384,7 +482,7 @@ void main() {
             callCount++;
             throw const grpc.GrpcError.alreadyExists('Already exists');
           },
-          settings: const RetrySettings(maxRetries: 5),
+          settings: RetrySettings(maxRetries: 5),
           isIdempotent: true,
         ),
         throwsA(isA<grpc.GrpcError>()),
@@ -401,10 +499,10 @@ void main() {
             callCount++;
             throw const grpc.GrpcError.unavailable('Unavailable');
           },
-          settings: const RetrySettings(
+          settings: RetrySettings(
             maxRetries: 3,
-            initialDelay: Duration(milliseconds: 1),
-            maxDelay: Duration(milliseconds: 5),
+            initialDelay: const Duration(milliseconds: 1),
+            maxDelay: const Duration(milliseconds: 5),
           ),
           isIdempotent: true,
         ),

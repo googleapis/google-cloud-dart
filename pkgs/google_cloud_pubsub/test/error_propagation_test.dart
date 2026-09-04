@@ -745,10 +745,10 @@ void main() {
     test('idle streaming pull reconnects cleanly when healthy', () async {
       final subscription = client.subscription('sub');
       final stream = subscription.streamingPull(
-        retry: const RetrySettings(
+        retry: RetrySettings(
           maxRetries: 2,
-          initialDelay: Duration(milliseconds: 20),
-          maxDelay: Duration(milliseconds: 50),
+          initialDelay: const Duration(milliseconds: 20),
+          maxDelay: const Duration(milliseconds: 50),
         ),
       );
 

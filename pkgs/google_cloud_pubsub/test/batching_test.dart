@@ -25,9 +25,9 @@ void main() {
     test('flushes when maxMessages is reached', () async {
       final completer = Completer<List<int>>();
       Batcher<int>(
-          settings: const BatchingSettings(
+          settings: BatchingSettings(
             maxMessages: 3,
-            maxDelay: Duration(seconds: 1),
+            maxDelay: const Duration(seconds: 1),
           ),
           itemSize: (i) => 1,
           onBatch: (batch) async {
@@ -45,9 +45,9 @@ void main() {
     test('flushes when maxBytes is reached', () async {
       final completer = Completer<List<int>>();
       Batcher<int>(
-          settings: const BatchingSettings(
+          settings: BatchingSettings(
             maxBytes: 10,
-            maxDelay: Duration(seconds: 1),
+            maxDelay: const Duration(seconds: 1),
           ),
           itemSize: (i) => i,
           onBatch: (batch) async {
@@ -64,9 +64,9 @@ void main() {
     test('flushes after maxDelay', () async {
       final completer = Completer<List<int>>();
       Batcher<int>(
-          settings: const BatchingSettings(
+          settings: BatchingSettings(
             maxMessages: 10,
-            maxDelay: Duration(milliseconds: 100),
+            maxDelay: const Duration(milliseconds: 100),
           ),
           itemSize: (i) => 1,
           onBatch: (batch) async {
@@ -86,9 +86,9 @@ void main() {
       var batchCompleted = false;
 
       final batcher = Batcher<int>(
-        settings: const BatchingSettings(
+        settings: BatchingSettings(
           maxMessages: 10,
-          maxDelay: Duration(seconds: 10),
+          maxDelay: const Duration(seconds: 10),
         ),
         itemSize: (i) => 1,
         onBatch: (batch) async {
@@ -116,7 +116,7 @@ void main() {
 
     test('calling add after close throws StateError', () async {
       final batcher = Batcher<int>(
-        settings: const BatchingSettings(maxMessages: 10),
+        settings: BatchingSettings(maxMessages: 10),
         itemSize: (i) => 1,
         onBatch: (_) async {},
       );
@@ -127,26 +127,41 @@ void main() {
   });
 
   group('BatchingSettings', () {
-    test('parameter assertions', () {
+    test('defaults are initialized correctly', () {
+      final settings = BatchingSettings();
+      expect(settings.maxMessages, equals(100));
+      expect(settings.maxBytes, equals(1024 * 1024));
+      expect(settings.maxDelay, equals(const Duration(milliseconds: 10)));
+    });
+
+    test('parameter validation throws ArgumentError', () {
       expect(
         () => BatchingSettings(maxMessages: 0),
-        throwsA(isA<AssertionError>()),
+        throwsA(isA<ArgumentError>()),
       );
       expect(
         () => BatchingSettings(maxMessages: -1),
-        throwsA(isA<AssertionError>()),
+        throwsA(isA<ArgumentError>()),
       );
       expect(
         () => BatchingSettings(maxBytes: 0),
-        throwsA(isA<AssertionError>()),
+        throwsA(isA<ArgumentError>()),
       );
       expect(
         () => BatchingSettings(maxBytes: -10),
-        throwsA(isA<AssertionError>()),
+        throwsA(isA<ArgumentError>()),
       );
       expect(
         () => BatchingSettings(maxDelay: Duration.zero),
-        throwsA(isA<AssertionError>()),
+        throwsA(isA<ArgumentError>()),
+      );
+      expect(
+        () => BatchingSettings(maxDelay: const Duration(milliseconds: -1)),
+        throwsA(isA<ArgumentError>()),
+      );
+      expect(
+        () => BatchingSettings(maxDelay: const Duration(seconds: -10)),
+        throwsA(isA<ArgumentError>()),
       );
     });
   });

@@ -25,10 +25,10 @@ Future<void> main() async {
   try {
     final topic = pubsub.topic(
       'my-topic',
-      publishSettings: const PublishSettings(
+      publishSettings: PublishSettings(
         batching: BatchingSettings(
           maxMessages: 50,
-          maxDelay: Duration(milliseconds: 20),
+          maxDelay: const Duration(milliseconds: 20),
         ),
       ),
     );
@@ -36,10 +36,10 @@ Future<void> main() async {
 
     final subscription = pubsub.subscription(
       'my-subscription',
-      ackSettings: const AckSettings(
+      ackSettings: AckSettings(
         batching: BatchingSettings(
           maxMessages: 50,
-          maxDelay: Duration(milliseconds: 20),
+          maxDelay: const Duration(milliseconds: 20),
         ),
       ),
     );

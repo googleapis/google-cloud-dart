@@ -28,10 +28,9 @@ final class AckSettings {
   /// Settings controlling retries when flushing a batch over a unary RPC.
   final RetrySettings retry;
 
-  const AckSettings({
-    this.batching = const BatchingSettings(),
-    this.retry = const RetrySettings(),
-  });
+  AckSettings({BatchingSettings? batching, RetrySettings? retry})
+    : batching = batching ?? BatchingSettings(),
+      retry = retry ?? RetrySettings();
 }
 
 class _AckRequest {
@@ -95,7 +94,7 @@ final class Subscription {
     this.pubsub,
     String subscriptionId, {
     AckSettings? ackSettings,
-  }) : ackSettings = ackSettings ?? const AckSettings(),
+  }) : ackSettings = ackSettings ?? AckSettings(),
        name = 'projects/${pubsub.projectId}/subscriptions/$subscriptionId' {
     _validateName(name);
     _initBatchers();
@@ -108,7 +107,7 @@ final class Subscription {
   /// It is an error if [name] is not in the format
   /// `projects/<project-id>/subscriptions/<subscription-id>`.
   Subscription(this.pubsub, this.name, {AckSettings? ackSettings})
-    : ackSettings = ackSettings ?? const AckSettings() {
+    : ackSettings = ackSettings ?? AckSettings() {
     _validateName(name);
     _initBatchers();
   }

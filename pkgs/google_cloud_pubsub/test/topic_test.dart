@@ -107,10 +107,10 @@ void main() {
 
       final topic = client.topic(
         'test-topic',
-        publishSettings: const PublishSettings(
+        publishSettings: PublishSettings(
           batching: BatchingSettings(
             maxMessages: 10,
-            maxDelay: Duration(seconds: 10),
+            maxDelay: const Duration(seconds: 10),
           ),
         ),
       );
@@ -143,10 +143,10 @@ void main() {
 
       final topic = client.topic(
         'test-topic',
-        publishSettings: const PublishSettings(
+        publishSettings: PublishSettings(
           batching: BatchingSettings(
             maxMessages: 10,
-            maxDelay: Duration(seconds: 10),
+            maxDelay: const Duration(seconds: 10),
           ),
         ),
       );
@@ -187,10 +187,10 @@ void main() {
 
       final topic = client.topic(
         'test-topic',
-        publishSettings: const PublishSettings(
+        publishSettings: PublishSettings(
           batching: BatchingSettings(
             maxMessages: 2,
-            maxDelay: Duration(seconds: 10),
+            maxDelay: const Duration(seconds: 10),
           ),
         ),
       );
@@ -226,10 +226,10 @@ void main() {
 
         final topic = client.topic(
           'test-topic',
-          publishSettings: const PublishSettings(
+          publishSettings: PublishSettings(
             batching: BatchingSettings(
               maxMessages: 2,
-              maxDelay: Duration(seconds: 10),
+              maxDelay: const Duration(seconds: 10),
             ),
           ),
         );
@@ -255,11 +255,11 @@ void main() {
         // 4th message = 24 bytes >= 20 bytes (triggers flush!).
         final topic = client.topic(
           'test-topic',
-          publishSettings: const PublishSettings(
+          publishSettings: PublishSettings(
             batching: BatchingSettings(
               maxBytes: 20,
               maxMessages: 100,
-              maxDelay: Duration(seconds: 10),
+              maxDelay: const Duration(seconds: 10),
             ),
           ),
         );

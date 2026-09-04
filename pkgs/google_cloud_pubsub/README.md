@@ -34,7 +34,7 @@ void main() async {
   final topic = await pubSub
       .topic(
         'put-your-topic-name-here',
-        publishSettings: const PublishSettings(
+        publishSettings: PublishSettings(
           batching: BatchingSettings(
             maxMessages: 100,
             maxDelay: Duration(milliseconds: 10),
@@ -47,7 +47,7 @@ void main() async {
   final subscription = await pubSub
       .subscription(
         'put-your-subscription-name-here',
-        ackSettings: const AckSettings(
+        ackSettings: AckSettings(
           batching: BatchingSettings(maxDelay: Duration(milliseconds: 50)),
         ),
       )

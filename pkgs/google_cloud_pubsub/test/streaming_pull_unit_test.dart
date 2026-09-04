@@ -201,10 +201,10 @@ void main() {
       () async {
         final subscription = client.subscription(
           'test-sub',
-          ackSettings: const AckSettings(
+          ackSettings: AckSettings(
             batching: BatchingSettings(
               maxMessages: 1,
-              maxDelay: Duration(milliseconds: 10),
+              maxDelay: const Duration(milliseconds: 10),
             ),
           ),
         );
@@ -246,10 +246,10 @@ void main() {
         'over stream', () async {
       final subscription = client.subscription(
         'test-sub',
-        ackSettings: const AckSettings(
+        ackSettings: AckSettings(
           batching: BatchingSettings(
             maxMessages: 1,
-            maxDelay: Duration(milliseconds: 10),
+            maxDelay: const Duration(milliseconds: 10),
           ),
         ),
       );
@@ -314,7 +314,7 @@ void main() {
         'immediately', () async {
       final subscription = client.subscription(
         'test-sub',
-        ackSettings: const AckSettings(retry: RetrySettings(maxRetries: 10)),
+        ackSettings: AckSettings(retry: RetrySettings(maxRetries: 10)),
       );
 
       final stream = subscription.streamingPull();
@@ -352,10 +352,10 @@ void main() {
     test('idle streaming pull reconnects cleanly after disconnect', () async {
       final subscription = client.subscription(
         'test-sub',
-        ackSettings: const AckSettings(
+        ackSettings: AckSettings(
           retry: RetrySettings(
-            initialDelay: Duration(milliseconds: 10),
-            maxDelay: Duration(milliseconds: 20),
+            initialDelay: const Duration(milliseconds: 10),
+            maxDelay: const Duration(milliseconds: 20),
           ),
         ),
       );
@@ -397,10 +397,10 @@ void main() {
       () async {
         final subscription = client.subscription(
           'test-sub',
-          ackSettings: const AckSettings(
+          ackSettings: AckSettings(
             retry: RetrySettings(
-              initialDelay: Duration(milliseconds: 50),
-              maxDelay: Duration(milliseconds: 100),
+              initialDelay: const Duration(milliseconds: 50),
+              maxDelay: const Duration(milliseconds: 100),
             ),
           ),
         );
@@ -428,10 +428,10 @@ void main() {
         'controller while other streams active', () async {
       final subscription = client.subscription(
         'test-sub',
-        ackSettings: const AckSettings(
+        ackSettings: AckSettings(
           retry: RetrySettings(
-            initialDelay: Duration(milliseconds: 10),
-            maxDelay: Duration(milliseconds: 20),
+            initialDelay: const Duration(milliseconds: 10),
+            maxDelay: const Duration(milliseconds: 20),
           ),
         ),
       );
@@ -509,10 +509,10 @@ void main() {
 
         final subscription = client.subscription(
           'test-sub',
-          ackSettings: const AckSettings(
+          ackSettings: AckSettings(
             batching: BatchingSettings(
               maxMessages: 10,
-              maxDelay: Duration(seconds: 10),
+              maxDelay: const Duration(seconds: 10),
             ),
           ),
         );
@@ -552,10 +552,10 @@ void main() {
 
         final subscription = client.subscription(
           'test-sub',
-          ackSettings: const AckSettings(
+          ackSettings: AckSettings(
             batching: BatchingSettings(
               maxMessages: 10,
-              maxDelay: Duration(seconds: 10),
+              maxDelay: const Duration(seconds: 10),
             ),
           ),
         );
@@ -615,10 +615,10 @@ void main() {
 
         final subscription = client.subscription(
           'test-sub',
-          ackSettings: const AckSettings(
+          ackSettings: AckSettings(
             batching: BatchingSettings(
               maxMessages: 1,
-              maxDelay: Duration(milliseconds: 1),
+              maxDelay: const Duration(milliseconds: 1),
             ),
             retry: RetrySettings(maxRetries: 0),
           ),
@@ -661,10 +661,10 @@ void main() {
 
         final subscription = client.subscription(
           'test-sub',
-          ackSettings: const AckSettings(
+          ackSettings: AckSettings(
             batching: BatchingSettings(
               maxMessages: 1,
-              maxDelay: Duration(milliseconds: 1),
+              maxDelay: const Duration(milliseconds: 1),
             ),
             retry: RetrySettings(maxRetries: 0),
           ),
@@ -702,10 +702,10 @@ void main() {
         'and prevents reconnects', () async {
       final subscription = client.subscription(
         'test-sub',
-        ackSettings: const AckSettings(
+        ackSettings: AckSettings(
           retry: RetrySettings(
             maxRetries: 10,
-            initialDelay: Duration(milliseconds: 10),
+            initialDelay: const Duration(milliseconds: 10),
           ),
         ),
       );
@@ -775,10 +775,10 @@ void main() {
         'falls back to unary', () async {
       final subscription = client.subscription(
         'test-sub',
-        ackSettings: const AckSettings(
+        ackSettings: AckSettings(
           batching: BatchingSettings(
             maxMessages: 1,
-            maxDelay: Duration(milliseconds: 1),
+            maxDelay: const Duration(milliseconds: 1),
           ),
           retry: RetrySettings(maxRetries: 0),
         ),
@@ -822,9 +822,9 @@ void main() {
       final subscription = client.subscription('test-sub');
 
       // Without explicit totalTimeout, totalTimeout defaults to null
-      const customRetry = RetrySettings(
+      final customRetry = RetrySettings(
         maxRetries: 5,
-        initialDelay: Duration(milliseconds: 10),
+        initialDelay: const Duration(milliseconds: 10),
       );
       expect(customRetry.hasExplicitTotalTimeout, isFalse);
 
@@ -835,9 +835,9 @@ void main() {
       expect(fakeSubscriber.connections.length, equals(1));
 
       // When explicit totalTimeout is provided, hasExplicitTotalTimeout is true
-      const explicitTimeoutRetry = RetrySettings(
+      final explicitTimeoutRetry = RetrySettings(
         maxRetries: 5,
-        totalTimeout: Duration(minutes: 5),
+        totalTimeout: const Duration(minutes: 5),
       );
       expect(explicitTimeoutRetry.hasExplicitTotalTimeout, isTrue);
 

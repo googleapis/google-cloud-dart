@@ -139,10 +139,10 @@ void main() {
 
       final topic = client.topic(
         'my-topic',
-        publishSettings: const PublishSettings(
+        publishSettings: PublishSettings(
           batching: BatchingSettings(
             maxMessages: 10,
-            maxDelay: Duration(seconds: 10),
+            maxDelay: const Duration(seconds: 10),
           ),
         ),
       );
@@ -185,10 +185,10 @@ void main() {
 
       final topic = client.topic(
         'my-topic',
-        publishSettings: const PublishSettings(
+        publishSettings: PublishSettings(
           batching: BatchingSettings(
             maxMessages: 3,
-            maxDelay: Duration(seconds: 10),
+            maxDelay: const Duration(seconds: 10),
           ),
         ),
       );
@@ -212,10 +212,10 @@ void main() {
 
       final topic = client.topic(
         'my-topic',
-        publishSettings: const PublishSettings(
+        publishSettings: PublishSettings(
           batching: BatchingSettings(
             maxMessages: 2,
-            maxDelay: Duration(seconds: 10),
+            maxDelay: const Duration(seconds: 10),
           ),
         ),
       );
@@ -243,10 +243,10 @@ void main() {
         // Data = 5 bytes, key = 3 ("abc"), value = 4 ("1234") -> 12 bytes.
         final topic = client.topic(
           'my-topic',
-          publishSettings: const PublishSettings(
+          publishSettings: PublishSettings(
             batching: BatchingSettings(
               maxBytes: 12,
-              maxDelay: Duration(seconds: 10),
+              maxDelay: const Duration(seconds: 10),
             ),
           ),
         );
@@ -289,10 +289,10 @@ void main() {
 
         final sub = client.subscription(
           'my-sub',
-          ackSettings: const AckSettings(
+          ackSettings: AckSettings(
             batching: BatchingSettings(
               maxMessages: 10,
-              maxDelay: Duration(seconds: 10),
+              maxDelay: const Duration(seconds: 10),
             ),
           ),
         );

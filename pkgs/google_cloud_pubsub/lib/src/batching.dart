@@ -27,16 +27,35 @@ final class BatchingSettings {
   /// The maximum time to wait before sending a batch.
   final Duration maxDelay;
 
-  const BatchingSettings({
+  /// Creates a new [BatchingSettings] instance.
+  ///
+  /// Throws [ArgumentError] if:
+  /// - [maxMessages] is not greater than 0.
+  /// - [maxBytes] is not greater than 0.
+  /// - [maxDelay] is not greater than [Duration.zero].
+  BatchingSettings({
     this.maxMessages = 100,
     this.maxBytes = 1024 * 1024, // 1 MB
     this.maxDelay = const Duration(milliseconds: 10),
-  }) : assert(maxMessages > 0, 'maxMessages must be greater than 0'),
-       assert(maxBytes > 0, 'maxBytes must be greater than 0'),
-       assert(
-         !identical(maxDelay, Duration.zero),
-         'maxDelay must be greater than zero',
-       );
+  }) {
+    if (maxMessages <= 0) {
+      throw ArgumentError.value(
+        maxMessages,
+        'maxMessages',
+        'Must be greater than 0',
+      );
+    }
+    if (maxBytes <= 0) {
+      throw ArgumentError.value(maxBytes, 'maxBytes', 'Must be greater than 0');
+    }
+    if (maxDelay <= Duration.zero) {
+      throw ArgumentError.value(
+        maxDelay,
+        'maxDelay',
+        'Must be greater than zero',
+      );
+    }
+  }
 }
 
 /// Generic batcher that accumulates items of type [T] and fires batches of [T]

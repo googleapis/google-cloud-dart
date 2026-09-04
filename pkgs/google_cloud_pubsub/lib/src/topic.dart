@@ -24,10 +24,9 @@ final class PublishSettings {
   final BatchingSettings batching;
   final RetrySettings retry;
 
-  const PublishSettings({
-    this.batching = const BatchingSettings(),
-    this.retry = const RetrySettings(),
-  });
+  PublishSettings({BatchingSettings? batching, RetrySettings? retry})
+    : batching = batching ?? BatchingSettings(),
+      retry = retry ?? RetrySettings();
 }
 
 class _PublishRequest {
@@ -66,7 +65,7 @@ final class Topic {
     this.pubsub,
     String topicId, {
     PublishSettings? publishSettings,
-  }) : publishSettings = publishSettings ?? const PublishSettings(),
+  }) : publishSettings = publishSettings ?? PublishSettings(),
        name = 'projects/${pubsub.projectId}/topics/$topicId' {
     _validateName(name);
     _initBatcher();
@@ -79,7 +78,7 @@ final class Topic {
   /// It is an error if [name] is not in the format
   /// `projects/<project-id>/topics/<topic-id>`.
   Topic(this.pubsub, this.name, {PublishSettings? publishSettings})
-    : publishSettings = publishSettings ?? const PublishSettings() {
+    : publishSettings = publishSettings ?? PublishSettings() {
     _validateName(name);
     _initBatcher();
   }
