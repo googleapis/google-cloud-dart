@@ -18,6 +18,8 @@ import 'dart:typed_data';
 
 import 'package:webcrypto/webcrypto.dart';
 
+import 'service_account_signer.dart';
+
 Uint8List _parsePemPkcs8Key(String pemString) {
   final lines = LineSplitter.split(pemString)
       .map((l) => l.trim())
@@ -47,8 +49,9 @@ String? _optionalString(Map<String, dynamic> info, String key) {
 ///
 /// Service accounts are used for server-to-server communication, such as
 /// interactions between a web application server and a Google service.
-final class ServiceAccountCredentials {
+final class ServiceAccountCredentials implements ServiceAccountSigner {
   /// The email address of the service account.
+  @override
   final String clientEmail;
 
   /// The unique identifier of the service account client, if available.
@@ -195,5 +198,6 @@ final class ServiceAccountCredentials {
   }
 
   /// Signs [message] using RSASSA-PKCS1-v1_5 with SHA-256 and the private key.
+  @override
   Future<Uint8List> sign(List<int> message) => _privateKey.signBytes(message);
 }

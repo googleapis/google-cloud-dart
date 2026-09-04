@@ -1,0 +1,327 @@
+// Copyright 2026 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+import 'dart:math';
+import 'dart:typed_data';
+
+import 'package:http/http.dart' as http;
+
+import 'service_account_signer.dart';
+
+// Design based on:
+// - https://github.com/googleapis/google-auth-library-java/blob/main/oauth2_http/java/com/google/auth/oauth2/ComputeEngineCredentials.java
+// - https://github.com/googleapis/google-auth-library-python/blob/main/google/auth/compute_engine/credentials.py
+// - https://github.com/googleapis/google-auth-library-python/blob/main/google/auth/iam.py
+
+/// Credentials for Google Compute Engine, Cloud Run, Cloud Functions, and
+/// other environments providing a Google Cloud metadata server.
+///
+/// Signs messages using the Google Cloud Identity and Access Management (IAM)
+/// credentials API (`signBlob`).
+final class ComputeEngineCredentials implements ServiceAccountSigner {
+  static const _defaultMetadataHost = 'metadata.google.internal';
+  static const _metadataFlavorHeader = {'Metadata-Flavor': 'Google'};
+  static const _retryableStatusCodes = {500, 502, 503, 504};
+
+  /// The email address of the service account.
+  @override
+  final String clientEmail;
+
+  /// The Google Cloud project ID associated with the instance, if available.
+  final String? projectId;
+
+  /// The universe domain for the service account.
+  final String universeDomain;
+
+  /// The metadata server host.
+  final String metadataHost;
+
+  final http.Client _client;
+  final bool _ownsClient;
+
+  String? _cachedAccessToken;
+  DateTime? _accessTokenExpiry;
+
+  ComputeEngineCredentials._({
+    required this.clientEmail,
+    required this.projectId,
+    required this.universeDomain,
+    required this.metadataHost,
+    required http.Client client,
+    required bool ownsClient,
+  }) : _client = client,
+       _ownsClient = ownsClient;
+
+  /// Returns the current access token for the service account, refreshing
+  /// it from the metadata server if expired.
+  Future<String> getAccessToken() => _getAccessToken();
+
+  Future<String> _getAccessToken({bool forceRefresh = false}) async {
+    if (!forceRefresh &&
+        _cachedAccessToken != null &&
+        _accessTokenExpiry != null) {
+      if (DateTime.now().isBefore(
+        _accessTokenExpiry!.subtract(const Duration(minutes: 1)),
+      )) {
+        return _cachedAccessToken!;
+      }
+    }
+
+    final tokenUri = Uri.http(
+      metadataHost,
+      '/computeMetadata/v1/instance/service-accounts/default/token',
+    );
+    final response = await _client.get(
+      tokenUri,
+      headers: _metadataFlavorHeader,
+    );
+
+    if (response.statusCode != 200) {
+      throw SigningException(
+        'Failed to get access token from Compute Engine metadata server: '
+        'HTTP ${response.statusCode} ${response.body}',
+      );
+    }
+
+    try {
+      final json = jsonDecode(response.body) as Map<String, dynamic>;
+      final accessToken = json['access_token'];
+      final expiresIn = json['expires_in'];
+      if (accessToken is! String || expiresIn is! int) {
+        throw const FormatException('Missing access_token or expires_in');
+      }
+      _cachedAccessToken = accessToken;
+      _accessTokenExpiry = DateTime.now().add(Duration(seconds: expiresIn));
+      return accessToken;
+    } on FormatException catch (e) {
+      throw SigningException(
+        'Failed to parse token response from metadata server: $e',
+        e,
+      );
+    }
+  }
+
+  /// Creates a [ComputeEngineCredentials] instance, discovering configuration
+  /// from the Compute Engine metadata server.
+  static Future<ComputeEngineCredentials> create({
+    http.Client? client,
+    String? clientEmail,
+    String? projectId,
+    String? universeDomain,
+    String? metadataHost,
+  }) async {
+    final host =
+        metadataHost ??
+        Platform.environment['GCE_METADATA_HOST'] ??
+        _defaultMetadataHost;
+    final httpClient = client ?? http.Client();
+    final ownsClient = client == null;
+
+    try {
+      var resolvedEmail = clientEmail;
+      if (resolvedEmail == null || resolvedEmail.isEmpty) {
+        final emailUri = Uri.http(
+          host,
+          '/computeMetadata/v1/instance/service-accounts/default/email',
+        );
+        final response = await httpClient.get(
+          emailUri,
+          headers: _metadataFlavorHeader,
+        );
+        if (response.statusCode != 200) {
+          throw SigningException(
+            'Failed to get default service account email from metadata server: '
+            'HTTP ${response.statusCode} ${response.body}',
+          );
+        }
+        resolvedEmail = response.body.trim();
+        if (resolvedEmail.isEmpty) {
+          throw SigningException(
+            'Empty service account email received from metadata server.',
+          );
+        }
+      }
+
+      var resolvedProjectId = projectId;
+      if (resolvedProjectId == null || resolvedProjectId.isEmpty) {
+        try {
+          final projectUri = Uri.http(
+            host,
+            '/computeMetadata/v1/project/project-id',
+          );
+          final response = await httpClient.get(
+            projectUri,
+            headers: _metadataFlavorHeader,
+          );
+          if (response.statusCode == 200) {
+            final trimmed = response.body.trim();
+            if (trimmed.isNotEmpty) {
+              resolvedProjectId = trimmed;
+            }
+          }
+        } catch (_) {
+          // Project ID is optional.
+        }
+      }
+
+      var resolvedUniverseDomain = universeDomain;
+      if (resolvedUniverseDomain == null || resolvedUniverseDomain.isEmpty) {
+        try {
+          final universeUri = Uri.http(
+            host,
+            '/computeMetadata/v1/universe/universe-domain',
+          );
+          final response = await httpClient.get(
+            universeUri,
+            headers: _metadataFlavorHeader,
+          );
+          if (response.statusCode == 200) {
+            final trimmed = response.body.trim();
+            if (trimmed.isNotEmpty) {
+              resolvedUniverseDomain = trimmed;
+            }
+          }
+        } catch (_) {
+          // Universe domain is optional; default to googleapis.com.
+        }
+        resolvedUniverseDomain ??= 'googleapis.com';
+      }
+
+      return ComputeEngineCredentials._(
+        clientEmail: resolvedEmail,
+        projectId: resolvedProjectId,
+        universeDomain: resolvedUniverseDomain,
+        metadataHost: host,
+        client: httpClient,
+        ownsClient: ownsClient,
+      );
+    } catch (e) {
+      if (ownsClient) {
+        httpClient.close();
+      }
+      rethrow;
+    }
+  }
+
+  /// Checks if the application is running in an environment with an accessible
+  /// Compute Engine metadata server.
+  static Future<bool> isOnComputeEngine({
+    http.Client? client,
+    String? metadataHost,
+    Duration timeout = const Duration(milliseconds: 500),
+  }) async {
+    if (Platform.environment['NO_GCE_CHECK']?.toLowerCase() == 'true') {
+      return false;
+    }
+
+    final host =
+        metadataHost ??
+        Platform.environment['GCE_METADATA_HOST'] ??
+        _defaultMetadataHost;
+    final httpClient = client ?? http.Client();
+    final closeClient = client == null;
+
+    try {
+      final response = await httpClient
+          .get(
+            Uri.http(host, '/computeMetadata/v1/'),
+            headers: _metadataFlavorHeader,
+          )
+          .timeout(timeout);
+      final flavorHeader = response.headers['metadata-flavor'];
+      return response.statusCode == 200 &&
+          flavorHeader != null &&
+          flavorHeader.toLowerCase() == 'google';
+    } catch (_) {
+      return false;
+    } finally {
+      if (closeClient) {
+        httpClient.close();
+      }
+    }
+  }
+
+  /// Signs [message] using the Identity and Access Management (IAM)
+  /// `signBlob` API.
+  @override
+  Future<Uint8List> sign(List<int> message) async {
+    final signBlobUrl = Uri.https(
+      'iamcredentials.$universeDomain',
+      '/v1/projects/-/serviceAccounts/$clientEmail:signBlob',
+    );
+    final requestBody = jsonEncode({'payload': base64.encode(message)});
+
+    var token = await _getAccessToken();
+    var attempts = 0;
+    var refreshedToken = false;
+
+    while (true) {
+      attempts++;
+      final response = await _client.post(
+        signBlobUrl,
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+        body: requestBody,
+      );
+
+      if (response.statusCode == 200) {
+        try {
+          final json = jsonDecode(response.body) as Map<String, dynamic>;
+          final signedBlob = json['signedBlob'];
+          if (signedBlob is! String) {
+            throw const FormatException("Missing 'signedBlob' in response");
+          }
+          return Uint8List.fromList(base64.decode(signedBlob));
+        } on FormatException catch (e) {
+          throw SigningException(
+            'Failed to parse signBlob response: ${e.message}',
+            e,
+          );
+        }
+      }
+
+      // If token expired (401), retry once with a freshly requested token.
+      if (response.statusCode == 401 && !refreshedToken) {
+        refreshedToken = true;
+        token = await _getAccessToken(forceRefresh: true);
+        continue;
+      }
+
+      // If retryable status code (5xx), back off and retry up to 3 times.
+      if (_retryableStatusCodes.contains(response.statusCode) &&
+          attempts <= 3) {
+        final delayMs = (pow(2, attempts) * 100).toInt();
+        await Future<void>.delayed(Duration(milliseconds: delayMs));
+        continue;
+      }
+
+      throw SigningException(
+        'Failed to sign message via IAM signBlob API: '
+        'HTTP ${response.statusCode} - ${response.body}',
+      );
+    }
+  }
+
+  /// Closes the underlying HTTP client if this instance created it.
+  void close() {
+    if (_ownsClient) {
+      _client.close();
+    }
+  }
+}

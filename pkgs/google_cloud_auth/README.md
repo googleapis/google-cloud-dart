@@ -21,10 +21,36 @@ Authentication and credential management for Google Cloud.
 
 - **Service Account Credentials**: Load service account credentials from a JSON
   file, JSON string, parsed map, or PKCS#8 PEM private key.
-- **Cryptographic Signing**: Sign arbitrary payloads using RSASSA-PKCS1-v1_5
-  with SHA-256 using the service account private key.
+- **Compute Engine Credentials**: Use credentials from the Google Compute Engine
+  (or Cloud Run / Cloud Build) metadata server and sign payloads via the Google
+  Cloud IAM `signBlob` API.
+- **Application Default Credentials**: Automatically find and load credentials
+  capable of signing messages using `applicationDefaultCredentials()`.
+- **Cryptographic Signing**: Sign arbitrary payloads using
+  `ServiceAccountSigner` implemented by both `ServiceAccountCredentials` (local
+  RSA-SHA256) and `ComputeEngineCredentials` (remote IAM `signBlob`).
 
 ## Usage
+
+### Signing with Application Default Credentials
+
+```dart
+import 'dart:convert';
+
+import 'package:google_cloud_auth/google_cloud_auth.dart';
+
+Future<void> main() async {
+  // Resolves credentials from GOOGLE_APPLICATION_CREDENTIALS, the gcloud
+  // well-known file, or the Compute Engine metadata server.
+  final signer = await applicationDefaultCredentials();
+
+  print('Signer email: ${signer.clientEmail}');
+
+  final message = utf8.encode('Hello from Application Default Credentials');
+  final signature = await signer.sign(message);
+  print('Signature generated (${signature.length} bytes)');
+}
+```
 
 ### Loading Service Account Credentials
 
