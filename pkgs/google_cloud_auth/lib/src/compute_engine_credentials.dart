@@ -74,7 +74,7 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
   /// It is safe to call this method concurrently.
   ///
   /// Throws [CredentialException] on failure.
-  Future<String> getAccessToken({bool forceRefresh = false}) async {
+  Future<String> accessToken({bool forceRefresh = false}) async {
     if (!forceRefresh &&
         _cachedAccessToken != null &&
         _accessTokenExpiry != null) {
@@ -298,7 +298,7 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
     );
     final requestBody = jsonEncode({'payload': base64.encode(message)});
 
-    var token = await getAccessToken();
+    var token = await accessToken();
     var attempts = 0;
     var refreshedToken = false;
 
@@ -342,7 +342,7 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
       // If token expired (401), retry once with a freshly requested token.
       if (response.statusCode == 401 && !refreshedToken) {
         refreshedToken = true;
-        token = await getAccessToken(forceRefresh: true);
+        token = await accessToken(forceRefresh: true);
         continue;
       }
 

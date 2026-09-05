@@ -51,15 +51,15 @@ void main() async {
       test('fetches email and universe domain', () async {
         final mockClient = MockClient((request) async {
           expect(request.headers['metadata-flavor'], 'Google');
-          final path = request.url.path;
-          if (path ==
-              '/computeMetadata/v1/instance/service-accounts/default/email') {
-            return http.Response('sa@test.iam.gserviceaccount.com', 200);
-          }
-          if (path == '/computeMetadata/v1/universe/universe-domain') {
-            return http.Response('custom.domain.com', 200);
-          }
-          return http.Response('Not found', 404);
+          return switch (request.url.path) {
+            '/computeMetadata/v1/instance/service-accounts/default/email' =>
+              http.Response('sa@test.iam.gserviceaccount.com', 200),
+            '/computeMetadata/v1/universe/universe-domain' => http.Response(
+              'custom.domain.com',
+              200,
+            ),
+            _ => http.Response('Not found', 404),
+          };
         });
 
         final creds = await ComputeEngineCredentials.create(
@@ -121,12 +121,15 @@ void main() async {
       });
 
       test('empty universe-domain', () async {
-        final mockClient = MockClient((request) async {
-          if (request.url.path.endsWith('/universe-domain')) {
-            return http.Response('', 200);
-          }
-          fail('Unexpected request: $request');
-        });
+        final mockClient = MockClient(
+          (request) async => switch (request.url.path) {
+            '/computeMetadata/v1/universe/universe-domain' => http.Response(
+              '',
+              200,
+            ),
+            _ => http.Response('Not found', 404),
+          },
+        );
 
         final creds = await ComputeEngineCredentials.create(
           client: mockClient,
@@ -139,12 +142,15 @@ void main() async {
       });
 
       test('not found universe-domain', () async {
-        final mockClient = MockClient((request) async {
-          if (request.url.path.endsWith('/universe-domain')) {
-            return http.Response('Not found', 404);
-          }
-          fail('Unexpected request: $request');
-        });
+        final mockClient = MockClient(
+          (request) async => switch (request.url.path) {
+            '/computeMetadata/v1/universe/universe-domain' => http.Response(
+              'Not found',
+              404,
+            ),
+            _ => http.Response('Not found', 404),
+          },
+        );
 
         final creds = await ComputeEngineCredentials.create(
           client: mockClient,
@@ -158,17 +164,17 @@ void main() async {
 
       test('throws CredentialException on metadata server error for universe '
           'domain', () async {
-        final mockClient = MockClient((request) async {
-          final path = request.url.path;
-          if (path ==
-              '/computeMetadata/v1/instance/service-accounts/default/email') {
-            return http.Response('sa@test.iam.gserviceaccount.com', 200);
-          }
-          if (path == '/computeMetadata/v1/universe/universe-domain') {
-            return http.Response('Internal error', 500);
-          }
-          return http.Response('Not found', 404);
-        });
+        final mockClient = MockClient(
+          (request) async => switch (request.url.path) {
+            '/computeMetadata/v1/instance/service-accounts/default/email' =>
+              http.Response('sa@test.iam.gserviceaccount.com', 200),
+            '/computeMetadata/v1/universe/universe-domain' => http.Response(
+              'Internal error',
+              500,
+            ),
+            _ => http.Response('Not found', 404),
+          },
+        );
 
         expect(
           () => ComputeEngineCredentials.create(
@@ -186,7 +192,7 @@ void main() async {
       });
     });
 
-    group('getAccessToken', () {
+    group('accessToken', () {
       test('fetches and caches access token', () async {
         var callCount = 0;
         final mockClient = MockClient((request) async {
@@ -211,17 +217,17 @@ void main() async {
           metadataHost: 'test-metadata',
         );
 
-        final token1 = await creds.getAccessToken();
+        final token1 = await creds.accessToken();
         expect(token1, 'token-1');
         expect(callCount, 1);
 
         // Cached
-        final token2 = await creds.getAccessToken();
+        final token2 = await creds.accessToken();
         expect(token2, 'token-1');
         expect(callCount, 1);
 
         // Force refresh
-        final token3 = await creds.getAccessToken(forceRefresh: true);
+        final token3 = await creds.accessToken(forceRefresh: true);
         expect(token3, 'token-2');
         expect(callCount, 2);
       });
@@ -245,9 +251,9 @@ void main() async {
           metadataHost: 'test-metadata',
         );
 
-        final future1 = creds.getAccessToken();
-        final future2 = creds.getAccessToken();
-        final future3 = creds.getAccessToken(forceRefresh: true);
+        final future1 = creds.accessToken();
+        final future2 = creds.accessToken();
+        final future3 = creds.accessToken(forceRefresh: true);
 
         await pumpEventQueue();
         expect(callCount, 1);
@@ -305,8 +311,8 @@ void main() async {
             metadataHost: 'test-metadata',
           );
 
-          final future1 = creds.getAccessToken();
-          final future2 = creds.getAccessToken();
+          final future1 = creds.accessToken();
+          final future2 = creds.accessToken();
 
           await pumpEventQueue();
           expect(callCount, 1);
@@ -318,19 +324,20 @@ void main() async {
           expect(callCount, 1);
 
           // Subsequent call should initiate a new request
-          final token = await creds.getAccessToken();
+          final token = await creds.accessToken();
           expect(token, 'recovered-token');
           expect(callCount, 2);
         },
       );
 
       test('throws CredentialException on HTTP error', () async {
-        final mockClient = MockClient((request) async {
-          if (request.url.path.endsWith('/token')) {
-            return http.Response('Unauthorized', 401);
-          }
-          return http.Response('Not found', 404);
-        });
+        final mockClient = MockClient(
+          (request) async => switch (request.url.path) {
+            '/computeMetadata/v1/instance/service-accounts/default/token' =>
+              http.Response('Unauthorized', 401),
+            _ => http.Response('Not found', 404),
+          },
+        );
 
         final creds = await ComputeEngineCredentials.create(
           client: mockClient,
@@ -340,7 +347,7 @@ void main() async {
         );
 
         expect(
-          creds.getAccessToken,
+          creds.accessToken,
           throwsA(
             isA<CredentialException>().having(
               (e) => e.message,
@@ -352,12 +359,13 @@ void main() async {
       });
 
       test('throws CredentialException on network error', () async {
-        final mockClient = MockClient((request) async {
-          if (request.url.path.endsWith('/token')) {
-            throw http.ClientException('Network down');
-          }
-          return http.Response('Not found', 404);
-        });
+        final mockClient = MockClient(
+          (request) async => switch (request.url.path) {
+            '/computeMetadata/v1/instance/service-accounts/default/token' =>
+              throw http.ClientException('Network down'),
+            _ => http.Response('Not found', 404),
+          },
+        );
 
         final creds = await ComputeEngineCredentials.create(
           client: mockClient,
@@ -367,7 +375,7 @@ void main() async {
         );
 
         expect(
-          creds.getAccessToken,
+          creds.accessToken,
           throwsA(
             isA<CredentialException>()
                 .having(
@@ -385,12 +393,13 @@ void main() async {
       });
 
       test('throws CredentialException on invalid JSON', () async {
-        final mockClient = MockClient((request) async {
-          if (request.url.path.endsWith('/token')) {
-            return http.Response('not valid json', 200);
-          }
-          return http.Response('Not found', 404);
-        });
+        final mockClient = MockClient(
+          (request) async => switch (request.url.path) {
+            '/computeMetadata/v1/instance/service-accounts/default/token' =>
+              http.Response('not valid json', 200),
+            _ => http.Response('Not found', 404),
+          },
+        );
 
         final creds = await ComputeEngineCredentials.create(
           client: mockClient,
@@ -400,7 +409,7 @@ void main() async {
         );
 
         expect(
-          creds.getAccessToken,
+          creds.accessToken,
           throwsA(
             isA<CredentialException>()
                 .having(
@@ -638,25 +647,23 @@ void main() async {
         expect(signBlobAttempts, 2);
       });
 
-      test(
-        'throws SigningException on persistent error from signBlob',
-        () async {
-          final message = utf8.encode('Test error');
+      test('throws SigningException on persistent error from '
+          'signBlob', () async {
+        final message = utf8.encode('Test error');
 
-          final mockClient = MockClient((request) async {
-            if (request.url.path.endsWith('/token')) {
-              return http.Response(
+        final mockClient = MockClient(
+          (request) async => switch (request.url.path) {
+            '/computeMetadata/v1/instance/service-accounts/default/token' =>
+              http.Response(
                 jsonEncode({
                   'access_token': 'token-123',
                   'expires_in': 3600,
                   'token_type': 'Bearer',
                 }),
                 200,
-              );
-            }
-
-            if (request.url.path.endsWith(':signBlob')) {
-              return http.Response(
+              ),
+            '/v1/projects/-/serviceAccounts/sa@test.iam.gserviceaccount.com:signBlob' =>
+              http.Response(
                 jsonEncode({
                   'error': {
                     'code': 403,
@@ -666,52 +673,48 @@ void main() async {
                   },
                 }),
                 403,
-              );
-            }
-
-            return http.Response('Not found', 404);
-          });
-
-          final creds = await ComputeEngineCredentials.create(
-            client: mockClient,
-            clientEmail: 'sa@test.iam.gserviceaccount.com',
-            metadataHost: 'test-metadata',
-          );
-
-          expect(
-            () => creds.sign(message),
-            throwsA(
-              isA<SigningException>().having(
-                (e) => e.message,
-                'message',
-                contains('Permission iam.serviceAccounts.signBlob denied'),
               ),
+            _ => http.Response('Not found', 404),
+          },
+        );
+
+        final creds = await ComputeEngineCredentials.create(
+          client: mockClient,
+          clientEmail: 'sa@test.iam.gserviceaccount.com',
+          metadataHost: 'test-metadata',
+        );
+
+        expect(
+          () => creds.sign(message),
+          throwsA(
+            isA<SigningException>().having(
+              (e) => e.message,
+              'message',
+              contains('Permission iam.serviceAccounts.signBlob denied'),
             ),
-          );
-        },
-      );
+          ),
+        );
+      });
 
       test('throws SigningException on network error from signBlob', () async {
         final message = utf8.encode('Test network error');
 
-        final mockClient = MockClient((request) async {
-          if (request.url.path.endsWith('/token')) {
-            return http.Response(
-              jsonEncode({
-                'access_token': 'token-123',
-                'expires_in': 3600,
-                'token_type': 'Bearer',
-              }),
-              200,
-            );
-          }
-
-          if (request.url.path.endsWith(':signBlob')) {
-            throw http.ClientException('Connection reset by peer');
-          }
-
-          return http.Response('Not found', 404);
-        });
+        final mockClient = MockClient(
+          (request) async => switch (request.url.path) {
+            '/computeMetadata/v1/instance/service-accounts/default/token' =>
+              http.Response(
+                jsonEncode({
+                  'access_token': 'token-123',
+                  'expires_in': 3600,
+                  'token_type': 'Bearer',
+                }),
+                200,
+              ),
+            '/v1/projects/-/serviceAccounts/sa@test.iam.gserviceaccount.com:signBlob' =>
+              throw http.ClientException('Connection reset by peer'),
+            _ => http.Response('Not found', 404),
+          },
+        );
 
         final creds = await ComputeEngineCredentials.create(
           client: mockClient,
