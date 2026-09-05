@@ -51,8 +51,10 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
   String? _cachedAccessToken;
   DateTime? _accessTokenExpiry;
 
-  /// The active request to fetch a new token. This is used to prevent
-  /// multiple concurrent requests from fetching new tokens at the same time.
+  /// The active request to fetch a new token.
+  ///
+  /// This is used to prevent multiple concurrent requests from fetching new
+  /// tokens at the same time.
   Future<String>? _activeTokenRequest;
 
   ComputeEngineCredentials._({
