@@ -12,22 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: google_cloud_auth
-description: >-
-  Authentication and credential management for Google Cloud.
-version: 0.1.0-wip
-repository: https://github.com/googleapis/google-cloud-dart/tree/main/pkgs/google_cloud_auth
+platforms: [vm, chrome]
 
-environment:
-  sdk: ^3.10.0
+tags:
+  google-cloud:
+exclude_tags: google-cloud
 
-resolution: workspace
-
-dependencies:
-  http: ^1.6.0
-  meta: ^1.17.0
-  path: ^1.9.0
-  webcrypto: ^0.6.0
-
-dev_dependencies:
-  test: ^1.24.0
+presets:
+  google-cloud:
+    include_tags: google-cloud
+    platforms: [vm]

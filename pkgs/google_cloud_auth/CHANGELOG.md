@@ -1,5 +1,4 @@
 ## 0.1.0-wip
 
-* Added `ServiceAccountCredentials` with support for RSA-SHA256 signing.
-
-
+* Support for key signing using both `ComputeEngineCredentials` and
+  `ServiceAccountCredentials`.
