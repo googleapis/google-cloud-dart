@@ -66,7 +66,7 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
   }) : _client = client,
        _ownsClient = ownsClient;
 
-  /// Returns a non-expired current OAuth2 access token for the service account.
+  /// A non-expired current OAuth2 access token for the service account.
   ///
   /// If the cached token is expired or if [forceRefresh] is `true`, then a new
   /// token is fetched.
