@@ -21,6 +21,7 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:google_cloud_auth/google_cloud_auth.dart';
+import 'package:google_cloud_auth/src/application_default_credentials.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:test/test.dart';
@@ -84,8 +85,8 @@ void main() {
           }),
         );
 
-        final signer = await applicationDefaultCredentials(
-          getEnvironmentVariable: (name) {
+        final signer = await internalDefaultCredentials(
+          getEnvironmentVariable: (String name) {
             if (name == 'GOOGLE_APPLICATION_CREDENTIALS') return saFile.path;
             return null;
           },
@@ -103,8 +104,8 @@ void main() {
     test('throws CredentialException when GOOGLE_APPLICATION_CREDENTIALS file '
         'does not exist', () async {
       expect(
-        () => applicationDefaultCredentials(
-          getEnvironmentVariable: (name) {
+        () => internalDefaultCredentials(
+          getEnvironmentVariable: (String name) {
             if (name == 'GOOGLE_APPLICATION_CREDENTIALS') {
               return '${tempDir.path}/non_existent.json';
             }
@@ -127,8 +128,8 @@ void main() {
       await invalidFile.writeAsString('not a json file');
 
       expect(
-        () => applicationDefaultCredentials(
-          getEnvironmentVariable: (name) {
+        () => internalDefaultCredentials(
+          getEnvironmentVariable: (String name) {
             if (name == 'GOOGLE_APPLICATION_CREDENTIALS') {
               return invalidFile.path;
             }
@@ -158,8 +159,8 @@ void main() {
       );
 
       expect(
-        () => applicationDefaultCredentials(
-          getEnvironmentVariable: (name) {
+        () => internalDefaultCredentials(
+          getEnvironmentVariable: (String name) {
             if (name == 'GOOGLE_APPLICATION_CREDENTIALS') {
               return userFile.path;
             }
@@ -187,14 +188,63 @@ void main() {
         }),
       );
 
-      final signer = await applicationDefaultCredentials(
-        getEnvironmentVariable: (name) => null,
+      final signer = await internalDefaultCredentials(
+        getEnvironmentVariable: (String name) => null,
         wellKnownFilePath: wellKnownFile.path,
       );
 
       expect(signer, isA<ServiceAccountCredentials>());
       expect(signer.clientEmail, 'wk-sa@project.iam.gserviceaccount.com');
     }, skip: _canUseWebCrypto ? null : 'Requires Dart 3.13 or later');
+
+    test(
+      'throws CredentialException when well-known file is not valid JSON',
+      () async {
+        final invalidFile = File('${tempDir.path}/invalid_adc.json');
+        await invalidFile.writeAsString('not a json file');
+
+        expect(
+          () => internalDefaultCredentials(
+            getEnvironmentVariable: (String name) => null,
+            wellKnownFilePath: invalidFile.path,
+          ),
+          throwsA(
+            isA<CredentialException>().having(
+              (e) => e.message,
+              'message',
+              contains('not a valid JSON file'),
+            ),
+          ),
+        );
+      },
+    );
+
+    test('throws CredentialException when well-known file is not a service '
+        'account', () async {
+      final userFile = File('${tempDir.path}/user_adc.json');
+      await userFile.writeAsString(
+        jsonEncode({
+          'type': 'authorized_user',
+          'client_id': 'client-id',
+          'client_secret': 'client-secret',
+          'refresh_token': 'token',
+        }),
+      );
+
+      expect(
+        () => internalDefaultCredentials(
+          getEnvironmentVariable: (String name) => null,
+          wellKnownFilePath: userFile.path,
+        ),
+        throwsA(
+          isA<CredentialException>().having(
+            (e) => e.message,
+            'message',
+            contains("has type 'authorized_user'"),
+          ),
+        ),
+      );
+    });
 
     test('falls back to ComputeEngineCredentials when metadata server is '
         'available', () async {
@@ -220,9 +270,9 @@ void main() {
         },
       );
 
-      final signer = await applicationDefaultCredentials(
+      final signer = await internalDefaultCredentials(
         client: mockClient,
-        getEnvironmentVariable: (name) => null,
+        getEnvironmentVariable: (String name) => null,
         wellKnownFilePath: '${tempDir.path}/non_existent.json',
       );
 
@@ -238,9 +288,9 @@ void main() {
         });
 
         expect(
-          () => applicationDefaultCredentials(
+          () => internalDefaultCredentials(
             client: mockClient,
-            getEnvironmentVariable: (name) => null,
+            getEnvironmentVariable: (String name) => null,
             wellKnownFilePath: '${tempDir.path}/non_existent.json',
           ),
           throwsA(
@@ -255,41 +305,27 @@ void main() {
     );
 
     test(
-      'defaultCredentials is an alias for applicationDefaultCredentials',
+      'defaultCredentials delegates to internalDefaultCredentials',
       () async {
-        final saFile = File('${tempDir.path}/service_account.json');
-        await saFile.writeAsString(
-          jsonEncode({
-            'type': 'service_account',
-            'project_id': 'alias-project',
-            'private_key': privateKeyPem,
-            'client_email': 'alias-sa@project.iam.gserviceaccount.com',
-          }),
-        );
+        final mockClient = MockClient((request) async {
+          throw http.ClientException('Connection refused');
+        });
 
-        final signer = await defaultCredentials(
-          getEnvironmentVariable: (name) {
-            if (name == 'GOOGLE_APPLICATION_CREDENTIALS') return saFile.path;
-            return null;
-          },
+        expect(
+          () => defaultCredentials(client: mockClient),
+          throwsA(isA<CredentialException>()),
         );
-
-        expect(signer, isA<ServiceAccountCredentials>());
-        expect(signer.clientEmail, 'alias-sa@project.iam.gserviceaccount.com');
       },
-      skip: _canUseWebCrypto ? null : 'Requires Dart 3.13 or later',
     );
 
     test(
-      'signs message using applicationDefaultCredentials',
+      'signs message using defaultCredentials',
       tags: ['google-cloud'],
       () async {
-        final signer = await applicationDefaultCredentials();
+        final signer = await defaultCredentials();
         expect(signer.clientEmail, contains('@'));
 
-        final message = utf8.encode(
-          'Hello from applicationDefaultCredentials!',
-        );
+        final message = utf8.encode('Hello from defaultCredentials!');
         final signature = await signer.sign(message);
 
         expect(signature, isNotEmpty);

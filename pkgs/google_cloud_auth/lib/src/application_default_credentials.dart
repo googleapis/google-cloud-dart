@@ -28,21 +28,15 @@ import 'service_account_signer.dart';
 // - https://github.com/googleapis/google-cloud-java/blob/main/google-auth-library-java/oauth2_http/java/com/google/auth/oauth2/DefaultCredentialsProvider.java
 // - https://github.com/googleapis/google-auth-library-python/blob/main/google/auth/_default.py
 
-/// Loads Application Default Credentials capable of signing messages.
+/// Provides the Application Default Credential from the environment.
 ///
-/// Follows the standard Google Cloud Application Default Credentials
-/// resolution:
-/// 1. The credentials file pointed to by the `GOOGLE_APPLICATION_CREDENTIALS`
-///    environment variable.
-/// 2. The well-known credentials file created by
-///    `gcloud auth application-default login` (if it contains service account
-///    credentials).
-/// 3. The Google Compute Engine (or Google Cloud Build / Cloud Run) metadata
-///    server.
-///
-/// Throws a [CredentialException] if no credentials capable of signing messages
-/// could be found or loaded.
-Future<ServiceAccountSigner> applicationDefaultCredentials({
+/// Throws a [CredentialException] if no credentials could be found or loaded.
+Future<ServiceAccountSigner> defaultCredentials({http.Client? client}) =>
+    internalDefaultCredentials(client: client);
+
+/// [defaultCredentials] with some extra parameters for testing.
+@internal
+Future<ServiceAccountSigner> internalDefaultCredentials({
   http.Client? client,
   @visibleForTesting String? Function(String name)? getEnvironmentVariable,
   @visibleForTesting String? wellKnownFilePath,
@@ -61,42 +55,7 @@ Future<ServiceAccountSigner> applicationDefaultCredentials({
         'file that does not exist: $envPath',
       );
     }
-
-    final String content;
-    try {
-      content = await file.readAsString();
-    } on FileSystemException catch (e, stackTrace) {
-      throw CredentialException(
-        'Failed to read credentials file at $envPath: $e',
-        innerException: e,
-        innerStackTrace: stackTrace,
-      );
-    }
-
-    final Map<String, dynamic> json;
-    try {
-      final decoded = jsonDecode(content);
-      if (decoded is! Map<String, dynamic>) {
-        throw const FormatException('Expected JSON object.');
-      }
-      json = decoded;
-    } on FormatException catch (e, stackTrace) {
-      throw CredentialException(
-        'The file at $envPath is not a valid JSON file: ${e.message}',
-        innerException: e,
-        innerStackTrace: stackTrace,
-      );
-    }
-
-    final type = json['type'];
-    if (type == 'service_account') {
-      return ServiceAccountCredentials.fromServiceAccountInfo(json);
-    }
-
-    throw CredentialException(
-      "The credential at '$envPath' has type '$type', which cannot be used to "
-      'sign messages. Service account credentials are required.',
-    );
+    return await _loadCredentialsFile(file);
   }
 
   // 2. Check well-known credentials file
@@ -105,18 +64,7 @@ Future<ServiceAccountSigner> applicationDefaultCredentials({
   if (adcPath != null) {
     final file = File(adcPath);
     if (await file.exists()) {
-      try {
-        final content = await file.readAsString();
-        final decoded = jsonDecode(content);
-        if (decoded is Map<String, dynamic> &&
-            decoded['type'] == 'service_account') {
-          return await ServiceAccountCredentials.fromServiceAccountInfo(
-            decoded,
-          );
-        }
-      } catch (_) {
-        // Fall through to Compute Engine metadata server check.
-      }
+      return await _loadCredentialsFile(file);
     }
   }
 
@@ -132,18 +80,43 @@ Future<ServiceAccountSigner> applicationDefaultCredentials({
   );
 }
 
-/// Alias for [applicationDefaultCredentials].
-Future<ServiceAccountSigner> defaultCredentials({
-  http.Client? client,
-  @visibleForTesting String? Function(String name)? getEnvironmentVariable,
-  @visibleForTesting String? wellKnownFilePath,
-  @visibleForTesting bool? isWindows,
-}) => applicationDefaultCredentials(
-  client: client,
-  getEnvironmentVariable: getEnvironmentVariable,
-  wellKnownFilePath: wellKnownFilePath,
-  isWindows: isWindows,
-);
+Future<ServiceAccountCredentials> _loadCredentialsFile(File file) async {
+  final String content;
+  try {
+    content = await file.readAsString();
+  } on FileSystemException catch (e, stackTrace) {
+    throw CredentialException(
+      'Failed to read credentials file at ${file.path}: $e',
+      innerException: e,
+      innerStackTrace: stackTrace,
+    );
+  }
+
+  final Map<String, dynamic> json;
+  try {
+    final decoded = jsonDecode(content);
+    if (decoded is! Map<String, dynamic>) {
+      throw const FormatException('Expected JSON object.');
+    }
+    json = decoded;
+  } on FormatException catch (e, stackTrace) {
+    throw CredentialException(
+      'The file at ${file.path} is not a valid JSON file: ${e.message}',
+      innerException: e,
+      innerStackTrace: stackTrace,
+    );
+  }
+
+  final type = json['type'];
+  if (type == 'service_account') {
+    return await ServiceAccountCredentials.fromServiceAccountInfo(json);
+  }
+
+  throw CredentialException(
+    "The credential at '${file.path}' has type '$type', which cannot be "
+    'used to sign messages. Service account credentials are required.',
+  );
+}
 
 String? _getWellKnownCredentialsPath(
   String? Function(String name) getEnv,

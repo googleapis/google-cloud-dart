@@ -25,7 +25,7 @@ Authentication and credential management for Google Cloud.
   (or Cloud Run / Cloud Build) metadata server and sign payloads via the Google
   Cloud IAM `signBlob` API.
 - **Application Default Credentials**: Automatically find and load credentials
-  capable of signing messages using `applicationDefaultCredentials()`.
+  capable of signing messages using `defaultCredentials()`.
 - **Cryptographic Signing**: Sign arbitrary payloads using
   `ServiceAccountSigner` implemented by both `ServiceAccountCredentials` (local
   RSA-SHA256) and `ComputeEngineCredentials` (remote IAM `signBlob`).
@@ -42,7 +42,7 @@ import 'package:google_cloud_auth/google_cloud_auth.dart';
 Future<void> main() async {
   // Resolves credentials from GOOGLE_APPLICATION_CREDENTIALS, the gcloud
   // well-known file, or the Compute Engine metadata server.
-  final signer = await applicationDefaultCredentials();
+  final signer = await defaultCredentials();
 
   print('Signer email: ${signer.clientEmail}');
 
