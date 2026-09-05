@@ -113,8 +113,8 @@ Future<ServiceAccountCredentials> _loadCredentialsFile(File file) async {
   }
 
   throw CredentialException(
-    "The credential at '${file.path}' has type '$type', which cannot be "
-    'used to sign messages. Service account credentials are required.',
+    "The credential at '${file.path}' has type '$type', "
+    'which is not recognized.',
   );
 }
 
