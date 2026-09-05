@@ -115,4 +115,18 @@ void main() {
       expect(actual, ['foo', 3.0, false, true, 3.14, null]);
     });
   });
+
+  test('Struct.fromJson rejects a cyclic map', () {
+    final map = <String, Object?>{};
+    map['x'] = map;
+
+    expect(() => Struct.fromJson(map), throwsFormatException);
+  });
+
+  test('ListValue.fromJson rejects a cyclic list', () {
+    final list = <Object?>[];
+    list.add(list);
+
+    expect(() => ListValue.fromJson(list), throwsFormatException);
+  });
 }
