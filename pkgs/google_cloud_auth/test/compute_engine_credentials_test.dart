@@ -137,6 +137,7 @@ void main() async {
           metadataHost: 'test-metadata',
         );
 
+        expect(creds, isA<GoogleCredentials>());
         expect(creds, isA<ServiceAccountSigner>());
         expect(creds.universeDomain, 'googleapis.com');
       });
@@ -158,6 +159,7 @@ void main() async {
           metadataHost: 'test-metadata',
         );
 
+        expect(creds, isA<GoogleCredentials>());
         expect(creds, isA<ServiceAccountSigner>());
         expect(creds.universeDomain, 'googleapis.com');
       });

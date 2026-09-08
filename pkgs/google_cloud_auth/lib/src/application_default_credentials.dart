@@ -21,8 +21,8 @@ import 'package:path/path.dart' as p;
 
 import 'compute_engine_credentials.dart';
 import 'credential_exception.dart';
+import 'google_credentials.dart';
 import 'service_account_credentials.dart';
-import 'service_account_signer.dart';
 
 // Design based on:
 // - https://github.com/googleapis/google-cloud-java/blob/main/google-auth-library-java/oauth2_http/java/com/google/auth/oauth2/DefaultCredentialsProvider.java
@@ -31,12 +31,12 @@ import 'service_account_signer.dart';
 /// Provides the Application Default Credential from the environment.
 ///
 /// Throws a [CredentialException] if no credentials could be found or loaded.
-Future<ServiceAccountSigner> defaultCredentials({http.Client? client}) =>
+Future<GoogleCredentials> defaultCredentials({http.Client? client}) =>
     internalDefaultCredentials(client: client);
 
 /// [defaultCredentials] with some extra parameters for testing.
 @internal
-Future<ServiceAccountSigner> internalDefaultCredentials({
+Future<GoogleCredentials> internalDefaultCredentials({
   http.Client? client,
   @visibleForTesting String? Function(String name)? getEnvironmentVariable,
   @visibleForTesting String? wellKnownFilePath,

@@ -18,5 +18,6 @@ library;
 export 'src/application_default_credentials.dart' show defaultCredentials;
 export 'src/compute_engine_credentials.dart';
 export 'src/credential_exception.dart';
+export 'src/google_credentials.dart';
 export 'src/service_account_credentials.dart';
 export 'src/service_account_signer.dart';

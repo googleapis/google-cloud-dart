@@ -85,14 +85,16 @@ void main() {
           }),
         );
 
-        final signer = await internalDefaultCredentials(
+        final credentials = await internalDefaultCredentials(
           getEnvironmentVariable: (String name) {
             if (name == 'GOOGLE_APPLICATION_CREDENTIALS') return saFile.path;
             return null;
           },
         );
 
-        expect(signer, isA<ServiceAccountCredentials>());
+        expect(credentials, isA<ServiceAccountCredentials>());
+        expect(credentials, isA<GoogleCredentials>());
+        final signer = credentials as ServiceAccountCredentials;
         expect(signer.clientEmail, 'env-sa@project.iam.gserviceaccount.com');
 
         final signature = await signer.sign(utf8.encode('test'));
@@ -188,12 +190,14 @@ void main() {
         }),
       );
 
-      final signer = await internalDefaultCredentials(
+      final credentials = await internalDefaultCredentials(
         getEnvironmentVariable: (String name) => null,
         wellKnownFilePath: wellKnownFile.path,
       );
 
-      expect(signer, isA<ServiceAccountCredentials>());
+      expect(credentials, isA<ServiceAccountCredentials>());
+      expect(credentials, isA<GoogleCredentials>());
+      final signer = credentials as ServiceAccountCredentials;
       expect(signer.clientEmail, 'wk-sa@project.iam.gserviceaccount.com');
     }, skip: _canUseWebCrypto ? null : 'Requires Dart 3.13 or later');
 
@@ -270,13 +274,15 @@ void main() {
         },
       );
 
-      final signer = await internalDefaultCredentials(
+      final credentials = await internalDefaultCredentials(
         client: mockClient,
         getEnvironmentVariable: (String name) => null,
         wellKnownFilePath: '${tempDir.path}/non_existent.json',
       );
 
-      expect(signer, isA<ComputeEngineCredentials>());
+      expect(credentials, isA<ComputeEngineCredentials>());
+      expect(credentials, isA<GoogleCredentials>());
+      final signer = credentials as ComputeEngineCredentials;
       expect(signer.clientEmail, 'gce-sa@project.iam.gserviceaccount.com');
     });
 
@@ -322,7 +328,10 @@ void main() {
       'signs message using defaultCredentials',
       tags: ['google-cloud'],
       () async {
-        final signer = await defaultCredentials();
+        final credentials = await defaultCredentials();
+        expect(credentials, isA<GoogleCredentials>());
+        expect(credentials, isA<ServiceAccountSigner>());
+        final signer = credentials as ServiceAccountSigner;
         expect(signer.clientEmail, contains('@'));
 
         final message = utf8.encode('Hello from defaultCredentials!');
