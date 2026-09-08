@@ -282,13 +282,13 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
               .get(pingUri, headers: _metadataFlavorHeader)
               .timeout(_computePingTimeout);
           final flavorHeader = response.headers['metadata-flavor'];
-          return response.statusCode == 200 &&
+          if (response.statusCode == 200 &&
               flavorHeader != null &&
-              flavorHeader.toLowerCase() == 'google';
-        } on Exception catch (_) {
-          if (attempt == _maxComputePingTries) {
-            break;
+              flavorHeader.toLowerCase() == 'google') {
+            return true;
           }
+        } on Exception catch (_) {
+          // Ignore network/timeout exceptions and retry.
         }
       }
       return _checkStaticGceDetection();

@@ -448,8 +448,10 @@ void main() async {
       );
 
       test('returns false when status is not 200', () async {
+        var callCount = 0;
         final mockClient = MockClient((request) async {
           expect(request.url.host, 'metadata.google.internal');
+          callCount++;
           return http.Response(
             'forbidden',
             403,
@@ -461,11 +463,14 @@ void main() async {
           client: mockClient,
         );
         expect(isGce, isFalse);
+        expect(callCount, 3);
       });
 
       test('returns false when metadata-flavor header is missing', () async {
+        var callCount = 0;
         final mockClient = MockClient((request) async {
           expect(request.url.host, 'metadata.google.internal');
+          callCount++;
           return http.Response('ok', 200);
         });
 
@@ -473,6 +478,7 @@ void main() async {
           client: mockClient,
         );
         expect(isGce, isFalse);
+        expect(callCount, 3);
       });
 
       test('returns false on network exception', () async {
@@ -500,6 +506,50 @@ void main() async {
         );
         expect(isGce, isFalse);
         expect(callCount, 3);
+      });
+
+      test('retries on transient HTTP error and succeeds', () async {
+        var callCount = 0;
+        final mockClient = MockClient((request) async {
+          expect(request.url.host, 'metadata.google.internal');
+          callCount++;
+          if (callCount < 3) {
+            return http.Response('Service unavailable', 503);
+          }
+          return http.Response(
+            'ok',
+            200,
+            headers: {'metadata-flavor': 'Google'},
+          );
+        });
+
+        final isGce = await ComputeEngineCredentials.isOnComputeEngine(
+          client: mockClient,
+        );
+        expect(isGce, isTrue);
+        expect(callCount, 3);
+      });
+
+      test('retries on missing metadata-flavor and succeeds', () async {
+        var callCount = 0;
+        final mockClient = MockClient((request) async {
+          expect(request.url.host, 'metadata.google.internal');
+          callCount++;
+          if (callCount < 2) {
+            return http.Response('ok', 200);
+          }
+          return http.Response(
+            'ok',
+            200,
+            headers: {'metadata-flavor': 'Google'},
+          );
+        });
+
+        final isGce = await ComputeEngineCredentials.isOnComputeEngine(
+          client: mockClient,
+        );
+        expect(isGce, isTrue);
+        expect(callCount, 2);
       });
     });
 
