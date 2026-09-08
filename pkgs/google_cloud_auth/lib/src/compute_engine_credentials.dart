@@ -41,10 +41,7 @@ const _computePingTimeout = Duration(milliseconds: 500);
 // - https://github.com/googleapis/google-auth-library-python/blob/2ea24b03436765fa3cf279ce148482ff6332136b/google/auth/compute_engine/_metadata.py#L146-L160
 /// Detects whether the application is running on Google Compute Engine by
 /// checking the DMI BIOS product name on Linux.
-bool _checkStaticGceDetection() {
-  if (!Platform.isLinux) {
-    return false;
-  }
+bool _checkStaticGceDetection(String path, bool isLinux) {
   try {
     return File(
       _linuxProductNamePath,
@@ -55,7 +52,12 @@ bool _checkStaticGceDetection() {
 }
 
 @internal
-Future<bool> internalIsOnComputeEngine({http.Client? client}) async {
+Future<bool> internalIsOnComputeEngine({
+  http.Client? client,
+  @visibleForTesting String? Function(String name)? getEnvironmentVariable,
+  @visibleForTesting String? linuxProductNamePath,
+  @visibleForTesting bool? isLinux,
+}) async {
   if (Platform.environment['NO_GCE_CHECK']?.toLowerCase() == 'true') {
     return false;
   }
@@ -82,7 +84,10 @@ Future<bool> internalIsOnComputeEngine({http.Client? client}) async {
         // Ignore network/timeout exceptions and retry.
       }
     }
-    return _checkStaticGceDetection();
+    return _checkStaticGceDetection(
+      linuxProductNamePath ?? _linuxProductNamePath,
+      isLinux ?? Platform.isLinux,
+    );
   } finally {
     if (closeClient) {
       httpClient.close();
