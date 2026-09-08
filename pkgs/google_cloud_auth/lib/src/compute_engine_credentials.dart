@@ -32,10 +32,11 @@ import 'service_account_signer.dart';
 /// other environments providing a Google Cloud metadata server.
 final class ComputeEngineCredentials implements ServiceAccountSigner {
   static const _defaultMetadataHost = 'metadata.google.internal';
-  static const _defaultMetadataIp = '169.254.169.254';
   static const _linuxProductNamePath = '/sys/class/dmi/id/product_name';
   static const _metadataFlavorHeader = {'Metadata-Flavor': 'Google'};
   static const _retryableStatusCodes = {500, 502, 503, 504};
+  static const _maxComputePingTries = 3;
+  static const _computePingTimeout = Duration(milliseconds: 500);
 
   /// The email address of the service account.
   @override
@@ -263,66 +264,34 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
   // - https://github.com/googleapis/google-auth-library-python/blob/2ea24b03436765fa3cf279ce148482ff6332136b/google/auth/compute_engine/_metadata.py#L122-L160
   /// Checks if the application is running in an environment with an accessible
   /// Compute Engine metadata server.
-  static Future<bool> isOnComputeEngine({
-    http.Client? client,
-    String? metadataHost,
-    Duration timeout = const Duration(seconds: 3),
-    int retryCount = 3,
-  }) async {
+  static Future<bool> isOnComputeEngine({http.Client? client}) async {
     if (Platform.environment['NO_GCE_CHECK']?.toLowerCase() == 'true') {
       return false;
     }
 
     final host =
-        metadataHost ??
-        Platform.environment['GCE_METADATA_HOST'] ??
-        _defaultMetadataHost;
+        Platform.environment['GCE_METADATA_HOST'] ?? _defaultMetadataHost;
     final httpClient = client ?? http.Client();
     final closeClient = client == null;
 
     try {
       final pingUri = Uri.http(host, '/computeMetadata/v1/');
-      for (var attempt = 1; attempt <= retryCount; attempt++) {
+      for (var attempt = 1; attempt <= _maxComputePingTries; attempt++) {
         try {
           final response = await httpClient
               .get(pingUri, headers: _metadataFlavorHeader)
-              .timeout(timeout);
+              .timeout(_computePingTimeout);
           final flavorHeader = response.headers['metadata-flavor'];
           return response.statusCode == 200 &&
               flavorHeader != null &&
               flavorHeader.toLowerCase() == 'google';
         } on Exception catch (_) {
-          if (attempt == retryCount) {
+          if (attempt == _maxComputePingTries) {
             break;
           }
         }
       }
-
-      // If ping failed and a custom metadata host was not explicitly requested,
-      // fall back to static GCE residency detection on Linux.
-      if (metadataHost == null &&
-          Platform.environment['GCE_METADATA_HOST'] == null) {
-        if (_checkStaticGceDetection()) {
-          return true;
-        }
-
-        if (host != _defaultMetadataIp) {
-          try {
-            final ipUri = Uri.http(_defaultMetadataIp, '/computeMetadata/v1/');
-            final response = await httpClient
-                .get(ipUri, headers: _metadataFlavorHeader)
-                .timeout(timeout);
-            final flavorHeader = response.headers['metadata-flavor'];
-            return response.statusCode == 200 &&
-                flavorHeader != null &&
-                flavorHeader.toLowerCase() == 'google';
-          } catch (_) {
-            // Direct IP ping failed as well.
-          }
-        }
-      }
-
-      return false;
+      return _checkStaticGceDetection();
     } finally {
       if (closeClient) {
         httpClient.close();
