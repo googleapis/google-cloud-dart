@@ -70,14 +70,15 @@ Future<bool> internalIsOnComputeEngine({
   final host = customHost ?? _defaultMetadataHost;
   final httpClient = client ?? http.Client();
   final closeClient = client == null;
+  final inFlightRequests = <Future<void>>[];
 
   try {
     final pingUri = Uri.http(host, '/computeMetadata/v1/');
     for (var attempt = 1; attempt <= _maxComputePingTries; attempt++) {
       try {
-        final response = await httpClient
-            .get(pingUri, headers: _metadataFlavorHeader)
-            .timeout(_computePingTimeout);
+        final request = httpClient.get(pingUri, headers: _metadataFlavorHeader);
+        inFlightRequests.add(request);
+        final response = await request.timeout(_computePingTimeout);
         final flavorHeader = response.headers['metadata-flavor'];
         if (response.statusCode == 200 &&
             flavorHeader != null &&
@@ -99,8 +100,18 @@ Future<bool> internalIsOnComputeEngine({
       isLinux ?? Platform.isLinux,
     );
   } finally {
+    // If `client` is provided by the caller, there is no guarantee that the
+    // caller doesn't call `close` while there are still requests in flight,
+    // which the `http.Client` API contract doesn't allow. Therefore, only
+    // tests are allowed to provide `client`.
     if (closeClient) {
-      httpClient.close();
+      unawaited(
+        Future.wait(
+          inFlightRequests.map(
+            (f) => f.catchError((_) => http.Response('', 500)),
+          ),
+        ).whenComplete(httpClient.close),
+      );
     }
   }
 }
@@ -316,8 +327,7 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
   // - https://github.com/googleapis/google-auth-library-python/blob/2ea24b03436765fa3cf279ce148482ff6332136b/google/auth/compute_engine/_metadata.py#L122-L160
   /// Checks if the application is running in an environment with an accessible
   /// Compute Engine metadata server.
-  static Future<bool> isOnComputeEngine({http.Client? client}) =>
-      internalIsOnComputeEngine(client: client);
+  static Future<bool> isOnComputeEngine() => internalIsOnComputeEngine();
 
   /// Signs [message] using the Identity and Access Management (IAM)
   /// `signBlob` API.

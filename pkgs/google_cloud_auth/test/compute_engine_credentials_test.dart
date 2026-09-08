@@ -557,7 +557,7 @@ void main() async {
       );
 
       test(
-        'returns true when ping fails but static GCE detection succeeds',
+        'returns true when static GCE detection succeeds',
         () async {
           final tempDir = await Directory.systemTemp.createTemp('gce_test');
           try {
@@ -580,8 +580,9 @@ void main() async {
         },
       );
 
-      test('returns false when ping fails and static GCE detection finds '
-          'other vendor', () async {
+      test(
+        'returns false when static GCE detection finds other vendor',
+        () async {
         final tempDir = await Directory.systemTemp.createTemp('gce_test');
         try {
           final dmiFile = File('${tempDir.path}/product_name');
