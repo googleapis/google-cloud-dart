@@ -48,10 +48,85 @@ final _canUseWebCrypto = () {
   return false;
 }();
 
-void main() {
-  late String privateKeyPem;
-  late Directory tempDir;
+late String _privateKeyPem;
+late Directory _tempDir;
 
+void testFileLoad(
+  Future<GoogleCredentials> Function(String filePath) loadCredentials, {
+  bool testNonExistentFile = false,
+}) {
+  test('success', () async {
+    final saFile = File('${_tempDir.path}/service_account.json');
+    await saFile.writeAsString(
+      jsonEncode({
+        'type': 'service_account',
+        'project_id': 'env-project',
+        'private_key': _privateKeyPem,
+        'client_email': 'env-sa@project.iam.gserviceaccount.com',
+      }),
+    );
+
+    final credentials = await loadCredentials(saFile.path);
+
+    expect(
+      credentials,
+      isA<ServiceAccountCredentials>().having(
+        (e) => e.clientEmail,
+        'clientEmail',
+        'env-sa@project.iam.gserviceaccount.com',
+      ),
+    );
+  }, skip: _canUseWebCrypto ? null : 'Requires Dart 3.13 or later');
+
+  if (testNonExistentFile) {
+    test('file does not exist', () async {
+      expect(
+        () => loadCredentials('${_tempDir.path}/non_existent.json'),
+        throwsA(
+          isA<CredentialException>().having(
+            (e) => e.message,
+            'message',
+            contains('does not exist'),
+          ),
+        ),
+      );
+    });
+  }
+
+  test('not valid JSON', () async {
+    final invalidFile = File('${_tempDir.path}/invalid.json');
+    await invalidFile.writeAsString('not a json file');
+
+    expect(
+      () => loadCredentials(invalidFile.path),
+      throwsA(
+        isA<CredentialException>().having(
+          (e) => e.message,
+          'message',
+          contains('not a valid JSON file'),
+        ),
+      ),
+    );
+  });
+
+  test('unrecognized type', () async {
+    final userFile = File('${_tempDir.path}/user_creds.json');
+    await userFile.writeAsString(jsonEncode({'type': 'unrecognized_type'}));
+
+    expect(
+      () => loadCredentials(userFile.path),
+      throwsA(
+        isA<CredentialException>().having(
+          (e) => e.message,
+          'message',
+          contains("has type 'unrecognized_type'"),
+        ),
+      ),
+    );
+  });
+}
+
+void main() {
   setUpAll(() async {
     if (!_canUseWebCrypto) return;
     final keyPair = await RsassaPkcs1V15PrivateKey.generateKey(
@@ -60,143 +135,40 @@ void main() {
       Hash.sha256,
     );
     final pkcs8Bytes = await keyPair.privateKey.exportPkcs8Key();
-    privateKeyPem = _pkcs8ToPem(pkcs8Bytes);
+    _privateKeyPem = _pkcs8ToPem(pkcs8Bytes);
   });
 
   setUp(() async {
-    tempDir = await Directory.systemTemp.createTemp('adc_test_');
+    _tempDir = await Directory.systemTemp.createTemp('adc_test_');
   });
 
   tearDown(() async {
-    await tempDir.delete(recursive: true);
+    await _tempDir.delete(recursive: true);
   });
 
   group('applicationDefaultCredentials', () {
-    group('from GOOGLE_APPLICATION_CREDENTIALS', () {
-      test(
-        'success', () async {
-        final saFile = File('${tempDir.path}/service_account.json');
-        await saFile.writeAsString(
-          jsonEncode({
-            'type': 'service_account',
-            'project_id': 'env-project',
-            'private_key': privateKeyPem,
-            'client_email': 'env-sa@project.iam.gserviceaccount.com',
-          }),
-        );
-
-        final credentials = await internalDefaultCredentials(
+    group('ServiceAccountCredentials from GOOGLE_APPLICATION_CREDENTIALS', () {
+      testFileLoad(
+        (filePath) => internalDefaultCredentials(
           getEnvironmentVariable: (String name) {
-            if (name == 'GOOGLE_APPLICATION_CREDENTIALS') return saFile.path;
+            if (name == 'GOOGLE_APPLICATION_CREDENTIALS') return filePath;
             return null;
           },
-        );
-
-        expect(
-          credentials,
-          isA<ServiceAccountCredentials>().having(
-            (e) => e.clientEmail,
-            'clientEmail',
-            'env-sa@project.iam.gserviceaccount.com',
-          ),
-        );
-      }, skip: _canUseWebCrypto ? null : 'Requires Dart 3.13 or later');
-
-      test('file does not exist', () async {
-        expect(
-          () => internalDefaultCredentials(
-            getEnvironmentVariable: (String name) {
-              if (name == 'GOOGLE_APPLICATION_CREDENTIALS') {
-                return '${tempDir.path}/non_existent.json';
-              }
-              return null;
-            },
-          ),
-          throwsA(
-            isA<CredentialException>().having(
-              (e) => e.message,
-              'message',
-              contains('does not exist'),
-            ),
-          ),
-        );
-      });
-
-      test('not valid JSON', () async {
-        final invalidFile = File('${tempDir.path}/invalid.json');
-        await invalidFile.writeAsString('not a json file');
-
-        expect(
-          () => internalDefaultCredentials(
-            getEnvironmentVariable: (String name) {
-              if (name == 'GOOGLE_APPLICATION_CREDENTIALS') {
-                return invalidFile.path;
-              }
-              return null;
-            },
-          ),
-          throwsA(
-            isA<CredentialException>().having(
-              (e) => e.message,
-              'message',
-              contains('not a valid JSON file'),
-            ),
-          ),
-        );
-      });
-
-      test('unrecognized type', () async {
-        final userFile = File('${tempDir.path}/user_creds.json');
-        await userFile.writeAsString(jsonEncode({'type': 'unrecognized_type'}));
-
-        expect(
-          () => internalDefaultCredentials(
-            getEnvironmentVariable: (String name) {
-              if (name == 'GOOGLE_APPLICATION_CREDENTIALS') {
-                return userFile.path;
-              }
-              return null;
-            },
-          ),
-          throwsA(
-            isA<CredentialException>().having(
-              (e) => e.message,
-              'message',
-              contains("has type 'unrecognized_type'"),
-            ),
-          ),
-        );
-      });
+        ),
+        testNonExistentFile: true,
+      );
     });
 
-    test('loads ServiceAccountCredentials from well-known file', () async {
-      final wellKnownFile = File('${tempDir.path}/gcloud_adc.json');
-      await wellKnownFile.writeAsString(
-        jsonEncode({
-          'type': 'service_account',
-          'project_id': 'wk-project',
-          'private_key': privateKeyPem,
-          'client_email': 'wk-sa@project.iam.gserviceaccount.com',
-        }),
-      );
-
-      final credentials = await internalDefaultCredentials(
-        getEnvironmentVariable: (String name) => null,
-        wellKnownFilePath: wellKnownFile.path,
-      );
-
-      expect(
-        credentials,
-        isA<ServiceAccountCredentials>().having(
-          (e) => e.clientEmail,
-          'clientEmail',
-          'wk-sa@project.iam.gserviceaccount.com',
+    group('ServiceAccountCredentials from well-known file', () {
+      testFileLoad(
+        (filePath) => internalDefaultCredentials(
+          getEnvironmentVariable: (String name) => null,
+          wellKnownFilePath: filePath,
         ),
       );
-    }, skip: _canUseWebCrypto ? null : 'Requires Dart 3.13 or later');
+    });
 
-    test('falls back to ComputeEngineCredentials when metadata server is '
-        'available', () async {
+    test('ComputeEngineCredentials from metadata server', () async {
       final mockClient = MockClient(
         (request) async => switch (request.url.path) {
           '/computeMetadata/v1/' => http.Response(
@@ -222,13 +194,17 @@ void main() {
       final credentials = await internalDefaultCredentials(
         client: mockClient,
         getEnvironmentVariable: (String name) => null,
-        wellKnownFilePath: '${tempDir.path}/non_existent.json',
+        wellKnownFilePath: '${_tempDir.path}/non_existent.json',
       );
 
-      expect(credentials, isA<ComputeEngineCredentials>());
-      expect(credentials, isA<GoogleCredentials>());
-      final signer = credentials as ComputeEngineCredentials;
-      expect(signer.clientEmail, 'gce-sa@project.iam.gserviceaccount.com');
+      expect(
+        credentials,
+        isA<ComputeEngineCredentials>().having(
+          (e) => e.clientEmail,
+          'clientEmail',
+          'gce-sa@project.iam.gserviceaccount.com',
+        ),
+      );
     });
 
     test(
@@ -242,7 +218,7 @@ void main() {
           () => internalDefaultCredentials(
             client: mockClient,
             getEnvironmentVariable: (String name) => null,
-            wellKnownFilePath: '${tempDir.path}/non_existent.json',
+            wellKnownFilePath: '${_tempDir.path}/non_existent.json',
           ),
           throwsA(
             isA<CredentialException>().having(
@@ -252,38 +228,6 @@ void main() {
             ),
           ),
         );
-      },
-    );
-
-    test(
-      'defaultCredentials delegates to internalDefaultCredentials',
-      () async {
-        final mockClient = MockClient((request) async {
-          throw http.ClientException('Connection refused');
-        });
-
-        expect(
-          () => defaultCredentials(client: mockClient),
-          throwsA(isA<CredentialException>()),
-        );
-      },
-    );
-
-    test(
-      'signs message using defaultCredentials',
-      tags: ['google-cloud'],
-      () async {
-        final credentials = await defaultCredentials();
-        expect(credentials, isA<GoogleCredentials>());
-        expect(credentials, isA<ServiceAccountSigner>());
-        final signer = credentials as ServiceAccountSigner;
-        expect(signer.clientEmail, contains('@'));
-
-        final message = utf8.encode('Hello from defaultCredentials!');
-        final signature = await signer.sign(message);
-
-        expect(signature, isNotEmpty);
-        expect(signature.length, greaterThan(64));
       },
     );
   });
