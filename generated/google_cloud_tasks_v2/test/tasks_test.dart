@@ -48,7 +48,6 @@ void main() {
           queue: Queue(name: queueName),
         ),
       );
-
     });
 
     tearDown(() async {
