@@ -17,9 +17,11 @@ library;
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:google_cloud_auth/google_cloud_auth.dart';
+import 'package:google_cloud_auth/src/compute_engine_credentials.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:test/test.dart';
@@ -440,9 +442,7 @@ void main() async {
             );
           });
 
-          final isGce = await ComputeEngineCredentials.isOnComputeEngine(
-            client: mockClient,
-          );
+          final isGce = await internalIsOnComputeEngine(client: mockClient);
           expect(isGce, isTrue);
         },
       );
@@ -459,8 +459,9 @@ void main() async {
           );
         });
 
-        final isGce = await ComputeEngineCredentials.isOnComputeEngine(
+        final isGce = await internalIsOnComputeEngine(
           client: mockClient,
+          isLinux: false,
         );
         expect(isGce, isFalse);
         expect(callCount, 3);
@@ -474,8 +475,9 @@ void main() async {
           return http.Response('ok', 200);
         });
 
-        final isGce = await ComputeEngineCredentials.isOnComputeEngine(
+        final isGce = await internalIsOnComputeEngine(
           client: mockClient,
+          isLinux: false,
         );
         expect(isGce, isFalse);
         expect(callCount, 3);
@@ -487,8 +489,9 @@ void main() async {
           throw http.ClientException('Connection refused');
         });
 
-        final isGce = await ComputeEngineCredentials.isOnComputeEngine(
+        final isGce = await internalIsOnComputeEngine(
           client: mockClient,
+          isLinux: false,
         );
         expect(isGce, isFalse);
       });
@@ -501,8 +504,9 @@ void main() async {
           throw http.ClientException('Connection reset');
         });
 
-        final isGce = await ComputeEngineCredentials.isOnComputeEngine(
+        final isGce = await internalIsOnComputeEngine(
           client: mockClient,
+          isLinux: false,
         );
         expect(isGce, isFalse);
         expect(callCount, 3);
@@ -523,9 +527,7 @@ void main() async {
           );
         });
 
-        final isGce = await ComputeEngineCredentials.isOnComputeEngine(
-          client: mockClient,
-        );
+        final isGce = await internalIsOnComputeEngine(client: mockClient);
         expect(isGce, isTrue);
         expect(callCount, 3);
       });
@@ -545,11 +547,86 @@ void main() async {
           );
         });
 
-        final isGce = await ComputeEngineCredentials.isOnComputeEngine(
-          client: mockClient,
-        );
+        final isGce = await internalIsOnComputeEngine(client: mockClient);
         expect(isGce, isTrue);
         expect(callCount, 2);
+      });
+
+      test(
+        'returns true when ping fails but static GCE detection succeeds',
+        () async {
+          final tempDir = await Directory.systemTemp.createTemp('gce_test');
+          try {
+            final dmiFile = File('${tempDir.path}/product_name');
+            await dmiFile.writeAsString('Google Compute Engine\n');
+
+            final mockClient = MockClient((request) async {
+              throw http.ClientException('Connection refused');
+            });
+
+            final isGce = await internalIsOnComputeEngine(
+              client: mockClient,
+              isLinux: true,
+              linuxProductNamePath: dmiFile.path,
+            );
+            expect(isGce, isTrue);
+          } finally {
+            await tempDir.delete(recursive: true);
+          }
+        },
+      );
+
+      test('returns false when ping fails and static GCE detection finds '
+          'other vendor', () async {
+        final tempDir = await Directory.systemTemp.createTemp('gce_test');
+        try {
+          final dmiFile = File('${tempDir.path}/product_name');
+          await dmiFile.writeAsString('Standard PC\n');
+
+          final mockClient = MockClient((request) async {
+            throw http.ClientException('Connection refused');
+          });
+
+          final isGce = await internalIsOnComputeEngine(
+            client: mockClient,
+            isLinux: true,
+            linuxProductNamePath: dmiFile.path,
+          );
+          expect(isGce, isFalse);
+        } finally {
+          await tempDir.delete(recursive: true);
+        }
+      });
+
+      test('returns false when NO_GCE_CHECK is true', () async {
+        final mockClient = MockClient((request) async {
+          fail('Should not attempt network call');
+        });
+
+        final isGce = await internalIsOnComputeEngine(
+          client: mockClient,
+          getEnvironmentVariable: (name) =>
+              name == 'NO_GCE_CHECK' ? 'true' : null,
+        );
+        expect(isGce, isFalse);
+      });
+
+      test('uses GCE_METADATA_HOST when set', () async {
+        final mockClient = MockClient((request) async {
+          expect(request.url.host, 'custom-metadata');
+          return http.Response(
+            'ok',
+            200,
+            headers: {'metadata-flavor': 'Google'},
+          );
+        });
+
+        final isGce = await internalIsOnComputeEngine(
+          client: mockClient,
+          getEnvironmentVariable: (name) =>
+              name == 'GCE_METADATA_HOST' ? 'custom-metadata' : null,
+        );
+        expect(isGce, isTrue);
       });
     });
 

@@ -42,10 +42,11 @@ const _computePingTimeout = Duration(milliseconds: 500);
 /// Detects whether the application is running on Google Compute Engine by
 /// checking the DMI BIOS product name on Linux.
 bool _checkStaticGceDetection(String path, bool isLinux) {
+  if (!isLinux) {
+    return false;
+  }
   try {
-    return File(
-      _linuxProductNamePath,
-    ).readAsStringSync().trim().startsWith('Google');
+    return File(path).readAsStringSync().trim().startsWith('Google');
   } catch (_) {
     return false;
   }
@@ -58,12 +59,12 @@ Future<bool> internalIsOnComputeEngine({
   @visibleForTesting String? linuxProductNamePath,
   @visibleForTesting bool? isLinux,
 }) async {
-  if (Platform.environment['NO_GCE_CHECK']?.toLowerCase() == 'true') {
+  final getEnv = getEnvironmentVariable ?? (name) => Platform.environment[name];
+  if (getEnv('NO_GCE_CHECK')?.toLowerCase() == 'true') {
     return false;
   }
 
-  final host =
-      Platform.environment['GCE_METADATA_HOST'] ?? _defaultMetadataHost;
+  final host = getEnv('GCE_METADATA_HOST') ?? _defaultMetadataHost;
   final httpClient = client ?? http.Client();
   final closeClient = client == null;
 

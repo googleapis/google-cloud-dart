@@ -15,7 +15,7 @@
 /// Authentication and credential management for Google Cloud.
 library;
 
-export 'src/compute_engine_credentials.dart';
+export 'src/compute_engine_credentials.dart' hide internalIsOnComputeEngine;
 export 'src/credential_exception.dart';
 export 'src/service_account_credentials.dart';
 export 'src/service_account_signer.dart';
