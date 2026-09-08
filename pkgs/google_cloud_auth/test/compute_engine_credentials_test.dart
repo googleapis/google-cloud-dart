@@ -556,37 +556,11 @@ void main() async {
         },
       );
 
-      test(
-        'returns true when static GCE detection succeeds',
-        () async {
-          final tempDir = await Directory.systemTemp.createTemp('gce_test');
-          try {
-            final dmiFile = File('${tempDir.path}/product_name');
-            await dmiFile.writeAsString('Google Compute Engine\n');
-
-            final mockClient = MockClient((request) async {
-              throw http.ClientException('Connection refused');
-            });
-
-            final isGce = await internalIsOnComputeEngine(
-              client: mockClient,
-              isLinux: true,
-              linuxProductNamePath: dmiFile.path,
-            );
-            expect(isGce, isTrue);
-          } finally {
-            await tempDir.delete(recursive: true);
-          }
-        },
-      );
-
-      test(
-        'returns false when static GCE detection finds other vendor',
-        () async {
+      test('returns true when static GCE detection succeeds', () async {
         final tempDir = await Directory.systemTemp.createTemp('gce_test');
         try {
           final dmiFile = File('${tempDir.path}/product_name');
-          await dmiFile.writeAsString('Standard PC\n');
+          await dmiFile.writeAsString('Google Compute Engine\n');
 
           final mockClient = MockClient((request) async {
             throw http.ClientException('Connection refused');
@@ -597,11 +571,35 @@ void main() async {
             isLinux: true,
             linuxProductNamePath: dmiFile.path,
           );
-          expect(isGce, isFalse);
+          expect(isGce, isTrue);
         } finally {
           await tempDir.delete(recursive: true);
         }
       });
+
+      test(
+        'returns false when static GCE detection finds other vendor',
+        () async {
+          final tempDir = await Directory.systemTemp.createTemp('gce_test');
+          try {
+            final dmiFile = File('${tempDir.path}/product_name');
+            await dmiFile.writeAsString('Standard PC\n');
+
+            final mockClient = MockClient((request) async {
+              throw http.ClientException('Connection refused');
+            });
+
+            final isGce = await internalIsOnComputeEngine(
+              client: mockClient,
+              isLinux: true,
+              linuxProductNamePath: dmiFile.path,
+            );
+            expect(isGce, isFalse);
+          } finally {
+            await tempDir.delete(recursive: true);
+          }
+        },
+      );
 
       test(
         'does not fall back to static detection when custom GCE_METADATA_HOST '
