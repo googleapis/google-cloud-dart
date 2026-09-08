@@ -484,7 +484,12 @@ libraries:
     copyright_year: "2026"
     keep:
       - CHANGELOG.md
+      - dart_test.yaml
+      - example/main.dart
+      - test/queues_test.dart
+      - test/tasks_test.dart
     dart:
+      dev_dependencies: googleapis_auth,test,test_utils
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_tasks_v2
   - name: google_cloud_type
     version: 0.5.5
