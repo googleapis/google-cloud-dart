@@ -77,7 +77,7 @@ Future<bool> internalIsOnComputeEngine({
     for (var attempt = 1; attempt <= _maxComputePingTries; attempt++) {
       try {
         final request = httpClient.get(pingUri, headers: _metadataFlavorHeader);
-        inFlightRequests.add(request);
+        inFlightRequests.add(request.catchError((_) => http.Response('', 500)));
         final response = await request.timeout(_computePingTimeout);
         final flavorHeader = response.headers['metadata-flavor'];
         if (response.statusCode == 200 &&
