@@ -19,6 +19,7 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:http/http.dart' as http;
+import 'package:meta/meta.dart';
 
 import 'credential_exception.dart';
 import 'service_account_signer.dart';
@@ -28,16 +29,70 @@ import 'service_account_signer.dart';
 // - https://github.com/googleapis/google-auth-library-python/blob/main/google/auth/compute_engine/credentials.py
 // - https://github.com/googleapis/google-auth-library-python/blob/main/google/auth/iam.py
 
+const _defaultMetadataHost = 'metadata.google.internal';
+const _linuxProductNamePath = '/sys/class/dmi/id/product_name';
+const _metadataFlavorHeader = {'Metadata-Flavor': 'Google'};
+const _retryableStatusCodes = {500, 502, 503, 504};
+const _maxComputePingTries = 3;
+const _computePingTimeout = Duration(milliseconds: 500);
+
+// Equivalent of:
+// - https://github.com/googleapis/google-auth-library-java/blob/9ac2d4340ebc6a8582b898e97f65aeed3c1776d6/oauth2_http/java/com/google/auth/oauth2/ComputeEngineCredentials.java#L621-L641
+// - https://github.com/googleapis/google-auth-library-python/blob/2ea24b03436765fa3cf279ce148482ff6332136b/google/auth/compute_engine/_metadata.py#L146-L160
+/// Detects whether the application is running on Google Compute Engine by
+/// checking the DMI BIOS product name on Linux.
+bool _checkStaticGceDetection() {
+  if (!Platform.isLinux) {
+    return false;
+  }
+  try {
+    return File(
+      _linuxProductNamePath,
+    ).readAsStringSync().trim().startsWith('Google');
+  } catch (_) {
+    return false;
+  }
+}
+
+@internal
+Future<bool> internalIsOnComputeEngine({http.Client? client}) async {
+  if (Platform.environment['NO_GCE_CHECK']?.toLowerCase() == 'true') {
+    return false;
+  }
+
+  final host =
+      Platform.environment['GCE_METADATA_HOST'] ?? _defaultMetadataHost;
+  final httpClient = client ?? http.Client();
+  final closeClient = client == null;
+
+  try {
+    final pingUri = Uri.http(host, '/computeMetadata/v1/');
+    for (var attempt = 1; attempt <= _maxComputePingTries; attempt++) {
+      try {
+        final response = await httpClient
+            .get(pingUri, headers: _metadataFlavorHeader)
+            .timeout(_computePingTimeout);
+        final flavorHeader = response.headers['metadata-flavor'];
+        if (response.statusCode == 200 &&
+            flavorHeader != null &&
+            flavorHeader.toLowerCase() == 'google') {
+          return true;
+        }
+      } on Exception catch (_) {
+        // Ignore network/timeout exceptions and retry.
+      }
+    }
+    return _checkStaticGceDetection();
+  } finally {
+    if (closeClient) {
+      httpClient.close();
+    }
+  }
+}
+
 /// Credentials for Google Compute Engine, Cloud Run, Cloud Functions, and
 /// other environments providing a Google Cloud metadata server.
 final class ComputeEngineCredentials implements ServiceAccountSigner {
-  static const _defaultMetadataHost = 'metadata.google.internal';
-  static const _linuxProductNamePath = '/sys/class/dmi/id/product_name';
-  static const _metadataFlavorHeader = {'Metadata-Flavor': 'Google'};
-  static const _retryableStatusCodes = {500, 502, 503, 504};
-  static const _maxComputePingTries = 3;
-  static const _computePingTimeout = Duration(milliseconds: 500);
-
   /// The email address of the service account.
   @override
   final String clientEmail;
@@ -242,62 +297,12 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
   }
 
   // Equivalent of:
-  // - https://github.com/googleapis/google-auth-library-java/blob/9ac2d4340ebc6a8582b898e97f65aeed3c1776d6/oauth2_http/java/com/google/auth/oauth2/ComputeEngineCredentials.java#L621-L641
-  // - https://github.com/googleapis/google-auth-library-python/blob/2ea24b03436765fa3cf279ce148482ff6332136b/google/auth/compute_engine/_metadata.py#L146-L160
-  /// Detects whether the application is running on Google Compute Engine by
-  /// checking the DMI BIOS product name on Linux.
-  static bool _checkStaticGceDetection() {
-    if (!Platform.isLinux) {
-      return false;
-    }
-    try {
-      return File(
-        _linuxProductNamePath,
-      ).readAsStringSync().trim().startsWith('Google');
-    } catch (_) {
-      return false;
-    }
-  }
-
-  // Equivalent of:
   // - https://github.com/googleapis/google-auth-library-java/blob/9ac2d4340ebc6a8582b898e97f65aeed3c1776d6/oauth2_http/java/com/google/auth/oauth2/ComputeEngineCredentials.java#L595-L641
   // - https://github.com/googleapis/google-auth-library-python/blob/2ea24b03436765fa3cf279ce148482ff6332136b/google/auth/compute_engine/_metadata.py#L122-L160
   /// Checks if the application is running in an environment with an accessible
   /// Compute Engine metadata server.
-  static Future<bool> isOnComputeEngine({http.Client? client}) async {
-    if (Platform.environment['NO_GCE_CHECK']?.toLowerCase() == 'true') {
-      return false;
-    }
-
-    final host =
-        Platform.environment['GCE_METADATA_HOST'] ?? _defaultMetadataHost;
-    final httpClient = client ?? http.Client();
-    final closeClient = client == null;
-
-    try {
-      final pingUri = Uri.http(host, '/computeMetadata/v1/');
-      for (var attempt = 1; attempt <= _maxComputePingTries; attempt++) {
-        try {
-          final response = await httpClient
-              .get(pingUri, headers: _metadataFlavorHeader)
-              .timeout(_computePingTimeout);
-          final flavorHeader = response.headers['metadata-flavor'];
-          if (response.statusCode == 200 &&
-              flavorHeader != null &&
-              flavorHeader.toLowerCase() == 'google') {
-            return true;
-          }
-        } on Exception catch (_) {
-          // Ignore network/timeout exceptions and retry.
-        }
-      }
-      return _checkStaticGceDetection();
-    } finally {
-      if (closeClient) {
-        httpClient.close();
-      }
-    }
-  }
+  static Future<bool> isOnComputeEngine({http.Client? client}) =>
+      internalIsOnComputeEngine(client: client);
 
   /// Signs [message] using the Identity and Access Management (IAM)
   /// `signBlob` API.
