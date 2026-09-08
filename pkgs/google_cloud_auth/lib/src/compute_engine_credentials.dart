@@ -41,12 +41,13 @@ const _computePingTimeout = Duration(milliseconds: 500);
 // - https://github.com/googleapis/google-auth-library-python/blob/2ea24b03436765fa3cf279ce148482ff6332136b/google/auth/compute_engine/_metadata.py#L146-L160
 /// Detects whether the application is running on Google Compute Engine by
 /// checking the DMI BIOS product name on Linux.
-bool _checkStaticGceDetection(String path, bool isLinux) {
+Future<bool> _checkStaticGceDetection(String path, bool isLinux) async {
   if (!isLinux) {
     return false;
   }
   try {
-    return File(path).readAsStringSync().trim().startsWith('Google');
+    final content = await File(path).readAsString();
+    return content.trim().startsWith('Google');
   } catch (_) {
     return false;
   }
@@ -55,16 +56,18 @@ bool _checkStaticGceDetection(String path, bool isLinux) {
 @internal
 Future<bool> internalIsOnComputeEngine({
   http.Client? client,
-  @visibleForTesting String? Function(String name)? getEnvironmentVariable,
-  @visibleForTesting String? linuxProductNamePath,
-  @visibleForTesting bool? isLinux,
+  String? Function(String name)? getEnvironmentVariable,
+  String? linuxProductNamePath,
+  bool? isLinux,
 }) async {
   final getEnv = getEnvironmentVariable ?? (name) => Platform.environment[name];
-  if (getEnv('NO_GCE_CHECK')?.toLowerCase() == 'true') {
+  final noGceCheck = getEnv('NO_GCE_CHECK')?.toLowerCase();
+  if (noGceCheck == 'true' || noGceCheck == '1') {
     return false;
   }
 
-  final host = getEnv('GCE_METADATA_HOST') ?? _defaultMetadataHost;
+  final customHost = getEnv('GCE_METADATA_HOST');
+  final host = customHost ?? _defaultMetadataHost;
   final httpClient = client ?? http.Client();
   final closeClient = client == null;
 
@@ -81,11 +84,17 @@ Future<bool> internalIsOnComputeEngine({
             flavorHeader.toLowerCase() == 'google') {
           return true;
         }
+        if (!_retryableStatusCodes.contains(response.statusCode)) {
+          break;
+        }
       } on Exception catch (_) {
         // Ignore network/timeout exceptions and retry.
       }
     }
-    return _checkStaticGceDetection(
+    if (customHost != null) {
+      return false;
+    }
+    return await _checkStaticGceDetection(
       linuxProductNamePath ?? _linuxProductNamePath,
       isLinux ?? Platform.isLinux,
     );

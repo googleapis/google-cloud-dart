@@ -464,7 +464,7 @@ void main() async {
           isLinux: false,
         );
         expect(isGce, isFalse);
-        expect(callCount, 3);
+        expect(callCount, 1);
       });
 
       test('returns false when metadata-flavor header is missing', () async {
@@ -480,7 +480,7 @@ void main() async {
           isLinux: false,
         );
         expect(isGce, isFalse);
-        expect(callCount, 3);
+        expect(callCount, 1);
       });
 
       test('returns false on network exception', () async {
@@ -532,25 +532,29 @@ void main() async {
         expect(callCount, 3);
       });
 
-      test('retries on missing metadata-flavor and succeeds', () async {
-        var callCount = 0;
-        final mockClient = MockClient((request) async {
-          expect(request.url.host, 'metadata.google.internal');
-          callCount++;
-          if (callCount < 2) {
-            return http.Response('ok', 200);
-          }
-          return http.Response(
-            'ok',
-            200,
-            headers: {'metadata-flavor': 'Google'},
-          );
-        });
+      test(
+        'falls back to static detection when ping returns non-retryable status',
+        () async {
+          final tempDir = await Directory.systemTemp.createTemp('gce_test');
+          try {
+            final dmiFile = File('${tempDir.path}/product_name');
+            await dmiFile.writeAsString('Google Compute Engine\n');
 
-        final isGce = await internalIsOnComputeEngine(client: mockClient);
-        expect(isGce, isTrue);
-        expect(callCount, 2);
-      });
+            final mockClient = MockClient(
+              (request) async => http.Response('forbidden', 403),
+            );
+
+            final isGce = await internalIsOnComputeEngine(
+              client: mockClient,
+              isLinux: true,
+              linuxProductNamePath: dmiFile.path,
+            );
+            expect(isGce, isTrue);
+          } finally {
+            await tempDir.delete(recursive: true);
+          }
+        },
+      );
 
       test(
         'returns true when ping fails but static GCE detection succeeds',
@@ -598,6 +602,33 @@ void main() async {
         }
       });
 
+      test(
+        'does not fall back to static detection when custom GCE_METADATA_HOST '
+        'fails',
+        () async {
+          final tempDir = await Directory.systemTemp.createTemp('gce_test');
+          try {
+            final dmiFile = File('${tempDir.path}/product_name');
+            await dmiFile.writeAsString('Google Compute Engine\n');
+
+            final mockClient = MockClient((request) async {
+              throw http.ClientException('Connection refused');
+            });
+
+            final isGce = await internalIsOnComputeEngine(
+              client: mockClient,
+              isLinux: true,
+              linuxProductNamePath: dmiFile.path,
+              getEnvironmentVariable: (name) =>
+                  name == 'GCE_METADATA_HOST' ? 'custom-metadata' : null,
+            );
+            expect(isGce, isFalse);
+          } finally {
+            await tempDir.delete(recursive: true);
+          }
+        },
+      );
+
       test('returns false when NO_GCE_CHECK is true', () async {
         final mockClient = MockClient((request) async {
           fail('Should not attempt network call');
@@ -607,6 +638,18 @@ void main() async {
           client: mockClient,
           getEnvironmentVariable: (name) =>
               name == 'NO_GCE_CHECK' ? 'true' : null,
+        );
+        expect(isGce, isFalse);
+      });
+
+      test('returns false when NO_GCE_CHECK is 1', () async {
+        final mockClient = MockClient((request) async {
+          fail('Should not attempt network call');
+        });
+
+        final isGce = await internalIsOnComputeEngine(
+          client: mockClient,
+          getEnvironmentVariable: (name) => name == 'NO_GCE_CHECK' ? '1' : null,
         );
         expect(isGce, isFalse);
       });
