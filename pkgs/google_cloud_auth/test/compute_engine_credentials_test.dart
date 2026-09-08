@@ -486,6 +486,22 @@ void main() async {
         );
         expect(isGce, isFalse);
       });
+
+      test('retries on network exception up to retryCount', () async {
+        var callCount = 0;
+        final mockClient = MockClient((request) async {
+          callCount++;
+          throw http.ClientException('Connection reset');
+        });
+
+        final isGce = await ComputeEngineCredentials.isOnComputeEngine(
+          client: mockClient,
+          metadataHost: 'test-metadata',
+          retryCount: 3,
+        );
+        expect(isGce, isFalse);
+        expect(callCount, 3);
+      });
     });
 
     group('sign', () {
