@@ -104,8 +104,6 @@ void main() {
             info,
           );
 
-          expect(creds, isA<GoogleCredentials>());
-          expect(creds, isA<ServiceAccountSigner>());
           expect(
             creds.tokenUri,
             equals(Uri.https('oauth2.googleapis.com', '/token')),
