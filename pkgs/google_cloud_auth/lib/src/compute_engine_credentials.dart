@@ -53,6 +53,8 @@ Future<bool> _checkStaticGceDetection(String path, bool isLinux) async {
   }
 }
 
+/// [ComputeEngineCredentials.isOnComputeEngine] with extra arguments for test
+/// injection.
 @internal
 Future<bool> internalIsOnComputeEngine({
   http.Client? client,
@@ -106,11 +108,7 @@ Future<bool> internalIsOnComputeEngine({
     // tests are allowed to provide `client`.
     if (closeClient) {
       unawaited(
-        Future.wait(
-          inFlightRequests.map(
-            (f) => f.catchError((_) => http.Response('', 500)),
-          ),
-        ).whenComplete(httpClient.close),
+        Future.wait(inFlightRequests).whenComplete(httpClient.close),
       );
     }
   }
