@@ -511,7 +511,7 @@ void main() {
       },
     );
 
-    test('PubSub._streamingPull handlers throw StateError when connection '
+    test('PubSub._streamingPull handlers fall back to unary when connection '
         'is closed', () async {
       final stream = client.streamingPull(
         'projects/test-project/subscriptions/my-sub',
@@ -521,7 +521,7 @@ void main() {
 
       await Future<void>.delayed(const Duration(milliseconds: 10));
       expect(fakeSubscriber.streamingPullControllers.length, equals(1));
-      final conn = fakeSubscriber.streamingPullControllers.first
+      final connection = fakeSubscriber.streamingPullControllers.first
         ..add(
           generated.StreamingPullResponse()
             ..receivedMessages.add(
@@ -535,37 +535,18 @@ void main() {
       expect(received, isNotNull);
 
       // Close response stream to complete pull and close requestController.
-      await conn.close();
+      await connection.close();
       await Future<void>.delayed(const Duration(milliseconds: 20));
       await streamSubscription.cancel();
 
-      expect(
-        () => received!.acknowledge(),
-        throwsA(
-          isA<StateError>().having(
-            (e) => e.message,
-            'message',
-            contains(
-              'Cannot acknowledge message: '
-              'streaming pull connection has closed.',
-            ),
-          ),
-        ),
-      );
+      await received!.acknowledge();
+      expect(fakeSubscriber.acknowledgeCalled, isTrue);
+      expect(fakeSubscriber.lastAckIds, equals(['ack-closed']));
 
-      expect(
-        () => received!.modifyAckDeadline(10),
-        throwsA(
-          isA<StateError>().having(
-            (e) => e.message,
-            'message',
-            contains(
-              'Cannot modify ack deadline: '
-              'streaming pull connection has closed.',
-            ),
-          ),
-        ),
-      );
+      await received!.modifyAckDeadline(10);
+      expect(fakeSubscriber.modifyAckDeadlineCalled, isTrue);
+      expect(fakeSubscriber.lastModifyAckDeadlineSeconds, equals(10));
+      expect(fakeSubscriber.lastModifyAckDeadlineIds, equals(['ack-closed']));
     });
     test('pull validates maxMessages > 0', () {
       expect(
