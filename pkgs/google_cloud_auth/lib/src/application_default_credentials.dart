@@ -45,7 +45,7 @@ Future<GoogleCredentials> internalDefaultCredentials({
   final getEnv = getEnvironmentVariable ?? (name) => Platform.environment[name];
   final onWindows = isWindows ?? Platform.isWindows;
 
-  // 1. Check GOOGLE_APPLICATION_CREDENTIALS
+  // Check GOOGLE_APPLICATION_CREDENTIALS
   final envPath = getEnv('GOOGLE_APPLICATION_CREDENTIALS');
   if (envPath != null && envPath.isNotEmpty) {
     final file = File(envPath);
@@ -58,7 +58,7 @@ Future<GoogleCredentials> internalDefaultCredentials({
     return await _loadCredentialsFile(file);
   }
 
-  // 2. Check well-known credentials file
+  // Check well-known credentials file
   final adcPath =
       wellKnownFilePath ?? _getWellKnownCredentialsPath(getEnv, onWindows);
   if (adcPath != null) {
@@ -68,7 +68,7 @@ Future<GoogleCredentials> internalDefaultCredentials({
     }
   }
 
-  // 3. Check Google Compute Engine metadata server
+  // Check Google Compute Engine metadata server
   if (await ComputeEngineCredentials.isOnComputeEngine(client: client)) {
     return await ComputeEngineCredentials.create(client: client);
   }
@@ -120,9 +120,9 @@ Future<ServiceAccountCredentials> _loadCredentialsFile(File file) async {
 
 String? _getWellKnownCredentialsPath(
   String? Function(String name) getEnv,
-  bool onWindows,
+  bool isWindows,
 ) {
-  if (onWindows) {
+  if (isWindows) {
     final appData = getEnv('APPDATA');
     if (appData == null || appData.isEmpty) return null;
     return p.windows.join(
