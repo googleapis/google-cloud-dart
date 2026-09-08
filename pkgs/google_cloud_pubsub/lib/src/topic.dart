@@ -12,7 +12,47 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'dart:async';
+import 'dart:convert';
+
 import '../google_cloud_pubsub.dart';
+import 'batching.dart';
+import 'retry.dart';
+
+/// Settings for background batching and retrying of published messages.
+final class PublishSettings {
+  /// Settings controlling how requests are accumulated and flushed.
+  final BatchingSettings batching;
+
+  /// Settings controlling retries when flushing a batch over a unary RPC.
+  final RetrySettings retry;
+
+  /// Creates a new [PublishSettings] instance.
+  PublishSettings({BatchingSettings? batching, RetrySettings? retry})
+    : batching = batching ?? BatchingSettings(),
+      retry = retry ?? RetrySettings();
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PublishSettings &&
+          runtimeType == other.runtimeType &&
+          batching == other.batching &&
+          retry == other.retry;
+
+  @override
+  int get hashCode => Object.hash(batching, retry);
+
+  @override
+  String toString() => 'PublishSettings(batching: $batching, retry: $retry)';
+}
+
+final class _PublishRequest {
+  final Message message;
+  final Completer<String> completer;
+
+  _PublishRequest(this.message, this.completer);
+}
 
 /// A [Google Cloud Pub/Sub topic](https://cloud.google.com/pubsub/docs/overview#topics).
 final class Topic {
@@ -28,13 +68,28 @@ final class Topic {
   /// It has the format `projects/<project-id>/topics/<topic-id>`.
   final String name;
 
+  /// Settings for publishing messages.
+  final PublishSettings publishSettings;
+
+  late final Batcher<_PublishRequest> _batcher;
+  bool _isClosed = false;
+  Future<void>? _closeFuture;
+
+  /// Whether this topic is closed.
+  bool get isClosed => _isClosed;
+
   /// A topic with the given [topicId] in the client's project.
   ///
   /// It is an error if the constructed topic name is invalid (e.g. if [topicId]
   /// contains slashes).
-  Topic.unqualified(this.pubsub, String topicId)
-    : name = 'projects/${pubsub.projectId}/topics/$topicId' {
+  Topic.unqualified(
+    this.pubsub,
+    String topicId, {
+    PublishSettings? publishSettings,
+  }) : name = 'projects/${pubsub.projectId}/topics/$topicId',
+       publishSettings = publishSettings ?? PublishSettings() {
     _validateName(name);
+    _initBatcher();
   }
 
   /// A topic with the given [name].
@@ -43,8 +98,58 @@ final class Topic {
   ///
   /// It is an error if [name] is not in the format
   /// `projects/<project-id>/topics/<topic-id>`.
-  Topic(this.pubsub, this.name) {
+  Topic(this.pubsub, this.name, {PublishSettings? publishSettings})
+    : publishSettings = publishSettings ?? PublishSettings() {
     _validateName(name);
+    _initBatcher();
+  }
+
+  void _initBatcher() {
+    _batcher = Batcher<_PublishRequest>(
+      settings: publishSettings.batching,
+      itemSize: (request) {
+        var size = request.message.data.length;
+        for (final entry in request.message.attributes.entries) {
+          size +=
+              utf8.encode(entry.key).length + utf8.encode(entry.value).length;
+        }
+        return size;
+      },
+      onBatch: _onBatch,
+    );
+  }
+
+  Future<void> _onBatch(List<_PublishRequest> batch) async {
+    try {
+      final messages = batch.map((item) => item.message).toList();
+      final messageIds = await runWithRetry(
+        () => pubsub.publishMessages(name, messages),
+        settings: publishSettings.retry,
+        isIdempotent: true,
+      );
+      for (var i = 0; i < batch.length; i++) {
+        if (i < messageIds.length) {
+          if (!batch[i].completer.isCompleted) {
+            batch[i].completer.complete(messageIds[i]);
+          }
+        } else {
+          if (!batch[i].completer.isCompleted) {
+            batch[i].completer.completeError(
+              InternalServerErrorException(
+                'Server returned fewer message IDs (${messageIds.length}) '
+                'than published messages (${batch.length}).',
+              ),
+            );
+          }
+        }
+      }
+    } catch (error, stackTrace) {
+      for (final item in batch) {
+        if (!item.completer.isCompleted) {
+          item.completer.completeError(error, stackTrace);
+        }
+      }
+    }
   }
 
   static void _validateName(String name) {
@@ -72,7 +177,10 @@ final class Topic {
   /// Returns a [Topic] instance representing the created topic.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Publisher.CreateTopic).
-  Future<Topic> create() => pubsub.createTopic(name);
+  Future<Topic> create() async {
+    await pubsub.createTopic(name, publishSettings: publishSettings);
+    return this;
+  }
 
   /// Deletes this topic on the server.
   ///
@@ -86,15 +194,44 @@ final class Topic {
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Publisher.DeleteTopic).
   Future<void> delete() => pubsub.deleteTopic(name);
 
-  /// Adds one or more messages to the topic.
+  /// Adds a message to the topic.
   ///
+  /// The message is placed into a background buffer and published in a batch
+  /// according to [publishSettings] batching configuration. If transient
+  /// network errors occur during publishing, the batch is automatically
+  /// retried according to [publishSettings] retry configuration.
+  ///
+  /// To ensure all buffered messages are published before application shutdown,
+  /// call and await [close].
+  ///
+  /// It is an error if called on a closed [Topic].
   /// Throws a [NotFoundException] if the topic does not exist.
+  /// Throws a [ServiceException] if publishing fails after retries.
   ///
   /// [data] is the message content.
   /// [attributes] are optional attributes for the message.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Publisher.Publish).
-  // TODO(sigurdm): Support batch publishing (publishMany) for high-throughput.
-  Future<String> publish(List<int> data, {Map<String, String>? attributes}) =>
-      pubsub.publish(name, data, attributes: attributes);
+  Future<String> publish(List<int> data, {Map<String, String>? attributes}) {
+    if (_isClosed) {
+      throw StateError('Cannot publish to a closed Topic.');
+    }
+    final completer = Completer<String>();
+    _batcher.add(
+      _PublishRequest(Message(data: data, attributes: attributes), completer),
+    );
+    return completer.future;
+  }
+
+  /// Closes the topic, flushing any pending messages and waiting for in-flight
+  /// batches to complete.
+  ///
+  /// Calling and awaiting [close] during application shutdown ensures that all
+  /// buffered messages are published before the process exits.
+  ///
+  /// Once closed, it is an error to call [publish].
+  Future<void> close() {
+    _isClosed = true;
+    return _closeFuture ??= _batcher.close();
+  }
 }
