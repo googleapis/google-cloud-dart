@@ -107,9 +107,7 @@ Future<bool> internalIsOnComputeEngine({
     // which the `http.Client` API contract doesn't allow. Therefore, only
     // tests are allowed to provide `client`.
     if (closeClient) {
-      unawaited(
-        Future.wait(inFlightRequests).whenComplete(httpClient.close),
-      );
+      unawaited(Future.wait(inFlightRequests).whenComplete(httpClient.close));
     }
   }
 }
