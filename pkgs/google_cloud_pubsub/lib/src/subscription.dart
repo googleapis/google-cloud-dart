@@ -15,6 +15,35 @@
 import 'dart:async';
 
 import '../google_cloud_pubsub.dart';
+import 'batching.dart';
+import 'retry.dart';
+
+/// Settings for background batching and retrying of acknowledgements and
+/// deadline modifications.
+final class AckSettings {
+  /// Settings controlling how requests are accumulated and flushed.
+  final BatchingSettings batching;
+
+  /// Settings controlling retries when flushing a batch over a unary RPC.
+  final RetrySettings retry;
+
+  AckSettings({BatchingSettings? batching, RetrySettings? retry})
+    : batching = batching ?? BatchingSettings(),
+      retry = retry ?? RetrySettings();
+}
+
+final class _AckRequest {
+  final String ackId;
+
+  _AckRequest(this.ackId);
+}
+
+final class _ModifyAckDeadlineRequest {
+  final String ackId;
+  final int ackDeadlineSeconds;
+
+  _ModifyAckDeadlineRequest(this.ackId, this.ackDeadlineSeconds);
+}
 
 /// A [Google Cloud Pub/Sub subscription](https://cloud.google.com/pubsub/docs/overview#subscriptions).
 final class Subscription {
@@ -30,13 +59,31 @@ final class Subscription {
   /// It has the format `projects/<project-id>/subscriptions/<subscription-id>`.
   final String name;
 
+  /// Settings controlling background acknowledgment and deadline modification
+  /// batching and retries.
+  final AckSettings ackSettings;
+
+  late final Batcher<_AckRequest> _ackBatcher;
+  late final Batcher<_ModifyAckDeadlineRequest> _modifyAckBatcher;
+
+  bool _isClosed = false;
+  Future<void>? _closeFuture;
+
+  /// Whether this subscription has been closed via [close].
+  bool get isClosed => _isClosed;
+
   /// A subscription with the given [subscriptionId] in the client's project.
   ///
   /// It is an error if the constructed subscription name is invalid (e.g. if
   /// [subscriptionId] contains slashes).
-  Subscription.unqualified(this.pubsub, String subscriptionId)
-    : name = 'projects/${pubsub.projectId}/subscriptions/$subscriptionId' {
+  Subscription.unqualified(
+    this.pubsub,
+    String subscriptionId, {
+    AckSettings? ackSettings,
+  }) : name = 'projects/${pubsub.projectId}/subscriptions/$subscriptionId',
+       ackSettings = ackSettings ?? AckSettings() {
     _validateName(name);
+    _initBatchers();
   }
 
   /// A subscription with the given [name].
@@ -45,8 +92,23 @@ final class Subscription {
   ///
   /// It is an error if [name] is not in the format
   /// `projects/<project-id>/subscriptions/<subscription-id>`.
-  Subscription(this.pubsub, this.name) {
+  Subscription(this.pubsub, this.name, {AckSettings? ackSettings})
+    : ackSettings = ackSettings ?? AckSettings() {
     _validateName(name);
+    _initBatchers();
+  }
+
+  void _initBatchers() {
+    _ackBatcher = Batcher<_AckRequest>(
+      settings: ackSettings.batching,
+      itemSize: (req) => req.ackId.length,
+      onBatch: _onAckBatch,
+    );
+    _modifyAckBatcher = Batcher<_ModifyAckDeadlineRequest>(
+      settings: ackSettings.batching,
+      itemSize: (req) => req.ackId.length,
+      onBatch: _onModifyAckBatch,
+    );
   }
 
   static void _validateName(String name) {
@@ -73,8 +135,10 @@ final class Subscription {
   /// Returns a [Subscription] instance representing the created subscription.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.CreateSubscription).
-  Future<Subscription> create({required String topic}) =>
-      pubsub.createSubscription(name, topic: topic);
+  Future<Subscription> create({required String topic}) async {
+    await pubsub.createSubscription(name, topic: topic);
+    return this;
+  }
 
   /// Deletes this subscription on the server.
   ///
@@ -87,12 +151,15 @@ final class Subscription {
 
   /// Pulls messages from the server.
   ///
+  /// It is an error if [maxMessages] is not greater than 0.
+  /// It is an error if called on a closed [Subscription].
   /// Throws a [NotFoundException] if the subscription does not exist.
-  ///
-  /// It is an error if [maxMessages] is less than or equal to 0.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.Pull).
   Future<List<ReceivedMessage>> pull({int maxMessages = 1}) {
+    if (_isClosed) {
+      throw StateError('Cannot pull messages on a closed Subscription.');
+    }
     if (maxMessages <= 0) {
       throw ArgumentError.value(
         maxMessages,
@@ -106,18 +173,18 @@ final class Subscription {
   /// Establishes a stream with the server, which sends messages down to the
   /// client.
   ///
-  /// The client streams acknowledgments and ack deadline modifications
-  /// back to the server. If an error occurs (including when the server closes
-  /// the stream with status `UNAVAILABLE` to reassign resources), the stream
-  /// will throw a [ServiceException]. In this case, the caller should
-  /// re-establish the stream. Flow control can be achieved by configuring the
-  /// underlying RPC channel.
-  ///
   /// Throws a [ServiceException] if the stream is broken by the server or
   /// network.
   ///
+  /// It is an error if called on a closed [Subscription].
+  /// It is an error if [streamAckDeadlineSeconds] is not between 10 and 600
+  /// seconds.
+  ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.StreamingPull).
   Stream<ReceivedMessage> streamingPull({int streamAckDeadlineSeconds = 10}) {
+    if (_isClosed) {
+      throw StateError('Cannot stream messages on a closed Subscription.');
+    }
     if (streamAckDeadlineSeconds < 10 || streamAckDeadlineSeconds > 600) {
       throw ArgumentError.value(
         streamAckDeadlineSeconds,
@@ -131,43 +198,83 @@ final class Subscription {
     );
   }
 
-  /// Acknowledges the messages associated with the [messages] immediately.
-  ///
-  /// The Pub/Sub system can remove the relevant messages from the subscription.
-  ///
-  /// Acknowledging a message whose ack deadline has expired may succeed,
-  /// but such a message may be redelivered later. Acknowledging a message more
-  /// than once will not result in an error.
-  ///
-  /// Throws a [NotFoundException] if the subscription does not exist.
-  ///
-  /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.Acknowledge).
-  Future<void> acknowledgeNow(List<ReceivedMessage> messages) =>
-      pubsub.acknowledge(name, messages.map((m) => m.ackId).toList());
-
-  /// Acknowledges a single message in the background.
-  ///
-  /// This operation is "fire-and-forget" and does not wait for server
-  /// confirmation. If you require explicit confirmation of acknowledgment,
-  /// use [acknowledgeNow].
-  void acknowledge(ReceivedMessage message) {
-    unawaited(acknowledgeNow([message]));
+  Future<void> _onAckBatch(List<_AckRequest> batch) async {
+    final ackIds = batch.map((e) => e.ackId).toList();
+    await runWithRetry(
+      () => pubsub.acknowledge(name, ackIds),
+      settings: ackSettings.retry,
+      isIdempotent: true,
+    );
   }
 
-  /// Modifies the ack deadline for a list of specific messages immediately.
+  Future<void> _onModifyAckBatch(List<_ModifyAckDeadlineRequest> batch) async {
+    final byDeadline = <int, List<String>>{};
+    for (final req in batch) {
+      byDeadline.putIfAbsent(req.ackDeadlineSeconds, () => []).add(req.ackId);
+    }
+    for (final entry in byDeadline.entries) {
+      final deadline = entry.key;
+      final ackIds = entry.value;
+      try {
+        await runWithRetry(
+          () => pubsub.modifyAckDeadline(name, ackIds, deadline),
+          settings: ackSettings.retry,
+          isIdempotent: true,
+        );
+      } catch (_) {
+        // Best effort.
+      }
+    }
+  }
+
+  /// Acknowledges the [messages] synchronously.
   ///
-  /// This method is useful to indicate that more time is needed to process a
-  /// message by the subscriber, or to make the message available for redelivery
-  /// if the processing was interrupted. Note that this does not modify the
-  /// subscription-level `ackDeadlineSeconds` used for subsequent messages.
+  /// Bypasses background batching and immediately executes a unary RPC.
   ///
-  /// Modifying the ack deadline for messages whose deadline has already expired
-  /// may succeed, but those messages may have already been redelivered or
-  /// made available for redelivery.
-  ///
+  /// It is an error if called on a closed [Subscription].
   /// Throws a [NotFoundException] if the subscription does not exist.
+  /// Throws a [ServiceException] if the RPC fails.
+  ///
+  /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.Acknowledge).
+  Future<void> acknowledgeNow(List<ReceivedMessage> messages) {
+    if (_isClosed) {
+      throw StateError('Cannot acknowledge messages on a closed Subscription.');
+    }
+    if (messages.isEmpty) return Future.value();
+    return pubsub.acknowledge(name, messages.map((m) => m.ackId).toList());
+  }
+
+  /// Acknowledges [message] in the background.
+  ///
+  /// The acknowledgment is buffered and sent in a batch according to
+  /// [AckSettings.batching] via a unary RPC with retries configured
+  /// by [AckSettings.retry].
+  ///
+  /// To ensure all buffered acknowledgments are delivered before application
+  /// shutdown, call and await [close].
+  ///
+  /// It is an error if called on a closed [Subscription].
+  ///
+  /// This is a non-blocking, fire-and-forget operation. If a background ACK
+  /// fails permanently, the message will eventually be redelivered by the
+  /// server after its ack deadline expires.
+  ///
+  /// See [acknowledgeNow] for an immediate, awaitable alternative.
+  void acknowledge(ReceivedMessage message) {
+    if (_isClosed) {
+      throw StateError('Cannot acknowledge messages on a closed Subscription.');
+    }
+    _ackBatcher.add(_AckRequest(message.ackId));
+  }
+
+  /// Modifies the ack deadline for [messages] synchronously.
+  ///
+  /// Bypasses background batching and immediately executes a unary RPC.
   ///
   /// It is an error if [ackDeadlineSeconds] is negative.
+  /// It is an error if called on a closed [Subscription].
+  /// Throws a [NotFoundException] if the subscription does not exist.
+  /// Throws a [ServiceException] if the RPC fails.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.ModifyAckDeadline).
   Future<void> modifyAckDeadlineNow(
@@ -181,6 +288,10 @@ final class Subscription {
         'Must be non-negative',
       );
     }
+    if (_isClosed) {
+      throw StateError('Cannot modify ack deadline on a closed Subscription.');
+    }
+    if (messages.isEmpty) return Future.value();
     return pubsub.modifyAckDeadline(
       name,
       messages.map((m) => m.ackId).toList(),
@@ -188,13 +299,20 @@ final class Subscription {
     );
   }
 
-  /// Modifies the ack deadline for a single message in the background.
+  /// Modifies the ack deadline for [message] in the background.
   ///
-  /// This operation is "fire-and-forget" and does not wait for server
-  /// confirmation. If you require explicit confirmation, use
-  /// [modifyAckDeadlineNow].
+  /// The request is buffered and sent in a batch according to
+  /// [AckSettings.batching] via a unary RPC with retries configured
+  /// by [AckSettings.retry].
+  ///
+  /// To ensure all buffered deadline modifications are delivered before
+  /// application shutdown, call and await [close].
   ///
   /// It is an error if [ackDeadlineSeconds] is negative.
+  /// It is an error if called on a closed [Subscription].
+  ///
+  /// This is a non-blocking, fire-and-forget operation. See
+  /// [modifyAckDeadlineNow] for an immediate, awaitable alternative.
   void modifyAckDeadline(ReceivedMessage message, int ackDeadlineSeconds) {
     if (ackDeadlineSeconds < 0) {
       throw ArgumentError.value(
@@ -203,6 +321,27 @@ final class Subscription {
         'Must be non-negative',
       );
     }
-    unawaited(modifyAckDeadlineNow([message], ackDeadlineSeconds));
+    if (_isClosed) {
+      throw StateError('Cannot modify ack deadline on a closed Subscription.');
+    }
+    _modifyAckBatcher.add(
+      _ModifyAckDeadlineRequest(message.ackId, ackDeadlineSeconds),
+    );
+  }
+
+  /// Closes the subscription, flushing any pending acknowledgments and
+  /// deadline modifications and waiting for in-flight batches to complete.
+  ///
+  /// Calling and awaiting [close] during application shutdown ensures that all
+  /// buffered acknowledgments and deadline modifications are sent before the
+  /// process exits, preventing message redelivery.
+  ///
+  /// Once closed, calls to [acknowledge], [modifyAckDeadline], and [pull] will
+  /// throw [StateError].
+  Future<void> close() {
+    _isClosed = true;
+    return _closeFuture ??= () async {
+      await Future.wait([_ackBatcher.close(), _modifyAckBatcher.close()]);
+    }();
   }
 }

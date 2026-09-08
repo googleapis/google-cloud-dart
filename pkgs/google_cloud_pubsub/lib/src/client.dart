@@ -14,6 +14,7 @@
 
 import 'dart:async';
 
+import 'package:google_cloud_rpc/rpc.dart';
 import 'package:grpc/grpc.dart';
 import 'package:meta/meta.dart';
 import '../google_cloud_pubsub.dart';
@@ -176,26 +177,35 @@ final class PubSub {
   // Topic-related methods
 
   /// A [Topic] object with the given [unqualifiedName] in the client's project.
-  Topic topic(String unqualifiedName) =>
-      Topic.unqualified(this, unqualifiedName);
+  Topic topic(String unqualifiedName, {PublishSettings? publishSettings}) =>
+      Topic.unqualified(
+        this,
+        unqualifiedName,
+        publishSettings: publishSettings,
+      );
 
   /// A [Topic] object with the given [name].
   ///
   /// The [name] must be in the format `projects/<project-id>/topics/<topic-id>`.
   /// Useful for cross-project access.
-  Topic topicName(String name) => Topic(this, name);
+  Topic topicName(String name, {PublishSettings? publishSettings}) =>
+      Topic(this, name, publishSettings: publishSettings);
 
   /// A [Subscription] object with the given [unqualifiedName] in the client's
   /// project.
-  Subscription subscription(String unqualifiedName) =>
-      Subscription.unqualified(this, unqualifiedName);
+  Subscription subscription(
+    String unqualifiedName, {
+    AckSettings? ackSettings,
+  }) =>
+      Subscription.unqualified(this, unqualifiedName, ackSettings: ackSettings);
 
   /// A [Subscription] object with the given [name].
   ///
   /// The [name] must be in the format
   /// `projects/<project-id>/subscriptions/<subscription-id>`.
   /// Useful for cross-project access.
-  Subscription subscriptionName(String name) => Subscription(this, name);
+  Subscription subscriptionName(String name, {AckSettings? ackSettings}) =>
+      Subscription(this, name, ackSettings: ackSettings);
 
   /// Creates the given topic with the given [topic].
   ///
@@ -246,21 +256,40 @@ final class PubSub {
     List<int> data, {
     Map<String, String>? attributes,
   }) async {
-    final message = grpc.PubsubMessage()..data = data;
-    if (attributes != null) {
-      message.attributes.addAll(attributes);
-    }
+    final messageIds = await publishMessages(topic, [
+      Message(data: data, attributes: attributes),
+    ]);
+    return messageIds.first;
+  }
 
-    final request = grpc.PublishRequest()
-      ..topic = topic
-      ..messages.add(message);
+  /// Adds multiple messages to the topic in a single RPC.
+  ///
+  /// The [topic] must be in the format `projects/<project-id>/topics/<topic-id>`.
+  ///
+  /// Throws a [NotFoundException] if the topic does not exist.
+  ///
+  /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Publisher.Publish).
+  Future<List<String>> publishMessages(
+    String topic,
+    List<Message> messages,
+  ) async {
+    if (messages.isEmpty) return <String>[];
+    final request = grpc.PublishRequest()..topic = topic;
+
+    for (final message in messages) {
+      final pbMessage = grpc.PubsubMessage()..data = message.data;
+      if (message.attributes.isNotEmpty) {
+        pbMessage.attributes.addAll(message.attributes);
+      }
+      request.messages.add(pbMessage);
+    }
 
     try {
       final response = await _publisher.publish(
         request,
         options: await _callOptions,
       );
-      return response.messageIds.first;
+      return response.messageIds;
     } on GrpcError catch (e) {
       throw _mapGrpcError(e);
     }
@@ -331,6 +360,8 @@ final class PubSub {
   /// The [subscription] must be in the format
   /// `projects/<project-id>/subscriptions/<subscription-id>`.
   ///
+  /// It is an error if [maxMessages] is not greater than 0.
+  ///
   /// Throws a [NotFoundException] if the subscription does not exist.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.Pull).
@@ -338,6 +369,13 @@ final class PubSub {
     String subscription, {
     int maxMessages = 1,
   }) async {
+    if (maxMessages <= 0) {
+      throw ArgumentError.value(
+        maxMessages,
+        'maxMessages',
+        'Must be greater than 0',
+      );
+    }
     final request = grpc.PullRequest()
       ..subscription = subscription
       ..maxMessages = maxMessages;
@@ -378,11 +416,30 @@ final class PubSub {
   ///
   /// Throws a [ServiceException] if the stream is broken by the server or
   /// network.
+  /// It is an error if [streamAckDeadlineSeconds] is not between 10 and 600
+  /// seconds.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.StreamingPull).
   Stream<ReceivedMessage> streamingPull(
     String subscription, {
     int streamAckDeadlineSeconds = 10,
+  }) {
+    if (streamAckDeadlineSeconds < 10 || streamAckDeadlineSeconds > 600) {
+      throw ArgumentError.value(
+        streamAckDeadlineSeconds,
+        'streamAckDeadlineSeconds',
+        'Must be between 10 and 600 seconds',
+      );
+    }
+    return _streamingPull(
+      subscription,
+      streamAckDeadlineSeconds: streamAckDeadlineSeconds,
+    );
+  }
+
+  Stream<ReceivedMessage> _streamingPull(
+    String subscription, {
+    required int streamAckDeadlineSeconds,
   }) async* {
     final requestController = StreamController<grpc.StreamingPullRequest>();
     try {
@@ -448,6 +505,7 @@ final class PubSub {
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.Acknowledge).
   Future<void> acknowledge(String subscription, List<String> ackIds) async {
+    if (ackIds.isEmpty) return;
     final request = grpc.AcknowledgeRequest()
       ..subscription = subscription
       ..ackIds.addAll(ackIds);
@@ -473,6 +531,8 @@ final class PubSub {
   /// may succeed, but those messages may have already been redelivered or
   /// made available for redelivery.
   ///
+  /// It is an error if [ackDeadlineSeconds] is negative.
+  ///
   /// Throws a [NotFoundException] if the subscription does not exist.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.ModifyAckDeadline).
@@ -481,6 +541,14 @@ final class PubSub {
     List<String> ackIds,
     int ackDeadlineSeconds,
   ) async {
+    if (ackDeadlineSeconds < 0) {
+      throw ArgumentError.value(
+        ackDeadlineSeconds,
+        'ackDeadlineSeconds',
+        'Must be non-negative',
+      );
+    }
+    if (ackIds.isEmpty) return;
     final request = grpc.ModifyAckDeadlineRequest()
       ..subscription = subscription
       ..ackIds.addAll(ackIds)
@@ -524,7 +592,10 @@ final class PubSub {
       StatusCode.permissionDenied => ForbiddenException(message),
       StatusCode.notFound => NotFoundException(message),
       StatusCode.alreadyExists => ConflictException(message),
-      StatusCode.aborted => ConflictException(message),
+      StatusCode.aborted => ConflictException(
+        message,
+        status: Status(code: StatusCode.aborted, message: message),
+      ),
       StatusCode.failedPrecondition => PreconditionFailedException(message),
       StatusCode.outOfRange => RequestRangeNotSatisfiableException(message),
       StatusCode.resourceExhausted => TooManyRequestsException(message),
