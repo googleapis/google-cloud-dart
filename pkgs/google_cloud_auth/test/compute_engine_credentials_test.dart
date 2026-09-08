@@ -17,6 +17,7 @@ library;
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:google_cloud_auth/google_cloud_auth.dart';
@@ -431,13 +432,14 @@ void main() async {
       test(
         'returns true when metadata server responds with Google flavor',
         () async {
-          final mockClient = MockClient(
-            (request) async => http.Response(
+          final mockClient = MockClient((request) async {
+            expect(request.url.host, 'test-metadata');
+            return http.Response(
               'ok',
               200,
               headers: {'metadata-flavor': 'Google'},
-            ),
-          );
+            );
+          });
 
           final isGce = await ComputeEngineCredentials.isOnComputeEngine(
             client: mockClient,
@@ -448,13 +450,14 @@ void main() async {
       );
 
       test('returns false when status is not 200', () async {
-        final mockClient = MockClient(
-          (request) async => http.Response(
+        final mockClient = MockClient((request) async {
+          expect(request.url.host, 'test-metadata');
+          return http.Response(
             'forbidden',
             403,
             headers: {'metadata-flavor': 'Google'},
-          ),
-        );
+          );
+        });
 
         final isGce = await ComputeEngineCredentials.isOnComputeEngine(
           client: mockClient,
@@ -464,9 +467,10 @@ void main() async {
       });
 
       test('returns false when metadata-flavor header is missing', () async {
-        final mockClient = MockClient(
-          (request) async => http.Response('ok', 200),
-        );
+        final mockClient = MockClient((request) async {
+          expect(request.url.host, 'test-metadata');
+          return http.Response('ok', 200);
+        });
 
         final isGce = await ComputeEngineCredentials.isOnComputeEngine(
           client: mockClient,
@@ -477,6 +481,7 @@ void main() async {
 
       test('returns false on network exception', () async {
         final mockClient = MockClient((request) async {
+          expect(request.url.host, 'test-metadata');
           throw http.ClientException('Connection refused');
         });
 
@@ -490,6 +495,7 @@ void main() async {
       test('retries on network exception up to retryCount', () async {
         var callCount = 0;
         final mockClient = MockClient((request) async {
+          expect(request.url.host, 'test-metadata');
           callCount++;
           throw http.ClientException('Connection reset');
         });
@@ -502,6 +508,32 @@ void main() async {
         expect(isGce, isFalse);
         expect(callCount, 3);
       });
+
+      test(
+        'use ip after host name fails',
+        () async {
+          final mockClient = MockClient((request) async {
+            if (request.url.host == '169.254.169.254') {
+              return http.Response(
+                'ok',
+                200,
+                headers: {'metadata-flavor': 'Google'},
+              );
+            } else {
+              throw http.ClientException('Connection reset');
+            }
+          });
+
+          final isGce = await ComputeEngineCredentials.isOnComputeEngine(
+            client: mockClient,
+            retryCount: 3,
+          );
+          expect(isGce, isTrue);
+        },
+        skip: Platform.environment['GCE_METADATA_HOST'] == null
+            ? null
+            : 'GCE_METADATA_HOST set',
+      );
     });
 
     group('sign', () {

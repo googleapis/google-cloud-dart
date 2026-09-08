@@ -306,9 +306,7 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
           return true;
         }
 
-        // Also attempt direct link-local IP ping if on Linux and DNS might have
-        // failed.
-        if (Platform.isLinux && host != _defaultMetadataIp) {
+        if (host != _defaultMetadataIp) {
           try {
             final ipUri = Uri.http(_defaultMetadataIp, '/computeMetadata/v1/');
             final response = await httpClient
