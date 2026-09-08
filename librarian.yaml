@@ -486,7 +486,6 @@ libraries:
       - CHANGELOG.md
       - dart_test.yaml
       - example/main.dart
-      - test/queues_test.dart
       - test/tasks_test.dart
     dart:
       dev_dependencies: googleapis_auth,test,test_utils
