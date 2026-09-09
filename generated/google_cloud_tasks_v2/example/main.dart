@@ -45,6 +45,7 @@ void main() async {
   const parent = 'projects/$projectId/locations/$location';
   const queueId = 'helloWorld';
 
+  // Once deleted, a queue name cannot be reused for a week.
   final createdQueue = await tasksService.createQueue(
     CreateQueueRequest(
       parent: parent,

@@ -42,6 +42,7 @@ void main() {
       final queueId = 'queue-${Random().nextInt(999999999)}';
       queueName = '$parent/queues/$queueId';
 
+      // Once deleted, a queue name cannot be reused for a week.
       await tasksService.createQueue(
         CreateQueueRequest(
           parent: parent,
