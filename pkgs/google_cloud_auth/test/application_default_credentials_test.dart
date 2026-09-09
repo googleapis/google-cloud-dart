@@ -114,28 +114,63 @@ void main() {
   });
 
   group('applicationDefaultCredentials', () {
-    group('ServiceAccountCredentials from GOOGLE_APPLICATION_CREDENTIALS', () {
-      testFileLoad(
-        () => tempDir,
-        (filePath) => internalDefaultCredentials(
+    group('ServiceAccountCredentials', () {
+      group('from GOOGLE_APPLICATION_CREDENTIALS', () {
+        testFileLoad(
+          () => tempDir,
+          (filePath) => internalDefaultCredentials(
+            getEnvironmentVariable: (String name) {
+              if (name == 'GOOGLE_APPLICATION_CREDENTIALS') return filePath;
+              return null;
+            },
+          ),
+          testNonExistentFile: true,
+        );
+      });
+
+      test('from CLOUDSDK_CONFIG', () async {
+        final saFile = File(
+          '${tempDir.path}/application_default_credentials.json',
+        );
+        await saFile.writeAsString(
+          jsonEncode({
+            'type': 'service_account',
+            'project_id': 'env-project',
+            'private_key': testPrivateKey,
+            'client_email': 'env-sa@project.iam.gserviceaccount.com',
+          }),
+        );
+
+        final credentials = await internalDefaultCredentials(
           getEnvironmentVariable: (String name) {
-            if (name == 'GOOGLE_APPLICATION_CREDENTIALS') return filePath;
+            if (name == 'CLOUDSDK_CONFIG') return tempDir.path;
             return null;
           },
-        ),
-        testNonExistentFile: true,
-      );
-    });
+          isWindows: false,
+        );
 
-    group('ServiceAccountCredentials from well-known file', () {
-      testFileLoad(
-        () => tempDir,
-        (filePath) => internalDefaultCredentials(
-          getEnvironmentVariable: (String name) => null,
-          wellKnownFilePath: filePath,
-        ),
-      );
+        expect(
+          credentials,
+          isA<ServiceAccountCredentials>().having(
+            (e) => e.clientEmail,
+            'clientEmail',
+            'env-sa@project.iam.gserviceaccount.com',
+          ),
+        );
+      }, skip: canUseWebCrypto ? null : 'Requires Dart 3.13 or later');
+
+      group('from well-known file', () {
+        testFileLoad(
+          () => tempDir,
+          (filePath) => internalDefaultCredentials(
+            getEnvironmentVariable: (String name) => null,
+            wellKnownFilePath: filePath,
+          ),
+        );
+      });
+
     });
+  });
 
     test('ComputeEngineCredentials from metadata server', () async {
       final mockClient = MockClient(
@@ -199,5 +234,167 @@ void main() {
         );
       },
     );
+
+
+  group('getWellKnownCredentialsPath', () {
+    group('POSIX', () {
+      test('returns CLOUDSDK_CONFIG path when set', () {
+        final path = getWellKnownCredentialsPath(
+          (name) => switch (name) {
+            'CLOUDSDK_CONFIG' => '/custom/config',
+            _ => null,
+          },
+          false,
+        );
+        expect(
+          path,
+          equals('/custom/config/application_default_credentials.json'),
+        );
+      });
+
+      test('prioritizes CLOUDSDK_CONFIG over HOME', () {
+        final path = getWellKnownCredentialsPath(
+          (name) => switch (name) {
+            'CLOUDSDK_CONFIG' => '/custom/config',
+            'HOME' => '/home/user',
+            _ => null,
+          },
+          false,
+        );
+        expect(
+          path,
+          equals('/custom/config/application_default_credentials.json'),
+        );
+      });
+
+      test('returns HOME-based config path when CLOUDSDK_CONFIG not set', () {
+        final path = getWellKnownCredentialsPath(
+          (name) => switch (name) {
+            'HOME' => '/home/user',
+            _ => null,
+          },
+          false,
+        );
+        expect(
+          path,
+          equals(
+            '/home/user/.config/gcloud/application_default_credentials.json',
+          ),
+        );
+      });
+
+      test('returns null when neither CLOUDSDK_CONFIG nor HOME is set', () {
+        final path = getWellKnownCredentialsPath((name) => null, false);
+        expect(path, isNull);
+      });
+
+      test('returns null when HOME is empty', () {
+        final path = getWellKnownCredentialsPath(
+          (name) => switch (name) {
+            'HOME' => '',
+            _ => null,
+          },
+          false,
+        );
+        expect(path, isNull);
+      });
+
+      test('falls back to HOME when CLOUDSDK_CONFIG is empty', () {
+        final path = getWellKnownCredentialsPath(
+          (name) => switch (name) {
+            'CLOUDSDK_CONFIG' => '',
+            'HOME' => '/home/user',
+            _ => null,
+          },
+          false,
+        );
+        expect(
+          path,
+          equals(
+            '/home/user/.config/gcloud/application_default_credentials.json',
+          ),
+        );
+      });
+    });
+
+    group('Windows', () {
+      test('returns CLOUDSDK_CONFIG path when set', () {
+        final path = getWellKnownCredentialsPath(
+          (name) => switch (name) {
+            'CLOUDSDK_CONFIG' => r'C:\custom\config',
+            _ => null,
+          },
+          true,
+        );
+        expect(
+          path,
+          equals(r'C:\custom\config\application_default_credentials.json'),
+        );
+      });
+
+      test('prioritizes CLOUDSDK_CONFIG over APPDATA', () {
+        final path = getWellKnownCredentialsPath(
+          (name) => switch (name) {
+            'CLOUDSDK_CONFIG' => r'C:\custom\config',
+            'APPDATA' => r'C:\Users\user\AppData\Roaming',
+            _ => null,
+          },
+          true,
+        );
+        expect(
+          path,
+          equals(r'C:\custom\config\application_default_credentials.json'),
+        );
+      });
+
+      test('returns APPDATA config path when CLOUDSDK_CONFIG not set', () {
+        final path = getWellKnownCredentialsPath(
+          (name) => switch (name) {
+            'APPDATA' => r'C:\Users\user\AppData\Roaming',
+            _ => null,
+          },
+          true,
+        );
+        expect(
+          path,
+          equals(
+            r'C:\Users\user\AppData\Roaming\gcloud\application_default_credentials.json',
+          ),
+        );
+      });
+
+      test('returns null when neither CLOUDSDK_CONFIG nor APPDATA is set', () {
+        final path = getWellKnownCredentialsPath((name) => null, true);
+        expect(path, isNull);
+      });
+
+      test('returns null when APPDATA is empty', () {
+        final path = getWellKnownCredentialsPath(
+          (name) => switch (name) {
+            'APPDATA' => '',
+            _ => null,
+          },
+          true,
+        );
+        expect(path, isNull);
+      });
+
+      test('falls back to APPDATA when CLOUDSDK_CONFIG is empty', () {
+        final path = getWellKnownCredentialsPath(
+          (name) => switch (name) {
+            'CLOUDSDK_CONFIG' => '',
+            'APPDATA' => r'C:\Users\user\AppData\Roaming',
+            _ => null,
+          },
+          true,
+        );
+        expect(
+          path,
+          equals(
+            r'C:\Users\user\AppData\Roaming\gcloud\application_default_credentials.json',
+          ),
+        );
+      });
+    });
   });
 }

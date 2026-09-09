@@ -60,7 +60,7 @@ Future<GoogleCredentials> internalDefaultCredentials({
 
   // Check well-known credentials file
   final adcPath =
-      wellKnownFilePath ?? _getWellKnownCredentialsPath(getEnv, onWindows);
+      wellKnownFilePath ?? getWellKnownCredentialsPath(getEnv, onWindows);
   if (adcPath != null) {
     final file = File(adcPath);
     if (await file.exists()) {
@@ -118,33 +118,26 @@ Future<ServiceAccountCredentials> _loadCredentialsFile(File file) async {
   );
 }
 
-String? _getWellKnownCredentialsPath(
+const _credentialsFileName = 'application_default_credentials.json';
+
+@visibleForTesting
+String? getWellKnownCredentialsPath(
   String? Function(String name) getEnv,
   bool isWindows,
 ) {
+  final path = isWindows ? p.windows : p.posix;
+  final cloudSdkConfig = getEnv('CLOUDSDK_CONFIG');
+  if (cloudSdkConfig != null && cloudSdkConfig.isNotEmpty) {
+    return path.join(cloudSdkConfig, _credentialsFileName);
+  }
+
   if (isWindows) {
     final appData = getEnv('APPDATA');
     if (appData == null || appData.isEmpty) return null;
-    return p.windows.join(
-      appData,
-      'gcloud',
-      'application_default_credentials.json',
-    );
-  } else {
-    final cloudSdkConfig = getEnv('CLOUDSDK_CONFIG');
-    if (cloudSdkConfig != null && cloudSdkConfig.isNotEmpty) {
-      return p.posix.join(
-        cloudSdkConfig,
-        'application_default_credentials.json',
-      );
-    }
-    final home = getEnv('HOME');
-    if (home == null || home.isEmpty) return null;
-    return p.posix.join(
-      home,
-      '.config',
-      'gcloud',
-      'application_default_credentials.json',
-    );
+    return path.join(appData, 'gcloud', _credentialsFileName);
   }
+
+  final home = getEnv('HOME');
+  if (home == null || home.isEmpty) return null;
+  return path.join(home, '.config', 'gcloud', _credentialsFileName);
 }
