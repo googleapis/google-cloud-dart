@@ -168,78 +168,73 @@ void main() {
           ),
         );
       });
-
     });
   });
 
-    test('ComputeEngineCredentials from metadata server', () async {
-      final mockClient = MockClient(
-        (request) async => switch (request.url.path) {
-          '/computeMetadata/v1/' => http.Response(
-            'ok',
-            200,
-            headers: {'metadata-flavor': 'Google'},
-          ),
-          '/computeMetadata/v1/instance/service-accounts/default/email' =>
-            http.Response(
-              'gce-sa@project.iam.gserviceaccount.com',
-              200,
-              headers: {'metadata-flavor': 'Google'},
-            ),
-          '/computeMetadata/v1/universe/universe-domain' => http.Response(
-            'googleapis.com',
-            200,
-            headers: {'metadata-flavor': 'Google'},
-          ),
-          _ => http.Response('Not found', 404),
-        },
-      );
-
-      final credentials = await internalDefaultCredentials(
-        client: mockClient,
-        getEnvironmentVariable: (String name) => null,
-        wellKnownFilePath: '${tempDir.path}/non_existent.json',
-      );
-
-      expect(
-        credentials,
-        isA<ComputeEngineCredentials>().having(
-          (e) => e.clientEmail,
-          'clientEmail',
-          'gce-sa@project.iam.gserviceaccount.com',
+  test('ComputeEngineCredentials from metadata server', () async {
+    final mockClient = MockClient(
+      (request) async => switch (request.url.path) {
+        '/computeMetadata/v1/' => http.Response(
+          'ok',
+          200,
+          headers: {'metadata-flavor': 'Google'},
         ),
-      );
-    });
-
-    test(
-      'throws CredentialException when no credentials can be found',
-      () async {
-        final mockClient = MockClient((request) async {
-          throw http.ClientException('Connection refused');
-        });
-
-        expect(
-          () => internalDefaultCredentials(
-            client: mockClient,
-            getEnvironmentVariable: (String name) => null,
-            wellKnownFilePath: '${tempDir.path}/non_existent.json',
+        '/computeMetadata/v1/instance/service-accounts/default/email' =>
+          http.Response(
+            'gce-sa@project.iam.gserviceaccount.com',
+            200,
+            headers: {'metadata-flavor': 'Google'},
           ),
-          throwsA(
-            isA<CredentialException>().having(
-              (e) => e.message,
-              'message',
-              contains('Could not load Application Default Credentials'),
-            ),
-          ),
-        );
+        '/computeMetadata/v1/universe/universe-domain' => http.Response(
+          'googleapis.com',
+          200,
+          headers: {'metadata-flavor': 'Google'},
+        ),
+        _ => http.Response('Not found', 404),
       },
     );
 
+    final credentials = await internalDefaultCredentials(
+      client: mockClient,
+      getEnvironmentVariable: (String name) => null,
+      wellKnownFilePath: '${tempDir.path}/non_existent.json',
+    );
+
+    expect(
+      credentials,
+      isA<ComputeEngineCredentials>().having(
+        (e) => e.clientEmail,
+        'clientEmail',
+        'gce-sa@project.iam.gserviceaccount.com',
+      ),
+    );
+  });
+
+  test('throws CredentialException when no credentials can be found', () async {
+    final mockClient = MockClient((request) async {
+      throw http.ClientException('Connection refused');
+    });
+
+    expect(
+      () => internalDefaultCredentials(
+        client: mockClient,
+        getEnvironmentVariable: (String name) => null,
+        wellKnownFilePath: '${tempDir.path}/non_existent.json',
+      ),
+      throwsA(
+        isA<CredentialException>().having(
+          (e) => e.message,
+          'message',
+          contains('Could not load Application Default Credentials'),
+        ),
+      ),
+    );
+  });
 
   group('getWellKnownCredentialsPath', () {
     group('POSIX', () {
       test('returns CLOUDSDK_CONFIG path when set', () {
-        final path = getWellKnownCredentialsPath(
+        final path = _getWellKnownCredentialsPath(
           (name) => switch (name) {
             'CLOUDSDK_CONFIG' => '/custom/config',
             _ => null,
@@ -253,7 +248,7 @@ void main() {
       });
 
       test('prioritizes CLOUDSDK_CONFIG over HOME', () {
-        final path = getWellKnownCredentialsPath(
+        final path = _getWellKnownCredentialsPath(
           (name) => switch (name) {
             'CLOUDSDK_CONFIG' => '/custom/config',
             'HOME' => '/home/user',
@@ -268,7 +263,7 @@ void main() {
       });
 
       test('returns HOME-based config path when CLOUDSDK_CONFIG not set', () {
-        final path = getWellKnownCredentialsPath(
+        final path = _getWellKnownCredentialsPath(
           (name) => switch (name) {
             'HOME' => '/home/user',
             _ => null,
@@ -284,12 +279,12 @@ void main() {
       });
 
       test('returns null when neither CLOUDSDK_CONFIG nor HOME is set', () {
-        final path = getWellKnownCredentialsPath((name) => null, false);
+        final path = _getWellKnownCredentialsPath((name) => null, false);
         expect(path, isNull);
       });
 
       test('returns null when HOME is empty', () {
-        final path = getWellKnownCredentialsPath(
+        final path = _getWellKnownCredentialsPath(
           (name) => switch (name) {
             'HOME' => '',
             _ => null,
@@ -300,7 +295,7 @@ void main() {
       });
 
       test('falls back to HOME when CLOUDSDK_CONFIG is empty', () {
-        final path = getWellKnownCredentialsPath(
+        final path = _getWellKnownCredentialsPath(
           (name) => switch (name) {
             'CLOUDSDK_CONFIG' => '',
             'HOME' => '/home/user',
@@ -319,7 +314,7 @@ void main() {
 
     group('Windows', () {
       test('returns CLOUDSDK_CONFIG path when set', () {
-        final path = getWellKnownCredentialsPath(
+        final path = _getWellKnownCredentialsPath(
           (name) => switch (name) {
             'CLOUDSDK_CONFIG' => r'C:\custom\config',
             _ => null,
@@ -333,7 +328,7 @@ void main() {
       });
 
       test('prioritizes CLOUDSDK_CONFIG over APPDATA', () {
-        final path = getWellKnownCredentialsPath(
+        final path = _getWellKnownCredentialsPath(
           (name) => switch (name) {
             'CLOUDSDK_CONFIG' => r'C:\custom\config',
             'APPDATA' => r'C:\Users\user\AppData\Roaming',
@@ -348,7 +343,7 @@ void main() {
       });
 
       test('returns APPDATA config path when CLOUDSDK_CONFIG not set', () {
-        final path = getWellKnownCredentialsPath(
+        final path = _getWellKnownCredentialsPath(
           (name) => switch (name) {
             'APPDATA' => r'C:\Users\user\AppData\Roaming',
             _ => null,
@@ -364,12 +359,12 @@ void main() {
       });
 
       test('returns null when neither CLOUDSDK_CONFIG nor APPDATA is set', () {
-        final path = getWellKnownCredentialsPath((name) => null, true);
+        final path = _getWellKnownCredentialsPath((name) => null, true);
         expect(path, isNull);
       });
 
       test('returns null when APPDATA is empty', () {
-        final path = getWellKnownCredentialsPath(
+        final path = _getWellKnownCredentialsPath(
           (name) => switch (name) {
             'APPDATA' => '',
             _ => null,
@@ -380,7 +375,7 @@ void main() {
       });
 
       test('falls back to APPDATA when CLOUDSDK_CONFIG is empty', () {
-        final path = getWellKnownCredentialsPath(
+        final path = _getWellKnownCredentialsPath(
           (name) => switch (name) {
             'CLOUDSDK_CONFIG' => '',
             'APPDATA' => r'C:\Users\user\AppData\Roaming',

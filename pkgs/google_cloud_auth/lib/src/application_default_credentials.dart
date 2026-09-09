@@ -28,6 +28,8 @@ import 'service_account_credentials.dart';
 // - https://github.com/googleapis/google-cloud-java/blob/main/google-auth-library-java/oauth2_http/java/com/google/auth/oauth2/DefaultCredentialsProvider.java
 // - https://github.com/googleapis/google-auth-library-python/blob/main/google/auth/_default.py
 
+const _credentialsFileName = 'application_default_credentials.json';
+
 /// Provides the Application Default Credential from the environment.
 ///
 /// Throws a [CredentialException] if no credentials could be found or loaded.
@@ -118,9 +120,7 @@ Future<ServiceAccountCredentials> _loadCredentialsFile(File file) async {
   );
 }
 
-const _credentialsFileName = 'application_default_credentials.json';
-
-@visibleForTesting
+@internal
 String? getWellKnownCredentialsPath(
   String? Function(String name) getEnv,
   bool isWindows,
