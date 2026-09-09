@@ -17,51 +17,27 @@ library;
 
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
-import 'dart:typed_data';
 
 import 'package:google_cloud_auth/google_cloud_auth.dart';
 import 'package:google_cloud_auth/src/application_default_credentials.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:test/test.dart';
-import 'package:webcrypto/webcrypto.dart';
 
-String _pkcs8ToPem(Uint8List pkcs8Bytes) {
-  final b64 = base64.encode(pkcs8Bytes);
-  final lines = <String>['-----BEGIN PRIVATE KEY-----'];
-  for (var i = 0; i < b64.length; i += 64) {
-    lines.add(b64.substring(i, min(i + 64, b64.length)));
-  }
-  lines.add('-----END PRIVATE KEY-----');
-  return lines.join('\n');
-}
-
-final _canUseWebCrypto = () {
-  if (!const bool.fromEnvironment('dart.library.io')) return true;
-  final versionStr = Platform.version.split(' ').first;
-  final parts = versionStr.split('.').map(int.tryParse).toList();
-  if (parts.length >= 2 && parts[0] != null && parts[1] != null) {
-    if (parts[0]! > 3) return true;
-    if (parts[0]! == 3 && parts[1]! >= 13) return true;
-  }
-  return false;
-}();
-
-late String _privateKeyPem;
-late Directory _tempDir;
+import 'test_utils.dart';
 
 void testFileLoad(
+  Directory Function() tempDir,
   Future<GoogleCredentials> Function(String filePath) loadCredentials, {
   bool testNonExistentFile = false,
 }) {
   test('success', () async {
-    final saFile = File('${_tempDir.path}/service_account.json');
+    final saFile = File('${tempDir().path}/service_account.json');
     await saFile.writeAsString(
       jsonEncode({
         'type': 'service_account',
         'project_id': 'env-project',
-        'private_key': _privateKeyPem,
+        'private_key': testPrivateKey,
         'client_email': 'env-sa@project.iam.gserviceaccount.com',
       }),
     );
@@ -76,12 +52,12 @@ void testFileLoad(
         'env-sa@project.iam.gserviceaccount.com',
       ),
     );
-  }, skip: _canUseWebCrypto ? null : 'Requires Dart 3.13 or later');
+  }, skip: canUseWebCrypto ? null : 'Requires Dart 3.13 or later');
 
   if (testNonExistentFile) {
     test('file does not exist', () async {
       expect(
-        () => loadCredentials('${_tempDir.path}/non_existent.json'),
+        () => loadCredentials('${tempDir().path}/non_existent.json'),
         throwsA(
           isA<CredentialException>().having(
             (e) => e.message,
@@ -94,7 +70,7 @@ void testFileLoad(
   }
 
   test('not valid JSON', () async {
-    final invalidFile = File('${_tempDir.path}/invalid.json');
+    final invalidFile = File('${tempDir().path}/invalid.json');
     await invalidFile.writeAsString('not a json file');
 
     expect(
@@ -110,7 +86,7 @@ void testFileLoad(
   });
 
   test('unrecognized type', () async {
-    final userFile = File('${_tempDir.path}/user_creds.json');
+    final userFile = File('${tempDir().path}/user_creds.json');
     await userFile.writeAsString(jsonEncode({'type': 'unrecognized_type'}));
 
     expect(
@@ -127,28 +103,20 @@ void testFileLoad(
 }
 
 void main() {
-  setUpAll(() async {
-    if (!_canUseWebCrypto) return;
-    final keyPair = await RsassaPkcs1V15PrivateKey.generateKey(
-      2048,
-      BigInt.from(65537),
-      Hash.sha256,
-    );
-    final pkcs8Bytes = await keyPair.privateKey.exportPkcs8Key();
-    _privateKeyPem = _pkcs8ToPem(pkcs8Bytes);
-  });
+  late Directory tempDir;
 
-  setUp(() async {
-    _tempDir = await Directory.systemTemp.createTemp('adc_test_');
+  setUp(() {
+    tempDir = Directory.systemTemp.createTempSync('adc_test');
   });
 
   tearDown(() async {
-    await _tempDir.delete(recursive: true);
+    await tempDir.delete(recursive: true);
   });
 
   group('applicationDefaultCredentials', () {
     group('ServiceAccountCredentials from GOOGLE_APPLICATION_CREDENTIALS', () {
       testFileLoad(
+        () => tempDir,
         (filePath) => internalDefaultCredentials(
           getEnvironmentVariable: (String name) {
             if (name == 'GOOGLE_APPLICATION_CREDENTIALS') return filePath;
@@ -161,6 +129,7 @@ void main() {
 
     group('ServiceAccountCredentials from well-known file', () {
       testFileLoad(
+        () => tempDir,
         (filePath) => internalDefaultCredentials(
           getEnvironmentVariable: (String name) => null,
           wellKnownFilePath: filePath,
@@ -194,7 +163,7 @@ void main() {
       final credentials = await internalDefaultCredentials(
         client: mockClient,
         getEnvironmentVariable: (String name) => null,
-        wellKnownFilePath: '${_tempDir.path}/non_existent.json',
+        wellKnownFilePath: '${tempDir.path}/non_existent.json',
       );
 
       expect(
@@ -218,7 +187,7 @@ void main() {
           () => internalDefaultCredentials(
             client: mockClient,
             getEnvironmentVariable: (String name) => null,
-            wellKnownFilePath: '${_tempDir.path}/non_existent.json',
+            wellKnownFilePath: '${tempDir.path}/non_existent.json',
           ),
           throwsA(
             isA<CredentialException>().having(
