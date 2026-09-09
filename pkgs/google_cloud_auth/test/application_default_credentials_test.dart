@@ -26,82 +26,6 @@ import 'package:test/test.dart';
 
 import 'test_utils.dart';
 
-void testFileLoad(
-  Directory Function() tempDir,
-  Future<GoogleCredentials> Function(String filePath) loadCredentials, {
-  bool testNonExistentFile = false,
-}) {
-  test('success', () async {
-    final saFile = File('${tempDir().path}/service_account.json');
-    await saFile.writeAsString(
-      jsonEncode({
-        'type': 'service_account',
-        'project_id': 'env-project',
-        'private_key': testPrivateKey,
-        'client_email': 'env-sa@project.iam.gserviceaccount.com',
-      }),
-    );
-
-    final credentials = await loadCredentials(saFile.path);
-
-    expect(
-      credentials,
-      isA<ServiceAccountCredentials>().having(
-        (e) => e.clientEmail,
-        'clientEmail',
-        'env-sa@project.iam.gserviceaccount.com',
-      ),
-    );
-  }, skip: canUseWebCrypto ? null : 'Requires Dart 3.13 or later');
-
-  if (testNonExistentFile) {
-    test('file does not exist', () async {
-      expect(
-        () => loadCredentials('${tempDir().path}/non_existent.json'),
-        throwsA(
-          isA<CredentialException>().having(
-            (e) => e.message,
-            'message',
-            contains('does not exist'),
-          ),
-        ),
-      );
-    });
-  }
-
-  test('not valid JSON', () async {
-    final invalidFile = File('${tempDir().path}/invalid.json');
-    await invalidFile.writeAsString('not a json file');
-
-    expect(
-      () => loadCredentials(invalidFile.path),
-      throwsA(
-        isA<CredentialException>().having(
-          (e) => e.message,
-          'message',
-          contains('not a valid JSON file'),
-        ),
-      ),
-    );
-  });
-
-  test('unrecognized type', () async {
-    final userFile = File('${tempDir().path}/user_creds.json');
-    await userFile.writeAsString(jsonEncode({'type': 'unrecognized_type'}));
-
-    expect(
-      () => loadCredentials(userFile.path),
-      throwsA(
-        isA<CredentialException>().having(
-          (e) => e.message,
-          'message',
-          contains("has type 'unrecognized_type'"),
-        ),
-      ),
-    );
-  });
-}
-
 void main() {
   late Directory tempDir;
 
@@ -126,16 +50,101 @@ void main() {
 
     group('ServiceAccountCredentials', () {
       group('from GOOGLE_APPLICATION_CREDENTIALS', () {
-        testFileLoad(
-          () => tempDir,
-          (filePath) => internalDefaultCredentials(
+        test('success', () async {
+          final saFile = File('${tempDir.path}/service_account.json');
+          await saFile.writeAsString(
+            jsonEncode({
+              'type': 'service_account',
+              'project_id': 'env-project',
+              'private_key': testPrivateKey,
+              'client_email': 'env-sa@project.iam.gserviceaccount.com',
+            }),
+          );
+
+          final credentials = await internalDefaultCredentials(
             getEnvironmentVariable: (String name) {
-              if (name == 'GOOGLE_APPLICATION_CREDENTIALS') return filePath;
+              if (name == 'GOOGLE_APPLICATION_CREDENTIALS') return saFile.path;
               return null;
             },
-          ),
-          testNonExistentFile: true,
-        );
+          );
+
+          expect(
+            credentials,
+            isA<ServiceAccountCredentials>().having(
+              (e) => e.clientEmail,
+              'clientEmail',
+              'env-sa@project.iam.gserviceaccount.com',
+            ),
+          );
+        }, skip: canUseWebCrypto ? null : 'Requires Dart 3.13 or later');
+
+        test('file does not exist', () async {
+          expect(
+            () => internalDefaultCredentials(
+              getEnvironmentVariable: (String name) {
+                if (name == 'GOOGLE_APPLICATION_CREDENTIALS') {
+                  return '${tempDir.path}/non_existent.json';
+                }
+                return null;
+              },
+            ),
+            throwsA(
+              isA<CredentialException>().having(
+                (e) => e.message,
+                'message',
+                contains('does not exist'),
+              ),
+            ),
+          );
+        });
+
+        test('not valid JSON', () async {
+          final invalidFile = File('${tempDir.path}/invalid.json');
+          await invalidFile.writeAsString('not a json file');
+
+          expect(
+            () => internalDefaultCredentials(
+              getEnvironmentVariable: (String name) {
+                if (name == 'GOOGLE_APPLICATION_CREDENTIALS') {
+                  return invalidFile.path;
+                }
+                return null;
+              },
+            ),
+            throwsA(
+              isA<CredentialException>().having(
+                (e) => e.message,
+                'message',
+                contains('not a valid JSON file'),
+              ),
+            ),
+          );
+        });
+
+        test('unrecognized type', () async {
+          final userFile = File('${tempDir.path}/user_creds.json');
+          await userFile.writeAsString(
+            jsonEncode({'type': 'unrecognized_type'}),
+          );
+
+          expect(
+            () => internalDefaultCredentials(
+              getEnvironmentVariable: (String name) {
+                if (name == 'GOOGLE_APPLICATION_CREDENTIALS') {
+                  return userFile.path;
+                }
+                return null;
+              },
+            ),
+            throwsA(
+              isA<CredentialException>().having(
+                (e) => e.message,
+                'message',
+                contains("has type 'unrecognized_type'"),
+              ),
+            ),
+          );
+        });
       });
 
       test('from CLOUDSDK_CONFIG', () async {
@@ -170,13 +179,71 @@ void main() {
       }, skip: canUseWebCrypto ? null : 'Requires Dart 3.13 or later');
 
       group('from well-known file', () {
-        testFileLoad(
-          () => tempDir,
-          (filePath) => internalDefaultCredentials(
+        test('success', () async {
+          final saFile = File('${tempDir.path}/service_account.json');
+          await saFile.writeAsString(
+            jsonEncode({
+              'type': 'service_account',
+              'project_id': 'env-project',
+              'private_key': testPrivateKey,
+              'client_email': 'env-sa@project.iam.gserviceaccount.com',
+            }),
+          );
+
+          final credentials = await internalDefaultCredentials(
             getEnvironmentVariable: (String name) => null,
-            wellKnownFilePath: filePath,
-          ),
-        );
+            wellKnownFilePath: saFile.path,
+          );
+
+          expect(
+            credentials,
+            isA<ServiceAccountCredentials>().having(
+              (e) => e.clientEmail,
+              'clientEmail',
+              'env-sa@project.iam.gserviceaccount.com',
+            ),
+          );
+        }, skip: canUseWebCrypto ? null : 'Requires Dart 3.13 or later');
+
+        test('not valid JSON', () async {
+          final invalidFile = File('${tempDir.path}/invalid.json');
+          await invalidFile.writeAsString('not a json file');
+
+          expect(
+            () => internalDefaultCredentials(
+              getEnvironmentVariable: (String name) => null,
+              wellKnownFilePath: invalidFile.path,
+            ),
+            throwsA(
+              isA<CredentialException>().having(
+                (e) => e.message,
+                'message',
+                contains('not a valid JSON file'),
+              ),
+            ),
+          );
+        });
+
+        test('unrecognized type', () async {
+          final userFile = File('${tempDir.path}/user_creds.json');
+          await userFile.writeAsString(
+            jsonEncode({'type': 'unrecognized_type'}),
+          );
+
+          expect(
+            () => internalDefaultCredentials(
+              getEnvironmentVariable: (String name) => null,
+              wellKnownFilePath: userFile.path,
+            ),
+            throwsA(
+              isA<CredentialException>().having(
+                (e) => e.message,
+                'message',
+                contains("has type 'unrecognized_type'"),
+              ),
+            ),
+          );
+        });
       });
     });
   });
