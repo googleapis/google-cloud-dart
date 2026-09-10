@@ -42,9 +42,7 @@ const _computePingTimeout = Duration(milliseconds: 500);
 /// Detects whether the application is running on Google Compute Engine by
 /// checking the DMI BIOS product name on Linux.
 Future<bool> _checkStaticGceDetection(String path, bool isLinux) async {
-  if (!isLinux) {
-    return false;
-  }
+  if (!isLinux) return false;
   try {
     final content = await File(path).readAsString();
     return content.trim().startsWith('Google');
