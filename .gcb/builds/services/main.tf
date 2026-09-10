@@ -32,6 +32,12 @@ resource "google_project_service" "cloudfunctions" {
   disable_dependent_services = true
 }
 
+resource "google_project_service" "cloudtasks" {
+  project                    = var.project
+  service                    = "cloudtasks.googleapis.com"
+  disable_dependent_services = true
+}
+
 resource "google_project_service" "firestore" {
   project = var.project
   service = "firestore.googleapis.com"

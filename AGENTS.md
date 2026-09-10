@@ -19,7 +19,7 @@
 
 ## Testing instructions
 
-- Run `dart test` frequently.
+- Run `dart test .` frequently (note the `.` when running from the root).
 - Before running tests with the `-P google-cloud` flag, find the currently
   configured project using `gcloud config get-value project` and ask the
   user to confirm that this specific project is safe to use.
