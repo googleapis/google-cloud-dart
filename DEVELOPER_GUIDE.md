@@ -30,6 +30,7 @@ graph TD
 
   subgraph Tier2 ["Tier 2"]
     google_cloud_compute_v1["compute_v1"]
+    google_cloud_dns_v1["dns_v1"]
     google_cloud_iam_v1["iam_v1"]
     google_cloud_language_v2["language_v2"]
     google_cloud_location["location"]
@@ -71,6 +72,8 @@ graph TD
   google_cloud_common --> google_cloud_protobuf
   google_cloud_compute_v1 --> google_cloud_protobuf
   google_cloud_compute_v1 --> google_cloud_rpc
+  google_cloud_dns_v1 --> google_cloud_protobuf
+  google_cloud_dns_v1 --> google_cloud_rpc
   google_cloud_firestore_v1 --> google_cloud_longrunning
   google_cloud_firestore_v1 --> google_cloud_protobuf
   google_cloud_firestore_v1 --> google_cloud_rpc

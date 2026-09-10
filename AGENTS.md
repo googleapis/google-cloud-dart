@@ -6,6 +6,9 @@
 - Update the package's `CHANGELOG.md` with any new features, public API
   changes, or bug fixes before declaring yourself done.
 - Wrap Markdown (`*.md`) files at 80 columns.
+- To generate a Discovery REST API package (e.g. Cloud DNS), ensure
+  `sources.discovery` is configured in `librarian.yaml` and specify
+  `specification_format: discovery` and `roots: [discovery, googleapis]`.
 - Update this file if you discover something useful about developing in this
   repository.
 
