@@ -275,8 +275,7 @@ final class Subscription {
       throw ArgumentError.value(
         name,
         'name',
-        'Must be in the format '
-            'projects/<project-id>/subscriptions/<subscription-id>',
+        'Must be in the format projects/<project-id>/subscriptions/<subscription-id>',
       );
     }
   }
