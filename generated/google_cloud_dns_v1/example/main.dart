@@ -16,7 +16,7 @@ import 'package:google_cloud_dns_v1/dns.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
 
 void main() async {
-  const projectId = 'skilful-orb-203421'; // Enter your projectId here.
+  const projectId = ''; // Enter your projectId here.
   if (projectId.isEmpty) {
     print('Please provide a project ID in the `projectId` constant.');
     return;
