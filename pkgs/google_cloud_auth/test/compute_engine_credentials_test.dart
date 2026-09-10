@@ -635,8 +635,7 @@ void main() async {
 
         final isGce = await internalIsOnComputeEngine(
           client: mockClient,
-          readEnvironment: (name) =>
-              name == 'NO_GCE_CHECK' ? 'true' : null,
+          readEnvironment: (name) => name == 'NO_GCE_CHECK' ? 'true' : null,
         );
         expect(isGce, isFalse);
       });
