@@ -450,6 +450,9 @@ final class PubSub {
             requestStream,
             options: options,
           );
+          // Any RPC or connection errors are forwarded to the stream listener
+          // below. Suppress errors on this unawaited headers future to avoid
+          // uncaught asynchronous errors in the zone.
           unawaited(
             responseStream.headers
                 .then((_) {
