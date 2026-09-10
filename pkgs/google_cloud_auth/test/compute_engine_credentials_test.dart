@@ -618,7 +618,7 @@ void main() async {
               client: mockClient,
               isLinux: true,
               linuxProductNamePath: dmiFile.path,
-              getEnvironmentVariable: (name) =>
+              readEnvironment: (name) =>
                   name == 'GCE_METADATA_HOST' ? 'custom-metadata' : null,
             );
             expect(isGce, isFalse);
@@ -635,7 +635,7 @@ void main() async {
 
         final isGce = await internalIsOnComputeEngine(
           client: mockClient,
-          getEnvironmentVariable: (name) =>
+          readEnvironment: (name) =>
               name == 'NO_GCE_CHECK' ? 'true' : null,
         );
         expect(isGce, isFalse);
@@ -648,7 +648,7 @@ void main() async {
 
         final isGce = await internalIsOnComputeEngine(
           client: mockClient,
-          getEnvironmentVariable: (name) => name == 'NO_GCE_CHECK' ? '1' : null,
+          readEnvironment: (name) => name == 'NO_GCE_CHECK' ? '1' : null,
         );
         expect(isGce, isFalse);
       });
@@ -665,7 +665,7 @@ void main() async {
 
         final isGce = await internalIsOnComputeEngine(
           client: mockClient,
-          getEnvironmentVariable: (name) =>
+          readEnvironment: (name) =>
               name == 'GCE_METADATA_HOST' ? 'custom-metadata' : null,
         );
         expect(isGce, isTrue);

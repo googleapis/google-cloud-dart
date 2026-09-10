@@ -58,17 +58,17 @@ Future<bool> _checkStaticGceDetection(String path, bool isLinux) async {
 @internal
 Future<bool> internalIsOnComputeEngine({
   http.Client? client,
-  String? Function(String name)? getEnvironmentVariable,
+  String? Function(String name)? readEnvironment,
   String? linuxProductNamePath,
   bool? isLinux,
 }) async {
-  final getEnv = getEnvironmentVariable ?? (name) => Platform.environment[name];
-  final noGceCheck = getEnv('NO_GCE_CHECK')?.toLowerCase();
+  final readEnv = readEnvironment ?? (name) => Platform.environment[name];
+  final noGceCheck = readEnv('NO_GCE_CHECK')?.toLowerCase();
   if (noGceCheck == 'true' || noGceCheck == '1') {
     return false;
   }
 
-  final customHost = getEnv('GCE_METADATA_HOST');
+  final customHost = readEnv('GCE_METADATA_HOST');
   final host = customHost ?? _defaultMetadataHost;
   final httpClient = client ?? http.Client();
   final closeClient = client == null;
