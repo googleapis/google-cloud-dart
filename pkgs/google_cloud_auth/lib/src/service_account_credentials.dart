@@ -18,6 +18,7 @@ import 'dart:typed_data';
 
 import 'package:webcrypto/webcrypto.dart';
 
+import 'google_credentials.dart';
 import 'service_account_signer.dart';
 
 Uint8List _parsePemPkcs8Key(String pemString) {
@@ -49,7 +50,8 @@ String? _optionalString(Map<String, dynamic> info, String key) {
 ///
 /// Service accounts are used for server-to-server communication, such as
 /// interactions between a web application server and a Google service.
-final class ServiceAccountCredentials implements ServiceAccountSigner {
+final class ServiceAccountCredentials extends GoogleCredentials
+    implements ServiceAccountSigner {
   /// The email address of the service account.
   @override
   final String clientEmail;
@@ -70,11 +72,6 @@ final class ServiceAccountCredentials implements ServiceAccountSigner {
   /// The OAuth2 token endpoint URI.
   final Uri tokenUri;
 
-  /// The universe domain for the service account.
-  ///
-  /// See [Universes, regions, and zones](https://docs.cloud.google.com/docs/overview#universes_regions_and_zones).
-  final String universeDomain;
-
   final RsassaPkcs1V15PrivateKey _privateKey;
 
   ServiceAccountCredentials._({
@@ -85,7 +82,7 @@ final class ServiceAccountCredentials implements ServiceAccountSigner {
     this.projectId,
     this.quotaProjectId,
     Uri? tokenUri,
-    this.universeDomain = 'googleapis.com',
+    super.universeDomain = GoogleCredentials.defaultUniverseDomain,
   }) : _privateKey = privateKey,
        tokenUri = tokenUri ?? Uri.https('oauth2.$universeDomain', '/token');
 
@@ -130,7 +127,8 @@ final class ServiceAccountCredentials implements ServiceAccountSigner {
     final projectId = _optionalString(info, 'project_id');
     final quotaProjectId = _optionalString(info, 'quota_project_id');
     final universeDomain =
-        _optionalString(info, 'universe_domain') ?? 'googleapis.com';
+        _optionalString(info, 'universe_domain') ??
+        GoogleCredentials.defaultUniverseDomain;
 
     final tokenUriStr = _optionalString(info, 'token_uri');
     final tokenUri = tokenUriStr != null ? Uri.parse(tokenUriStr) : null;
@@ -177,7 +175,7 @@ final class ServiceAccountCredentials implements ServiceAccountSigner {
     String? projectId,
     String? quotaProjectId,
     Uri? tokenUri,
-    String universeDomain = 'googleapis.com',
+    String universeDomain = GoogleCredentials.defaultUniverseDomain,
   }) async {
     final pkcs8Bytes = _parsePemPkcs8Key(privateKeyPkcs8);
     final privateKey = await RsassaPkcs1V15PrivateKey.importPkcs8Key(

@@ -21,6 +21,7 @@ import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 
 import 'credential_exception.dart';
+import 'google_credentials.dart';
 import 'service_account_signer.dart';
 
 // Design based on:
@@ -30,7 +31,8 @@ import 'service_account_signer.dart';
 
 /// Credentials for Google Compute Engine, Cloud Run, Cloud Functions, and
 /// other environments providing a Google Cloud metadata server.
-final class ComputeEngineCredentials implements ServiceAccountSigner {
+final class ComputeEngineCredentials extends GoogleCredentials
+    implements ServiceAccountSigner {
   static const _defaultMetadataHost = 'metadata.google.internal';
   static const _metadataFlavorHeader = {'Metadata-Flavor': 'Google'};
   static const _retryableStatusCodes = {500, 502, 503, 504};
@@ -38,9 +40,6 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
   /// The email address of the service account.
   @override
   final String clientEmail;
-
-  /// The universe domain for the service account.
-  final String universeDomain;
 
   /// The metadata server host.
   final String metadataHost;
@@ -59,7 +58,7 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
 
   ComputeEngineCredentials._({
     required this.clientEmail,
-    required this.universeDomain,
+    required super.universeDomain,
     required this.metadataHost,
     required http.Client client,
     required bool ownsClient,
@@ -212,9 +211,9 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
           final trimmed = response.body.trim();
           resolvedUniverseDomain = trimmed.isNotEmpty
               ? trimmed
-              : 'googleapis.com';
+              : GoogleCredentials.defaultUniverseDomain;
         } else if (response.statusCode == 404) {
-          resolvedUniverseDomain = 'googleapis.com';
+          resolvedUniverseDomain = GoogleCredentials.defaultUniverseDomain;
         } else {
           throw CredentialException(
             'Failed to get universe domain from metadata server: '
