@@ -160,6 +160,9 @@ class DelayedAuthenticator extends Fake implements grpc.BaseAuthenticator {
   final Completer<void> completer = Completer<void>();
 
   @override
+  grpc.CallOptions get toCallOptions => grpc.CallOptions();
+
+  @override
   Future<void> authenticate(Map<String, String> metadata, String uri) async {
     await completer.future;
   }
@@ -951,6 +954,63 @@ void main() {
 
       await subscription.close();
     });
+
+    test(
+      'stream is only added to active streams once listener is attached',
+      () async {
+        final authCompleter = Completer<grpc.BaseAuthenticator>();
+        final clientWithDelayedAuth = PubSub.testing(
+          projectId: 'test-project',
+          channel: FakeClientChannel(),
+          subscriberClient: fakeSubscriber,
+          authenticator: authCompleter.future,
+        );
+
+        final subscription = clientWithDelayedAuth.subscription(
+          'test-sub',
+          ackSettings: AckSettings(
+            batching: BatchingSettings(maxMessages: 1),
+            retry: RetrySettings(maxRetries: 0),
+          ),
+        );
+
+        final stream = subscription.streamingPull();
+        final streamSubscription = stream.listen((_) {});
+
+        // While _callOptions is in-flight, stream has no listener yet.
+        // An ACK sent during this window should fall back to unary RPC.
+        final message = ReceivedMessage(
+          ackId: 'ack-during-init',
+          messageId: 'msg-during-init',
+          publishTime: DateTime.now(),
+          message: Message(data: [1]),
+        );
+        subscription.acknowledge(message);
+
+        // Now finish auth so the unary call and connection finish initializing
+        authCompleter.complete(DelayedAuthenticator());
+        await Future<void>.delayed(const Duration(milliseconds: 30));
+
+        expect(fakeSubscriber.acknowledgeCalled, isTrue);
+        expect(
+          fakeSubscriber.unaryAckCalls.any(
+            (call) => call.contains('ack-during-init'),
+          ),
+          isTrue,
+        );
+
+        // The connection was opened but should NOT have received the ACK
+        // (it was sent via unary fallback before the stream was active).
+        expect(fakeSubscriber.connections.length, equals(1));
+        final ackOverStream = fakeSubscriber.connections.first.recordedRequests
+            .any((request) => request.ackIds.contains('ack-during-init'));
+        expect(ackOverStream, isFalse);
+
+        await streamSubscription.cancel();
+        await subscription.close();
+        await clientWithDelayedAuth.close();
+      },
+    );
 
     test(
       'custom RetrySettings is respected directly in streamingPull',

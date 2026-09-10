@@ -151,15 +151,11 @@ final class Subscription {
 
   StreamController<grpc.StreamingPullRequest>? _getActiveStream() {
     if (_isClosed || _activeStreams.isEmpty) return null;
-    for (var i = 0; i < _activeStreams.length; i++) {
-      final index = (_nextStreamIndex + i) % _activeStreams.length;
-      final stream = _activeStreams[index];
-      if (!stream.isClosed && stream.hasListener) {
-        _nextStreamIndex = (index + 1) % _activeStreams.length;
-        return stream;
-      }
-    }
-    return null;
+    _activeStreams.removeWhere((stream) => stream.isClosed);
+    if (_activeStreams.isEmpty) return null;
+    final stream = _activeStreams[_nextStreamIndex % _activeStreams.length];
+    _nextStreamIndex = (_nextStreamIndex + 1) % _activeStreams.length;
+    return stream;
   }
 
   // Sends a batch of ACKs. Prefers sending over active gRPC streams
@@ -501,13 +497,22 @@ final class Subscription {
     void connect(Iterator<Duration> delays) {
       if (_isClosed || isCancelled || controller.isClosed) return;
 
-      final requestController = StreamController<grpc.StreamingPullRequest>()
-        ..add(
-          grpc.StreamingPullRequest()
-            ..subscription = name
-            ..streamAckDeadlineSeconds = streamAckDeadlineSeconds,
-        );
-      _activeStreams.add(requestController);
+      late final StreamController<grpc.StreamingPullRequest> requestController;
+      requestController =
+          StreamController<grpc.StreamingPullRequest>(
+            onListen: () {
+              if (!_isClosed && !isCancelled && !controller.isClosed) {
+                _activeStreams.add(requestController);
+              }
+            },
+            onCancel: () {
+              _activeStreams.remove(requestController);
+            },
+          )..add(
+            grpc.StreamingPullRequest()
+              ..subscription = name
+              ..streamAckDeadlineSeconds = streamAckDeadlineSeconds,
+          );
       requestControllers.add(requestController);
 
       Stopwatch? connectionStopwatch;
