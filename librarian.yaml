@@ -17,6 +17,9 @@ sources:
   conformance:
     commit: 07eec573f37d51c5c08243b1bd04e3c79422351f
     sha256: f888f61018e0073bc675a5efa3d9e22dec8da725e77e9c18bbaa3f71f71ced14
+  discovery:
+    commit: 5bee7e33bd6c24d984e0bf3ca0c52f0c5c0c8c2c
+    sha256: a2aec2a4fa0434a10946e024fb8630d02d3d1145c24b2b907b9a494aaa447939
   googleapis:
     commit: 28ba5d15234eff44241492ca72b135e1171fc537
     sha256: 7914a988cc0da8792005bf87a7a4277aa15f85d57d1727c2eef93fce743ab4a1
@@ -291,6 +294,21 @@ libraries:
     dart:
       dev_dependencies: googleapis_auth,test,test_utils
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_compute_v1
+  - name: google_cloud_dns_v1
+    version: 0.1.0
+    copyright_year: "2026"
+    keep:
+      - CHANGELOG.md
+      - dart_test.yaml
+      - example/main.dart
+      - test/dns_test.dart
+    roots:
+      - discovery
+      - googleapis
+    specification_format: discovery
+    dart:
+      dev_dependencies: googleapis_auth,test,test_utils
+      repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_dns_v1
   - name: google_cloud_firestore_v1
     version: 0.5.5
     apis:
