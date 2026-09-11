@@ -19,6 +19,7 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:http/http.dart' as http;
+import 'package:meta/meta.dart';
 
 import 'credential_exception.dart';
 import 'service_account_signer.dart';
@@ -28,13 +29,90 @@ import 'service_account_signer.dart';
 // - https://github.com/googleapis/google-auth-library-python/blob/main/google/auth/compute_engine/credentials.py
 // - https://github.com/googleapis/google-auth-library-python/blob/main/google/auth/iam.py
 
+const _defaultMetadataHost = 'metadata.google.internal';
+const _linuxProductNamePath = '/sys/class/dmi/id/product_name';
+const _metadataFlavorHeader = {'Metadata-Flavor': 'Google'};
+const _retryableStatusCodes = {500, 502, 503, 504};
+const _maxComputePingTries = 3;
+const _computePingTimeout = Duration(milliseconds: 500);
+
+// Equivalent of:
+// - https://github.com/googleapis/google-auth-library-java/blob/9ac2d4340ebc6a8582b898e97f65aeed3c1776d6/oauth2_http/java/com/google/auth/oauth2/ComputeEngineCredentials.java#L621-L641
+// - https://github.com/googleapis/google-auth-library-python/blob/2ea24b03436765fa3cf279ce148482ff6332136b/google/auth/compute_engine/_metadata.py#L146-L160
+/// Detects whether the application is running on Google Compute Engine by
+/// checking the DMI BIOS product name on Linux.
+Future<bool> _checkStaticGceDetection(String path, bool isLinux) async {
+  if (!isLinux) return false;
+  try {
+    final content = await File(path).readAsString();
+    return content.trim().startsWith('Google');
+  } catch (_) {
+    return false;
+  }
+}
+
+/// [ComputeEngineCredentials.isOnComputeEngine] with extra arguments for test
+/// injection.
+@internal
+Future<bool> internalIsOnComputeEngine({
+  http.Client? client,
+  String? Function(String name)? readEnvironment,
+  String? linuxProductNamePath,
+  bool? isLinux,
+}) async {
+  final readEnv = readEnvironment ?? (name) => Platform.environment[name];
+  final noGceCheck = readEnv('NO_GCE_CHECK')?.toLowerCase();
+  if (noGceCheck == 'true' || noGceCheck == '1') {
+    return false;
+  }
+
+  final customHost = readEnv('GCE_METADATA_HOST');
+  final host = customHost ?? _defaultMetadataHost;
+  final httpClient = client ?? http.Client();
+  final closeClient = client == null;
+  final inFlightRequests = <Future<void>>[];
+
+  try {
+    final pingUri = Uri.http(host, '/computeMetadata/v1/');
+    for (var attempt = 1; attempt <= _maxComputePingTries; attempt++) {
+      try {
+        final request = httpClient.get(pingUri, headers: _metadataFlavorHeader);
+        inFlightRequests.add(request.catchError((_) => http.Response('', 500)));
+        final response = await request.timeout(_computePingTimeout);
+        final flavorHeader = response.headers['metadata-flavor'];
+        if (response.statusCode == 200 &&
+            flavorHeader != null &&
+            flavorHeader.toLowerCase() == 'google') {
+          return true;
+        }
+        if (!_retryableStatusCodes.contains(response.statusCode)) {
+          break;
+        }
+      } on Exception catch (_) {
+        // Ignore network/timeout exceptions and retry.
+      }
+    }
+    if (customHost != null) {
+      return false;
+    }
+    return await _checkStaticGceDetection(
+      linuxProductNamePath ?? _linuxProductNamePath,
+      isLinux ?? Platform.isLinux,
+    );
+  } finally {
+    // If `client` is provided by the caller, there is no guarantee that the
+    // caller doesn't call `close` while there are still requests in flight,
+    // which the `http.Client` API contract doesn't allow. Therefore, only
+    // tests are allowed to provide `client`.
+    if (closeClient) {
+      unawaited(inFlightRequests.wait.whenComplete(httpClient.close));
+    }
+  }
+}
+
 /// Credentials for Google Compute Engine, Cloud Run, Cloud Functions, and
 /// other environments providing a Google Cloud metadata server.
 final class ComputeEngineCredentials implements ServiceAccountSigner {
-  static const _defaultMetadataHost = 'metadata.google.internal';
-  static const _metadataFlavorHeader = {'Metadata-Flavor': 'Google'};
-  static const _retryableStatusCodes = {500, 502, 503, 504};
-
   /// The email address of the service account.
   @override
   final String clientEmail;
@@ -239,45 +317,11 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
   }
 
   // Equivalent of:
-  // - https://github.com/googleapis/google-auth-library-java/blob/9ac2d4340ebc6a8582b898e97f65aeed3c1776d6/oauth2_http/java/com/google/auth/oauth2/ComputeEngineCredentials.java#L595-L613
-  // - https://github.com/googleapis/google-auth-library-python/blob/2ea24b03436765fa3cf279ce148482ff6332136b/google/auth/compute_engine/_metadata.py#L122-L144
+  // - https://github.com/googleapis/google-auth-library-java/blob/9ac2d4340ebc6a8582b898e97f65aeed3c1776d6/oauth2_http/java/com/google/auth/oauth2/ComputeEngineCredentials.java#L595-L641
+  // - https://github.com/googleapis/google-auth-library-python/blob/2ea24b03436765fa3cf279ce148482ff6332136b/google/auth/compute_engine/_metadata.py#L122-L160
   /// Checks if the application is running in an environment with an accessible
   /// Compute Engine metadata server.
-  static Future<bool> isOnComputeEngine({
-    http.Client? client,
-    String? metadataHost,
-    Duration timeout = const Duration(milliseconds: 500),
-  }) async {
-    if (Platform.environment['NO_GCE_CHECK']?.toLowerCase() == 'true') {
-      return false;
-    }
-
-    final host =
-        metadataHost ??
-        Platform.environment['GCE_METADATA_HOST'] ??
-        _defaultMetadataHost;
-    final httpClient = client ?? http.Client();
-    final closeClient = client == null;
-
-    try {
-      final response = await httpClient
-          .get(
-            Uri.http(host, '/computeMetadata/v1/'),
-            headers: _metadataFlavorHeader,
-          )
-          .timeout(timeout);
-      final flavorHeader = response.headers['metadata-flavor'];
-      return response.statusCode == 200 &&
-          flavorHeader != null &&
-          flavorHeader.toLowerCase() == 'google';
-    } catch (_) {
-      return false;
-    } finally {
-      if (closeClient) {
-        httpClient.close();
-      }
-    }
-  }
+  static Future<bool> isOnComputeEngine() => internalIsOnComputeEngine();
 
   /// Signs [message] using the Identity and Access Management (IAM)
   /// `signBlob` API.
