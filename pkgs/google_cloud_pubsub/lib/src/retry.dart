@@ -19,6 +19,10 @@ import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:grpc/grpc.dart';
 import 'package:meta/meta.dart';
 
+// TODO(https://github.com/googleapis/google-cloud-dart/issues/346): share
+// this with `google_cloud_storage`'s retry implementation. Until then, any
+// change to which errors are considered retryable must be made in both.
+
 /// Settings for configuring retry logic with exponential backoff.
 final class RetrySettings {
   /// The maximum number of times to retry before failing.
@@ -27,6 +31,9 @@ final class RetrySettings {
   final int? maxRetries;
 
   /// The maximum amount of total time to retry before failing.
+  ///
+  /// This is the wall-clock budget across all attempts, as opposed to
+  /// [maxDelay], which caps an individual wait.
   ///
   /// A `null` value indicates that the total retry time is unlimited.
   /// If the calculated backoff delay for an attempt would cause execution to

@@ -45,6 +45,7 @@ graph TD
     google_cloud_functions_v2["functions_v2"]
     google_cloud_logging_v2["logging_v2"]
     google_cloud_secretmanager_v1["secretmanager_v1"]
+    google_cloud_tasks_v2["tasks_v2"]
   end
 
   subgraph Tier4 ["Tier 4"]
@@ -107,6 +108,10 @@ graph TD
   google_cloud_storage --> google_cloud
   google_cloud_storage --> google_cloud_protobuf
   google_cloud_storage --> google_cloud_rpc
+  google_cloud_tasks_v2 --> google_cloud_iam_v1
+  google_cloud_tasks_v2 --> google_cloud_location
+  google_cloud_tasks_v2 --> google_cloud_protobuf
+  google_cloud_tasks_v2 --> google_cloud_rpc
   google_cloud_type --> google_cloud_protobuf
 ```
 <!-- DEPS_DIAGRAM_END -->

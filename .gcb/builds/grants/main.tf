@@ -42,6 +42,20 @@ resource "google_project_iam_member" "sa-can-use-logging" {
   member  = "serviceAccount:${data.google_service_account.integration-test-runner.email}"
 }
 
+# The service account needs to create and delete queues and tasks for Cloud Tasks tests.
+resource "google_project_iam_member" "sa-can-use-cloudtasks" {
+  project = data.google_project.project.id
+  role    = "roles/cloudtasks.admin"
+  member  = "serviceAccount:${data.google_service_account.integration-test-runner.email}"
+}
+
+# The service account needs to generate identity tokens to access Cloud Run services during tests.
+resource "google_project_iam_member" "sa-can-create-tokens" {
+  project = data.google_project.project.id
+  role    = "roles/iam.serviceAccountTokenCreator"
+  member  = "serviceAccount:${data.google_service_account.integration-test-runner.email}"
+}
+
 output "runner" {
   value = data.google_service_account.integration-test-runner.id
 }
