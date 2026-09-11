@@ -121,6 +121,9 @@ final class Subscription {
     );
     _modifyAckBatcher = Batcher<_ModifyAckDeadlineRequest>(
       settings: ackSettings.batching,
+      // Each ack ID is accompanied by its own deadline: `ModifyAckDeadline`
+      // requests carry a `modifyDeadlineSeconds` list parallel to the ack ID
+      // list, so add the 4 bytes of the int32 deadline per ack ID.
       itemSize: (request) => request.ackId.length + 4,
       onBatch: _onModifyAckBatch,
     );

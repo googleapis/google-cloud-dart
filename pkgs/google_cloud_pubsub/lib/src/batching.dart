@@ -18,13 +18,28 @@ import 'package:meta/meta.dart';
 
 /// Settings for batching operations.
 final class BatchingSettings {
-  /// The maximum number of items in a batch.
+  /// The maximum number of items to collect before sending a batch.
   final int maxMessages;
 
-  /// The maximum size in bytes for a batch.
+  /// The maximum total size in bytes of the items to collect before sending
+  /// a batch.
+  ///
+  /// Only the items themselves are measured. When publishing, this is the
+  /// message payload plus the UTF-8 encoded attribute keys and values; the
+  /// overhead of the request itself (the topic name, protobuf field tags and
+  /// length prefixes, and gRPC framing) is *not* counted, so the request
+  /// actually sent is somewhat larger than [maxBytes].
+  ///
+  /// An item that would push the total above [maxBytes] starts a new batch
+  /// instead. A single item larger than [maxBytes] is sent on its own, in a
+  /// batch that exceeds [maxBytes].
+  ///
+  /// Pub/Sub rejects publish requests larger than 10,000,000 bytes. That
+  /// limit is not enforced here, so leave room for the uncounted overhead.
   final int maxBytes;
 
-  /// The maximum time to wait before sending a batch.
+  /// The maximum time to wait before sending a batch that has reached
+  /// neither [maxMessages] nor [maxBytes].
   final Duration maxDelay;
 
   /// Creates a new [BatchingSettings] instance.
@@ -35,7 +50,7 @@ final class BatchingSettings {
   /// - [maxDelay] is not greater than [Duration.zero].
   BatchingSettings({
     this.maxMessages = 100,
-    this.maxBytes = 1024 * 1024, // 1 MB
+    this.maxBytes = 1024 * 1024, // 1 MiB
     this.maxDelay = const Duration(milliseconds: 10),
   }) {
     if (maxMessages <= 0) {
