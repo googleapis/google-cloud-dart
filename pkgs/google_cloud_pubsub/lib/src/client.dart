@@ -89,11 +89,12 @@ final class PubSub {
     required ClientChannel channel,
     grpc.SubscriberClient? subscriberClient,
     grpc.PublisherClient? publisherClient,
+    FutureOr<BaseAuthenticator>? authenticator,
   }) => PubSub._(
     projectId,
     channel,
     false,
-    null,
+    authenticator,
     subscriberClient: subscriberClient,
     publisherClient: publisherClient,
   );
@@ -422,6 +423,100 @@ final class PubSub {
     }
   }
 
+  /// Low-level streaming pull over an explicit [requestStream].
+  ///
+  /// Used internally by [streamingPull] and [Subscription.streamingPull].
+  @internal
+  Stream<ReceivedMessage> streamingPullWithStream(
+    Stream<grpc.StreamingPullRequest> requestStream, {
+    void Function()? onConnected,
+    FutureOr<void> Function(List<String> ackIds)? ackHandler,
+    FutureOr<void> Function(List<String> ackIds, int ackDeadlineSeconds)?
+    modifyDeadlineHandler,
+  }) {
+    late StreamController<ReceivedMessage> controller;
+    StreamSubscription<grpc.StreamingPullResponse>? streamSubscription;
+    var isPaused = false;
+    var isCancelled = false;
+    controller = StreamController<ReceivedMessage>(
+      onListen: () async {
+        try {
+          final options = await _callOptions;
+          if (isCancelled) {
+            unawaited(controller.close());
+            return;
+          }
+          final responseStream = _subscriber.streamingPull(
+            requestStream,
+            options: options,
+          );
+          // Any RPC or connection errors are forwarded to the stream listener
+          // below. Suppress errors on this unawaited headers future to avoid
+          // uncaught asynchronous errors in the zone.
+          unawaited(
+            responseStream.headers
+                .then((_) {
+                  if (!isCancelled) {
+                    onConnected?.call();
+                  }
+                })
+                .catchError((_) {}),
+          );
+          streamSubscription = responseStream.listen(
+            (response) {
+              for (final receivedMessage in response.receivedMessages) {
+                controller.add(
+                  _mapReceivedMessage(
+                    receivedMessage,
+                    ackHandler: ackHandler,
+                    modifyDeadlineHandler: modifyDeadlineHandler,
+                  ),
+                );
+              }
+            },
+            onError: (Object error, StackTrace stackTrace) {
+              if (error is GrpcError) {
+                controller.addError(_mapGrpcError(error), stackTrace);
+              } else {
+                controller.addError(error, stackTrace);
+              }
+              unawaited(controller.close());
+            },
+            onDone: () {
+              unawaited(controller.close());
+            },
+            cancelOnError: true,
+          );
+          if (isPaused) {
+            streamSubscription?.pause();
+          }
+        } catch (error, stackTrace) {
+          if (!isCancelled && !controller.isClosed) {
+            if (error is GrpcError) {
+              controller.addError(_mapGrpcError(error), stackTrace);
+            } else {
+              controller.addError(error, stackTrace);
+            }
+            unawaited(controller.close());
+          }
+        }
+      },
+      onPause: () {
+        isPaused = true;
+        streamSubscription?.pause();
+      },
+      onResume: () {
+        isPaused = false;
+        streamSubscription?.resume();
+      },
+      onCancel: () {
+        isCancelled = true;
+        return streamSubscription?.cancel();
+      },
+    );
+    return controller.stream;
+  }
+
   /// Establishes a stream with the server, which sends messages down to the
   /// client.
   ///
@@ -431,12 +526,15 @@ final class PubSub {
   /// The client streams acknowledgments and ack deadline modifications
   /// back to the server. If an error occurs (including when the server closes
   /// the stream with status `UNAVAILABLE` to reassign resources), the stream
-  /// will throw a [ServiceException]. In this case, the caller should
+  /// will emit a [ServiceException]. In this case, the caller should
   /// re-establish the stream. Flow control can be achieved by configuring the
   /// underlying RPC channel.
   ///
-  /// Throws a [ServiceException] if the stream is broken by the server or
-  /// network.
+  /// Any errors (such as a [ServiceException] if the stream is broken by
+  /// the server or network) are emitted asynchronously on the returned
+  /// stream rather than thrown synchronously.
+  ///
+  /// It is an error if [subscription] is empty.
   /// It is an error if [streamAckDeadlineSeconds] is not between 10 and 600
   /// seconds.
   ///
@@ -445,6 +543,13 @@ final class PubSub {
     String subscription, {
     int streamAckDeadlineSeconds = 10,
   }) {
+    if (subscription.isEmpty) {
+      throw ArgumentError.value(
+        subscription,
+        'subscription',
+        'Must not be empty',
+      );
+    }
     if (streamAckDeadlineSeconds < 10 || streamAckDeadlineSeconds > 600) {
       throw ArgumentError.value(
         streamAckDeadlineSeconds,
@@ -464,54 +569,52 @@ final class PubSub {
   }) async* {
     final requestController = StreamController<grpc.StreamingPullRequest>();
     try {
-      final options = await _callOptions;
       requestController.add(
         grpc.StreamingPullRequest()
           ..subscription = subscription
           ..streamAckDeadlineSeconds = streamAckDeadlineSeconds,
       );
-      // TODO(sigurdm): Retry on broken connections.
-      void handleAck(List<String> ackIds) {
-        if (requestController.isClosed) {
-          throw StateError(
-            'Cannot acknowledge message: streaming pull connection has closed.',
-          );
-        }
-        requestController.add(
-          grpc.StreamingPullRequest()..ackIds.addAll(ackIds),
-        );
-      }
-
-      void handleModifyDeadline(List<String> ackIds, int seconds) {
-        if (requestController.isClosed) {
-          throw StateError(
-            'Cannot modify ack deadline: streaming pull connection has closed.',
-          );
-        }
-        requestController.add(
-          grpc.StreamingPullRequest()
-            ..modifyDeadlineAckIds.addAll(ackIds)
-            ..modifyDeadlineSeconds.addAll(List.filled(ackIds.length, seconds)),
-        );
-      }
-
-      final responseStream = _subscriber.streamingPull(
+      yield* streamingPullWithStream(
         requestController.stream,
-        options: options,
+        ackHandler: (ackIds) async {
+          if (ackIds.isEmpty) return;
+          if (!requestController.isClosed && requestController.hasListener) {
+            requestController.add(
+              grpc.StreamingPullRequest()..ackIds.addAll(ackIds),
+            );
+            return;
+          }
+          await acknowledge(subscription, ackIds);
+        },
+        modifyDeadlineHandler: (ackIds, ackDeadlineSeconds) async {
+          if (ackDeadlineSeconds < 0) {
+            throw ArgumentError.value(
+              ackDeadlineSeconds,
+              'ackDeadlineSeconds',
+              'Must be non-negative',
+            );
+          }
+          if (ackIds.isEmpty) return;
+          if (!requestController.isClosed && requestController.hasListener) {
+            requestController.add(
+              grpc.StreamingPullRequest()
+                ..modifyDeadlineAckIds.addAll(ackIds)
+                ..modifyDeadlineSeconds.addAll(
+                  List.filled(ackIds.length, ackDeadlineSeconds),
+                ),
+            );
+            return;
+          }
+          await modifyAckDeadline(subscription, ackIds, ackDeadlineSeconds);
+        },
       );
-      await for (final response in responseStream) {
-        for (final receivedMessage in response.receivedMessages) {
-          yield _mapReceivedMessage(
-            receivedMessage,
-            ackHandler: handleAck,
-            modifyDeadlineHandler: handleModifyDeadline,
-          );
-        }
-      }
-    } on GrpcError catch (error) {
-      throw _mapGrpcError(error);
     } finally {
-      await requestController.close();
+      if (!requestController.isClosed) {
+        if (!requestController.hasListener) {
+          unawaited(requestController.stream.drain<void>().catchError((_) {}));
+        }
+        unawaited(requestController.close());
+      }
     }
   }
 
