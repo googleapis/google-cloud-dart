@@ -12,6 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/// @docImport 'subscription.dart';
+library;
+
 import 'dart:async';
 import 'dart:typed_data';
 
@@ -23,36 +26,52 @@ final class Message {
   /// Optional attributes for this message.
   final Map<String, String> attributes;
 
+  /// Creates a new [Message] with the given [data] and optional [attributes].
   Message({required List<int> data, Map<String, String>? attributes})
-    : data = data is Uint8List ? data : Uint8List.fromList(data),
-      attributes = attributes ?? const {};
+    : data = Uint8List.fromList(data),
+      attributes = attributes == null ? const {} : Map.unmodifiable(attributes);
+
+  @override
+  String toString() =>
+      'Message('
+      'data: ${data.length} bytes, '
+      'attributes: $attributes)';
 }
 
 /// A message received from a subscription.
 final class ReceivedMessage {
-  /// The acknowledgment ID, used to identify this message when acknowledging
-  /// it or modifying its acknowledgment deadline.
-  final String ackId;
-
-  /// The message payload and attributes.
+  /// The message details.
   final Message message;
 
-  /// The ID of this message, assigned by the server.
+  /// The acknowledgment ID for this message.
+  final String ackId;
+
+  /// The server-assigned ID of this message.
   final String messageId;
 
   /// The time at which the message was published.
   final DateTime publishTime;
 
-  final FutureOr<void> Function(List<String>)? _ackHandler;
-  final FutureOr<void> Function(List<String>, int)? _modifyDeadlineHandler;
+  /// The delivery attempt count for this message.
+  ///
+  /// This value is greater than 0 only if the subscription has a dead-letter
+  /// policy configured. Otherwise, it is 0.
+  final int deliveryAttempt;
 
+  final FutureOr<void> Function(List<String> ackIds)? _ackHandler;
+  final FutureOr<void> Function(List<String> ackIds, int ackDeadlineSeconds)?
+  _modifyDeadlineHandler;
+
+  /// Creates a new [ReceivedMessage].
   ReceivedMessage({
+    required this.message,
     required this.ackId,
     required this.messageId,
     required this.publishTime,
-    required this.message,
-    FutureOr<void> Function(List<String>)? ackHandler,
-    FutureOr<void> Function(List<String>, int)? modifyDeadlineHandler,
+    this.deliveryAttempt = 0,
+    FutureOr<void> Function(List<String> ackIds)? ackHandler,
+    FutureOr<void> Function(List<String> ackIds, int ackDeadlineSeconds)?
+    modifyDeadlineHandler,
   }) : _ackHandler = ackHandler,
        _modifyDeadlineHandler = modifyDeadlineHandler;
 
@@ -64,27 +83,61 @@ final class ReceivedMessage {
 
   /// Acknowledges the message.
   ///
-  /// If this message was received via `pull`, it will call the unary
-  /// acknowledge endpoint.
-  /// If it was received via `streamingPull`, it will send an acknowledgment
-  /// request over the existing stream.
+  /// Returns a [Future] that completes when the acknowledgment has been
+  /// processed.
+  ///
+  /// For background batched acknowledgment with retries, use
+  /// [Subscription.acknowledge].
+  ///
+  /// It is an error if no acknowledge handler is configured for this message
+  /// (e.g. if the message was constructed manually without a handler).
   Future<void> acknowledge() async {
     final handler = _ackHandler;
-    if (handler != null) {
-      await handler([ackId]);
+    if (handler == null) {
+      throw StateError('No acknowledge handler configured for this message.');
     }
+    await handler([ackId]);
   }
 
   /// Modifies the ack deadline for this message.
   ///
-  /// [seconds] must be the new ack deadline in seconds, relative to the
-  /// time this method is called. For example, if [seconds] is 10, the new ack
-  /// deadline is 10 seconds from now. Specifying 0 makes the message
-  /// immediately available for redelivery.
-  Future<void> modifyAckDeadline(int seconds) async {
-    final handler = _modifyDeadlineHandler;
-    if (handler != null) {
-      await handler([ackId], seconds);
+  /// Returns a [Future] that completes when the deadline modification has been
+  /// processed.
+  ///
+  /// [ackDeadlineSeconds] must be the new ack deadline in seconds, relative to
+  /// the time this method is called. For example, if [ackDeadlineSeconds] is
+  /// 10, the new ack deadline is 10 seconds from now. Specifying 0 makes the
+  /// message immediately available for redelivery.
+  ///
+  /// For background batched deadline modifications with retries, use
+  /// [Subscription.modifyAckDeadline].
+  ///
+  /// It is an error if [ackDeadlineSeconds] is negative.
+  /// It is an error if no modify-ack-deadline handler is configured for this
+  /// message (e.g. if the message was constructed manually without a handler).
+  Future<void> modifyAckDeadline(int ackDeadlineSeconds) async {
+    if (ackDeadlineSeconds < 0) {
+      throw ArgumentError.value(
+        ackDeadlineSeconds,
+        'ackDeadlineSeconds',
+        'Must be non-negative',
+      );
     }
+    final handler = _modifyDeadlineHandler;
+    if (handler == null) {
+      throw StateError(
+        'No modify-ack-deadline handler configured for this message.',
+      );
+    }
+    await handler([ackId], ackDeadlineSeconds);
   }
+
+  @override
+  String toString() =>
+      'ReceivedMessage('
+      'messageId: $messageId, '
+      'ackId: $ackId, '
+      'publishTime: $publishTime, '
+      'deliveryAttempt: $deliveryAttempt, '
+      'message: $message)';
 }

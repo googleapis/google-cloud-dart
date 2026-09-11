@@ -14,6 +14,7 @@
 
 import 'dart:async';
 
+import 'package:google_cloud_rpc/rpc.dart';
 import 'package:grpc/grpc.dart';
 import 'package:meta/meta.dart';
 import '../google_cloud_pubsub.dart';
@@ -100,17 +101,21 @@ final class PubSub {
   /// Turns the protobuf-generated [grpc.ReceivedMessage] into a
   /// [ReceivedMessage].
   static ReceivedMessage _mapReceivedMessage(
-    grpc.ReceivedMessage m, {
+    grpc.ReceivedMessage receivedMessage, {
     FutureOr<void> Function(List<String> ackIds)? ackHandler,
-    FutureOr<void> Function(List<String> ackIds, int seconds)?
+    FutureOr<void> Function(List<String> ackIds, int ackDeadlineSeconds)?
     modifyDeadlineHandler,
   }) => ReceivedMessage(
-    ackId: m.ackId,
-    messageId: m.message.messageId,
-    publishTime: m.message.publishTime.toDateTime(),
+    ackId: receivedMessage.ackId,
+    messageId: receivedMessage.message.messageId,
+    publishTime: receivedMessage.message.publishTime.toDateTime(),
+    deliveryAttempt: receivedMessage.deliveryAttempt,
     ackHandler: ackHandler,
     modifyDeadlineHandler: modifyDeadlineHandler,
-    message: Message(data: m.message.data, attributes: m.message.attributes),
+    message: Message(
+      data: receivedMessage.message.data,
+      attributes: receivedMessage.message.attributes,
+    ),
   );
 
   /// Constructs a client used to communicate with [Google Cloud Pub/Sub][].
@@ -176,26 +181,35 @@ final class PubSub {
   // Topic-related methods
 
   /// A [Topic] object with the given [unqualifiedName] in the client's project.
-  Topic topic(String unqualifiedName) =>
-      Topic.unqualified(this, unqualifiedName);
+  Topic topic(String unqualifiedName, {PublishSettings? publishSettings}) =>
+      Topic.unqualified(
+        this,
+        unqualifiedName,
+        publishSettings: publishSettings,
+      );
 
   /// A [Topic] object with the given [name].
   ///
   /// The [name] must be in the format `projects/<project-id>/topics/<topic-id>`.
   /// Useful for cross-project access.
-  Topic topicName(String name) => Topic(this, name);
+  Topic topicName(String name, {PublishSettings? publishSettings}) =>
+      Topic(this, name, publishSettings: publishSettings);
 
   /// A [Subscription] object with the given [unqualifiedName] in the client's
   /// project.
-  Subscription subscription(String unqualifiedName) =>
-      Subscription.unqualified(this, unqualifiedName);
+  Subscription subscription(
+    String unqualifiedName, {
+    AckSettings? ackSettings,
+  }) =>
+      Subscription.unqualified(this, unqualifiedName, ackSettings: ackSettings);
 
   /// A [Subscription] object with the given [name].
   ///
   /// The [name] must be in the format
   /// `projects/<project-id>/subscriptions/<subscription-id>`.
   /// Useful for cross-project access.
-  Subscription subscriptionName(String name) => Subscription(this, name);
+  Subscription subscriptionName(String name, {AckSettings? ackSettings}) =>
+      Subscription(this, name, ackSettings: ackSettings);
 
   /// Creates the given topic with the given [topic].
   ///
@@ -207,13 +221,16 @@ final class PubSub {
   // TODO(sigurdm): Support configuring topic options (labels,
   // messageStoragePolicy, kmsKeyName, schemaSettings,
   // messageRetentionDuration).
-  Future<Topic> createTopic(String topic) async {
-    final t = grpc.Topic()..name = topic;
+  Future<Topic> createTopic(
+    String topic, {
+    PublishSettings? publishSettings,
+  }) async {
+    final topicProto = grpc.Topic()..name = topic;
     try {
-      await _publisher.createTopic(t, options: await _callOptions);
-      return topicName(topic);
-    } on GrpcError catch (e) {
-      throw _mapGrpcError(e);
+      await _publisher.createTopic(topicProto, options: await _callOptions);
+      return topicName(topic, publishSettings: publishSettings);
+    } on GrpcError catch (error) {
+      throw _mapGrpcError(error);
     }
   }
 
@@ -228,41 +245,70 @@ final class PubSub {
     final request = grpc.DeleteTopicRequest()..topic = topic;
     try {
       await _publisher.deleteTopic(request, options: await _callOptions);
-    } on GrpcError catch (e) {
-      throw _mapGrpcError(e);
+    } on GrpcError catch (error) {
+      throw _mapGrpcError(error);
     }
   }
 
-  /// Adds one or more messages to the topic.
+  /// Adds a message to the topic.
   ///
   /// The [topic] must be in the format `projects/<project-id>/topics/<topic-id>`.
   ///
   /// Throws a [NotFoundException] if the topic does not exist.
   ///
+  /// Throws an [InternalServerErrorException] if the server returns no message
+  /// ID.
+  ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Publisher.Publish).
-  // TODO(sigurdm): Support batch publishing (publishMany) for high-throughput.
   Future<String> publish(
     String topic,
     List<int> data, {
     Map<String, String>? attributes,
   }) async {
-    final message = grpc.PubsubMessage()..data = data;
-    if (attributes != null) {
-      message.attributes.addAll(attributes);
+    final messageIds = await publishMessages(topic, [
+      Message(data: data, attributes: attributes),
+    ]);
+    if (messageIds.isEmpty) {
+      throw InternalServerErrorException(
+        'Server returned no message ID for published message.',
+      );
     }
+    return messageIds.first;
+  }
 
-    final request = grpc.PublishRequest()
-      ..topic = topic
-      ..messages.add(message);
+  /// Adds multiple messages to the topic in a single RPC.
+  ///
+  /// The [topic] must be in the format `projects/<project-id>/topics/<topic-id>`.
+  ///
+  /// Returns a list of server-assigned message IDs matching the order of the
+  /// provided [messages].
+  ///
+  /// Throws a [NotFoundException] if the topic does not exist.
+  ///
+  /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Publisher.Publish).
+  Future<List<String>> publishMessages(
+    String topic,
+    List<Message> messages,
+  ) async {
+    if (messages.isEmpty) return <String>[];
+    final request = grpc.PublishRequest()..topic = topic;
+
+    for (final message in messages) {
+      final pubsubMessage = grpc.PubsubMessage()..data = message.data;
+      if (message.attributes.isNotEmpty) {
+        pubsubMessage.attributes.addAll(message.attributes);
+      }
+      request.messages.add(pubsubMessage);
+    }
 
     try {
       final response = await _publisher.publish(
         request,
         options: await _callOptions,
       );
-      return response.messageIds.first;
-    } on GrpcError catch (e) {
-      throw _mapGrpcError(e);
+      return response.messageIds;
+    } on GrpcError catch (error) {
+      throw _mapGrpcError(error);
     }
   }
 
@@ -292,16 +338,20 @@ final class PubSub {
   Future<Subscription> createSubscription(
     String subscription, {
     required String topic,
+    AckSettings? ackSettings,
   }) async {
-    final sub = grpc.Subscription()
+    final subscriptionProto = grpc.Subscription()
       ..name = subscription
       ..topic = topic;
 
     try {
-      await _subscriber.createSubscription(sub, options: await _callOptions);
-      return subscriptionName(subscription);
-    } on GrpcError catch (e) {
-      throw _mapGrpcError(e);
+      await _subscriber.createSubscription(
+        subscriptionProto,
+        options: await _callOptions,
+      );
+      return subscriptionName(subscription, ackSettings: ackSettings);
+    } on GrpcError catch (error) {
+      throw _mapGrpcError(error);
     }
   }
 
@@ -321,8 +371,8 @@ final class PubSub {
         request,
         options: await _callOptions,
       );
-    } on GrpcError catch (e) {
-      throw _mapGrpcError(e);
+    } on GrpcError catch (error) {
+      throw _mapGrpcError(error);
     }
   }
 
@@ -331,6 +381,8 @@ final class PubSub {
   /// The [subscription] must be in the format
   /// `projects/<project-id>/subscriptions/<subscription-id>`.
   ///
+  /// It is an error if [maxMessages] is not greater than 0.
+  ///
   /// Throws a [NotFoundException] if the subscription does not exist.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.Pull).
@@ -338,6 +390,13 @@ final class PubSub {
     String subscription, {
     int maxMessages = 1,
   }) async {
+    if (maxMessages <= 0) {
+      throw ArgumentError.value(
+        maxMessages,
+        'maxMessages',
+        'Must be greater than zero',
+      );
+    }
     final request = grpc.PullRequest()
       ..subscription = subscription
       ..maxMessages = maxMessages;
@@ -350,16 +409,16 @@ final class PubSub {
 
       return response.receivedMessages
           .map(
-            (m) => _mapReceivedMessage(
-              m,
+            (receivedMessage) => _mapReceivedMessage(
+              receivedMessage,
               ackHandler: (ackIds) => acknowledge(subscription, ackIds),
-              modifyDeadlineHandler: (ackIds, seconds) =>
-                  modifyAckDeadline(subscription, ackIds, seconds),
+              modifyDeadlineHandler: (ackIds, ackDeadlineSeconds) =>
+                  modifyAckDeadline(subscription, ackIds, ackDeadlineSeconds),
             ),
           )
           .toList();
-    } on GrpcError catch (e) {
-      throw _mapGrpcError(e);
+    } on GrpcError catch (error) {
+      throw _mapGrpcError(error);
     }
   }
 
@@ -378,11 +437,30 @@ final class PubSub {
   ///
   /// Throws a [ServiceException] if the stream is broken by the server or
   /// network.
+  /// It is an error if [streamAckDeadlineSeconds] is not between 10 and 600
+  /// seconds.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.StreamingPull).
   Stream<ReceivedMessage> streamingPull(
     String subscription, {
     int streamAckDeadlineSeconds = 10,
+  }) {
+    if (streamAckDeadlineSeconds < 10 || streamAckDeadlineSeconds > 600) {
+      throw ArgumentError.value(
+        streamAckDeadlineSeconds,
+        'streamAckDeadlineSeconds',
+        'Must be between 10 and 600 seconds',
+      );
+    }
+    return _streamingPull(
+      subscription,
+      streamAckDeadlineSeconds: streamAckDeadlineSeconds,
+    );
+  }
+
+  Stream<ReceivedMessage> _streamingPull(
+    String subscription, {
+    required int streamAckDeadlineSeconds,
   }) async* {
     final requestController = StreamController<grpc.StreamingPullRequest>();
     try {
@@ -394,23 +472,27 @@ final class PubSub {
       );
       // TODO(sigurdm): Retry on broken connections.
       void handleAck(List<String> ackIds) {
-        if (!requestController.isClosed) {
-          requestController.add(
-            grpc.StreamingPullRequest()..ackIds.addAll(ackIds),
+        if (requestController.isClosed) {
+          throw StateError(
+            'Cannot acknowledge message: streaming pull connection has closed.',
           );
         }
+        requestController.add(
+          grpc.StreamingPullRequest()..ackIds.addAll(ackIds),
+        );
       }
 
       void handleModifyDeadline(List<String> ackIds, int seconds) {
-        if (!requestController.isClosed) {
-          requestController.add(
-            grpc.StreamingPullRequest()
-              ..modifyDeadlineAckIds.addAll(ackIds)
-              ..modifyDeadlineSeconds.addAll(
-                List.filled(ackIds.length, seconds),
-              ),
+        if (requestController.isClosed) {
+          throw StateError(
+            'Cannot modify ack deadline: streaming pull connection has closed.',
           );
         }
+        requestController.add(
+          grpc.StreamingPullRequest()
+            ..modifyDeadlineAckIds.addAll(ackIds)
+            ..modifyDeadlineSeconds.addAll(List.filled(ackIds.length, seconds)),
+        );
       }
 
       final responseStream = _subscriber.streamingPull(
@@ -418,16 +500,16 @@ final class PubSub {
         options: options,
       );
       await for (final response in responseStream) {
-        for (final m in response.receivedMessages) {
+        for (final receivedMessage in response.receivedMessages) {
           yield _mapReceivedMessage(
-            m,
+            receivedMessage,
             ackHandler: handleAck,
             modifyDeadlineHandler: handleModifyDeadline,
           );
         }
       }
-    } on GrpcError catch (e) {
-      throw _mapGrpcError(e);
+    } on GrpcError catch (error) {
+      throw _mapGrpcError(error);
     } finally {
       await requestController.close();
     }
@@ -448,14 +530,15 @@ final class PubSub {
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.Acknowledge).
   Future<void> acknowledge(String subscription, List<String> ackIds) async {
+    if (ackIds.isEmpty) return;
     final request = grpc.AcknowledgeRequest()
       ..subscription = subscription
       ..ackIds.addAll(ackIds);
 
     try {
       await _subscriber.acknowledge(request, options: await _callOptions);
-    } on GrpcError catch (e) {
-      throw _mapGrpcError(e);
+    } on GrpcError catch (error) {
+      throw _mapGrpcError(error);
     }
   }
 
@@ -473,6 +556,8 @@ final class PubSub {
   /// may succeed, but those messages may have already been redelivered or
   /// made available for redelivery.
   ///
+  /// It is an error if [ackDeadlineSeconds] is negative.
+  ///
   /// Throws a [NotFoundException] if the subscription does not exist.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.ModifyAckDeadline).
@@ -481,6 +566,14 @@ final class PubSub {
     List<String> ackIds,
     int ackDeadlineSeconds,
   ) async {
+    if (ackDeadlineSeconds < 0) {
+      throw ArgumentError.value(
+        ackDeadlineSeconds,
+        'ackDeadlineSeconds',
+        'Must be non-negative',
+      );
+    }
+    if (ackIds.isEmpty) return;
     final request = grpc.ModifyAckDeadlineRequest()
       ..subscription = subscription
       ..ackIds.addAll(ackIds)
@@ -488,8 +581,8 @@ final class PubSub {
 
     try {
       await _subscriber.modifyAckDeadline(request, options: await _callOptions);
-    } on GrpcError catch (e) {
-      throw _mapGrpcError(e);
+    } on GrpcError catch (error) {
+      throw _mapGrpcError(error);
     }
   }
 
@@ -516,15 +609,18 @@ final class PubSub {
   // - DeleteSchema
   // - ValidateSchema
   // - ValidateMessage
-  Exception _mapGrpcError(GrpcError e) {
-    final message = e.message ?? 'Unknown gRPC error';
-    return switch (e.code) {
+  Exception _mapGrpcError(GrpcError error) {
+    final message = error.message ?? 'Unknown gRPC error';
+    return switch (error.code) {
       StatusCode.invalidArgument => BadRequestException(message),
       StatusCode.unauthenticated => UnauthorizedException(message),
       StatusCode.permissionDenied => ForbiddenException(message),
       StatusCode.notFound => NotFoundException(message),
       StatusCode.alreadyExists => ConflictException(message),
-      StatusCode.aborted => ConflictException(message),
+      StatusCode.aborted => ConflictException(
+        message,
+        status: Status(code: StatusCode.aborted, message: message),
+      ),
       StatusCode.failedPrecondition => PreconditionFailedException(message),
       StatusCode.outOfRange => RequestRangeNotSatisfiableException(message),
       StatusCode.resourceExhausted => TooManyRequestsException(message),
@@ -533,9 +629,12 @@ final class PubSub {
       StatusCode.internal => InternalServerErrorException(message),
       StatusCode.unimplemented => NotImplementedException(message),
       StatusCode.unavailable => ServiceUnavailableException(message),
-      StatusCode.dataLoss => InternalServerErrorException(message),
+      StatusCode.dataLoss => InternalServerErrorException(
+        message,
+        status: Status(code: StatusCode.dataLoss, message: message),
+      ),
       StatusCode.unknown => InternalServerErrorException(message),
-      _ => ServiceException(message, statusCode: e.code),
+      _ => ServiceException(message, statusCode: error.code),
     };
   }
 }
