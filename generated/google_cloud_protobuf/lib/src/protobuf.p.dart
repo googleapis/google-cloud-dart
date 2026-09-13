@@ -199,26 +199,7 @@ class Value extends ProtoMessage {
     this.listValue,
   }) : super(fullyQualifiedName);
 
-  factory Value.fromJson(Object? json) {
-    switch (json) {
-      case null:
-        return Value(nullValue: NullValue.nullValue);
-      case double d:
-        return Value(numberValue: d);
-      case int i:
-        return Value(numberValue: i.toDouble());
-      case String s:
-        return Value(stringValue: s);
-      case bool b:
-        return Value(boolValue: b);
-      case List<dynamic> l:
-        return Value(listValue: ListValue.fromJson(l));
-      case Map<dynamic, dynamic> m:
-        return Value(structValue: Struct.fromJson(m));
-      default:
-        throw FormatException('Invalid Value: $json');
-    }
-  }
+  factory Value.fromJson(Object? json) => _decodeValue(json, Set.identity());
 
   @override
   Object? toJson() =>
@@ -549,21 +530,76 @@ class _StructHelper {
   static Map<String, Object?> encode(Struct value) =>
       value.fields.map((key, value) => MapEntry(key, value.toJson()));
 
-  static Struct decode(Object? value) {
-    final fields = (value as Map<String, dynamic>).map(
-      (key, value) => MapEntry(key, Value.fromJson(value)),
-    );
-    return Struct(fields: fields);
-  }
+  static Struct decode(Object? value) => _decodeStruct(value, Set.identity());
 }
 
 class _ListValueHelper {
   static List<Object?> encode(ListValue value) =>
       value.values.map((v) => v.toJson()).toList();
 
-  static ListValue decode(Object? value) {
-    final values = (value as List).map(Value.fromJson).toList();
-    return ListValue(values: values);
+  static ListValue decode(Object? value) =>
+      _decodeListValue(value, Set.identity());
+}
+
+// `Value`, `Struct` and `ListValue` decode into each other, so the decoding
+// functions below thread [parents] — the containers currently being decoded —
+// through the recursion in order to reject cycles.
+//
+// `jsonDecode` cannot produce a cyclic structure, but a hand-built Dart
+// collection can be cyclic, which would otherwise recurse until the stack
+// overflows.
+
+/// Decodes [json] into a [Value].
+Value _decodeValue(Object? json, Set<Object> parents) {
+  switch (json) {
+    case null:
+      return Value(nullValue: NullValue.nullValue);
+    case double d:
+      return Value(numberValue: d);
+    case int i:
+      return Value(numberValue: i.toDouble());
+    case String s:
+      return Value(stringValue: s);
+    case bool b:
+      return Value(boolValue: b);
+    case List<dynamic> l:
+      return Value(listValue: _decodeListValue(l, parents));
+    case Map<dynamic, dynamic> m:
+      return Value(structValue: _decodeStruct(m, parents));
+    default:
+      throw FormatException('Invalid Value: $json');
+  }
+}
+
+/// Decodes [json] into a [Struct].
+Struct _decodeStruct(Object? json, Set<Object> parents) {
+  final map = json as Map<String, dynamic>;
+  if (!parents.add(map)) {
+    throw FormatException('Cyclic reference in Struct: $json');
+  }
+  try {
+    return Struct(
+      fields: map.map(
+        (key, value) => MapEntry(key, _decodeValue(value, parents)),
+      ),
+    );
+  } finally {
+    parents.remove(map);
+  }
+}
+
+/// Decodes [json] into a [ListValue].
+ListValue _decodeListValue(Object? json, Set<Object> parents) {
+  final list = json as List;
+  if (!parents.add(list)) {
+    throw FormatException('Cyclic reference in ListValue: $json');
+  }
+  try {
+    return ListValue(
+      values: [for (final value in list) _decodeValue(value, parents)],
+    );
+  } finally {
+    parents.remove(list);
   }
 }
 
