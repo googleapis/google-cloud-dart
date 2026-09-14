@@ -36,35 +36,62 @@ const maxPublishRequestMessages = 1000;
 @internal
 const maxAcknowledgeRequestBytes = 512 * 1000;
 
-/// [settings] capped to the limits the server enforces on a single request.
+/// [settings] checked against the limits the server enforces on a single
+/// request, and narrowed to them where necessary.
 ///
-/// An oversized request is rejected outright with a non-retryable
-/// `INVALID_ARGUMENT` error, failing every item in the batch, so sending
-/// smaller batches than requested is always preferable to sending a batch that
-/// cannot succeed. The official Python, Go, and Node.js clients cap their
-/// batch settings the same way.
+/// [maxBytes] is the largest serialized request the server will accept, and
+/// [maxMessages] the largest number of items it will accept, or null if no
+/// count limit applies. [requestDescription] names the request in the error
+/// message.
 ///
-/// Capping rather than rejecting is deliberate, even though [BatchingSettings]
-/// throws for its other invalid inputs: the applicable limit depends on which
-/// request the settings are used for, and one [BatchingSettings] may
-/// legitimately be shared between publishing and acknowledging.
+/// Throws an [ArgumentError] if the caller explicitly asked for more than the
+/// server allows. Such a request can only ever fail — an oversized request is
+/// rejected outright with a non-retryable `INVALID_ARGUMENT` error that takes
+/// every item in the batch with it — and silently substituting a different
+/// value would leave the settings object reporting a size that is not the one
+/// in use.
+///
+/// The check cannot live in [BatchingSettings] itself, because the applicable
+/// limit depends on which request the settings are used for, and one
+/// [BatchingSettings] may legitimately be shared between publishing and
+/// acknowledging.
+///
+/// A [BatchingSettings.maxBytes] that the caller never set is *not* an error.
+/// Its default suits publishing and exceeds what an `Acknowledge` request
+/// allows, so it is quietly narrowed rather than forcing everyone who wants to
+/// set [BatchingSettings.maxMessages] on a subscription to also restate a byte
+/// limit they have no opinion about.
 @internal
-BatchingSettings capToServerLimits(
+BatchingSettings resolveServerLimits(
   BatchingSettings settings, {
   required int maxBytes,
   int? maxMessages,
+  required String requestDescription,
 }) {
-  final cappedBytes = math.min(settings.maxBytes, maxBytes);
-  final cappedMessages = maxMessages == null
-      ? settings.maxMessages
-      : math.min(settings.maxMessages, maxMessages);
-  if (cappedBytes == settings.maxBytes &&
-      cappedMessages == settings.maxMessages) {
-    return settings;
+  if (settings._maxBytesWasSpecified && settings.maxBytes > maxBytes) {
+    throw ArgumentError.value(
+      settings.maxBytes,
+      'batching.maxBytes',
+      'Must be at most $maxBytes, the largest $requestDescription Pub/Sub '
+          'accepts',
+    );
   }
+  // The default is well under every count limit, so anything above one was
+  // asked for deliberately.
+  if (maxMessages != null && settings.maxMessages > maxMessages) {
+    throw ArgumentError.value(
+      settings.maxMessages,
+      'batching.maxMessages',
+      'Must be at most $maxMessages, the most messages Pub/Sub accepts in '
+          'one $requestDescription',
+    );
+  }
+
+  final resolvedBytes = math.min(settings.maxBytes, maxBytes);
+  if (resolvedBytes == settings.maxBytes) return settings;
   return BatchingSettings(
-    maxMessages: cappedMessages,
-    maxBytes: cappedBytes,
+    maxMessages: settings.maxMessages,
+    maxBytes: resolvedBytes,
     maxDelay: settings.maxDelay,
   );
 }
@@ -83,12 +110,17 @@ BatchingSettings capToServerLimits(
 /// | `Publish` | 10,000,000 bytes, 1,000 messages |
 /// | `Acknowledge`, `ModifyAckDeadline` | 512,000 bytes |
 ///
-/// Settings that would exceed the applicable limit are capped to it, so a
-/// batch of several items is never sent over the limit. A single item that is
-/// larger than the limit on its own still is, and the server rejects that
-/// request with a non-retryable `INVALID_ARGUMENT` error that fails the whole
-/// batch, so check the size of individual messages yourself if they may
-/// approach it.
+/// Asking for more than the applicable limit is an error: constructing the
+/// `Topic` or `Subscription` that would use the settings throws an
+/// [ArgumentError], rather than quietly substituting a value you did not ask
+/// for. The one exception is a [maxBytes] you never set, whose default suits
+/// publishing and is narrowed silently for acknowledgments.
+///
+/// Within the limit, a batch of several items is never sent over [maxBytes]. A
+/// single item that is larger than [maxBytes] on its own still is, and the
+/// server rejects that request with a non-retryable `INVALID_ARGUMENT` error
+/// that fails the whole batch, so check the size of individual messages
+/// yourself if they may approach the limit.
 ///
 /// See the [Pub/Sub quotas and limits](https://cloud.google.com/pubsub/quotas).
 final class BatchingSettings {
@@ -112,7 +144,18 @@ final class BatchingSettings {
   /// An item that would push the total above [maxBytes] starts a new batch
   /// instead. A single item larger than [maxBytes] is sent on its own, in a
   /// batch that exceeds [maxBytes].
+  ///
+  /// Must not exceed what the server accepts for the request being batched;
+  /// see the table on [BatchingSettings].
   final int maxBytes;
+
+  /// Whether [maxBytes] came from the caller rather than from the default.
+  ///
+  /// The default suits publishing and is larger than an `Acknowledge` request
+  /// allows, so it has to be narrowed for that path. Narrowing a value the
+  /// caller actually chose would be wrong — that is an error instead — which
+  /// means the two cases have to be told apart.
+  final bool _maxBytesWasSpecified;
 
   /// The maximum time to wait before sending a batch that has reached
   /// neither [maxMessages] nor [maxBytes].
@@ -124,11 +167,16 @@ final class BatchingSettings {
   /// - [maxMessages] is not greater than 0.
   /// - [maxBytes] is not greater than 0.
   /// - [maxDelay] is not greater than [Duration.zero].
+  ///
+  /// Exceeding a server limit is also an error, but is reported by the `Topic`
+  /// or `Subscription` the settings are given to, which is what determines
+  /// which limit applies.
   BatchingSettings({
     this.maxMessages = 100,
-    this.maxBytes = 1024 * 1024, // 1 MiB
+    int? maxBytes,
     this.maxDelay = const Duration(milliseconds: 10),
-  }) {
+  }) : maxBytes = maxBytes ?? 1024 * 1024, // 1 MiB
+       _maxBytesWasSpecified = maxBytes != null {
     if (maxMessages <= 0) {
       throw ArgumentError.value(
         maxMessages,
@@ -136,9 +184,9 @@ final class BatchingSettings {
         'Must be greater than zero',
       );
     }
-    if (maxBytes <= 0) {
+    if (this.maxBytes <= 0) {
       throw ArgumentError.value(
-        maxBytes,
+        this.maxBytes,
         'maxBytes',
         'Must be greater than zero',
       );
