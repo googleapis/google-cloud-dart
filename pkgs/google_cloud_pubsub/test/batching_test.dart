@@ -17,6 +17,7 @@ library;
 
 import 'dart:async';
 
+import 'package:google_cloud_pubsub/google_cloud_pubsub.dart';
 import 'package:google_cloud_pubsub/src/batching.dart';
 import 'package:test/test.dart';
 
@@ -344,6 +345,147 @@ void main() {
           ),
         ),
       );
+    });
+  });
+
+  group('Batcher.baseSize', () {
+    test('counts towards maxBytes', () async {
+      final batches = <List<int>>[];
+      // Base 6 plus two items of 2 reaches maxBytes; a third would exceed it.
+      Batcher<int>(
+          settings: BatchingSettings(
+            maxMessages: 100,
+            maxBytes: 10,
+            maxDelay: const Duration(seconds: 10),
+          ),
+          baseSize: 6,
+          itemSize: (item) => 2,
+          onBatch: (batch) async => batches.add(batch),
+        )
+        ..add(1)
+        ..add(2);
+      await Future<void>.delayed(Duration.zero);
+      expect(batches, [
+        [1, 2],
+      ]);
+    });
+
+    test('is reapplied to each subsequent batch', () async {
+      final batches = <List<int>>[];
+      Batcher<int>(
+          settings: BatchingSettings(
+            maxMessages: 100,
+            maxBytes: 10,
+            maxDelay: const Duration(seconds: 10),
+          ),
+          baseSize: 6,
+          itemSize: (item) => 2,
+          onBatch: (batch) async => batches.add(batch),
+        )
+        ..add(1)
+        ..add(2)
+        ..add(3)
+        ..add(4);
+      await Future<void>.delayed(Duration.zero);
+      expect(batches, [
+        [1, 2],
+        [3, 4],
+      ]);
+    });
+
+    test('defaults to zero, preserving the plain item-sum behaviour', () async {
+      final batches = <List<int>>[];
+      final batcher = Batcher<int>(
+        settings: BatchingSettings(
+          maxMessages: 100,
+          maxBytes: 10,
+          maxDelay: const Duration(seconds: 10),
+        ),
+        itemSize: (item) => 2,
+        onBatch: (batch) async => batches.add(batch),
+      );
+
+      for (var i = 1; i <= 5; i++) {
+        batcher.add(i);
+      }
+      await Future<void>.delayed(Duration.zero);
+      expect(batches, [
+        [1, 2, 3, 4, 5],
+      ]);
+    });
+  });
+
+  group('capToServerLimits', () {
+    test('caps maxBytes above the limit', () {
+      final capped = capToServerLimits(
+        BatchingSettings(maxBytes: 50000000),
+        maxBytes: maxPublishRequestBytes,
+      );
+      expect(capped.maxBytes, maxPublishRequestBytes);
+    });
+
+    test('caps maxMessages above the limit', () {
+      final capped = capToServerLimits(
+        BatchingSettings(maxMessages: 5000),
+        maxBytes: maxPublishRequestBytes,
+        maxMessages: maxPublishRequestMessages,
+      );
+      expect(capped.maxMessages, maxPublishRequestMessages);
+    });
+
+    test('leaves settings within the limits untouched', () {
+      final settings = BatchingSettings(maxMessages: 10, maxBytes: 2048);
+      final capped = capToServerLimits(
+        settings,
+        maxBytes: maxPublishRequestBytes,
+        maxMessages: maxPublishRequestMessages,
+      );
+      expect(identical(capped, settings), isTrue);
+    });
+
+    test('preserves maxDelay when capping', () {
+      const maxDelay = Duration(seconds: 7);
+      final capped = capToServerLimits(
+        BatchingSettings(maxBytes: 50000000, maxDelay: maxDelay),
+        maxBytes: maxPublishRequestBytes,
+      );
+      expect(capped.maxDelay, maxDelay);
+    });
+
+    test('leaves maxMessages alone when no message limit applies', () {
+      final capped = capToServerLimits(
+        BatchingSettings(maxMessages: 5000, maxBytes: 50000000),
+        maxBytes: maxAcknowledgeRequestBytes,
+      );
+      expect(capped.maxMessages, 5000);
+      expect(capped.maxBytes, maxAcknowledgeRequestBytes);
+    });
+  });
+
+  group('server limits', () {
+    test('match the documented Pub/Sub quotas', () {
+      // https://cloud.google.com/pubsub/quotas. Pub/Sub documents these in
+      // decimal units, so "10MB" is 10,000,000 bytes rather than 10 MiB.
+      expect(maxPublishRequestBytes, 10 * 1000 * 1000);
+      expect(maxPublishRequestMessages, 1000);
+      expect(maxAcknowledgeRequestBytes, 512 * 1000);
+    });
+
+    test('publish defaults stay within them', () {
+      final settings = PublishSettings().batching;
+      expect(settings.maxBytes, lessThanOrEqualTo(maxPublishRequestBytes));
+      expect(
+        settings.maxMessages,
+        lessThanOrEqualTo(maxPublishRequestMessages),
+      );
+    });
+
+    test('acknowledgment defaults stay within them', () {
+      // The publish-oriented default of 1 MiB is twice what the server allows
+      // for an Acknowledge or ModifyAckDeadline request.
+      final settings = AckSettings().batching;
+      expect(settings.maxBytes, maxAcknowledgeRequestBytes);
+      expect(settings.maxBytes, lessThanOrEqualTo(maxAcknowledgeRequestBytes));
     });
   });
 }

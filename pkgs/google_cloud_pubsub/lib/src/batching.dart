@@ -13,29 +13,88 @@
 // limitations under the License.
 
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:meta/meta.dart';
 
+/// The maximum serialized size of a `Publish` request.
+///
+/// Note that Pub/Sub documents this as "10MB", meaning 10,000,000 bytes rather
+/// than 10 MiB.
+@internal
+const maxPublishRequestBytes = 10 * 1000 * 1000;
+
+/// The maximum number of messages in a `Publish` request.
+@internal
+const maxPublishRequestMessages = 1000;
+
+/// The maximum serialized size of an `Acknowledge` or `ModifyAckDeadline`
+/// request.
+@internal
+const maxAcknowledgeRequestBytes = 512 * 1000;
+
+/// [settings] capped to the limits the server enforces on a single request.
+///
+/// An oversized request is rejected outright with a non-retryable
+/// `INVALID_ARGUMENT` error, failing every item in the batch, so sending
+/// smaller batches than requested is always preferable to sending a batch that
+/// cannot succeed. The official Python, Go, and Node.js clients cap their
+/// batch settings the same way.
+@internal
+BatchingSettings capToServerLimits(
+  BatchingSettings settings, {
+  required int maxBytes,
+  int? maxMessages,
+}) {
+  final cappedBytes = math.min(settings.maxBytes, maxBytes);
+  final cappedMessages = maxMessages == null
+      ? settings.maxMessages
+      : math.min(settings.maxMessages, maxMessages);
+  if (cappedBytes == settings.maxBytes &&
+      cappedMessages == settings.maxMessages) {
+    return settings;
+  }
+  return BatchingSettings(
+    maxMessages: cappedMessages,
+    maxBytes: cappedBytes,
+    maxDelay: settings.maxDelay,
+  );
+}
+
 /// Settings for batching operations.
+///
+/// A batch is sent as soon as any of [maxMessages], [maxBytes], or [maxDelay]
+/// is reached, whichever happens first.
+///
+/// Pub/Sub enforces its own limits on each request, and it measures the
+/// *serialized* request. [maxBytes] is measured the same way, so it can be
+/// compared directly against those limits:
+///
+/// | Request | Server limit |
+/// | --- | --- |
+/// | `Publish` | 10,000,000 bytes, 1,000 messages |
+/// | `Acknowledge`, `ModifyAckDeadline` | 512 KB |
+///
+/// Settings that would exceed the applicable limit are capped to it, so a
+/// batch is never knowingly sent over the limit. Exceeding it would fail the
+/// entire batch with a non-retryable `INVALID_ARGUMENT` error.
+///
+/// See the [Pub/Sub quotas and limits](https://cloud.google.com/pubsub/quotas).
 final class BatchingSettings {
   /// The maximum number of items to collect before sending a batch.
   final int maxMessages;
 
-  /// The maximum total size in bytes of the items to collect before sending
-  /// a batch.
+  /// The maximum serialized size in bytes of a request before it is sent.
   ///
-  /// Only the items themselves are measured. When publishing, this is the
-  /// message payload plus the UTF-8 encoded attribute keys and values; the
-  /// overhead of the request itself (the topic name, protobuf field tags and
-  /// length prefixes, and gRPC framing) is *not* counted, so the request
-  /// actually sent is somewhat larger than [maxBytes].
+  /// This is the size of the whole request as it appears on the wire: the
+  /// items, the protobuf field tags and length prefixes that frame them, and
+  /// the fixed fields the request carries (such as the topic or subscription
+  /// name). It does not include gRPC framing, which the server does not count
+  /// against its limits either.
   ///
   /// An item that would push the total above [maxBytes] starts a new batch
   /// instead. A single item larger than [maxBytes] is sent on its own, in a
   /// batch that exceeds [maxBytes].
-  ///
-  /// Pub/Sub rejects publish requests larger than 10,000,000 bytes. That
-  /// limit is not enforced here, so leave room for the uncounted overhead.
   final int maxBytes;
 
   /// The maximum time to wait before sending a batch that has reached
@@ -104,9 +163,16 @@ final class Batcher<T> {
   final int Function(T) itemSize;
   final Future<void> Function(List<T>) onBatch;
 
+  /// The size in bytes that a batch occupies before any item is added.
+  ///
+  /// This accounts for whatever the request carries besides the items
+  /// themselves, so that [BatchingSettings.maxBytes] can be compared against
+  /// the size of the whole request rather than the sum of its items.
+  final int baseSize;
+
   final List<T> _buffer = [];
   final Set<Future<void>> _inFlight = {};
-  int _currentSizeBytes = 0;
+  int _currentSizeBytes;
   Timer? _timer;
   bool _isClosed = false;
   Future<void>? _closeFuture;
@@ -115,7 +181,8 @@ final class Batcher<T> {
     required this.settings,
     required this.itemSize,
     required this.onBatch,
-  });
+    this.baseSize = 0,
+  }) : _currentSizeBytes = baseSize;
 
   /// Whether this batcher is closed.
   bool get isClosed => _isClosed;
@@ -150,7 +217,7 @@ final class Batcher<T> {
 
     final batch = _buffer.toList();
     _buffer.clear();
-    _currentSizeBytes = 0;
+    _currentSizeBytes = baseSize;
 
     final future = Future.sync(() => onBatch(batch));
     _inFlight.add(future);

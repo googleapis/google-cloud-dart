@@ -16,6 +16,7 @@
 library;
 
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:google_cloud_pubsub/google_cloud_pubsub.dart';
 import 'package:google_cloud_pubsub/src/generated/google/pubsub/v1/pubsub.pbgrpc.dart'
@@ -248,19 +249,33 @@ void main() {
     );
 
     test(
-      'calculates message size including attribute key and value lengths',
+      'batches on the serialized size of the request, attributes included',
       () async {
-        // Configure maxBytes to 20.
-        // data length = 4.
-        // attribute 'k': 'v' length = 1 + 1 = 2.
-        // Total size per message = 6.
-        // 3 messages = 18 bytes (does not trigger flush).
-        // 4th message = 24 bytes >= 20 bytes (triggers flush!).
+        // The thresholds come from what protobuf actually produces, so this
+        // test pins the batcher to real serialized sizes rather than to
+        // hand-computed arithmetic that can drift away from the encoding.
+        int serializedSize(int messageCount) {
+          final request = generated.PublishRequest()
+            ..topic = 'projects/test-project/topics/test-topic';
+          for (var i = 0; i < messageCount; i++) {
+            request.messages.add(
+              generated.PubsubMessage()
+                ..data = Uint8List.fromList([1, 2, 3, 4])
+                ..attributes.addAll({'k': 'v'}),
+            );
+          }
+          return request.writeToBuffer().length;
+        }
+
+        // Room for exactly three messages, but not for a fourth.
+        final maxBytes = serializedSize(4) - 1;
+        expect(serializedSize(3), lessThan(maxBytes));
+
         final topic = client.topic(
           'test-topic',
           publishSettings: PublishSettings(
             batching: BatchingSettings(
-              maxBytes: 20,
+              maxBytes: maxBytes,
               maxMessages: 100,
               maxDelay: const Duration(seconds: 10),
             ),
@@ -274,8 +289,8 @@ void main() {
         await Future<void>.delayed(const Duration(milliseconds: 10));
         expect(fakePublisher.publishCallCount, equals(0));
 
-        // Adding the 4th message would push the batch to 24 bytes > 20 bytes,
-        // so the existing 3 messages (18 bytes) are flushed first into batch 1.
+        // The fourth message would take the request past maxBytes, so the
+        // three buffered messages are flushed first.
         unawaited(topic.publish([1, 2, 3, 4], attributes: {'k': 'v'}));
 
         await Future<void>.delayed(const Duration(milliseconds: 10));
@@ -285,8 +300,61 @@ void main() {
         await topic.close();
         expect(fakePublisher.publishCallCount, equals(2));
         expect(fakePublisher.recordedRequests[1].messages.length, equals(1));
+
+        // The point of all of the above: what actually went on the wire fits.
+        for (final request in fakePublisher.recordedRequests) {
+          expect(request.writeToBuffer().length, lessThanOrEqualTo(maxBytes));
+        }
       },
     );
+
+    test('never sends a request larger than maxBytes, even for many small '
+        'messages carrying attributes', () async {
+      // Small messages with several attributes are the worst case for
+      // framing overhead: the tags and length prefixes are a large fraction
+      // of the total. Counting only payload and attribute bytes used to
+      // overshoot here by around 20%, which the server rejects outright.
+      const maxBytes = 50000;
+      final topic = client.topic(
+        'test-topic',
+        publishSettings: PublishSettings(
+          batching: BatchingSettings(
+            maxBytes: maxBytes,
+            maxMessages: 1000000,
+            maxDelay: const Duration(seconds: 10),
+          ),
+        ),
+      );
+
+      final published = <Future<String>>[];
+      for (var i = 0; i < 4000; i++) {
+        published.add(
+          topic.publish(
+            [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            attributes: {
+              'attribute-key-0': 'attribute-value-0',
+              'attribute-key-1': 'attribute-value-1',
+              'attribute-key-2': 'attribute-value-2',
+              'attribute-key-3': 'attribute-value-3',
+              'attribute-key-4': 'attribute-value-4',
+            },
+          ),
+        );
+      }
+      await topic.close();
+      await Future.wait(published);
+
+      expect(fakePublisher.recordedRequests, isNotEmpty);
+      for (final request in fakePublisher.recordedRequests) {
+        expect(request.writeToBuffer().length, lessThanOrEqualTo(maxBytes));
+      }
+      // Sanity check that the batches are not trivially small, which would
+      // make the assertion above vacuous.
+      expect(
+        fakePublisher.recordedRequests.first.messages.length,
+        greaterThan(100),
+      );
+    });
 
     test('Topic.create() returns this and preserves publishSettings', () async {
       final customSettings = PublishSettings(
@@ -341,24 +409,41 @@ void main() {
     test(
       'Topic batching calculates multi-byte UTF-8 attribute byte size',
       () async {
+        // '🎉' is 4 bytes in UTF-8 but 2 code units in UTF-16. Measuring it as
+        // 2 would make each message two bytes smaller, the second message
+        // would still appear to fit, and no flush would happen.
+        int serializedSize(int messageCount) {
+          final request = generated.PublishRequest()
+            ..topic = 'projects/test-project/topics/test-topic';
+          for (var i = 0; i < messageCount; i++) {
+            request.messages.add(
+              generated.PubsubMessage()
+                ..data = Uint8List.fromList([1])
+                ..attributes.addAll({'k': '🎉'}),
+            );
+          }
+          return request.writeToBuffer().length;
+        }
+
+        // Room for exactly one message, but not for a second.
+        final maxBytes = serializedSize(2) - 1;
+        expect(serializedSize(1), lessThan(maxBytes));
+
         final topic = client.topic(
           'test-topic',
           publishSettings: PublishSettings(
             batching: BatchingSettings(
-              // '🎉' is 4 bytes in UTF-8, 2 code units in UTF-16
-              // data: 1 byte, 'k': 1 byte, '🎉': 4 bytes = 6 bytes
-              maxBytes: 10,
+              maxBytes: maxBytes,
               maxDelay: const Duration(seconds: 10),
             ),
           ),
         );
 
-        // Adding first item: 6 bytes
         final f1 = topic.publish([1], attributes: {'k': '🎉'});
         await Future<void>.delayed(Duration.zero);
         expect(fakePublisher.publishCalled, isFalse);
 
-        // Adding second item: 6 bytes. 6 + 6 > 10, so first item flushes.
+        // The second message no longer fits, so the first one is flushed.
         final f2 = topic.publish([2], attributes: {'k': '🎉'});
         await Future<void>.delayed(Duration.zero);
         expect(fakePublisher.publishCalled, isTrue);
