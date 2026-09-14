@@ -26,15 +26,26 @@
 /// See the [protocol buffer encoding reference](https://protobuf.dev/programming-guides/encoding/).
 library;
 
+import 'dart:convert';
+
 import 'package:meta/meta.dart';
+
+import 'message.dart';
 
 /// The number of bytes the base 128 varint encoding of [value] occupies.
 ///
-/// [value] must be non-negative. Every varint is at least one byte long, and
-/// each byte carries seven bits of payload.
+/// Every varint is at least one byte long, and each byte carries seven bits of
+/// payload.
+///
+/// [value] is expected to be non-negative. A negative value is sign extended
+/// to 64 bits by `package:protobuf` and always occupies ten bytes; returning
+/// that rather than tripping only an assert keeps a release build
+/// over-estimating instead of under-estimating, which is the safe direction
+/// for a size limit.
 @internal
 int varintSize(int value) {
   assert(value >= 0);
+  if (value < 0) return 10;
   var size = 1;
   while (value >= 128) {
     value >>= 7;
@@ -58,3 +69,45 @@ int tagSize(int fieldNumber) => varintSize(fieldNumber << 3);
 @internal
 int lengthDelimitedSize(int fieldNumber, int payloadBytes) =>
     tagSize(fieldNumber) + varintSize(payloadBytes) + payloadBytes;
+
+// Field numbers from `google/pubsub/v1/pubsub.proto`.
+const _publishRequestMessagesField = 2;
+const _pubsubMessageDataField = 1;
+const _pubsubMessageAttributesField = 2;
+
+// Protobuf encodes a map entry as a submessage with the key in field 1 and the
+// value in field 2.
+const _mapEntryKeyField = 1;
+const _mapEntryValueField = 2;
+
+/// The number of bytes [message] adds to a serialized `PublishRequest`.
+///
+/// This is the exact contribution of one entry of the repeated `messages`
+/// field: the entry's own tag and length prefix, plus the encoding of the
+/// `PubsubMessage` itself.
+///
+/// Two details are easy to get wrong here, and both are covered by
+/// `test/wire_size_test.dart`:
+///
+/// - `data` is written even when empty, because `PubSub.publishMessages`
+///   always assigns it. An empty `bytes` field still costs its tag and a zero
+///   length prefix.
+/// - A map entry always writes both its key and its value, so an attribute
+///   with an empty key or value is not free.
+///
+/// `messageId`, `publishTime` and `orderingKey` are never set on the publish
+/// path, so they contribute nothing.
+@internal
+int publishRequestMessageSize(Message message) {
+  var body = lengthDelimitedSize(_pubsubMessageDataField, message.data.length);
+  for (final entry in message.attributes.entries) {
+    final entrySize =
+        lengthDelimitedSize(_mapEntryKeyField, utf8.encode(entry.key).length) +
+        lengthDelimitedSize(
+          _mapEntryValueField,
+          utf8.encode(entry.value).length,
+        );
+    body += lengthDelimitedSize(_pubsubMessageAttributesField, entrySize);
+  }
+  return lengthDelimitedSize(_publishRequestMessagesField, body);
+}

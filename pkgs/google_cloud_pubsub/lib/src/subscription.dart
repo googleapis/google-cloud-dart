@@ -28,9 +28,12 @@ import 'wire_size.dart';
 // `AcknowledgeRequest` and of `StreamingPullRequest`, and deadline
 // modifications name their ack IDs in field 4 of both
 // `ModifyAckDeadlineRequest` and `StreamingPullRequest`, so one constant
-// serves the unary and the streaming path alike.
+// serves the unary and the streaming path alike. Field 3 holds the deadline
+// itself: a single shared value on `ModifyAckDeadlineRequest`, a packed list
+// on `StreamingPullRequest`.
 const _requestSubscriptionField = 1;
 const _ackIdsField = 2;
+const _modifyDeadlineSecondsField = 3;
 const _modifyDeadlineAckIdsField = 4;
 
 /// Settings for background batching and retrying of acknowledgments and
@@ -39,7 +42,7 @@ final class AckSettings {
   /// Settings controlling how requests are accumulated and flushed.
   ///
   /// Defaults to [BatchingSettings] with [BatchingSettings.maxBytes] set to
-  /// the 512 KB that Pub/Sub allows for an `Acknowledge` or
+  /// the 512,000 bytes that Pub/Sub allows for an `Acknowledge` or
   /// `ModifyAckDeadline` request, rather than the larger default that suits
   /// publishing. A larger value is capped to that limit.
   final BatchingSettings batching;
@@ -152,25 +155,31 @@ final class Subscription {
       baseSize: baseSize,
       // Ack IDs are server-generated ASCII, so their UTF-16 length is also
       // their length in bytes.
-      itemSize: (request) =>
-          lengthDelimitedSize(_ackIdsField, request.ackId.length),
+      itemSize: (request) {
+        assert(utf8.encode(request.ackId).length == request.ackId.length);
+        return lengthDelimitedSize(_ackIdsField, request.ackId.length);
+      },
       onBatch: _onAckBatch,
     );
     _modifyAckBatcher = Batcher<_ModifyAckDeadlineRequest>(
       settings: settings,
-      baseSize: baseSize,
-      // A `StreamingPullRequest` carries a `modifyDeadlineSeconds` list
-      // parallel to its ack ID list — "The size of this list must be the same
-      // as the size of `modify_deadline_ack_ids`" — so each ack ID also costs
-      // the varint encoding of its own deadline. A unary
-      // `ModifyAckDeadlineRequest` instead has a single shared deadline, which
-      // makes this an over-estimate on that path.
-      itemSize: (request) =>
-          lengthDelimitedSize(
-            _modifyDeadlineAckIdsField,
-            request.ackId.length,
-          ) +
-          varintSize(request.ackDeadlineSeconds),
+      // A unary `ModifyAckDeadlineRequest` carries one shared
+      // `ackDeadlineSeconds`, so charge its tag once up front. Without it a
+      // group of exactly one ack ID would be under-counted by that byte.
+      baseSize: baseSize + tagSize(_modifyDeadlineSecondsField),
+      // A `StreamingPullRequest` instead carries a `modifyDeadlineSeconds`
+      // list parallel to its ack ID list — "The size of this list must be the
+      // same as the size of `modify_deadline_ack_ids`" — so each ack ID also
+      // costs the varint encoding of its own deadline. On the unary path,
+      // where the deadline is shared, that makes this an over-estimate.
+      itemSize: (request) {
+        assert(utf8.encode(request.ackId).length == request.ackId.length);
+        return lengthDelimitedSize(
+              _modifyDeadlineAckIdsField,
+              request.ackId.length,
+            ) +
+            varintSize(request.ackDeadlineSeconds);
+      },
       onBatch: _onModifyAckBatch,
     );
   }

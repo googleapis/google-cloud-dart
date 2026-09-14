@@ -30,6 +30,9 @@ const maxPublishRequestMessages = 1000;
 
 /// The maximum serialized size of an `Acknowledge` or `ModifyAckDeadline`
 /// request.
+///
+/// Note that Pub/Sub documents this as "512 KB", meaning 512,000 bytes rather
+/// than 512 KiB.
 @internal
 const maxAcknowledgeRequestBytes = 512 * 1000;
 
@@ -40,6 +43,11 @@ const maxAcknowledgeRequestBytes = 512 * 1000;
 /// smaller batches than requested is always preferable to sending a batch that
 /// cannot succeed. The official Python, Go, and Node.js clients cap their
 /// batch settings the same way.
+///
+/// Capping rather than rejecting is deliberate, even though [BatchingSettings]
+/// throws for its other invalid inputs: the applicable limit depends on which
+/// request the settings are used for, and one [BatchingSettings] may
+/// legitimately be shared between publishing and acknowledging.
 @internal
 BatchingSettings capToServerLimits(
   BatchingSettings settings, {
@@ -73,11 +81,14 @@ BatchingSettings capToServerLimits(
 /// | Request | Server limit |
 /// | --- | --- |
 /// | `Publish` | 10,000,000 bytes, 1,000 messages |
-/// | `Acknowledge`, `ModifyAckDeadline` | 512 KB |
+/// | `Acknowledge`, `ModifyAckDeadline` | 512,000 bytes |
 ///
 /// Settings that would exceed the applicable limit are capped to it, so a
-/// batch is never knowingly sent over the limit. Exceeding it would fail the
-/// entire batch with a non-retryable `INVALID_ARGUMENT` error.
+/// batch of several items is never sent over the limit. A single item that is
+/// larger than the limit on its own still is, and the server rejects that
+/// request with a non-retryable `INVALID_ARGUMENT` error that fails the whole
+/// batch, so check the size of individual messages yourself if they may
+/// approach it.
 ///
 /// See the [Pub/Sub quotas and limits](https://cloud.google.com/pubsub/quotas).
 final class BatchingSettings {
@@ -91,6 +102,12 @@ final class BatchingSettings {
   /// the fixed fields the request carries (such as the topic or subscription
   /// name). It does not include gRPC framing, which the server does not count
   /// against its limits either.
+  ///
+  /// This is exact for `Publish`. For acknowledgments it is deliberately
+  /// conservative — the subscription name is counted even on the streaming
+  /// path that omits it, and each ack ID is charged for its own deadline even
+  /// on the unary path that carries a single shared one — so those batches may
+  /// be slightly smaller than [maxBytes] would allow.
   ///
   /// An item that would push the total above [maxBytes] starts a new batch
   /// instead. A single item larger than [maxBytes] is sent on its own, in a

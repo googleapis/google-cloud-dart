@@ -1,15 +1,13 @@
 ## 0.1.0-wip
 
-- Added resilient streaming pull in `Subscription.streamingPull` with support
-  for parallel streams (`maxConcurrentStreams`), automatic reconnection with
-  exponential backoff, and backpressure pause/resume forwarding.
-- Routed background `Subscription.acknowledge` and `modifyAckDeadline` batches
-  directly over active streaming pull channels.
 - Added `BatchingSettings`, `PublishSettings`, and `AckSettings`.
   `BatchingSettings.maxBytes` is measured against the serialized request, the
-  same way Pub/Sub enforces its own limits, and is capped to the limit that
-  applies to the request being batched. `AckSettings` defaults it to the
-  512 KB allowed for acknowledgment requests.
+  same way Pub/Sub enforces its own limits. Both it and
+  `BatchingSettings.maxMessages` are capped to the limits that apply to the
+  request being batched: 10,000,000 bytes and 1,000 messages for publishing,
+  512,000 bytes for acknowledgments. `AckSettings` defaults `maxBytes` to
+  512,000 bytes rather than sharing the larger publish-oriented default, which
+  was twice what the server accepts for `Acknowledge` and `ModifyAckDeadline`.
 - Added background message batching for `Topic.publish`.
 - Added background acknowledgment and deadline modification batching for
   `Subscription.acknowledge` and `Subscription.modifyAckDeadline`.
