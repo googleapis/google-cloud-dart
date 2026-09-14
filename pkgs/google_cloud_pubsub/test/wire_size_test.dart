@@ -27,6 +27,7 @@ import 'dart:convert';
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:google_cloud_pubsub/google_cloud_pubsub.dart';
 import 'package:google_cloud_pubsub/src/generated/google/pubsub/v1/pubsub.pb.dart'
     as grpc;
 import 'package:google_cloud_pubsub/src/wire_size.dart';
@@ -34,28 +35,21 @@ import 'package:test/test.dart';
 
 /// Field numbers from `google/pubsub/v1/pubsub.proto`.
 const publishRequestTopicField = 1;
-const publishRequestMessagesField = 2;
-const pubsubMessageDataField = 1;
-const pubsubMessageAttributesField = 2;
-const mapEntryKeyField = 1;
-const mapEntryValueField = 2;
 const acknowledgeRequestSubscriptionField = 1;
 const acknowledgeRequestAckIdsField = 2;
+const modifyAckDeadlineRequestSubscriptionField = 1;
+const modifyAckDeadlineRequestSecondsField = 3;
+const modifyAckDeadlineRequestAckIdsField = 4;
 
-/// Mirrors `Topic._publishedMessageSize`.
-int predictedMessageSize(List<int> data, Map<String, String> attributes) {
-  var body = lengthDelimitedSize(pubsubMessageDataField, data.length);
-  for (final entry in attributes.entries) {
-    final entrySize =
-        lengthDelimitedSize(mapEntryKeyField, utf8.encode(entry.key).length) +
-        lengthDelimitedSize(
-          mapEntryValueField,
-          utf8.encode(entry.value).length,
-        );
-    body += lengthDelimitedSize(pubsubMessageAttributesField, entrySize);
-  }
-  return lengthDelimitedSize(publishRequestMessagesField, body);
-}
+/// The size the production code predicts for one published message.
+///
+/// This calls the real [publishRequestMessageSize] rather than a copy of it,
+/// so that a change to the prediction that is not also a change to the wire
+/// format fails these tests.
+int predictedMessageSize(List<int> data, Map<String, String> attributes) =>
+    publishRequestMessageSize(
+      Message(data: Uint8List.fromList(data), attributes: attributes),
+    );
 
 int actualMessageSize(List<int> data, Map<String, String> attributes) {
   final message = grpc.PubsubMessage()..data = Uint8List.fromList(data);
@@ -225,6 +219,59 @@ void main() {
               .length;
 
       expect(predicted, actual);
+    });
+
+    test('modack size covers a serialized ModifyAckDeadlineRequest', () {
+      const subscription =
+          'projects/example-project/subscriptions/example-subscription';
+
+      // Mirrors how `Subscription._initBatchers` sizes the modack batcher: the
+      // subscription plus the shared deadline's tag up front, then each ack ID
+      // charged for its own deadline varint.
+      int predict(List<String> ackIds, int deadline) {
+        var size =
+            lengthDelimitedSize(
+              modifyAckDeadlineRequestSubscriptionField,
+              utf8.encode(subscription).length,
+            ) +
+            tagSize(modifyAckDeadlineRequestSecondsField);
+        for (final ackId in ackIds) {
+          size +=
+              lengthDelimitedSize(
+                modifyAckDeadlineRequestAckIdsField,
+                ackId.length,
+              ) +
+              varintSize(deadline);
+        }
+        return size;
+      }
+
+      int actual(List<String> ackIds, int deadline) =>
+          (grpc.ModifyAckDeadlineRequest()
+                ..subscription = subscription
+                ..ackDeadlineSeconds = deadline
+                ..ackIds.addAll(ackIds))
+              .writeToBuffer()
+              .length;
+
+      // A unary request carries one shared deadline, so the prediction is an
+      // over-estimate that grows with the number of ack IDs — but it must
+      // never be an under-estimate, including for a single ack ID, which is
+      // the tightest case.
+      for (final deadline in [0, 10, 600, 65536]) {
+        for (final count in [1, 2, 3, 50]) {
+          final ackIds = [for (var i = 0; i < count; i++) 'ack-id-$i'];
+          expect(
+            predict(ackIds, deadline),
+            greaterThanOrEqualTo(actual(ackIds, deadline)),
+            reason: 'count: $count, deadline: $deadline',
+          );
+        }
+      }
+
+      // For one ack ID the prediction is exact: the shared deadline and the
+      // per-ack-ID deadline are the same single value.
+      expect(predict(['ack-id-0'], 600), actual(['ack-id-0'], 600));
     });
   });
 }

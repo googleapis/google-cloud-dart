@@ -20,21 +20,16 @@ import 'batching.dart';
 import 'retry.dart';
 import 'wire_size.dart';
 
-// Field numbers from `google/pubsub/v1/pubsub.proto`, used to predict the
+// Field number from `google/pubsub/v1/pubsub.proto`, used to predict the
 // serialized size of a `PublishRequest` without building one.
 const _publishRequestTopicField = 1;
-const _publishRequestMessagesField = 2;
-const _pubsubMessageDataField = 1;
-const _pubsubMessageAttributesField = 2;
-
-// Protobuf encodes a map entry as a submessage with the key in field 1 and the
-// value in field 2.
-const _mapEntryKeyField = 1;
-const _mapEntryValueField = 2;
 
 /// Settings for background batching and retrying of published messages.
 final class PublishSettings {
   /// Settings controlling how requests are accumulated and flushed.
+  ///
+  /// Capped to what Pub/Sub allows in a single `Publish` request: 10,000,000
+  /// bytes and 1,000 messages.
   final BatchingSettings batching;
 
   /// Settings controlling retries when flushing a batch over a unary RPC.
@@ -117,40 +112,6 @@ final class Topic {
     _initBatcher();
   }
 
-  /// The number of bytes [message] adds to a serialized `PublishRequest`.
-  ///
-  /// This is the exact contribution of one entry of the repeated `messages`
-  /// field: the entry's own tag and length prefix, plus the encoding of the
-  /// `PubsubMessage` itself.
-  ///
-  /// Two details are easy to get wrong here, and both are covered by
-  /// `test/wire_size_test.dart`:
-  ///
-  /// - `data` is written even when empty, because [PubSub.publishMessages]
-  ///   always assigns it. An empty `bytes` field still costs its tag and a
-  ///   zero length prefix.
-  /// - A map entry always writes both its key and its value, so an attribute
-  ///   with an empty key or value is not free.
-  static int _publishedMessageSize(Message message) {
-    var body = lengthDelimitedSize(
-      _pubsubMessageDataField,
-      message.data.length,
-    );
-    for (final entry in message.attributes.entries) {
-      final entrySize =
-          lengthDelimitedSize(
-            _mapEntryKeyField,
-            utf8.encode(entry.key).length,
-          ) +
-          lengthDelimitedSize(
-            _mapEntryValueField,
-            utf8.encode(entry.value).length,
-          );
-      body += lengthDelimitedSize(_pubsubMessageAttributesField, entrySize);
-    }
-    return lengthDelimitedSize(_publishRequestMessagesField, body);
-  }
-
   void _initBatcher() {
     _batcher = Batcher<_PublishRequest>(
       settings: capToServerLimits(
@@ -163,7 +124,7 @@ final class Topic {
         _publishRequestTopicField,
         utf8.encode(name).length,
       ),
-      itemSize: (request) => _publishedMessageSize(request.message),
+      itemSize: (request) => publishRequestMessageSize(request.message),
       onBatch: _onBatch,
     );
   }
