@@ -28,8 +28,8 @@ const _publishRequestTopicField = 1;
 final class PublishSettings {
   /// Settings controlling how requests are accumulated and flushed.
   ///
-  /// Capped to what Pub/Sub allows in a single `Publish` request: 10,000,000
-  /// bytes and 1,000 messages.
+  /// Pub/Sub accepts at most 10,000,000 bytes and 1,000 messages in a single
+  /// `Publish` request; asking for more throws an [ArgumentError].
   final BatchingSettings batching;
 
   /// Settings controlling retries when flushing a batch over a unary RPC.
@@ -114,10 +114,11 @@ final class Topic {
 
   void _initBatcher() {
     _batcher = Batcher<_PublishRequest>(
-      settings: capToServerLimits(
+      settings: resolveServerLimits(
         publishSettings.batching,
         maxBytes: maxPublishRequestBytes,
         maxMessages: maxPublishRequestMessages,
+        requestDescription: 'Publish request',
       ),
       // Every request carries the topic name, whatever else it contains.
       baseSize: lengthDelimitedSize(

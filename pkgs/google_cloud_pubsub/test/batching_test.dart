@@ -415,50 +415,94 @@ void main() {
     });
   });
 
-  group('capToServerLimits', () {
-    test('caps maxBytes above the limit', () {
-      final capped = capToServerLimits(
-        BatchingSettings(maxBytes: 50000000),
-        maxBytes: maxPublishRequestBytes,
+  group('resolveServerLimits', () {
+    test('rejects a maxBytes the caller set above the limit', () {
+      expect(
+        () => resolveServerLimits(
+          BatchingSettings(maxBytes: 50000000),
+          maxBytes: maxPublishRequestBytes,
+          requestDescription: 'Publish request',
+        ),
+        throwsA(
+          isA<ArgumentError>()
+              .having((e) => e.name, 'name', 'batching.maxBytes')
+              .having((e) => e.invalidValue, 'invalidValue', 50000000),
+        ),
       );
-      expect(capped.maxBytes, maxPublishRequestBytes);
     });
 
-    test('caps maxMessages above the limit', () {
-      final capped = capToServerLimits(
-        BatchingSettings(maxMessages: 5000),
-        maxBytes: maxPublishRequestBytes,
-        maxMessages: maxPublishRequestMessages,
+    test('rejects a maxMessages above the limit', () {
+      expect(
+        () => resolveServerLimits(
+          BatchingSettings(maxMessages: 5000),
+          maxBytes: maxPublishRequestBytes,
+          maxMessages: maxPublishRequestMessages,
+          requestDescription: 'Publish request',
+        ),
+        throwsA(
+          isA<ArgumentError>()
+              .having((e) => e.name, 'name', 'batching.maxMessages')
+              .having((e) => e.invalidValue, 'invalidValue', 5000),
+        ),
       );
-      expect(capped.maxMessages, maxPublishRequestMessages);
     });
 
     test('leaves settings within the limits untouched', () {
       final settings = BatchingSettings(maxMessages: 10, maxBytes: 2048);
-      final capped = capToServerLimits(
+      final resolved = resolveServerLimits(
         settings,
         maxBytes: maxPublishRequestBytes,
         maxMessages: maxPublishRequestMessages,
+        requestDescription: 'Publish request',
       );
-      expect(identical(capped, settings), isTrue);
+      expect(identical(resolved, settings), isTrue);
     });
 
-    test('preserves maxDelay when capping', () {
-      const maxDelay = Duration(seconds: 7);
-      final capped = capToServerLimits(
-        BatchingSettings(maxBytes: 50000000, maxDelay: maxDelay),
-        maxBytes: maxPublishRequestBytes,
+    test('narrows a maxBytes the caller never set', () {
+      // The default suits publishing and is larger than an acknowledgment
+      // request allows. Rejecting it would mean nobody could set only
+      // maxMessages on a subscription.
+      final settings = BatchingSettings(maxMessages: 10);
+      final resolved = resolveServerLimits(
+        settings,
+        maxBytes: maxAcknowledgeRequestBytes,
+        requestDescription: 'Acknowledge request',
       );
-      expect(capped.maxDelay, maxDelay);
+      expect(settings.maxBytes, greaterThan(maxAcknowledgeRequestBytes));
+      expect(resolved.maxBytes, maxAcknowledgeRequestBytes);
+      expect(resolved.maxMessages, 10);
+    });
+
+    test('rejects the same value when the caller set it explicitly', () {
+      // Same number as the default, but chosen rather than inherited.
+      expect(
+        () => resolveServerLimits(
+          BatchingSettings(maxBytes: 1024 * 1024),
+          maxBytes: maxAcknowledgeRequestBytes,
+          requestDescription: 'Acknowledge request',
+        ),
+        throwsArgumentError,
+      );
+    });
+
+    test('preserves maxDelay when narrowing', () {
+      const maxDelay = Duration(seconds: 7);
+      final resolved = resolveServerLimits(
+        BatchingSettings(maxDelay: maxDelay),
+        maxBytes: maxAcknowledgeRequestBytes,
+        requestDescription: 'Acknowledge request',
+      );
+      expect(resolved.maxDelay, maxDelay);
     });
 
     test('leaves maxMessages alone when no message limit applies', () {
-      final capped = capToServerLimits(
-        BatchingSettings(maxMessages: 5000, maxBytes: 50000000),
+      final resolved = resolveServerLimits(
+        BatchingSettings(maxMessages: 5000),
         maxBytes: maxAcknowledgeRequestBytes,
+        requestDescription: 'Acknowledge request',
       );
-      expect(capped.maxMessages, 5000);
-      expect(capped.maxBytes, maxAcknowledgeRequestBytes);
+      expect(resolved.maxMessages, 5000);
+      expect(resolved.maxBytes, maxAcknowledgeRequestBytes);
     });
   });
 

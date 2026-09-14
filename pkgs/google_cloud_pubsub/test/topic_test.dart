@@ -320,7 +320,8 @@ void main() {
         publishSettings: PublishSettings(
           batching: BatchingSettings(
             maxBytes: maxBytes,
-            maxMessages: 1000000,
+            // The most Pub/Sub allows, so that maxBytes is what binds.
+            maxMessages: 1000,
             maxDelay: const Duration(seconds: 10),
           ),
         ),

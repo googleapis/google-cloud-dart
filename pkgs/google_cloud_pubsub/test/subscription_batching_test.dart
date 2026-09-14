@@ -232,20 +232,40 @@ void main() {
       }
     });
 
-    test('caps maxBytes to the acknowledge request limit', () async {
+    test('rejects a maxBytes above the acknowledge request limit', () {
+      expect(
+        () => client.subscription(
+          'test-subscription',
+          ackSettings: AckSettings(
+            batching: BatchingSettings(
+              // Fine for publishing, far above what an `Acknowledge` request
+              // accepts.
+              maxBytes: 8 * 1000 * 1000,
+            ),
+          ),
+        ),
+        throwsA(
+          isA<ArgumentError>()
+              .having((e) => e.name, 'name', 'batching.maxBytes')
+              .having((e) => e.invalidValue, 'invalidValue', 8 * 1000 * 1000),
+        ),
+      );
+    });
+
+    test('narrows a maxBytes that was never set', () async {
+      // Setting only maxMessages must not be rejected for inheriting a default
+      // byte limit that suits publishing.
       final subscription = client.subscription(
         'test-subscription',
         ackSettings: AckSettings(
           batching: BatchingSettings(
-            // Far above what the server accepts for an `Acknowledge` request.
-            maxBytes: 8 * 1000 * 1000,
             maxMessages: 1000000,
             maxDelay: const Duration(milliseconds: 5),
           ),
         ),
       );
 
-      // Enough ack IDs to blow past 512,000 bytes were the cap not applied.
+      // Enough ack IDs to pass 512,000 bytes were the default not narrowed.
       for (var i = 0; i < 6000; i++) {
         subscription.acknowledge(receivedMessage(ackId(i)));
       }
@@ -256,7 +276,7 @@ void main() {
         expect(
           request.writeToBuffer().length,
           lessThanOrEqualTo(512 * 1000),
-          reason: 'the server limit should have capped the batch',
+          reason: 'the server limit should have bounded the batch',
         );
       }
     });
