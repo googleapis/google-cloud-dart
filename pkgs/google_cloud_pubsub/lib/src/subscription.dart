@@ -13,17 +13,37 @@
 // limitations under the License.
 
 import 'dart:async';
+import 'dart:convert';
 
 import '../google_cloud_pubsub.dart';
 import 'batching.dart';
 import 'disposable_stream_controller.dart';
 import 'generated/google/pubsub/v1/pubsub.pbgrpc.dart' as grpc;
 import 'retry.dart';
+import 'wire_size.dart';
+
+// Field numbers from `google/pubsub/v1/pubsub.proto`, used to predict the
+// serialized size of an acknowledgment request without building one.
+//
+// `AcknowledgeRequest`, `ModifyAckDeadlineRequest` and `StreamingPullRequest`
+// all carry the subscription in field 1. Ack IDs live in field 2 of
+// `AcknowledgeRequest` and of `StreamingPullRequest`, and deadline
+// modifications name their ack IDs in field 4 of both
+// `ModifyAckDeadlineRequest` and `StreamingPullRequest`, so one constant
+// serves the unary and the streaming path alike.
+const _requestSubscriptionField = 1;
+const _ackIdsField = 2;
+const _modifyDeadlineAckIdsField = 4;
 
 /// Settings for background batching and retrying of acknowledgments and
 /// deadline modifications.
 final class AckSettings {
   /// Settings controlling how requests are accumulated and flushed.
+  ///
+  /// Defaults to [BatchingSettings] with [BatchingSettings.maxBytes] set to
+  /// the 512 KB that Pub/Sub allows for an `Acknowledge` or
+  /// `ModifyAckDeadline` request, rather than the larger default that suits
+  /// publishing. A larger value is capped to that limit.
   final BatchingSettings batching;
 
   /// Settings controlling retries when flushing a batch over a unary RPC.
@@ -31,7 +51,8 @@ final class AckSettings {
 
   /// Creates a new [AckSettings] instance.
   AckSettings({BatchingSettings? batching, RetrySettings? retry})
-    : batching = batching ?? BatchingSettings(),
+    : batching =
+          batching ?? BatchingSettings(maxBytes: maxAcknowledgeRequestBytes),
       retry = retry ?? RetrySettings();
 
   @override
@@ -139,17 +160,42 @@ final class Subscription {
   }
 
   void _initBatchers() {
+    // Every unary request carries the subscription name, whatever else it
+    // contains. Requests sent over an established streaming pull omit it, so
+    // counting it always is the conservative choice.
+    final baseSize = lengthDelimitedSize(
+      _requestSubscriptionField,
+      utf8.encode(name).length,
+    );
+    final settings = capToServerLimits(
+      ackSettings.batching,
+      maxBytes: maxAcknowledgeRequestBytes,
+    );
+
     _ackBatcher = Batcher<_AckRequest>(
-      settings: ackSettings.batching,
-      itemSize: (request) => request.ackId.length,
+      settings: settings,
+      baseSize: baseSize,
+      // Ack IDs are server-generated ASCII, so their UTF-16 length is also
+      // their length in bytes.
+      itemSize: (request) =>
+          lengthDelimitedSize(_ackIdsField, request.ackId.length),
       onBatch: _onAckBatch,
     );
     _modifyAckBatcher = Batcher<_ModifyAckDeadlineRequest>(
-      settings: ackSettings.batching,
-      // Each ack ID is accompanied by its own deadline: `ModifyAckDeadline`
-      // requests carry a `modifyDeadlineSeconds` list parallel to the ack ID
-      // list, so add the 4 bytes of the int32 deadline per ack ID.
-      itemSize: (request) => request.ackId.length + 4,
+      settings: settings,
+      baseSize: baseSize,
+      // A `StreamingPullRequest` carries a `modifyDeadlineSeconds` list
+      // parallel to its ack ID list — "The size of this list must be the same
+      // as the size of `modify_deadline_ack_ids`" — so each ack ID also costs
+      // the varint encoding of its own deadline. A unary
+      // `ModifyAckDeadlineRequest` instead has a single shared deadline, which
+      // makes this an over-estimate on that path.
+      itemSize: (request) =>
+          lengthDelimitedSize(
+            _modifyDeadlineAckIdsField,
+            request.ackId.length,
+          ) +
+          varintSize(request.ackDeadlineSeconds),
       onBatch: _onModifyAckDeadlineBatch,
     );
   }
