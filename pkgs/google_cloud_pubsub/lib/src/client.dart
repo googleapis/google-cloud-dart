@@ -18,6 +18,7 @@ import 'package:google_cloud_rpc/rpc.dart';
 import 'package:grpc/grpc.dart';
 import 'package:meta/meta.dart';
 import '../google_cloud_pubsub.dart';
+import 'disposable_stream_controller.dart';
 import 'generated/google/pubsub/v1/pubsub.pbgrpc.dart' as grpc;
 import 'pubsub_emulator_host_vm.dart';
 
@@ -567,7 +568,8 @@ final class PubSub {
     String subscription, {
     required int streamAckDeadlineSeconds,
   }) async* {
-    final requestController = StreamController<grpc.StreamingPullRequest>();
+    final requestController =
+        DisposableStreamController<grpc.StreamingPullRequest>();
     try {
       requestController.add(
         grpc.StreamingPullRequest()
@@ -609,12 +611,7 @@ final class PubSub {
         },
       );
     } finally {
-      if (!requestController.isClosed) {
-        if (!requestController.hasListener) {
-          unawaited(requestController.stream.drain<void>().catchError((_) {}));
-        }
-        unawaited(requestController.close());
-      }
+      unawaited(requestController.dispose());
     }
   }
 

@@ -16,6 +16,7 @@ import 'dart:async';
 
 import '../google_cloud_pubsub.dart';
 import 'batching.dart';
+import 'disposable_stream_controller.dart';
 import 'generated/google/pubsub/v1/pubsub.pbgrpc.dart' as grpc;
 import 'retry.dart';
 
@@ -99,7 +100,8 @@ final class Subscription {
   /// Used to route ACKs and deadline modifications directly over existing
   /// bidirectional streaming pull connections instead of making separate unary
   /// RPCs.
-  final List<StreamController<grpc.StreamingPullRequest>> _activeStreams = [];
+  final List<DisposableStreamController<grpc.StreamingPullRequest>>
+  _activeStreams = [];
   final Set<_ActiveStreamingPull> _activeStreamingPulls = {};
 
   /// Index for round-robin load balancing ACKs across active streams.
@@ -152,7 +154,7 @@ final class Subscription {
     );
   }
 
-  StreamController<grpc.StreamingPullRequest>? _getActiveStream() {
+  DisposableStreamController<grpc.StreamingPullRequest>? _getActiveStream() {
     if (_isClosed || _activeStreams.isEmpty) return null;
     _activeStreams.removeWhere((stream) => stream.isClosed);
     if (_activeStreams.isEmpty) return null;
@@ -409,7 +411,8 @@ final class Subscription {
 
     // Track active request streams and subscriptions so we can clean them up.
     final currentSubscriptions = <StreamSubscription<ReceivedMessage>>[];
-    final requestControllers = <StreamController<grpc.StreamingPullRequest>>[];
+    final requestControllers =
+        <DisposableStreamController<grpc.StreamingPullRequest>>[];
     final reconnectTimers = <Timer>[];
 
     Future<void> cancelAll() async {
@@ -422,14 +425,7 @@ final class Subscription {
       requestControllers.clear();
       for (final requestController in requestControllersToClose) {
         _activeStreams.remove(requestController);
-        if (!requestController.isClosed) {
-          if (!requestController.hasListener) {
-            unawaited(
-              requestController.stream.drain<void>().catchError((_) {}),
-            );
-          }
-          unawaited(requestController.close());
-        }
+        unawaited(requestController.dispose());
       }
 
       final subscriptionsToCancel = currentSubscriptions.toList();
@@ -499,9 +495,10 @@ final class Subscription {
     void connect(Iterator<Duration> delays) {
       if (_isClosed || isCancelled || controller.isClosed) return;
 
-      late final StreamController<grpc.StreamingPullRequest> requestController;
+      late final DisposableStreamController<grpc.StreamingPullRequest>
+      requestController;
       requestController =
-          StreamController<grpc.StreamingPullRequest>(
+          DisposableStreamController<grpc.StreamingPullRequest>(
             onListen: () {
               if (!_isClosed && !isCancelled && !controller.isClosed) {
                 _activeStreams.add(requestController);
@@ -532,14 +529,7 @@ final class Subscription {
           currentSubscriptions.remove(currentSubscription);
           unawaited(currentSubscription.cancel().catchError((_) {}));
         }
-        if (!requestController.isClosed) {
-          if (!requestController.hasListener) {
-            unawaited(
-              requestController.stream.drain<void>().catchError((_) {}),
-            );
-          }
-          unawaited(requestController.close());
-        }
+        unawaited(requestController.dispose());
       }
 
       Future<void> scheduleReconnect({
