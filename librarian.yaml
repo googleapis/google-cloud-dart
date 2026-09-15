@@ -58,7 +58,7 @@ default:
       proto:google.type: package:google_cloud_type/type.dart
 libraries:
   - name: google_cloud_ai_generativelanguage_v1beta
-    version: 0.5.5
+    version: 0.5.6
     apis:
       - path: google/ai/generativelanguage/v1beta
     copyright_year: "2025"
@@ -151,7 +151,7 @@ libraries:
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_ai_generativelanguage_v1beta
       supports_sse: true
   - name: google_cloud_aiplatform_v1beta1
-    version: 0.5.5
+    version: 0.5.6
     copyright_year: "2025"
     keep:
       - CHANGELOG.md
@@ -279,7 +279,7 @@ libraries:
     dart:
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_common
   - name: google_cloud_compute_v1
-    version: 0.1.0
+    version: 0.1.1
     copyright_year: "2026"
     keep:
       - CHANGELOG.md

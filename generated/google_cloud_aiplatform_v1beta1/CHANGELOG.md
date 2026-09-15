@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.5.6
+
+- chore: regen with latest librarian and api defs (#349)
+- doc(aiplatform|generativelanguage): point users to Genkit (#335)
+
 ## 0.5.5
 
 - feat: track library version usage (#330)
