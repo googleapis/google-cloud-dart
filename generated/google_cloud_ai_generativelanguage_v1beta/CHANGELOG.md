@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.6
+
+- doc(aiplatform|generativelanguage): point users to Genkit (#335)
+
 ## 0.5.5
 
 - feat: track library version usage (#330)
