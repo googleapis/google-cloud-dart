@@ -120,6 +120,8 @@ services.
   fake `FakePacketMirrorings`.
 - Code that uses `PreviewFeatures` can be tested by injecting the
   fake `FakePreviewFeatures`.
+- Code that uses `ProjectViews` can be tested by injecting the
+  fake `FakeProjectViews`.
 - Code that uses `Projects` can be tested by injecting the
   fake `FakeProjects`.
 - Code that uses `PublicAdvertisedPrefixes` can be tested by injecting the
