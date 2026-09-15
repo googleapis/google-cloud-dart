@@ -49,15 +49,15 @@ class FakeResponseFuture<T> extends Fake implements grpc.ResponseFuture<T> {
     Function? onError,
   }) => _future.then(
     onValue,
-    onError: (Object e, StackTrace s) {
+    onError: (Object error, StackTrace stackTrace) {
       if (onError != null) {
         if (onError is FutureOr<S> Function(Object, StackTrace)) {
-          onError(e, s);
+          onError(error, stackTrace);
         } else if (onError is FutureOr<S> Function(Object)) {
-          onError(e);
+          onError(error);
         } else {
           // ignore: avoid_dynamic_calls
-          (onError as dynamic)(e, s);
+          (onError as dynamic)(error, stackTrace);
         }
       }
     },
@@ -95,7 +95,8 @@ class FakeResponseStream<T> extends StreamView<T>
 
 class FakeSubscriberClient extends Fake implements generated.SubscriberClient {
   final StreamController<generated.StreamingPullResponse>
-  streamingPullController = StreamController();
+  streamingPullController = StreamController.broadcast();
+  int streamingPullCallCount = 0;
 
   bool acknowledgeCalled = false;
   List<String>? lastAckIds;
@@ -107,14 +108,24 @@ class FakeSubscriberClient extends Fake implements generated.SubscriberClient {
   Future<void> Function(List<String> ackIds, int seconds)?
   modifyAckDeadlineBehavior;
 
+  final List<generated.StreamingPullRequest> streamingPullRequests = [];
+  final List<StreamController<generated.StreamingPullResponse>>
+  streamingPullControllers = [];
+
   @override
   grpc.ResponseStream<generated.StreamingPullResponse> streamingPull(
     Stream<generated.StreamingPullRequest> request, {
     grpc.CallOptions? options,
   }) {
-    // Listen to request stream to prevent sender from hanging on close()
-    unawaited(request.drain());
-    return FakeResponseStream(streamingPullController.stream);
+    streamingPullCallCount++;
+    request.listen(streamingPullRequests.add);
+    final controller = StreamController<generated.StreamingPullResponse>();
+    streamingPullControllers.add(controller);
+    streamingPullController.stream.listen(
+      controller.add,
+      onError: controller.addError,
+    );
+    return FakeResponseStream(controller.stream);
   }
 
   @override
@@ -564,6 +575,352 @@ void main() {
         }
       },
     );
+
+    test('streamingPull auto-reconnects on transient error', () async {
+      final subscription = client.subscription('sub');
+      final stream = subscription.streamingPull(
+        retry: RetrySettings(initialDelay: const Duration(milliseconds: 10)),
+      );
+
+      final results = <ReceivedMessage>[];
+      final firstMessageReceived = Completer<void>();
+      final secondMessageReceived = Completer<void>();
+      final streamSubscription = stream.listen((receivedMessage) {
+        results.add(receivedMessage);
+        if (results.length == 1) firstMessageReceived.complete();
+        if (results.length == 2) secondMessageReceived.complete();
+      });
+
+      // Wait for initial stream connection to establish
+      while (fakeSubscriber.streamingPullCallCount < 1) {
+        await Future<void>.delayed(const Duration(milliseconds: 5));
+      }
+
+      // Push first message
+      fakeSubscriber.streamingPullController.add(
+        generated.StreamingPullResponse()
+          ..receivedMessages.add(
+            generated.ReceivedMessage()
+              ..message = (pb.PubsubMessage()..messageId = 'msg-1'),
+          ),
+      );
+
+      await firstMessageReceived.future.timeout(const Duration(seconds: 3));
+
+      // Push a retryable error
+      fakeSubscriber.streamingPullController.addError(
+        const grpc.GrpcError.unavailable('Transient error'),
+      );
+
+      // Wait for reconnect to establish
+      while (fakeSubscriber.streamingPullCallCount < 2) {
+        await Future<void>.delayed(const Duration(milliseconds: 5));
+      }
+
+      // Push second message after reconnect
+      fakeSubscriber.streamingPullController.add(
+        generated.StreamingPullResponse()
+          ..receivedMessages.add(
+            generated.ReceivedMessage()
+              ..message = (pb.PubsubMessage()..messageId = 'msg-2'),
+          ),
+      );
+
+      await secondMessageReceived.future.timeout(const Duration(seconds: 3));
+
+      await streamSubscription.cancel();
+      await subscription.close();
+
+      expect(results.length, equals(2));
+      expect(results[0].messageId, equals('msg-1'));
+      expect(results[1].messageId, equals('msg-2'));
+    });
+
+    test('streamingPull maxConcurrentStreams parameter validation', () {
+      final subscription = client.subscription('sub');
+      expect(
+        () => subscription.streamingPull(maxConcurrentStreams: 0),
+        throwsArgumentError,
+      );
+    });
+
+    test('streamingPull opens maxConcurrentStreams', () async {
+      final subscription = client.subscription('sub');
+      final streamSubscription = subscription
+          .streamingPull(maxConcurrentStreams: 3)
+          .listen((_) {});
+
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+      expect(fakeSubscriber.streamingPullCallCount, equals(3));
+
+      await streamSubscription.cancel();
+    });
+
+    test('message.acknowledge() on streaming pull sends ACK', () async {
+      final subscription = client.subscription('sub');
+      final stream = subscription.streamingPull();
+      final msgCompleter = Completer<ReceivedMessage>();
+
+      final streamSubscription = stream.listen((receivedMessage) {
+        if (!msgCompleter.isCompleted) {
+          msgCompleter.complete(receivedMessage);
+        }
+      });
+
+      Timer(const Duration(milliseconds: 10), () {
+        fakeSubscriber.streamingPullController.add(
+          generated.StreamingPullResponse()
+            ..receivedMessages.add(
+              generated.ReceivedMessage()
+                ..ackId = 'ack-stream-1'
+                ..message = (pb.PubsubMessage()..messageId = 'msg-1'),
+            ),
+        );
+      });
+
+      final receivedMessage = await msgCompleter.future;
+      expect(receivedMessage.ackId, equals('ack-stream-1'));
+
+      await receivedMessage.acknowledge();
+
+      final ackOverStream = fakeSubscriber.streamingPullRequests.any(
+        (request) => request.ackIds.contains('ack-stream-1'),
+      );
+      expect(
+        ackOverStream,
+        isTrue,
+        reason: 'ACK should be sent over active stream',
+      );
+
+      await streamSubscription.cancel();
+      await subscription.close();
+    });
+
+    test(
+      'message.modifyAckDeadline() on streaming pull modifies deadline',
+      () async {
+        final subscription = client.subscription('sub');
+        final stream = subscription.streamingPull();
+        final msgCompleter = Completer<ReceivedMessage>();
+
+        final streamSubscription = stream.listen((receivedMessage) {
+          if (!msgCompleter.isCompleted) {
+            msgCompleter.complete(receivedMessage);
+          }
+        });
+
+        Timer(const Duration(milliseconds: 10), () {
+          fakeSubscriber.streamingPullController.add(
+            generated.StreamingPullResponse()
+              ..receivedMessages.add(
+                generated.ReceivedMessage()
+                  ..ackId = 'ack-stream-2'
+                  ..message = (pb.PubsubMessage()..messageId = 'msg-2'),
+              ),
+          );
+        });
+
+        final receivedMessage = await msgCompleter.future;
+        expect(receivedMessage.ackId, equals('ack-stream-2'));
+
+        await receivedMessage.modifyAckDeadline(45);
+
+        final modOverStream = fakeSubscriber.streamingPullRequests.any(
+          (request) =>
+              request.modifyDeadlineAckIds.contains('ack-stream-2') &&
+              request.modifyDeadlineSeconds.contains(45),
+        );
+        expect(
+          modOverStream,
+          isTrue,
+          reason: 'ModifyAckDeadline should be sent over active stream',
+        );
+
+        await streamSubscription.cancel();
+        await subscription.close();
+      },
+    );
+
+    test('streamingPull fails immediately on non-retryable error', () async {
+      final subscription = client.subscription('sub');
+      final stream = subscription.streamingPull();
+
+      final completer = Completer<Object>();
+      final streamSubscription = stream.listen(
+        (_) {},
+        onError: completer.complete,
+      );
+
+      Timer(const Duration(milliseconds: 10), () {
+        fakeSubscriber.streamingPullController.addError(
+          const grpc.GrpcError.notFound('Subscription not found'),
+        );
+      });
+
+      final error = await completer.future;
+      expect(error, isA<NotFoundException>());
+
+      // Non-retryable error should not trigger reconnect
+      expect(fakeSubscriber.streamingPullCallCount, equals(1));
+
+      await streamSubscription.cancel();
+      await subscription.close();
+    });
+
+    test('idle streaming pull reconnects cleanly when healthy', () async {
+      final subscription = client.subscription('sub');
+      final stream = subscription.streamingPull(
+        retry: RetrySettings(
+          maxRetries: 2,
+          initialDelay: const Duration(milliseconds: 20),
+          maxDelay: const Duration(milliseconds: 50),
+        ),
+      );
+
+      final messages = <ReceivedMessage>[];
+      final streamSubscription = stream.listen(messages.add);
+
+      // Connection 1 receives a message (healthy)
+      Timer(const Duration(milliseconds: 10), () {
+        fakeSubscriber.streamingPullController.add(
+          generated.StreamingPullResponse()
+            ..receivedMessages.add(
+              generated.ReceivedMessage()
+                ..ackId = 'ack-h-1'
+                ..message = (pb.PubsubMessage()..messageId = 'msg-h-1'),
+            ),
+        );
+      });
+
+      // Transient disconnect 1
+      Timer(const Duration(milliseconds: 40), () {
+        fakeSubscriber.streamingPullController.addError(
+          const grpc.GrpcError.unavailable('Idle timeout 1'),
+        );
+      });
+
+      // Connection 2 receives a message (healthy)
+      Timer(const Duration(milliseconds: 150), () {
+        fakeSubscriber.streamingPullController.add(
+          generated.StreamingPullResponse()
+            ..receivedMessages.add(
+              generated.ReceivedMessage()
+                ..ackId = 'ack-h-2'
+                ..message = (pb.PubsubMessage()..messageId = 'msg-h-2'),
+            ),
+        );
+      });
+
+      // Transient disconnect 2
+      Timer(const Duration(milliseconds: 180), () {
+        fakeSubscriber.streamingPullController.addError(
+          const grpc.GrpcError.unavailable('Idle timeout 2'),
+        );
+      });
+
+      // Connection 3 receives a message (healthy)
+      Timer(const Duration(milliseconds: 300), () {
+        fakeSubscriber.streamingPullController.add(
+          generated.StreamingPullResponse()
+            ..receivedMessages.add(
+              generated.ReceivedMessage()
+                ..ackId = 'ack-h-3'
+                ..message = (pb.PubsubMessage()..messageId = 'msg-h-3'),
+            ),
+        );
+      });
+
+      await Future<void>.delayed(const Duration(milliseconds: 500));
+      await streamSubscription.cancel();
+      await subscription.close();
+
+      expect(
+        messages.map((message) => message.messageId),
+        equals(['msg-h-1', 'msg-h-2', 'msg-h-3']),
+      );
+      expect(fakeSubscriber.streamingPullCallCount, equals(3));
+    });
+
+    test(
+      'multi-stream concurrency: dropping one stream does not close controller',
+      () async {
+        final subscription = client.subscription('sub');
+        final stream = subscription.streamingPull(maxConcurrentStreams: 2);
+
+        final messages = <ReceivedMessage>[];
+        var isClosed = false;
+        final streamSubscription = stream.listen(
+          messages.add,
+          onDone: () {
+            isClosed = true;
+          },
+        );
+
+        await Future<void>.delayed(const Duration(milliseconds: 20));
+        expect(fakeSubscriber.streamingPullCallCount, equals(2));
+
+        // Drop only stream 0
+        fakeSubscriber.streamingPullControllers[0].addError(
+          const grpc.GrpcError.unavailable('Stream 0 dropped'),
+        );
+
+        await Future<void>.delayed(const Duration(milliseconds: 50));
+        expect(isClosed, isFalse);
+
+        // Stream 1 is still active and receives a message
+        fakeSubscriber.streamingPullControllers[1].add(
+          generated.StreamingPullResponse()
+            ..receivedMessages.add(
+              generated.ReceivedMessage()
+                ..ackId = 'ack-multi'
+                ..message = (pb.PubsubMessage()..messageId = 'msg-multi'),
+            ),
+        );
+
+        await Future<void>.delayed(const Duration(milliseconds: 50));
+        expect(
+          messages.any((message) => message.messageId == 'msg-multi'),
+          isTrue,
+        );
+
+        await streamSubscription.cancel();
+        await subscription.close();
+      },
+    );
+
+    test('backpressure pause and resume', () async {
+      final subscription = client.subscription('sub');
+      final stream = subscription.streamingPull();
+
+      final messages = <ReceivedMessage>[];
+      final streamSubscription = stream.listen(messages.add);
+      await Future<void>.delayed(const Duration(milliseconds: 10));
+
+      streamSubscription.pause();
+      expect(streamSubscription.isPaused, isTrue);
+
+      fakeSubscriber.streamingPullController.add(
+        generated.StreamingPullResponse()
+          ..receivedMessages.add(
+            generated.ReceivedMessage()
+              ..ackId = 'ack-paused'
+              ..message = (pb.PubsubMessage()..messageId = 'msg-paused'),
+          ),
+      );
+
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+      expect(messages, isEmpty);
+
+      streamSubscription.resume();
+      expect(streamSubscription.isPaused, isFalse);
+
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+      expect(messages.length, equals(1));
+      expect(messages.first.ackId, equals('ack-paused'));
+
+      await streamSubscription.cancel();
+      await subscription.close();
+    });
   });
 
   group('ReceivedMessage composition and delegation', () {
@@ -586,5 +943,21 @@ void main() {
       expect(receivedMessage.data, equals([1, 2, 3]));
       expect(receivedMessage.attributes, equals({'key': 'value'}));
     });
+
+    test(
+      'acknowledge and modifyAckDeadline without handler throw StateError',
+      () async {
+        final message = ReceivedMessage(
+          ackId: 'ack-123',
+          messageId: 'msg-456',
+          publishTime: DateTime.now(),
+          message: Message(data: [1]),
+        );
+
+        await expectLater(message.acknowledge(), throwsStateError);
+        await expectLater(message.modifyAckDeadline(10), throwsStateError);
+        expect(() => message.modifyAckDeadline(-1), throwsArgumentError);
+      },
+    );
   });
 }
