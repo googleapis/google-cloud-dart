@@ -49,6 +49,15 @@ resource "google_project_iam_member" "sa-can-use-cloudtasks" {
   member  = "serviceAccount:${data.google_service_account.integration-test-runner.email}"
 }
 
+# The service account needs to create and delete topics and subscriptions, and
+# to publish and consume messages, for the Pub/Sub tests. Editor rather than
+# admin: the tests never read or write IAM policies on those resources.
+resource "google_project_iam_member" "sa-can-use-pubsub" {
+  project = data.google_project.project.id
+  role    = "roles/pubsub.editor"
+  member  = "serviceAccount:${data.google_service_account.integration-test-runner.email}"
+}
+
 # The service account needs to generate identity tokens to access Cloud Run services during tests.
 resource "google_project_iam_member" "sa-can-create-tokens" {
   project = data.google_project.project.id

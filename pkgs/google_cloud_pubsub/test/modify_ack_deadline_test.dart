@@ -13,7 +13,7 @@
 // limitations under the License.
 
 @TestOn('vm')
-@Tags(['firebase-emulator'])
+@Tags(['firebase-emulator', 'google-cloud'])
 library;
 
 import 'package:google_cloud_pubsub/google_cloud_pubsub.dart';
@@ -35,8 +35,7 @@ void main() {
 
     test('modifyAckDeadline for non-existent subscription throws '
         'NotFoundException', () async {
-      final subscriptionName =
-          'non-existent-${DateTime.now().millisecondsSinceEpoch}';
+      final subscriptionName = testResourceName('non-existent');
       final subscription = client.subscription(subscriptionName);
 
       expect(
