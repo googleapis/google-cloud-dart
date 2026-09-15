@@ -26,7 +26,7 @@ env:
   # Formatting changes between SDK versions so fix the SDK version used for `dart format`.
   FORMAT_DART_VERSION: 3.13.2
   GOOGLE_CLOUD_PROJECT: test-project
-  LIBRARIAN_VERSION: v0.39.1-0.20260827211949-1cdc9901f973
+  LIBRARIAN_VERSION: v0.44.1-0.20260915154909-bea74dadf46d
   MINIMUM_DART_TEST_VERSION: &MINIMUM_DART_TEST_VERSION 3.10.1
 name: Dart Checks
 jobs:
