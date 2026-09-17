@@ -367,7 +367,7 @@ void main() {
         'immediately', () async {
       final subscription = client.subscription(
         'test-sub',
-        ackSettings: AckSettings(retry: ExponentialRetry(maxRetries: 10)),
+        ackSettings: AckSettings(retry: const ExponentialRetry(maxRetries: 10)),
       );
 
       final stream = subscription.streamingPull();
@@ -404,7 +404,7 @@ void main() {
       // Verify ForbiddenException (permissionDenied) also fails immediately.
       final forbiddenSub = client.subscription(
         'forbidden-sub',
-        ackSettings: AckSettings(retry: ExponentialRetry(maxRetries: 10)),
+        ackSettings: AckSettings(retry: const ExponentialRetry(maxRetries: 10)),
       );
       Object? forbiddenError;
       var forbiddenDone = false;
@@ -432,9 +432,9 @@ void main() {
       final subscription = client.subscription(
         'test-sub',
         ackSettings: AckSettings(
-          retry: ExponentialRetry(
-            initialDelay: const Duration(milliseconds: 10),
-            maxDelay: const Duration(milliseconds: 20),
+          retry: const ExponentialRetry(
+            initialDelay: Duration(milliseconds: 10),
+            maxDelay: Duration(milliseconds: 20),
           ),
         ),
       );
@@ -477,9 +477,9 @@ void main() {
         final subscription = client.subscription(
           'test-sub',
           ackSettings: AckSettings(
-            retry: ExponentialRetry(
-              initialDelay: const Duration(milliseconds: 50),
-              maxDelay: const Duration(milliseconds: 100),
+            retry: const ExponentialRetry(
+              initialDelay: Duration(milliseconds: 50),
+              maxDelay: Duration(milliseconds: 100),
             ),
           ),
         );
@@ -508,9 +508,9 @@ void main() {
       final subscription = client.subscription(
         'test-sub',
         ackSettings: AckSettings(
-          retry: ExponentialRetry(
-            initialDelay: const Duration(milliseconds: 10),
-            maxDelay: const Duration(milliseconds: 20),
+          retry: const ExponentialRetry(
+            initialDelay: Duration(milliseconds: 10),
+            maxDelay: Duration(milliseconds: 20),
           ),
         ),
       );
@@ -580,9 +580,9 @@ void main() {
       final subscription = client.subscription(
         'test-sub',
         ackSettings: AckSettings(
-          retry: ExponentialRetry(
-            initialDelay: const Duration(milliseconds: 20),
-            maxDelay: const Duration(milliseconds: 50),
+          retry: const ExponentialRetry(
+            initialDelay: Duration(milliseconds: 20),
+            maxDelay: Duration(milliseconds: 50),
           ),
         ),
       );
@@ -757,7 +757,7 @@ void main() {
               maxMessages: 1,
               maxDelay: const Duration(milliseconds: 1),
             ),
-            retry: ExponentialRetry(maxRetries: 0),
+            retry: const ExponentialRetry(maxRetries: 0),
           ),
         );
 
@@ -803,7 +803,7 @@ void main() {
               maxMessages: 1,
               maxDelay: const Duration(milliseconds: 1),
             ),
-            retry: ExponentialRetry(maxRetries: 0),
+            retry: const ExponentialRetry(maxRetries: 0),
           ),
         );
 
@@ -840,9 +840,9 @@ void main() {
       final subscription = client.subscription(
         'test-sub',
         ackSettings: AckSettings(
-          retry: ExponentialRetry(
+          retry: const ExponentialRetry(
             maxRetries: 10,
-            initialDelay: const Duration(milliseconds: 10),
+            initialDelay: Duration(milliseconds: 10),
           ),
         ),
       );
@@ -918,7 +918,7 @@ void main() {
             maxMessages: 1,
             maxDelay: const Duration(milliseconds: 1),
           ),
-          retry: ExponentialRetry(maxRetries: 0),
+          retry: const ExponentialRetry(maxRetries: 0),
         ),
       );
 
@@ -970,7 +970,7 @@ void main() {
           'test-sub',
           ackSettings: AckSettings(
             batching: BatchingSettings(maxMessages: 1),
-            retry: ExponentialRetry(maxRetries: 0),
+            retry: const ExponentialRetry(maxRetries: 0),
           ),
         );
 
@@ -1017,10 +1017,10 @@ void main() {
       () async {
         final subscription = client.subscription('test-sub');
 
-        final customRetry = ExponentialRetry(
+        const customRetry = ExponentialRetry(
           maxRetries: 5,
-          maxRetryInterval: const Duration(minutes: 5),
-          initialDelay: const Duration(milliseconds: 10),
+          maxRetryInterval: Duration(minutes: 5),
+          initialDelay: Duration(milliseconds: 10),
         );
         expect(
           customRetry.maxRetryInterval,
@@ -1104,7 +1104,7 @@ void main() {
               maxMessages: 1,
               maxDelay: const Duration(seconds: 10),
             ),
-            retry: ExponentialRetry(maxRetries: 0),
+            retry: const ExponentialRetry(maxRetries: 0),
           ),
         );
 
@@ -1146,7 +1146,7 @@ void main() {
             maxMessages: 100,
             maxDelay: const Duration(seconds: 10),
           ),
-          retry: ExponentialRetry(maxRetries: 0),
+          retry: const ExponentialRetry(maxRetries: 0),
         ),
       );
 
@@ -1217,9 +1217,9 @@ void main() {
       final subscription = client.subscription('test-sub');
       final stream = subscription.streamingPull(
         maxConcurrentStreams: 4,
-        retry: ExponentialRetry(
+        retry: const ExponentialRetry(
           maxRetries: 5,
-          initialDelay: const Duration(milliseconds: 20),
+          initialDelay: Duration(milliseconds: 20),
         ),
       );
 
@@ -1270,10 +1270,10 @@ void main() {
       () async {
         final subscription = client.subscription('test-sub');
         final stream = subscription.streamingPull(
-          retry: ExponentialRetry(
+          retry: const ExponentialRetry(
             maxRetries: 2,
-            initialDelay: const Duration(milliseconds: 10),
-            maxDelay: const Duration(milliseconds: 20),
+            initialDelay: Duration(milliseconds: 10),
+            maxDelay: Duration(milliseconds: 20),
           ),
         );
 
@@ -1349,7 +1349,9 @@ void main() {
       () async {
         final subscription = client.subscription(
           'test-sub',
-          ackSettings: AckSettings(retry: ExponentialRetry(maxRetries: 0)),
+          ackSettings: AckSettings(
+            retry: const ExponentialRetry(maxRetries: 0),
+          ),
         );
 
         final stream = subscription.streamingPull(maxConcurrentStreams: 2);
@@ -1392,9 +1394,9 @@ void main() {
         final subscription = client.subscription(
           'test-sub',
           ackSettings: AckSettings(
-            retry: ExponentialRetry(
+            retry: const ExponentialRetry(
               maxRetries: 2,
-              initialDelay: const Duration(milliseconds: 1),
+              initialDelay: Duration(milliseconds: 1),
             ),
           ),
         );

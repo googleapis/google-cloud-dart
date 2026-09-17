@@ -403,12 +403,13 @@ final class Subscription {
   ///
   /// The stream automatically reconnects on transient network errors using the
   /// configured [retry] strategy (defaulting to [AckSettings.retry] with
-  /// unlimited total duration). Custom [ExponentialRetry] instances retain their
-  /// configured [ExponentialRetry.maxRetryInterval] (which defaults to 1 minute)
-  /// unless `maxRetryInterval: null` is passed for unlimited reconnection
-  /// duration. Reconnections use exponential backoff, which resets once a
-  /// connection has been sustained and healthy (>= 15 seconds) or successfully
-  /// yields messages.
+  /// unlimited total duration). Custom [ExponentialRetry] instances retain
+  /// their configured [ExponentialRetry.maxRetryInterval] (which defaults to 1
+  /// minute) unless `maxRetryInterval: null` is passed for unlimited
+  /// reconnection duration. Reconnections use exponential backoff, which resets
+  /// once a connection has been sustained and healthy (>= 15 seconds) or
+  /// successfully yields messages.
+
   ///
   /// ACKs and deadline modifications sent via [acknowledge],
   /// [modifyAckDeadline], or the message handlers are batched in the background

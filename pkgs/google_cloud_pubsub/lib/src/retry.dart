@@ -67,6 +67,5 @@ RetryRunner normalizePubSubRetry(
           ? isPubSubRetryable
           : exp.isRetryable,
     ),
-    final other => other,
   };
 }
