@@ -375,7 +375,9 @@ void main() {
 
       final topic = client.topic(
         'test-topic',
-        publishSettings: PublishSettings(retry: RetrySettings(maxRetries: 0)),
+        publishSettings: PublishSettings(
+          retry: const ExponentialRetry(maxRetries: 0),
+        ),
       );
       final publishFuture = topic.publish([1, 2, 3]);
 

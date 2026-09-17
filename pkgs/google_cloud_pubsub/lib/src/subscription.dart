@@ -17,7 +17,6 @@ import 'dart:convert';
 
 import '../google_cloud_pubsub.dart';
 import 'batching.dart';
-import 'retry.dart';
 import 'wire_size.dart';
 
 // Field numbers from `google/pubsub/v1/pubsub.proto`, used to predict the
@@ -48,14 +47,14 @@ final class AckSettings {
   /// never set is narrowed to it instead.
   final BatchingSettings batching;
 
-  /// Settings controlling retries when flushing a batch over a unary RPC.
-  final RetrySettings retry;
+  /// Strategy controlling retries when flushing a batch over a unary RPC.
+  final RetryRunner retry;
 
   /// Creates a new [AckSettings] instance.
-  AckSettings({BatchingSettings? batching, RetrySettings? retry})
+  AckSettings({BatchingSettings? batching, RetryRunner? retry})
     : batching =
           batching ?? BatchingSettings(maxBytes: maxAcknowledgeRequestBytes),
-      retry = retry ?? RetrySettings();
+      retry = retry ?? defaultPubSubRetry;
 
   @override
   bool operator ==(Object other) =>
@@ -280,9 +279,8 @@ final class Subscription {
   Future<void> _onAckBatch(List<_AckRequest> batch) async {
     final ackIds = batch.map((item) => item.ackId).toSet().toList();
     try {
-      await runWithRetry(
+      await ackSettings.retry.run(
         () => pubsub.acknowledge(name, ackIds),
-        settings: ackSettings.retry,
         isIdempotent: true,
       );
     } catch (_) {
@@ -305,9 +303,8 @@ final class Subscription {
         final deadlineSeconds = entry.key;
         final ackIds = entry.value;
         try {
-          await runWithRetry(
+          await ackSettings.retry.run(
             () => pubsub.modifyAckDeadline(name, ackIds, deadlineSeconds),
-            settings: ackSettings.retry,
             isIdempotent: true,
           );
         } catch (_) {

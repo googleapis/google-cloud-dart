@@ -17,7 +17,6 @@ import 'dart:convert';
 
 import '../google_cloud_pubsub.dart';
 import 'batching.dart';
-import 'retry.dart';
 import 'wire_size.dart';
 
 // Field number from `google/pubsub/v1/pubsub.proto`, used to predict the
@@ -32,13 +31,13 @@ final class PublishSettings {
   /// `Publish` request; asking for more throws an [ArgumentError].
   final BatchingSettings batching;
 
-  /// Settings controlling retries when flushing a batch over a unary RPC.
-  final RetrySettings retry;
+  /// Strategy controlling retries when flushing a batch over a unary RPC.
+  final RetryRunner retry;
 
   /// Creates a new [PublishSettings] instance.
-  PublishSettings({BatchingSettings? batching, RetrySettings? retry})
+  PublishSettings({BatchingSettings? batching, RetryRunner? retry})
     : batching = batching ?? BatchingSettings(),
-      retry = retry ?? RetrySettings();
+      retry = retry ?? defaultPubSubRetry;
 
   @override
   bool operator ==(Object other) =>
@@ -133,11 +132,11 @@ final class Topic {
   Future<void> _onBatch(List<_PublishRequest> batch) async {
     try {
       final messages = batch.map((item) => item.message).toList();
-      final messageIds = await runWithRetry(
+      final messageIds = await publishSettings.retry.run(
         () => pubsub.publishMessages(name, messages),
-        settings: publishSettings.retry,
         isIdempotent: true,
       );
+
       for (var i = 0; i < batch.length; i++) {
         if (i < messageIds.length) {
           if (!batch[i].completer.isCompleted) {
