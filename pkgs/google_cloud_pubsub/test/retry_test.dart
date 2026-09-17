@@ -17,7 +17,6 @@ library;
 
 import 'package:clock/clock.dart';
 import 'package:google_cloud_pubsub/google_cloud_pubsub.dart';
-import 'package:google_cloud_pubsub/src/retry.dart';
 import 'package:google_cloud_rpc/rpc.dart';
 import 'package:grpc/grpc.dart' as grpc;
 import 'package:test/test.dart';
