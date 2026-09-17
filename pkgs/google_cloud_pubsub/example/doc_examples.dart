@@ -26,11 +26,11 @@ Future<void> streamingPullExample(PubSub pubsub) async {
   final stream = subscription.streamingPull(
     maxConcurrentStreams: 3,
     streamAckDeadlineSeconds: 30,
-    retry: RetrySettings(
+    retry: const ExponentialRetry(
       maxRetries: 10,
-      totalTimeout: null,
-      initialDelay: const Duration(seconds: 1),
-      maxDelay: const Duration(seconds: 30),
+      maxRetryInterval: null,
+      initialDelay: Duration(seconds: 1),
+      maxDelay: Duration(seconds: 30),
     ),
   );
 

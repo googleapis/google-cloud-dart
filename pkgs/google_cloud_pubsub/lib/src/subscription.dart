@@ -50,14 +50,14 @@ final class AckSettings {
   /// never set is narrowed to it instead.
   final BatchingSettings batching;
 
-  /// Settings controlling retries when flushing a batch over a unary RPC.
-  final RetrySettings retry;
+  /// Strategy controlling retries when flushing a batch over a unary RPC.
+  final RetryRunner retry;
 
   /// Creates a new [AckSettings] instance.
-  AckSettings({BatchingSettings? batching, RetrySettings? retry})
+  AckSettings({BatchingSettings? batching, RetryRunner? retry})
     : batching =
           batching ?? BatchingSettings(maxBytes: maxAcknowledgeRequestBytes),
-      retry = retry ?? RetrySettings();
+      retry = normalizePubSubRetry(retry);
 
   @override
   bool operator ==(Object other) =>
@@ -246,9 +246,8 @@ final class Subscription {
     // Fall back to unary RPC if no active streams or if subscription is
     // closing.
     try {
-      await runWithRetry(
+      await ackSettings.retry.run(
         () => pubsub.acknowledge(name, ackIds),
-        settings: ackSettings.retry,
         isIdempotent: true,
       );
       resolveBatch();
@@ -316,9 +315,8 @@ final class Subscription {
         // Fall back to unary RPC if no active streams or subscription is
         // closing.
         try {
-          await runWithRetry(
+          await ackSettings.retry.run(
             () => pubsub.modifyAckDeadline(name, ackIds, deadline),
-            settings: ackSettings.retry,
             isIdempotent: true,
           );
           resolveGroup();
@@ -404,13 +402,13 @@ final class Subscription {
   /// high-volume subscriptions by bypassing single-stream limitations.
   ///
   /// The stream automatically reconnects on transient network errors using the
-  /// configured [retry] settings (defaulting to [AckSettings.retry] with
-  /// unlimited total duration). Custom [RetrySettings] retain their configured
-  /// [RetrySettings.totalTimeout] (which defaults to 1 minute) unless
-  /// `totalTimeout: null` is passed for unlimited reconnection duration.
-  /// Reconnections use exponential backoff, which resets once a connection
-  /// has been sustained and healthy (>= 15 seconds) or successfully yields
-  /// messages.
+  /// configured [retry] strategy (defaulting to [AckSettings.retry] with
+  /// unlimited total duration). Custom [ExponentialRetry] instances retain their
+  /// configured [ExponentialRetry.maxRetryInterval] (which defaults to 1 minute)
+  /// unless `maxRetryInterval: null` is passed for unlimited reconnection
+  /// duration. Reconnections use exponential backoff, which resets once a
+  /// connection has been sustained and healthy (>= 15 seconds) or successfully
+  /// yields messages.
   ///
   /// ACKs and deadline modifications sent via [acknowledge],
   /// [modifyAckDeadline], or the message handlers are batched in the background
@@ -429,7 +427,7 @@ final class Subscription {
   Stream<ReceivedMessage> streamingPull({
     int streamAckDeadlineSeconds = 10,
     int maxConcurrentStreams = 1,
-    RetrySettings? retry,
+    RetryRunner? retry,
   }) {
     if (streamAckDeadlineSeconds < 10 || streamAckDeadlineSeconds > 600) {
       throw ArgumentError.value(
@@ -448,15 +446,11 @@ final class Subscription {
     if (_isClosed) {
       throw StateError('Cannot stream messages on a closed Subscription.');
     }
-    final effectiveRetry =
-        retry ??
-        RetrySettings(
-          maxRetries: ackSettings.retry.maxRetries,
-          totalTimeout: null,
-          initialDelay: ackSettings.retry.initialDelay,
-          delayMultiplier: ackSettings.retry.delayMultiplier,
-          maxDelay: ackSettings.retry.maxDelay,
-        );
+    final effectiveRetry = normalizePubSubRetry(
+      retry,
+      fallback: ackSettings.retry,
+      clearMaxRetryInterval: retry == null,
+    );
 
     late final StreamController<ReceivedMessage> controller;
     late final _ActiveStreamingPull session;
@@ -596,7 +590,7 @@ final class Subscription {
         cleanupCurrentConnection();
         if (_isClosed || isCancelled || controller.isClosed) return;
 
-        if (error != null && !isRetryable(error)) {
+        if (error != null && !effectiveRetry.isRetryable(error)) {
           isCancelled = true;
           controller.addError(error, stackTrace);
           await cancelAll();
@@ -611,13 +605,7 @@ final class Subscription {
         final wasHealthy =
             hasReceivedItem || (uptime >= const Duration(seconds: 15));
         if (wasHealthy) {
-          nextDelays = delaySequence(
-            maxRetries: effectiveRetry.maxRetries,
-            totalTimeout: effectiveRetry.totalTimeout,
-            initialDelay: effectiveRetry.initialDelay,
-            delayMultiplier: effectiveRetry.delayMultiplier,
-            maxDelay: effectiveRetry.maxDelay,
-          ).iterator;
+          nextDelays = effectiveRetry.delays().iterator;
         }
         if (nextDelays.moveNext()) {
           late Timer timer;
@@ -679,16 +667,10 @@ final class Subscription {
         }
         _activeStreamingPulls.add(session);
         for (var i = 0; i < maxConcurrentStreams; i++) {
-          final delays = delaySequence(
-            maxRetries: effectiveRetry.maxRetries,
-            totalTimeout: effectiveRetry.totalTimeout,
-            initialDelay: effectiveRetry.initialDelay,
-            delayMultiplier: effectiveRetry.delayMultiplier,
-            maxDelay: effectiveRetry.maxDelay,
-          ).iterator;
-          connect(delays);
+          connect(effectiveRetry.delays().iterator);
         }
       },
+
       onPause: () {
         isPaused = true;
         for (final subscription in currentSubscriptions.toList()) {

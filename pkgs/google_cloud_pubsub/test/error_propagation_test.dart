@@ -579,7 +579,7 @@ void main() {
     test('streamingPull auto-reconnects on transient error', () async {
       final subscription = client.subscription('sub');
       final stream = subscription.streamingPull(
-        retry: RetrySettings(initialDelay: const Duration(milliseconds: 10)),
+        retry: const ExponentialRetry(initialDelay: Duration(milliseconds: 10)),
       );
 
       final results = <ReceivedMessage>[];
@@ -770,10 +770,10 @@ void main() {
     test('idle streaming pull reconnects cleanly when healthy', () async {
       final subscription = client.subscription('sub');
       final stream = subscription.streamingPull(
-        retry: RetrySettings(
+        retry: const ExponentialRetry(
           maxRetries: 2,
-          initialDelay: const Duration(milliseconds: 20),
-          maxDelay: const Duration(milliseconds: 50),
+          initialDelay: Duration(milliseconds: 20),
+          maxDelay: Duration(milliseconds: 50),
         ),
       );
 
