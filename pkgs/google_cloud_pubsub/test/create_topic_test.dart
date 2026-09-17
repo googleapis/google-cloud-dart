@@ -13,7 +13,7 @@
 // limitations under the License.
 
 @TestOn('vm')
-@Tags(['firebase-emulator'])
+@Tags(['firebase-emulator', 'google-cloud'])
 library;
 
 import 'package:google_cloud_pubsub/google_cloud_pubsub.dart';
@@ -34,7 +34,7 @@ void main() {
     });
 
     test('create topic', () async {
-      final topicName = 'test-topic-${DateTime.now().millisecondsSinceEpoch}';
+      final topicName = testResourceName('test-topic');
       final topic = client.topic(topicName);
 
       await topic.create();
@@ -42,7 +42,7 @@ void main() {
     });
 
     test('create existing topic throws ConflictException', () async {
-      final topicName = 'test-topic-${DateTime.now().millisecondsSinceEpoch}';
+      final topicName = testResourceName('test-topic');
       final topic = client.topic(topicName);
 
       await topic.create();

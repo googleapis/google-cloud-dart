@@ -13,7 +13,7 @@
 // limitations under the License.
 
 @TestOn('vm')
-@Tags(['firebase-emulator'])
+@Tags(['firebase-emulator', 'google-cloud'])
 library;
 
 import 'dart:convert';
@@ -31,9 +31,8 @@ void main() {
 
     setUp(() async {
       client = await createClient();
-      final suffix = DateTime.now().microsecondsSinceEpoch;
-      topic = client.topic('test-topic-$suffix');
-      subscription = client.subscription('test-sub-$suffix');
+      topic = client.topic(testResourceName('test-topic'));
+      subscription = client.subscription(testResourceName('test-sub'));
 
       await topic.create();
       addTearDown(() async => await topic.delete());
@@ -159,8 +158,9 @@ void main() {
       // is the only thing that can keep a message from coming back.
       await reopened.modifyAckDeadlineNow([acknowledged, nacked], 0);
 
-      // A single pull returns everything currently available.
-      final redelivered = await reopened.pull(maxMessages: 10);
+      // Use pullReliably so eventual consistency on real GCP does not cause an
+      // empty first pull after modifyAckDeadline(0).
+      final redelivered = await pullReliably(reopened, count: 1);
       final redeliveredData = redelivered
           .map((message) => utf8.decode(message.data))
           .toList();

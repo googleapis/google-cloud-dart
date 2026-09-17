@@ -13,11 +13,29 @@
 // limitations under the License.
 
 import 'dart:io';
+import 'dart:math';
 
 import 'package:google_cloud_pubsub/google_cloud_pubsub.dart';
 import 'package:test/test.dart';
 
 final isEmulator = Platform.environment['PUBSUB_EMULATOR_HOST'] != null;
+
+const _nameCharacters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+final _random = Random();
+
+/// Returns `prefix` followed by a random suffix.
+///
+/// The tests tagged `google-cloud` run against a real, shared Google Cloud
+/// project, where several builds may be running at the same time. A random
+/// suffix keeps concurrently running tests from picking the same topic or
+/// subscription name, which would make one of them fail with a
+/// [ConflictException] or observe the other's messages.
+String testResourceName(String prefix) => [
+  prefix,
+  '-',
+  for (var i = 0; i < 12; i++)
+    _nameCharacters[_random.nextInt(_nameCharacters.length)],
+].join();
 
 /// Creates a [PubSub] client configured for either the emulator or production
 /// based on environment variables.

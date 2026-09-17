@@ -1,4 +1,4 @@
-## 0.6.4-wip
+## 0.6.4
 
 * Send `gccl/<version>` in `x-goog-api-client` request header for API usage
   attribution.

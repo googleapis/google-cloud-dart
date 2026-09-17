@@ -82,6 +82,7 @@ export 'src/api.g.dart'
         FakeOrganizationSecurityPolicies,
         FakePacketMirrorings,
         FakePreviewFeatures,
+        FakeProjectViews,
         FakeProjects,
         FakePublicAdvertisedPrefixes,
         FakePublicDelegatedPrefixes,
