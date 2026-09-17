@@ -18,9 +18,15 @@ platforms: [vm]
 test-randomize-ordering-seed: random
 
 tags:
+  google-cloud:
   firebase-emulator:
-exclude_tags: firebase-emulator
+exclude_tags: google-cloud || firebase-emulator
 
 presets:
+  google-cloud:
+    include_tags: google-cloud
+    # These tests need application default credentials and a configured
+    # project, which only the VM has access to.
+    platforms: [vm]
   firebase-emulator:
     include_tags: firebase-emulator

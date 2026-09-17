@@ -125100,6 +125100,13 @@ final class Tool_ParallelAiSearch extends ProtoMessage {
   /// See https://docs.parallel.ai/search/search-quickstart for more details.
   final String apiKey;
 
+  /// Optional. Instructs Vertex Grounding to use Parallel's Zero Data
+  /// Retention Marketplace product. If this value is "false" or omitted, the
+  /// Parallel Web Search for Grounding standard subscription will be used. If
+  /// this value is "true", the Parallel Web Search for Grounding - ZDR
+  /// subscription will be used.
+  final bool enableZeroDataRetention;
+
   /// Optional. Custom configs for ParallelAiSearch.
   /// This field can be used to pass any parameter from the Parallel.ai
   /// Search API.
@@ -125119,8 +125126,11 @@ final class Tool_ParallelAiSearch extends ProtoMessage {
   /// }
   final protobuf.Struct? customConfigs;
 
-  Tool_ParallelAiSearch({this.apiKey = '', this.customConfigs})
-    : super(fullyQualifiedName);
+  Tool_ParallelAiSearch({
+    this.apiKey = '',
+    this.enableZeroDataRetention = false,
+    this.customConfigs,
+  }) : super(fullyQualifiedName);
 
   factory Tool_ParallelAiSearch.fromJson(Object? j) {
     final json = j as Map<String, Object?>;
@@ -125128,6 +125138,10 @@ final class Tool_ParallelAiSearch extends ProtoMessage {
       apiKey: switch (json['apiKey']) {
         null => '',
         Object $1 => decodeString($1),
+      },
+      enableZeroDataRetention: switch (json['enableZeroDataRetention']) {
+        null => false,
+        Object $1 => decodeBool($1),
       },
       customConfigs: switch (json['customConfigs']) {
         null => null,
@@ -125139,12 +125153,17 @@ final class Tool_ParallelAiSearch extends ProtoMessage {
   @override
   Object toJson() => {
     if (apiKey.isNotDefault) 'apiKey': apiKey,
+    if (enableZeroDataRetention.isNotDefault)
+      'enableZeroDataRetention': enableZeroDataRetention,
     'customConfigs': ?customConfigs?.toJson(),
   };
 
   @override
   String toString() {
-    final $contents = ['apiKey=$apiKey'].join(',');
+    final $contents = [
+      'apiKey=$apiKey',
+      'enableZeroDataRetention=$enableZeroDataRetention',
+    ].join(',');
     return 'ParallelAiSearch(${$contents})';
   }
 }

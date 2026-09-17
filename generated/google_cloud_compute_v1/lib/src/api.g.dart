@@ -723,6 +723,46 @@ final class Advice {
     return CalendarModeAdviceResponse.fromJson(response);
   }
 
+  /// Advice on making real-time decisions (such as choosing zone or
+  /// machine types) during deployment to maximize your chances of obtaining
+  /// capacity.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<CapacityAdviceResponse> capacity(
+    CapacityAdviceRpcRequest request,
+  ) async {
+    final url = _endPoint.replace(
+      path:
+          '/compute/v1/projects/${request.project}/regions/${request.region}/advice/capacity',
+    );
+    final response = await _client.post(
+      url,
+      body: request.capacityAdviceRequestResource,
+    );
+    return CapacityAdviceResponse.fromJson(response);
+  }
+
+  /// Gets the capacity history.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<CapacityHistoryResponse> capacityHistory(
+    CapacityHistoryAdviceRequest request,
+  ) async {
+    final url = _endPoint.replace(
+      path:
+          '/compute/v1/projects/${request.project}/regions/${request.region}/advice/capacityHistory',
+    );
+    final response = await _client.post(
+      url,
+      body: request.capacityHistoryRequestResource,
+    );
+    return CapacityHistoryResponse.fromJson(response);
+  }
+
   /// Closes the client and cleans up any resources associated with it.
   ///
   /// Once [close] is called, no other methods should be called.
@@ -735,6 +775,14 @@ base class FakeAdvice implements Advice {
     CalendarModeAdviceRpcRequest request,
   )?
   _calendarMode;
+  final Future<CapacityAdviceResponse> Function(
+    CapacityAdviceRpcRequest request,
+  )?
+  _capacity;
+  final Future<CapacityHistoryResponse> Function(
+    CapacityHistoryAdviceRequest request,
+  )?
+  _capacityHistory;
 
   @override
   Uri get _endPoint => throw UnsupportedError('_endPoint');
@@ -748,7 +796,15 @@ base class FakeAdvice implements Advice {
       CalendarModeAdviceRpcRequest request,
     )?
     calendarMode,
-  }) : _calendarMode = calendarMode;
+    Future<CapacityAdviceResponse> Function(CapacityAdviceRpcRequest request)?
+    capacity,
+    Future<CapacityHistoryResponse> Function(
+      CapacityHistoryAdviceRequest request,
+    )?
+    capacityHistory,
+  }) : _calendarMode = calendarMode,
+       _capacity = capacity,
+       _capacityHistory = capacityHistory;
 
   /// Advise how, where and when to create the requested amount of instances
   /// with specified accelerators, within the specified time and location limits.
@@ -768,6 +824,42 @@ base class FakeAdvice implements Advice {
       return calendarMode(request);
     }
     throw UnsupportedError('calendarMode');
+  }
+
+  /// Advice on making real-time decisions (such as choosing zone or
+  /// machine types) during deployment to maximize your chances of obtaining
+  /// capacity.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<CapacityAdviceResponse> capacity(
+    CapacityAdviceRpcRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_capacity case final capacity?) {
+      return capacity(request);
+    }
+    throw UnsupportedError('capacity');
+  }
+
+  /// Gets the capacity history.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<CapacityHistoryResponse> capacityHistory(
+    CapacityHistoryAdviceRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_capacityHistory case final capacityHistory?) {
+      return capacityHistory(request);
+    }
+    throw UnsupportedError('capacityHistory');
   }
 
   @override
@@ -25476,6 +25568,129 @@ base class FakePreviewFeatures implements PreviewFeatures {
   }
 }
 
+/// The ProjectViews API.
+final class ProjectViews {
+  static const _defaultHost = 'compute.googleapis.com';
+  final Uri _endPoint;
+
+  final ServiceClient _client;
+
+  /// Creates a `ProjectViews` using [client] for transport.
+  ///
+  /// The provided [http.Client] must be configured to provide whatever
+  /// authentication is required by `ProjectViews`. You can do that using
+  /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
+  ///
+  /// If [endPoint] is provided then its `scheme`, `host`, and `port` are
+  /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
+  /// could be used to force the `Firestore` service to communicate with the
+  /// local emulator.
+  ///
+  /// If [gcclVersion] is set then `gccl/<version>` will be included in the
+  /// `x-google-api-client` header. This argument is only meant for use by
+  /// hand-written official Google Cloud API clients.
+  ProjectViews({
+    required http.Client client,
+    Uri? endPoint,
+    String? gcclVersion,
+  }) : _client = ServiceClient(
+         client: client,
+         gapicVersion: packageVersion,
+         gcclVersion: gcclVersion,
+       ),
+       _endPoint = endPoint == null
+           ? Uri.https(_defaultHost, '')
+           : Uri(
+               scheme: endPoint.scheme,
+               host: endPoint.host,
+               port: endPoint.port,
+             );
+
+  /// Creates a `ProjectViews` that does authentication through an API key.
+  ///
+  /// If called without arguments, the API key is taken from these environment
+  /// variables:
+  ///
+  /// - `GOOGLE_API_KEY`
+  ///
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
+  ///
+  /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
+  factory ProjectViews.fromApiKey([String? apiKey]) =>
+      ProjectViews(client: httpClientFromApiKey(apiKey, _apiKeys));
+
+  /// Returns the specified global ProjectViews resource, with a regional
+  /// context.
+  /// This regional API endpoint reads resource metadata from regional
+  /// read-only replicas. Because changes are copied to these regional replicas
+  /// asynchronously, for real-time resource reads or any write operations
+  /// (creating, updating, or deleting resources), use the global
+  /// [projects.get](https://cloud.google.com/compute/docs/reference/rest/v1/projects/get)
+  /// endpoint.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<ProjectView> get(GetProjectViewRequest request) async {
+    final url = _endPoint.replace(
+      path:
+          '/compute/v1/projects/${request.project}/regions/${request.region}/projectViews',
+    );
+    final response = await _client.get(url);
+    return ProjectView.fromJson(response);
+  }
+
+  /// Closes the client and cleans up any resources associated with it.
+  ///
+  /// Once [close] is called, no other methods should be called.
+  void close() => _client.close();
+}
+
+/// Testing fake for [ProjectViews].
+base class FakeProjectViews implements ProjectViews {
+  final Future<ProjectView> Function(GetProjectViewRequest request)? _get;
+
+  @override
+  Uri get _endPoint => throw UnsupportedError('_endPoint');
+  @override
+  ServiceClient get _client => throw UnsupportedError('_client');
+
+  bool isClosed = false;
+
+  FakeProjectViews({
+    Future<ProjectView> Function(GetProjectViewRequest request)? get,
+  }) : _get = get;
+
+  /// Returns the specified global ProjectViews resource, with a regional
+  /// context.
+  /// This regional API endpoint reads resource metadata from regional
+  /// read-only replicas. Because changes are copied to these regional replicas
+  /// asynchronously, for real-time resource reads or any write operations
+  /// (creating, updating, or deleting resources), use the global
+  /// [projects.get](https://cloud.google.com/compute/docs/reference/rest/v1/projects/get)
+  /// endpoint.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ProjectView> get(GetProjectViewRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_get case final get?) {
+      return get(request);
+    }
+    throw UnsupportedError('get');
+  }
+
+  @override
+  void close() {
+    isClosed = true;
+  }
+}
+
 /// The Projects API.
 final class Projects {
   static const _defaultHost = 'compute.googleapis.com';
@@ -40788,6 +41003,21 @@ final class ReservationSlots {
     return ReservationSlotsGetResponse.fromJson(response);
   }
 
+  /// Get health info on a reservation slot.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<Operation> getHealth(GetHealthReservationSlotRequest request) async {
+    final url = _endPoint.replace(
+      path:
+          '/compute/v1/projects/${request.project}/zones/${request.zone}/${request.parentName}/reservationSlots/${request.reservationSlot}/getHealth',
+      queryParameters: {'requestId': ?request.requestId},
+    );
+    final response = await _client.post(url);
+    return Operation.fromJson(response);
+  }
+
   /// Allows customers to get SBOM versions of a reservation slot.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
@@ -40860,6 +41090,8 @@ base class FakeReservationSlots implements ReservationSlots {
     GetReservationSlotRequest request,
   )?
   _get;
+  final Future<Operation> Function(GetHealthReservationSlotRequest request)?
+  _getHealth;
   final Future<Operation> Function(GetVersionReservationSlotRequest request)?
   _getVersion;
   final Future<ReservationSlotsListResponse> Function(
@@ -40881,6 +41113,8 @@ base class FakeReservationSlots implements ReservationSlots {
       GetReservationSlotRequest request,
     )?
     get,
+    Future<Operation> Function(GetHealthReservationSlotRequest request)?
+    getHealth,
     Future<Operation> Function(GetVersionReservationSlotRequest request)?
     getVersion,
     Future<ReservationSlotsListResponse> Function(
@@ -40889,6 +41123,7 @@ base class FakeReservationSlots implements ReservationSlots {
     list,
     Future<Operation> Function(UpdateReservationSlotRequest request)? update,
   }) : _get = get,
+       _getHealth = getHealth,
        _getVersion = getVersion,
        _list = list,
        _update = update;
@@ -40908,6 +41143,21 @@ base class FakeReservationSlots implements ReservationSlots {
       return get(request);
     }
     throw UnsupportedError('get');
+  }
+
+  /// Get health info on a reservation slot.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Operation> getHealth(GetHealthReservationSlotRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_getHealth case final getHealth?) {
+      return getHealth(request);
+    }
+    throw UnsupportedError('getHealth');
   }
 
   /// Allows customers to get SBOM versions of a reservation slot.
@@ -53889,6 +54139,13 @@ final class AcceleratorType extends ProtoMessage {
   /// [Output Only] Name of the resource.
   final String? name;
 
+  /// Output only. Contains standard resource metadata for an AcceleratorType
+  /// resource. It is populated for each instance of the AcceleratorType
+  /// resource, and includes the api_version the
+  /// instance was retrieved through, and its canonical
+  /// resource_type name.
+  final ResourceMetadata? resourceMetadata;
+
   /// Output only. [Output Only] Server-defined, fully qualified URL for this resource.
   final String? selfLink;
 
@@ -53906,6 +54163,7 @@ final class AcceleratorType extends ProtoMessage {
     this.kind,
     this.maximumCardsPerInstance,
     this.name,
+    this.resourceMetadata,
     this.selfLink,
     this.zone,
   }) : super(fullyQualifiedName);
@@ -53941,6 +54199,10 @@ final class AcceleratorType extends ProtoMessage {
         null => null,
         Object $1 => decodeString($1),
       },
+      resourceMetadata: switch (json['resourceMetadata']) {
+        null => null,
+        Object $1 => ResourceMetadata.fromJson($1),
+      },
       selfLink: switch (json['selfLink']) {
         null => null,
         Object $1 => decodeString($1),
@@ -53961,6 +54223,7 @@ final class AcceleratorType extends ProtoMessage {
     'kind': ?kind,
     'maximumCardsPerInstance': ?maximumCardsPerInstance,
     'name': ?name,
+    'resourceMetadata': ?resourceMetadata?.toJson(),
     'selfLink': ?selfLink,
     'zone': ?zone,
   };
@@ -71984,7 +72247,8 @@ final class Backend extends ProtoMessage {
   /// handle additional traffic or is fully loaded. For usage guidelines, see
   /// Connection balancing mode.
   ///
-  /// Backends must use compatible balancing modes. For more information, see
+  /// Backends must use compatible balancing modes. Backends of a backend
+  /// service may use different balancing modes. For more information, see
   /// Supported balancing modes and target capacity settings and
   /// Restrictions and guidance for instance groups.
   ///
@@ -72020,6 +72284,9 @@ final class Backend extends ProtoMessage {
 
   /// This field designates whether this is a failover backend. More than one
   /// failover backend can be configured for a given BackendService.
+  ///
+  /// This field can only be used for a regional external Passthrough Network
+  /// Load Balancer or a regional internal Passthrough Network Load Balancer.
   final bool? failover;
 
   /// The fully-qualified URL of aninstance
@@ -72114,6 +72381,15 @@ final class Backend extends ProtoMessage {
   ///    capacity, backends in this layer would be used and traffic would be
   ///    assigned based on the load balancing algorithm you use. This is the
   ///    default
+  ///
+  ///
+  ///
+  /// For global external Passthrough Network Load Balancers, the following
+  /// restrictions apply:
+  ///
+  ///    - At most one backend can be marked as PREFERRED.
+  ///    - PREFERRED and DEFAULT backends cannot reside
+  ///    in the same Cloud region.
   /// Check the Preference enum for the list of possible values.
   final String? preference;
 
@@ -72290,7 +72566,8 @@ final class Backend extends ProtoMessage {
 /// handle additional traffic or is fully loaded. For usage guidelines, see
 /// Connection balancing mode.
 ///
-/// Backends must use compatible balancing modes. For more information, see
+/// Backends must use compatible balancing modes. Backends of a backend
+/// service may use different balancing modes. For more information, see
 /// Supported balancing modes and target capacity settings and
 /// Restrictions and guidance for instance groups.
 ///
@@ -72344,6 +72621,15 @@ final class Backend_BalancingMode extends ProtoEnum {
 ///    capacity, backends in this layer would be used and traffic would be
 ///    assigned based on the load balancing algorithm you use. This is the
 ///    default
+///
+///
+///
+/// For global external Passthrough Network Load Balancers, the following
+/// restrictions apply:
+///
+///    - At most one backend can be marked as PREFERRED.
+///    - PREFERRED and DEFAULT backends cannot reside
+///    in the same Cloud region.
 final class Backend_Preference extends ProtoEnum {
   /// A value indicating that the enum field is not set.
   static const undefinedPreference = Backend_Preference('UNDEFINED_PREFERENCE');
@@ -72827,14 +73113,17 @@ final class BackendBucketCdnPolicy extends ProtoMessage {
   final BackendBucketCdnPolicyCacheKeyPolicy? cacheKeyPolicy;
 
   /// Specifies the cache setting for all responses from this backend.
-  /// The possible values are:USE_ORIGIN_HEADERS Requires the origin to set valid caching
+  /// The possible values are:
+  /// USE_ORIGIN_HEADERS Requires the origin to set valid caching
   /// headers to cache content. Responses without these headers will not be
   /// cached at Google's edge, and will require a full trip to the origin on
   /// every request, potentially impacting performance and increasing load on
-  /// the origin server.FORCE_CACHE_ALL Cache all content, ignoring any "private",
+  /// the origin server.
+  /// FORCE_CACHE_ALL Cache all content, ignoring any "private",
   /// "no-store" or "no-cache" directives in Cache-Control response headers.
   /// Warning: this may result in Cloud CDN caching private,
-  /// per-user (user identifiable) content.CACHE_ALL_STATIC Automatically cache static content,
+  /// per-user (user identifiable) content.
+  /// CACHE_ALL_STATIC Automatically cache static content,
   /// including common image formats, media (video and audio), and web assets
   /// (JavaScript and CSS). Requests and responses that are marked as
   /// uncacheable, as well as dynamic content (including HTML), will not be
@@ -73063,14 +73352,17 @@ final class BackendBucketCdnPolicy extends ProtoMessage {
 }
 
 /// Specifies the cache setting for all responses from this backend.
-/// The possible values are:USE_ORIGIN_HEADERS Requires the origin to set valid caching
+/// The possible values are:
+/// USE_ORIGIN_HEADERS Requires the origin to set valid caching
 /// headers to cache content. Responses without these headers will not be
 /// cached at Google's edge, and will require a full trip to the origin on
 /// every request, potentially impacting performance and increasing load on
-/// the origin server.FORCE_CACHE_ALL Cache all content, ignoring any "private",
+/// the origin server.
+/// FORCE_CACHE_ALL Cache all content, ignoring any "private",
 /// "no-store" or "no-cache" directives in Cache-Control response headers.
 /// Warning: this may result in Cloud CDN caching private,
-/// per-user (user identifiable) content.CACHE_ALL_STATIC Automatically cache static content,
+/// per-user (user identifiable) content.
+/// CACHE_ALL_STATIC Automatically cache static content,
 /// including common image formats, media (video and audio), and web assets
 /// (JavaScript and CSS). Requests and responses that are marked as
 /// uncacheable, as well as dynamic content (including HTML), will not be
@@ -73761,8 +74053,8 @@ final class BackendService extends ProtoMessage {
   /// Balancers](https://cloud.google.com/load-balancing/docs/internal/failover-overview)
   /// and [external passthrough Network Load
   /// Balancers](https://cloud.google.com/load-balancing/docs/network/networklb-failover-overview).
-  ///
-  /// failoverPolicy cannot be specified with haPolicy.
+  /// failoverPolicy cannot be specified with haPolicy.failoverPolicy cannot be used by global external Passthrough
+  /// Network Load Balancers.
   final BackendServiceFailoverPolicy? failoverPolicy;
 
   /// Fingerprint of this resource. A hash of the contents stored in this object.
@@ -73801,9 +74093,9 @@ final class BackendService extends ProtoMessage {
   /// haPolicy requires customers to be responsible for tracking backend
   /// endpoint health and electing a leader among the healthy endpoints.
   /// Therefore, haPolicy cannot be specified with healthChecks.
-  ///
-  /// haPolicy can only be specified for External Passthrough Network Load
-  /// Balancers and Internal Passthrough Network Load Balancers.
+  /// haPolicy can only be specified for External Passthrough
+  /// Network Load Balancers and Internal Passthrough Network Load Balancers.haPolicy cannot be used by global external Passthrough Network
+  /// Load Balancers.
   final BackendServiceHapolicy? haPolicy;
 
   /// The list of URLs to the healthChecks, httpHealthChecks (legacy), or
@@ -73868,8 +74160,8 @@ final class BackendService extends ProtoMessage {
 
   /// Specifies the load balancer type. A backend service
   /// created for one type of load balancer cannot be used with another.
-  /// For more information, refer toChoosing
-  /// a load balancer.
+  /// For more information, refer to
+  /// Backend services product and scheme table.
   /// Check the LoadBalancingScheme enum for the list of possible values.
   final String? loadBalancingScheme;
 
@@ -73916,28 +74208,40 @@ final class BackendService extends ProtoMessage {
   ///    If set, the Backend Service responses are expected to contain non-standard
   ///    HTTP response header field Endpoint-Load-Metrics. The reported
   ///    metrics to use for computing the weights are specified via thecustomMetrics field.
+  ///    - WEIGHTED_MAGLEV: Per-endpoint weighted load balancing via
+  ///    health check reported weights. If set, the backend service must configure
+  ///    an HTTP-based Health Check, and health check replies are expected to
+  ///    contain the non-standard HTTP response header fieldX-Load-Balancing-Endpoint-Weight to specify the per-endpoint
+  ///    weights. If set, load balancing is weighted based on the per-endpoint
+  ///    weights reported in the last processed health check replies, as long as
+  ///    every instance either reported a valid weight or had UNAVAILABLE_WEIGHT.
+  ///    Otherwise, load balancing remains equal-weight.
   ///
-  ///    This field is applicable to either:
-  ///       - A regional backend service with the service protocol set to HTTP,
-  ///       HTTPS, HTTP2 or H2C, and load_balancing_scheme set to
-  ///       INTERNAL_MANAGED.
-  ///       - A global backend service with the
-  ///       load_balancing_scheme set to INTERNAL_SELF_MANAGED, INTERNAL_MANAGED, or
-  ///       EXTERNAL_MANAGED.
   ///
   ///
-  ///    If sessionAffinity is not configured—that is, if session
-  ///    affinity remains at the default value of NONE—then the
-  ///    default value for localityLbPolicy
-  ///    is ROUND_ROBIN. If session affinity is set to a value other
-  ///    than NONE,
-  ///    then the default value for localityLbPolicy isMAGLEV.
+  /// This field is applicable to either:
   ///
-  ///    Only ROUND_ROBIN and RING_HASH are supported
-  ///    when the backend service is referenced by a URL map that is bound to
-  ///    target gRPC proxy that has validateForProxyless field set to true.
+  ///    - A regional backend service with the service protocol set to HTTP,
+  ///    HTTPS, HTTP2 or H2C, and load_balancing_scheme set to
+  ///    INTERNAL_MANAGED.
+  ///    - A global backend service with the
+  ///    load_balancing_scheme set to INTERNAL_SELF_MANAGED, INTERNAL_MANAGED, or
+  ///    EXTERNAL_MANAGED.
   ///
-  ///    localityLbPolicy cannot be specified with haPolicy.
+  ///
+  ///
+  /// If sessionAffinity is not configured—that is, if session
+  /// affinity remains at the default value of NONE—then the
+  /// default value for localityLbPolicy
+  /// is ROUND_ROBIN. If session affinity is set to a value other
+  /// than NONE,
+  /// then the default value for localityLbPolicy isMAGLEV.
+  ///
+  /// Only ROUND_ROBIN and RING_HASH are supported
+  /// when the backend service is referenced by a URL map that is bound to
+  /// target gRPC proxy that has validateForProxyless field set to true.
+  ///
+  /// localityLbPolicy cannot be specified with haPolicy.
   /// Check the LocalityLbPolicy enum for the list of possible values.
   final String? localityLbPolicy;
 
@@ -74054,13 +74358,13 @@ final class BackendService extends ProtoMessage {
   /// Balancers, omit port_name.
   final String? portName;
 
-  /// The protocol this BackendService uses to communicate
-  /// with backends.
+  /// The protocol this BackendService uses to communicate with backends.
   ///
-  /// Possible values are HTTP, HTTPS, HTTP2, H2C, TCP, SSL, UDP or GRPC.
-  /// depending on the chosen load balancer or Traffic Director configuration.
-  /// Refer to the documentation for the load balancers or for Traffic Director
-  /// for more information.
+  /// Possible values are HTTP, HTTPS, HTTP2, H2C, TCP, SSL, UDP, GRPC, or
+  /// UNSPECIFIED, depending on the chosen load balancer or Traffic Director
+  /// configuration.
+  /// Refer to
+  /// Load balancing features for more information.
   ///
   /// Must be set to GRPC when the backend service is referenced by a URL map
   /// that is bound to target gRPC proxy.
@@ -74699,8 +75003,8 @@ final class BackendService_IpAddressSelectionPolicy extends ProtoEnum {
 
 /// Specifies the load balancer type. A backend service
 /// created for one type of load balancer cannot be used with another.
-/// For more information, refer toChoosing
-/// a load balancer.
+/// For more information, refer to
+/// Backend services product and scheme table.
 final class BackendService_LoadBalancingScheme extends ProtoEnum {
   /// A value indicating that the enum field is not set.
   static const undefinedLoadBalancingScheme =
@@ -74778,28 +75082,40 @@ final class BackendService_LoadBalancingScheme extends ProtoEnum {
 ///    If set, the Backend Service responses are expected to contain non-standard
 ///    HTTP response header field Endpoint-Load-Metrics. The reported
 ///    metrics to use for computing the weights are specified via thecustomMetrics field.
+///    - WEIGHTED_MAGLEV: Per-endpoint weighted load balancing via
+///    health check reported weights. If set, the backend service must configure
+///    an HTTP-based Health Check, and health check replies are expected to
+///    contain the non-standard HTTP response header fieldX-Load-Balancing-Endpoint-Weight to specify the per-endpoint
+///    weights. If set, load balancing is weighted based on the per-endpoint
+///    weights reported in the last processed health check replies, as long as
+///    every instance either reported a valid weight or had UNAVAILABLE_WEIGHT.
+///    Otherwise, load balancing remains equal-weight.
 ///
-///    This field is applicable to either:
-///       - A regional backend service with the service protocol set to HTTP,
-///       HTTPS, HTTP2 or H2C, and load_balancing_scheme set to
-///       INTERNAL_MANAGED.
-///       - A global backend service with the
-///       load_balancing_scheme set to INTERNAL_SELF_MANAGED, INTERNAL_MANAGED, or
-///       EXTERNAL_MANAGED.
 ///
 ///
-///    If sessionAffinity is not configured—that is, if session
-///    affinity remains at the default value of NONE—then the
-///    default value for localityLbPolicy
-///    is ROUND_ROBIN. If session affinity is set to a value other
-///    than NONE,
-///    then the default value for localityLbPolicy isMAGLEV.
+/// This field is applicable to either:
 ///
-///    Only ROUND_ROBIN and RING_HASH are supported
-///    when the backend service is referenced by a URL map that is bound to
-///    target gRPC proxy that has validateForProxyless field set to true.
+///    - A regional backend service with the service protocol set to HTTP,
+///    HTTPS, HTTP2 or H2C, and load_balancing_scheme set to
+///    INTERNAL_MANAGED.
+///    - A global backend service with the
+///    load_balancing_scheme set to INTERNAL_SELF_MANAGED, INTERNAL_MANAGED, or
+///    EXTERNAL_MANAGED.
 ///
-///    localityLbPolicy cannot be specified with haPolicy.
+///
+///
+/// If sessionAffinity is not configured—that is, if session
+/// affinity remains at the default value of NONE—then the
+/// default value for localityLbPolicy
+/// is ROUND_ROBIN. If session affinity is set to a value other
+/// than NONE,
+/// then the default value for localityLbPolicy isMAGLEV.
+///
+/// Only ROUND_ROBIN and RING_HASH are supported
+/// when the backend service is referenced by a URL map that is bound to
+/// target gRPC proxy that has validateForProxyless field set to true.
+///
+/// localityLbPolicy cannot be specified with haPolicy.
 final class BackendService_LocalityLbPolicy extends ProtoEnum {
   /// A value indicating that the enum field is not set.
   static const undefinedLocalityLbPolicy = BackendService_LocalityLbPolicy(
@@ -74888,13 +75204,13 @@ final class BackendService_LocalityLbPolicy extends ProtoEnum {
   String toString() => 'LocalityLbPolicy.$value';
 }
 
-/// The protocol this BackendService uses to communicate
-/// with backends.
+/// The protocol this BackendService uses to communicate with backends.
 ///
-/// Possible values are HTTP, HTTPS, HTTP2, H2C, TCP, SSL, UDP or GRPC.
-/// depending on the chosen load balancer or Traffic Director configuration.
-/// Refer to the documentation for the load balancers or for Traffic Director
-/// for more information.
+/// Possible values are HTTP, HTTPS, HTTP2, H2C, TCP, SSL, UDP, GRPC, or
+/// UNSPECIFIED, depending on the chosen load balancer or Traffic Director
+/// configuration.
+/// Refer to
+/// Load balancing features for more information.
 ///
 /// Must be set to GRPC when the backend service is referenced by a URL map
 /// that is bound to target gRPC proxy.
@@ -75147,14 +75463,17 @@ final class BackendServiceCdnPolicy extends ProtoMessage {
   final CacheKeyPolicy? cacheKeyPolicy;
 
   /// Specifies the cache setting for all responses from this backend.
-  /// The possible values are:USE_ORIGIN_HEADERS Requires the origin to set valid caching
+  /// The possible values are:
+  /// USE_ORIGIN_HEADERS Requires the origin to set valid caching
   /// headers to cache content. Responses without these headers will not be
   /// cached at Google's edge, and will require a full trip to the origin on
   /// every request, potentially impacting performance and increasing load on
-  /// the origin server.FORCE_CACHE_ALL Cache all content, ignoring any "private",
+  /// the origin server.
+  /// FORCE_CACHE_ALL Cache all content, ignoring any "private",
   /// "no-store" or "no-cache" directives in Cache-Control response headers.
   /// Warning: this may result in Cloud CDN caching private,
-  /// per-user (user identifiable) content.CACHE_ALL_STATIC Automatically cache static content,
+  /// per-user (user identifiable) content.
+  /// CACHE_ALL_STATIC Automatically cache static content,
   /// including common image formats, media (video and audio), and web assets
   /// (JavaScript and CSS). Requests and responses that are marked as
   /// uncacheable, as well as dynamic content (including HTML), will not be
@@ -75384,14 +75703,17 @@ final class BackendServiceCdnPolicy extends ProtoMessage {
 }
 
 /// Specifies the cache setting for all responses from this backend.
-/// The possible values are:USE_ORIGIN_HEADERS Requires the origin to set valid caching
+/// The possible values are:
+/// USE_ORIGIN_HEADERS Requires the origin to set valid caching
 /// headers to cache content. Responses without these headers will not be
 /// cached at Google's edge, and will require a full trip to the origin on
 /// every request, potentially impacting performance and increasing load on
-/// the origin server.FORCE_CACHE_ALL Cache all content, ignoring any "private",
+/// the origin server.
+/// FORCE_CACHE_ALL Cache all content, ignoring any "private",
 /// "no-store" or "no-cache" directives in Cache-Control response headers.
 /// Warning: this may result in Cloud CDN caching private,
-/// per-user (user identifiable) content.CACHE_ALL_STATIC Automatically cache static content,
+/// per-user (user identifiable) content.
+/// CACHE_ALL_STATIC Automatically cache static content,
 /// including common image formats, media (video and audio), and web assets
 /// (JavaScript and CSS). Requests and responses that are marked as
 /// uncacheable, as well as dynamic content (including HTML), will not be
@@ -76262,7 +76584,8 @@ final class BackendServiceHapolicyLeaderNetworkEndpoint extends ProtoMessage {
   /// instance must already be attached to the NEG specified in the
   /// haPolicy.leader.backendGroup.
   ///
-  /// The name must be 1-63 characters long, and comply with RFC1035.
+  /// The value must be a valid RFC1035 name (1-63 characters) or a valid
+  /// instance URL.
   /// Authorization requires the following IAM permission on the
   /// specified resource instance: compute.instances.use
   final String? instance;
@@ -77320,6 +77643,46 @@ final class BackendServiceTlsSettings extends ProtoMessage {
   /// field. Can only be specified if authenticationMode is not NONE.
   final String? authenticationConfig;
 
+  /// Assigns the Managed Identity for the BackendService Workload.
+  ///
+  ///
+  /// Use this property to configure the load balancer back-end to use
+  /// certificates and roots of trust provisioned by the Managed Workload
+  /// Identity system.
+  ///
+  ///  The `identity` property is the
+  /// fully-specified SPIFFE ID to use in the SVID presented by the Load
+  /// Balancer Workload.
+  ///
+  ///  The SPIFFE ID must be a resource starting with the
+  /// `trustDomain` property value, followed by the path to the Managed
+  /// Workload Identity.
+  ///
+  ///  Supported SPIFFE ID format:
+  ///
+  ///    - //<trust_domain>/ns/<namespace>/sa/<subject>
+  ///
+  ///
+  /// The Trust Domain within the Managed Identity must refer to a valid
+  /// Workload Identity Pool. The TrustConfig and CertificateIssuanceConfig
+  /// will be inherited from the Workload Identity Pool.
+  ///
+  ///  Restrictions:
+  ///
+  ///    - If you set the `identity` property, you cannot manually set
+  ///    the following fields:
+  ///        - tlsSettings.sni
+  ///       - tlsSettings.subjectAltNames
+  ///       - tlsSettings.authenticationConfig
+  ///
+  ///
+  /// When defining a `identity` for a RegionBackendServices, the
+  /// corresponding Workload Identity Pool must have a ca_pool
+  /// configured in the same region.
+  ///
+  ///  The system will set up a read-onlytlsSettings.authenticationConfig for the Managed Identity.
+  final String? identity;
+
   /// Server Name Indication - see RFC3546 section 3.1. If set, the load
   /// balancer sends this string as the SNI hostname in the TLS connection to
   /// the backend, and requires that this string match a Subject Alternative
@@ -77342,6 +77705,7 @@ final class BackendServiceTlsSettings extends ProtoMessage {
 
   BackendServiceTlsSettings({
     this.authenticationConfig,
+    this.identity,
     this.sni,
     this.subjectAltNames = const [],
   }) : super(fullyQualifiedName);
@@ -77350,6 +77714,10 @@ final class BackendServiceTlsSettings extends ProtoMessage {
     final json = j as Map<String, Object?>;
     return BackendServiceTlsSettings(
       authenticationConfig: switch (json['authenticationConfig']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      identity: switch (json['identity']) {
         null => null,
         Object $1 => decodeString($1),
       },
@@ -77371,6 +77739,7 @@ final class BackendServiceTlsSettings extends ProtoMessage {
   @override
   Object toJson() => {
     'authenticationConfig': ?authenticationConfig,
+    'identity': ?identity,
     'sni': ?sni,
     if (subjectAltNames.isNotDefault)
       'subjectAltNames': [for (final i in subjectAltNames) i.toJson()],
@@ -77381,6 +77750,7 @@ final class BackendServiceTlsSettings extends ProtoMessage {
     final $contents = [
       if (authenticationConfig != null)
         'authenticationConfig=$authenticationConfig',
+      if (identity != null) 'identity=$identity',
       if (sni != null) 'sni=$sni',
     ].join(',');
     return 'BackendServiceTlsSettings(${$contents})';
@@ -80637,6 +81007,1295 @@ final class CancelRolloutRequest extends ProtoMessage {
   }
 }
 
+/// A request to provide Assistant Scores. These scores determine VM
+/// obtainability and preemption likelihood.
+final class CapacityAdviceRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.compute.v1.CapacityAdviceRequest';
+
+  /// Policy specifying the distribution of instances across
+  /// zones within the requested region.
+  final CapacityAdviceRequestDistributionPolicy? distributionPolicy;
+
+  /// Policy for instance selectors.
+  final CapacityAdviceRequestInstanceFlexibilityPolicy?
+  instanceFlexibilityPolicy;
+
+  /// Instance properties for this request.
+  final CapacityAdviceRequestInstanceProperties? instanceProperties;
+
+  /// The number of VM instances to request.
+  final int? size;
+
+  CapacityAdviceRequest({
+    this.distributionPolicy,
+    this.instanceFlexibilityPolicy,
+    this.instanceProperties,
+    this.size,
+  }) : super(fullyQualifiedName);
+
+  factory CapacityAdviceRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CapacityAdviceRequest(
+      distributionPolicy: switch (json['distributionPolicy']) {
+        null => null,
+        Object $1 => CapacityAdviceRequestDistributionPolicy.fromJson($1),
+      },
+      instanceFlexibilityPolicy: switch (json['instanceFlexibilityPolicy']) {
+        null => null,
+        Object $1 => CapacityAdviceRequestInstanceFlexibilityPolicy.fromJson(
+          $1,
+        ),
+      },
+      instanceProperties: switch (json['instanceProperties']) {
+        null => null,
+        Object $1 => CapacityAdviceRequestInstanceProperties.fromJson($1),
+      },
+      size: switch (json['size']) {
+        null => null,
+        Object $1 => decodeInt($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'distributionPolicy': ?distributionPolicy?.toJson(),
+    'instanceFlexibilityPolicy': ?instanceFlexibilityPolicy?.toJson(),
+    'instanceProperties': ?instanceProperties?.toJson(),
+    'size': ?size,
+  };
+
+  @override
+  String toString() {
+    final $contents = [if (size != null) 'size=$size'].join(',');
+    return 'CapacityAdviceRequest(${$contents})';
+  }
+}
+
+/// Distribution policy.
+final class CapacityAdviceRequestDistributionPolicy extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.compute.v1.CapacityAdviceRequestDistributionPolicy';
+
+  /// Target distribution shape. You can specify the following values:ANY, ANY_SINGLE_ZONE, or BALANCED.
+  /// Check the TargetShape enum for the list of possible values.
+  final String? targetShape;
+
+  /// Zones where Capacity Advisor looks for capacity.
+  final List<CapacityAdviceRequestDistributionPolicyZoneConfiguration> zones;
+
+  CapacityAdviceRequestDistributionPolicy({
+    this.targetShape,
+    this.zones = const [],
+  }) : super(fullyQualifiedName);
+
+  factory CapacityAdviceRequestDistributionPolicy.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CapacityAdviceRequestDistributionPolicy(
+      targetShape: switch (json['targetShape']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      zones: switch (json['zones']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1)
+            CapacityAdviceRequestDistributionPolicyZoneConfiguration.fromJson(
+              i,
+            ),
+        ],
+        _ => throw const FormatException('"zones" is not a list'),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'targetShape': ?targetShape,
+    if (zones.isNotDefault) 'zones': [for (final i in zones) i.toJson()],
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      if (targetShape != null) 'targetShape=$targetShape',
+    ].join(',');
+    return 'CapacityAdviceRequestDistributionPolicy(${$contents})';
+  }
+}
+
+/// Target distribution shape. You can specify the following values:ANY, ANY_SINGLE_ZONE, or BALANCED.
+final class CapacityAdviceRequestDistributionPolicy_TargetShape
+    extends ProtoEnum {
+  /// A value indicating that the enum field is not set.
+  static const undefinedTargetShape =
+      CapacityAdviceRequestDistributionPolicy_TargetShape(
+        'UNDEFINED_TARGET_SHAPE',
+      );
+
+  /// Picks zones for creating VM instances to fulfill the requested number
+  /// of VMs within present resource constraints.
+  static const any = CapacityAdviceRequestDistributionPolicy_TargetShape('ANY');
+
+  /// Creates all VM instances within a single zone. The zone is selected
+  /// based on the present resource constraints.
+  static const anySingleZone =
+      CapacityAdviceRequestDistributionPolicy_TargetShape('ANY_SINGLE_ZONE');
+
+  /// Prioritizes acquisition of resources, scheduling VMs in zones where
+  /// resources are available while distributing VMs as evenly as possible
+  /// across selected zones to minimize the impact of zonal failure.
+  static const balanced = CapacityAdviceRequestDistributionPolicy_TargetShape(
+    'BALANCED',
+  );
+
+  /// Default value, unused.
+  static const targetShapeUnspecified =
+      CapacityAdviceRequestDistributionPolicy_TargetShape(
+        'TARGET_SHAPE_UNSPECIFIED',
+      );
+
+  /// The default value for [CapacityAdviceRequestDistributionPolicy_TargetShape].
+  static const $default = undefinedTargetShape;
+
+  const CapacityAdviceRequestDistributionPolicy_TargetShape(super.value);
+
+  factory CapacityAdviceRequestDistributionPolicy_TargetShape.fromJson(
+    Object? json,
+  ) => CapacityAdviceRequestDistributionPolicy_TargetShape(json as String);
+
+  bool get isNotDefault => this != $default;
+
+  @override
+  String toString() => 'TargetShape.$value';
+}
+
+/// Zone configuration for the distribution policy.
+final class CapacityAdviceRequestDistributionPolicyZoneConfiguration
+    extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.compute.v1.CapacityAdviceRequestDistributionPolicyZoneConfiguration';
+
+  /// The URL of the zone. It can be a
+  /// partial or full URL. For example, the following are valid values:
+  ///
+  ///
+  ///      - https://www.googleapis.com/compute/v1/projects/project/zones/zone
+  ///    - projects/project/zones/zone
+  ///    - zones/zone
+  final String? zone;
+
+  CapacityAdviceRequestDistributionPolicyZoneConfiguration({this.zone})
+    : super(fullyQualifiedName);
+
+  factory CapacityAdviceRequestDistributionPolicyZoneConfiguration.fromJson(
+    Object? j,
+  ) {
+    final json = j as Map<String, Object?>;
+    return CapacityAdviceRequestDistributionPolicyZoneConfiguration(
+      zone: switch (json['zone']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {'zone': ?zone};
+
+  @override
+  String toString() {
+    final $contents = [if (zone != null) 'zone=$zone'].join(',');
+    return 'CapacityAdviceRequestDistributionPolicyZoneConfiguration(${$contents})';
+  }
+}
+
+/// Specification of alternative, flexible instance configurations.
+final class CapacityAdviceRequestInstanceFlexibilityPolicy
+    extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.compute.v1.CapacityAdviceRequestInstanceFlexibilityPolicy';
+
+  /// Named instance selections to configure properties.
+  /// The key is an arbitrary, unique RFC1035 string that identifies the
+  /// instance selection.
+  final Map<
+    String,
+    CapacityAdviceRequestInstanceFlexibilityPolicyInstanceSelection
+  >
+  instanceSelections;
+
+  CapacityAdviceRequestInstanceFlexibilityPolicy({
+    this.instanceSelections = const {},
+  }) : super(fullyQualifiedName);
+
+  factory CapacityAdviceRequestInstanceFlexibilityPolicy.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CapacityAdviceRequestInstanceFlexibilityPolicy(
+      instanceSelections: switch (json['instanceSelections']) {
+        null => {},
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(
+              e.key,
+            ): CapacityAdviceRequestInstanceFlexibilityPolicyInstanceSelection.fromJson(
+              e.value,
+            ),
+        },
+        _ => throw const FormatException(
+          '"instanceSelections" is not an object',
+        ),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (instanceSelections.isNotDefault)
+      'instanceSelections': {
+        for (final e in instanceSelections.entries) e.key: e.value.toJson(),
+      },
+  };
+
+  @override
+  String toString() => 'CapacityAdviceRequestInstanceFlexibilityPolicy()';
+}
+
+/// Machine specification.
+final class CapacityAdviceRequestInstanceFlexibilityPolicyInstanceSelection
+    extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.compute.v1.CapacityAdviceRequestInstanceFlexibilityPolicyInstanceSelection';
+
+  /// Local SSDs.
+  final List<
+    CapacityAdviceRequestInstanceFlexibilityPolicyInstanceSelectionAttachedDisk
+  >
+  disks;
+
+  /// Accelerators configuration.
+  final List<AcceleratorConfig> guestAccelerators;
+
+  /// Full machine-type names, e.g. "n1-standard-16".
+  final List<String> machineTypes;
+
+  CapacityAdviceRequestInstanceFlexibilityPolicyInstanceSelection({
+    this.disks = const [],
+    this.guestAccelerators = const [],
+    this.machineTypes = const [],
+  }) : super(fullyQualifiedName);
+
+  factory CapacityAdviceRequestInstanceFlexibilityPolicyInstanceSelection.fromJson(
+    Object? j,
+  ) {
+    final json = j as Map<String, Object?>;
+    return CapacityAdviceRequestInstanceFlexibilityPolicyInstanceSelection(
+      disks: switch (json['disks']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1)
+            CapacityAdviceRequestInstanceFlexibilityPolicyInstanceSelectionAttachedDisk.fromJson(
+              i,
+            ),
+        ],
+        _ => throw const FormatException('"disks" is not a list'),
+      },
+      guestAccelerators: switch (json['guestAccelerators']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) AcceleratorConfig.fromJson(i)],
+        _ => throw const FormatException('"guestAccelerators" is not a list'),
+      },
+      machineTypes: switch (json['machineTypes']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException('"machineTypes" is not a list'),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (disks.isNotDefault) 'disks': [for (final i in disks) i.toJson()],
+    if (guestAccelerators.isNotDefault)
+      'guestAccelerators': [for (final i in guestAccelerators) i.toJson()],
+    if (machineTypes.isNotDefault) 'machineTypes': machineTypes,
+  };
+
+  @override
+  String toString() =>
+      'CapacityAdviceRequestInstanceFlexibilityPolicyInstanceSelection()';
+}
+
+/// Attached disk configuration.
+final class CapacityAdviceRequestInstanceFlexibilityPolicyInstanceSelectionAttachedDisk
+    extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.compute.v1.CapacityAdviceRequestInstanceFlexibilityPolicyInstanceSelectionAttachedDisk';
+
+  /// Specifies the type of the disk.
+  /// Check the Type enum for the list of possible values.
+  final String? type;
+
+  CapacityAdviceRequestInstanceFlexibilityPolicyInstanceSelectionAttachedDisk({
+    this.type,
+  }) : super(fullyQualifiedName);
+
+  factory CapacityAdviceRequestInstanceFlexibilityPolicyInstanceSelectionAttachedDisk.fromJson(
+    Object? j,
+  ) {
+    final json = j as Map<String, Object?>;
+    return CapacityAdviceRequestInstanceFlexibilityPolicyInstanceSelectionAttachedDisk(
+      type: switch (json['type']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {'type': ?type};
+
+  @override
+  String toString() {
+    final $contents = [if (type != null) 'type=$type'].join(',');
+    return 'CapacityAdviceRequestInstanceFlexibilityPolicyInstanceSelectionAttachedDisk(${$contents})';
+  }
+}
+
+/// Specifies the type of the disk.
+final class CapacityAdviceRequestInstanceFlexibilityPolicyInstanceSelectionAttachedDisk_Type
+    extends ProtoEnum {
+  /// A value indicating that the enum field is not set.
+  static const undefinedType =
+      CapacityAdviceRequestInstanceFlexibilityPolicyInstanceSelectionAttachedDisk_Type(
+        'UNDEFINED_TYPE',
+      );
+
+  /// Default value, unspecified disk type.
+  static const diskTypeUnspecified =
+      CapacityAdviceRequestInstanceFlexibilityPolicyInstanceSelectionAttachedDisk_Type(
+        'DISK_TYPE_UNSPECIFIED',
+      );
+
+  /// Scratch disk (Local SSD).
+  static const scratch =
+      CapacityAdviceRequestInstanceFlexibilityPolicyInstanceSelectionAttachedDisk_Type(
+        'SCRATCH',
+      );
+
+  /// The default value for [CapacityAdviceRequestInstanceFlexibilityPolicyInstanceSelectionAttachedDisk_Type].
+  static const $default = undefinedType;
+
+  const CapacityAdviceRequestInstanceFlexibilityPolicyInstanceSelectionAttachedDisk_Type(
+    super.value,
+  );
+
+  factory CapacityAdviceRequestInstanceFlexibilityPolicyInstanceSelectionAttachedDisk_Type.fromJson(
+    Object? json,
+  ) =>
+      CapacityAdviceRequestInstanceFlexibilityPolicyInstanceSelectionAttachedDisk_Type(
+        json as String,
+      );
+
+  bool get isNotDefault => this != $default;
+
+  @override
+  String toString() => 'Type.$value';
+}
+
+/// Instance provisioning properties.
+final class CapacityAdviceRequestInstanceProperties extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.compute.v1.CapacityAdviceRequestInstanceProperties';
+
+  /// Specifies the scheduling options.
+  final CapacityAdviceRequestInstancePropertiesScheduling? scheduling;
+
+  CapacityAdviceRequestInstanceProperties({this.scheduling})
+    : super(fullyQualifiedName);
+
+  factory CapacityAdviceRequestInstanceProperties.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CapacityAdviceRequestInstanceProperties(
+      scheduling: switch (json['scheduling']) {
+        null => null,
+        Object $1 => CapacityAdviceRequestInstancePropertiesScheduling.fromJson(
+          $1,
+        ),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {'scheduling': ?scheduling?.toJson()};
+
+  @override
+  String toString() => 'CapacityAdviceRequestInstanceProperties()';
+}
+
+/// Defines the instance scheduling options.
+final class CapacityAdviceRequestInstancePropertiesScheduling
+    extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.compute.v1.CapacityAdviceRequestInstancePropertiesScheduling';
+
+  /// Specifies the provisioning model.
+  /// Check the ProvisioningModel enum for the list of possible values.
+  final String? provisioningModel;
+
+  CapacityAdviceRequestInstancePropertiesScheduling({this.provisioningModel})
+    : super(fullyQualifiedName);
+
+  factory CapacityAdviceRequestInstancePropertiesScheduling.fromJson(
+    Object? j,
+  ) {
+    final json = j as Map<String, Object?>;
+    return CapacityAdviceRequestInstancePropertiesScheduling(
+      provisioningModel: switch (json['provisioningModel']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {'provisioningModel': ?provisioningModel};
+
+  @override
+  String toString() {
+    final $contents = [
+      if (provisioningModel != null) 'provisioningModel=$provisioningModel',
+    ].join(',');
+    return 'CapacityAdviceRequestInstancePropertiesScheduling(${$contents})';
+  }
+}
+
+/// Specifies the provisioning model.
+final class CapacityAdviceRequestInstancePropertiesScheduling_ProvisioningModel
+    extends ProtoEnum {
+  /// A value indicating that the enum field is not set.
+  static const undefinedProvisioningModel =
+      CapacityAdviceRequestInstancePropertiesScheduling_ProvisioningModel(
+        'UNDEFINED_PROVISIONING_MODEL',
+      );
+
+  /// Instance is provisioned using the Flex Start provisioning model and
+  /// has a limited runtime.
+  static const flexStart =
+      CapacityAdviceRequestInstancePropertiesScheduling_ProvisioningModel(
+        'FLEX_START',
+      );
+
+  /// Bound to the lifecycle of the reservation in which it is provisioned.
+  static const reservationBound =
+      CapacityAdviceRequestInstancePropertiesScheduling_ProvisioningModel(
+        'RESERVATION_BOUND',
+      );
+
+  /// Heavily discounted, no guaranteed runtime.
+  static const spot =
+      CapacityAdviceRequestInstancePropertiesScheduling_ProvisioningModel(
+        'SPOT',
+      );
+
+  /// Standard provisioning with user controlled runtime, no discounts.
+  static const standard =
+      CapacityAdviceRequestInstancePropertiesScheduling_ProvisioningModel(
+        'STANDARD',
+      );
+
+  /// The default value for [CapacityAdviceRequestInstancePropertiesScheduling_ProvisioningModel].
+  static const $default = undefinedProvisioningModel;
+
+  const CapacityAdviceRequestInstancePropertiesScheduling_ProvisioningModel(
+    super.value,
+  );
+
+  factory CapacityAdviceRequestInstancePropertiesScheduling_ProvisioningModel.fromJson(
+    Object? json,
+  ) => CapacityAdviceRequestInstancePropertiesScheduling_ProvisioningModel(
+    json as String,
+  );
+
+  bool get isNotDefault => this != $default;
+
+  @override
+  String toString() => 'ProvisioningModel.$value';
+}
+
+/// A response contains scoring recommendations.
+final class CapacityAdviceResponse extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.compute.v1.CapacityAdviceResponse';
+
+  /// Initially the API will provide one recommendation which balances the
+  /// individual scores according to the service provider's preference.
+  final List<CapacityAdviceResponseRecommendation> recommendations;
+
+  CapacityAdviceResponse({this.recommendations = const []})
+    : super(fullyQualifiedName);
+
+  factory CapacityAdviceResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CapacityAdviceResponse(
+      recommendations: switch (json['recommendations']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) CapacityAdviceResponseRecommendation.fromJson(i),
+        ],
+        _ => throw const FormatException('"recommendations" is not a list'),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (recommendations.isNotDefault)
+      'recommendations': [for (final i in recommendations) i.toJson()],
+  };
+
+  @override
+  String toString() => 'CapacityAdviceResponse()';
+}
+
+/// Recommendation.
+final class CapacityAdviceResponseRecommendation extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.compute.v1.CapacityAdviceResponseRecommendation';
+
+  /// Scores for the recommendation.
+  final CapacityAdviceResponseRecommendationScores? scores;
+
+  /// Shards represent blocks of uniform capacity in recommendations.
+  final List<CapacityAdviceResponseRecommendationShard> shards;
+
+  CapacityAdviceResponseRecommendation({this.scores, this.shards = const []})
+    : super(fullyQualifiedName);
+
+  factory CapacityAdviceResponseRecommendation.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CapacityAdviceResponseRecommendation(
+      scores: switch (json['scores']) {
+        null => null,
+        Object $1 => CapacityAdviceResponseRecommendationScores.fromJson($1),
+      },
+      shards: switch (json['shards']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1)
+            CapacityAdviceResponseRecommendationShard.fromJson(i),
+        ],
+        _ => throw const FormatException('"shards" is not a list'),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'scores': ?scores?.toJson(),
+    if (shards.isNotDefault) 'shards': [for (final i in shards) i.toJson()],
+  };
+
+  @override
+  String toString() => 'CapacityAdviceResponseRecommendation()';
+}
+
+/// Groups information about a shard of capacity.
+final class CapacityAdviceResponseRecommendationScores extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.compute.v1.CapacityAdviceResponseRecommendationScores';
+
+  /// The estimated run time of the majority of Spot VMs in the request
+  /// before preemption. The estimate is best-effort only. It is based on
+  /// historical data and current conditions.
+  final String? estimatedUptime;
+
+  /// The obtainability score indicates the likelihood of successfully
+  /// obtaining (provisioning) the requested number of VMs.
+  /// The score range is 0.0 through 1.0. Higher is better.
+  final double? obtainability;
+
+  CapacityAdviceResponseRecommendationScores({
+    this.estimatedUptime,
+    this.obtainability,
+  }) : super(fullyQualifiedName);
+
+  factory CapacityAdviceResponseRecommendationScores.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CapacityAdviceResponseRecommendationScores(
+      estimatedUptime: switch (json['estimatedUptime']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      obtainability: switch (json['obtainability']) {
+        null => null,
+        Object $1 => decodeDouble($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'estimatedUptime': ?estimatedUptime,
+    if (obtainability case final $1?) 'obtainability': encodeDouble($1),
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      if (estimatedUptime != null) 'estimatedUptime=$estimatedUptime',
+      if (obtainability != null) 'obtainability=$obtainability',
+    ].join(',');
+    return 'CapacityAdviceResponseRecommendationScores(${$contents})';
+  }
+}
+
+/// Shards represent blocks of uniform capacity in recommendations.
+/// Each shard is for a single zone and a single machine shape. Each shard
+/// defines a size expressed as the number of VMs.
+final class CapacityAdviceResponseRecommendationShard extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.compute.v1.CapacityAdviceResponseRecommendationShard';
+
+  /// The number of instances.
+  final int? instanceCount;
+
+  /// The machine type corresponds to the instance selection in the request.
+  final String? machineType;
+
+  /// The provisioning model that you want to view recommendations for.
+  /// Check the ProvisioningModel enum for the list of possible values.
+  final String? provisioningModel;
+
+  /// Output only. The zone name for this shard.
+  final String? zone;
+
+  CapacityAdviceResponseRecommendationShard({
+    this.instanceCount,
+    this.machineType,
+    this.provisioningModel,
+    this.zone,
+  }) : super(fullyQualifiedName);
+
+  factory CapacityAdviceResponseRecommendationShard.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CapacityAdviceResponseRecommendationShard(
+      instanceCount: switch (json['instanceCount']) {
+        null => null,
+        Object $1 => decodeInt($1),
+      },
+      machineType: switch (json['machineType']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      provisioningModel: switch (json['provisioningModel']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      zone: switch (json['zone']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'instanceCount': ?instanceCount,
+    'machineType': ?machineType,
+    'provisioningModel': ?provisioningModel,
+    'zone': ?zone,
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      if (instanceCount != null) 'instanceCount=$instanceCount',
+      if (machineType != null) 'machineType=$machineType',
+      if (provisioningModel != null) 'provisioningModel=$provisioningModel',
+      if (zone != null) 'zone=$zone',
+    ].join(',');
+    return 'CapacityAdviceResponseRecommendationShard(${$contents})';
+  }
+}
+
+/// The provisioning model that you want to view recommendations for.
+final class CapacityAdviceResponseRecommendationShard_ProvisioningModel
+    extends ProtoEnum {
+  /// A value indicating that the enum field is not set.
+  static const undefinedProvisioningModel =
+      CapacityAdviceResponseRecommendationShard_ProvisioningModel(
+        'UNDEFINED_PROVISIONING_MODEL',
+      );
+
+  /// Instance is provisioned using the Flex Start provisioning model and
+  /// has a limited runtime.
+  static const flexStart =
+      CapacityAdviceResponseRecommendationShard_ProvisioningModel('FLEX_START');
+
+  /// Bound to the lifecycle of the reservation in which it is provisioned.
+  static const reservationBound =
+      CapacityAdviceResponseRecommendationShard_ProvisioningModel(
+        'RESERVATION_BOUND',
+      );
+
+  /// Heavily discounted, no guaranteed runtime.
+  static const spot =
+      CapacityAdviceResponseRecommendationShard_ProvisioningModel('SPOT');
+
+  /// Standard provisioning with user controlled runtime, no discounts.
+  static const standard =
+      CapacityAdviceResponseRecommendationShard_ProvisioningModel('STANDARD');
+
+  /// The default value for [CapacityAdviceResponseRecommendationShard_ProvisioningModel].
+  static const $default = undefinedProvisioningModel;
+
+  const CapacityAdviceResponseRecommendationShard_ProvisioningModel(
+    super.value,
+  );
+
+  factory CapacityAdviceResponseRecommendationShard_ProvisioningModel.fromJson(
+    Object? json,
+  ) => CapacityAdviceResponseRecommendationShard_ProvisioningModel(
+    json as String,
+  );
+
+  bool get isNotDefault => this != $default;
+
+  @override
+  String toString() => 'ProvisioningModel.$value';
+}
+
+/// A request message for Advice.Capacity. See the method description for details.
+final class CapacityAdviceRpcRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.compute.v1.CapacityAdviceRpcRequest';
+
+  /// The body resource for this request
+  final CapacityAdviceRequest? capacityAdviceRequestResource;
+
+  /// Project ID for this request.
+  final String project;
+
+  /// Name of the region for this request.
+  final String region;
+
+  CapacityAdviceRpcRequest({
+    required this.capacityAdviceRequestResource,
+    required this.project,
+    required this.region,
+  }) : super(fullyQualifiedName);
+
+  factory CapacityAdviceRpcRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CapacityAdviceRpcRequest(
+      capacityAdviceRequestResource:
+          switch (json['capacityAdviceRequestResource']) {
+            null => null,
+            Object $1 => CapacityAdviceRequest.fromJson($1),
+          },
+      project: switch (json['project']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      region: switch (json['region']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'capacityAdviceRequestResource': ?capacityAdviceRequestResource?.toJson(),
+    'project': project,
+    'region': region,
+  };
+
+  @override
+  String toString() {
+    final $contents = ['project=$project', 'region=$region'].join(',');
+    return 'CapacityAdviceRpcRequest(${$contents})';
+  }
+}
+
+/// A request message for Advice.CapacityHistory. See the method description for details.
+final class CapacityHistoryAdviceRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.compute.v1.CapacityHistoryAdviceRequest';
+
+  /// The body resource for this request
+  final CapacityHistoryRequest? capacityHistoryRequestResource;
+
+  /// Project ID for this request.
+  final String project;
+
+  /// Name of the region for this request.
+  final String region;
+
+  CapacityHistoryAdviceRequest({
+    required this.capacityHistoryRequestResource,
+    required this.project,
+    required this.region,
+  }) : super(fullyQualifiedName);
+
+  factory CapacityHistoryAdviceRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CapacityHistoryAdviceRequest(
+      capacityHistoryRequestResource:
+          switch (json['capacityHistoryRequestResource']) {
+            null => null,
+            Object $1 => CapacityHistoryRequest.fromJson($1),
+          },
+      project: switch (json['project']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      region: switch (json['region']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'capacityHistoryRequestResource': ?capacityHistoryRequestResource?.toJson(),
+    'project': project,
+    'region': region,
+  };
+
+  @override
+  String toString() {
+    final $contents = ['project=$project', 'region=$region'].join(',');
+    return 'CapacityHistoryAdviceRequest(${$contents})';
+  }
+}
+
+/// A request to get the capacity history.
+final class CapacityHistoryRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.compute.v1.CapacityHistoryRequest';
+
+  /// Instance properties for this request.
+  final CapacityHistoryRequestInstanceProperties? instanceProperties;
+
+  /// Location policy for this request.
+  final CapacityHistoryRequestLocationPolicy? locationPolicy;
+
+  /// List of history types to get capacity history for.
+  /// Check the Types enum for the list of possible values.
+  final List<String> types;
+
+  CapacityHistoryRequest({
+    this.instanceProperties,
+    this.locationPolicy,
+    this.types = const [],
+  }) : super(fullyQualifiedName);
+
+  factory CapacityHistoryRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CapacityHistoryRequest(
+      instanceProperties: switch (json['instanceProperties']) {
+        null => null,
+        Object $1 => CapacityHistoryRequestInstanceProperties.fromJson($1),
+      },
+      locationPolicy: switch (json['locationPolicy']) {
+        null => null,
+        Object $1 => CapacityHistoryRequestLocationPolicy.fromJson($1),
+      },
+      types: switch (json['types']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException('"types" is not a list'),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'instanceProperties': ?instanceProperties?.toJson(),
+    'locationPolicy': ?locationPolicy?.toJson(),
+    if (types.isNotDefault) 'types': types,
+  };
+
+  @override
+  String toString() => 'CapacityHistoryRequest()';
+}
+
+final class CapacityHistoryRequest_Types extends ProtoEnum {
+  /// A value indicating that the enum field is not set.
+  static const undefinedTypes = CapacityHistoryRequest_Types('UNDEFINED_TYPES');
+
+  /// Default value, unused.
+  static const historyTypeUnspecified = CapacityHistoryRequest_Types(
+    'HISTORY_TYPE_UNSPECIFIED',
+  );
+
+  /// Preemption history.
+  static const preemption = CapacityHistoryRequest_Types('PREEMPTION');
+
+  /// Price history.
+  static const price = CapacityHistoryRequest_Types('PRICE');
+
+  /// The default value for [CapacityHistoryRequest_Types].
+  static const $default = undefinedTypes;
+
+  const CapacityHistoryRequest_Types(super.value);
+
+  factory CapacityHistoryRequest_Types.fromJson(Object? json) =>
+      CapacityHistoryRequest_Types(json as String);
+
+  bool get isNotDefault => this != $default;
+
+  @override
+  String toString() => 'Types.$value';
+}
+
+/// Instance properties for this request.
+final class CapacityHistoryRequestInstanceProperties extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.compute.v1.CapacityHistoryRequestInstanceProperties';
+
+  /// The machine type for the VM, such as `n2-standard-4`.
+  final String? machineType;
+
+  /// Specifies the scheduling options.
+  final CapacityHistoryRequestInstancePropertiesScheduling? scheduling;
+
+  CapacityHistoryRequestInstanceProperties({this.machineType, this.scheduling})
+    : super(fullyQualifiedName);
+
+  factory CapacityHistoryRequestInstanceProperties.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CapacityHistoryRequestInstanceProperties(
+      machineType: switch (json['machineType']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      scheduling: switch (json['scheduling']) {
+        null => null,
+        Object $1 =>
+          CapacityHistoryRequestInstancePropertiesScheduling.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'machineType': ?machineType,
+    'scheduling': ?scheduling?.toJson(),
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      if (machineType != null) 'machineType=$machineType',
+    ].join(',');
+    return 'CapacityHistoryRequestInstanceProperties(${$contents})';
+  }
+}
+
+/// Scheduling options.
+final class CapacityHistoryRequestInstancePropertiesScheduling
+    extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.compute.v1.CapacityHistoryRequestInstancePropertiesScheduling';
+
+  /// The provisioning model to get capacity history for.
+  /// This field must be set to SPOT.
+  ///
+  /// For more information, see
+  /// Compute Engine instances provisioning models.
+  /// Check the ProvisioningModel enum for the list of possible values.
+  final String? provisioningModel;
+
+  CapacityHistoryRequestInstancePropertiesScheduling({this.provisioningModel})
+    : super(fullyQualifiedName);
+
+  factory CapacityHistoryRequestInstancePropertiesScheduling.fromJson(
+    Object? j,
+  ) {
+    final json = j as Map<String, Object?>;
+    return CapacityHistoryRequestInstancePropertiesScheduling(
+      provisioningModel: switch (json['provisioningModel']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {'provisioningModel': ?provisioningModel};
+
+  @override
+  String toString() {
+    final $contents = [
+      if (provisioningModel != null) 'provisioningModel=$provisioningModel',
+    ].join(',');
+    return 'CapacityHistoryRequestInstancePropertiesScheduling(${$contents})';
+  }
+}
+
+/// The provisioning model to get capacity history for.
+/// This field must be set to SPOT.
+///
+/// For more information, see
+/// Compute Engine instances provisioning models.
+final class CapacityHistoryRequestInstancePropertiesScheduling_ProvisioningModel
+    extends ProtoEnum {
+  /// A value indicating that the enum field is not set.
+  static const undefinedProvisioningModel =
+      CapacityHistoryRequestInstancePropertiesScheduling_ProvisioningModel(
+        'UNDEFINED_PROVISIONING_MODEL',
+      );
+
+  /// Instance is provisioned using the Flex Start provisioning model and
+  /// has a limited runtime.
+  static const flexStart =
+      CapacityHistoryRequestInstancePropertiesScheduling_ProvisioningModel(
+        'FLEX_START',
+      );
+
+  /// Bound to the lifecycle of the reservation in which it is provisioned.
+  static const reservationBound =
+      CapacityHistoryRequestInstancePropertiesScheduling_ProvisioningModel(
+        'RESERVATION_BOUND',
+      );
+
+  /// Heavily discounted, no guaranteed runtime.
+  static const spot =
+      CapacityHistoryRequestInstancePropertiesScheduling_ProvisioningModel(
+        'SPOT',
+      );
+
+  /// Standard provisioning with user controlled runtime, no discounts.
+  static const standard =
+      CapacityHistoryRequestInstancePropertiesScheduling_ProvisioningModel(
+        'STANDARD',
+      );
+
+  /// The default value for [CapacityHistoryRequestInstancePropertiesScheduling_ProvisioningModel].
+  static const $default = undefinedProvisioningModel;
+
+  const CapacityHistoryRequestInstancePropertiesScheduling_ProvisioningModel(
+    super.value,
+  );
+
+  factory CapacityHistoryRequestInstancePropertiesScheduling_ProvisioningModel.fromJson(
+    Object? json,
+  ) => CapacityHistoryRequestInstancePropertiesScheduling_ProvisioningModel(
+    json as String,
+  );
+
+  bool get isNotDefault => this != $default;
+
+  @override
+  String toString() => 'ProvisioningModel.$value';
+}
+
+/// Location policy for this request.
+final class CapacityHistoryRequestLocationPolicy extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.compute.v1.CapacityHistoryRequestLocationPolicy';
+
+  /// The region or zone to get capacity history for.
+  ///
+  /// It can be a partial or full URL. For example, the following are valid
+  /// values:
+  ///
+  ///
+  ///      - https://www.googleapis.com/compute/v1/projects/project/zones/zone
+  ///    - projects/project/zones/zone
+  ///    - zones/zone
+  ///
+  ///
+  ///
+  /// This field is optional.
+  final String? location;
+
+  CapacityHistoryRequestLocationPolicy({this.location})
+    : super(fullyQualifiedName);
+
+  factory CapacityHistoryRequestLocationPolicy.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CapacityHistoryRequestLocationPolicy(
+      location: switch (json['location']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {'location': ?location};
+
+  @override
+  String toString() {
+    final $contents = [if (location != null) 'location=$location'].join(',');
+    return 'CapacityHistoryRequestLocationPolicy(${$contents})';
+  }
+}
+
+/// Contains the capacity history.
+final class CapacityHistoryResponse extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.compute.v1.CapacityHistoryResponse';
+
+  /// Output only. The location (region or zone) for which the capacity history is returned.
+  /// It is returned as a URL - For example,https://www.googleapis.com/compute/v1/projects/project/zones/zone.
+  final String? location;
+
+  /// The machine type for which the capacity history is returned.
+  final String? machineType;
+
+  /// The preemption history for the requested machine type and location.
+  final List<CapacityHistoryResponsePreemptionRecord> preemptionHistory;
+
+  /// The price history for the requested machine type and location.
+  final List<CapacityHistoryResponsePriceRecord> priceHistory;
+
+  CapacityHistoryResponse({
+    this.location,
+    this.machineType,
+    this.preemptionHistory = const [],
+    this.priceHistory = const [],
+  }) : super(fullyQualifiedName);
+
+  factory CapacityHistoryResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CapacityHistoryResponse(
+      location: switch (json['location']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      machineType: switch (json['machineType']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      preemptionHistory: switch (json['preemptionHistory']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1)
+            CapacityHistoryResponsePreemptionRecord.fromJson(i),
+        ],
+        _ => throw const FormatException('"preemptionHistory" is not a list'),
+      },
+      priceHistory: switch (json['priceHistory']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) CapacityHistoryResponsePriceRecord.fromJson(i),
+        ],
+        _ => throw const FormatException('"priceHistory" is not a list'),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'location': ?location,
+    'machineType': ?machineType,
+    if (preemptionHistory.isNotDefault)
+      'preemptionHistory': [for (final i in preemptionHistory) i.toJson()],
+    if (priceHistory.isNotDefault)
+      'priceHistory': [for (final i in priceHistory) i.toJson()],
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      if (location != null) 'location=$location',
+      if (machineType != null) 'machineType=$machineType',
+    ].join(',');
+    return 'CapacityHistoryResponse(${$contents})';
+  }
+}
+
+/// A record of Spot VM preemption history.
+final class CapacityHistoryResponsePreemptionRecord extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.compute.v1.CapacityHistoryResponsePreemptionRecord';
+
+  /// The time interval for this preemption record.
+  final Interval? interval;
+
+  /// The preemption rate during the interval, representing the fraction of
+  /// Spot VMs that were preempted. Range: 0.0 to 1.0. Preemption rate is
+  /// calculated as (total preempted Spots) / (total Spots that stopped
+  /// running).
+  final double? preemptionRate;
+
+  CapacityHistoryResponsePreemptionRecord({this.interval, this.preemptionRate})
+    : super(fullyQualifiedName);
+
+  factory CapacityHistoryResponsePreemptionRecord.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CapacityHistoryResponsePreemptionRecord(
+      interval: switch (json['interval']) {
+        null => null,
+        Object $1 => Interval.fromJson($1),
+      },
+      preemptionRate: switch (json['preemptionRate']) {
+        null => null,
+        Object $1 => decodeDouble($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'interval': ?interval?.toJson(),
+    if (preemptionRate case final $1?) 'preemptionRate': encodeDouble($1),
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      if (preemptionRate != null) 'preemptionRate=$preemptionRate',
+    ].join(',');
+    return 'CapacityHistoryResponsePreemptionRecord(${$contents})';
+  }
+}
+
+/// A record of price history.
+final class CapacityHistoryResponsePriceRecord extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.compute.v1.CapacityHistoryResponsePriceRecord';
+
+  /// The time interval for this price record.
+  final Interval? interval;
+
+  /// The Spot VM list price during the interval.
+  final Money? listPrice;
+
+  CapacityHistoryResponsePriceRecord({this.interval, this.listPrice})
+    : super(fullyQualifiedName);
+
+  factory CapacityHistoryResponsePriceRecord.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CapacityHistoryResponsePriceRecord(
+      interval: switch (json['interval']) {
+        null => null,
+        Object $1 => Interval.fromJson($1),
+      },
+      listPrice: switch (json['listPrice']) {
+        null => null,
+        Object $1 => Money.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'interval': ?interval?.toJson(),
+    'listPrice': ?listPrice?.toJson(),
+  };
+
+  @override
+  String toString() => 'CapacityHistoryResponsePriceRecord()';
+}
+
 /// Settings controlling the volume of requests, connections and retries to this
 /// backend service.
 final class CircuitBreakers extends ProtoMessage {
@@ -81107,7 +82766,7 @@ final class Commitment extends ProtoMessage {
   /// resource types.
   ///
   ///  The type must be one of the following:ACCELERATOR_OPTIMIZED, ACCELERATOR_OPTIMIZED_A3,ACCELERATOR_OPTIMIZED_A3_MEGA,COMPUTE_OPTIMIZED, COMPUTE_OPTIMIZED_C2D,
-  ///  COMPUTE_OPTIMIZED_C3, COMPUTE_OPTIMIZED_C3D,COMPUTE_OPTIMIZED_H3, GENERAL_PURPOSE,GENERAL_PURPOSE_C4, GENERAL_PURPOSE_E2,GENERAL_PURPOSE_N2, GENERAL_PURPOSE_N2D,GENERAL_PURPOSE_N4, GENERAL_PURPOSE_T2D,GRAPHICS_OPTIMIZED, GRAPHICS_OPTIMIZED_G4,GRAPHICS_OPTIMIZED_G4_VGPU,MEMORY_OPTIMIZED, MEMORY_OPTIMIZED_M3,MEMORY_OPTIMIZED_X4, STORAGE_OPTIMIZED_Z3. For
+  ///  COMPUTE_OPTIMIZED_C3, COMPUTE_OPTIMIZED_C3D,COMPUTE_OPTIMIZED_H3, GENERAL_PURPOSE,GENERAL_PURPOSE_C4, GENERAL_PURPOSE_E2,GENERAL_PURPOSE_N2, GENERAL_PURPOSE_N2D,GENERAL_PURPOSE_N4, GENERAL_PURPOSE_T2D,GRAPHICS_OPTIMIZED, GRAPHICS_OPTIMIZED_G4,GRAPHICS_OPTIMIZED_G4_VGPU,MEMORY_OPTIMIZED, MEMORY_OPTIMIZED_M3,MEMORY_OPTIMIZED_X4, STORAGE_OPTIMIZED_Z3,STORAGE_OPTIMIZED_Z4DS, STORAGE_OPTIMIZED_Z4DH,STORAGE_OPTIMIZED_Z4D4T. For
   /// example, type MEMORY_OPTIMIZED specifies a commitment that
   /// applies only to eligible resources of memory optimized M1 and M2 machine
   /// series. Type GENERAL_PURPOSE specifies a commitment that
@@ -81415,7 +83074,7 @@ final class Commitment_Status extends ProtoEnum {
 /// resource types.
 ///
 ///  The type must be one of the following:ACCELERATOR_OPTIMIZED, ACCELERATOR_OPTIMIZED_A3,ACCELERATOR_OPTIMIZED_A3_MEGA,COMPUTE_OPTIMIZED, COMPUTE_OPTIMIZED_C2D,
-///  COMPUTE_OPTIMIZED_C3, COMPUTE_OPTIMIZED_C3D,COMPUTE_OPTIMIZED_H3, GENERAL_PURPOSE,GENERAL_PURPOSE_C4, GENERAL_PURPOSE_E2,GENERAL_PURPOSE_N2, GENERAL_PURPOSE_N2D,GENERAL_PURPOSE_N4, GENERAL_PURPOSE_T2D,GRAPHICS_OPTIMIZED, GRAPHICS_OPTIMIZED_G4,GRAPHICS_OPTIMIZED_G4_VGPU,MEMORY_OPTIMIZED, MEMORY_OPTIMIZED_M3,MEMORY_OPTIMIZED_X4, STORAGE_OPTIMIZED_Z3. For
+///  COMPUTE_OPTIMIZED_C3, COMPUTE_OPTIMIZED_C3D,COMPUTE_OPTIMIZED_H3, GENERAL_PURPOSE,GENERAL_PURPOSE_C4, GENERAL_PURPOSE_E2,GENERAL_PURPOSE_N2, GENERAL_PURPOSE_N2D,GENERAL_PURPOSE_N4, GENERAL_PURPOSE_T2D,GRAPHICS_OPTIMIZED, GRAPHICS_OPTIMIZED_G4,GRAPHICS_OPTIMIZED_G4_VGPU,MEMORY_OPTIMIZED, MEMORY_OPTIMIZED_M3,MEMORY_OPTIMIZED_X4, STORAGE_OPTIMIZED_Z3,STORAGE_OPTIMIZED_Z4DS, STORAGE_OPTIMIZED_Z4DH,STORAGE_OPTIMIZED_Z4D4T. For
 /// example, type MEMORY_OPTIMIZED specifies a commitment that
 /// applies only to eligible resources of memory optimized M1 and M2 machine
 /// series. Type GENERAL_PURPOSE specifies a commitment that
@@ -81539,7 +83198,27 @@ final class Commitment_Type extends ProtoEnum {
   /// CUD bucket for C4N (dual Diorite) machines.
   static const networkOptimizedC4N = Commitment_Type('NETWORK_OPTIMIZED_C4N');
 
+  /// CUD bucket for NETWORK_OPTIMIZED_U4C machines.
+  static const networkOptimizedU4C = Commitment_Type('NETWORK_OPTIMIZED_U4C');
+
+  /// CUD bucket for NETWORK_OPTIMIZED_U4P machines.
+  static const networkOptimizedU4P = Commitment_Type('NETWORK_OPTIMIZED_U4P');
+
+  /// CUD bucket for NETWORK_OPTIMIZED_U4S machines.
+  static const networkOptimizedU4S = Commitment_Type('NETWORK_OPTIMIZED_U4S');
+
   static const storageOptimizedZ3 = Commitment_Type('STORAGE_OPTIMIZED_Z3');
+
+  /// CUD bucket for Z4D-4T machines.
+  static const storageOptimizedZ4D4T = Commitment_Type(
+    'STORAGE_OPTIMIZED_Z4D4T',
+  );
+
+  /// CUD bucket for Z4DH machines.
+  static const storageOptimizedZ4Dh = Commitment_Type('STORAGE_OPTIMIZED_Z4DH');
+
+  /// CUD bucket for Z4DS machines.
+  static const storageOptimizedZ4Ds = Commitment_Type('STORAGE_OPTIMIZED_Z4DS');
 
   /// Note for internal users: When adding a new enum Type for v1, make sure
   /// to also add it in the comment for the `optional Type type` definition.
@@ -82519,6 +84198,11 @@ final class ConfidentialInstanceConfig_ConfidentialInstanceType
       ConfidentialInstanceConfig_ConfidentialInstanceType(
         'UNDEFINED_CONFIDENTIAL_INSTANCE_TYPE',
       );
+
+  /// Bare Metal Secure AI.
+  static const bmsai = ConfidentialInstanceConfig_ConfidentialInstanceType(
+    'BMSAI',
+  );
 
   /// Arm Confidential Compute Architecture.
   static const cca = ConfidentialInstanceConfig_ConfidentialInstanceType('CCA');
@@ -98834,6 +100518,8 @@ final class ForwardingRule extends ProtoMessage {
   ///
   ///
   ///
+  /// The IP address can only be set at creation. Once set, it cannot be updated.
+  ///
   /// The forwarding rule's target or backendService,
   /// and in most cases, also the loadBalancingScheme, determine the
   /// type of IP address that you can use. For detailed information, see
@@ -98842,6 +100528,10 @@ final class ForwardingRule extends ProtoMessage {
   ///
   /// When reading an IPAddress, the API always returns the IP
   /// address number.
+  ///
+  /// When creating a global external Passthrough Network Load Balancer
+  /// forwarding rule (a parent forwarding rule), you must use theIPAddresses field, but the Google Cloud generated child
+  /// forwarding rules set the IPAddress field instead. Refer to theavailabilityGroup field for further details.
   final String? iPAddress;
 
   /// The IP protocol to which this rule applies.
@@ -98889,8 +100579,18 @@ final class ForwardingRule extends ProtoMessage {
   final List<ForwardingRuleAttachedExtension> attachedExtensions;
 
   /// Identifies the backend service to which the forwarding rule sends traffic.
-  /// Required for internal and external passthrough Network Load Balancers;
-  /// must be omitted for all other load balancer types.
+  ///
+  /// It is a required field for the following load balancers:
+  ///
+  ///    - Internal passthrough Network Load Balancers
+  ///    - Backend service-based regional external passthrough Network Load
+  ///    Balancers
+  ///    - Global external passthrough Network Load Balancers
+  ///
+  ///
+  ///
+  /// It cannot be set by other load balancer types and protocol forwarding
+  /// rules.
   final String? backendService;
 
   /// Output only. [Output Only] The URL for the corresponding base forwarding rule. By base
@@ -98995,8 +100695,8 @@ final class ForwardingRule extends ProtoMessage {
 
   /// Specifies the forwarding rule type.
   ///
-  /// For more information about forwarding rules, refer to
-  /// Forwarding rule concepts.
+  /// For more information, refer to
+  /// Forwarding rule product and scheme table.
   /// Check the LoadBalancingScheme enum for the list of possible values.
   final String? loadBalancingScheme;
 
@@ -99033,6 +100733,13 @@ final class ForwardingRule extends ProtoMessage {
   /// For Private Service Connect forwarding rules that forward traffic to Google
   /// APIs, the forwarding rule name must be a 1-20 characters string with
   /// lowercase letters and numbers and must start with a letter.
+  ///
+  /// For global external Passthrough Network Load Balancer forwarding rules, the
+  /// forwarding rule name must be 1-43 characters long. For each global external
+  /// Passthrough Network Load Balancer forwarding rule (a parent forwarding
+  /// rule) that you create, Google Cloud generates two output-only child
+  /// forwarding rules that are named by concatenating the parent forwarding rule
+  /// name with the `-ag0` and `-ag1` suffixes, respectively. Refer to theavailabilityGroup field for further details.
   final String? name;
 
   /// This field is not used for global external load balancing.
@@ -99083,7 +100790,8 @@ final class ForwardingRule extends ProtoMessage {
   ///
   ///
   /// For external forwarding rules, two or more forwarding rules cannot use the
-  /// same [IPAddress, IPProtocol] pair, and cannot have overlappingportRanges.
+  /// same [IPAddress, IPProtocol] pair (specified inIPAddress, IPAddresses, IPProtocol
+  /// fields) if they have overlapping portRanges.
   ///
   /// For internal forwarding rules within the same VPC network, two or more
   /// forwarding rules cannot use the same [IPAddress, IPProtocol]
@@ -99110,8 +100818,8 @@ final class ForwardingRule extends ProtoMessage {
   ///
   ///
   /// For external forwarding rules, two or more forwarding rules cannot use the
-  /// same [IPAddress, IPProtocol] pair if they share at least one
-  /// port number.
+  /// same [IPAddress, IPProtocol] pair (specified inIPAddress, IPAddresses, IPProtocol
+  /// fields) if they share at least one port number.
   ///
   /// For internal forwarding rules within the same VPC network, two or more
   /// forwarding rules cannot use the same [IPAddress, IPProtocol]
@@ -99198,6 +100906,15 @@ final class ForwardingRule extends ProtoMessage {
   ///
   ///
   ///      -  For Private Service Connect forwarding rules that forward traffic to managed services, the target must be a service attachment. The target is not mutable once set as a service attachment.
+  ///
+  ///
+  ///
+  /// The following load balancers cannot set the target field (they should set the backendService field instead):
+  ///
+  ///    - Internal passthrough Network Load Balancers
+  ///    - Backend service-based regional external passthrough Network Load
+  ///    Balancers
+  ///    - Global external passthrough Network Load Balancers
   final String? target;
 
   ForwardingRule({
@@ -99649,8 +101366,8 @@ final class ForwardingRule_IpVersion extends ProtoEnum {
 
 /// Specifies the forwarding rule type.
 ///
-/// For more information about forwarding rules, refer to
-/// Forwarding rule concepts.
+/// For more information, refer to
+/// Forwarding rule product and scheme table.
 final class ForwardingRule_LoadBalancingScheme extends ProtoEnum {
   /// A value indicating that the enum field is not set.
   static const undefinedLoadBalancingScheme =
@@ -100223,6 +101940,18 @@ final class FutureReservation extends ProtoMessage {
   /// reservation_name or a name_prefix.
   final String? reservationName;
 
+  /// Output only. Contains standard resource metadata for an FutureReservation
+  /// resource. It is populated for each instance of the FutureReservation
+  /// resource, and includes the api_version the
+  /// instance was retrieved through, and its canonical
+  /// resource_type name.
+  final ResourceMetadata? resourceMetadata;
+
+  /// Name of the resource intended to be delivered. Name should conform to
+  /// RFC1035. This will be the name of storage pool or Exapool for persistent
+  /// disk FRs.
+  final String? resourceName;
+
   /// Maintenance information for this reservation
   /// Check the SchedulingType enum for the list of possible values.
   final String? schedulingType;
@@ -100247,6 +101976,9 @@ final class FutureReservation extends ProtoMessage {
 
   /// Output only. [Output only] Status of the Future Reservation
   final FutureReservationStatus? status;
+
+  /// Storage pool details for the future reservation.
+  final FutureReservationStoragePoolProperties? storagePoolProperties;
 
   /// Time window for this Future Reservation.
   final FutureReservationTimeWindow? timeWindow;
@@ -100273,6 +102005,8 @@ final class FutureReservation extends ProtoMessage {
     this.planningStatus,
     this.reservationMode,
     this.reservationName,
+    this.resourceMetadata,
+    this.resourceName,
     this.schedulingType,
     this.selfLink,
     this.selfLinkWithId,
@@ -100280,6 +102014,7 @@ final class FutureReservation extends ProtoMessage {
     this.specificReservationRequired,
     this.specificSkuProperties,
     this.status,
+    this.storagePoolProperties,
     this.timeWindow,
     this.zone,
   }) : super(fullyQualifiedName);
@@ -100362,6 +102097,14 @@ final class FutureReservation extends ProtoMessage {
         null => null,
         Object $1 => decodeString($1),
       },
+      resourceMetadata: switch (json['resourceMetadata']) {
+        null => null,
+        Object $1 => ResourceMetadata.fromJson($1),
+      },
+      resourceName: switch (json['resourceName']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
       schedulingType: switch (json['schedulingType']) {
         null => null,
         Object $1 => decodeString($1),
@@ -100390,6 +102133,10 @@ final class FutureReservation extends ProtoMessage {
       status: switch (json['status']) {
         null => null,
         Object $1 => FutureReservationStatus.fromJson($1),
+      },
+      storagePoolProperties: switch (json['storagePoolProperties']) {
+        null => null,
+        Object $1 => FutureReservationStoragePoolProperties.fromJson($1),
       },
       timeWindow: switch (json['timeWindow']) {
         null => null,
@@ -100423,6 +102170,8 @@ final class FutureReservation extends ProtoMessage {
     'planningStatus': ?planningStatus,
     'reservationMode': ?reservationMode,
     'reservationName': ?reservationName,
+    'resourceMetadata': ?resourceMetadata?.toJson(),
+    'resourceName': ?resourceName,
     'schedulingType': ?schedulingType,
     'selfLink': ?selfLink,
     'selfLinkWithId': ?selfLinkWithId,
@@ -100430,6 +102179,7 @@ final class FutureReservation extends ProtoMessage {
     'specificReservationRequired': ?specificReservationRequired,
     'specificSkuProperties': ?specificSkuProperties?.toJson(),
     'status': ?status?.toJson(),
+    'storagePoolProperties': ?storagePoolProperties?.toJson(),
     'timeWindow': ?timeWindow?.toJson(),
     'zone': ?zone,
   };
@@ -100455,6 +102205,7 @@ final class FutureReservation extends ProtoMessage {
       if (planningStatus != null) 'planningStatus=$planningStatus',
       if (reservationMode != null) 'reservationMode=$reservationMode',
       if (reservationName != null) 'reservationName=$reservationName',
+      if (resourceName != null) 'resourceName=$resourceName',
       if (schedulingType != null) 'schedulingType=$schedulingType',
       if (selfLink != null) 'selfLink=$selfLink',
       if (selfLinkWithId != null) 'selfLinkWithId=$selfLinkWithId',
@@ -100471,6 +102222,12 @@ final class FutureReservation_ConfidentialComputeType extends ProtoEnum {
   static const undefinedConfidentialComputeType =
       FutureReservation_ConfidentialComputeType(
         'UNDEFINED_CONFIDENTIAL_COMPUTE_TYPE',
+      );
+
+  /// Bare Metal Secure AI.
+  static const confidentialComputeTypeBmsai =
+      FutureReservation_ConfidentialComputeType(
+        'CONFIDENTIAL_COMPUTE_TYPE_BMSAI',
       );
 
   /// Intel Trust Domain Extensions.
@@ -100879,6 +102636,9 @@ final class FutureReservationStatus extends ProtoMessage {
   /// start_time.
   final List<String> autoCreatedReservations;
 
+  /// Output only. Exapool provisioned capacities for each SKU type.
+  final StoragePoolExapoolProvisionedCapacityGb? exapoolProvisionedCapacityGb;
+
   /// Output only. [Output Only] Represents the existing matching usage for the future
   /// reservation.
   final FutureReservationStatusExistingMatchingUsageInfo?
@@ -100909,15 +102669,21 @@ final class FutureReservationStatus extends ProtoMessage {
 
   final FutureReservationStatusSpecificSkuproperties? specificSkuProperties;
 
+  /// Output only. Storage pool provisioned capacities for each SKU type.
+  final FutureReservationStoragePoolProvisionedCapacity?
+  storagePoolProvisionedCapacity;
+
   FutureReservationStatus({
     this.amendmentStatus,
     this.autoCreatedReservations = const [],
+    this.exapoolProvisionedCapacityGb,
     this.existingMatchingUsageInfo,
     this.fulfilledCount,
     this.lastKnownGoodState,
     this.lockTime,
     this.procurementStatus,
     this.specificSkuProperties,
+    this.storagePoolProvisionedCapacity,
   }) : super(fullyQualifiedName);
 
   factory FutureReservationStatus.fromJson(Object? j) {
@@ -100934,6 +102700,11 @@ final class FutureReservationStatus extends ProtoMessage {
           '"autoCreatedReservations" is not a list',
         ),
       },
+      exapoolProvisionedCapacityGb:
+          switch (json['exapoolProvisionedCapacityGb']) {
+            null => null,
+            Object $1 => StoragePoolExapoolProvisionedCapacityGb.fromJson($1),
+          },
       existingMatchingUsageInfo: switch (json['existingMatchingUsageInfo']) {
         null => null,
         Object $1 => FutureReservationStatusExistingMatchingUsageInfo.fromJson(
@@ -100960,6 +102731,12 @@ final class FutureReservationStatus extends ProtoMessage {
         null => null,
         Object $1 => FutureReservationStatusSpecificSkuproperties.fromJson($1),
       },
+      storagePoolProvisionedCapacity:
+          switch (json['storagePoolProvisionedCapacity']) {
+            null => null,
+            Object $1 =>
+              FutureReservationStoragePoolProvisionedCapacity.fromJson($1),
+          },
     );
   }
 
@@ -100968,12 +102745,14 @@ final class FutureReservationStatus extends ProtoMessage {
     'amendmentStatus': ?amendmentStatus,
     if (autoCreatedReservations.isNotDefault)
       'autoCreatedReservations': autoCreatedReservations,
+    'exapoolProvisionedCapacityGb': ?exapoolProvisionedCapacityGb?.toJson(),
     'existingMatchingUsageInfo': ?existingMatchingUsageInfo?.toJson(),
     'fulfilledCount': ?fulfilledCount?.toString(),
     'lastKnownGoodState': ?lastKnownGoodState?.toJson(),
     'lockTime': ?lockTime,
     'procurementStatus': ?procurementStatus,
     'specificSkuProperties': ?specificSkuProperties?.toJson(),
+    'storagePoolProvisionedCapacity': ?storagePoolProvisionedCapacity?.toJson(),
   };
 
   @override
@@ -101437,6 +103216,129 @@ final class FutureReservationStatusSpecificSkuproperties extends ProtoMessage {
         'sourceInstanceTemplateId=$sourceInstanceTemplateId',
     ].join(',');
     return 'FutureReservationStatusSpecificSKUProperties(${$contents})';
+  }
+}
+
+/// Storage pool properties for the future reservation.
+final class FutureReservationStoragePoolProperties extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.compute.v1.FutureReservationStoragePoolProperties';
+
+  /// Requested exapool provisioned capacity in GiB.
+  final StoragePoolExapoolProvisionedCapacityGb?
+  requestedExapoolProvisionedCapacityGb;
+
+  /// Requested storage pool provisioned capacity.
+  final FutureReservationStoragePoolProvisionedCapacity?
+  requestedStoragePoolProvisionedCapacity;
+
+  /// Type of the storage pool.
+  final String? storagePoolType;
+
+  FutureReservationStoragePoolProperties({
+    this.requestedExapoolProvisionedCapacityGb,
+    this.requestedStoragePoolProvisionedCapacity,
+    this.storagePoolType,
+  }) : super(fullyQualifiedName);
+
+  factory FutureReservationStoragePoolProperties.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return FutureReservationStoragePoolProperties(
+      requestedExapoolProvisionedCapacityGb:
+          switch (json['requestedExapoolProvisionedCapacityGb']) {
+            null => null,
+            Object $1 => StoragePoolExapoolProvisionedCapacityGb.fromJson($1),
+          },
+      requestedStoragePoolProvisionedCapacity:
+          switch (json['requestedStoragePoolProvisionedCapacity']) {
+            null => null,
+            Object $1 =>
+              FutureReservationStoragePoolProvisionedCapacity.fromJson($1),
+          },
+      storagePoolType: switch (json['storagePoolType']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'requestedExapoolProvisionedCapacityGb':
+        ?requestedExapoolProvisionedCapacityGb?.toJson(),
+    'requestedStoragePoolProvisionedCapacity':
+        ?requestedStoragePoolProvisionedCapacity?.toJson(),
+    'storagePoolType': ?storagePoolType,
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      if (storagePoolType != null) 'storagePoolType=$storagePoolType',
+    ].join(',');
+    return 'FutureReservationStoragePoolProperties(${$contents})';
+  }
+}
+
+/// Storage pool provisioned capacities for each SKU type.
+final class FutureReservationStoragePoolProvisionedCapacity
+    extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.compute.v1.FutureReservationStoragePoolProvisionedCapacity';
+
+  /// Size of the storage pool in GiB.
+  final int? poolProvisionedCapacityGb;
+
+  /// Provisioned IOPS of the storage pool. Only relevant if the storage pool
+  /// type is hyperdisk-balanced.
+  final int? poolProvisionedIops;
+
+  /// Provisioned throughput of the storage pool in MiB/s. Only relevant if
+  /// the storage pool type is hyperdisk-balanced or hyperdisk-throughput.
+  final int? poolProvisionedThroughput;
+
+  FutureReservationStoragePoolProvisionedCapacity({
+    this.poolProvisionedCapacityGb,
+    this.poolProvisionedIops,
+    this.poolProvisionedThroughput,
+  }) : super(fullyQualifiedName);
+
+  factory FutureReservationStoragePoolProvisionedCapacity.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return FutureReservationStoragePoolProvisionedCapacity(
+      poolProvisionedCapacityGb: switch (json['poolProvisionedCapacityGb']) {
+        null => null,
+        Object $1 => decodeInt64($1),
+      },
+      poolProvisionedIops: switch (json['poolProvisionedIops']) {
+        null => null,
+        Object $1 => decodeInt64($1),
+      },
+      poolProvisionedThroughput: switch (json['poolProvisionedThroughput']) {
+        null => null,
+        Object $1 => decodeInt64($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'poolProvisionedCapacityGb': ?poolProvisionedCapacityGb?.toString(),
+    'poolProvisionedIops': ?poolProvisionedIops?.toString(),
+    'poolProvisionedThroughput': ?poolProvisionedThroughput?.toString(),
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      if (poolProvisionedCapacityGb != null)
+        'poolProvisionedCapacityGb=$poolProvisionedCapacityGb',
+      if (poolProvisionedIops != null)
+        'poolProvisionedIops=$poolProvisionedIops',
+      if (poolProvisionedThroughput != null)
+        'poolProvisionedThroughput=$poolProvisionedThroughput',
+    ].join(',');
+    return 'FutureReservationStoragePoolProvisionedCapacity(${$contents})';
   }
 }
 
@@ -104522,6 +106424,311 @@ final class GetHealthCheckRequest extends ProtoMessage {
   }
 }
 
+/// Metadata for GetHealth operations.
+final class GetHealthOperationMetadata extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.compute.v1.GetHealthOperationMetadata';
+
+  /// Output only. The health information.
+  final GetHealthOperationMetadataHealthInfo? healthInfo;
+
+  GetHealthOperationMetadata({this.healthInfo}) : super(fullyQualifiedName);
+
+  factory GetHealthOperationMetadata.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GetHealthOperationMetadata(
+      healthInfo: switch (json['healthInfo']) {
+        null => null,
+        Object $1 => GetHealthOperationMetadataHealthInfo.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {'healthInfo': ?healthInfo?.toJson()};
+
+  @override
+  String toString() => 'GetHealthOperationMetadata()';
+}
+
+/// Health information.
+final class GetHealthOperationMetadataHealthInfo extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.compute.v1.GetHealthOperationMetadataHealthInfo';
+
+  /// Output only. The availability SLO status.
+  /// Check the AvailabilitySloStatus enum for the list of possible values.
+  final String? availabilitySloStatus;
+
+  /// Output only. The health status.
+  /// Check the HealthStatus enum for the list of possible values.
+  final String? healthStatus;
+
+  /// Output only. The repair category.
+  /// Check the RepairCategory enum for the list of possible values.
+  final String? repairCategory;
+
+  /// Output only. The reason for unhealthy status.
+  /// Check the UnhealthyReason enum for the list of possible values.
+  final String? unhealthyReason;
+
+  /// Output only. The time when health info was updated.
+  final String? updateTime;
+
+  GetHealthOperationMetadataHealthInfo({
+    this.availabilitySloStatus,
+    this.healthStatus,
+    this.repairCategory,
+    this.unhealthyReason,
+    this.updateTime,
+  }) : super(fullyQualifiedName);
+
+  factory GetHealthOperationMetadataHealthInfo.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GetHealthOperationMetadataHealthInfo(
+      availabilitySloStatus: switch (json['availabilitySloStatus']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      healthStatus: switch (json['healthStatus']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      repairCategory: switch (json['repairCategory']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      unhealthyReason: switch (json['unhealthyReason']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      updateTime: switch (json['updateTime']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'availabilitySloStatus': ?availabilitySloStatus,
+    'healthStatus': ?healthStatus,
+    'repairCategory': ?repairCategory,
+    'unhealthyReason': ?unhealthyReason,
+    'updateTime': ?updateTime,
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      if (availabilitySloStatus != null)
+        'availabilitySloStatus=$availabilitySloStatus',
+      if (healthStatus != null) 'healthStatus=$healthStatus',
+      if (repairCategory != null) 'repairCategory=$repairCategory',
+      if (unhealthyReason != null) 'unhealthyReason=$unhealthyReason',
+      if (updateTime != null) 'updateTime=$updateTime',
+    ].join(',');
+    return 'GetHealthOperationMetadataHealthInfo(${$contents})';
+  }
+}
+
+/// Output only. The availability SLO status.
+final class GetHealthOperationMetadataHealthInfo_AvailabilitySloStatus
+    extends ProtoEnum {
+  /// A value indicating that the enum field is not set.
+  static const undefinedAvailabilitySloStatus =
+      GetHealthOperationMetadataHealthInfo_AvailabilitySloStatus(
+        'UNDEFINED_AVAILABILITY_SLO_STATUS',
+      );
+
+  /// The slot availability is in SLO.
+  static const availabilitySloStatusInSlo =
+      GetHealthOperationMetadataHealthInfo_AvailabilitySloStatus(
+        'AVAILABILITY_SLO_STATUS_IN_SLO',
+      );
+
+  /// The slot availability is out of SLO.
+  static const availabilitySloStatusOutOfSlo =
+      GetHealthOperationMetadataHealthInfo_AvailabilitySloStatus(
+        'AVAILABILITY_SLO_STATUS_OUT_OF_SLO',
+      );
+
+  /// The slot availability is unknown.
+  static const availabilitySloStatusSloUnknown =
+      GetHealthOperationMetadataHealthInfo_AvailabilitySloStatus(
+        'AVAILABILITY_SLO_STATUS_SLO_UNKNOWN',
+      );
+
+  /// Unspecified availability SLO status.
+  static const availabilitySloStatusUnspecified =
+      GetHealthOperationMetadataHealthInfo_AvailabilitySloStatus(
+        'AVAILABILITY_SLO_STATUS_UNSPECIFIED',
+      );
+
+  /// The default value for [GetHealthOperationMetadataHealthInfo_AvailabilitySloStatus].
+  static const $default = undefinedAvailabilitySloStatus;
+
+  const GetHealthOperationMetadataHealthInfo_AvailabilitySloStatus(super.value);
+
+  factory GetHealthOperationMetadataHealthInfo_AvailabilitySloStatus.fromJson(
+    Object? json,
+  ) => GetHealthOperationMetadataHealthInfo_AvailabilitySloStatus(
+    json as String,
+  );
+
+  bool get isNotDefault => this != $default;
+
+  @override
+  String toString() => 'AvailabilitySloStatus.$value';
+}
+
+/// Output only. The health status.
+final class GetHealthOperationMetadataHealthInfo_HealthStatus
+    extends ProtoEnum {
+  /// A value indicating that the enum field is not set.
+  static const undefinedHealthStatus =
+      GetHealthOperationMetadataHealthInfo_HealthStatus(
+        'UNDEFINED_HEALTH_STATUS',
+      );
+
+  /// The reservation slot is healthy.
+  static const healthStatusHealthy =
+      GetHealthOperationMetadataHealthInfo_HealthStatus(
+        'HEALTH_STATUS_HEALTHY',
+      );
+
+  /// The reservation slot is unhealthy.
+  static const healthStatusUnhealthy =
+      GetHealthOperationMetadataHealthInfo_HealthStatus(
+        'HEALTH_STATUS_UNHEALTHY',
+      );
+
+  /// Unspecified health status.
+  static const healthStatusUnspecified =
+      GetHealthOperationMetadataHealthInfo_HealthStatus(
+        'HEALTH_STATUS_UNSPECIFIED',
+      );
+
+  /// The default value for [GetHealthOperationMetadataHealthInfo_HealthStatus].
+  static const $default = undefinedHealthStatus;
+
+  const GetHealthOperationMetadataHealthInfo_HealthStatus(super.value);
+
+  factory GetHealthOperationMetadataHealthInfo_HealthStatus.fromJson(
+    Object? json,
+  ) => GetHealthOperationMetadataHealthInfo_HealthStatus(json as String);
+
+  bool get isNotDefault => this != $default;
+
+  @override
+  String toString() => 'HealthStatus.$value';
+}
+
+/// Output only. The repair category.
+final class GetHealthOperationMetadataHealthInfo_RepairCategory
+    extends ProtoEnum {
+  /// A value indicating that the enum field is not set.
+  static const undefinedRepairCategory =
+      GetHealthOperationMetadataHealthInfo_RepairCategory(
+        'UNDEFINED_REPAIR_CATEGORY',
+      );
+
+  /// The repair is because of critical failures, that are scoped outside
+  /// emergent maintenance
+  static const repairCategoryCriticalFailure =
+      GetHealthOperationMetadataHealthInfo_RepairCategory(
+        'REPAIR_CATEGORY_CRITICAL_FAILURE',
+      );
+
+  /// The repair is because of an emergent maintenance
+  static const repairCategoryEmergentMaintenance =
+      GetHealthOperationMetadataHealthInfo_RepairCategory(
+        'REPAIR_CATEGORY_EMERGENT_MAINTENANCE',
+      );
+
+  /// The repair is because of a planned maintenance
+  static const repairCategoryPlannedMaintenance =
+      GetHealthOperationMetadataHealthInfo_RepairCategory(
+        'REPAIR_CATEGORY_PLANNED_MAINTENANCE',
+      );
+
+  /// Unspecified repair category.
+  static const repairCategoryUnspecified =
+      GetHealthOperationMetadataHealthInfo_RepairCategory(
+        'REPAIR_CATEGORY_UNSPECIFIED',
+      );
+
+  /// The repair is because of a user reported fault
+  static const repairCategoryUserReportedFault =
+      GetHealthOperationMetadataHealthInfo_RepairCategory(
+        'REPAIR_CATEGORY_USER_REPORTED_FAULT',
+      );
+
+  /// The default value for [GetHealthOperationMetadataHealthInfo_RepairCategory].
+  static const $default = undefinedRepairCategory;
+
+  const GetHealthOperationMetadataHealthInfo_RepairCategory(super.value);
+
+  factory GetHealthOperationMetadataHealthInfo_RepairCategory.fromJson(
+    Object? json,
+  ) => GetHealthOperationMetadataHealthInfo_RepairCategory(json as String);
+
+  bool get isNotDefault => this != $default;
+
+  @override
+  String toString() => 'RepairCategory.$value';
+}
+
+/// Output only. The reason for unhealthy status.
+final class GetHealthOperationMetadataHealthInfo_UnhealthyReason
+    extends ProtoEnum {
+  /// A value indicating that the enum field is not set.
+  static const undefinedUnhealthyReason =
+      GetHealthOperationMetadataHealthInfo_UnhealthyReason(
+        'UNDEFINED_UNHEALTHY_REASON',
+      );
+
+  /// The slot is unhealthy because there is a pending repair, waiting for
+  /// customer approval
+  static const unhealthyReasonPendingUserApproval =
+      GetHealthOperationMetadataHealthInfo_UnhealthyReason(
+        'UNHEALTHY_REASON_PENDING_USER_APPROVAL',
+      );
+
+  /// The slot is unhealthy because repair is in progress
+  static const unhealthyReasonRepairing =
+      GetHealthOperationMetadataHealthInfo_UnhealthyReason(
+        'UNHEALTHY_REASON_REPAIRING',
+      );
+
+  /// The slot is unhealthy because a vm cannot be scheduled on it, and no
+  /// repairs are running on the slot
+  static const unhealthyReasonUnschedulable =
+      GetHealthOperationMetadataHealthInfo_UnhealthyReason(
+        'UNHEALTHY_REASON_UNSCHEDULABLE',
+      );
+
+  /// Unspecified unhealthy reason.
+  static const unhealthyReasonUnspecified =
+      GetHealthOperationMetadataHealthInfo_UnhealthyReason(
+        'UNHEALTHY_REASON_UNSPECIFIED',
+      );
+
+  /// The default value for [GetHealthOperationMetadataHealthInfo_UnhealthyReason].
+  static const $default = undefinedUnhealthyReason;
+
+  const GetHealthOperationMetadataHealthInfo_UnhealthyReason(super.value);
+
+  factory GetHealthOperationMetadataHealthInfo_UnhealthyReason.fromJson(
+    Object? json,
+  ) => GetHealthOperationMetadataHealthInfo_UnhealthyReason(json as String);
+
+  bool get isNotDefault => this != $default;
+
+  @override
+  String toString() => 'UnhealthyReason.$value';
+}
+
 /// A request message for RegionBackendServices.GetHealth. See the method description for details.
 final class GetHealthRegionBackendServiceRequest extends ProtoMessage {
   static const String fullyQualifiedName =
@@ -104696,6 +106903,85 @@ final class GetHealthRegionHealthSourceRequest extends ProtoMessage {
       'region=$region',
     ].join(',');
     return 'GetHealthRegionHealthSourceRequest(${$contents})';
+  }
+}
+
+/// A request message for ReservationSlots.GetHealth. See the method description for details.
+final class GetHealthReservationSlotRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.compute.v1.GetHealthReservationSlotRequest';
+
+  /// The name of the parent reservation, parent block and parent sub-block. In
+  /// the format of
+  /// reservations/{reservation_name}/reservationBlocks/{reservation_block_name}/reservationSubBlocks/{reservation_sub_block_name}
+  final String parentName;
+
+  /// Project ID for this request.
+  final String project;
+
+  /// An optional request ID to identify requests.
+  final String? requestId;
+
+  /// The name of the reservation slot.
+  /// Name should conform to RFC1035 or be a resource ID.
+  final String reservationSlot;
+
+  /// Name of the zone for this request. Zone name should conform to RFC1035.
+  final String zone;
+
+  GetHealthReservationSlotRequest({
+    required this.parentName,
+    required this.project,
+    this.requestId,
+    required this.reservationSlot,
+    required this.zone,
+  }) : super(fullyQualifiedName);
+
+  factory GetHealthReservationSlotRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GetHealthReservationSlotRequest(
+      parentName: switch (json['parentName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      project: switch (json['project']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      requestId: switch (json['requestId']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      reservationSlot: switch (json['reservationSlot']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      zone: switch (json['zone']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'parentName': parentName,
+    'project': project,
+    'requestId': ?requestId,
+    'reservationSlot': reservationSlot,
+    'zone': zone,
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      'parentName=$parentName',
+      'project=$project',
+      if (requestId != null) 'requestId=$requestId',
+      'reservationSlot=$reservationSlot',
+      'zone=$zone',
+    ].join(',');
+    return 'GetHealthReservationSlotRequest(${$contents})';
   }
 }
 
@@ -109089,6 +111375,44 @@ final class GetProjectRequest extends ProtoMessage {
   String toString() {
     final $contents = ['project=$project'].join(',');
     return 'GetProjectRequest(${$contents})';
+  }
+}
+
+/// A request message for ProjectViews.Get. See the method description for details.
+final class GetProjectViewRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.compute.v1.GetProjectViewRequest';
+
+  /// Required. Project ID for this request. This is part of the URL path.
+  final String project;
+
+  /// Required. Name of the region for this request. This is part of the URL path.
+  final String region;
+
+  GetProjectViewRequest({required this.project, required this.region})
+    : super(fullyQualifiedName);
+
+  factory GetProjectViewRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GetProjectViewRequest(
+      project: switch (json['project']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      region: switch (json['region']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {'project': project, 'region': region};
+
+  @override
+  String toString() {
+    final $contents = ['project=$project', 'region=$region'].join(',');
+    return 'GetProjectViewRequest(${$contents})';
   }
 }
 
@@ -115580,6 +117904,7 @@ final class GuestOsFeature extends ProtoMessage {
   ///    - IDPF
   ///    - SNP_SVSM_CAPABLE
   ///    - CCA_CAPABLE
+  ///    - SUSPEND_SAFE_FPR
   ///
   ///
   /// For more information, see
@@ -115625,6 +117950,7 @@ final class GuestOsFeature extends ProtoMessage {
 ///    - IDPF
 ///    - SNP_SVSM_CAPABLE
 ///    - CCA_CAPABLE
+///    - SUSPEND_SAFE_FPR
 ///
 ///
 /// For more information, see
@@ -115636,6 +117962,10 @@ final class GuestOsFeature_Type extends ProtoEnum {
   static const bareMetalLinuxCompatible = GuestOsFeature_Type(
     'BARE_METAL_LINUX_COMPATIBLE',
   );
+
+  /// Indicates the guest OS is capable of Bare Metal Secure AI (BMSAI)
+  /// confidential computing.
+  static const bmsaiCapable = GuestOsFeature_Type('BMSAI_CAPABLE');
 
   static const ccaCapable = GuestOsFeature_Type('CCA_CAPABLE');
 
@@ -115662,6 +117992,10 @@ final class GuestOsFeature_Type extends ProtoEnum {
   static const sevSnpCapable = GuestOsFeature_Type('SEV_SNP_CAPABLE');
 
   static const snpSvsmCapable = GuestOsFeature_Type('SNP_SVSM_CAPABLE');
+
+  /// Indicates the guest OS is safe for free page reporting (FPR) during
+  /// suspend.
+  static const suspendSafeFpr = GuestOsFeature_Type('SUSPEND_SAFE_FPR');
 
   static const tdxCapable = GuestOsFeature_Type('TDX_CAPABLE');
 
@@ -118720,9 +121054,6 @@ final class HealthStatus extends ProtoMessage {
 }
 
 /// Health state of the IPv4 address of the instance.
-/// Additional supported values which may be not listed in the enum directly due to technical reasons:
-/// HEALTHY
-/// UNHEALTHY
 final class HealthStatus_HealthState extends ProtoEnum {
   /// A value indicating that the enum field is not set.
   static const undefinedHealthState = HealthStatus_HealthState(
@@ -118908,26 +121239,25 @@ final class HealthStatusForNetworkEndpoint extends ProtoMessage {
 
 /// Health state of the network endpoint determined based on the health checks
 /// configured.
-/// Additional supported values which may be not listed in the enum directly due to technical reasons:
-/// DRAINING
-/// HEALTHY
-/// UNHEALTHY
-/// UNKNOWN
 final class HealthStatusForNetworkEndpoint_HealthState extends ProtoEnum {
   /// A value indicating that the enum field is not set.
   static const undefinedHealthState =
       HealthStatusForNetworkEndpoint_HealthState('UNDEFINED_HEALTH_STATE');
 
+  /// Endpoint is being drained.
   static const draining = HealthStatusForNetworkEndpoint_HealthState(
     'DRAINING',
   );
 
+  /// Endpoint is healthy.
   static const healthy = HealthStatusForNetworkEndpoint_HealthState('HEALTHY');
 
+  /// Endpoint is unhealthy.
   static const unhealthy = HealthStatusForNetworkEndpoint_HealthState(
     'UNHEALTHY',
   );
 
+  /// Health status of the endpoint is unknown.
   static const unknown = HealthStatusForNetworkEndpoint_HealthState('UNKNOWN');
 
   /// The default value for [HealthStatusForNetworkEndpoint_HealthState].
@@ -128874,6 +131204,7 @@ final class Instance extends ProtoMessage {
   ///
   ///
   /// For example: zones/us-central1-f/machineTypes/custom-4-5120
+  ///
   /// For a full list of restrictions, read theSpecifications
   /// for custom machine types.
   final String? machineType;
@@ -129801,6 +132132,10 @@ final class InstanceFlexibilityPolicyInstanceSelection extends ProtoMessage {
   /// example `n2-standard-4` and not URLs or partial URLs.
   final List<String> machineTypes;
 
+  /// Name of the minimum CPU platform to be used by this instance selection.
+  /// e.g. 'Intel Ice Lake'.
+  final String? minCpuPlatform;
+
   /// Rank when prioritizing the shape flexibilities.
   /// The instance selections with rank are considered
   /// first, in the ascending order of the rank.
@@ -129810,6 +132145,7 @@ final class InstanceFlexibilityPolicyInstanceSelection extends ProtoMessage {
   InstanceFlexibilityPolicyInstanceSelection({
     this.disks = const [],
     this.machineTypes = const [],
+    this.minCpuPlatform,
     this.rank,
   }) : super(fullyQualifiedName);
 
@@ -129826,6 +132162,10 @@ final class InstanceFlexibilityPolicyInstanceSelection extends ProtoMessage {
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
         _ => throw const FormatException('"machineTypes" is not a list'),
       },
+      minCpuPlatform: switch (json['minCpuPlatform']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
       rank: switch (json['rank']) {
         null => null,
         Object $1 => decodeInt64($1),
@@ -129837,12 +132177,16 @@ final class InstanceFlexibilityPolicyInstanceSelection extends ProtoMessage {
   Object toJson() => {
     if (disks.isNotDefault) 'disks': [for (final i in disks) i.toJson()],
     if (machineTypes.isNotDefault) 'machineTypes': machineTypes,
+    'minCpuPlatform': ?minCpuPlatform,
     'rank': ?rank?.toString(),
   };
 
   @override
   String toString() {
-    final $contents = [if (rank != null) 'rank=$rank'].join(',');
+    final $contents = [
+      if (minCpuPlatform != null) 'minCpuPlatform=$minCpuPlatform',
+      if (rank != null) 'rank=$rank',
+    ].join(',');
     return 'InstanceFlexibilityPolicyInstanceSelection(${$contents})';
   }
 }
@@ -131278,9 +133622,6 @@ final class InstanceGroupManagerInstanceLifecyclePolicy extends ProtoMessage {
 ///    by recreating it. For more information, see About
 ///    repairing VMs in a MIG.
 ///    - DO_NOTHING: MIG does not repair a failed VM.
-/// Additional supported values which may be not listed in the enum directly due to technical reasons:
-/// DO_NOTHING
-/// REPAIR
 final class InstanceGroupManagerInstanceLifecyclePolicy_DefaultActionOnFailure
     extends ProtoEnum {
   /// A value indicating that the enum field is not set.
@@ -131289,11 +133630,15 @@ final class InstanceGroupManagerInstanceLifecyclePolicy_DefaultActionOnFailure
         'UNDEFINED_DEFAULT_ACTION_ON_FAILURE',
       );
 
+  /// MIG does not repair a failed VM.
   static const doNothing =
       InstanceGroupManagerInstanceLifecyclePolicy_DefaultActionOnFailure(
         'DO_NOTHING',
       );
 
+  /// (default): MIG automatically repairs a failed VM by recreating it.
+  /// For more information, see About
+  /// repairing VMs in a MIG.
   static const repair =
       InstanceGroupManagerInstanceLifecyclePolicy_DefaultActionOnFailure(
         'REPAIR',
@@ -135503,6 +137848,9 @@ final class InstancePropertiesPatch extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.compute.v1.InstancePropertiesPatch';
 
+  /// This optional flag exposes the hashed physical host ID.
+  final bool? exposeHostTopology;
+
   /// The label key-value pairs that you want to patch onto the instance.
   final Map<String, String> labels;
 
@@ -135511,12 +137859,19 @@ final class InstancePropertiesPatch extends ProtoMessage {
   /// instance metadata.
   final Map<String, String> metadata;
 
-  InstancePropertiesPatch({this.labels = const {}, this.metadata = const {}})
-    : super(fullyQualifiedName);
+  InstancePropertiesPatch({
+    this.exposeHostTopology,
+    this.labels = const {},
+    this.metadata = const {},
+  }) : super(fullyQualifiedName);
 
   factory InstancePropertiesPatch.fromJson(Object? j) {
     final json = j as Map<String, Object?>;
     return InstancePropertiesPatch(
+      exposeHostTopology: switch (json['exposeHostTopology']) {
+        null => null,
+        Object $1 => decodeBool($1),
+      },
       labels: switch (json['labels']) {
         null => {},
         Map<String, Object?> $1 => {
@@ -135538,12 +137893,18 @@ final class InstancePropertiesPatch extends ProtoMessage {
 
   @override
   Object toJson() => {
+    'exposeHostTopology': ?exposeHostTopology,
     if (labels.isNotDefault) 'labels': labels,
     if (metadata.isNotDefault) 'metadata': metadata,
   };
 
   @override
-  String toString() => 'InstancePropertiesPatch()';
+  String toString() {
+    final $contents = [
+      if (exposeHostTopology != null) 'exposeHostTopology=$exposeHostTopology',
+    ].join(',');
+    return 'InstancePropertiesPatch(${$contents})';
+  }
 }
 
 final class InstanceReference extends ProtoMessage {
@@ -138301,6 +140662,9 @@ final class Interconnect extends ProtoMessage {
   /// Output only. [Output Only] Server-defined URL for the resource.
   final String? selfLink;
 
+  /// Output only. Server-defined URL for this resource with the resource id.
+  final String? selfLinkWithId;
+
   /// Output only. [Output Only] The current state of Interconnect functionality, which can
   /// take one of the following values:
   ///
@@ -138358,6 +140722,7 @@ final class Interconnect extends ProtoMessage {
     this.requestedLinkCount,
     this.satisfiesPzs,
     this.selfLink,
+    this.selfLinkWithId,
     this.state,
     this.subzone,
     this.wireGroups = const [],
@@ -138519,6 +140884,10 @@ final class Interconnect extends ProtoMessage {
         null => null,
         Object $1 => decodeString($1),
       },
+      selfLinkWithId: switch (json['selfLinkWithId']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
       state: switch (json['state']) {
         null => null,
         Object $1 => decodeString($1),
@@ -138575,6 +140944,7 @@ final class Interconnect extends ProtoMessage {
     'requestedLinkCount': ?requestedLinkCount,
     'satisfiesPzs': ?satisfiesPzs,
     'selfLink': ?selfLink,
+    'selfLinkWithId': ?selfLinkWithId,
     'state': ?state,
     'subzone': ?subzone,
     if (wireGroups.isNotDefault) 'wireGroups': wireGroups,
@@ -138608,6 +140978,7 @@ final class Interconnect extends ProtoMessage {
       if (requestedLinkCount != null) 'requestedLinkCount=$requestedLinkCount',
       if (satisfiesPzs != null) 'satisfiesPzs=$satisfiesPzs',
       if (selfLink != null) 'selfLink=$selfLink',
+      if (selfLinkWithId != null) 'selfLinkWithId=$selfLinkWithId',
       if (state != null) 'state=$state',
       if (subzone != null) 'subzone=$subzone',
     ].join(',');
@@ -145145,8 +147516,19 @@ final class InterconnectLocationCrossSiteInterconnectInfo extends ProtoMessage {
   /// may match multiple InterconnectLocations.
   final String? city;
 
-  InterconnectLocationCrossSiteInterconnectInfo({this.city})
-    : super(fullyQualifiedName);
+  /// Output only. The maximum unmetered bandwidth for dynamic paths allowable per
+  /// WireGroup for this metro.
+  final int? maxDynamicPathBandwidthGbps;
+
+  /// Output only. The maximum unmetered bandwidth for fixed paths allowable per WireGroup
+  /// for this metro.
+  final int? maxFixedPathBandwidthGbps;
+
+  InterconnectLocationCrossSiteInterconnectInfo({
+    this.city,
+    this.maxDynamicPathBandwidthGbps,
+    this.maxFixedPathBandwidthGbps,
+  }) : super(fullyQualifiedName);
 
   factory InterconnectLocationCrossSiteInterconnectInfo.fromJson(Object? j) {
     final json = j as Map<String, Object?>;
@@ -145155,15 +147537,34 @@ final class InterconnectLocationCrossSiteInterconnectInfo extends ProtoMessage {
         null => null,
         Object $1 => decodeString($1),
       },
+      maxDynamicPathBandwidthGbps:
+          switch (json['maxDynamicPathBandwidthGbps']) {
+            null => null,
+            Object $1 => decodeInt64($1),
+          },
+      maxFixedPathBandwidthGbps: switch (json['maxFixedPathBandwidthGbps']) {
+        null => null,
+        Object $1 => decodeInt64($1),
+      },
     );
   }
 
   @override
-  Object toJson() => {'city': ?city};
+  Object toJson() => {
+    'city': ?city,
+    'maxDynamicPathBandwidthGbps': ?maxDynamicPathBandwidthGbps?.toString(),
+    'maxFixedPathBandwidthGbps': ?maxFixedPathBandwidthGbps?.toString(),
+  };
 
   @override
   String toString() {
-    final $contents = [if (city != null) 'city=$city'].join(',');
+    final $contents = [
+      if (city != null) 'city=$city',
+      if (maxDynamicPathBandwidthGbps != null)
+        'maxDynamicPathBandwidthGbps=$maxDynamicPathBandwidthGbps',
+      if (maxFixedPathBandwidthGbps != null)
+        'maxFixedPathBandwidthGbps=$maxFixedPathBandwidthGbps',
+    ].join(',');
     return 'InterconnectLocationCrossSiteInterconnectInfo(${$contents})';
   }
 }
@@ -146737,6 +149138,56 @@ final class InterconnectsGetMacsecConfigResponse extends ProtoMessage {
   String toString() {
     final $contents = [if (etag != null) 'etag=$etag'].join(',');
     return 'InterconnectsGetMacsecConfigResponse(${$contents})';
+  }
+}
+
+/// Represents a time interval, encoded as a Timestamp start (inclusive) and a
+/// Timestamp end (exclusive).
+///
+/// The start must be less than or equal to the end.
+/// When the start equals the end, the interval is empty (matches no time).
+/// When both start and end are unspecified, the interval matches any time.
+final class Interval extends ProtoMessage {
+  static const String fullyQualifiedName = 'google.cloud.compute.v1.Interval';
+
+  /// Optional. Exclusive end of the interval.
+  ///
+  /// If specified, a Timestamp matching this interval will have to be before the
+  /// end.
+  final String? endTime;
+
+  /// Optional. Inclusive start of the interval.
+  ///
+  /// If specified, a Timestamp matching this interval will have to be the same
+  /// or after the start.
+  final String? startTime;
+
+  Interval({this.endTime, this.startTime}) : super(fullyQualifiedName);
+
+  factory Interval.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Interval(
+      endTime: switch (json['endTime']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      startTime: switch (json['startTime']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {'endTime': ?endTime, 'startTime': ?startTime};
+
+  @override
+  String toString() {
+    final $contents = [
+      if (endTime != null) 'endTime=$endTime',
+      if (startTime != null) 'startTime=$startTime',
+    ].join(',');
+    return 'Interval(${$contents})';
   }
 }
 
@@ -174484,6 +176935,12 @@ final class ManagedInstance extends ProtoMessage {
   /// `PENDING_STOP` state or there is a programmed stop scheduled.
   final ManagedInstanceShutdownDetails? shutdownDetails;
 
+  /// Output only. The eventual status of the instance. The instance group
+  /// manager will not be identified as stable till each managed instance reaches
+  /// its targetStatus.
+  /// Check the TargetStatus enum for the list of possible values.
+  final String? targetStatus;
+
   /// Output only. [Output Only] Intended version of this instance.
   final ManagedInstanceVersion? version;
 
@@ -174500,6 +176957,7 @@ final class ManagedInstance extends ProtoMessage {
     this.propertiesFromFlexibilityPolicy,
     this.scheduling,
     this.shutdownDetails,
+    this.targetStatus,
     this.version,
   }) : super(fullyQualifiedName);
 
@@ -174559,6 +177017,10 @@ final class ManagedInstance extends ProtoMessage {
         null => null,
         Object $1 => ManagedInstanceShutdownDetails.fromJson($1),
       },
+      targetStatus: switch (json['targetStatus']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
       version: switch (json['version']) {
         null => null,
         Object $1 => ManagedInstanceVersion.fromJson($1),
@@ -174582,6 +177044,7 @@ final class ManagedInstance extends ProtoMessage {
         ?.toJson(),
     'scheduling': ?scheduling?.toJson(),
     'shutdownDetails': ?shutdownDetails?.toJson(),
+    'targetStatus': ?targetStatus,
     'version': ?version?.toJson(),
   };
 
@@ -174593,6 +177056,7 @@ final class ManagedInstance extends ProtoMessage {
       if (instance != null) 'instance=$instance',
       if (instanceStatus != null) 'instanceStatus=$instanceStatus',
       if (name != null) 'name=$name',
+      if (targetStatus != null) 'targetStatus=$targetStatus',
     ].join(',');
     return 'ManagedInstance(${$contents})';
   }
@@ -174701,9 +177165,6 @@ final class ManagedInstance_CurrentAction extends ProtoEnum {
 
 /// Output only. [Output Only] The status of the instance. This field is empty when
 /// the instance does not exist.
-/// Additional supported values which may be not listed in the enum directly due to technical reasons:
-/// STOPPING
-/// SUSPENDING
 final class ManagedInstance_InstanceStatus extends ProtoEnum {
   /// A value indicating that the enum field is not set.
   static const undefinedInstanceStatus = ManagedInstance_InstanceStatus(
@@ -174739,11 +177200,13 @@ final class ManagedInstance_InstanceStatus extends ProtoEnum {
   /// The instance has stopped successfully.
   static const stopped = ManagedInstance_InstanceStatus('STOPPED');
 
+  /// The instance is currently stopping (either being deleted or killed).
   static const stopping = ManagedInstance_InstanceStatus('STOPPING');
 
   /// The instance has suspended.
   static const suspended = ManagedInstance_InstanceStatus('SUSPENDED');
 
+  /// The instance is suspending.
   static const suspending = ManagedInstance_InstanceStatus('SUSPENDING');
 
   /// The instance has stopped (either by explicit action or underlying
@@ -174762,6 +177225,43 @@ final class ManagedInstance_InstanceStatus extends ProtoEnum {
 
   @override
   String toString() => 'InstanceStatus.$value';
+}
+
+/// Output only. The eventual status of the instance. The instance group
+/// manager will not be identified as stable till each managed instance reaches
+/// its targetStatus.
+/// Additional supported values which may be not listed in the enum directly due to technical reasons:
+/// RUNNING
+/// STOPPED
+/// SUSPENDED
+final class ManagedInstance_TargetStatus extends ProtoEnum {
+  /// A value indicating that the enum field is not set.
+  static const undefinedTargetStatus = ManagedInstance_TargetStatus(
+    'UNDEFINED_TARGET_STATUS',
+  );
+
+  /// The managed instance will eventually be ABANDONED, i.e. dissociated
+  /// from the managed instance group.
+  static const abandoned = ManagedInstance_TargetStatus('ABANDONED');
+
+  /// The managed instance will eventually be DELETED.
+  static const deleted = ManagedInstance_TargetStatus('DELETED');
+
+  /// Only present to map the STATUS_INVALID value.
+  static const invalid = ManagedInstance_TargetStatus('INVALID');
+
+  /// The default value for [ManagedInstance_TargetStatus].
+  static const $default = undefinedTargetStatus;
+
+  const ManagedInstance_TargetStatus(super.value);
+
+  factory ManagedInstance_TargetStatus.fromJson(Object? json) =>
+      ManagedInstance_TargetStatus(json as String);
+
+  bool get isNotDefault => this != $default;
+
+  @override
+  String toString() => 'TargetStatus.$value';
 }
 
 final class ManagedInstanceInstanceHealth extends ProtoMessage {
@@ -175314,6 +177814,64 @@ final class MetadataFilterLabelMatch extends ProtoMessage {
       if (value != null) 'value=$value',
     ].join(',');
     return 'MetadataFilterLabelMatch(${$contents})';
+  }
+}
+
+/// Represents an amount of money with its currency type.
+final class Money extends ProtoMessage {
+  static const String fullyQualifiedName = 'google.cloud.compute.v1.Money';
+
+  /// The three-letter currency code defined in ISO 4217.
+  final String? currencyCode;
+
+  /// Number of nano (10^-9) units of the amount.
+  /// The value must be between -999,999,999 and +999,999,999 inclusive.
+  /// If `units` is positive, `nanos` must be positive or zero.
+  /// If `units` is zero, `nanos` can be positive, zero, or negative.
+  /// If `units` is negative, `nanos` must be negative or zero.
+  /// For example $-1.75 is represented as `units`=-1 and `nanos`=-750,000,000.
+  final int? nanos;
+
+  /// The whole units of the amount.
+  /// For example if `currencyCode` is `"USD"`, then 1 unit is one US dollar.
+  final int? units;
+
+  Money({this.currencyCode, this.nanos, this.units})
+    : super(fullyQualifiedName);
+
+  factory Money.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Money(
+      currencyCode: switch (json['currencyCode']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      nanos: switch (json['nanos']) {
+        null => null,
+        Object $1 => decodeInt($1),
+      },
+      units: switch (json['units']) {
+        null => null,
+        Object $1 => decodeInt64($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'currencyCode': ?currencyCode,
+    'nanos': ?nanos,
+    'units': ?units?.toString(),
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      if (currencyCode != null) 'currencyCode=$currencyCode',
+      if (nanos != null) 'nanos=$nanos',
+      if (units != null) 'units=$units',
+    ].join(',');
+    return 'Money(${$contents})';
   }
 }
 
@@ -177717,6 +180275,12 @@ final class NetworkEndpointGroup_NetworkEndpointType extends ProtoEnum {
 
   /// The network endpoint is represented by an IP address.
   static const gceVmIp = NetworkEndpointGroup_NetworkEndpointType('GCE_VM_IP');
+
+  /// The network endpoint for targeting a specific network interface of a
+  /// VM instance in configurations with multiple network interfaces on the
+  /// same network.
+  static const gceVmIpDedicatedBackend =
+      NetworkEndpointGroup_NetworkEndpointType('GCE_VM_IP_DEDICATED_BACKEND');
 
   /// The network endpoint is represented by IP address and port pair.
   static const gceVmIpPort = NetworkEndpointGroup_NetworkEndpointType(
@@ -180761,9 +183325,6 @@ final class NetworkProfileNetworkFeatures extends ProtoMessage {
   }
 }
 
-///
-/// Additional supported values which may be not listed in the enum directly due to technical reasons:
-/// PRIVATE_SERVICE_CONNECT
 final class NetworkProfileNetworkFeatures_AddressPurposes extends ProtoEnum {
   /// A value indicating that the enum field is not set.
   static const undefinedAddressPurposes =
@@ -180796,6 +183357,8 @@ final class NetworkProfileNetworkFeatures_AddressPurposes extends ProtoEnum {
     'NAT_AUTO',
   );
 
+  /// A private network IP address that can be used to configure Private
+  /// Service Connect. This purpose can be specified only forGLOBAL addresses of Type INTERNAL
   static const privateServiceConnect =
       NetworkProfileNetworkFeatures_AddressPurposes('PRIVATE_SERVICE_CONNECT');
 
@@ -182468,9 +185031,6 @@ final class NetworkRoutingConfig_BgpBestPathSelectionMode extends ProtoEnum {
 /// Allows to define a preferred approach for handling inter-region cost in
 /// the selection process when using the STANDARD BGP best path
 /// selection algorithm. Can be DEFAULT orADD_COST_TO_MED.
-/// Additional supported values which may be not listed in the enum directly due to technical reasons:
-/// ADD_COST_TO_MED
-/// DEFAULT
 final class NetworkRoutingConfig_BgpInterRegionCost extends ProtoEnum {
   /// A value indicating that the enum field is not set.
   static const undefinedBgpInterRegionCost =
@@ -185582,6 +188142,9 @@ final class Operation extends ProtoMessage {
   /// this field will be populated.
   final Error? error;
 
+  /// Output only. Metadata for GetHealth operations.
+  final GetHealthOperationMetadata? getHealthOperationMetadata;
+
   final GetVersionOperationMetadata? getVersionOperationMetadata;
 
   /// [Output Only] If the operation fails, this field contains the HTTP error
@@ -185682,6 +188245,7 @@ final class Operation extends ProtoMessage {
     this.description,
     this.endTime,
     this.error,
+    this.getHealthOperationMetadata,
     this.getVersionOperationMetadata,
     this.httpErrorMessage,
     this.httpErrorStatusCode,
@@ -185728,6 +188292,10 @@ final class Operation extends ProtoMessage {
       error: switch (json['error']) {
         null => null,
         Object $1 => Error.fromJson($1),
+      },
+      getHealthOperationMetadata: switch (json['getHealthOperationMetadata']) {
+        null => null,
+        Object $1 => GetHealthOperationMetadata.fromJson($1),
       },
       getVersionOperationMetadata:
           switch (json['getVersionOperationMetadata']) {
@@ -185833,6 +188401,7 @@ final class Operation extends ProtoMessage {
     'description': ?description,
     'endTime': ?endTime,
     'error': ?error?.toJson(),
+    'getHealthOperationMetadata': ?getHealthOperationMetadata?.toJson(),
     'getVersionOperationMetadata': ?getVersionOperationMetadata?.toJson(),
     'httpErrorMessage': ?httpErrorMessage,
     'httpErrorStatusCode': ?httpErrorStatusCode,
@@ -195404,6 +197973,41 @@ final class Project_XpnProjectStatus extends ProtoEnum {
   String toString() => 'XpnProjectStatus.$value';
 }
 
+/// Represents a ProjectView resource.
+///
+/// A ProjectView resource contains read-only project data which is available
+/// globally.
+final class ProjectView extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.compute.v1.ProjectView';
+
+  /// The project data.
+  /// The returned Project data does not contain regional or zonal quota
+  /// usage data. Global quota limits are present. For accurate, real-time quota
+  /// usage numbers, query the global
+  /// [projects.get](https://cloud.google.com/compute/docs/reference/rest/v1/projects/get)
+  /// endpoint.
+  final Project? project;
+
+  ProjectView({this.project}) : super(fullyQualifiedName);
+
+  factory ProjectView.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ProjectView(
+      project: switch (json['project']) {
+        null => null,
+        Object $1 => Project.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {'project': ?project?.toJson()};
+
+  @override
+  String toString() => 'ProjectView()';
+}
+
 final class ProjectsDisableXpnResourceRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.compute.v1.ProjectsDisableXpnResourceRequest';
@@ -197891,7 +200495,7 @@ final class QuotaStatusWarning extends ProtoMessage {
   ///   {
   ///    "key": "scope",
   ///    "value": "zones/us-east1-d"
-  ///   }
+  ///   }]
   final List<Data> data;
 
   /// [Output Only] A human-readable description of the warning code.
@@ -198478,6 +201082,74 @@ final class Reference extends ProtoMessage {
       if (target != null) 'target=$target',
     ].join(',');
     return 'Reference(${$contents})';
+  }
+}
+
+/// The spec for modifying the path using a regular expression.
+final class RegexRewrite extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.compute.v1.RegexRewrite';
+
+  /// Required. The regular expression used to match against the URL path.
+  /// It uses RE2 syntax with the following constraints:
+  ///
+  ///
+  ///      - Any single character operators
+  ///      - Groups are allowed to have only submatch operator inside
+  ///      - Groups are allowed only without any char repetition, e.g.
+  ///      .*
+  ///      - Any char repetition, e.g. .*, is
+  ///      only allowed to be used in a single regex together with:
+  ///
+  ///
+  ///             - Empty string operators
+  ///             - Other repetitions
+  ///             - Ranges
+  ///             - Repetitions of ranges
+  ///
+  ///
+  ///      - Ranges are only allowed to have:
+  ///
+  ///
+  ///             - Character range
+  ///             - Digits range
+  ///             - Symbols listed in characters allowed for ranges
+  final String? pathPattern;
+
+  /// Required. Required when path pattern is specified. Used to rewrite matching parts of
+  /// the path.
+  final String? pathSubstitution;
+
+  RegexRewrite({this.pathPattern, this.pathSubstitution})
+    : super(fullyQualifiedName);
+
+  factory RegexRewrite.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return RegexRewrite(
+      pathPattern: switch (json['pathPattern']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      pathSubstitution: switch (json['pathSubstitution']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'pathPattern': ?pathPattern,
+    'pathSubstitution': ?pathSubstitution,
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      if (pathPattern != null) 'pathPattern=$pathPattern',
+      if (pathSubstitution != null) 'pathSubstitution=$pathSubstitution',
+    ].join(',');
+    return 'RegexRewrite(${$contents})';
   }
 }
 
@@ -203097,6 +205769,13 @@ final class Reservation extends ProtoMessage {
   /// will not be shared with Google Cloud managed services.
   final AllocationReservationSharingPolicy? reservationSharingPolicy;
 
+  /// Output only. [Output Only] Contains standard resource metadata for an Allocation
+  /// resource. It is populated for each instance of the Allocation
+  /// resource, and includes the api_version the
+  /// instance was retrieved through, and its canonical
+  /// resource_type name.
+  final ResourceMetadata? resourceMetadata;
+
   /// Resource policies to be added to this reservation. The key is defined by
   /// user, and the value is resource policy url. This is to define placement
   /// policy with reservation.
@@ -203164,6 +205843,7 @@ final class Reservation extends ProtoMessage {
     this.params,
     this.protectionTier,
     this.reservationSharingPolicy,
+    this.resourceMetadata,
     this.resourcePolicies = const {},
     this.resourceStatus,
     this.satisfiesPzs,
@@ -203252,6 +205932,10 @@ final class Reservation extends ProtoMessage {
         null => null,
         Object $1 => AllocationReservationSharingPolicy.fromJson($1),
       },
+      resourceMetadata: switch (json['resourceMetadata']) {
+        null => null,
+        Object $1 => ResourceMetadata.fromJson($1),
+      },
       resourcePolicies: switch (json['resourcePolicies']) {
         null => {},
         Map<String, Object?> $1 => {
@@ -203320,6 +206004,7 @@ final class Reservation extends ProtoMessage {
     'params': ?params?.toJson(),
     'protectionTier': ?protectionTier,
     'reservationSharingPolicy': ?reservationSharingPolicy?.toJson(),
+    'resourceMetadata': ?resourceMetadata?.toJson(),
     if (resourcePolicies.isNotDefault) 'resourcePolicies': resourcePolicies,
     'resourceStatus': ?resourceStatus?.toJson(),
     'satisfiesPzs': ?satisfiesPzs,
@@ -203368,6 +206053,10 @@ final class Reservation_ConfidentialComputeType extends ProtoEnum {
       Reservation_ConfidentialComputeType(
         'UNDEFINED_CONFIDENTIAL_COMPUTE_TYPE',
       );
+
+  /// Bare Metal Secure AI.
+  static const confidentialComputeTypeBmsai =
+      Reservation_ConfidentialComputeType('CONFIDENTIAL_COMPUTE_TYPE_BMSAI');
 
   /// Intel Trust Domain Extensions.
   static const confidentialComputeTypeTdx = Reservation_ConfidentialComputeType(
@@ -206762,6 +209451,50 @@ final class ResourceGroupReference extends ProtoMessage {
   String toString() {
     final $contents = [if (group != null) 'group=$group'].join(',');
     return 'ResourceGroupReference(${$contents})';
+  }
+}
+
+/// Standardized resource metadata common to all compute resources.
+final class ResourceMetadata extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.compute.v1.ResourceMetadata';
+
+  /// The version of the API interface that this resource was retrieved through.
+  /// For example, `"2025-01-01"` or `"2025-01-01-preview"`.
+  final String? apiVersion;
+
+  /// The canonical resource type name in the format of a resource type
+  /// as defined by [AIP-123](https://google.aip.dev/123).
+  /// For example, `"compute.googleapis.com/Instance"`.
+  final String? resourceType;
+
+  ResourceMetadata({this.apiVersion, this.resourceType})
+    : super(fullyQualifiedName);
+
+  factory ResourceMetadata.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ResourceMetadata(
+      apiVersion: switch (json['apiVersion']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      resourceType: switch (json['resourceType']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {'apiVersion': ?apiVersion, 'resourceType': ?resourceType};
+
+  @override
+  String toString() {
+    final $contents = [
+      if (apiVersion != null) 'apiVersion=$apiVersion',
+      if (resourceType != null) 'resourceType=$resourceType',
+    ].join(',');
+    return 'ResourceMetadata(${$contents})';
   }
 }
 
@@ -216347,6 +219080,10 @@ final class Scheduling extends ProtoMessage {
   /// specified in the spread placement policy attached to the instance.
   final int? availabilityDomain;
 
+  /// This optional flag exposes the hashed physical host ID in the
+  /// ResourceStatus resource of the VM.
+  final bool? exposeHostTopology;
+
   final SchedulingGracefulShutdown? gracefulShutdown;
 
   /// Specify the time in seconds for host error detection, the value must be
@@ -216421,6 +219158,7 @@ final class Scheduling extends ProtoMessage {
   Scheduling({
     this.automaticRestart,
     this.availabilityDomain,
+    this.exposeHostTopology,
     this.gracefulShutdown,
     this.hostErrorTimeoutSeconds,
     this.instanceTerminationAction,
@@ -216448,6 +219186,10 @@ final class Scheduling extends ProtoMessage {
       availabilityDomain: switch (json['availabilityDomain']) {
         null => null,
         Object $1 => decodeInt($1),
+      },
+      exposeHostTopology: switch (json['exposeHostTopology']) {
+        null => null,
+        Object $1 => decodeBool($1),
       },
       gracefulShutdown: switch (json['gracefulShutdown']) {
         null => null,
@@ -216519,6 +219261,7 @@ final class Scheduling extends ProtoMessage {
   Object toJson() => {
     'automaticRestart': ?automaticRestart,
     'availabilityDomain': ?availabilityDomain,
+    'exposeHostTopology': ?exposeHostTopology,
     'gracefulShutdown': ?gracefulShutdown?.toJson(),
     'hostErrorTimeoutSeconds': ?hostErrorTimeoutSeconds,
     'instanceTerminationAction': ?instanceTerminationAction,
@@ -216542,6 +219285,7 @@ final class Scheduling extends ProtoMessage {
     final $contents = [
       if (automaticRestart != null) 'automaticRestart=$automaticRestart',
       if (availabilityDomain != null) 'availabilityDomain=$availabilityDomain',
+      if (exposeHostTopology != null) 'exposeHostTopology=$exposeHostTopology',
       if (hostErrorTimeoutSeconds != null)
         'hostErrorTimeoutSeconds=$hostErrorTimeoutSeconds',
       if (instanceTerminationAction != null)
@@ -219423,10 +222167,13 @@ final class SecurityPolicyRuleRateLimitOptions extends ProtoMessage {
   ///    which is resolved based on "userIpRequestHeaders" configured with the
   ///    security policy. If there is no "userIpRequestHeaders" configuration or
   ///    an IP address cannot be resolved from it, the key type defaults toIP.
+  ///    - ASN: The autonomous system number of the originating
+  ///    client. If not available, the key type defaults toALL.
+  ///    - TLS_JA4_FINGERPRINT: JA4 TLS/SSL fingerprint if the
+  ///    client connects using HTTPS, HTTP/2 or HTTP/3. If not available, the
+  ///    key type defaults to ALL.
   ///
-  /// - TLS_JA4_FINGERPRINT: JA4 TLS/SSL fingerprint if the
-  /// client connects using HTTPS, HTTP/2 or HTTP/3. If not available, the
-  /// key type defaults to ALL.
+  ///
   /// For "fairshare" action, this value is limited to ALL i.e. a single rate
   /// limit threshold is enforced for all the requests matching the rule.
   /// Check the EnforceOnKey enum for the list of possible values.
@@ -219588,10 +222335,13 @@ final class SecurityPolicyRuleRateLimitOptions extends ProtoMessage {
 ///    which is resolved based on "userIpRequestHeaders" configured with the
 ///    security policy. If there is no "userIpRequestHeaders" configuration or
 ///    an IP address cannot be resolved from it, the key type defaults toIP.
+///    - ASN: The autonomous system number of the originating
+///    client. If not available, the key type defaults toALL.
+///    - TLS_JA4_FINGERPRINT: JA4 TLS/SSL fingerprint if the
+///    client connects using HTTPS, HTTP/2 or HTTP/3. If not available, the
+///    key type defaults to ALL.
 ///
-/// - TLS_JA4_FINGERPRINT: JA4 TLS/SSL fingerprint if the
-/// client connects using HTTPS, HTTP/2 or HTTP/3. If not available, the
-/// key type defaults to ALL.
+///
 /// For "fairshare" action, this value is limited to ALL i.e. a single rate
 /// limit threshold is enforced for all the requests matching the rule.
 final class SecurityPolicyRuleRateLimitOptions_EnforceOnKey extends ProtoEnum {
@@ -219602,6 +222352,8 @@ final class SecurityPolicyRuleRateLimitOptions_EnforceOnKey extends ProtoEnum {
       );
 
   static const all = SecurityPolicyRuleRateLimitOptions_EnforceOnKey('ALL');
+
+  static const asn = SecurityPolicyRuleRateLimitOptions_EnforceOnKey('ASN');
 
   static const httpCookie = SecurityPolicyRuleRateLimitOptions_EnforceOnKey(
     'HTTP_COOKIE',
@@ -219699,10 +222451,11 @@ final class SecurityPolicyRuleRateLimitOptionsEnforceOnKeyConfig
   ///    which is resolved based on "userIpRequestHeaders" configured with the
   ///    security policy. If there is no "userIpRequestHeaders" configuration
   ///    or an IP address cannot be resolved from it, the key type defaults toIP.
-  ///
-  /// - TLS_JA4_FINGERPRINT: JA4 TLS/SSL fingerprint if the
-  /// client connects using HTTPS, HTTP/2 or HTTP/3. If not available, the
-  /// key type defaults to ALL.
+  ///    - ASN: The autonomous system number of the originating
+  ///    client. If not available, the key type defaults toALL.
+  ///    - TLS_JA4_FINGERPRINT: JA4 TLS/SSL fingerprint if the
+  ///    client connects using HTTPS, HTTP/2 or HTTP/3. If not available, the
+  ///    key type defaults to ALL.
   /// Check the EnforceOnKeyType enum for the list of possible values.
   final String? enforceOnKeyType;
 
@@ -219779,10 +222532,11 @@ final class SecurityPolicyRuleRateLimitOptionsEnforceOnKeyConfig
 ///    which is resolved based on "userIpRequestHeaders" configured with the
 ///    security policy. If there is no "userIpRequestHeaders" configuration
 ///    or an IP address cannot be resolved from it, the key type defaults toIP.
-///
-/// - TLS_JA4_FINGERPRINT: JA4 TLS/SSL fingerprint if the
-/// client connects using HTTPS, HTTP/2 or HTTP/3. If not available, the
-/// key type defaults to ALL.
+///    - ASN: The autonomous system number of the originating
+///    client. If not available, the key type defaults toALL.
+///    - TLS_JA4_FINGERPRINT: JA4 TLS/SSL fingerprint if the
+///    client connects using HTTPS, HTTP/2 or HTTP/3. If not available, the
+///    key type defaults to ALL.
 final class SecurityPolicyRuleRateLimitOptionsEnforceOnKeyConfig_EnforceOnKeyType
     extends ProtoEnum {
   /// A value indicating that the enum field is not set.
@@ -219794,6 +222548,11 @@ final class SecurityPolicyRuleRateLimitOptionsEnforceOnKeyConfig_EnforceOnKeyTyp
   static const all =
       SecurityPolicyRuleRateLimitOptionsEnforceOnKeyConfig_EnforceOnKeyType(
         'ALL',
+      );
+
+  static const asn =
+      SecurityPolicyRuleRateLimitOptionsEnforceOnKeyConfig_EnforceOnKeyType(
+        'ASN',
       );
 
   static const httpCookie =
@@ -236433,6 +239192,20 @@ final class Subnetwork_ResolveSubnetMask extends ProtoEnum {
   /// All ranges assigned to the VM NIC will respond to ARP.
   static const arpAllRanges = Subnetwork_ResolveSubnetMask('ARP_ALL_RANGES');
 
+  /// VMs will receive an ARP response from a VM instance owning the target IP
+  /// address within the subnetwork's primary CIDR range, if such a VM instance
+  /// exists and is running.
+  static const arpBroadcastPrimaryRange = Subnetwork_ResolveSubnetMask(
+    'ARP_BROADCAST_PRIMARY_RANGE',
+  );
+
+  /// Combines ARP_BROADCAST_PRIMARY_RANGE with MAC learning. Enables cache
+  /// mapping between IP addresses and custom MAC addresses of instances and
+  /// use of it to set the correct destination MAC address. If this option is
+  /// chosen, the subnetwork must have /24 or a smaller CIDR range.
+  static const arpBroadcastPrimaryRangeWithLearning =
+      Subnetwork_ResolveSubnetMask('ARP_BROADCAST_PRIMARY_RANGE_WITH_LEARNING');
+
   /// Only the primary range of the VM NIC will respond to ARP.
   static const arpPrimaryRange = Subnetwork_ResolveSubnetMask(
     'ARP_PRIMARY_RANGE',
@@ -240022,7 +242795,8 @@ final class TargetPool extends ProtoMessage {
   /// The server-defined URL for the resource. This field is applicable only when
   /// the containing target pool is serving a forwarding rule as the primary
   /// pool, and its failoverRatio field is properly set to a value
-  /// between [0, 1].backupPool and failoverRatio together define
+  /// between [0, 1].
+  /// backupPool and failoverRatio together define
   /// the fallback behavior of the primary target pool: if the ratio of the
   /// healthy instances in the primary pool is at or belowfailoverRatio, traffic arriving at the load-balanced
   /// IP will be directed to the backup pool.
@@ -250565,10 +253339,14 @@ final class UrlRewrite extends ProtoMessage {
   /// Only one of path_prefix_rewrite orpath_template_rewrite may be specified.
   final String? pathTemplateRewrite;
 
+  /// The regex rewrite to be applied to the URL. Only one ofpathPrefixRewrite, pathTemplateRewrite, orregexRewrite may be specified.
+  final RegexRewrite? regexRewrite;
+
   UrlRewrite({
     this.hostRewrite,
     this.pathPrefixRewrite,
     this.pathTemplateRewrite,
+    this.regexRewrite,
   }) : super(fullyQualifiedName);
 
   factory UrlRewrite.fromJson(Object? j) {
@@ -250586,6 +253364,10 @@ final class UrlRewrite extends ProtoMessage {
         null => null,
         Object $1 => decodeString($1),
       },
+      regexRewrite: switch (json['regexRewrite']) {
+        null => null,
+        Object $1 => RegexRewrite.fromJson($1),
+      },
     );
   }
 
@@ -250594,6 +253376,7 @@ final class UrlRewrite extends ProtoMessage {
     'hostRewrite': ?hostRewrite,
     'pathPrefixRewrite': ?pathPrefixRewrite,
     'pathTemplateRewrite': ?pathTemplateRewrite,
+    'regexRewrite': ?regexRewrite?.toJson(),
   };
 
   @override
@@ -254331,7 +257114,7 @@ final class Warning extends ProtoMessage {
   ///   {
   ///    "key": "scope",
   ///    "value": "zones/us-east1-d"
-  ///   }
+  ///   }]
   final List<Data> data;
 
   /// [Output Only] A human-readable description of the warning code.
@@ -254543,7 +257326,7 @@ final class Warnings extends ProtoMessage {
   ///   {
   ///    "key": "scope",
   ///    "value": "zones/us-east1-d"
-  ///   }
+  ///   }]
   final List<Data> data;
 
   /// [Output Only] A human-readable description of the warning code.

@@ -11,6 +11,9 @@
 
 ## Style
 
+- Follow the style described in
+  [Effective Dart](https://dart.dev/effective-dart):
+    - Do not prefix functions and methods with "get".
 - Prefer the use of `Uri.https(...)` over `Uri.parse(...)` when the scheme is
   known to be https.
 

@@ -74,6 +74,12 @@ resource "google_project_service" "logging" {
   disable_dependent_services = true
 }
 
+resource "google_project_service" "pubsub" {
+  project                    = var.project
+  service                    = "pubsub.googleapis.com"
+  disable_dependent_services = true
+}
+
 resource "google_project_service" "secretmanager" {
   project                    = var.project
   service                    = "secretmanager.googleapis.com"
