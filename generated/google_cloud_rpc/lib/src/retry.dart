@@ -29,8 +29,9 @@ sealed class RetryRunner {
     Clock clock = const Clock(),
   });
 
-  /// Returns whether [error] is considered retryable by this runner.
-  bool isRetryable(Object error);
+  /// Function that returns whether an error is considered retryable by this
+  /// runner.
+  bool Function(Object error) get isRetryable;
 
   /// Generates a sequence of wait durations for retries or reconnections.
   Iterable<Duration> delays({Clock clock = const Clock(), Random? random});
@@ -211,7 +212,8 @@ final class ExponentialRetry implements RetryRunner {
   /// Defaults to `0.0` (no jitter).
   final double jitter;
 
-  final bool Function(Object) _isRetryable;
+  @override
+  final bool Function(Object error) isRetryable;
 
   const ExponentialRetry({
     this.maxRetries,
@@ -222,11 +224,8 @@ final class ExponentialRetry implements RetryRunner {
     this.maxDelay = const Duration(seconds: 60),
     this.maxRetryInterval = const Duration(minutes: 2),
     this.jitter = 0.0,
-    bool Function(Object) isRetryable = defaultIsRetryable,
-  }) : _isRetryable = isRetryable;
-
-  @override
-  bool isRetryable(Object error) => _isRetryable(error);
+    this.isRetryable = defaultIsRetryable,
+  });
 
   @override
   Iterable<Duration> delays({Clock clock = const Clock(), Random? random}) =>
@@ -274,7 +273,7 @@ final class ExponentialRetry implements RetryRunner {
           delayMultiplier == other.delayMultiplier &&
           maxDelay == other.maxDelay &&
           jitter == other.jitter &&
-          _isRetryable == other._isRetryable;
+          isRetryable == other.isRetryable;
 
   @override
   int get hashCode => Object.hash(
@@ -284,7 +283,7 @@ final class ExponentialRetry implements RetryRunner {
     delayMultiplier,
     maxDelay,
     jitter,
-    _isRetryable,
+    isRetryable,
   );
 
   @override

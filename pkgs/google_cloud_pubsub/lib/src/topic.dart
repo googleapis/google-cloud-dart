@@ -17,6 +17,7 @@ import 'dart:convert';
 
 import '../google_cloud_pubsub.dart';
 import 'batching.dart';
+import 'retry.dart';
 import 'wire_size.dart';
 
 // Field number from `google/pubsub/v1/pubsub.proto`, used to predict the
@@ -37,7 +38,7 @@ final class PublishSettings {
   /// Creates a new [PublishSettings] instance.
   PublishSettings({BatchingSettings? batching, RetryRunner? retry})
     : batching = batching ?? BatchingSettings(),
-      retry = retry ?? defaultPubSubRetry;
+      retry = normalizePubSubRetry(retry);
 
   @override
   bool operator ==(Object other) =>

@@ -14,6 +14,7 @@
 
 import 'package:google_cloud_rpc/retry.dart';
 import 'package:grpc/grpc.dart';
+import 'package:meta/meta.dart';
 
 export 'package:google_cloud_rpc/retry.dart';
 
@@ -44,3 +45,28 @@ const defaultPubSubRetry = ExponentialRetry(
   jitter: 0.2,
   isRetryable: isPubSubRetryable,
 );
+
+/// Normalizes a [RetryRunner] for Pub/Sub by substituting [isPubSubRetryable]
+/// whenever an [ExponentialRetry] uses [defaultIsRetryable].
+@internal
+RetryRunner normalizePubSubRetry(
+  RetryRunner? retry, {
+  RetryRunner fallback = defaultPubSubRetry,
+  bool clearMaxRetryInterval = false,
+}) {
+  final target = retry ?? fallback;
+  return switch (target) {
+    final ExponentialRetry exp => ExponentialRetry(
+      maxRetries: exp.maxRetries,
+      maxRetryInterval: clearMaxRetryInterval ? null : exp.maxRetryInterval,
+      initialDelay: exp.initialDelay,
+      delayMultiplier: exp.delayMultiplier,
+      maxDelay: exp.maxDelay,
+      jitter: exp.jitter,
+      isRetryable: exp.isRetryable == defaultIsRetryable
+          ? isPubSubRetryable
+          : exp.isRetryable,
+    ),
+    final other => other,
+  };
+}
