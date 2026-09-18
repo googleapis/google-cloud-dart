@@ -71,7 +71,10 @@ Future<GoogleCredentials> internalDefaultCredentials({
   }
 
   // Check Google Compute Engine metadata server
-  if (await ComputeEngineCredentials.isOnComputeEngine(client: client)) {
+  if (await internalIsOnComputeEngine(
+    client: client,
+    readEnvironment: getEnvironmentVariable,
+  )) {
     return await ComputeEngineCredentials.create(client: client);
   }
 

@@ -12,21 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 language: dart
-version: v0.39.1-0.20260827211949-1cdc9901f973
+version: v0.44.1-0.20260915154909-bea74dadf46d
 sources:
   conformance:
-    commit: 07eec573f37d51c5c08243b1bd04e3c79422351f
-    sha256: f888f61018e0073bc675a5efa3d9e22dec8da725e77e9c18bbaa3f71f71ced14
+    commit: 216b587a1240d9a70f2d6876939a55f7ecf187a4
+    sha256: 01169d88eeec457f5e6999123a8f78d0b753edae4d44f0abee474b6b5c069546
   googleapis:
-    commit: 28ba5d15234eff44241492ca72b135e1171fc537
-    sha256: 7914a988cc0da8792005bf87a7a4277aa15f85d57d1727c2eef93fce743ab4a1
+    commit: 057518dd383c12fa3dafbc666294b4ad077ba1b2
+    sha256: 08a422dacf4560940325b62dea802fe82e4f2d4f19404539428c006122c5268c
   protobuf:
-    commit: 07eec573f37d51c5c08243b1bd04e3c79422351f
-    sha256: f888f61018e0073bc675a5efa3d9e22dec8da725e77e9c18bbaa3f71f71ced14
+    commit: 216b587a1240d9a70f2d6876939a55f7ecf187a4
+    sha256: 01169d88eeec457f5e6999123a8f78d0b753edae4d44f0abee474b6b5c069546
     subpath: src
   showcase:
-    commit: 0c88ce83d259310dd6f6dc8f63a93bf8592723de
-    sha256: a4ee652fc9bbf90d53148e5cb2594906a41f846f4e3518e8fd97f3b2893c7073
+    commit: 5158967e8a41c751b15776142d190428ddb7e99f
+    sha256: a31271ff2cdeb7cce91e93a4d58a66dcaaac574c51cc14bd74577ab1eafd3ccd
 default:
   output: generated/
   tag_format: '{name}-v{version}'
@@ -58,7 +58,7 @@ default:
       proto:google.type: package:google_cloud_type/type.dart
 libraries:
   - name: google_cloud_ai_generativelanguage_v1beta
-    version: 0.5.5
+    version: 0.5.6
     apis:
       - path: google/ai/generativelanguage/v1beta
     copyright_year: "2025"
@@ -151,7 +151,7 @@ libraries:
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_ai_generativelanguage_v1beta
       supports_sse: true
   - name: google_cloud_aiplatform_v1beta1
-    version: 0.5.5
+    version: 0.5.6
     copyright_year: "2025"
     keep:
       - CHANGELOG.md
@@ -279,7 +279,7 @@ libraries:
     dart:
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_common
   - name: google_cloud_compute_v1
-    version: 0.1.0
+    version: 0.1.1
     copyright_year: "2026"
     keep:
       - CHANGELOG.md
@@ -479,6 +479,17 @@ libraries:
       dev_dependencies: path,test,test_utils
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_showcase_v1beta1
       supports_sse: true
+  - name: google_cloud_tasks_v2
+    version: 0.1.0
+    copyright_year: "2026"
+    keep:
+      - CHANGELOG.md
+      - dart_test.yaml
+      - example/main.dart
+      - test/tasks_test.dart
+    dart:
+      dev_dependencies: googleapis_auth,test,test_utils
+      repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_tasks_v2
   - name: google_cloud_type
     version: 0.5.5
     apis:

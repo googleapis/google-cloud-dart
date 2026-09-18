@@ -32,6 +32,7 @@ Program](https://bughunters.google.com/open-source-security).
 | [`google_cloud_secretmanager_v1`](https://pub.dev/packages/google_cloud_secretmanager_v1) | [![pub package](https://img.shields.io/pub/v/google_cloud_secretmanager_v1.svg)](https://pub.dev/packages/google_cloud_secretmanager_v1) | [generated/google_cloud_secretmanager_v1](generated/google_cloud_secretmanager_v1) |
 | [`google_cloud_shelf`](https://pub.dev/packages/google_cloud_shelf) | [![pub package](https://img.shields.io/pub/v/google_cloud_shelf.svg)](https://pub.dev/packages/google_cloud_shelf) | [pkgs/google_cloud_shelf](pkgs/google_cloud_shelf) |
 | [`google_cloud_storage`](https://pub.dev/packages/google_cloud_storage) | [![pub package](https://img.shields.io/pub/v/google_cloud_storage.svg)](https://pub.dev/packages/google_cloud_storage) | [pkgs/google_cloud_storage](pkgs/google_cloud_storage) |
+| [`google_cloud_tasks_v2`](https://pub.dev/packages/google_cloud_tasks_v2) | [![pub package](https://img.shields.io/pub/v/google_cloud_tasks_v2.svg)](https://pub.dev/packages/google_cloud_tasks_v2) | [generated/google_cloud_tasks_v2](generated/google_cloud_tasks_v2) |
 | [`google_cloud_type`](https://pub.dev/packages/google_cloud_type) | [![pub package](https://img.shields.io/pub/v/google_cloud_type.svg)](https://pub.dev/packages/google_cloud_type) | [generated/google_cloud_type](generated/google_cloud_type) |
 <!-- PKG_TABLE_END -->
 

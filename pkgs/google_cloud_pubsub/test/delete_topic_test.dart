@@ -13,7 +13,7 @@
 // limitations under the License.
 
 @TestOn('vm')
-@Tags(['firebase-emulator'])
+@Tags(['firebase-emulator', 'google-cloud'])
 library;
 
 import 'package:google_cloud_pubsub/google_cloud_pubsub.dart';
@@ -34,9 +34,7 @@ void main() {
     });
 
     test('Delete non-existent topic throws NotFoundException', () async {
-      final topic = client.topic(
-        'non-existent-${DateTime.now().millisecondsSinceEpoch}',
-      );
+      final topic = client.topic(testResourceName('non-existent'));
       expect(topic.delete(), throwsA(isA<NotFoundException>()));
     });
   });

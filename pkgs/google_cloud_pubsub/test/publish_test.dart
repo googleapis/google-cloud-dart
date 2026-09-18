@@ -13,7 +13,7 @@
 // limitations under the License.
 
 @TestOn('vm')
-@Tags(['firebase-emulator'])
+@Tags(['firebase-emulator', 'google-cloud'])
 library;
 
 import 'dart:convert';
@@ -36,7 +36,7 @@ void main() {
     });
 
     test('publish to non-existent topic throws NotFoundException', () async {
-      final topicName = 'non-existent-${DateTime.now().millisecondsSinceEpoch}';
+      final topicName = testResourceName('non-existent');
       final topic = client.topic(topicName);
 
       expect(
@@ -46,9 +46,8 @@ void main() {
     });
 
     test('publish and pull message', () async {
-      final topicName = 'test-topic-${DateTime.now().millisecondsSinceEpoch}';
-      final subscriptionName =
-          'test-sub-${DateTime.now().millisecondsSinceEpoch}';
+      final topicName = testResourceName('test-topic');
+      final subscriptionName = testResourceName('test-sub');
       final topic = client.topic(topicName);
       final subscription = client.subscription(subscriptionName);
 
@@ -69,9 +68,8 @@ void main() {
     });
 
     test('publish and streaming pull message', () async {
-      final topicName = 'test-topic-${DateTime.now().millisecondsSinceEpoch}';
-      final subscriptionName =
-          'test-sub-${DateTime.now().millisecondsSinceEpoch}';
+      final topicName = testResourceName('test-topic');
+      final subscriptionName = testResourceName('test-sub');
       final topic = client.topic(topicName);
       final subscription = client.subscription(subscriptionName);
 
@@ -92,9 +90,8 @@ void main() {
     });
 
     test('publish and pull message with attributes', () async {
-      final topicName = 'test-topic-${DateTime.now().millisecondsSinceEpoch}';
-      final subscriptionName =
-          'test-sub-${DateTime.now().millisecondsSinceEpoch}';
+      final topicName = testResourceName('test-topic');
+      final subscriptionName = testResourceName('test-sub');
       final topic = client.topic(topicName);
       final subscription = client.subscription(subscriptionName);
 
@@ -117,9 +114,8 @@ void main() {
     });
 
     test('publish multiple messages and pull batch', () async {
-      final topicName = 'test-topic-${DateTime.now().millisecondsSinceEpoch}';
-      final subscriptionName =
-          'test-sub-${DateTime.now().millisecondsSinceEpoch}';
+      final topicName = testResourceName('test-topic');
+      final subscriptionName = testResourceName('test-sub');
       final topic = client.topic(topicName);
       final subscription = client.subscription(subscriptionName);
 
