@@ -82,21 +82,20 @@ void main() {
 
       test('deduplicates by keeping latest deadline per ackId and groups by '
           'deadline', () async {
-        final sub = client.subscription(
-          'test-sub',
-          ackSettings: AckSettings(
-            batching: BatchingSettings(
-              maxMessages: 10,
-              maxDelay: const Duration(seconds: 10),
-            ),
-          ),
-        );
-
-        sub
-          ..modifyAckDeadline(dummyMessage('ack-1'), 10)
-          ..modifyAckDeadline(dummyMessage('ack-1'), 30) // overrides 10
-          ..modifyAckDeadline(dummyMessage('ack-2'), 30)
-          ..modifyAckDeadline(dummyMessage('ack-3'), 0); // nack
+        final sub =
+            client.subscription(
+                'test-sub',
+                ackSettings: AckSettings(
+                  batching: BatchingSettings(
+                    maxMessages: 10,
+                    maxDelay: const Duration(seconds: 10),
+                  ),
+                ),
+              )
+              ..modifyAckDeadline(dummyMessage('ack-1'), 10)
+              ..modifyAckDeadline(dummyMessage('ack-1'), 30) // overrides 10
+              ..modifyAckDeadline(dummyMessage('ack-2'), 30)
+              ..modifyAckDeadline(dummyMessage('ack-3'), 0); // nack
 
         await sub.close();
 

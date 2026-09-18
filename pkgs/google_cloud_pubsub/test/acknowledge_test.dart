@@ -136,23 +136,22 @@ void main() {
             }
           };
 
-          final sub = client.subscription(
-            'test-sub',
-            ackSettings: AckSettings(
-              batching: BatchingSettings(
-                maxMessages: 10,
-                maxDelay: const Duration(seconds: 10),
-              ),
-              retry: const ExponentialRetry(
-                initialDelay: Duration(milliseconds: 1),
-              ),
-            ),
-          );
-
-          sub
-            ..acknowledge(dummyMessage('ack-1'))
-            ..acknowledge(dummyMessage('ack-1'))
-            ..acknowledge(dummyMessage('ack-2'));
+          final sub =
+              client.subscription(
+                  'test-sub',
+                  ackSettings: AckSettings(
+                    batching: BatchingSettings(
+                      maxMessages: 10,
+                      maxDelay: const Duration(seconds: 10),
+                    ),
+                    retry: const ExponentialRetry(
+                      initialDelay: Duration(milliseconds: 1),
+                    ),
+                  ),
+                )
+                ..acknowledge(dummyMessage('ack-1'))
+                ..acknowledge(dummyMessage('ack-1'))
+                ..acknowledge(dummyMessage('ack-2'));
 
           await sub.close();
           expect(attempts, 2);
