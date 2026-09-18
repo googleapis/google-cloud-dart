@@ -12,10 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
 import 'package:google_cloud_pubsub/google_cloud_pubsub.dart';
+import 'package:google_cloud_pubsub/src/generated/google/pubsub/v1/pubsub.pbgrpc.dart'
+    as generated;
+import 'package:grpc/grpc.dart' as grpc;
+import 'package:protobuf/well_known_types/google/protobuf/empty.pb.dart'
+    as protobuf;
+import 'package:test/fake.dart';
 import 'package:test/test.dart';
 
 final isEmulator = Platform.environment['PUBSUB_EMULATOR_HOST'] != null;
@@ -63,12 +70,6 @@ Future<PubSub> createClient() async {
 /// Pulls up to [count] messages from the [subscription], retrying up to 10
 /// times with a 1-second delay between attempts if the expected count is
 /// not met.
-///
-/// Because message delivery in Google Cloud Pub/Sub is eventually consistent,
-/// a published message may not be immediately available in the first pull
-/// request. Polling dynamically like this avoids both test flakiness (by
-/// waiting up to 10 seconds) and unnecessary test suite delay (by returning
-/// instantly as soon as all messages are retrieved).
 Future<List<ReceivedMessage>> pullReliably(
   Subscription subscription, {
   required int count,
@@ -84,4 +85,150 @@ Future<List<ReceivedMessage>> pullReliably(
     messages.addAll(pulled);
   }
   return messages;
+}
+
+class FakeResponseFuture<T> extends Fake implements grpc.ResponseFuture<T> {
+  final Future<T> _future;
+
+  FakeResponseFuture(this._future);
+
+  @override
+  Future<S> then<S>(
+    FutureOr<S> Function(T value) onValue, {
+    Function? onError,
+  }) => _future.then(onValue, onError: onError);
+
+  @override
+  Future<T> catchError(Function onError, {bool Function(Object)? test}) =>
+      _future.catchError(onError, test: test);
+
+  @override
+  Future<T> whenComplete(FutureOr<void> Function() action) =>
+      _future.whenComplete(action);
+}
+
+class FakeResponseStream<T> extends StreamView<T>
+    implements grpc.ResponseStream<T> {
+  FakeResponseStream(super.stream);
+
+  @override
+  grpc.ResponseFuture<T> get single => FakeResponseFuture(super.single);
+
+  @override
+  Future<void> cancel() => Future<void>.value();
+
+  @override
+  Future<Map<String, String>> get headers => Future.value(const {});
+
+  @override
+  Future<Map<String, String>> get trailers => Future.value(const {});
+}
+
+class FakeClientChannel extends Fake implements grpc.ClientChannel {
+  bool isShutdown = false;
+
+  @override
+  Future<void> shutdown() async {
+    isShutdown = true;
+  }
+}
+
+class FakePublisherClient extends Fake implements generated.PublisherClient {
+  Future<generated.PublishResponse> Function(generated.PublishRequest request)?
+  publishBehavior;
+  int publishCallCount = 0;
+  bool get publishCalled => publishCallCount > 0;
+  final List<generated.PublishRequest> recordedRequests = [];
+
+  @override
+  grpc.ResponseFuture<generated.PublishResponse> publish(
+    generated.PublishRequest request, {
+    grpc.CallOptions? options,
+  }) {
+    publishCallCount++;
+    recordedRequests.add(request);
+    final completer = Completer<generated.PublishResponse>();
+    if (publishBehavior case final behavior?) {
+      behavior(
+        request,
+      ).then(completer.complete).catchError(completer.completeError);
+    } else {
+      final response = generated.PublishResponse()
+        ..messageIds.addAll(
+          List.generate(request.messages.length, (i) => 'msg-$i'),
+        );
+      completer.complete(response);
+    }
+    return FakeResponseFuture(completer.future);
+  }
+
+  @override
+  grpc.ResponseFuture<generated.Topic> createTopic(
+    generated.Topic request, {
+    grpc.CallOptions? options,
+  }) => FakeResponseFuture(Future.value(request));
+
+  @override
+  grpc.ResponseFuture<protobuf.Empty> deleteTopic(
+    generated.DeleteTopicRequest request, {
+    grpc.CallOptions? options,
+  }) => FakeResponseFuture(Future.value(protobuf.Empty()));
+}
+
+class FakeSubscriberClient extends Fake implements generated.SubscriberClient {
+  Future<void> Function(List<String> ackIds)? acknowledgeBehavior;
+  int acknowledgeCallCount = 0;
+  bool get acknowledgeCalled => acknowledgeCallCount > 0;
+  final List<generated.AcknowledgeRequest> recordedAckRequests = [];
+  List<String>? get lastAckIds =>
+      recordedAckRequests.isEmpty ? null : recordedAckRequests.last.ackIds;
+
+  Future<void> Function(List<String> ackIds, int seconds)?
+  modifyAckDeadlineBehavior;
+  int modifyAckDeadlineCallCount = 0;
+  bool get modifyAckDeadlineCalled => modifyAckDeadlineCallCount > 0;
+  final List<generated.ModifyAckDeadlineRequest> recordedModifyAckRequests = [];
+  List<String>? get lastModifyAckDeadlineIds =>
+      recordedModifyAckRequests.isEmpty
+      ? null
+      : recordedModifyAckRequests.last.ackIds;
+  int? get lastModifyAckDeadlineSeconds => recordedModifyAckRequests.isEmpty
+      ? null
+      : recordedModifyAckRequests.last.ackDeadlineSeconds;
+
+  @override
+  grpc.ResponseFuture<protobuf.Empty> acknowledge(
+    generated.AcknowledgeRequest request, {
+    grpc.CallOptions? options,
+  }) {
+    acknowledgeCallCount++;
+    recordedAckRequests.add(request);
+    final completer = Completer<protobuf.Empty>();
+    if (acknowledgeBehavior case final behavior?) {
+      behavior(request.ackIds)
+          .then((_) => completer.complete(protobuf.Empty()))
+          .catchError(completer.completeError);
+    } else {
+      completer.complete(protobuf.Empty());
+    }
+    return FakeResponseFuture(completer.future);
+  }
+
+  @override
+  grpc.ResponseFuture<protobuf.Empty> modifyAckDeadline(
+    generated.ModifyAckDeadlineRequest request, {
+    grpc.CallOptions? options,
+  }) {
+    modifyAckDeadlineCallCount++;
+    recordedModifyAckRequests.add(request);
+    final completer = Completer<protobuf.Empty>();
+    if (modifyAckDeadlineBehavior case final behavior?) {
+      behavior(request.ackIds, request.ackDeadlineSeconds)
+          .then((_) => completer.complete(protobuf.Empty()))
+          .catchError(completer.completeError);
+    } else {
+      completer.complete(protobuf.Empty());
+    }
+    return FakeResponseFuture(completer.future);
+  }
 }

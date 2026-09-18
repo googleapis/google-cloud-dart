@@ -17,10 +17,7 @@ import 'dart:math' as math;
 
 import 'package:meta/meta.dart';
 
-/// The maximum serialized size of a `Publish` request.
-///
-/// Note that Pub/Sub documents this as "10MB", meaning 10,000,000 bytes rather
-/// than 10 MiB.
+/// The maximum serialized size of a `Publish` request (10,000,000 bytes).
 @internal
 const maxPublishRequestBytes = 10 * 1000 * 1000;
 
@@ -29,38 +26,12 @@ const maxPublishRequestBytes = 10 * 1000 * 1000;
 const maxPublishRequestMessages = 1000;
 
 /// The maximum serialized size of an `Acknowledge` or `ModifyAckDeadline`
-/// request.
-///
-/// Note that Pub/Sub documents this as "512 KB", meaning 512,000 bytes rather
-/// than 512 KiB.
+/// request (512,000 bytes).
 @internal
 const maxAcknowledgeRequestBytes = 512 * 1000;
 
-/// [settings] checked against the limits the server enforces on a single
-/// request, and narrowed to them where necessary.
-///
-/// [maxBytes] is the largest serialized request the server will accept, and
-/// [maxMessages] the largest number of items it will accept, or null if no
-/// count limit applies. [requestDescription] names the request in the error
-/// message.
-///
-/// Throws an [ArgumentError] if the caller explicitly asked for more than the
-/// server allows. Such a request can only ever fail — an oversized request is
-/// rejected outright with a non-retryable `INVALID_ARGUMENT` error that takes
-/// every item in the batch with it — and silently substituting a different
-/// value would leave the settings object reporting a size that is not the one
-/// in use.
-///
-/// The check cannot live in [BatchingSettings] itself, because the applicable
-/// limit depends on which request the settings are used for, and one
-/// [BatchingSettings] may legitimately be shared between publishing and
-/// acknowledging.
-///
-/// A [BatchingSettings.maxBytes] that the caller never set is *not* an error.
-/// Its default suits publishing and exceeds what an `Acknowledge` request
-/// allows, so it is quietly narrowed rather than forcing everyone who wants to
-/// set [BatchingSettings.maxMessages] on a subscription to also restate a byte
-/// limit they have no opinion about.
+/// Validates [settings] against the server limits for a specific RPC and
+/// narrows an unspecified default [BatchingSettings.maxBytes] if needed.
 @internal
 BatchingSettings resolveServerLimits(
   BatchingSettings settings, {
@@ -76,8 +47,6 @@ BatchingSettings resolveServerLimits(
           'accepts',
     );
   }
-  // The default is well under every count limit, so anything above one was
-  // asked for deliberately.
   if (maxMessages != null && settings.maxMessages > maxMessages) {
     throw ArgumentError.value(
       settings.maxMessages,
@@ -101,26 +70,9 @@ BatchingSettings resolveServerLimits(
 /// A batch is sent as soon as any of [maxMessages], [maxBytes], or [maxDelay]
 /// is reached, whichever happens first.
 ///
-/// Pub/Sub enforces its own limits on each request, and it measures the
-/// *serialized* request. [maxBytes] is measured the same way, so it can be
-/// compared directly against those limits:
-///
-/// | Request | Server limit |
-/// | --- | --- |
-/// | `Publish` | 10,000,000 bytes, 1,000 messages |
-/// | `Acknowledge`, `ModifyAckDeadline` | 512,000 bytes |
-///
-/// Asking for more than the applicable limit is an error: constructing the
-/// `Topic` or `Subscription` that would use the settings throws an
-/// [ArgumentError], rather than quietly substituting a value you did not ask
-/// for. The one exception is a [maxBytes] you never set, whose default suits
-/// publishing and is narrowed silently for acknowledgments.
-///
-/// Within the limit, a batch of several items is never sent over [maxBytes]. A
-/// single item that is larger than [maxBytes] on its own still is, and the
-/// server rejects that request with a non-retryable `INVALID_ARGUMENT` error
-/// that fails the whole batch, so check the size of individual messages
-/// yourself if they may approach the limit.
+/// [maxBytes] is measured against the serialized protobuf request size:
+/// - `Publish`: up to 10,000,000 bytes and 1,000 messages.
+/// - `Acknowledge` and `ModifyAckDeadline`: up to 512,000 bytes.
 ///
 /// See the [Pub/Sub quotas and limits](https://cloud.google.com/pubsub/quotas).
 final class BatchingSettings {
@@ -129,32 +81,13 @@ final class BatchingSettings {
 
   /// The maximum serialized size in bytes of a request before it is sent.
   ///
-  /// This is the size of the whole request as it appears on the wire: the
-  /// items, the protobuf field tags and length prefixes that frame them, and
-  /// the fixed fields the request carries (such as the topic or subscription
-  /// name). It does not include gRPC framing, which the server does not count
-  /// against its limits either.
-  ///
-  /// This is exact for `Publish`. For acknowledgments it is deliberately
-  /// conservative — the subscription name is counted even on the streaming
-  /// path that omits it, and each ack ID is charged for its own deadline even
-  /// on the unary path that carries a single shared one — so those batches may
-  /// be slightly smaller than [maxBytes] would allow.
-  ///
-  /// An item that would push the total above [maxBytes] starts a new batch
-  /// instead. A single item larger than [maxBytes] is sent on its own, in a
-  /// batch that exceeds [maxBytes].
-  ///
-  /// Must not exceed what the server accepts for the request being batched;
-  /// see the table on [BatchingSettings].
+  /// Includes the items, their protobuf field tags and length prefixes, and
+  /// the fixed fields carried by the request (such as the topic or subscription
+  /// name). An item that would push a non-empty batch above [maxBytes] flushes
+  /// the current batch first; a single item larger than [maxBytes] is sent in
+  /// its own batch.
   final int maxBytes;
 
-  /// Whether [maxBytes] came from the caller rather than from the default.
-  ///
-  /// The default suits publishing and is larger than an `Acknowledge` request
-  /// allows, so it has to be narrowed for that path. Narrowing a value the
-  /// caller actually chose would be wrong — that is an error instead — which
-  /// means the two cases have to be told apart.
   final bool _maxBytesWasSpecified;
 
   /// The maximum time to wait before sending a batch that has reached
@@ -163,14 +96,8 @@ final class BatchingSettings {
 
   /// Creates a new [BatchingSettings] instance.
   ///
-  /// It is an error if:
-  /// - [maxMessages] is not greater than 0.
-  /// - [maxBytes] is not greater than 0.
-  /// - [maxDelay] is not greater than [Duration.zero].
-  ///
-  /// Exceeding a server limit is also an error, but is reported by the `Topic`
-  /// or `Subscription` the settings are given to, which is what determines
-  /// which limit applies.
+  /// It is an error if [maxMessages], [maxBytes], or [maxDelay] is not greater
+  /// than zero.
   BatchingSettings({
     this.maxMessages = 100,
     int? maxBytes,
@@ -229,10 +156,6 @@ final class Batcher<T> {
   final Future<void> Function(List<T>) onBatch;
 
   /// The size in bytes that a batch occupies before any item is added.
-  ///
-  /// This accounts for whatever the request carries besides the items
-  /// themselves, so that [BatchingSettings.maxBytes] can be compared against
-  /// the size of the whole request rather than the sum of its items.
   final int baseSize;
 
   final List<T> _buffer = [];
@@ -291,8 +214,7 @@ final class Batcher<T> {
           _inFlight.remove(future);
         })
         .catchError((_) {
-          // Errors should be handled by onBatch (e.g. failing the
-          // completers for the items).
+          // Errors are handled by onBatch or propagated via close().
         });
   }
 

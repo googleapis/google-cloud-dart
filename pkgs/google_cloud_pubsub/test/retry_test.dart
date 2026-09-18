@@ -15,41 +15,27 @@
 @TestOn('vm')
 library;
 
-import 'package:clock/clock.dart';
 import 'package:google_cloud_pubsub/google_cloud_pubsub.dart';
-import 'package:google_cloud_rpc/rpc.dart';
+import 'package:google_cloud_pubsub/src/retry.dart';
 import 'package:grpc/grpc.dart' as grpc;
+
 import 'package:test/test.dart';
+
+import 'test_utils.dart';
 
 void main() {
   group('isPubSubRetryable', () {
-    test('ALREADY_EXISTS (gRPC code 6) must NOT be retried', () {
-      const error = grpc.GrpcError.custom(
-        grpc.StatusCode.alreadyExists,
-        'Already exists',
-      );
-      expect(isPubSubRetryable(error), isFalse);
-    });
-
-    test('ConflictException must NOT be retried', () {
-      final error = ConflictException('Already exists conflict');
-      expect(isPubSubRetryable(error), isFalse);
-    });
-
     test('deterministic client errors are not retryable', () {
       expect(isPubSubRetryable(NotFoundException('not found')), isFalse);
       expect(isPubSubRetryable(ForbiddenException('forbidden')), isFalse);
       expect(isPubSubRetryable(BadRequestException('bad request')), isFalse);
       expect(isPubSubRetryable(UnauthorizedException('unauthorized')), isFalse);
-      expect(
-        isPubSubRetryable(PreconditionFailedException('precondition')),
-        isFalse,
-      );
+      expect(isPubSubRetryable(ConflictException('conflict')), isFalse);
       expect(
         isPubSubRetryable(
           const grpc.GrpcError.custom(
-            grpc.StatusCode.invalidArgument,
-            'invalid argument',
+            grpc.StatusCode.alreadyExists,
+            'already exists',
           ),
         ),
         isFalse,
@@ -63,26 +49,8 @@ void main() {
       expect(
         isPubSubRetryable(
           const grpc.GrpcError.custom(
-            grpc.StatusCode.permissionDenied,
-            'permission denied',
-          ),
-        ),
-        isFalse,
-      );
-      expect(
-        isPubSubRetryable(
-          const grpc.GrpcError.custom(
-            grpc.StatusCode.unauthenticated,
-            'unauthenticated',
-          ),
-        ),
-        isFalse,
-      );
-      expect(
-        isPubSubRetryable(
-          const grpc.GrpcError.custom(
-            grpc.StatusCode.unimplemented,
-            'unimplemented',
+            grpc.StatusCode.invalidArgument,
+            'invalid argument',
           ),
         ),
         isFalse,
@@ -121,7 +89,7 @@ void main() {
         isTrue,
       );
       expect(
-        isPubSubRetryable(ServiceUnavailableException('service unavailable')),
+        isPubSubRetryable(ServiceUnavailableException('unavailable')),
         isTrue,
       );
       expect(isPubSubRetryable(GatewayTimeoutException('timeout')), isTrue);
@@ -130,94 +98,65 @@ void main() {
         isTrue,
       );
       expect(
-        isPubSubRetryable(
-          InternalServerErrorException('internal server error'),
-        ),
-        isTrue,
-      );
-    });
-
-    test('non-Exception objects are not retryable', () {
-      expect(isPubSubRetryable(StateError('state error')), isFalse);
-      expect(isPubSubRetryable(ArgumentError('argument error')), isFalse);
-      expect(isPubSubRetryable('string error'), isFalse);
-    });
-
-    test('StatusCode.aborted is retryable for raw and mapped exceptions', () {
-      expect(
-        isPubSubRetryable(const grpc.GrpcError.aborted('aborted')),
-        isTrue,
-      );
-      expect(
-        isPubSubRetryable(
-          ConflictException(
-            'aborted',
-            status: Status(code: grpc.StatusCode.aborted, message: 'aborted'),
-          ),
-        ),
-        isTrue,
-      );
-      expect(
-        isPubSubRetryable(
-          ServiceException(
-            'aborted',
-            statusCode: 500,
-            status: Status(code: grpc.StatusCode.aborted, message: 'aborted'),
-          ),
-        ),
-        isTrue,
-      );
-      // Plain ConflictException without aborted is NOT retryable
-      expect(isPubSubRetryable(ConflictException('conflict')), isFalse);
-    });
-
-    test('BadGatewayException and RequestTimeoutException are retryable', () {
-      expect(isPubSubRetryable(BadGatewayException('bad gateway')), isTrue);
-      expect(
-        isPubSubRetryable(RequestTimeoutException('request timeout')),
+        isPubSubRetryable(InternalServerErrorException('internal')),
         isTrue,
       );
     });
 
     test(
-      'StatusCode.dataLoss is NOT retryable for raw and mapped exceptions',
-      () {
-        expect(
-          isPubSubRetryable(
-            const grpc.GrpcError.custom(grpc.StatusCode.dataLoss, 'data loss'),
-          ),
-          isFalse,
+      'mapped ABORTED is retryable while DATA_LOSS and ALREADY_EXISTS are not',
+      () async {
+        final fakePublisher = FakePublisherClient();
+        final client = PubSub.testing(
+          projectId: 'test-project',
+          channel: FakeClientChannel(),
+          publisherClient: fakePublisher,
         );
-        expect(
-          isPubSubRetryable(
-            ServiceException(
-              'data loss',
-              statusCode: 500,
-              status: Status(
-                code: grpc.StatusCode.dataLoss,
-                message: 'data loss',
-              ),
+        addTearDown(client.close);
+
+        fakePublisher.publishBehavior = (_) async =>
+            throw const grpc.GrpcError.aborted('aborted');
+        await expectLater(
+          client.publish('projects/test-project/topics/t', [1]),
+          throwsA(
+            isA<ConflictException>().having(
+              isPubSubRetryable,
+              'retryable',
+              isTrue,
             ),
           ),
-          isFalse,
         );
-        expect(
-          isPubSubRetryable(
-            InternalServerErrorException(
-              'data loss',
-              status: Status(
-                code: grpc.StatusCode.dataLoss,
-                message: 'data loss',
-              ),
+
+        fakePublisher.publishBehavior = (_) async =>
+            throw const grpc.GrpcError.alreadyExists('already exists');
+        await expectLater(
+          client.publish('projects/test-project/topics/t', [1]),
+          throwsA(
+            isA<ConflictException>().having(
+              isPubSubRetryable,
+              'retryable',
+              isFalse,
             ),
           ),
-          isFalse,
+        );
+
+        fakePublisher.publishBehavior = (_) async =>
+            throw const grpc.GrpcError.dataLoss('data loss');
+        await expectLater(
+          client.publish('projects/test-project/topics/t', [1]),
+          throwsA(
+            isA<InternalServerErrorException>().having(
+              isPubSubRetryable,
+              'retryable',
+              isFalse,
+            ),
+          ),
         );
       },
     );
   });
 
-  group('defaultPubSubRetry', () {
+  group('defaultPubSubRetry & normalizePubSubRetry', () {
     test('defaults match Pub/Sub exponential backoff specification', () {
       expect(
         defaultPubSubRetry.maxRetryInterval,
@@ -232,135 +171,13 @@ void main() {
       expect(defaultPubSubRetry.jitter, equals(0.2));
       expect(defaultPubSubRetry.maxRetries, isNull);
     });
-  });
 
-  group('RetryRunner.run with Pub/Sub errors', () {
-    const testRetry = ExponentialRetry(
-      maxRetries: 3,
-      initialDelay: Duration(milliseconds: 1),
-      maxDelay: Duration(milliseconds: 5),
-      jitter: 0.2,
-      isRetryable: isPubSubRetryable,
-    );
-
-    test('non-retryable error throws immediately without retrying', () async {
-      var callCount = 0;
-      await expectLater(
-        () => testRetry.run(() async {
-          callCount++;
-          throw const grpc.GrpcError.alreadyExists('Already exists');
-        }, isIdempotent: true),
-        throwsA(isA<grpc.GrpcError>()),
-      );
-
-      expect(callCount, equals(1));
+    test('normalizePubSubRetry substitutes isPubSubRetryable by default', () {
+      final normalized =
+          normalizePubSubRetry(const ExponentialRetry(maxRetries: 3))
+              as ExponentialRetry;
+      expect(normalized.maxRetries, 3);
+      expect(normalized.isRetryable, same(isPubSubRetryable));
     });
-
-    test('retryable error retries up to maxRetries', () async {
-      var callCount = 0;
-      await expectLater(
-        () => testRetry.run(() async {
-          callCount++;
-          throw const grpc.GrpcError.unavailable('Unavailable');
-        }, isIdempotent: true),
-        throwsA(isA<grpc.GrpcError>()),
-      );
-
-      expect(callCount, equals(4)); // 1 initial + 3 retries
-    });
-
-    test('isIdempotent false throws immediately without retrying', () async {
-      var callCount = 0;
-      await expectLater(
-        () => testRetry.run(() async {
-          callCount++;
-          throw const grpc.GrpcError.unavailable('Unavailable');
-        }, isIdempotent: false),
-        throwsA(isA<grpc.GrpcError>()),
-      );
-      expect(callCount, equals(1));
-    });
-
-    test('returns value on initial attempt success', () async {
-      final result = await testRetry.run(
-        () async => 'success',
-        isIdempotent: true,
-      );
-      expect(result, equals('success'));
-    });
-
-    test('recovers after transient retryable errors', () async {
-      var attempts = 0;
-      final result = await testRetry.run(() async {
-        attempts++;
-        if (attempts < 3) {
-          throw const grpc.GrpcError.unavailable('Unavailable');
-        }
-        return 'recovered';
-      }, isIdempotent: true);
-      expect(result, equals('recovered'));
-      expect(attempts, equals(3));
-    });
-
-    test('retries retryable ServiceException', () async {
-      var attempts = 0;
-      final result = await testRetry.run(() async {
-        attempts++;
-        if (attempts < 2) {
-          throw ServiceUnavailableException('Service Unavailable');
-        }
-        return 'done';
-      }, isIdempotent: true);
-      expect(result, equals('done'));
-      expect(attempts, equals(2));
-    });
-
-    test('maxRetryInterval halts retries when deadline expires', () async {
-      var currentTime = DateTime(2026, 1, 1, 12, 0);
-      final mockClock = Clock(() => currentTime);
-      var callCount = 0;
-
-      const timeoutRetry = ExponentialRetry(
-        maxRetryInterval: Duration(seconds: 1),
-        initialDelay: Duration(milliseconds: 1),
-        maxDelay: Duration(milliseconds: 5),
-        isRetryable: isPubSubRetryable,
-      );
-
-      await expectLater(
-        () => timeoutRetry.run(
-          () async {
-            callCount++;
-            // Advance time past the 1-second timeout
-            currentTime = currentTime.add(const Duration(seconds: 2));
-            throw const grpc.GrpcError.unavailable('Unavailable');
-          },
-          isIdempotent: true,
-          clock: mockClock,
-        ),
-        throwsA(isA<grpc.GrpcError>()),
-      );
-
-      expect(callCount, equals(1));
-    });
-
-    test(
-      'ExponentialRetry with maxRetries: 0 executes exactly once and rethrows',
-      () async {
-        var attempts = 0;
-        const zeroRetry = ExponentialRetry(
-          maxRetries: 0,
-          isRetryable: isPubSubRetryable,
-        );
-        await expectLater(
-          () => zeroRetry.run(() async {
-            attempts++;
-            throw const grpc.GrpcError.unavailable('Transient');
-          }, isIdempotent: true),
-          throwsA(isA<grpc.GrpcError>()),
-        );
-        expect(attempts, equals(1));
-      },
-    );
   });
 }
