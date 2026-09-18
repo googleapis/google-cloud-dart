@@ -22,5 +22,7 @@ export 'package:grpc/grpc.dart'
 
 export 'src/client.dart' show PubSub;
 export 'src/message.dart' show Message, ReceivedMessage;
+export 'src/retry.dart'
+    show ExponentialRetry, RetryRunner, defaultPubSubRetry, isPubSubRetryable;
 export 'src/subscription.dart' show Subscription;
 export 'src/topic.dart' show Topic;
