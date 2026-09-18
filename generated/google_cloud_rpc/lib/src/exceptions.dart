@@ -285,3 +285,14 @@ final class GatewayTimeoutException extends ServiceException {
   @override
   String get _name => 'GatewayTimeoutException';
 }
+
+/// Exception thrown when the server-calculated checksum does not match the
+/// checksum calculated by the client.
+class ChecksumValidationException implements Exception {
+  final String message;
+
+  ChecksumValidationException(this.message);
+
+  @override
+  String toString() => 'ChecksumValidationException: $message';
+}
