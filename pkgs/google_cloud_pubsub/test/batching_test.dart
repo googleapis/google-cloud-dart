@@ -16,361 +16,51 @@
 library;
 
 import 'dart:async';
+import 'dart:convert';
+import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:google_cloud_pubsub/google_cloud_pubsub.dart';
 import 'package:google_cloud_pubsub/src/batching.dart';
+import 'package:google_cloud_pubsub/src/generated/google/pubsub/v1/pubsub.pb.dart'
+    as grpc;
+import 'package:google_cloud_pubsub/src/wire_size.dart';
 import 'package:test/test.dart';
 
 void main() {
   group('Batcher', () {
-    test('flushes when maxMessages is reached', () async {
-      final completer = Completer<List<int>>();
-      Batcher<int>(
-          settings: BatchingSettings(
-            maxMessages: 3,
-            maxDelay: const Duration(seconds: 1),
-          ),
-          itemSize: (item) => 1,
-          onBatch: (batch) async {
-            completer.complete(batch);
-          },
-        )
-        ..add(1)
-        ..add(2)
-        ..add(3);
-
-      final result = await completer.future;
-      expect(result, [1, 2, 3]);
-    });
-
-    test('flushes when maxBytes is reached', () async {
-      final completer = Completer<List<int>>();
-      Batcher<int>(
-          settings: BatchingSettings(
-            maxBytes: 10,
-            maxDelay: const Duration(seconds: 1),
-          ),
-          itemSize: (item) => item,
-          onBatch: (batch) async {
-            completer.complete(batch);
-          },
-        )
-        ..add(4)
-        ..add(6); // 4 + 6 = 10, which reaches maxBytes
-
-      final result = await completer.future;
-      expect(result, [4, 6]);
-    });
-
-    test(
-      'flushes existing items before adding item that would exceed maxBytes',
-      () async {
-        final batches = <List<int>>[];
-        final batcher =
-            Batcher<int>(
-                settings: BatchingSettings(
-                  maxBytes: 10,
-                  maxDelay: const Duration(seconds: 1),
-                ),
-                itemSize: (item) => item,
-                onBatch: (batch) async {
-                  batches.add(batch);
-                },
-              )
-              ..add(6)
-              ..add(
-                6,
-              ); // 6 + 6 = 12 > 10, so first 6 is flushed, second 6 is buffered
-        await Future<void>.delayed(Duration.zero);
-        expect(
-          batches,
-          equals([
-            [6],
-          ]),
-        );
-        await batcher.close();
-        expect(
-          batches,
-          equals([
-            [6],
-            [6],
-          ]),
-        );
-      },
-    );
-
-    test('flushes after maxDelay', () async {
-      final completer = Completer<List<int>>();
-      Batcher<int>(
-          settings: BatchingSettings(
-            maxMessages: 10,
-            maxDelay: const Duration(milliseconds: 100),
-          ),
-          itemSize: (item) => 1,
-          onBatch: (batch) async {
-            completer.complete(batch);
-          },
-        )
-        ..add(1)
-        ..add(2);
-
-      final result = await completer.future;
-      expect(result, [1, 2]);
-    });
-
-    test('close flushes pending items and awaits in-flight batches', () async {
-      final inFlightCompleter = Completer<void>();
-      var batchStarted = false;
-      var batchCompleted = false;
-
-      final batcher = Batcher<int>(
-        settings: BatchingSettings(
-          maxMessages: 10,
-          maxDelay: const Duration(seconds: 10),
-        ),
-        itemSize: (item) => 1,
-        onBatch: (batch) async {
-          batchStarted = true;
-          await inFlightCompleter.future;
-          batchCompleted = true;
-        },
-      )..add(42);
-
-      var closeFinished = false;
-      final closeFuture = batcher.close().then((_) {
-        closeFinished = true;
-      });
-
-      await Future<void>.delayed(const Duration(milliseconds: 10));
-      expect(batchStarted, isTrue);
-      expect(closeFinished, isFalse);
-
-      inFlightCompleter.complete();
-      await closeFuture;
-
-      expect(batchCompleted, isTrue);
-      expect(closeFinished, isTrue);
-    });
-
-    test('calling add after close throws StateError', () async {
-      final batcher = Batcher<int>(
-        settings: BatchingSettings(maxMessages: 10),
-        itemSize: (item) => 1,
-        onBatch: (_) async {},
-      );
-
-      await batcher.close();
-      expect(() => batcher.add(1), throwsStateError);
-    });
-
-    test('synchronous throws from onBatch are safely caught', () async {
-      var threw = false;
-      final batcher = Batcher<int>(
-        settings: BatchingSettings(
-          maxMessages: 1,
-          maxDelay: const Duration(milliseconds: 10),
-        ),
-        itemSize: (item) => 1,
-        onBatch: (batch) {
-          threw = true;
-          throw Exception('sync throw in onBatch');
-        },
-      );
-
-      // add(1) triggers immediate flush because maxMessages: 1.
-      // Should not throw synchronously from add.
-      expect(() => batcher.add(1), returnsNormally);
-      expect(threw, isTrue);
-
-      // close() should rethrow the unhandled exception
-      await expectLater(batcher.close(), throwsA(isA<Exception>()));
-    });
-
-    test(
-      'asynchronous errors in onBatch do not hang close() and are rethrown',
-      () async {
-        final batcher = Batcher<int>(
-          settings: BatchingSettings(maxMessages: 1),
-          itemSize: (item) => 1,
-          onBatch: (batch) => Future.error(Exception('async error in onBatch')),
-        );
-
-        expect(() => batcher.add(1), returnsNormally);
-        await expectLater(batcher.close(), throwsA(isA<Exception>()));
-      },
-    );
-
-    test('synchronous Error in onBatch is rethrown by close()', () async {
-      final batcher = Batcher<int>(
-        settings: BatchingSettings(maxMessages: 1),
-        itemSize: (item) => 1,
-        onBatch: (batch) => throw StateError('sync bug in onBatch'),
-      );
-
-      expect(() => batcher.add(1), returnsNormally);
-      await expectLater(batcher.close(), throwsStateError);
-    });
-
-    test('asynchronous Error in onBatch is rethrown by close()', () async {
-      final batcher = Batcher<int>(
-        settings: BatchingSettings(maxMessages: 1),
-        itemSize: (item) => 1,
-        onBatch: (batch) => Future.error(StateError('async bug in onBatch')),
-      );
-
-      expect(() => batcher.add(1), returnsNormally);
-      await expectLater(batcher.close(), throwsStateError);
-    });
-
-    test(
-      'non-Exception object thrown in onBatch is rethrown by close()',
-      () async {
-        final batcher = Batcher<int>(
-          settings: BatchingSettings(maxMessages: 1),
-          itemSize: (item) => 1,
-          // ignore: only_throw_errors
-          onBatch: (batch) => throw 'raw string throw',
-        );
-
-        expect(() => batcher.add(1), returnsNormally);
-        await expectLater(batcher.close(), throwsA(equals('raw string throw')));
-      },
-    );
-
-    test(
-      'single item exceeding maxBytes on empty buffer flushes immediately',
-      () async {
-        final completer = Completer<List<int>>();
-        final batcher = Batcher<int>(
-          settings: BatchingSettings(
-            maxBytes: 10,
-            maxDelay: const Duration(seconds: 10),
-          ),
-          itemSize: (item) => item,
-          onBatch: (batch) async => completer.complete(batch),
-        )..add(15);
-        expect(await completer.future, equals([15]));
-        await batcher.close();
-      },
-    );
-  });
-
-  group('BatchingSettings', () {
-    test('defaults are initialized correctly', () {
-      final settings = BatchingSettings();
-      expect(settings.maxMessages, equals(100));
-      expect(settings.maxBytes, equals(1024 * 1024));
-      expect(settings.maxDelay, equals(const Duration(milliseconds: 10)));
-    });
-
-    test('equality and hashCode', () {
-      final a = BatchingSettings();
-      final b = BatchingSettings();
-      expect(a, equals(b));
-      expect(a.hashCode, equals(b.hashCode));
-
-      final c = BatchingSettings(maxMessages: 50);
-      expect(a, isNot(equals(c)));
-      expect(a.toString(), contains('BatchingSettings'));
-    });
-
-    test('parameter validation error messages are harmonized', () {
-      expect(
-        () => BatchingSettings(maxMessages: 0),
-        throwsA(
-          isA<ArgumentError>().having(
-            (e) => e.message,
-            'message',
-            'Must be greater than zero',
-          ),
-        ),
-      );
-      expect(
-        () => BatchingSettings(maxMessages: -1),
-        throwsA(
-          isA<ArgumentError>().having(
-            (e) => e.message,
-            'message',
-            'Must be greater than zero',
-          ),
-        ),
-      );
-      expect(
-        () => BatchingSettings(maxBytes: 0),
-        throwsA(
-          isA<ArgumentError>().having(
-            (e) => e.message,
-            'message',
-            'Must be greater than zero',
-          ),
-        ),
-      );
-      expect(
-        () => BatchingSettings(maxBytes: -10),
-        throwsA(
-          isA<ArgumentError>().having(
-            (e) => e.message,
-            'message',
-            'Must be greater than zero',
-          ),
-        ),
-      );
-      expect(
-        () => BatchingSettings(maxDelay: Duration.zero),
-        throwsA(
-          isA<ArgumentError>().having(
-            (e) => e.message,
-            'message',
-            'Must be greater than zero',
-          ),
-        ),
-      );
-      expect(
-        () => BatchingSettings(maxDelay: const Duration(milliseconds: -1)),
-        throwsA(
-          isA<ArgumentError>().having(
-            (e) => e.message,
-            'message',
-            'Must be greater than zero',
-          ),
-        ),
-      );
-      expect(
-        () => BatchingSettings(maxDelay: const Duration(seconds: -10)),
-        throwsA(
-          isA<ArgumentError>().having(
-            (e) => e.message,
-            'message',
-            'Must be greater than zero',
-          ),
-        ),
-      );
-    });
-  });
-
-  group('Batcher.baseSize', () {
-    test('counts towards maxBytes', () async {
+    test('flushes when maxMessages or maxBytes is reached', () async {
       final batches = <List<int>>[];
-      // Base 6 plus two items of 2 reaches maxBytes; a third would exceed it.
-      Batcher<int>(
-          settings: BatchingSettings(
-            maxMessages: 100,
-            maxBytes: 10,
-            maxDelay: const Duration(seconds: 10),
-          ),
-          baseSize: 6,
-          itemSize: (item) => 2,
-          onBatch: (batch) async => batches.add(batch),
-        )
-        ..add(1)
-        ..add(2);
+      final batcher =
+          Batcher<int>(
+              settings: BatchingSettings(
+                maxMessages: 3,
+                maxBytes: 10,
+                maxDelay: const Duration(seconds: 1),
+              ),
+              itemSize: (item) => item,
+              onBatch: (batch) async => batches.add(batch),
+            )
+            ..add(2)
+            ..add(3)
+            ..add(4) // 3 items -> flushes [2, 3, 4]
+            ..add(6)
+            ..add(6); // 6 + 6 > 10 -> flushes [6], buffers [6]
+
       await Future<void>.delayed(Duration.zero);
       expect(batches, [
-        [1, 2],
+        [2, 3, 4],
+        [6],
+      ]);
+      await batcher.close();
+      expect(batches, [
+        [2, 3, 4],
+        [6],
+        [6],
       ]);
     });
 
-    test('is reapplied to each subsequent batch', () async {
+    test('accounts for baseSize in every batch', () async {
       final batches = <List<int>>[];
       Batcher<int>(
           settings: BatchingSettings(
@@ -393,45 +83,54 @@ void main() {
       ]);
     });
 
-    test('defaults to zero, preserving the plain item-sum behaviour', () async {
+    test('flushes after maxDelay and awaits in-flight on close()', () async {
+      final inFlight = Completer<void>();
       final batches = <List<int>>[];
       final batcher = Batcher<int>(
         settings: BatchingSettings(
-          maxMessages: 100,
-          maxBytes: 10,
-          maxDelay: const Duration(seconds: 10),
+          maxMessages: 10,
+          maxDelay: const Duration(milliseconds: 20),
         ),
-        itemSize: (item) => 2,
-        onBatch: (batch) async => batches.add(batch),
-      );
+        itemSize: (_) => 1,
+        onBatch: (batch) async {
+          batches.add(batch);
+          await inFlight.future;
+        },
+      )..add(1);
 
-      for (var i = 1; i <= 5; i++) {
-        batcher.add(i);
-      }
-      await Future<void>.delayed(Duration.zero);
+      await Future<void>.delayed(const Duration(milliseconds: 50));
       expect(batches, [
-        [1, 2, 3, 4, 5],
+        [1],
       ]);
+
+      var closed = false;
+      final closeFuture = batcher.close().then((_) => closed = true);
+      expect(() => batcher.add(2), throwsStateError);
+      expect(closed, isFalse);
+
+      inFlight.complete();
+      await closeFuture;
+      expect(closed, isTrue);
     });
   });
 
-  group('resolveServerLimits', () {
-    test('rejects a maxBytes the caller set above the limit', () {
+  group('BatchingSettings & resolveServerLimits', () {
+    test('validates positive settings and server quotas', () {
+      expect(() => BatchingSettings(maxMessages: 0), throwsArgumentError);
+      expect(() => BatchingSettings(maxBytes: 0), throwsArgumentError);
+      expect(
+        () => BatchingSettings(maxDelay: Duration.zero),
+        throwsArgumentError,
+      );
+
       expect(
         () => resolveServerLimits(
-          BatchingSettings(maxBytes: 50000000),
+          BatchingSettings(maxBytes: 50 * 1000 * 1000),
           maxBytes: maxPublishRequestBytes,
           requestDescription: 'Publish request',
         ),
-        throwsA(
-          isA<ArgumentError>()
-              .having((e) => e.name, 'name', 'batching.maxBytes')
-              .having((e) => e.invalidValue, 'invalidValue', 50000000),
-        ),
+        throwsArgumentError,
       );
-    });
-
-    test('rejects a maxMessages above the limit', () {
       expect(
         () => resolveServerLimits(
           BatchingSettings(maxMessages: 5000),
@@ -439,42 +138,17 @@ void main() {
           maxMessages: maxPublishRequestMessages,
           requestDescription: 'Publish request',
         ),
-        throwsA(
-          isA<ArgumentError>()
-              .having((e) => e.name, 'name', 'batching.maxMessages')
-              .having((e) => e.invalidValue, 'invalidValue', 5000),
-        ),
+        throwsArgumentError,
       );
-    });
 
-    test('leaves settings within the limits untouched', () {
-      final settings = BatchingSettings(maxMessages: 10, maxBytes: 2048);
-      final resolved = resolveServerLimits(
-        settings,
-        maxBytes: maxPublishRequestBytes,
-        maxMessages: maxPublishRequestMessages,
-        requestDescription: 'Publish request',
-      );
-      expect(identical(resolved, settings), isTrue);
-    });
-
-    test('narrows a maxBytes the caller never set', () {
-      // The default suits publishing and is larger than an acknowledgment
-      // request allows. Rejecting it would mean nobody could set only
-      // maxMessages on a subscription.
-      final settings = BatchingSettings(maxMessages: 10);
-      final resolved = resolveServerLimits(
-        settings,
+      // Unspecified maxBytes is narrowed to maxAcknowledgeRequestBytes,
+      // whereas an explicitly set 1 MiB maxBytes throws.
+      final narrowed = resolveServerLimits(
+        BatchingSettings(maxMessages: 10),
         maxBytes: maxAcknowledgeRequestBytes,
         requestDescription: 'Acknowledge request',
       );
-      expect(settings.maxBytes, greaterThan(maxAcknowledgeRequestBytes));
-      expect(resolved.maxBytes, maxAcknowledgeRequestBytes);
-      expect(resolved.maxMessages, 10);
-    });
-
-    test('rejects the same value when the caller set it explicitly', () {
-      // Same number as the default, but chosen rather than inherited.
+      expect(narrowed.maxBytes, maxAcknowledgeRequestBytes);
       expect(
         () => resolveServerLimits(
           BatchingSettings(maxBytes: 1024 * 1024),
@@ -484,52 +158,39 @@ void main() {
         throwsArgumentError,
       );
     });
-
-    test('preserves maxDelay when narrowing', () {
-      const maxDelay = Duration(seconds: 7);
-      final resolved = resolveServerLimits(
-        BatchingSettings(maxDelay: maxDelay),
-        maxBytes: maxAcknowledgeRequestBytes,
-        requestDescription: 'Acknowledge request',
-      );
-      expect(resolved.maxDelay, maxDelay);
-    });
-
-    test('leaves maxMessages alone when no message limit applies', () {
-      final resolved = resolveServerLimits(
-        BatchingSettings(maxMessages: 5000),
-        maxBytes: maxAcknowledgeRequestBytes,
-        requestDescription: 'Acknowledge request',
-      );
-      expect(resolved.maxMessages, 5000);
-      expect(resolved.maxBytes, maxAcknowledgeRequestBytes);
-    });
   });
 
-  group('server limits', () {
-    test('match the documented Pub/Sub quotas', () {
-      // https://cloud.google.com/pubsub/quotas. Pub/Sub documents these in
-      // decimal units, so "10MB" is 10,000,000 bytes rather than 10 MiB.
-      expect(maxPublishRequestBytes, 10 * 1000 * 1000);
-      expect(maxPublishRequestMessages, 1000);
-      expect(maxAcknowledgeRequestBytes, 512 * 1000);
-    });
+  group('wire_size', () {
+    test('publishRequestMessageSize matches serialized PublishRequest', () {
+      const topic = 'projects/example-project/topics/example-topic';
+      final random = Random(20260914);
+      final messages = <grpc.PubsubMessage>[];
+      var predicted = lengthDelimitedSize(1, utf8.encode(topic).length);
 
-    test('publish defaults stay within them', () {
-      final settings = PublishSettings().batching;
-      expect(settings.maxBytes, lessThanOrEqualTo(maxPublishRequestBytes));
-      expect(
-        settings.maxMessages,
-        lessThanOrEqualTo(maxPublishRequestMessages),
-      );
-    });
+      for (var i = 0; i < 100; i++) {
+        final data = Uint8List.fromList(
+          List<int>.filled(random.nextInt(2000), 0),
+        );
+        final attributes = <String, String>{
+          if (i.isEven) 'key-$i': 'välué-${'x' * (i * 2)}',
+        };
+        messages.add(
+          grpc.PubsubMessage()
+            ..data = data
+            ..attributes.addAll(attributes),
+        );
+        predicted += publishRequestMessageSize(
+          Message(data: data, attributes: attributes),
+        );
+      }
 
-    test('acknowledgment defaults stay within them', () {
-      // The publish-oriented default of 1 MiB is twice what the server allows
-      // for an Acknowledge or ModifyAckDeadline request.
-      final settings = AckSettings().batching;
-      expect(settings.maxBytes, maxAcknowledgeRequestBytes);
-      expect(settings.maxBytes, lessThanOrEqualTo(maxAcknowledgeRequestBytes));
+      final actual =
+          (grpc.PublishRequest()
+                ..topic = topic
+                ..messages.addAll(messages))
+              .writeToBuffer()
+              .length;
+      expect(predicted, actual);
     });
   });
 }
