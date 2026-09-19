@@ -423,6 +423,7 @@ final class ComputeEngineCredentials extends GoogleCredentials
   }
 
   /// Closes the underlying HTTP client if this instance created it.
+  @override
   void close() {
     if (_ownsClient) {
       _client.close();

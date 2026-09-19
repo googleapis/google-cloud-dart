@@ -45,7 +45,8 @@ void main() {
         return;
       }
       // Credentials should always be available when running on GCE.
-      await defaultCredentials();
+      final creds = await defaultCredentials();
+      creds.close();
     });
 
     group('ServiceAccountCredentials', () {

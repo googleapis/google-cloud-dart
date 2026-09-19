@@ -30,4 +30,7 @@ abstract class GoogleCredentials {
   /// Creates a [GoogleCredentials] instance with the specified
   /// [universeDomain].
   const GoogleCredentials({this.universeDomain = defaultUniverseDomain});
+
+  /// Closes any resources held by the credentials.
+  void close() {}
 }
