@@ -48,7 +48,7 @@ Future<GoogleCredentials> internalDefaultCredentials({
   final onWindows = isWindows ?? Platform.isWindows;
 
   // Check GOOGLE_APPLICATION_CREDENTIALS
-  final envPath = getEnv('GOOGLE_APPLICATION_CREDENTIALS');
+  final envPath = getEnv('GOOGLE_APPLICATION_CREDENTIALS')?.trim();
   if (envPath != null && envPath.isNotEmpty) {
     final file = File(envPath);
     if (!await file.exists()) {
@@ -75,7 +75,10 @@ Future<GoogleCredentials> internalDefaultCredentials({
     client: client,
     readEnvironment: getEnvironmentVariable,
   )) {
-    return await ComputeEngineCredentials.create(client: client);
+    return await ComputeEngineCredentials.create(
+      client: client,
+      metadataHost: getEnv('GCE_METADATA_HOST')?.trim(),
+    );
   }
 
   throw CredentialException(
@@ -89,7 +92,7 @@ Future<ServiceAccountCredentials> _loadCredentialsFile(File file) async {
   final String content;
   try {
     content = await file.readAsString();
-  } on FileSystemException catch (e, stackTrace) {
+  } on IOException catch (e, stackTrace) {
     throw CredentialException(
       'Failed to read credentials file at ${file.path}: $e',
       innerException: e,
@@ -114,7 +117,22 @@ Future<ServiceAccountCredentials> _loadCredentialsFile(File file) async {
 
   final type = json['type'];
   if (type == 'service_account') {
-    return await ServiceAccountCredentials.fromServiceAccountInfo(json);
+    try {
+      return await ServiceAccountCredentials.fromServiceAccountInfo(json);
+    } on FormatException catch (e, stackTrace) {
+      throw CredentialException(
+        'Failed to parse service account credentials from ${file.path}: '
+        '${e.message}',
+        innerException: e,
+        innerStackTrace: stackTrace,
+      );
+    } on Exception catch (e, stackTrace) {
+      throw CredentialException(
+        'Failed to load service account credentials from ${file.path}: $e',
+        innerException: e,
+        innerStackTrace: stackTrace,
+      );
+    }
   }
 
   throw CredentialException(
@@ -129,18 +147,18 @@ String? getWellKnownCredentialsPath(
   bool isWindows,
 ) {
   final path = isWindows ? p.windows : p.posix;
-  final cloudSdkConfig = getEnv('CLOUDSDK_CONFIG');
+  final cloudSdkConfig = getEnv('CLOUDSDK_CONFIG')?.trim();
   if (cloudSdkConfig != null && cloudSdkConfig.isNotEmpty) {
     return path.join(cloudSdkConfig, _credentialsFileName);
   }
 
   if (isWindows) {
-    final appData = getEnv('APPDATA');
+    final appData = getEnv('APPDATA')?.trim();
     if (appData == null || appData.isEmpty) return null;
     return path.join(appData, 'gcloud', _credentialsFileName);
   }
 
-  final home = getEnv('HOME');
+  final home = getEnv('HOME')?.trim();
   if (home == null || home.isEmpty) return null;
   return path.join(home, '.config', 'gcloud', _credentialsFileName);
 }

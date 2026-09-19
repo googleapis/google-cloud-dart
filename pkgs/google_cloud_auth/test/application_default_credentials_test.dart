@@ -145,6 +145,35 @@ void main() {
             ),
           );
         });
+
+        test('malformed service account missing client_email', () async {
+          final saFile = File('${tempDir.path}/incomplete_sa.json');
+          await saFile.writeAsString(
+            jsonEncode({
+              'type': 'service_account',
+              'project_id': 'env-project',
+              'private_key': testPrivateKey,
+            }),
+          );
+
+          expect(
+            () => internalDefaultCredentials(
+              getEnvironmentVariable: (String name) {
+                if (name == 'GOOGLE_APPLICATION_CREDENTIALS') {
+                  return saFile.path;
+                }
+                return null;
+              },
+            ),
+            throwsA(
+              isA<CredentialException>().having(
+                (e) => e.message,
+                'message',
+                contains('Failed to parse service account credentials'),
+              ),
+            ),
+          );
+        });
       });
 
       test('from CLOUDSDK_CONFIG', () async {
@@ -285,6 +314,49 @@ void main() {
         'gce-sa@project.iam.gserviceaccount.com',
       ),
     );
+  });
+
+  test('ComputeEngineCredentials forwards GCE_METADATA_HOST from '
+      'getEnvironmentVariable', () async {
+    final hostsContacted = <String>{};
+    final mockClient = MockClient((request) async {
+      hostsContacted.add(request.url.host);
+      return switch (request.url.path) {
+        '/computeMetadata/v1/' => http.Response(
+          'ok',
+          200,
+          headers: {'metadata-flavor': 'Google'},
+        ),
+        '/computeMetadata/v1/instance/service-accounts/default/email' =>
+          http.Response(
+            'gce-sa@project.iam.gserviceaccount.com',
+            200,
+            headers: {'metadata-flavor': 'Google'},
+          ),
+        '/computeMetadata/v1/universe/universe-domain' => http.Response(
+          'googleapis.com',
+          200,
+          headers: {'metadata-flavor': 'Google'},
+        ),
+        _ => http.Response('Not found', 404),
+      };
+    });
+
+    final credentials = await internalDefaultCredentials(
+      client: mockClient,
+      getEnvironmentVariable: (String name) => switch (name) {
+        'GCE_METADATA_HOST' => 'custom-metadata-host',
+        _ => null,
+      },
+      wellKnownFilePath: '${tempDir.path}/non_existent.json',
+    );
+
+    expect(credentials, isA<ComputeEngineCredentials>());
+    expect(
+      (credentials as ComputeEngineCredentials).metadataHost,
+      equals('custom-metadata-host'),
+    );
+    expect(hostsContacted, equals({'custom-metadata-host'}));
   });
 
   test('throws CredentialException when no credentials can be found', () async {

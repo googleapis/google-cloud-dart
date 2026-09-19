@@ -155,7 +155,7 @@ final class ComputeEngineCredentials extends GoogleCredentials
     if (!forceRefresh &&
         _cachedAccessToken != null &&
         _accessTokenExpiry != null) {
-      if (DateTime.now().isBefore(
+      if (DateTime.timestamp().isBefore(
         _accessTokenExpiry!.subtract(const Duration(minutes: 1)),
       )) {
         return _cachedAccessToken!;
@@ -191,14 +191,19 @@ final class ComputeEngineCredentials extends GoogleCredentials
     }
 
     try {
-      final json = jsonDecode(response.body) as Map<String, dynamic>;
-      final accessToken = json['access_token'];
-      final expiresIn = json['expires_in'];
-      if (accessToken is! String || expiresIn is! int) {
+      final decoded = jsonDecode(response.body);
+      if (decoded is! Map<String, dynamic>) {
+        throw const FormatException('Expected JSON object.');
+      }
+      final accessToken = decoded['access_token'];
+      final expiresIn = decoded['expires_in'];
+      if (accessToken is! String || accessToken.isEmpty || expiresIn is! num) {
         throw const FormatException('Missing access_token or expires_in');
       }
       _cachedAccessToken = accessToken;
-      _accessTokenExpiry = DateTime.now().add(Duration(seconds: expiresIn));
+      _accessTokenExpiry = DateTime.timestamp().add(
+        Duration(seconds: expiresIn.toInt()),
+      );
       return accessToken;
     } on FormatException catch (e, stackTrace) {
       throw CredentialException(
@@ -325,23 +330,25 @@ final class ComputeEngineCredentials extends GoogleCredentials
   /// Signs [message] using the Identity and Access Management (IAM)
   /// `signBlob` API.
   ///
-  /// Throws [CredentialException] on failure.
+  /// Throws [SigningException] on failure.
   @override
   Future<Uint8List> sign(List<int> message) async {
-    final signBlobUrl = Uri(
-      scheme: 'https',
-      host: 'iamcredentials.$universeDomain',
-      pathSegments: [
-        'v1',
-        'projects',
-        '-',
-        'serviceAccounts',
-        '$clientEmail:signBlob',
-      ],
+    final signBlobUrl = Uri.https(
+      'iamcredentials.$universeDomain',
+      '/v1/projects/-/serviceAccounts/$clientEmail:signBlob',
     );
     final requestBody = jsonEncode({'payload': base64.encode(message)});
 
-    var token = await accessToken();
+    String token;
+    try {
+      token = await accessToken();
+    } on Exception catch (e, stackTrace) {
+      throw SigningException(
+        'Failed to obtain access token for signing: $e',
+        innerException: e,
+        innerStackTrace: stackTrace,
+      );
+    }
     var attempts = 0;
     var refreshedToken = false;
 
@@ -367,8 +374,11 @@ final class ComputeEngineCredentials extends GoogleCredentials
 
       if (response.statusCode == 200) {
         try {
-          final json = jsonDecode(response.body) as Map<String, dynamic>;
-          final signedBlob = json['signedBlob'];
+          final decoded = jsonDecode(response.body);
+          if (decoded is! Map<String, dynamic>) {
+            throw const FormatException('Expected JSON object.');
+          }
+          final signedBlob = decoded['signedBlob'];
           if (signedBlob is! String) {
             throw const FormatException("Missing 'signedBlob' in response");
           }
@@ -385,7 +395,15 @@ final class ComputeEngineCredentials extends GoogleCredentials
       // If token expired (401), retry once with a freshly requested token.
       if (response.statusCode == 401 && !refreshedToken) {
         refreshedToken = true;
-        token = await accessToken(forceRefresh: true);
+        try {
+          token = await accessToken(forceRefresh: true);
+        } on Exception catch (e, stackTrace) {
+          throw SigningException(
+            'Failed to refresh access token for signing: $e',
+            innerException: e,
+            innerStackTrace: stackTrace,
+          );
+        }
         continue;
       }
 

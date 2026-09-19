@@ -196,6 +196,18 @@ final class ServiceAccountCredentials extends GoogleCredentials
   }
 
   /// Signs [message] using RSASSA-PKCS1-v1_5 with SHA-256 and the private key.
+  ///
+  /// Throws [SigningException] on failure.
   @override
-  Future<Uint8List> sign(List<int> message) => _privateKey.signBytes(message);
+  Future<Uint8List> sign(List<int> message) async {
+    try {
+      return await _privateKey.signBytes(message);
+    } on Exception catch (e, stackTrace) {
+      throw SigningException(
+        'Failed to sign message: $e',
+        innerException: e,
+        innerStackTrace: stackTrace,
+      );
+    }
+  }
 }
