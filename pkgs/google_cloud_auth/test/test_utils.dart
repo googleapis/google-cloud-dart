@@ -18,6 +18,8 @@ import 'dart:io';
 import 'package:webcrypto/webcrypto.dart';
 
 final canUseWebCrypto = () {
+  // package:webcrypto is always available in the browser.
+  // Dart 3.13 or later is required when run using the vm.
   if (!const bool.fromEnvironment('dart.library.io')) return true;
   final versionStr = Platform.version.split(' ').first;
   final parts = versionStr.split('.').map(int.tryParse).toList();
