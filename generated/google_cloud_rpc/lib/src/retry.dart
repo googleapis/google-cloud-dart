@@ -29,48 +29,11 @@ sealed class RetryRunner {
     Clock clock = const Clock(),
   });
 
-  /// Function that returns whether an error is considered retryable by this
-  /// runner.
-  bool Function(Object error) get isRetryable;
+  /// Returns whether [error] is considered retryable by this runner.
+  bool isRetryable(Object error);
 
   /// Generates a sequence of wait durations for retries or reconnections.
   Iterable<Duration> delays({Clock clock = const Clock(), Random? random});
-}
-
-/// Returns whether [error] is considered a transient, retryable error by
-/// default.
-bool defaultIsRetryable(Object error) {
-  if (error is! Exception) return false;
-  return switch (error) {
-    // InternalServerErrorException (HTTP 500 / gRPC INTERNAL or UNKNOWN) is
-    // retryable unless it carries gRPC status DATA_LOSS (code 15).
-    InternalServerErrorException(:final status) => status?.code != 15,
-    // ConflictException (HTTP 409 / gRPC ALREADY_EXISTS) is not retryable
-    // unless it carries gRPC status ABORTED (code 10).
-    ConflictException(:final status) => status?.code == 10,
-    BadGatewayException() ||
-    RequestTimeoutException() ||
-    ServiceUnavailableException() ||
-    GatewayTimeoutException() ||
-    TooManyRequestsException() => true,
-    ServiceException(:final status, :final statusCode) =>
-      switch (status?.code) {
-        // gRPC status codes: UNKNOWN(2), DEADLINE_EXCEEDED(4),
-        // RESOURCE_EXHAUSTED(8), ABORTED(10), INTERNAL(13), UNAVAILABLE(14).
-        2 || 4 || 8 || 10 || 13 || 14 => true,
-        null =>
-          statusCode == 408 ||
-              statusCode == 429 ||
-              statusCode == 500 ||
-              statusCode == 502 ||
-              statusCode == 503 ||
-              statusCode == 504,
-        _ => false,
-      },
-    http.ClientException() => true,
-    ChecksumValidationException() => true,
-    _ => false,
-  };
 }
 
 /// Generates a sequence of delays for exponential backoff.
@@ -212,9 +175,6 @@ final class ExponentialRetry implements RetryRunner {
   /// Defaults to `0.0` (no jitter).
   final double jitter;
 
-  @override
-  final bool Function(Object error) isRetryable;
-
   const ExponentialRetry({
     this.maxRetries,
     // Defaults taken from Python:
@@ -224,8 +184,42 @@ final class ExponentialRetry implements RetryRunner {
     this.maxDelay = const Duration(seconds: 60),
     this.maxRetryInterval = const Duration(minutes: 2),
     this.jitter = 0.0,
-    this.isRetryable = defaultIsRetryable,
   });
+
+  @override
+  bool isRetryable(Object error) {
+    if (error is! Exception) return false;
+    return switch (error) {
+      // InternalServerErrorException (HTTP 500 / gRPC INTERNAL or UNKNOWN) is
+      // retryable unless it carries gRPC status DATA_LOSS (code 15).
+      InternalServerErrorException(:final status) => status?.code != 15,
+      // ConflictException (HTTP 409 / gRPC ALREADY_EXISTS) is not retryable
+      // unless it carries gRPC status ABORTED (code 10).
+      ConflictException(:final status) => status?.code == 10,
+      BadGatewayException() ||
+      RequestTimeoutException() ||
+      ServiceUnavailableException() ||
+      GatewayTimeoutException() ||
+      TooManyRequestsException() => true,
+      ServiceException(:final status, :final statusCode) =>
+        switch (status?.code) {
+          // gRPC status codes: UNKNOWN(2), DEADLINE_EXCEEDED(4),
+          // RESOURCE_EXHAUSTED(8), ABORTED(10), INTERNAL(13), UNAVAILABLE(14).
+          2 || 4 || 8 || 10 || 13 || 14 => true,
+          null =>
+            statusCode == 408 ||
+                statusCode == 429 ||
+                statusCode == 500 ||
+                statusCode == 502 ||
+                statusCode == 503 ||
+                statusCode == 504,
+          _ => false,
+        },
+      http.ClientException() => true,
+      ChecksumValidationException() => true,
+      _ => false,
+    };
+  }
 
   @override
   Iterable<Duration> delays({Clock clock = const Clock(), Random? random}) =>
@@ -251,13 +245,11 @@ final class ExponentialRetry implements RetryRunner {
     while (true) {
       try {
         return await body();
-      } catch (e) {
-        if (!isIdempotent || !isRetryable(e)) rethrow;
-        if (iterator.moveNext()) {
-          await Future<void>.delayed(iterator.current);
-        } else {
-          rethrow;
-        }
+      } on Exception catch (e) {
+        if (!isIdempotent) rethrow;
+        if (!isRetryable(e)) rethrow;
+        if (!iterator.moveNext()) rethrow;
+        await Future<void>.delayed(iterator.current);
       }
     }
   }
@@ -272,8 +264,7 @@ final class ExponentialRetry implements RetryRunner {
           initialDelay == other.initialDelay &&
           delayMultiplier == other.delayMultiplier &&
           maxDelay == other.maxDelay &&
-          jitter == other.jitter &&
-          isRetryable == other.isRetryable;
+          jitter == other.jitter;
 
   @override
   int get hashCode => Object.hash(
@@ -283,7 +274,6 @@ final class ExponentialRetry implements RetryRunner {
     delayMultiplier,
     maxDelay,
     jitter,
-    isRetryable,
   );
 
   @override
@@ -298,6 +288,4 @@ final class ExponentialRetry implements RetryRunner {
 }
 
 /// The default retry strategy.
-///
-/// This strategy implements exponential backoff for idempotent operations.
 const defaultRetry = ExponentialRetry();

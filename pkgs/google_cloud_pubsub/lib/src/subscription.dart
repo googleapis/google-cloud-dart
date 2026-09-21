@@ -19,7 +19,6 @@ import '../google_cloud_pubsub.dart';
 import 'batching.dart';
 import 'disposable_stream_controller.dart';
 import 'generated/google/pubsub/v1/pubsub.pbgrpc.dart' as grpc;
-import 'retry.dart';
 import 'wire_size.dart';
 
 // Field numbers from `google/pubsub/v1/pubsub.proto`, used to predict the
@@ -57,7 +56,7 @@ final class AckSettings {
   AckSettings({BatchingSettings? batching, RetryRunner? retry})
     : batching =
           batching ?? BatchingSettings(maxBytes: maxAcknowledgeRequestBytes),
-      retry = normalizePubSubRetry(retry);
+      retry = retry ?? defaultRetry;
 
   @override
   bool operator ==(Object other) =>
@@ -447,11 +446,17 @@ final class Subscription {
     if (_isClosed) {
       throw StateError('Cannot stream messages on a closed Subscription.');
     }
-    final effectiveRetry = normalizePubSubRetry(
-      retry,
-      fallback: ackSettings.retry,
-      clearMaxRetryInterval: retry == null,
-    );
+    final effectiveRetry = switch (retry ?? ackSettings.retry) {
+      final ExponentialRetry exp when retry == null => ExponentialRetry(
+        maxRetries: exp.maxRetries,
+        maxRetryInterval: null,
+        initialDelay: exp.initialDelay,
+        delayMultiplier: exp.delayMultiplier,
+        maxDelay: exp.maxDelay,
+        jitter: exp.jitter,
+      ),
+      final r => r,
+    };
 
     late final StreamController<ReceivedMessage> controller;
     late final _ActiveStreamingPull session;
