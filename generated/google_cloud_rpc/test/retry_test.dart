@@ -102,21 +102,27 @@ void main() {
     });
   });
 
-  group('defaultIsRetryable', () {
+  group('defaultRetry.isRetryable', () {
     test('classifies retryable exceptions', () {
-      expect(defaultIsRetryable(TooManyRequestsException('429')), isTrue);
-      expect(defaultIsRetryable(InternalServerErrorException('500')), isTrue);
-      expect(defaultIsRetryable(BadGatewayException('502')), isTrue);
-      expect(defaultIsRetryable(ServiceUnavailableException('503')), isTrue);
-      expect(defaultIsRetryable(GatewayTimeoutException('504')), isTrue);
-      expect(defaultIsRetryable(RequestTimeoutException('408')), isTrue);
-      expect(defaultIsRetryable(http.ClientException('network')), isTrue);
+      expect(defaultRetry.isRetryable(TooManyRequestsException('429')), isTrue);
       expect(
-        defaultIsRetryable(ChecksumValidationException('bad checksum')),
+        defaultRetry.isRetryable(InternalServerErrorException('500')),
+        isTrue,
+      );
+      expect(defaultRetry.isRetryable(BadGatewayException('502')), isTrue);
+      expect(
+        defaultRetry.isRetryable(ServiceUnavailableException('503')),
+        isTrue,
+      );
+      expect(defaultRetry.isRetryable(GatewayTimeoutException('504')), isTrue);
+      expect(defaultRetry.isRetryable(RequestTimeoutException('408')), isTrue);
+      expect(defaultRetry.isRetryable(http.ClientException('network')), isTrue);
+      expect(
+        defaultRetry.isRetryable(ChecksumValidationException('bad checksum')),
         isTrue,
       );
       expect(
-        defaultIsRetryable(
+        defaultRetry.isRetryable(
           ConflictException('aborted', status: Status(code: 10)),
         ),
         isTrue,
@@ -124,11 +130,11 @@ void main() {
     });
 
     test('classifies non-retryable exceptions', () {
-      expect(defaultIsRetryable(BadRequestException('400')), isFalse);
-      expect(defaultIsRetryable(NotFoundException('404')), isFalse);
-      expect(defaultIsRetryable(ConflictException('409')), isFalse);
+      expect(defaultRetry.isRetryable(BadRequestException('400')), isFalse);
+      expect(defaultRetry.isRetryable(NotFoundException('404')), isFalse);
+      expect(defaultRetry.isRetryable(ConflictException('409')), isFalse);
       expect(
-        defaultIsRetryable(
+        defaultRetry.isRetryable(
           InternalServerErrorException('data loss', status: Status(code: 15)),
         ),
         isFalse,
