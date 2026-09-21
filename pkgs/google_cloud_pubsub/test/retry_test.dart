@@ -16,91 +16,23 @@
 library;
 
 import 'package:google_cloud_pubsub/google_cloud_pubsub.dart';
-import 'package:google_cloud_pubsub/src/retry.dart';
 import 'package:grpc/grpc.dart' as grpc;
-
 import 'package:test/test.dart';
 
 import 'test_utils.dart';
 
 void main() {
-  group('isPubSubRetryable', () {
-    test('deterministic client errors are not retryable', () {
-      expect(isPubSubRetryable(NotFoundException('not found')), isFalse);
-      expect(isPubSubRetryable(ForbiddenException('forbidden')), isFalse);
-      expect(isPubSubRetryable(BadRequestException('bad request')), isFalse);
-      expect(isPubSubRetryable(UnauthorizedException('unauthorized')), isFalse);
-      expect(isPubSubRetryable(ConflictException('conflict')), isFalse);
+  group('defaultRetry', () {
+    test('defaults match Pub/Sub exponential backoff specification', () {
+      expect(defaultRetry.maxRetryInterval, equals(const Duration(minutes: 1)));
       expect(
-        isPubSubRetryable(
-          const grpc.GrpcError.custom(
-            grpc.StatusCode.alreadyExists,
-            'already exists',
-          ),
-        ),
-        isFalse,
+        defaultRetry.initialDelay,
+        equals(const Duration(milliseconds: 100)),
       );
-      expect(
-        isPubSubRetryable(
-          const grpc.GrpcError.custom(grpc.StatusCode.notFound, 'not found'),
-        ),
-        isFalse,
-      );
-      expect(
-        isPubSubRetryable(
-          const grpc.GrpcError.custom(
-            grpc.StatusCode.invalidArgument,
-            'invalid argument',
-          ),
-        ),
-        isFalse,
-      );
-    });
-
-    test('transient errors are retryable', () {
-      expect(
-        isPubSubRetryable(const grpc.GrpcError.aborted('aborted')),
-        isTrue,
-      );
-      expect(
-        isPubSubRetryable(
-          const grpc.GrpcError.unavailable('service unavailable'),
-        ),
-        isTrue,
-      );
-      expect(
-        isPubSubRetryable(
-          const grpc.GrpcError.deadlineExceeded('deadline exceeded'),
-        ),
-        isTrue,
-      );
-      expect(
-        isPubSubRetryable(const grpc.GrpcError.internal('internal error')),
-        isTrue,
-      );
-      expect(
-        isPubSubRetryable(
-          const grpc.GrpcError.resourceExhausted('resource exhausted'),
-        ),
-        isTrue,
-      );
-      expect(
-        isPubSubRetryable(const grpc.GrpcError.unknown('unknown')),
-        isTrue,
-      );
-      expect(
-        isPubSubRetryable(ServiceUnavailableException('unavailable')),
-        isTrue,
-      );
-      expect(isPubSubRetryable(GatewayTimeoutException('timeout')), isTrue);
-      expect(
-        isPubSubRetryable(TooManyRequestsException('too many requests')),
-        isTrue,
-      );
-      expect(
-        isPubSubRetryable(InternalServerErrorException('internal')),
-        isTrue,
-      );
+      expect(defaultRetry.delayMultiplier, equals(1.3));
+      expect(defaultRetry.maxDelay, equals(const Duration(seconds: 60)));
+      expect(defaultRetry.jitter, equals(0.2));
+      expect(defaultRetry.maxRetries, isNull);
     });
 
     test(
@@ -120,7 +52,7 @@ void main() {
           client.publish('projects/test-project/topics/t', [1]),
           throwsA(
             isA<ConflictException>().having(
-              isPubSubRetryable,
+              defaultRetry.isRetryable,
               'retryable',
               isTrue,
             ),
@@ -133,7 +65,7 @@ void main() {
           client.publish('projects/test-project/topics/t', [1]),
           throwsA(
             isA<ConflictException>().having(
-              isPubSubRetryable,
+              defaultRetry.isRetryable,
               'retryable',
               isFalse,
             ),
@@ -146,7 +78,7 @@ void main() {
           client.publish('projects/test-project/topics/t', [1]),
           throwsA(
             isA<InternalServerErrorException>().having(
-              isPubSubRetryable,
+              defaultRetry.isRetryable,
               'retryable',
               isFalse,
             ),
@@ -154,30 +86,5 @@ void main() {
         );
       },
     );
-  });
-
-  group('defaultPubSubRetry & normalizePubSubRetry', () {
-    test('defaults match Pub/Sub exponential backoff specification', () {
-      expect(
-        defaultPubSubRetry.maxRetryInterval,
-        equals(const Duration(minutes: 1)),
-      );
-      expect(
-        defaultPubSubRetry.initialDelay,
-        equals(const Duration(milliseconds: 100)),
-      );
-      expect(defaultPubSubRetry.delayMultiplier, equals(1.3));
-      expect(defaultPubSubRetry.maxDelay, equals(const Duration(seconds: 60)));
-      expect(defaultPubSubRetry.jitter, equals(0.2));
-      expect(defaultPubSubRetry.maxRetries, isNull);
-    });
-
-    test('normalizePubSubRetry substitutes isPubSubRetryable by default', () {
-      final normalized =
-          normalizePubSubRetry(const ExponentialRetry(maxRetries: 3))
-              as ExponentialRetry;
-      expect(normalized.maxRetries, 3);
-      expect(normalized.isRetryable, same(isPubSubRetryable));
-    });
   });
 }

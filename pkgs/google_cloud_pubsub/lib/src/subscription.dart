@@ -17,7 +17,6 @@ import 'dart:convert';
 
 import '../google_cloud_pubsub.dart';
 import 'batching.dart';
-import 'retry.dart';
 import 'wire_size.dart';
 
 // Field numbers from `google/pubsub/v1/pubsub.proto`, used to predict the
@@ -55,7 +54,7 @@ final class AckSettings {
   AckSettings({BatchingSettings? batching, RetryRunner? retry})
     : batching =
           batching ?? BatchingSettings(maxBytes: maxAcknowledgeRequestBytes),
-      retry = normalizePubSubRetry(retry);
+      retry = retry ?? defaultRetry;
 
   @override
   bool operator ==(Object other) =>
