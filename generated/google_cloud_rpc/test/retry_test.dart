@@ -208,9 +208,13 @@ void main() {
     });
 
     test('value equality and hashCode', () {
-      const a = ExponentialRetry(maxRetries: 3, jitter: 0.2);
-      const b = ExponentialRetry(maxRetries: 3, jitter: 0.2);
-      const c = ExponentialRetry(maxRetries: 4, jitter: 0.2);
+      // ignore: prefer_const_constructors
+      final a = ExponentialRetry(maxRetries: 3, jitter: 0.2);
+      // ignore: prefer_const_constructors
+      final b = ExponentialRetry(maxRetries: 3, jitter: 0.2);
+      // ignore: prefer_const_constructors
+      final c = ExponentialRetry(maxRetries: 4, jitter: 0.2);
+      expect(identical(a, b), isFalse);
       expect(a, equals(b));
       expect(a.hashCode, equals(b.hashCode));
       expect(a, isNot(equals(c)));
