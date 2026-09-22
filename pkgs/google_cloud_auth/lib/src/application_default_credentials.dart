@@ -30,6 +30,8 @@ import 'service_account_credentials.dart';
 
 const _credentialsFileName = 'application_default_credentials.json';
 
+String? _readEnvironment(String name) => Platform.environment[name];
+
 /// Provides the Application Default Credential from the environment.
 ///
 /// Throws a [CredentialException] if no credentials could be found or loaded.
@@ -40,15 +42,15 @@ Future<GoogleCredentials> defaultCredentials({http.Client? client}) =>
 @internal
 Future<GoogleCredentials> internalDefaultCredentials({
   http.Client? client,
-  @visibleForTesting String? Function(String name)? getEnvironmentVariable,
+  @visibleForTesting
+  String? Function(String name) readEnvironment = _readEnvironment,
   @visibleForTesting String? wellKnownFilePath,
   @visibleForTesting bool? isWindows,
 }) async {
-  final getEnv = getEnvironmentVariable ?? (name) => Platform.environment[name];
   final onWindows = isWindows ?? Platform.isWindows;
 
   // Check GOOGLE_APPLICATION_CREDENTIALS
-  final envPath = getEnv('GOOGLE_APPLICATION_CREDENTIALS')?.trim();
+  final envPath = readEnvironment('GOOGLE_APPLICATION_CREDENTIALS')?.trim();
   if (envPath != null && envPath.isNotEmpty) {
     final file = File(envPath);
     if (!await file.exists()) {
@@ -62,7 +64,7 @@ Future<GoogleCredentials> internalDefaultCredentials({
 
   // Check well-known credentials file
   final adcPath =
-      wellKnownFilePath ?? getWellKnownCredentialsPath(getEnv, onWindows);
+      wellKnownFilePath ?? wellKnownCredentialsPath(readEnvironment, onWindows);
   if (adcPath != null) {
     final file = File(adcPath);
     if (await file.exists()) {
@@ -73,11 +75,11 @@ Future<GoogleCredentials> internalDefaultCredentials({
   // Check Google Compute Engine metadata server
   if (await internalIsOnComputeEngine(
     client: client,
-    readEnvironment: getEnvironmentVariable,
+    readEnvironment: readEnvironment,
   )) {
     return await ComputeEngineCredentials.create(
       client: client,
-      metadataHost: getEnv('GCE_METADATA_HOST')?.trim(),
+      metadataHost: readEnvironment('GCE_METADATA_HOST')?.trim(),
     );
   }
 
@@ -142,23 +144,24 @@ Future<ServiceAccountCredentials> _loadCredentialsFile(File file) async {
 }
 
 @internal
-String? getWellKnownCredentialsPath(
-  String? Function(String name) getEnv,
+@visibleForTesting
+String? wellKnownCredentialsPath(
+  String? Function(String name) readEnvironment,
   bool isWindows,
 ) {
   final path = isWindows ? p.windows : p.posix;
-  final cloudSdkConfig = getEnv('CLOUDSDK_CONFIG')?.trim();
+  final cloudSdkConfig = readEnvironment('CLOUDSDK_CONFIG')?.trim();
   if (cloudSdkConfig != null && cloudSdkConfig.isNotEmpty) {
     return path.join(cloudSdkConfig, _credentialsFileName);
   }
 
   if (isWindows) {
-    final appData = getEnv('APPDATA')?.trim();
+    final appData = readEnvironment('APPDATA')?.trim();
     if (appData == null || appData.isEmpty) return null;
     return path.join(appData, 'gcloud', _credentialsFileName);
   }
 
-  final home = getEnv('HOME')?.trim();
+  final home = readEnvironment('HOME')?.trim();
   if (home == null || home.isEmpty) return null;
   return path.join(home, '.config', 'gcloud', _credentialsFileName);
 }

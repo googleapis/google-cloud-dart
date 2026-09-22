@@ -63,7 +63,7 @@ void main() {
           );
 
           final credentials = await internalDefaultCredentials(
-            getEnvironmentVariable: (String name) {
+            readEnvironment: (String name) {
               if (name == 'GOOGLE_APPLICATION_CREDENTIALS') return saFile.path;
               return null;
             },
@@ -82,7 +82,7 @@ void main() {
         test('file does not exist', () async {
           expect(
             () => internalDefaultCredentials(
-              getEnvironmentVariable: (String name) {
+              readEnvironment: (String name) {
                 if (name == 'GOOGLE_APPLICATION_CREDENTIALS') {
                   return '${tempDir.path}/non_existent.json';
                 }
@@ -105,7 +105,7 @@ void main() {
 
           expect(
             () => internalDefaultCredentials(
-              getEnvironmentVariable: (String name) {
+              readEnvironment: (String name) {
                 if (name == 'GOOGLE_APPLICATION_CREDENTIALS') {
                   return invalidFile.path;
                 }
@@ -130,7 +130,7 @@ void main() {
 
           expect(
             () => internalDefaultCredentials(
-              getEnvironmentVariable: (String name) {
+              readEnvironment: (String name) {
                 if (name == 'GOOGLE_APPLICATION_CREDENTIALS') {
                   return userFile.path;
                 }
@@ -159,7 +159,7 @@ void main() {
 
           expect(
             () => internalDefaultCredentials(
-              getEnvironmentVariable: (String name) {
+              readEnvironment: (String name) {
                 if (name == 'GOOGLE_APPLICATION_CREDENTIALS') {
                   return saFile.path;
                 }
@@ -191,7 +191,7 @@ void main() {
         );
 
         final credentials = await internalDefaultCredentials(
-          getEnvironmentVariable: (String name) {
+          readEnvironment: (String name) {
             if (name == 'CLOUDSDK_CONFIG') return tempDir.path;
             return null;
           },
@@ -221,7 +221,7 @@ void main() {
           );
 
           final credentials = await internalDefaultCredentials(
-            getEnvironmentVariable: (String name) => null,
+            readEnvironment: (String name) => null,
             wellKnownFilePath: saFile.path,
           );
 
@@ -241,7 +241,7 @@ void main() {
 
           expect(
             () => internalDefaultCredentials(
-              getEnvironmentVariable: (String name) => null,
+              readEnvironment: (String name) => null,
               wellKnownFilePath: invalidFile.path,
             ),
             throwsA(
@@ -262,7 +262,7 @@ void main() {
 
           expect(
             () => internalDefaultCredentials(
-              getEnvironmentVariable: (String name) => null,
+              readEnvironment: (String name) => null,
               wellKnownFilePath: userFile.path,
             ),
             throwsA(
@@ -303,7 +303,7 @@ void main() {
 
     final credentials = await internalDefaultCredentials(
       client: mockClient,
-      getEnvironmentVariable: (String name) => null,
+      readEnvironment: (String name) => null,
       wellKnownFilePath: '${tempDir.path}/non_existent.json',
     );
 
@@ -318,7 +318,7 @@ void main() {
   });
 
   test('ComputeEngineCredentials forwards GCE_METADATA_HOST from '
-      'getEnvironmentVariable', () async {
+      'readEnvironment', () async {
     final hostsContacted = <String>{};
     final mockClient = MockClient((request) async {
       hostsContacted.add(request.url.host);
@@ -345,7 +345,7 @@ void main() {
 
     final credentials = await internalDefaultCredentials(
       client: mockClient,
-      getEnvironmentVariable: (String name) => switch (name) {
+      readEnvironment: (String name) => switch (name) {
         'GCE_METADATA_HOST' => 'custom-metadata-host',
         _ => null,
       },
@@ -368,7 +368,7 @@ void main() {
     expect(
       () => internalDefaultCredentials(
         client: mockClient,
-        getEnvironmentVariable: (String name) => null,
+        readEnvironment: (String name) => null,
         wellKnownFilePath: '${tempDir.path}/non_existent.json',
       ),
       throwsA(
@@ -384,7 +384,7 @@ void main() {
   group('getWellKnownCredentialsPath', () {
     group('POSIX', () {
       test('returns CLOUDSDK_CONFIG path when set', () {
-        final path = getWellKnownCredentialsPath(
+        final path = wellKnownCredentialsPath(
           (name) => switch (name) {
             'CLOUDSDK_CONFIG' => '/custom/config',
             _ => null,
@@ -398,7 +398,7 @@ void main() {
       });
 
       test('prioritizes CLOUDSDK_CONFIG over HOME', () {
-        final path = getWellKnownCredentialsPath(
+        final path = wellKnownCredentialsPath(
           (name) => switch (name) {
             'CLOUDSDK_CONFIG' => '/custom/config',
             'HOME' => '/home/user',
@@ -413,7 +413,7 @@ void main() {
       });
 
       test('returns HOME-based config path when CLOUDSDK_CONFIG not set', () {
-        final path = getWellKnownCredentialsPath(
+        final path = wellKnownCredentialsPath(
           (name) => switch (name) {
             'HOME' => '/home/user',
             _ => null,
@@ -429,12 +429,12 @@ void main() {
       });
 
       test('returns null when neither CLOUDSDK_CONFIG nor HOME is set', () {
-        final path = getWellKnownCredentialsPath((name) => null, false);
+        final path = wellKnownCredentialsPath((name) => null, false);
         expect(path, isNull);
       });
 
       test('returns null when HOME is empty', () {
-        final path = getWellKnownCredentialsPath(
+        final path = wellKnownCredentialsPath(
           (name) => switch (name) {
             'HOME' => '',
             _ => null,
@@ -445,7 +445,7 @@ void main() {
       });
 
       test('falls back to HOME when CLOUDSDK_CONFIG is empty', () {
-        final path = getWellKnownCredentialsPath(
+        final path = wellKnownCredentialsPath(
           (name) => switch (name) {
             'CLOUDSDK_CONFIG' => '',
             'HOME' => '/home/user',
@@ -464,7 +464,7 @@ void main() {
 
     group('Windows', () {
       test('returns CLOUDSDK_CONFIG path when set', () {
-        final path = getWellKnownCredentialsPath(
+        final path = wellKnownCredentialsPath(
           (name) => switch (name) {
             'CLOUDSDK_CONFIG' => r'C:\custom\config',
             _ => null,
@@ -478,7 +478,7 @@ void main() {
       });
 
       test('prioritizes CLOUDSDK_CONFIG over APPDATA', () {
-        final path = getWellKnownCredentialsPath(
+        final path = wellKnownCredentialsPath(
           (name) => switch (name) {
             'CLOUDSDK_CONFIG' => r'C:\custom\config',
             'APPDATA' => r'C:\Users\user\AppData\Roaming',
@@ -493,7 +493,7 @@ void main() {
       });
 
       test('returns APPDATA config path when CLOUDSDK_CONFIG not set', () {
-        final path = getWellKnownCredentialsPath(
+        final path = wellKnownCredentialsPath(
           (name) => switch (name) {
             'APPDATA' => r'C:\Users\user\AppData\Roaming',
             _ => null,
@@ -509,12 +509,12 @@ void main() {
       });
 
       test('returns null when neither CLOUDSDK_CONFIG nor APPDATA is set', () {
-        final path = getWellKnownCredentialsPath((name) => null, true);
+        final path = wellKnownCredentialsPath((name) => null, true);
         expect(path, isNull);
       });
 
       test('returns null when APPDATA is empty', () {
-        final path = getWellKnownCredentialsPath(
+        final path = wellKnownCredentialsPath(
           (name) => switch (name) {
             'APPDATA' => '',
             _ => null,
@@ -525,7 +525,7 @@ void main() {
       });
 
       test('falls back to APPDATA when CLOUDSDK_CONFIG is empty', () {
-        final path = getWellKnownCredentialsPath(
+        final path = wellKnownCredentialsPath(
           (name) => switch (name) {
             'CLOUDSDK_CONFIG' => '',
             'APPDATA' => r'C:\Users\user\AppData\Roaming',
