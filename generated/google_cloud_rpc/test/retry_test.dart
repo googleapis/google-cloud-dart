@@ -14,7 +14,7 @@
 
 import 'package:clock/clock.dart';
 import 'package:google_cloud_rpc/exceptions.dart';
-import 'package:google_cloud_storage/src/retry.dart';
+import 'package:google_cloud_rpc/retry.dart';
 import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 

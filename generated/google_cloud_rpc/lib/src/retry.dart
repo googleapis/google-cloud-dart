@@ -18,7 +18,7 @@ import 'package:clock/clock.dart';
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 
-import '../google_cloud_storage.dart';
+import '../exceptions.dart';
 
 /// An abstract class for running a function with retry logic.
 sealed class RetryRunner {
