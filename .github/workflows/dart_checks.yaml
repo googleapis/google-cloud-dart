@@ -75,20 +75,34 @@ jobs:
       - name: Analyze
         run: dart analyze
 
-  unit_tests:
-    name: Unit Tests (${{ matrix.sdk }}, ${{ matrix.platform }})
-    runs-on: ubuntu-latest
+  vm_unit_tests:
+    name: VM Unit Tests (${{ matrix.os }}, ${{ matrix.sdk }})
     strategy:
       matrix:
+        os: [macos-latest, windows-latest, ubuntu-latest]
         sdk: [*MINIMUM_DART_TEST_VERSION, stable]
-        platform: ["chrome", "vm"]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
       - uses: dart-lang/setup-dart@6afc89df92d6eb3834022f73cd65adc8cdfcb92d
         with:
           sdk: ${{ matrix.sdk }}
       - run: dart pub get
-      - run: dart test -p ${{ matrix.platform }} .
+      - run: dart test -p vm .
+
+  chrome_unit_tests:
+    name: Chrome Unit Tests (${{ matrix.sdk }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        sdk: [*MINIMUM_DART_TEST_VERSION, stable]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: dart-lang/setup-dart@6afc89df92d6eb3834022f73cd65adc8cdfcb92d
+        with:
+          sdk: ${{ matrix.sdk }}
+      - run: dart pub get
+      - run: dart test -p chrome .
 
   storage_testbench_tests:
     name: Storage Testbench Tests (${{ matrix.sdk }})
