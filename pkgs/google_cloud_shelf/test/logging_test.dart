@@ -545,7 +545,9 @@ Matcher _jsonStringMatcher(Object expected) => isA<String>().having(
   expected,
 );
 
-final _stackTraceMatcher = matches(RegExp(r'test/logging_test.dart \d+:\d+'));
+final _stackTraceMatcher = matches(
+  RegExp(r'test[/\\]logging_test\.dart \d+:\d+'),
+);
 
 Future<Response> _throwHttpResponseMinimal(_) =>
     throw HttpResponseException(400, 'minimal');

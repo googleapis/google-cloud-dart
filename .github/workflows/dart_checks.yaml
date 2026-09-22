@@ -57,6 +57,7 @@ jobs:
     name: Analyze (${{ matrix.sdk }})
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         sdk: [*MINIMUM_DART_TEST_VERSION, stable]
     steps:
@@ -79,6 +80,7 @@ jobs:
   vm_unit_tests:
     name: VM Unit Tests (${{ matrix.os }}, ${{ matrix.sdk }})
     strategy:
+      fail-fast: false
       matrix:
         os: [macos-latest, windows-latest, ubuntu-latest]
         sdk: [*MINIMUM_DART_TEST_VERSION, stable]
@@ -112,6 +114,7 @@ jobs:
     name: Chrome Unit Tests (${{ matrix.sdk }})
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         sdk: [*MINIMUM_DART_TEST_VERSION, stable]
     steps:
@@ -126,6 +129,7 @@ jobs:
     name: Storage Testbench Tests (${{ matrix.sdk }})
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         sdk: [*MINIMUM_DART_TEST_VERSION, stable]
     steps:
@@ -141,6 +145,7 @@ jobs:
     name: Firestore Emulator Tests (${{ matrix.sdk }})
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         sdk: [*MINIMUM_DART_TEST_VERSION, stable]
     steps:
