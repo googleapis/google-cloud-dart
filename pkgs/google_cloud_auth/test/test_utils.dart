@@ -13,22 +13,12 @@
 // limitations under the License.
 
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:webcrypto/webcrypto.dart';
 
-final canUseWebCrypto = () {
-  // package:webcrypto is always available in the browser.
-  // Dart 3.13 or later is required when run using the vm.
-  if (!const bool.fromEnvironment('dart.library.io')) return true;
-  final versionStr = Platform.version.split(' ').first;
-  final parts = versionStr.split('.').map(int.tryParse).toList();
-  if (parts.length >= 2 && parts[0] != null && parts[1] != null) {
-    if (parts[0]! > 3) return true;
-    if (parts[0]! == 3 && parts[1]! >= 13) return true;
-  }
-  return false;
-}();
+export 'src/can_use_web_crypto_web.dart'
+    if (dart.library.io) 'src/can_use_web_crypto_io.dart'
+    show canUseWebCrypto;
 
 const testPrivateKey = '''-----BEGIN PRIVATE KEY-----
 MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC86+n/Af9C9sBo
