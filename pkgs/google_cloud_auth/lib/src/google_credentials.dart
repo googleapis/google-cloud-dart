@@ -16,9 +16,8 @@
 // - https://github.com/googleapis/google-auth-library-java/blob/main/oauth2_http/java/com/google/auth/oauth2/GoogleCredentials.java
 // - https://github.com/googleapis/google-auth-library-python/blob/main/google/auth/credentials.py
 
-/// Base class for credentials used to authenticate with Google APIs and
-/// services.
-abstract class GoogleCredentials {
+/// Credentials used to authenticate with Google APIs and services.
+abstract base class GoogleCredentials {
   /// The default universe domain for Google Cloud services.
   static const defaultUniverseDomain = 'googleapis.com';
 
