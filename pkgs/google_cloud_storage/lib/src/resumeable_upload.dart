@@ -19,13 +19,13 @@ import 'dart:typed_data';
 import 'package:convert/convert.dart';
 import 'package:crypto/crypto.dart' as crypto;
 import 'package:google_cloud_rpc/exceptions.dart';
+import 'package:google_cloud_rpc/retry.dart';
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 
 import 'crc32c.dart';
 import 'object_metadata.dart';
 import 'object_metadata_json.dart';
-import 'retry.dart';
 
 // Upload chunk sizes must be a multiple of 256KiB.
 //
