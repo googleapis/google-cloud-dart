@@ -18,12 +18,22 @@ import 'package:clock/clock.dart';
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 
-import '../exceptions.dart';
+import 'exceptions.dart';
 
 /// An abstract class for running a function with retry logic.
 sealed class RetryRunner {
   /// Runs the given function with retry logic.
-  Future<T> run<T>(Future<T> Function() body, {required bool isIdempotent});
+  Future<T> run<T>(
+    Future<T> Function() body, {
+    required bool isIdempotent,
+    Clock clock = const Clock(),
+  });
+
+  /// Returns whether [error] is considered retryable by this runner.
+  bool isRetryable(Object error);
+
+  /// Generates a sequence of wait durations for retries or reconnections.
+  Iterable<Duration> delays({Clock clock = const Clock(), Random? random});
 }
 
 /// Generates a sequence of delays for exponential backoff.
@@ -55,27 +65,72 @@ Iterable<Duration> delaySequence({
   required Duration initialDelay,
   required Duration maxDelay,
   required double delayMultiplier,
+  double jitter = 0.0,
   Clock clock = const Clock(),
-}) sync* {
-  var reachedMax = false;
+  Random? random,
+}) {
   final noRetriesAfter = maxRetryInterval == null
       ? null
       : clock.fromNowBy(maxRetryInterval);
+  return _delaySequence(
+    maxRetries: maxRetries,
+    noRetriesAfter: noRetriesAfter,
+    initialDelay: initialDelay,
+    maxDelay: maxDelay,
+    delayMultiplier: delayMultiplier,
+    jitter: jitter,
+    clock: clock,
+    random: random,
+  );
+}
+
+Iterable<Duration> _delaySequence({
+  required int? maxRetries,
+  required DateTime? noRetriesAfter,
+  required Duration initialDelay,
+  required Duration maxDelay,
+  required double delayMultiplier,
+  required double jitter,
+  required Clock clock,
+  required Random? random,
+}) sync* {
+  var reachedMax = false;
+  final randomGenerator = jitter == 0.0 ? null : (random ?? Random());
   for (var i = 0; (maxRetries == null) || (i < maxRetries); i++) {
     if (noRetriesAfter != null && clock.now().isAfter(noRetriesAfter)) {
       break;
     }
+
+    final Duration baseDelay;
     if (reachedMax) {
-      yield maxDelay;
+      baseDelay = maxDelay;
     } else {
-      final delay = initialDelay * pow(delayMultiplier, i);
-      if (delay > maxDelay) {
+      final multiplier = pow(delayMultiplier, i);
+      if (!multiplier.isFinite ||
+          initialDelay.inMicroseconds * multiplier >= maxDelay.inMicroseconds) {
         reachedMax = true;
-        yield maxDelay;
+        baseDelay = maxDelay;
       } else {
-        yield delay;
+        final delay = initialDelay * multiplier;
+        if (delay > maxDelay) {
+          reachedMax = true;
+          baseDelay = maxDelay;
+        } else {
+          baseDelay = delay;
+        }
       }
     }
+    final Duration delay;
+    if (randomGenerator == null) {
+      delay = baseDelay;
+    } else {
+      final jitterFactor =
+          (1.0 - jitter) + (2.0 * jitter * randomGenerator.nextDouble());
+      delay = Duration(
+        microseconds: (baseDelay.inMicroseconds * jitterFactor).round(),
+      );
+    }
+    yield delay;
   }
 }
 
@@ -88,13 +143,11 @@ final class NoDelayRetry extends ExponentialRetry {
 /// A retry runner that implements exponential backoff.
 ///
 /// When [run] is called, it will attempt to execute the given function. If the
-/// function throws an recoverable exception
-/// (such as [RequestTimeoutException]) and the function is idempotent, it
-/// will retry the function with increasing wait times between attempts.
-///
-/// See [Retry strategy](https://docs.cloud.google.com/storage/docs/retry-strategy).
+/// function throws a recoverable exception (such as [RequestTimeoutException])
+/// and the function is idempotent, it will retry the function with increasing
+/// wait times between attempts.
 final class ExponentialRetry implements RetryRunner {
-  /// The maximim number of times to retry before failing.
+  /// The maximum number of times to retry before failing.
   ///
   /// A `null` value indicates that the number of retries is unlimited.
   final int? maxRetries;
@@ -113,8 +166,14 @@ final class ExponentialRetry implements RetryRunner {
   /// The maximum amount of time to wait between retries.
   ///
   /// If the calculated exponential wait time between retries exceeds this
-  /// value, the wait time will be clamped to this value.
+  /// value, the wait time will be clamped to this value before applying
+  /// [jitter].
   final Duration maxDelay;
+
+  /// Randomized jitter factor applied to each delay (e.g. `0.2` for ±20%).
+  ///
+  /// Defaults to `0.0` (no jitter).
+  final double jitter;
 
   const ExponentialRetry({
     this.maxRetries,
@@ -124,58 +183,109 @@ final class ExponentialRetry implements RetryRunner {
     this.delayMultiplier = 2,
     this.maxDelay = const Duration(seconds: 60),
     this.maxRetryInterval = const Duration(minutes: 2),
+    this.jitter = 0.0,
   });
+
+  @override
+  bool isRetryable(Object error) {
+    if (error is! Exception) return false;
+    return switch (error) {
+      // InternalServerErrorException (HTTP 500 / gRPC INTERNAL or UNKNOWN) is
+      // retryable unless it carries gRPC status DATA_LOSS (code 15).
+      InternalServerErrorException(:final status) => status?.code != 15,
+      // ConflictException (HTTP 409 / gRPC ALREADY_EXISTS) is not retryable
+      // unless it carries gRPC status ABORTED (code 10).
+      ConflictException(:final status) => status?.code == 10,
+      BadGatewayException() ||
+      RequestTimeoutException() ||
+      ServiceUnavailableException() ||
+      GatewayTimeoutException() ||
+      TooManyRequestsException() => true,
+      ServiceException(:final status, :final statusCode) =>
+        switch (status?.code) {
+          // gRPC status codes: UNKNOWN(2), DEADLINE_EXCEEDED(4),
+          // RESOURCE_EXHAUSTED(8), ABORTED(10), INTERNAL(13), UNAVAILABLE(14).
+          2 || 4 || 8 || 10 || 13 || 14 => true,
+          null =>
+            statusCode == 408 ||
+                statusCode == 429 ||
+                statusCode == 500 ||
+                statusCode == 502 ||
+                statusCode == 503 ||
+                statusCode == 504,
+          _ => false,
+        },
+      http.ClientException() => true,
+      ChecksumValidationException() => true,
+      _ => false,
+    };
+  }
+
+  @override
+  Iterable<Duration> delays({Clock clock = const Clock(), Random? random}) =>
+      delaySequence(
+        maxRetries: maxRetries,
+        maxRetryInterval: maxRetryInterval,
+        initialDelay: initialDelay,
+        maxDelay: maxDelay,
+        delayMultiplier: delayMultiplier,
+        jitter: jitter,
+        clock: clock,
+        random: random,
+      );
 
   @override
   Future<T> run<T>(
     Future<T> Function() body, {
     required bool isIdempotent,
+    Clock clock = const Clock(),
   }) async {
-    final delays = delaySequence(
-      maxRetries: maxRetries,
-      maxRetryInterval: maxRetryInterval,
-      initialDelay: initialDelay,
-      maxDelay: maxDelay,
-      delayMultiplier: delayMultiplier,
-    ).iterator;
+    final iterator = delays(clock: clock).iterator;
 
     while (true) {
       try {
         return await body();
-      } catch (e) {
+      } on Exception catch (e) {
         if (!isIdempotent) rethrow;
-        switch (e) {
-          // Taken from:
-          // https://github.com/googleapis/python-storage/blob/e730bf50c4584f737ab86b2e409ddb27b40d2cec/google/cloud/storage/retry.py#L62
-          case TooManyRequestsException():
-          case InternalServerErrorException():
-          case BadGatewayException():
-          case ServiceUnavailableException():
-          case GatewayTimeoutException():
-          case RequestTimeoutException():
-          // Transport-level errors.
-          case http.ClientException():
-          // Checksum validation errors.
-          case ChecksumValidationException():
-            break;
-          default:
-            rethrow;
-        }
-        if (delays.moveNext()) {
-          await Future<void>.delayed(delays.current);
-        } else {
-          rethrow;
-        }
+        if (!isRetryable(e)) rethrow;
+        if (!iterator.moveNext()) rethrow;
+        await Future<void>.delayed(iterator.current);
       }
     }
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ExponentialRetry &&
+          runtimeType == other.runtimeType &&
+          maxRetries == other.maxRetries &&
+          maxRetryInterval == other.maxRetryInterval &&
+          initialDelay == other.initialDelay &&
+          delayMultiplier == other.delayMultiplier &&
+          maxDelay == other.maxDelay &&
+          jitter == other.jitter;
+
+  @override
+  int get hashCode => Object.hash(
+    maxRetries,
+    maxRetryInterval,
+    initialDelay,
+    delayMultiplier,
+    maxDelay,
+    jitter,
+  );
+
+  @override
+  String toString() =>
+      'ExponentialRetry('
+      'maxRetries: $maxRetries, '
+      'maxRetryInterval: $maxRetryInterval, '
+      'initialDelay: $initialDelay, '
+      'delayMultiplier: $delayMultiplier, '
+      'maxDelay: $maxDelay, '
+      'jitter: $jitter)';
 }
 
 /// The default retry strategy.
-///
-/// This strategy implements exponential backoff for [idempotent operations].
-///
-/// See [Retry strategy](https://docs.cloud.google.com/storage/docs/retry-strategy).
-///
-/// [idempotent operations]: https://docs.cloud.google.com/storage/docs/retry-strategy#idempotency-operations
 const defaultRetry = ExponentialRetry();

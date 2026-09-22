@@ -12,9 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'dart:math';
+
 import 'package:clock/clock.dart';
 import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:google_cloud_rpc/retry.dart';
+import 'package:google_cloud_rpc/rpc.dart';
 import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 
@@ -78,6 +81,64 @@ void main() {
       time = time.add(delays.current);
 
       expect(delays.moveNext(), isFalse);
+    });
+
+    test('applies jitter within bounds when configured', () {
+      final delays = delaySequence(
+        maxRetries: 20,
+        initialDelay: const Duration(seconds: 10),
+        delayMultiplier: 1.0,
+        maxDelay: const Duration(seconds: 10),
+        jitter: 0.2,
+        random: Random(42),
+      ).toList();
+
+      expect(delays, hasLength(20));
+      for (final d in delays) {
+        expect(d.inMilliseconds, greaterThanOrEqualTo(8000));
+        expect(d.inMilliseconds, lessThanOrEqualTo(12000));
+      }
+      expect(delays.toSet().length, greaterThan(1));
+    });
+  });
+
+  group('defaultRetry.isRetryable', () {
+    test('classifies retryable exceptions', () {
+      expect(defaultRetry.isRetryable(TooManyRequestsException('429')), isTrue);
+      expect(
+        defaultRetry.isRetryable(InternalServerErrorException('500')),
+        isTrue,
+      );
+      expect(defaultRetry.isRetryable(BadGatewayException('502')), isTrue);
+      expect(
+        defaultRetry.isRetryable(ServiceUnavailableException('503')),
+        isTrue,
+      );
+      expect(defaultRetry.isRetryable(GatewayTimeoutException('504')), isTrue);
+      expect(defaultRetry.isRetryable(RequestTimeoutException('408')), isTrue);
+      expect(defaultRetry.isRetryable(http.ClientException('network')), isTrue);
+      expect(
+        defaultRetry.isRetryable(ChecksumValidationException('bad checksum')),
+        isTrue,
+      );
+      expect(
+        defaultRetry.isRetryable(
+          ConflictException('aborted', status: Status(code: 10)),
+        ),
+        isTrue,
+      );
+    });
+
+    test('classifies non-retryable exceptions', () {
+      expect(defaultRetry.isRetryable(BadRequestException('400')), isFalse);
+      expect(defaultRetry.isRetryable(NotFoundException('404')), isFalse);
+      expect(defaultRetry.isRetryable(ConflictException('409')), isFalse);
+      expect(
+        defaultRetry.isRetryable(
+          InternalServerErrorException('data loss', status: Status(code: 15)),
+        ),
+        isFalse,
+      );
     });
   });
 
@@ -144,6 +205,19 @@ void main() {
         }, isIdempotent: true),
         5,
       );
+    });
+
+    test('value equality and hashCode', () {
+      // ignore: prefer_const_constructors
+      final a = ExponentialRetry(maxRetries: 3, jitter: 0.2);
+      // ignore: prefer_const_constructors
+      final b = ExponentialRetry(maxRetries: 3, jitter: 0.2);
+      // ignore: prefer_const_constructors
+      final c = ExponentialRetry(maxRetries: 4, jitter: 0.2);
+      expect(identical(a, b), isFalse);
+      expect(a, equals(b));
+      expect(a.hashCode, equals(b.hashCode));
+      expect(a, isNot(equals(c)));
     });
   });
 }
