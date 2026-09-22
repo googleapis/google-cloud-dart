@@ -25,6 +25,7 @@ on:
 env:
   # Formatting changes between SDK versions so fix the SDK version used for `dart format`.
   FORMAT_DART_VERSION: 3.13.2
+  GO_VERSION: 1.26.1
   GOOGLE_CLOUD_PROJECT: test-project
   LIBRARIAN_VERSION: v0.44.1-0.20260915154909-bea74dadf46d
   MINIMUM_DART_TEST_VERSION: &MINIMUM_DART_TEST_VERSION 3.10.1
@@ -84,6 +85,23 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      # The `google_cloud_showcase_v1beta1` tests build and run the Showcase
+      # server using `go install`. Go is in the PATH of the Linux and Windows
+      # runner images but, on macOS, it is only in the hosted tool cache.
+      - name: Install Go
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache: false
+      - name: Cache Go Modules
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: |
+            ~/go/pkg/mod
+            ~/.cache/go-build
+            ~/Library/Caches/go-build
+            ~/AppData/Local/go-build
+          key: ${{ runner.os }}-go-showcase-${{ env.GO_VERSION }}
       - uses: dart-lang/setup-dart@6afc89df92d6eb3834022f73cd65adc8cdfcb92d
         with:
           sdk: ${{ matrix.sdk }}
@@ -157,7 +175,7 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e
         with:
-          go-version: 1.26.1
+          go-version: ${{ env.GO_VERSION }}
           cache: false
       - name: Cache Go Librarian
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
