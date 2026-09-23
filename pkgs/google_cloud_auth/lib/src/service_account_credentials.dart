@@ -89,6 +89,9 @@ final class ServiceAccountCredentials extends GoogleCredentials
 
   /// Creates a [ServiceAccountCredentials] instance from a service account
   /// JSON file at [path].
+  ///
+  /// Throws a [CredentialException] if reading [path] fails or when running on
+  /// the web.
   static Future<ServiceAccountCredentials> fromServiceAccountFile(
     String path,
   ) async {

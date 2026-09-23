@@ -12,11 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@TestOn('vm')
-library;
-
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:google_cloud_auth/google_cloud_auth.dart';
 import 'package:google_cloud_auth/src/application_default_credentials.dart';
@@ -27,16 +23,6 @@ import 'package:test/test.dart';
 import 'test_utils.dart';
 
 void main() {
-  late Directory tempDir;
-
-  setUp(() {
-    tempDir = Directory.systemTemp.createTempSync('adc_test');
-  });
-
-  tearDown(() async {
-    await tempDir.delete(recursive: true);
-  });
-
   group('applicationDefaultCredentials', () {
     test('available on Google Compute Engine', () async {
       // TODO(https://github.com/dart-lang/test/issues/2576): Throw then this
@@ -52,8 +38,8 @@ void main() {
     group('ServiceAccountCredentials', () {
       group('from GOOGLE_APPLICATION_CREDENTIALS', () {
         test('success', () async {
-          final saFile = File('${tempDir.path}/service_account.json');
-          await saFile.writeAsString(
+          final saFilePath = await writeTempFile(
+            'service_account.json',
             jsonEncode({
               'type': 'service_account',
               'project_id': 'env-project',
@@ -64,7 +50,7 @@ void main() {
 
           final credentials = await internalDefaultCredentials(
             readEnvironment: (String name) {
-              if (name == 'GOOGLE_APPLICATION_CREDENTIALS') return saFile.path;
+              if (name == 'GOOGLE_APPLICATION_CREDENTIALS') return saFilePath;
               return null;
             },
           );
@@ -84,7 +70,7 @@ void main() {
             () => internalDefaultCredentials(
               readEnvironment: (String name) {
                 if (name == 'GOOGLE_APPLICATION_CREDENTIALS') {
-                  return '${tempDir.path}/non_existent.json';
+                  return 'non_existent.json';
                 }
                 return null;
               },
@@ -100,14 +86,16 @@ void main() {
         });
 
         test('not valid JSON', () async {
-          final invalidFile = File('${tempDir.path}/invalid.json');
-          await invalidFile.writeAsString('not a json file');
+          final invalidFilePath = await writeTempFile(
+            'invalid.json',
+            'not a json file',
+          );
 
           expect(
             () => internalDefaultCredentials(
               readEnvironment: (String name) {
                 if (name == 'GOOGLE_APPLICATION_CREDENTIALS') {
-                  return invalidFile.path;
+                  return invalidFilePath;
                 }
                 return null;
               },
@@ -123,8 +111,8 @@ void main() {
         });
 
         test('unrecognized type', () async {
-          final userFile = File('${tempDir.path}/user_creds.json');
-          await userFile.writeAsString(
+          final userFilePath = await writeTempFile(
+            'user_creds.json',
             jsonEncode({'type': 'unrecognized_type'}),
           );
 
@@ -132,7 +120,7 @@ void main() {
             () => internalDefaultCredentials(
               readEnvironment: (String name) {
                 if (name == 'GOOGLE_APPLICATION_CREDENTIALS') {
-                  return userFile.path;
+                  return userFilePath;
                 }
                 return null;
               },
@@ -148,8 +136,8 @@ void main() {
         });
 
         test('malformed service account missing client_email', () async {
-          final saFile = File('${tempDir.path}/incomplete_sa.json');
-          await saFile.writeAsString(
+          final saFilePath = await writeTempFile(
+            'incomplete_sa.json',
             jsonEncode({
               'type': 'service_account',
               'project_id': 'env-project',
@@ -161,7 +149,7 @@ void main() {
             () => internalDefaultCredentials(
               readEnvironment: (String name) {
                 if (name == 'GOOGLE_APPLICATION_CREDENTIALS') {
-                  return saFile.path;
+                  return saFilePath;
                 }
                 return null;
               },
@@ -178,10 +166,8 @@ void main() {
       });
 
       test('from CLOUDSDK_CONFIG', () async {
-        final saFile = File(
-          '${tempDir.path}/application_default_credentials.json',
-        );
-        await saFile.writeAsString(
+        final saFilePath = await writeTempFile(
+          'application_default_credentials.json',
           jsonEncode({
             'type': 'service_account',
             'project_id': 'env-project',
@@ -189,10 +175,14 @@ void main() {
             'client_email': 'env-sa@project.iam.gserviceaccount.com',
           }),
         );
+        final configDir = saFilePath.substring(
+          0,
+          saFilePath.lastIndexOf(RegExp(r'[/\\]')),
+        );
 
         final credentials = await internalDefaultCredentials(
           readEnvironment: (String name) {
-            if (name == 'CLOUDSDK_CONFIG') return tempDir.path;
+            if (name == 'CLOUDSDK_CONFIG') return configDir;
             return null;
           },
         );
@@ -209,8 +199,8 @@ void main() {
 
       group('from well-known file', () {
         test('success', () async {
-          final saFile = File('${tempDir.path}/service_account.json');
-          await saFile.writeAsString(
+          final saFilePath = await writeTempFile(
+            'service_account.json',
             jsonEncode({
               'type': 'service_account',
               'project_id': 'env-project',
@@ -221,7 +211,7 @@ void main() {
 
           final credentials = await internalDefaultCredentials(
             readEnvironment: (String name) => null,
-            wellKnownFilePath: saFile.path,
+            wellKnownFilePath: saFilePath,
           );
 
           expect(
@@ -235,13 +225,15 @@ void main() {
         }, skip: canUseWebCrypto ? null : 'Requires Dart 3.13 or later');
 
         test('not valid JSON', () async {
-          final invalidFile = File('${tempDir.path}/invalid.json');
-          await invalidFile.writeAsString('not a json file');
+          final invalidFilePath = await writeTempFile(
+            'invalid.json',
+            'not a json file',
+          );
 
           expect(
             () => internalDefaultCredentials(
               readEnvironment: (String name) => null,
-              wellKnownFilePath: invalidFile.path,
+              wellKnownFilePath: invalidFilePath,
             ),
             throwsA(
               isA<CredentialException>().having(
@@ -254,15 +246,15 @@ void main() {
         });
 
         test('unrecognized type', () async {
-          final userFile = File('${tempDir.path}/user_creds.json');
-          await userFile.writeAsString(
+          final userFilePath = await writeTempFile(
+            'user_creds.json',
             jsonEncode({'type': 'unrecognized_type'}),
           );
 
           expect(
             () => internalDefaultCredentials(
               readEnvironment: (String name) => null,
-              wellKnownFilePath: userFile.path,
+              wellKnownFilePath: userFilePath,
             ),
             throwsA(
               isA<CredentialException>().having(
@@ -274,7 +266,7 @@ void main() {
           );
         });
       });
-    });
+    }, testOn: 'vm');
   });
 
   test('ComputeEngineCredentials from metadata server', () async {
@@ -303,7 +295,7 @@ void main() {
     final credentials = await internalDefaultCredentials(
       client: mockClient,
       readEnvironment: (String name) => null,
-      wellKnownFilePath: '${tempDir.path}/non_existent.json',
+      wellKnownFilePath: 'non_existent.json',
     );
 
     expect(
@@ -348,7 +340,7 @@ void main() {
         'GCE_METADATA_HOST' => 'custom-metadata-host',
         _ => null,
       },
-      wellKnownFilePath: '${tempDir.path}/non_existent.json',
+      wellKnownFilePath: 'non_existent.json',
     );
 
     expect(credentials, isA<ComputeEngineCredentials>());
@@ -368,7 +360,7 @@ void main() {
       () => internalDefaultCredentials(
         client: mockClient,
         readEnvironment: (String name) => null,
-        wellKnownFilePath: '${tempDir.path}/non_existent.json',
+        wellKnownFilePath: 'non_existent.json',
       ),
       throwsA(
         isA<CredentialException>().having(
@@ -454,7 +446,7 @@ void main() {
           ),
         );
       });
-    }, skip: Platform.isWindows ? 'Skip on Windows' : null);
+    }, testOn: '!windows');
 
     group('Windows', () {
       test('returns CLOUDSDK_CONFIG path when set', () {
@@ -529,6 +521,6 @@ void main() {
           ),
         );
       });
-    }, skip: !Platform.isWindows ? 'Skip on non-Windows' : null);
+    }, testOn: 'windows');
   });
 }

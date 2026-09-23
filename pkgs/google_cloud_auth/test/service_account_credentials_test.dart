@@ -312,13 +312,19 @@ void main() {
           expect(creds.universeDomain, equals('googleapis.com'));
         }, testOn: 'vm');
 
-        test('throws CredentialException on browser', () async {
-          await expectLater(
-            ServiceAccountCredentials.fromServiceAccountFile(
-              'service_account.json',
-            ),
-            throwsA(isA<CredentialException>()),
-          );
+        test(
+          'throws CredentialException when file cannot be read or on browser',
+          () async {
+            await expectLater(
+              ServiceAccountCredentials.fromServiceAccountFile(
+                'non_existent_service_account.json',
+              ),
+              throwsA(isA<CredentialException>()),
+            );
+          },
+        );
+
+        test('defaultCredentials and isOnComputeEngine on browser', () async {
           await expectLater(
             defaultCredentials(),
             throwsA(isA<CredentialException>()),
