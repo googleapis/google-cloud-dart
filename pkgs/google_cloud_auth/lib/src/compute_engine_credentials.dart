@@ -62,6 +62,11 @@ Future<bool> internalIsOnComputeEngine({
   String? linuxProductNamePath,
   bool? isLinux,
 }) async {
+  // On the web, browser `fetch` cannot access `http://metadata.google.internal`
+  // because the required `Metadata-Flavor: Google` header is not CORS-safelisted
+  // and the GCE metadata server rejects CORS preflights to prevent browser-based
+  // SSRF / DNS-rebinding attacks. Short-circuit unless a test `client` is
+  // injected so browser callers do not fire doomed fetch retries.
   if (!isPlatformIo && client == null) {
     return false;
   }

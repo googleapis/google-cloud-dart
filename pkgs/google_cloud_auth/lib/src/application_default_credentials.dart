@@ -33,7 +33,9 @@ const _credentialsFileName = 'application_default_credentials.json';
 
 /// Provides the Application Default Credential from the environment.
 ///
-/// Throws a [CredentialException] if no credentials could be found or loaded.
+/// Throws a [CredentialException] if no credentials could be found or loaded
+/// (including when running on the web, where environment variables, local
+/// credential files, and the Compute Engine metadata server are unavailable).
 Future<GoogleCredentials> defaultCredentials({http.Client? client}) =>
     internalDefaultCredentials(client: client);
 
