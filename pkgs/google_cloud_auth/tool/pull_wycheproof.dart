@@ -16,6 +16,8 @@ library;
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:http/http.dart' as http;
+
 final _baseUrl = Uri.https(
   'raw.githubusercontent.com',
   'C2SP/wycheproof/main/testvectors_v1/',
@@ -29,24 +31,33 @@ const _vectors = [
 ];
 
 Future<void> main() async {
-  final client = HttpClient();
+  final client = http.Client();
   final vectorContents = <String, String>{};
 
-  for (final file in _vectors) {
-    final uri = _baseUrl.resolve(file);
-    stdout.write('Fetching $file from $_baseUrl... ');
-    final request = await client.getUrl(uri);
-    final response = await request.close();
-    if (response.statusCode != 200) {
-      stderr.writeln('FAILED (${response.statusCode})');
-      exitCode = 1;
-      continue;
+  try {
+    for (final file in _vectors) {
+      final uri = _baseUrl.resolve(file);
+      stdout.write('Fetching $file from $_baseUrl... ');
+      try {
+        final response = await client.get(uri);
+        if (response.statusCode != 200) {
+          stderr.writeln('FAILED (${response.statusCode})');
+          exitCode = 1;
+          continue;
+        }
+        final content = response.body;
+        vectorContents[file] = content;
+        stdout.writeln(
+          'DONE (${(content.length / 1024).toStringAsFixed(1)} KB)',
+        );
+      } on Object catch (e) {
+        stderr.writeln('FAILED ($e)');
+        exitCode = 1;
+      }
     }
-    final content = await response.transform(utf8.decoder).join();
-    vectorContents[file] = content;
-    stdout.writeln('DONE (${(content.length / 1024).toStringAsFixed(1)} KB)');
+  } finally {
+    client.close();
   }
-  client.close();
 
   final buffer = StringBuffer()
     ..writeln(

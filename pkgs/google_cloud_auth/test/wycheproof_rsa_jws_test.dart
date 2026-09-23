@@ -26,8 +26,8 @@ Uint8List _base64UrlDecodeUnpadded(String s) {
   return base64Url.decode(padded);
 }
 
-/// Simple JWS RS256 verification logic modelled after #B12JV / #FBFF8 requirements
-/// to exercise `package:webcrypto` and strict JWS specs.
+/// Simple JWS RS256 verification logic modelled after #B12JV / #FBFF8
+/// requirements to exercise `package:webcrypto` and strict JWS specs.
 Future<bool> _verifyJwsRs256(String jws, Map<String, dynamic> jwkData) async {
   final parts = jws.split('.');
   if (parts.length != 3) {
@@ -42,6 +42,20 @@ Future<bool> _verifyJwsRs256(String jws, Map<String, dynamic> jwkData) async {
     // Strict RS256 enforcement (Algorithm Confusion & "none" rejection)
     final alg = headerJson['alg'];
     if (alg != 'RS256') return false;
+
+    // Enforce JWK algorithm, public key use, and key operations restrictions
+    final jwkAlg = jwkData['alg'];
+    if (jwkAlg != null && jwkAlg != 'RS256') return false;
+
+    final jwkUse = jwkData['use'];
+    if (jwkUse != null && jwkUse != 'sig') return false;
+
+    final jwkKeyOps = jwkData['key_ops'];
+    if (jwkKeyOps != null) {
+      if (jwkKeyOps is! List || !jwkKeyOps.contains('verify')) {
+        return false;
+      }
+    }
 
     // Reject unknown critical headers per RFC 7515 §4.1.11
     final crit = headerJson['crit'];
@@ -66,7 +80,7 @@ Future<bool> _verifyJwsRs256(String jws, Map<String, dynamic> jwkData) async {
     );
 
     return await publicKey.verifyBytes(signatureBytes, signedBytes);
-  } on Exception {
+  } on Object {
     return false;
   }
 }
@@ -113,22 +127,33 @@ void _testRsaSignatures() {
             final result = testCase['result'] as String;
             final msgHex = testCase['msg'] as String;
             final sigHex = testCase['sig'] as String;
+            final flags =
+                (testCase['flags'] as List<dynamic>?)?.cast<String>() ??
+                const <String>[];
 
             test('tcId $tcId: $comment', () async {
               final msgBytes = _hexToBytes(msgHex);
               final sigBytes = _hexToBytes(sigHex);
               final spkiBytes = _hexToBytes(publicKeyDerStr);
 
-              final publicKey = await RsassaPkcs1V15PublicKey.importSpkiKey(
-                spkiBytes,
-                hashAlgorithm,
-              );
+              bool isValid;
+              try {
+                final publicKey = await RsassaPkcs1V15PublicKey.importSpkiKey(
+                  spkiBytes,
+                  hashAlgorithm,
+                );
+                isValid = await publicKey.verifyBytes(sigBytes, msgBytes);
+              } on Object {
+                isValid = false;
+              }
 
-              final isValid = await publicKey.verifyBytes(sigBytes, msgBytes);
-
-              if (result == 'valid' || result == 'acceptable') {
+              // BoringSSL and WebCrypto strictly reject legacy PKCS#1 v1.5
+              // DigestInfo encodings that omit the ASN.1 NULL parameter.
+              if (result == 'valid' ||
+                  (result == 'acceptable' && !flags.contains('MissingNull'))) {
                 expect(isValid, isTrue, reason: 'Expected valid signature');
-              } else if (result == 'invalid') {
+              } else if (result == 'invalid' ||
+                  (result == 'acceptable' && flags.contains('MissingNull'))) {
                 expect(isValid, isFalse, reason: 'Expected invalid signature');
               } else {
                 fail('Unknown test result flag: $result');
@@ -152,21 +177,21 @@ void _testJws() {
 
     for (final groupData in testGroups) {
       final privateJwk = groupData['private'] as Map<String, dynamic>;
-      // For this test, we only want to evaluate RS256 JWK scenarios contextually
-      // However, algorithm confusion tests might use HS256 with an RSA public key.
-      // Wycheproof tests include the correct key in 'private' for the JWS being tested.
-      // We are writing an RS256 specific endpoint, so we supply the test's key
-      // but stripped down to a public RS256 JWK, no matter what it originally was,
-      // EXCEPT some test groups might not be RSA.
-      // Let's filter to RSA test groups. The test vectors for alg confusion
-      // where an RSA key is checked with HS256 will have kty: "RSA".
+      // Filter to RSA test groups. Test vectors for algorithm confusion
+      // where an RSA key is checked against HS256 or non-RS256 algorithms
+      // have kty: "RSA".
       if (privateJwk['kty'] != 'RSA') continue;
+
+      final jwkAlg = privateJwk['alg'];
+      final isNonRs256Key = jwkAlg != null && jwkAlg != 'RS256';
 
       // Extract the public RSA JWK only
       final publicJwk = <String, dynamic>{
         'kty': 'RSA',
         if (privateJwk.containsKey('alg')) 'alg': privateJwk['alg'],
         if (privateJwk.containsKey('use')) 'use': privateJwk['use'],
+        if (privateJwk['key_ops'] case final List<dynamic> ops)
+          'key_ops': ops.where((op) => op != 'sign').toList(),
         if (privateJwk.containsKey('kid')) 'kid': privateJwk['kid'],
         'n': privateJwk['n'],
         'e': privateJwk['e'],
@@ -184,17 +209,17 @@ void _testJws() {
         test('tcId $tcId: $comment', () async {
           final isValid = await _verifyJwsRs256(jwsStr, publicJwk);
 
-          if (result == 'valid' || result == 'acceptable') {
-            expect(
-              isValid,
-              isTrue,
-              reason: 'Expected valid signature verification',
-            );
-          } else if (result == 'invalid') {
+          if (isNonRs256Key || result == 'invalid') {
             expect(
               isValid,
               isFalse,
               reason: 'Expected invalid signature verification',
+            );
+          } else if (result == 'valid' || result == 'acceptable') {
+            expect(
+              isValid,
+              isTrue,
+              reason: 'Expected valid signature verification',
             );
           } else {
             fail('Unknown test result flag: $result');
