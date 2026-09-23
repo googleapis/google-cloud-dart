@@ -12,6 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/// Design based on:
+/// - https://github.com/googleapis/google-cloud-java/blob/main/google-auth-library-java/oauth2_http/java/com/google/auth/oauth2/DefaultCredentialsProvider.java
+/// - https://github.com/googleapis/google-auth-library-python/blob/main/google/auth/_default.py
+library;
+
 import 'dart:convert';
 import 'dart:io';
 
@@ -23,10 +28,6 @@ import 'compute_engine_credentials.dart';
 import 'credential_exception.dart';
 import 'google_credentials.dart';
 import 'service_account_credentials.dart';
-
-// Design based on:
-// - https://github.com/googleapis/google-cloud-java/blob/main/google-auth-library-java/oauth2_http/java/com/google/auth/oauth2/DefaultCredentialsProvider.java
-// - https://github.com/googleapis/google-auth-library-python/blob/main/google/auth/_default.py
 
 const _credentialsFileName = 'application_default_credentials.json';
 

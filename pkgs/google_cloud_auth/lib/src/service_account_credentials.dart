@@ -12,6 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/// Design based on:
+/// - https://github.com/googleapis/google-cloud-java/blob/main/google-auth-library-java/oauth2_http/java/com/google/auth/oauth2/ServiceAccountCredentials.java
+/// - https://github.com/googleapis/google-cloud-python/blob/main/packages/google-auth/google/oauth2/service_account.py
+library;
+
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
@@ -41,10 +46,6 @@ String? _optionalString(Map<String, dynamic> info, String key) {
   }
   return value;
 }
-
-// Design based on:
-// - https://github.com/googleapis/google-cloud-java/blob/main/google-auth-library-java/oauth2_http/java/com/google/auth/oauth2/ServiceAccountCredentials.java
-// - https://github.com/googleapis/google-cloud-python/blob/main/packages/google-auth/google/oauth2/service_account.py
 
 /// Credentials for a Google Cloud service account.
 ///

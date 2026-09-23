@@ -12,6 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/// Design based on:
+/// - https://github.com/googleapis/google-auth-library-java/blob/main/oauth2_http/java/com/google/auth/oauth2/ComputeEngineCredentials.java
+/// - https://github.com/googleapis/google-auth-library-python/blob/main/google/auth/compute_engine/credentials.py
+/// - https://github.com/googleapis/google-auth-library-python/blob/main/google/auth/iam.py
+library;
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -24,11 +30,6 @@ import 'package:meta/meta.dart';
 import 'credential_exception.dart';
 import 'google_credentials.dart';
 import 'service_account_signer.dart';
-
-// Design based on:
-// - https://github.com/googleapis/google-auth-library-java/blob/main/oauth2_http/java/com/google/auth/oauth2/ComputeEngineCredentials.java
-// - https://github.com/googleapis/google-auth-library-python/blob/main/google/auth/compute_engine/credentials.py
-// - https://github.com/googleapis/google-auth-library-python/blob/main/google/auth/iam.py
 
 const _defaultMetadataHost = 'metadata.google.internal';
 const _linuxProductNamePath = '/sys/class/dmi/id/product_name';

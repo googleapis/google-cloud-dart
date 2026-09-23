@@ -12,13 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/// Design based on:
+/// - https://github.com/googleapis/google-cloud-java/blob/main/google-auth-library-java/credentials/java/com/google/auth/ServiceAccountSigner.java
+/// - https://github.com/googleapis/google-cloud-python/blob/main/packages/google-auth/google/auth/credentials.py
+library;
+
 import 'dart:typed_data';
 
 import 'credential_exception.dart';
-
-// Design based on:
-// - https://github.com/googleapis/google-cloud-java/blob/main/google-auth-library-java/credentials/java/com/google/auth/ServiceAccountSigner.java
-// - https://github.com/googleapis/google-cloud-python/blob/main/packages/google-auth/google/auth/credentials.py
 
 /// Interface for a service account signer.
 ///
