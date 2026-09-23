@@ -195,7 +195,6 @@ void main() {
             if (name == 'CLOUDSDK_CONFIG') return tempDir.path;
             return null;
           },
-          isWindows: false,
         );
 
         expect(
@@ -389,7 +388,6 @@ void main() {
             'CLOUDSDK_CONFIG' => '/custom/config',
             _ => null,
           },
-          false,
         );
         expect(
           path,
@@ -404,7 +402,6 @@ void main() {
             'HOME' => '/home/user',
             _ => null,
           },
-          false,
         );
         expect(
           path,
@@ -418,7 +415,6 @@ void main() {
             'HOME' => '/home/user',
             _ => null,
           },
-          false,
         );
         expect(
           path,
@@ -428,8 +424,8 @@ void main() {
         );
       });
 
-      test('returns null when neither CLOUDSDK_CONFIG nor HOME is set', () {
-        final path = wellKnownCredentialsPath((name) => null, false);
+      test('returns null when no environment variables set', () {
+        final path = wellKnownCredentialsPath((name) => null);
         expect(path, isNull);
       });
 
@@ -439,7 +435,6 @@ void main() {
             'HOME' => '',
             _ => null,
           },
-          false,
         );
         expect(path, isNull);
       });
@@ -451,7 +446,6 @@ void main() {
             'HOME' => '/home/user',
             _ => null,
           },
-          false,
         );
         expect(
           path,
@@ -460,7 +454,7 @@ void main() {
           ),
         );
       });
-    });
+    }, skip: Platform.isWindows ? 'Skip on Windows' : null);
 
     group('Windows', () {
       test('returns CLOUDSDK_CONFIG path when set', () {
@@ -469,7 +463,6 @@ void main() {
             'CLOUDSDK_CONFIG' => r'C:\custom\config',
             _ => null,
           },
-          true,
         );
         expect(
           path,
@@ -484,7 +477,6 @@ void main() {
             'APPDATA' => r'C:\Users\user\AppData\Roaming',
             _ => null,
           },
-          true,
         );
         expect(
           path,
@@ -498,7 +490,6 @@ void main() {
             'APPDATA' => r'C:\Users\user\AppData\Roaming',
             _ => null,
           },
-          true,
         );
         expect(
           path,
@@ -509,7 +500,7 @@ void main() {
       });
 
       test('returns null when neither CLOUDSDK_CONFIG nor APPDATA is set', () {
-        final path = wellKnownCredentialsPath((name) => null, true);
+        final path = wellKnownCredentialsPath((name) => null);
         expect(path, isNull);
       });
 
@@ -519,7 +510,6 @@ void main() {
             'APPDATA' => '',
             _ => null,
           },
-          true,
         );
         expect(path, isNull);
       });
@@ -531,7 +521,6 @@ void main() {
             'APPDATA' => r'C:\Users\user\AppData\Roaming',
             _ => null,
           },
-          true,
         );
         expect(
           path,
@@ -540,6 +529,6 @@ void main() {
           ),
         );
       });
-    });
+    }, skip: !Platform.isWindows ? 'Skip on non-Windows' : null);
   });
 }

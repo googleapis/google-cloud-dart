@@ -45,10 +45,7 @@ Future<GoogleCredentials> internalDefaultCredentials({
   @visibleForTesting
   String? Function(String name) readEnvironment = _readEnvironment,
   @visibleForTesting String? wellKnownFilePath,
-  @visibleForTesting bool? isWindows,
 }) async {
-  final onWindows = isWindows ?? Platform.isWindows;
-
   // Check GOOGLE_APPLICATION_CREDENTIALS
   final envPath = readEnvironment('GOOGLE_APPLICATION_CREDENTIALS')?.trim();
   if (envPath != null && envPath.isNotEmpty) {
@@ -64,7 +61,7 @@ Future<GoogleCredentials> internalDefaultCredentials({
 
   // Check well-known credentials file
   final adcPath =
-      wellKnownFilePath ?? wellKnownCredentialsPath(readEnvironment, onWindows);
+      wellKnownFilePath ?? wellKnownCredentialsPath(readEnvironment);
   if (adcPath != null) {
     final file = File(adcPath);
     if (await file.exists()) {
@@ -147,15 +144,14 @@ Future<ServiceAccountCredentials> _loadCredentialsFile(File file) async {
 @visibleForTesting
 String? wellKnownCredentialsPath(
   String? Function(String name) readEnvironment,
-  bool isWindows,
 ) {
-  final path = isWindows ? p.windows : p.posix;
+  final path = Platform.isWindows ? p.windows : p.posix;
   final cloudSdkConfig = readEnvironment('CLOUDSDK_CONFIG')?.trim();
   if (cloudSdkConfig != null && cloudSdkConfig.isNotEmpty) {
     return path.join(cloudSdkConfig, _credentialsFileName);
   }
 
-  if (isWindows) {
+  if (Platform.isWindows) {
     final appData = readEnvironment('APPDATA')?.trim();
     if (appData == null || appData.isEmpty) return null;
     return path.join(appData, 'gcloud', _credentialsFileName);
