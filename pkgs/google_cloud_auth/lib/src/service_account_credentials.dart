@@ -22,6 +22,7 @@ import 'dart:typed_data';
 
 import 'package:webcrypto/webcrypto.dart';
 
+import 'credential_exception.dart';
 import 'google_credentials.dart';
 import 'platform_web.dart' if (dart.library.io) 'platform_io.dart';
 import 'service_account_signer.dart';
