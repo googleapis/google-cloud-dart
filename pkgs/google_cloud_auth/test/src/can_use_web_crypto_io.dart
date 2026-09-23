@@ -14,6 +14,8 @@
 
 import 'dart:io';
 
+import 'package:test/test.dart';
+
 /// Whether `package:webcrypto` can be used on the current platform.
 ///
 /// The VM requires Dart 3.13 or later.
@@ -26,3 +28,15 @@ final canUseWebCrypto = () {
   }
   return false;
 }();
+
+/// Writes [content] to [filename] in a temporary directory cleaned up after the
+/// test completes.
+Future<String> writeTempFile(String filename, String content) async {
+  final tempDir = await Directory.systemTemp.createTemp('sa_test_');
+  addTearDown(() async {
+    await tempDir.delete(recursive: true);
+  });
+  final tempFile = File('${tempDir.path}/$filename');
+  await tempFile.writeAsString(content);
+  return tempFile.path;
+}

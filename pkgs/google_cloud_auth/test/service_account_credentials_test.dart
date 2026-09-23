@@ -13,7 +13,6 @@
 // limitations under the License.
 
 import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:google_cloud_auth/google_cloud_auth.dart';
@@ -271,12 +270,6 @@ void main() {
 
       group('fromServiceAccountFile', () {
         test('loads credentials from file', () async {
-          final tempDir = await Directory.systemTemp.createTemp('sa_test_');
-          final tempFile = File('${tempDir.path}/service_account.json');
-          addTearDown(() async {
-            await tempDir.delete(recursive: true);
-          });
-
           // This string was taken from a real key dump.
           const jsonString = r'''
 {
@@ -293,10 +286,13 @@ void main() {
   "universe_domain": "googleapis.com"
 }
 ''';
-          await tempFile.writeAsString(jsonString);
+          final tempFilePath = await writeTempFile(
+            'service_account.json',
+            jsonString,
+          );
 
           final creds = await ServiceAccountCredentials.fromServiceAccountFile(
-            tempFile.path,
+            tempFilePath,
           );
 
           expect(
@@ -314,8 +310,22 @@ void main() {
             equals(Uri.https('oauth2.googleapis.com', '/token')),
           );
           expect(creds.universeDomain, equals('googleapis.com'));
-        });
-      }, testOn: 'vm');
+        }, testOn: 'vm');
+
+        test('throws CredentialException on browser', () async {
+          await expectLater(
+            ServiceAccountCredentials.fromServiceAccountFile(
+              'service_account.json',
+            ),
+            throwsA(isA<CredentialException>()),
+          );
+          await expectLater(
+            defaultCredentials(),
+            throwsA(isA<CredentialException>()),
+          );
+          expect(await ComputeEngineCredentials.isOnComputeEngine(), isFalse);
+        }, testOn: 'browser');
+      });
 
       group('fromPkcs8', () {
         test('creates valid credentials', () async {

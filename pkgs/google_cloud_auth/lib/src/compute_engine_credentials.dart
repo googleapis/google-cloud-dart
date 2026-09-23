@@ -20,7 +20,6 @@ library;
 
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 
@@ -29,6 +28,7 @@ import 'package:meta/meta.dart';
 
 import 'credential_exception.dart';
 import 'google_credentials.dart';
+import 'platform_web.dart' if (dart.library.io) 'platform_io.dart';
 import 'service_account_signer.dart';
 
 const _defaultMetadataHost = 'metadata.google.internal';
@@ -46,7 +46,7 @@ const _computePingTimeout = Duration(milliseconds: 500);
 Future<bool> _checkStaticGceDetection(String path, bool isLinux) async {
   if (!isLinux) return false;
   try {
-    final content = await File(path).readAsString();
+    final content = await readFileAsString(path);
     return content.trim().startsWith('Google');
   } catch (_) {
     return false;
@@ -62,7 +62,10 @@ Future<bool> internalIsOnComputeEngine({
   String? linuxProductNamePath,
   bool? isLinux,
 }) async {
-  final readEnv = readEnvironment ?? (name) => Platform.environment[name];
+  if (!isPlatformIo && client == null) {
+    return false;
+  }
+  final readEnv = readEnvironment ?? readPlatformEnvironment;
   final noGceCheck = readEnv('NO_GCE_CHECK')?.toLowerCase();
   if (noGceCheck == 'true' || noGceCheck == '1') {
     return false;
@@ -99,7 +102,7 @@ Future<bool> internalIsOnComputeEngine({
     }
     return await _checkStaticGceDetection(
       linuxProductNamePath ?? _linuxProductNamePath,
-      isLinux ?? Platform.isLinux,
+      isLinux ?? isPlatformLinux,
     );
   } finally {
     // If `client` is provided by the caller, there is no guarantee that the
@@ -227,7 +230,7 @@ final class ComputeEngineCredentials extends GoogleCredentials
   }) async {
     final host =
         metadataHost ??
-        Platform.environment['GCE_METADATA_HOST'] ??
+        readPlatformEnvironment('GCE_METADATA_HOST') ??
         _defaultMetadataHost;
     final httpClient = client ?? http.Client();
     final ownsClient = client == null;
