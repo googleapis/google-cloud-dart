@@ -14,8 +14,10 @@
 
 import 'dart:async';
 
+import 'package:google_cloud_rpc/rpc.dart';
 import 'package:grpc/grpc.dart';
 import 'package:meta/meta.dart';
+
 import '../google_cloud_pubsub.dart';
 import 'generated/google/pubsub/v1/pubsub.pbgrpc.dart' as grpc;
 import 'pubsub_emulator_host_vm.dart';
@@ -524,7 +526,10 @@ final class PubSub {
       StatusCode.permissionDenied => ForbiddenException(message),
       StatusCode.notFound => NotFoundException(message),
       StatusCode.alreadyExists => ConflictException(message),
-      StatusCode.aborted => ConflictException(message),
+      StatusCode.aborted => ConflictException(
+        message,
+        status: Status(code: StatusCode.aborted, message: message),
+      ),
       StatusCode.failedPrecondition => PreconditionFailedException(message),
       StatusCode.outOfRange => RequestRangeNotSatisfiableException(message),
       StatusCode.resourceExhausted => TooManyRequestsException(message),
@@ -533,8 +538,12 @@ final class PubSub {
       StatusCode.internal => InternalServerErrorException(message),
       StatusCode.unimplemented => NotImplementedException(message),
       StatusCode.unavailable => ServiceUnavailableException(message),
-      StatusCode.dataLoss => InternalServerErrorException(message),
+      StatusCode.dataLoss => InternalServerErrorException(
+        message,
+        status: Status(code: StatusCode.dataLoss, message: message),
+      ),
       StatusCode.unknown => InternalServerErrorException(message),
+
       _ => ServiceException(message, statusCode: e.code),
     };
   }

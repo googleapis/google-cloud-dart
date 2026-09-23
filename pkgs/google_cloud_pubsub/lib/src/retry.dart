@@ -12,16 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export 'package:google_cloud_rpc/exceptions.dart';
-export 'package:grpc/grpc.dart'
-    show
-        BaseAuthenticator,
-        ComputeEngineAuthenticator,
-        ServiceAccountAuthenticator,
-        applicationDefaultCredentialsAuthenticator;
+import 'package:google_cloud_rpc/retry.dart';
 
-export 'src/client.dart' show PubSub;
-export 'src/message.dart' show Message, ReceivedMessage;
-export 'src/retry.dart' hide delaySequence;
-export 'src/subscription.dart' show Subscription;
-export 'src/topic.dart' show Topic;
+export 'package:google_cloud_rpc/retry.dart';
+
+/// The default retry strategy for Pub/Sub unary operations.
+///
+/// Implements exponential backoff with ±20% jitter for idempotent operations.
+const defaultRetry = ExponentialRetry(
+  initialDelay: Duration(milliseconds: 100),
+  delayMultiplier: 1.3,
+  maxDelay: Duration(seconds: 60),
+  maxRetryInterval: Duration(minutes: 1),
+  jitter: 0.2,
+);
