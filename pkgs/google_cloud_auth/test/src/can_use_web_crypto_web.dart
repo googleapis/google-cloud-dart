@@ -18,5 +18,6 @@
 const canUseWebCrypto = true;
 
 /// Stub for [writeTempFile] on the web.
-Future<String> writeTempFile(String filename, String content) =>
-    throw UnsupportedError('writeTempFile is only supported on the VM.');
+Future<String> writeTempFile(String filename, String content) async {
+  throw UnsupportedError('writeTempFile is only supported on the VM.');
+}

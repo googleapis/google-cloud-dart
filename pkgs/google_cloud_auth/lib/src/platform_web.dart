@@ -30,8 +30,8 @@ String? readPlatformEnvironment(String name) => null;
 Future<bool> fileExists(String path) async => false;
 
 /// Local file system access is not available on the web.
-Future<String> readFileAsString(String path) => Future.error(
-  CredentialException(
+Future<String> readFileAsString(String path) async {
+  throw CredentialException(
     'Reading credentials from a file ($path) is not supported on the web.',
-  ),
-);
+  );
+}
