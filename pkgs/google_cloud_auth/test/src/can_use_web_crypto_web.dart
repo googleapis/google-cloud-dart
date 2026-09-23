@@ -12,12 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/// Authentication and credential management for Google Cloud.
-library;
-
-export 'src/application_default_credentials.dart' show defaultCredentials;
-export 'src/compute_engine_credentials.dart' hide internalIsOnComputeEngine;
-export 'src/credential_exception.dart';
-export 'src/google_credentials.dart';
-export 'src/service_account_credentials.dart';
-export 'src/service_account_signer.dart';
+/// Whether `package:webcrypto` can be used on the current platform.
+///
+/// The browser always provides the Web Crypto API, so this is always true.
+const canUseWebCrypto = true;

@@ -12,12 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/// Authentication and credential management for Google Cloud.
-library;
+import 'dart:io';
 
-export 'src/application_default_credentials.dart' show defaultCredentials;
-export 'src/compute_engine_credentials.dart' hide internalIsOnComputeEngine;
-export 'src/credential_exception.dart';
-export 'src/google_credentials.dart';
-export 'src/service_account_credentials.dart';
-export 'src/service_account_signer.dart';
+/// Whether `package:webcrypto` can be used on the current platform.
+///
+/// The VM requires Dart 3.13 or later.
+final canUseWebCrypto = () {
+  final versionStr = Platform.version.split(' ').first;
+  final parts = versionStr.split('.').map(int.tryParse).toList();
+  if (parts.length >= 2 && parts[0] != null && parts[1] != null) {
+    if (parts[0]! > 3) return true;
+    if (parts[0]! == 3 && parts[1]! >= 13) return true;
+  }
+  return false;
+}();

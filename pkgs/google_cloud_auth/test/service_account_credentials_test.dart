@@ -14,49 +14,23 @@
 
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:google_cloud_auth/google_cloud_auth.dart';
 import 'package:test/test.dart';
 import 'package:webcrypto/webcrypto.dart';
 
-String _pkcs8ToPem(Uint8List pkcs8Bytes) {
-  final b64 = base64.encode(pkcs8Bytes);
-  final lines = <String>['-----BEGIN PRIVATE KEY-----'];
-  for (var i = 0; i < b64.length; i += 64) {
-    lines.add(b64.substring(i, min(i + 64, b64.length)));
-  }
-  lines.add('-----END PRIVATE KEY-----');
-  return lines.join('\n');
-}
-
-final _canUseWebCrypto = () {
-  if (!const bool.fromEnvironment('dart.library.io')) return true;
-  final versionStr = Platform.version.split(' ').first;
-  final parts = versionStr.split('.').map(int.tryParse).toList();
-  if (parts.length >= 2 && parts[0] != null && parts[1] != null) {
-    if (parts[0]! > 3) return true;
-    if (parts[0]! == 3 && parts[1]! >= 13) return true;
-  }
-  return false;
-}();
+import 'test_utils.dart';
 
 void main() {
-  late KeyPair<RsassaPkcs1V15PrivateKey, RsassaPkcs1V15PublicKey> testKeyPair;
-  late String privateKeyPem;
+  late RsassaPkcs1V15PublicKey testPublicKey;
 
   group(
     'ServiceAccountCredentials',
     () {
       setUpAll(() async {
-        testKeyPair = await RsassaPkcs1V15PrivateKey.generateKey(
-          2048,
-          BigInt.from(65537),
-          Hash.sha256,
-        );
-        final pkcs8Bytes = await testKeyPair.privateKey.exportPkcs8Key();
-        privateKeyPem = _pkcs8ToPem(pkcs8Bytes);
+        if (!canUseWebCrypto) return;
+        testPublicKey = await getTestPublicKey();
       });
 
       group('fromServiceAccountInfo', () {
@@ -65,7 +39,7 @@ void main() {
             'type': 'service_account',
             'project_id': 'test-project',
             'private_key_id': 'key-id-123',
-            'private_key': privateKeyPem,
+            'private_key': testPrivateKey,
             'client_email': 'test@test-project.iam.gserviceaccount.com',
             'client_id': 'client-123',
             'token_uri': 'https://oauth2.googleapis.com/custom_token',
@@ -96,7 +70,7 @@ void main() {
         test('minimal keys set', () async {
           final info = {
             'type': 'service_account',
-            'private_key': privateKeyPem,
+            'private_key': testPrivateKey,
             'client_email': 'test@test-project.iam.gserviceaccount.com',
           };
 
@@ -119,7 +93,7 @@ void main() {
             'default token_uri', () async {
           final info = {
             'type': 'service_account',
-            'private_key': privateKeyPem,
+            'private_key': testPrivateKey,
             'client_email': 'test@test-project.iam.gserviceaccount.com',
             'universe_domain': 'custom.domain.com',
           };
@@ -137,7 +111,7 @@ void main() {
 
         test('throws on missing type', () async {
           final info = {
-            'private_key': privateKeyPem,
+            'private_key': testPrivateKey,
             'client_email': 'test@test-project.iam.gserviceaccount.com',
           };
 
@@ -150,7 +124,7 @@ void main() {
         test('throws on invalid type', () async {
           final info = {
             'type': 'authorized_user',
-            'private_key': privateKeyPem,
+            'private_key': testPrivateKey,
             'client_email': 'test@test-project.iam.gserviceaccount.com',
           };
 
@@ -163,7 +137,7 @@ void main() {
         test('throws on missing client_email', () async {
           final info = {
             'type': 'service_account',
-            'private_key': privateKeyPem,
+            'private_key': testPrivateKey,
           };
 
           expect(
@@ -189,7 +163,7 @@ void main() {
           () async {
             final info = <String, Object?>{
               'type': 'service_account',
-              'private_key': privateKeyPem,
+              'private_key': testPrivateKey,
               'client_email': 'test@test-project.iam.gserviceaccount.com',
               'private_key_id': 12345,
             };
@@ -204,7 +178,7 @@ void main() {
         test('throws on non-string client_id', () async {
           final info = <String, Object?>{
             'type': 'service_account',
-            'private_key': privateKeyPem,
+            'private_key': testPrivateKey,
             'client_email': 'test@test-project.iam.gserviceaccount.com',
             'client_id': 12345,
           };
@@ -220,7 +194,7 @@ void main() {
           () async {
             final info = <String, Object?>{
               'type': 'service_account',
-              'private_key': privateKeyPem,
+              'private_key': testPrivateKey,
               'client_email': 'test@test-project.iam.gserviceaccount.com',
               'project_id': 12345,
             };
@@ -235,7 +209,7 @@ void main() {
         test('throws on non-string quota_project_id', () async {
           final info = <String, Object?>{
             'type': 'service_account',
-            'private_key': privateKeyPem,
+            'private_key': testPrivateKey,
             'client_email': 'test@test-project.iam.gserviceaccount.com',
             'quota_project_id': 12345,
           };
@@ -249,7 +223,7 @@ void main() {
         test('throws on non-string universe_domain', () async {
           final info = <String, Object?>{
             'type': 'service_account',
-            'private_key': privateKeyPem,
+            'private_key': testPrivateKey,
             'client_email': 'test@test-project.iam.gserviceaccount.com',
             'universe_domain': 12345,
           };
@@ -263,7 +237,7 @@ void main() {
         test('throws on non-string token_uri', () async {
           final info = <String, Object?>{
             'type': 'service_account',
-            'private_key': privateKeyPem,
+            'private_key': testPrivateKey,
             'client_email': 'test@test-project.iam.gserviceaccount.com',
             'token_uri': 12345,
           };
@@ -278,7 +252,7 @@ void main() {
           final info = <String, Object?>{
             'type': 'service_account',
             'project_id': 'string-project',
-            'private_key': privateKeyPem,
+            'private_key': testPrivateKey,
             'client_email': 'string@string-project.iam.gserviceaccount.com',
           };
 
@@ -347,7 +321,7 @@ void main() {
         test('creates valid credentials', () async {
           final creds = await ServiceAccountCredentials.fromPkcs8(
             clientEmail: 'pkcs8@project.iam.gserviceaccount.com',
-            privateKeyPkcs8: privateKeyPem,
+            privateKeyPkcs8: testPrivateKey,
             privateKeyId: 'pkcs8-key',
             projectId: 'pkcs8-project',
           );
@@ -370,7 +344,7 @@ void main() {
           () async {
             final creds = await ServiceAccountCredentials.fromPkcs8(
               clientEmail: 'pkcs8@project.iam.gserviceaccount.com',
-              privateKeyPkcs8: privateKeyPem,
+              privateKeyPkcs8: testPrivateKey,
               universeDomain: 'custom.domain.com',
             );
 
@@ -387,7 +361,7 @@ void main() {
         test('signs message and signature is valid with public key', () async {
           final creds = await ServiceAccountCredentials.fromPkcs8(
             clientEmail: 'test@example.com',
-            privateKeyPkcs8: privateKeyPem,
+            privateKeyPkcs8: testPrivateKey,
           );
 
           final message = utf8.encode('Hello Google Cloud!');
@@ -395,24 +369,21 @@ void main() {
 
           expect(signature, isNotEmpty);
 
-          final isValid = await testKeyPair.publicKey.verifyBytes(
-            signature,
-            message,
-          );
+          final isValid = await testPublicKey.verifyBytes(signature, message);
           expect(isValid, isTrue);
         });
 
         test('signature fails for modified message', () async {
           final creds = await ServiceAccountCredentials.fromPkcs8(
             clientEmail: 'test@example.com',
-            privateKeyPkcs8: privateKeyPem,
+            privateKeyPkcs8: testPrivateKey,
           );
 
           final message = utf8.encode('Hello Google Cloud!');
           final signature = await creds.sign(message);
 
           final tamperedMessage = utf8.encode('Hello Google Cloud?');
-          final isValid = await testKeyPair.publicKey.verifyBytes(
+          final isValid = await testPublicKey.verifyBytes(
             signature,
             tamperedMessage,
           );
@@ -422,21 +393,18 @@ void main() {
         test('signs Uint8List message directly', () async {
           final creds = await ServiceAccountCredentials.fromPkcs8(
             clientEmail: 'test@example.com',
-            privateKeyPkcs8: privateKeyPem,
+            privateKeyPkcs8: testPrivateKey,
           );
 
           final message = Uint8List.fromList([1, 2, 3, 4, 5]);
           final signature = await creds.sign(message);
 
-          final isValid = await testKeyPair.publicKey.verifyBytes(
-            signature,
-            message,
-          );
+          final isValid = await testPublicKey.verifyBytes(signature, message);
           expect(isValid, isTrue);
         });
       });
     },
-    skip: _canUseWebCrypto
+    skip: canUseWebCrypto
         ? null
         : 'Requires Dart 3.13 or later for native assets',
   );
