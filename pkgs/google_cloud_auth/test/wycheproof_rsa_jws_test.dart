@@ -191,7 +191,10 @@ void _testJws() {
         if (privateJwk.containsKey('alg')) 'alg': privateJwk['alg'],
         if (privateJwk.containsKey('use')) 'use': privateJwk['use'],
         if (privateJwk['key_ops'] case final List<dynamic> ops)
-          'key_ops': ops.where((op) => op != 'sign').toList(),
+          'key_ops': ops
+              .expand((op) => op.toString().split(', '))
+              .where((op) => op != 'sign')
+              .toList(),
         if (privateJwk.containsKey('kid')) 'kid': privateJwk['kid'],
         'n': privateJwk['n'],
         'e': privateJwk['e'],
