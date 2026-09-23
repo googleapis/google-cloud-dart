@@ -18,6 +18,7 @@
 library;
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
@@ -26,16 +27,15 @@ import 'package:path/path.dart' as p;
 import 'compute_engine_credentials.dart';
 import 'credential_exception.dart';
 import 'google_credentials.dart';
-import 'platform_web.dart' if (dart.library.io) 'platform_io.dart';
 import 'service_account_credentials.dart';
 
 const _credentialsFileName = 'application_default_credentials.json';
 
+String? _readEnvironment(String name) => Platform.environment[name];
+
 /// Provides the Application Default Credential from the environment.
 ///
-/// Throws a [CredentialException] if no credentials could be found or loaded
-/// (including when running on the web, where environment variables, local
-/// credential files, and the Compute Engine metadata server are unavailable).
+/// Throws a [CredentialException] if no credentials could be found or loaded.
 Future<GoogleCredentials> defaultCredentials({http.Client? client}) =>
     internalDefaultCredentials(client: client);
 
@@ -44,27 +44,29 @@ Future<GoogleCredentials> defaultCredentials({http.Client? client}) =>
 Future<GoogleCredentials> internalDefaultCredentials({
   http.Client? client,
   @visibleForTesting
-  String? Function(String name) readEnvironment = readPlatformEnvironment,
+  String? Function(String name) readEnvironment = _readEnvironment,
   @visibleForTesting String? wellKnownFilePath,
 }) async {
   // Check GOOGLE_APPLICATION_CREDENTIALS
   final envPath = readEnvironment('GOOGLE_APPLICATION_CREDENTIALS')?.trim();
   if (envPath != null && envPath.isNotEmpty) {
-    if (!await fileExists(envPath)) {
+    final file = File(envPath);
+    if (!await file.exists()) {
       throw CredentialException(
         'The GOOGLE_APPLICATION_CREDENTIALS environment variable points to a '
         'file that does not exist: $envPath',
       );
     }
-    return await _loadCredentialsFile(envPath);
+    return await _loadCredentialsFile(file);
   }
 
   // Check well-known credentials file
   final adcPath =
       wellKnownFilePath ?? wellKnownCredentialsPath(readEnvironment);
   if (adcPath != null) {
-    if (await fileExists(adcPath)) {
-      return await _loadCredentialsFile(adcPath);
+    final file = File(adcPath);
+    if (await file.exists()) {
+      return await _loadCredentialsFile(file);
     }
   }
 
@@ -86,8 +88,17 @@ Future<GoogleCredentials> internalDefaultCredentials({
   );
 }
 
-Future<ServiceAccountCredentials> _loadCredentialsFile(String filePath) async {
-  final content = await readFileAsString(filePath);
+Future<ServiceAccountCredentials> _loadCredentialsFile(File file) async {
+  final String content;
+  try {
+    content = await file.readAsString();
+  } on IOException catch (e, stackTrace) {
+    throw CredentialException(
+      'Failed to read credentials file at ${file.path}: $e',
+      innerException: e,
+      innerStackTrace: stackTrace,
+    );
+  }
 
   final Map<String, dynamic> json;
   try {
@@ -98,7 +109,7 @@ Future<ServiceAccountCredentials> _loadCredentialsFile(String filePath) async {
     json = decoded;
   } on FormatException catch (e, stackTrace) {
     throw CredentialException(
-      'The file at $filePath is not a valid JSON file: ${e.message}',
+      'The file at ${file.path} is not a valid JSON file: ${e.message}',
       innerException: e,
       innerStackTrace: stackTrace,
     );
@@ -110,14 +121,14 @@ Future<ServiceAccountCredentials> _loadCredentialsFile(String filePath) async {
       return await ServiceAccountCredentials.fromServiceAccountInfo(json);
     } on FormatException catch (e, stackTrace) {
       throw CredentialException(
-        'Failed to parse service account credentials from $filePath: '
+        'Failed to parse service account credentials from ${file.path}: '
         '${e.message}',
         innerException: e,
         innerStackTrace: stackTrace,
       );
     } on Exception catch (e, stackTrace) {
       throw CredentialException(
-        'Failed to load service account credentials from $filePath: $e',
+        'Failed to load service account credentials from ${file.path}: $e',
         innerException: e,
         innerStackTrace: stackTrace,
       );
@@ -125,7 +136,7 @@ Future<ServiceAccountCredentials> _loadCredentialsFile(String filePath) async {
   }
 
   throw CredentialException(
-    "The credential at '$filePath' has type '$type', "
+    "The credential at '${file.path}' has type '$type', "
     'which is not recognized.',
   );
 }
@@ -135,13 +146,13 @@ Future<ServiceAccountCredentials> _loadCredentialsFile(String filePath) async {
 String? wellKnownCredentialsPath(
   String? Function(String name) readEnvironment,
 ) {
-  final path = isPlatformWindows ? p.windows : p.posix;
+  final path = Platform.isWindows ? p.windows : p.posix;
   final cloudSdkConfig = readEnvironment('CLOUDSDK_CONFIG')?.trim();
   if (cloudSdkConfig != null && cloudSdkConfig.isNotEmpty) {
     return path.join(cloudSdkConfig, _credentialsFileName);
   }
 
-  if (isPlatformWindows) {
+  if (Platform.isWindows) {
     final appData = readEnvironment('APPDATA')?.trim();
     if (appData == null || appData.isEmpty) return null;
     return path.join(appData, 'gcloud', _credentialsFileName);

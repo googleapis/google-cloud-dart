@@ -19,17 +19,11 @@ import 'credential_exception.dart';
 /// Whether the current runtime supports `dart:io` platform and file operations.
 const bool isPlatformIo = true;
 
-/// Whether the current operating system is Windows.
-bool get isPlatformWindows => Platform.isWindows;
-
 /// Whether the current operating system is Linux.
 bool get isPlatformLinux => Platform.isLinux;
 
 /// Reads an environment variable from [Platform.environment].
 String? readPlatformEnvironment(String name) => Platform.environment[name];
-
-/// Returns `true` if a file exists at [path].
-Future<bool> fileExists(String path) => File(path).exists();
 
 /// Reads the file at [path] as a UTF-8 string.
 ///

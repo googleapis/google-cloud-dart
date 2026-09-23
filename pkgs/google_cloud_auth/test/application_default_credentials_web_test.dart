@@ -12,14 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/// Authentication and credential management for Google Cloud.
+@TestOn('browser')
 library;
 
-export 'src/application_default_credentials.dart'
-    if (dart.library.js_interop) 'src/application_default_credentials_web.dart'
-    show defaultCredentials;
-export 'src/compute_engine_credentials.dart' hide internalIsOnComputeEngine;
-export 'src/credential_exception.dart';
-export 'src/google_credentials.dart';
-export 'src/service_account_credentials.dart';
-export 'src/service_account_signer.dart';
+import 'package:google_cloud_auth/google_cloud_auth.dart';
+import 'package:test/test.dart';
+
+void main() {
+  test('defaultCredentials throws CredentialException on the web', () async {
+    await expectLater(
+      defaultCredentials(),
+      throwsA(
+        isA<CredentialException>().having(
+          (e) => e.message,
+          'message',
+          contains('not supported on the web'),
+        ),
+      ),
+    );
+  });
+}

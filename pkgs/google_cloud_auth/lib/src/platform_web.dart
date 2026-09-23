@@ -17,17 +17,11 @@ import 'credential_exception.dart';
 /// Whether the current runtime supports `dart:io` platform and file operations.
 const bool isPlatformIo = false;
 
-/// Whether the current operating system is Windows.
-bool get isPlatformWindows => false;
-
 /// Whether the current operating system is Linux.
 bool get isPlatformLinux => false;
 
 /// Environment variables are not available on the web.
 String? readPlatformEnvironment(String name) => null;
-
-/// Local file system access is not available on the web.
-Future<bool> fileExists(String path) async => false;
 
 /// Local file system access is not available on the web.
 Future<String> readFileAsString(String path) async {
