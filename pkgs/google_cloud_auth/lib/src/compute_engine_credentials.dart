@@ -46,7 +46,7 @@ const _computePingTimeout = Duration(milliseconds: 500);
 Future<bool> _checkStaticGceDetection(String path, bool isLinux) async {
   if (!isLinux) return false;
   try {
-    final content = await readFileAsString(path);
+    final content = await readCredentialFileAsString(path);
     return content.trim().startsWith('Google');
   } catch (_) {
     return false;

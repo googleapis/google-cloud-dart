@@ -640,6 +640,10 @@ void main() async {
         testOn: 'vm',
       );
 
+      test('returns false on browser when no client is provided', () async {
+        expect(await ComputeEngineCredentials.isOnComputeEngine(), isFalse);
+      }, testOn: 'browser');
+
       test('returns false when NO_GCE_CHECK is true', () async {
         final mockClient = MockClient((request) async {
           fail('Should not attempt network call');

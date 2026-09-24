@@ -96,7 +96,7 @@ final class ServiceAccountCredentials extends GoogleCredentials
   static Future<ServiceAccountCredentials> fromServiceAccountFile(
     String path,
   ) async {
-    final contents = await readFileAsString(path);
+    final contents = await readCredentialFileAsString(path);
     return fromServiceAccountString(contents);
   }
 

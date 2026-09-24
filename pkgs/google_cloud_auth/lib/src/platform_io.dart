@@ -25,10 +25,10 @@ bool get isPlatformLinux => Platform.isLinux;
 /// Reads an environment variable from [Platform.environment].
 String? readPlatformEnvironment(String name) => Platform.environment[name];
 
-/// Reads the file at [path] as a UTF-8 string.
+/// Reads the credentials file at [path] as a UTF-8 string.
 ///
 /// Throws a [CredentialException] if reading fails.
-Future<String> readFileAsString(String path) async {
+Future<String> readCredentialFileAsString(String path) async {
   try {
     return await File(path).readAsString();
   } on IOException catch (e, stackTrace) {

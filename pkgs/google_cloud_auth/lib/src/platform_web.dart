@@ -24,7 +24,7 @@ bool get isPlatformLinux => false;
 String? readPlatformEnvironment(String name) => null;
 
 /// Local file system access is not available on the web.
-Future<String> readFileAsString(String path) async {
+Future<String> readCredentialFileAsString(String path) async {
   throw CredentialException(
     'Reading credentials from a file ($path) is not supported on the web.',
   );

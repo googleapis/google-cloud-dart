@@ -323,14 +323,6 @@ void main() {
             );
           },
         );
-
-        test('defaultCredentials and isOnComputeEngine on browser', () async {
-          await expectLater(
-            defaultCredentials(),
-            throwsA(isA<CredentialException>()),
-          );
-          expect(await ComputeEngineCredentials.isOnComputeEngine(), isFalse);
-        }, testOn: 'browser');
       });
 
       group('fromPkcs8', () {
