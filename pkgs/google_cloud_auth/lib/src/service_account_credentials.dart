@@ -18,12 +18,13 @@
 library;
 
 import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:webcrypto/webcrypto.dart';
 
+import 'credential_exception.dart';
 import 'google_credentials.dart';
+import 'platform_web.dart' if (dart.library.io) 'platform_io.dart';
 import 'service_account_signer.dart';
 
 Uint8List _parsePemPkcs8Key(String pemString) {
@@ -89,11 +90,13 @@ final class ServiceAccountCredentials extends GoogleCredentials
 
   /// Creates a [ServiceAccountCredentials] instance from a service account
   /// JSON file at [path].
+  ///
+  /// Throws a [CredentialException] if reading [path] fails or when running on
+  /// the web.
   static Future<ServiceAccountCredentials> fromServiceAccountFile(
     String path,
   ) async {
-    final file = File(path);
-    final contents = await file.readAsString();
+    final contents = await readCredentialFileAsString(path);
     return fromServiceAccountString(contents);
   }
 

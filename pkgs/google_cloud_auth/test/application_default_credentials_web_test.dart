@@ -12,17 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'dart:io';
+@TestOn('browser')
+library;
 
-/// Whether `package:webcrypto` can be used on the current platform.
-///
-/// The VM requires Dart 3.13 or later.
-final canUseWebCrypto = () {
-  final versionStr = Platform.version.split(' ').first;
-  final parts = versionStr.split('.').map(int.tryParse).toList();
-  if (parts.length >= 2 && parts[0] != null && parts[1] != null) {
-    if (parts[0]! > 3) return true;
-    if (parts[0]! == 3 && parts[1]! >= 13) return true;
-  }
-  return false;
-}();
+import 'package:google_cloud_auth/google_cloud_auth.dart';
+import 'package:test/test.dart';
+
+void main() {
+  test('defaultCredentials throws CredentialException on the web', () async {
+    await expectLater(
+      defaultCredentials(),
+      throwsA(
+        isA<CredentialException>().having(
+          (e) => e.message,
+          'message',
+          contains('not supported on the web'),
+        ),
+      ),
+    );
+  });
+}

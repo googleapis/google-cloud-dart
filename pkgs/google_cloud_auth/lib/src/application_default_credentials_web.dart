@@ -12,14 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/// Authentication and credential management for Google Cloud.
-library;
+import 'package:http/http.dart' as http;
 
-export 'src/application_default_credentials.dart'
-    if (dart.library.js_interop) 'src/application_default_credentials_web.dart'
-    show defaultCredentials;
-export 'src/compute_engine_credentials.dart' hide internalIsOnComputeEngine;
-export 'src/credential_exception.dart';
-export 'src/google_credentials.dart';
-export 'src/service_account_credentials.dart';
-export 'src/service_account_signer.dart';
+import 'credential_exception.dart';
+import 'google_credentials.dart';
+
+/// Provides the Application Default Credential from the environment.
+///
+/// Always throws a [CredentialException] on the web, where environment
+/// variables, local credential files, and the Compute Engine metadata server
+/// are unavailable.
+Future<GoogleCredentials> defaultCredentials({http.Client? client}) async {
+  throw CredentialException(
+    'Application Default Credentials are not supported on the web.',
+  );
+}
