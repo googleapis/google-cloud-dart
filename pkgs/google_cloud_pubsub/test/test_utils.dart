@@ -70,6 +70,11 @@ Future<PubSub> createClient() async {
 /// Pulls up to [count] messages from the [subscription], retrying up to 10
 /// times with a 1-second delay between attempts if the expected count is
 /// not met.
+///
+/// In production Pub/Sub, a newly created subscription or freshly published
+/// message may take a moment to propagate across the service's backends, so a
+/// single `pull` immediately after `publish` can return fewer messages than
+/// expected (or none at all) even when the messages are on their way.
 Future<List<ReceivedMessage>> pullReliably(
   Subscription subscription, {
   required int count,
