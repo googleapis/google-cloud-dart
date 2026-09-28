@@ -23,7 +23,7 @@ import 'test_utils.dart';
 
 void main() {
   group('defaultRetry', () {
-    test('defaults match Pub/Sub exponential backoff specification', () {
+    test('has expected default backoff parameters', () {
       expect(defaultRetry.maxRetryInterval, equals(const Duration(minutes: 1)));
       expect(
         defaultRetry.initialDelay,
