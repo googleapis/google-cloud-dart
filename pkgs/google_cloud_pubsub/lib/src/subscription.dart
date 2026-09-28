@@ -608,6 +608,10 @@ final class Subscription {
 
         var nextDelays = delays;
         final uptime = connectionStopwatch?.elapsed ?? Duration.zero;
+        // A quiet subscription can stay connected for long periods without
+        // receiving messages. Treating a connection that stayed open for at
+        // least 15 seconds as healthy prevents periodic server-side idle
+        // disconnects from accumulating backoff up to `maxDelay`.
         final wasHealthy =
             hasReceivedItem || (uptime >= const Duration(seconds: 15));
         if (wasHealthy) {
@@ -826,6 +830,10 @@ final class Subscription {
   Future<void> _doClose() async {
     final pulls = _activeStreamingPulls.toList();
     _activeStreamingPulls.clear();
+    // Cancel active streaming pulls first so the final flush of `_ackBatcher`
+    // and `_modifyAckBatcher` below falls back to unary RPCs (which await
+    // server confirmation and retry on transient failures) rather than writing
+    // fire-and-forget frames onto streams that are being torn down.
     await Future.wait(pulls.map((pull) => pull.cancel()));
     await Future.wait([_ackBatcher.close(), _modifyAckBatcher.close()]);
     for (final pull in pulls) {
