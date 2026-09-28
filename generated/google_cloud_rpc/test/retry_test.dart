@@ -99,6 +99,34 @@ void main() {
         expect(d.inMilliseconds, lessThanOrEqualTo(12000));
       }
       expect(delays.toSet().length, greaterThan(1));
+      // Jitter is applied after the delay is capped at `maxDelay`.
+      expect(delays.any((d) => d > const Duration(seconds: 10)), isTrue);
+    });
+
+    test('matches the documented jitter example', () {
+      final delays = delaySequence(
+        maxRetries: 6,
+        initialDelay: const Duration(seconds: 1),
+        maxDelay: const Duration(seconds: 10),
+        delayMultiplier: 2,
+        jitter: 0.2,
+        random: Random(42),
+      ).toList();
+
+      const unjittered = [
+        Duration(seconds: 1),
+        Duration(seconds: 2),
+        Duration(seconds: 4),
+        Duration(seconds: 8),
+        Duration(seconds: 10),
+        Duration(seconds: 10),
+      ];
+      expect(delays, hasLength(unjittered.length));
+      expect(delays, isNot(unjittered));
+      for (var i = 0; i < delays.length; i++) {
+        expect(delays[i], greaterThanOrEqualTo(unjittered[i] * 0.8));
+        expect(delays[i], lessThanOrEqualTo(unjittered[i] * 1.2));
+      }
     });
   });
 
