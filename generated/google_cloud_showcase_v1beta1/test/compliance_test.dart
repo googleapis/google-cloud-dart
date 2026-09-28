@@ -13,6 +13,10 @@
 // limitations under the License.
 
 @TestOn('vm')
+// `setUpAll` builds and installs the Showcase server with `go install`, which
+// can take much longer than the default 30s timeout when the Go build cache is
+// cold.
+@Timeout(Duration(minutes: 5))
 /// Test using the Showcase [`Compliance` service][conformance].
 ///
 /// [conformance]: https://github.com/googleapis/gapic-showcase/blob/main/schema/google/showcase/v1beta1/compliance.proto

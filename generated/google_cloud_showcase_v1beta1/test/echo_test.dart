@@ -16,6 +16,10 @@
 /// - [go](https://github.com/googleapis/gapic-showcase/blob/main/server/services/echo_service_test.go)
 /// - [rust](https://github.com/googleapis/google-cloud-rust/blob/main/src/integration-tests/src/showcase/echo.rs)
 @TestOn('vm')
+// `setUpAll` builds and installs the Showcase server with `go install`, which
+// can take much longer than the default 30s timeout when the Go build cache is
+// cold.
+@Timeout(Duration(minutes: 5))
 library;
 
 import 'package:google_cloud_protobuf/protobuf.dart' as protobuf;

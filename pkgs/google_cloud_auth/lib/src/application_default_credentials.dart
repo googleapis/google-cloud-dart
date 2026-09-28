@@ -1,0 +1,164 @@
+// Copyright 2026 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+/// Design based on:
+/// - https://github.com/googleapis/google-cloud-java/blob/main/google-auth-library-java/oauth2_http/java/com/google/auth/oauth2/DefaultCredentialsProvider.java
+/// - https://github.com/googleapis/google-auth-library-python/blob/main/google/auth/_default.py
+library;
+
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:http/http.dart' as http;
+import 'package:meta/meta.dart';
+import 'package:path/path.dart' as p;
+
+import 'compute_engine_credentials.dart';
+import 'credential_exception.dart';
+import 'google_credentials.dart';
+import 'service_account_credentials.dart';
+
+const _credentialsFileName = 'application_default_credentials.json';
+
+String? _readEnvironment(String name) => Platform.environment[name];
+
+/// Provides the Application Default Credential from the environment.
+///
+/// Throws a [CredentialException] if no credentials could be found or loaded.
+Future<GoogleCredentials> defaultCredentials({http.Client? client}) =>
+    internalDefaultCredentials(client: client);
+
+/// [defaultCredentials] with some extra parameters for testing.
+@internal
+Future<GoogleCredentials> internalDefaultCredentials({
+  http.Client? client,
+  @visibleForTesting
+  String? Function(String name) readEnvironment = _readEnvironment,
+  @visibleForTesting String? wellKnownFilePath,
+}) async {
+  // Check GOOGLE_APPLICATION_CREDENTIALS
+  final envPath = readEnvironment('GOOGLE_APPLICATION_CREDENTIALS')?.trim();
+  if (envPath != null && envPath.isNotEmpty) {
+    final file = File(envPath);
+    if (!await file.exists()) {
+      throw CredentialException(
+        'The GOOGLE_APPLICATION_CREDENTIALS environment variable points to a '
+        'file that does not exist: $envPath',
+      );
+    }
+    return await _loadCredentialsFile(file);
+  }
+
+  // Check well-known credentials file
+  final adcPath =
+      wellKnownFilePath ?? wellKnownCredentialsPath(readEnvironment);
+  if (adcPath != null) {
+    final file = File(adcPath);
+    if (await file.exists()) {
+      return await _loadCredentialsFile(file);
+    }
+  }
+
+  // Check Google Compute Engine metadata server
+  if (await internalIsOnComputeEngine(
+    client: client,
+    readEnvironment: readEnvironment,
+  )) {
+    return await ComputeEngineCredentials.create(
+      client: client,
+      metadataHost: readEnvironment('GCE_METADATA_HOST')?.trim(),
+    );
+  }
+
+  throw CredentialException(
+    'Could not load Application Default Credentials. No service account '
+    'credentials found in GOOGLE_APPLICATION_CREDENTIALS, the well-known '
+    'credentials file, or the Compute Engine metadata server.',
+  );
+}
+
+Future<ServiceAccountCredentials> _loadCredentialsFile(File file) async {
+  final String content;
+  try {
+    content = await file.readAsString();
+  } on IOException catch (e, stackTrace) {
+    throw CredentialException(
+      'Failed to read credentials file at ${file.path}: $e',
+      innerException: e,
+      innerStackTrace: stackTrace,
+    );
+  }
+
+  final Map<String, dynamic> json;
+  try {
+    final decoded = jsonDecode(content);
+    if (decoded is! Map<String, dynamic>) {
+      throw const FormatException('Expected JSON object.');
+    }
+    json = decoded;
+  } on FormatException catch (e, stackTrace) {
+    throw CredentialException(
+      'The file at ${file.path} is not a valid JSON file: ${e.message}',
+      innerException: e,
+      innerStackTrace: stackTrace,
+    );
+  }
+
+  final type = json['type'];
+  if (type == 'service_account') {
+    try {
+      return await ServiceAccountCredentials.fromServiceAccountInfo(json);
+    } on FormatException catch (e, stackTrace) {
+      throw CredentialException(
+        'Failed to parse service account credentials from ${file.path}: '
+        '${e.message}',
+        innerException: e,
+        innerStackTrace: stackTrace,
+      );
+    } on Exception catch (e, stackTrace) {
+      throw CredentialException(
+        'Failed to load service account credentials from ${file.path}: $e',
+        innerException: e,
+        innerStackTrace: stackTrace,
+      );
+    }
+  }
+
+  throw CredentialException(
+    "The credential at '${file.path}' has type '$type', "
+    'which is not recognized.',
+  );
+}
+
+@internal
+@visibleForTesting
+String? wellKnownCredentialsPath(
+  String? Function(String name) readEnvironment,
+) {
+  final path = Platform.isWindows ? p.windows : p.posix;
+  final cloudSdkConfig = readEnvironment('CLOUDSDK_CONFIG')?.trim();
+  if (cloudSdkConfig != null && cloudSdkConfig.isNotEmpty) {
+    return path.join(cloudSdkConfig, _credentialsFileName);
+  }
+
+  if (Platform.isWindows) {
+    final appData = readEnvironment('APPDATA')?.trim();
+    if (appData == null || appData.isEmpty) return null;
+    return path.join(appData, 'gcloud', _credentialsFileName);
+  }
+
+  final home = readEnvironment('HOME')?.trim();
+  if (home == null || home.isEmpty) return null;
+  return path.join(home, '.config', 'gcloud', _credentialsFileName);
+}
