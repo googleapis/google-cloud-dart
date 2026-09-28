@@ -16,6 +16,7 @@
 library;
 
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:google_cloud_pubsub/google_cloud_pubsub.dart';
 import 'package:google_cloud_pubsub/src/generated/google/pubsub/v1/pubsub.pb.dart'
@@ -103,6 +104,73 @@ void main() {
             expect(stream.first, throwsA(isA<ServiceException>()));
           },
         );
+
+        test('parallel streamingPull routes modifyAckDeadline and acknowledge '
+            'over active streams', () async {
+          final topicName = testResourceName('stream-topic');
+          final subscriptionName = testResourceName('stream-sub');
+          final topic = client.topic(topicName);
+          final subscription = client.subscription(
+            subscriptionName,
+            ackSettings: AckSettings(
+              batching: BatchingSettings(
+                maxMessages: 1,
+                maxDelay: const Duration(milliseconds: 20),
+              ),
+            ),
+          );
+
+          await topic.create();
+          addTearDown(() async => await topic.delete());
+
+          await subscription.create(topic: topic.name);
+          addTearDown(() async => await subscription.delete());
+
+          final done = Completer<void>();
+          var deliveries = 0;
+          String? firstMessageId;
+          ReceivedMessage? secondDelivery;
+
+          final subListener = subscription
+              .streamingPull(
+                maxConcurrentStreams: 2,
+                streamAckDeadlineSeconds: 600,
+              )
+              .listen((message) async {
+                deliveries++;
+                if (deliveries == 1) {
+                  firstMessageId = message.messageId;
+                  expect(utf8.decode(message.data), 'stream-e2e-msg');
+                  await message.modifyAckDeadline(0);
+                } else if (deliveries == 2) {
+                  expect(message.messageId, firstMessageId);
+                  secondDelivery = message;
+                  await message.acknowledge();
+                  if (!done.isCompleted) done.complete();
+                }
+              }, onError: done.completeError);
+
+          await topic.publish(utf8.encode('stream-e2e-msg'));
+          await topic.close();
+
+          await done.future.timeout(const Duration(seconds: 10));
+          // Allow the stream-routed ACK frame to reach the server before
+          // tearing down the stream.
+          await Future<void>.delayed(const Duration(milliseconds: 200));
+          await subListener.cancel();
+          await subscription.close();
+
+          final reopen = client.subscription(subscriptionName);
+          addTearDown(() async => await reopen.close());
+          await reopen.modifyAckDeadlineNow([secondDelivery!], 0);
+          await client.publish(topic.name, utf8.encode('sentinel'));
+
+          final afterAck = await pullReliably(reopen, count: 1);
+          expect(afterAck.map((m) => utf8.decode(m.data)).toList(), [
+            'sentinel',
+          ]);
+          await reopen.acknowledgeNow(afterAck);
+        });
       },
     );
 
