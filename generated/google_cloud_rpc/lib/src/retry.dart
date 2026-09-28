@@ -56,6 +56,34 @@ sealed class RetryRunner {
 /// // ]
 /// ```
 ///
+/// A non-zero `jitter` randomizes the delays, so that clients that fail at the
+/// same time don't all retry at the same time. Each delay is multiplied by its
+/// own random factor between `1 - jitter` and `1 + jitter`. The factor is
+/// applied after the delay is capped at `maxDelay`, so a delay can be up to
+/// `jitter * maxDelay` longer than `maxDelay`. For example, with a `jitter` of
+/// `0.2`:
+///
+/// ```dart
+/// delaySequence(
+///     maxRetries: 6,
+///     initialDelay: Duration(seconds: 1),
+///     maxDelay: Duration(seconds: 10),
+///     delayMultiplier: 2,
+///     jitter: 0.2);
+/// // [
+/// //   between 0.8 and 1.2 seconds,
+/// //   between 1.6 and 2.4 seconds,
+/// //   between 3.2 and 4.8 seconds,
+/// //   between 6.4 and 9.6 seconds,
+/// //   between 8 and 12 seconds,
+/// //   between 8 and 12 seconds,
+/// // ]
+/// ```
+///
+/// The random factors are taken from `random`, or from a new [Random] if
+/// `random` is omitted. Passing a seeded [Random] makes the sequence
+/// reproducible.
+///
 /// If `maxRetryInterval` is set then the sequence must be iterated-over in
 /// real time.
 @visibleForTesting
@@ -170,7 +198,16 @@ final class ExponentialRetry implements RetryRunner {
   /// [jitter].
   final Duration maxDelay;
 
-  /// Randomized jitter factor applied to each delay (e.g. `0.2` for ±20%).
+  /// The fraction, between `0.0` and `1.0`, by which each delay is randomly
+  /// lengthened or shortened.
+  ///
+  /// Each delay is multiplied by its own random factor between `1 - jitter`
+  /// and `1 + jitter`, so a [jitter] of `0.2` varies each delay by up to ±20%.
+  /// This spreads out the retries of clients that failed at the same time, so
+  /// that they don't all retry at once.
+  ///
+  /// The factor is applied after the delay is capped at [maxDelay], so a delay
+  /// can be up to `jitter * maxDelay` longer than [maxDelay].
   ///
   /// Defaults to `0.0` (no jitter).
   final double jitter;
