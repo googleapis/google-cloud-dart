@@ -526,6 +526,9 @@ final class PubSub {
       StatusCode.permissionDenied => ForbiddenException(message),
       StatusCode.notFound => NotFoundException(message),
       StatusCode.alreadyExists => ConflictException(message),
+      // Attach the gRPC status code so `ExponentialRetry.isRetryable` can
+      // distinguish retryable `ABORTED` from non-retryable `ALREADY_EXISTS`
+      // (both map to HTTP 409 / `ConflictException`).
       StatusCode.aborted => ConflictException(
         message,
         status: Status(code: StatusCode.aborted, message: message),
@@ -538,6 +541,9 @@ final class PubSub {
       StatusCode.internal => InternalServerErrorException(message),
       StatusCode.unimplemented => NotImplementedException(message),
       StatusCode.unavailable => ServiceUnavailableException(message),
+      // Attach the gRPC status code so `ExponentialRetry.isRetryable` does not
+      // retry `DATA_LOSS` even though it maps to `InternalServerErrorException`
+      // alongside retryable `INTERNAL` and `UNKNOWN`.
       StatusCode.dataLoss => InternalServerErrorException(
         message,
         status: Status(code: StatusCode.dataLoss, message: message),
