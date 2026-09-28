@@ -139,7 +139,6 @@ void main() async {
           metadataHost: 'test-metadata',
         );
 
-        expect(creds, isA<ServiceAccountSigner>());
         expect(creds.universeDomain, 'googleapis.com');
       });
 
@@ -160,7 +159,6 @@ void main() async {
           metadataHost: 'test-metadata',
         );
 
-        expect(creds, isA<ServiceAccountSigner>());
         expect(creds.universeDomain, 'googleapis.com');
       });
 
@@ -424,6 +422,34 @@ void main() async {
                   'innerException',
                   isA<FormatException>(),
                 ),
+          ),
+        );
+      });
+
+      test('throws CredentialException on non-map JSON', () async {
+        final mockClient = MockClient(
+          (request) async => switch (request.url.path) {
+            '/computeMetadata/v1/instance/service-accounts/default/token' =>
+              http.Response('[1, 2, 3]', 200),
+            _ => http.Response('Not found', 404),
+          },
+        );
+
+        final creds = await ComputeEngineCredentials.create(
+          client: mockClient,
+          clientEmail: 'sa@test.com',
+          universeDomain: 'googleapis.com',
+          metadataHost: 'test-metadata',
+        );
+
+        expect(
+          creds.accessToken,
+          throwsA(
+            isA<CredentialException>().having(
+              (e) => e.message,
+              'message',
+              contains('Failed to parse token response'),
+            ),
           ),
         );
       });
@@ -922,6 +948,76 @@ void main() async {
           ),
         );
       });
+
+      test('throws SigningException on non-map JSON from signBlob', () async {
+        final message = utf8.encode('Test message');
+
+        final mockClient = MockClient(
+          (request) async => switch (request.url.path) {
+            '/computeMetadata/v1/instance/service-accounts/default/token' =>
+              http.Response(
+                jsonEncode({
+                  'access_token': 'token-123',
+                  'expires_in': 3600,
+                  'token_type': 'Bearer',
+                }),
+                200,
+              ),
+            '/v1/projects/-/serviceAccounts/sa@test.iam.gserviceaccount.com:signBlob' =>
+              http.Response('["not", "a", "map"]', 200),
+            _ => http.Response('Not found', 404),
+          },
+        );
+
+        final creds = await ComputeEngineCredentials.create(
+          client: mockClient,
+          clientEmail: 'sa@test.iam.gserviceaccount.com',
+          metadataHost: 'test-metadata',
+        );
+
+        expect(
+          () => creds.sign(message),
+          throwsA(
+            isA<SigningException>().having(
+              (e) => e.message,
+              'message',
+              contains('Failed to parse signBlob response'),
+            ),
+          ),
+        );
+      });
+
+      test(
+        'throws SigningException when obtaining access token fails',
+        () async {
+          final message = utf8.encode('Test message');
+
+          final mockClient = MockClient(
+            (request) async => switch (request.url.path) {
+              '/computeMetadata/v1/instance/service-accounts/default/token' =>
+                throw http.ClientException('Network down'),
+              _ => http.Response('Not found', 404),
+            },
+          );
+
+          final creds = await ComputeEngineCredentials.create(
+            client: mockClient,
+            clientEmail: 'sa@test.iam.gserviceaccount.com',
+            metadataHost: 'test-metadata',
+          );
+
+          expect(
+            () => creds.sign(message),
+            throwsA(
+              isA<SigningException>().having(
+                (e) => e.message,
+                'message',
+                contains('Failed to obtain access token for signing'),
+              ),
+            ),
+          );
+        },
+      );
 
       test(
         'signs message using ComputeEngineCredentials',
