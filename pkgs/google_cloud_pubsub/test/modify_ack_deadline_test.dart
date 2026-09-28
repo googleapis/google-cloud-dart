@@ -15,6 +15,8 @@
 @TestOn('vm')
 library;
 
+import 'dart:convert';
+
 import 'package:google_cloud_pubsub/google_cloud_pubsub.dart';
 import 'package:test/test.dart';
 
@@ -52,6 +54,47 @@ void main() {
             ], 30),
             throwsA(isA<NotFoundException>()),
           );
+        });
+
+        test('batched modifyAckDeadline to 0 flushed on close() triggers '
+            'redelivery', () async {
+          final topicName = testResourceName('modack-topic');
+          final subscriptionName = testResourceName('modack-sub');
+          final topic = client.topic(topicName);
+          final subscription = client.subscription(
+            subscriptionName,
+            ackSettings: AckSettings(
+              batching: BatchingSettings(
+                maxMessages: 50,
+                maxDelay: const Duration(seconds: 30),
+              ),
+            ),
+          );
+
+          await topic.create();
+          addTearDown(() async => await topic.delete());
+
+          await subscription.create(topic: topic.name);
+          addTearDown(() async => await subscription.delete());
+
+          await topic.publish(utf8.encode('modack-msg'));
+          await topic.close();
+
+          final received = await pullReliably(subscription, count: 1);
+          expect(received, hasLength(1));
+
+          // Extend the lease to 600s first so redelivery can only happen if
+          // the subsequent batched modifyAckDeadline(0) is flushed.
+          await subscription.modifyAckDeadlineNow(received, 600);
+          subscription.modifyAckDeadline(received.first, 0);
+          await subscription.close();
+
+          final reopen = client.subscription(subscriptionName);
+          addTearDown(() async => await reopen.close());
+          final redelivered = await pullReliably(reopen, count: 1);
+          expect(redelivered, hasLength(1));
+          expect(redelivered.first.messageId, received.first.messageId);
+          await reopen.acknowledgeNow(redelivered);
         });
       },
     );
