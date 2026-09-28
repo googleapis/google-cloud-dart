@@ -1,15 +1,20 @@
-## 0.6.4
+## 0.6.5-wip
 
 * Move retry classes (`RetryRunner`, `ExponentialRetry`) and
   `ChecksumValidationException` to `package:google_cloud_rpc` (re-exported for
   backwards compatibility).
+* Add a `jitter` parameter to `ExponentialRetry` that randomizes the delay
+  between retries.
+* Add `RetryRunner.isRetryable` and `RetryRunner.delays`.
+
+## 0.6.4
+
 * Send `gccl/<version>` in `x-goog-api-client` request header for API usage
   attribution.
 * Require `google_cloud_rpc: ^0.6.0`.
 * Add an `ifMetagenerationNotMatch` parameter to `Storage.patchBucket`,
   `Storage.uploadObject`, and `Storage.uploadObjectFromString`. If the
   precondition is not satisfied, a `NotModifiedException` is thrown.
-
 
 ## 0.6.3
 
