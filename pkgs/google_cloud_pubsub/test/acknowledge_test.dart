@@ -88,15 +88,22 @@ void main() {
 
             final received = await pullReliably(subscription, count: 5);
             expect(received, hasLength(5));
-            for (final msg in received) {
-              subscription.acknowledge(msg);
-            }
+            received.forEach(subscription.acknowledge);
             await subscription.close();
 
             final reopen = client.subscription(subscriptionName);
             addTearDown(() async => await reopen.close());
-            final redelivered = await reopen.pull(maxMessages: 5);
-            expect(redelivered, isEmpty);
+            // Nacking already-acknowledged messages is a no-op; if `close()`
+            // had not flushed the batch, this would make them redeliverable
+            // immediately alongside the sentinel message below.
+            await reopen.modifyAckDeadlineNow(received, 0);
+            await client.publish(topic.name, utf8.encode('sentinel'));
+
+            final afterAck = await pullReliably(reopen, count: 1);
+            expect(afterAck.map((m) => utf8.decode(m.data)).toList(), [
+              'sentinel',
+            ]);
+            await reopen.acknowledgeNow(afterAck);
           },
         );
       },
