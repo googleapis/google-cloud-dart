@@ -57,20 +57,6 @@ final class AckSettings {
     : batching =
           batching ?? BatchingSettings(maxBytes: maxAcknowledgeRequestBytes),
       retry = retry ?? defaultRetry;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is AckSettings &&
-          runtimeType == other.runtimeType &&
-          batching == other.batching &&
-          retry == other.retry;
-
-  @override
-  int get hashCode => Object.hash(batching, retry);
-
-  @override
-  String toString() => 'AckSettings(batching: $batching, retry: $retry)';
 }
 
 final class _AckRequest {

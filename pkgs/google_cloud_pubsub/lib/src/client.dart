@@ -252,7 +252,9 @@ final class PubSub {
     }
   }
 
-  /// Adds a message to the topic.
+  /// Adds a message to the topic in a single RPC without batching or retry.
+  ///
+  /// For background batching and automatic retries, use [Topic.publish].
   ///
   /// The [topic] must be in the format `projects/<project-id>/topics/<topic-id>`.
   ///
@@ -288,6 +290,7 @@ final class PubSub {
   /// Throws a [NotFoundException] if the topic does not exist.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Publisher.Publish).
+  @internal
   Future<List<String>> publishMessages(
     String topic,
     List<Message> messages,
