@@ -42,13 +42,23 @@ import 'dart:typed_data';
 
 const _tagSequence = 0x30;
 
-/// A DER tag-length-value triple located within a buffer.
-typedef _Tlv = ({int tag, int contentStart, int end});
-
-/// Reads the DER tag and length starting at [offset], without reading content.
+/// Reads the DER tag and length starting at [offset].
+/// 
+/// For example:
 ///
-/// [limit] is the exclusive end of the enclosing structure.
-_Tlv _readTlv(Uint8List bytes, int offset, int limit) {
+/// ```
+///    30 82 03 01  <769 bytes of content>
+///     │  │  └──┴── length (0x0301 = 769 bytes)
+///     │  └──────── number of length bytes (0x82 means 2 bytes)
+///     └─────────── tag (0x30 means SEQUENCE)
+/// ```
+///
+/// See https://letsencrypt.org/docs/a-warm-welcome-to-asn1-and-der/
+({int tag, int contentStart, int contentEnd}) _readTagLengthValue(
+  Uint8List bytes,
+  int offset,
+  int limit,
+) {
   if (offset >= limit) {
     throw const FormatException('Truncated DER: expected a tag.');
   }
@@ -89,7 +99,7 @@ _Tlv _readTlv(Uint8List bytes, int offset, int limit) {
       'Truncated DER: value extends past its parent.',
     );
   }
-  return (tag: tag, contentStart: index, end: end);
+  return (tag: tag, contentStart: index, contentEnd: end);
 }
 
 /// Decodes a PEM-encoded X.509 certificate into DER bytes.
@@ -120,15 +130,19 @@ Uint8List parsePemCertificate(String pem) {
 /// Throws a [FormatException] if [certificateDer] is not a well-formed
 /// certificate.
 Uint8List extractSubjectPublicKeyInfo(Uint8List certificateDer) {
-  final certificate = _readTlv(certificateDer, 0, certificateDer.length);
+  final certificate = _readTagLengthValue(
+    certificateDer,
+    0,
+    certificateDer.length,
+  );
   if (certificate.tag != _tagSequence) {
     throw const FormatException('Expected an X.509 Certificate SEQUENCE.');
   }
 
-  final tbs = _readTlv(
+  final tbs = _readTagLengthValue(
     certificateDer,
     certificate.contentStart,
-    certificate.end,
+    certificate.contentEnd,
   );
   if (tbs.tag != _tagSequence) {
     throw const FormatException('Expected a TBSCertificate SEQUENCE.');
@@ -137,23 +151,27 @@ Uint8List extractSubjectPublicKeyInfo(Uint8List certificateDer) {
   var offset = tbs.contentStart;
 
   // `version` is [0] EXPLICIT and defaults to v1, so it may be absent.
-  final first = _readTlv(certificateDer, offset, tbs.end);
+  final first = _readTagLengthValue(certificateDer, offset, tbs.contentEnd);
   if (first.tag == 0xa0) {
-    offset = first.end;
+    offset = first.contentEnd;
   }
 
   // Skip serialNumber, signature, issuer, validity and subject. The field
   // after them is subjectPublicKeyInfo.
   for (var i = 0; i < 5; i++) {
-    offset = _readTlv(certificateDer, offset, tbs.end).end;
+    offset = _readTagLengthValue(
+      certificateDer,
+      offset,
+      tbs.contentEnd,
+    ).contentEnd;
   }
 
-  final spki = _readTlv(certificateDer, offset, tbs.end);
+  final spki = _readTagLengthValue(certificateDer, offset, tbs.contentEnd);
   if (spki.tag != _tagSequence) {
     throw const FormatException('Expected a SubjectPublicKeyInfo SEQUENCE.');
   }
 
   // Return the whole triple, not just the content: importSpkiKey expects a
   // complete DER structure.
-  return Uint8List.sublistView(certificateDer, offset, spki.end);
+  return Uint8List.sublistView(certificateDer, offset, spki.contentEnd);
 }
