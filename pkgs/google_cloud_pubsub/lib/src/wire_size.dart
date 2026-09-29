@@ -13,7 +13,8 @@
 // limitations under the License.
 
 /// Helpers for calculating the serialized protocol buffer wire size of
-/// Pub/Sub requests and messages without allocating intermediate buffers.
+/// Pub/Sub requests and messages without constructing and serializing
+/// protocol buffer messages.
 library;
 
 import 'dart:convert';
