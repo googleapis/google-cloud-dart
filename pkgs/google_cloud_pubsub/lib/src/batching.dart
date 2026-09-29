@@ -126,25 +126,6 @@ final class BatchingSettings {
       );
     }
   }
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is BatchingSettings &&
-          runtimeType == other.runtimeType &&
-          maxMessages == other.maxMessages &&
-          maxBytes == other.maxBytes &&
-          maxDelay == other.maxDelay;
-
-  @override
-  int get hashCode => Object.hash(maxMessages, maxBytes, maxDelay);
-
-  @override
-  String toString() =>
-      'BatchingSettings('
-      'maxMessages: $maxMessages, '
-      'maxBytes: $maxBytes, '
-      'maxDelay: $maxDelay)';
 }
 
 /// Generic batcher that accumulates items of type [T] and fires batches of [T]
