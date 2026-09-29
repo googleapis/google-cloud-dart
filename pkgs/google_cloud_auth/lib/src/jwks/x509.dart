@@ -15,6 +15,8 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:meta/meta.dart';
+
 // Just enough DER to pull the SubjectPublicKeyInfo out of an X.509
 // certificate, so that it can be handed to
 // `RsassaPkcs1V15PublicKey.importSpkiKey`.
@@ -105,6 +107,7 @@ const _tagSequence = 0x30;
 /// Decodes a PEM-encoded X.509 certificate into DER bytes.
 ///
 /// Throws a [FormatException] if [pem] is not valid PEM.
+@internal
 Uint8List parsePemCertificate(String pem) {
   final body = LineSplitter.split(pem)
       .map((line) => line.trim())
@@ -129,6 +132,7 @@ Uint8List parsePemCertificate(String pem) {
 ///
 /// Throws a [FormatException] if [certificateDer] is not a well-formed
 /// certificate.
+@internal
 Uint8List extractSubjectPublicKeyInfo(Uint8List certificateDer) {
   final certificate = _readTagLengthValue(
     certificateDer,

@@ -35,7 +35,10 @@ final _maxAgePattern = RegExp(r'(?:^|[,\s])max-age\s*=\s*"?(\d+)"?');
 ///
 /// Honors `Cache-Control: max-age`, reduced by the `Age` header, per
 /// [RFC 9111 §4.2](https://datatracker.ietf.org/doc/html/rfc9111#section-4.2).
-/// Returns `null` when the response says nothing useful.
+///
+/// Returns `null` when the `cache-control` header is missing or invalid.
+@internal
+@visibleForTesting
 Duration? freshnessLifetime(Map<String, String> headers) {
   final cacheControl = headers['cache-control']?.toLowerCase();
   if (cacheControl == null) return null;
@@ -69,8 +72,7 @@ Duration? freshnessLifetime(Map<String, String> headers) {
 ///   else.
 ///
 /// Only RSA keys usable for RS256 are retained; anything else in the response
-/// is ignored so that new key types can be introduced without breaking
-/// existing clients.
+/// is ignored.
 @internal
 final class JwksCache {
   /// The endpoint public keys are fetched from.
@@ -103,9 +105,7 @@ final class JwksCache {
   /// Keys are fetched only when nothing is cached or the cached set has
   /// expired. An unknown [keyId] does not trigger a fetch: doing so would let
   /// anyone force an outbound request per inbound token just by sending an
-  /// arbitrary `kid`. Google publishes new keys well before signing with them,
-  /// so a cache that honors the endpoint's freshness lifetime sees them in
-  /// time.
+  /// arbitrary `kid`.
   ///
   /// Throws [TokenVerificationException] if the keys cannot be fetched.
   Future<RsassaPkcs1V15PublicKey?> lookupKey(String keyId) async =>
