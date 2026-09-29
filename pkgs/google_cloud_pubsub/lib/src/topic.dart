@@ -13,26 +13,31 @@
 // limitations under the License.
 
 import 'dart:async';
-import 'dart:convert';
 import 'dart:typed_data';
 
 import '../google_cloud_pubsub.dart';
 import 'batching.dart';
 import 'wire_size.dart';
 
-// Field number from `google/pubsub/v1/pubsub.proto`, used to predict the
-// serialized size of a `PublishRequest` without building one.
-const _publishRequestTopicField = 1;
-
 /// Settings for background batching and retrying of published messages.
+///
+/// Used by [Topic.publish].
 final class PublishSettings {
-  /// Settings controlling how requests are accumulated and flushed.
+  /// Settings controlling how messages are accumulated and flushed.
   ///
-  /// Pub/Sub accepts at most 10,000,000 bytes and 1,000 messages in a single
-  /// `Publish` request; asking for more throws an [ArgumentError].
+  /// Validated when a [Topic] is created: the [Topic] constructors, and
+  /// [PubSub.topic], [PubSub.topicName], and [PubSub.createTopic], throw an
+  /// [ArgumentError] if [BatchingSettings.maxBytes] exceeds 10,000,000 or
+  /// [BatchingSettings.maxMessages] exceeds 1,000, the largest `Publish`
+  /// request Pub/Sub accepts.
   final BatchingSettings batching;
 
-  /// Strategy controlling retries when flushing a batch over a unary RPC.
+  /// How failed `Publish` requests are retried.
+  ///
+  /// Defaults to [defaultRetry].
+  ///
+  /// A retried request can publish a message more than once if the server
+  /// processed the original request but the response was lost.
   final RetryRunner retry;
 
   /// Creates a new [PublishSettings] instance.
@@ -49,6 +54,10 @@ final class _PublishRequest {
 }
 
 /// A [Google Cloud Pub/Sub topic](https://cloud.google.com/pubsub/docs/overview#topics).
+///
+/// Messages passed to [publish] are buffered and sent in batches. Create one
+/// [Topic] per topic and reuse it, and call and await [close] before shutdown
+/// to flush buffered messages.
 final class Topic {
   static final RegExp _topicNameRegExp = RegExp(
     r'^projects/[^/]+/topics/[^/]+$',
@@ -66,16 +75,15 @@ final class Topic {
   final PublishSettings publishSettings;
 
   late final Batcher<_PublishRequest> _batcher;
-  bool _isClosed = false;
-  Future<void>? _closeFuture;
 
   /// Whether this topic is closed.
-  bool get isClosed => _isClosed;
+  bool get isClosed => _batcher.isClosed;
 
   /// A topic with the given [topicId] in the client's project.
   ///
   /// It is an error if the constructed topic name is invalid (e.g. if [topicId]
-  /// contains slashes).
+  /// contains slashes), or if [publishSettings] exceeds the limits described
+  /// in [PublishSettings.batching].
   Topic.unqualified(
     this.pubsub,
     String topicId, {
@@ -91,7 +99,8 @@ final class Topic {
   /// Useful for cross-project access.
   ///
   /// It is an error if [name] is not in the format
-  /// `projects/<project-id>/topics/<topic-id>`.
+  /// `projects/<project-id>/topics/<topic-id>`, or if [publishSettings]
+  /// exceeds the limits described in [PublishSettings.batching].
   Topic(this.pubsub, this.name, {PublishSettings? publishSettings})
     : publishSettings = publishSettings ?? PublishSettings() {
     _validateName(name);
@@ -108,10 +117,7 @@ final class Topic {
     _batcher = Batcher<_PublishRequest>(
       settings: publishSettings.batching,
       // Every request carries the topic name, whatever else it contains.
-      baseSize: lengthDelimitedSize(
-        _publishRequestTopicField,
-        utf8.encode(name).length,
-      ),
+      baseSize: publishRequestBaseSize(name),
       itemSize: (request) => publishRequestMessageSize(request.message),
       onBatch: _onBatch,
     );
@@ -176,7 +182,7 @@ final class Topic {
   ///
   /// Throws a [ConflictException] if the topic already exists.
   ///
-  /// Returns a [Topic] instance representing the created topic.
+  /// Returns this [Topic].
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Publisher.CreateTopic).
   Future<Topic> create() async {
@@ -199,9 +205,12 @@ final class Topic {
   /// Adds a message to the topic.
   ///
   /// The message is placed into a background buffer and published in a batch
-  /// according to [publishSettings] batching configuration. If transient
-  /// network errors occur during publishing, the batch is automatically
-  /// retried according to [publishSettings] retry configuration.
+  /// according to [publishSettings] batching configuration. If publishing
+  /// fails with a retryable error, the batch is retried according to
+  /// [publishSettings] retry configuration.
+  ///
+  /// Returns the server-assigned message ID once the batch containing the
+  /// message has been published.
   ///
   /// Only messages published through the same [Topic] object are batched
   /// together, so create one [Topic] per topic and reuse it rather than calling
@@ -214,8 +223,9 @@ final class Topic {
   /// call and await [close].
   ///
   /// It is an error if called on a closed [Topic].
+  ///
   /// Throws a [NotFoundException] if the topic does not exist.
-  /// Throws a [ServiceException] if publishing fails after retries.
+  /// Throws a [ServiceException] if publishing fails (after any retries).
   ///
   /// [data] is the message content.
   /// [attributes] are optional attributes for the message.
@@ -223,8 +233,10 @@ final class Topic {
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Publisher.Publish).
   // TODO(sigurdm): Add publisher flow control that limits the number and size
   // of outstanding messages.
+  // TODO(sigurdm): Set a per-attempt deadline on `Publish` requests, so a hung
+  // request cannot keep the returned future (and [close]) pending forever.
   Future<String> publish(List<int> data, {Map<String, String>? attributes}) {
-    if (_isClosed) {
+    if (isClosed) {
       throw StateError('Cannot publish to a closed Topic.');
     }
     final completer = Completer<String>();
@@ -242,11 +254,10 @@ final class Topic {
   /// batches to complete.
   ///
   /// Calling and awaiting [close] during application shutdown ensures that all
-  /// buffered messages are published before the process exits.
+  /// buffered messages are published before the process exits. Publishing
+  /// errors are reported through the futures returned by [publish], not by
+  /// [close].
   ///
   /// Once closed, it is an error to call [publish].
-  Future<void> close() {
-    _isClosed = true;
-    return _closeFuture ??= _batcher.close();
-  }
+  Future<void> close() => _batcher.close();
 }

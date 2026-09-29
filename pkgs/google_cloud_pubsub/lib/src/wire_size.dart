@@ -27,6 +27,7 @@ import 'message.dart';
 @internal
 int varintSize(int value) {
   assert(value >= 0);
+  // Protobuf encodes negative int32 and int64 values as 10-byte varints.
   if (value < 0) return 10;
   var size = 1;
   while (value >= 128) {
@@ -37,6 +38,10 @@ int varintSize(int value) {
 }
 
 /// The number of bytes the protobuf tag of [fieldNumber] occupies.
+///
+/// A tag is the varint `fieldNumber << 3 | wireType`, where the low 3 bits
+/// hold the wire type. The wire type never changes the varint's length, so it
+/// is left as zero here.
 @internal
 int tagSize(int fieldNumber) => varintSize(fieldNumber << 3);
 
@@ -47,11 +52,18 @@ int lengthDelimitedSize(int fieldNumber, int payloadBytes) =>
     tagSize(fieldNumber) + varintSize(payloadBytes) + payloadBytes;
 
 // Field numbers from `google/pubsub/v1/pubsub.proto`.
+const _publishRequestTopicField = 1;
 const _publishRequestMessagesField = 2;
 const _pubsubMessageDataField = 1;
 const _pubsubMessageAttributesField = 2;
 const _mapEntryKeyField = 1;
 const _mapEntryValueField = 2;
+
+/// The number of bytes a serialized `PublishRequest` for [topic] occupies
+/// before any message is added: its `topic` field.
+@internal
+int publishRequestBaseSize(String topic) =>
+    lengthDelimitedSize(_publishRequestTopicField, utf8.encode(topic).length);
 
 /// The exact number of bytes [message] adds to a serialized `PublishRequest`.
 @internal
