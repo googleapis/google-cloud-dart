@@ -16,13 +16,15 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:meta/meta.dart';
 import 'package:webcrypto/webcrypto.dart';
 
 import '../verifier/token_verification_exception.dart';
 import 'x509.dart';
 
 // Design based on:
-// - https://github.com/googleapis/google-api-java-client/blob/main/google-api-client/src/main/java/com/google/api/client/googleapis/auth/oauth2/GooglePublicKeysManager.java
+// - https://github.com/googleapis/google-auth-library-java/blob/main/oauth2_http/java/com/google/auth/oauth2/TokenVerifier.java
+//   (see `PublicKeyLoader`).
 
 /// Used when the response carries no usable freshness information.
 const _defaultCacheDuration = Duration(hours: 1);
@@ -69,6 +71,7 @@ Duration? freshnessLifetime(Map<String, String> headers) {
 /// Only RSA keys usable for RS256 are retained; anything else in the response
 /// is ignored so that new key types can be introduced without breaking
 /// existing clients.
+@internal
 final class JwksCache {
   /// The endpoint public keys are fetched from.
   final Uri uri;
@@ -226,6 +229,7 @@ final class JwksCache {
         );
       } on Object {
         // Skip individual malformed keys rather than failing the whole set.
+        // This is consistent with TokenVerifier.java.
         continue;
       }
     }
@@ -244,6 +248,8 @@ final class JwksCache {
           Hash.sha256,
         );
       } on Object {
+        // Skip individual malformed keys rather than failing the whole set.
+        // This is consistent with TokenVerifier.java.
         continue;
       }
     }
