@@ -167,11 +167,16 @@ class FakePublisherClient extends Fake implements generated.PublisherClient {
     return FakeResponseFuture(completer.future);
   }
 
+  int createTopicCallCount = 0;
+
   @override
   grpc.ResponseFuture<generated.Topic> createTopic(
     generated.Topic request, {
     grpc.CallOptions? options,
-  }) => FakeResponseFuture(Future.value(request));
+  }) {
+    createTopicCallCount++;
+    return FakeResponseFuture(Future.value(request));
+  }
 
   @override
   grpc.ResponseFuture<protobuf.Empty> deleteTopic(
@@ -181,6 +186,17 @@ class FakePublisherClient extends Fake implements generated.PublisherClient {
 }
 
 class FakeSubscriberClient extends Fake implements generated.SubscriberClient {
+  int createSubscriptionCallCount = 0;
+
+  @override
+  grpc.ResponseFuture<generated.Subscription> createSubscription(
+    generated.Subscription request, {
+    grpc.CallOptions? options,
+  }) {
+    createSubscriptionCallCount++;
+    return FakeResponseFuture(Future.value(request));
+  }
+
   Future<void> Function(List<String> ackIds)? acknowledgeBehavior;
   int acknowledgeCallCount = 0;
   bool get acknowledgeCalled => acknowledgeCallCount > 0;

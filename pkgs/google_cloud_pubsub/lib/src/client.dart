@@ -35,6 +35,7 @@ final class PubSub {
   grpc.PublisherClient? _publisherClient;
   grpc.SubscriberClient? _subscriberClient;
   final FutureOr<BaseAuthenticator>? _authenticator;
+  bool _isClosed = false;
 
   static String? _calculateProjectId(
     String? projectId,
@@ -179,14 +180,19 @@ final class PubSub {
   ///
   /// This does not flush messages buffered by [Topic.publish]. Call and await
   /// [Topic.close] on every [Topic] you published to before closing the
-  /// client, or the buffered messages fail to publish.
+  /// client. Once the client is closed, publishing fails immediately with a
+  /// [StateError], including for messages that a [Topic] still has buffered.
   Future<void> close() async {
+    _isClosed = true;
     await _channel.shutdown();
   }
 
   // Topic-related methods
 
   /// A [Topic] object with the given [unqualifiedName] in the client's project.
+  ///
+  /// It is an error if [publishSettings] exceeds the limits described in
+  /// [PublishSettings.batching].
   Topic topic(String unqualifiedName, {PublishSettings? publishSettings}) =>
       Topic.unqualified(
         this,
@@ -198,11 +204,17 @@ final class PubSub {
   ///
   /// The [name] must be in the format `projects/<project-id>/topics/<topic-id>`.
   /// Useful for cross-project access.
+  ///
+  /// It is an error if [publishSettings] exceeds the limits described in
+  /// [PublishSettings.batching].
   Topic topicName(String name, {PublishSettings? publishSettings}) =>
       Topic(this, name, publishSettings: publishSettings);
 
   /// A [Subscription] object with the given [unqualifiedName] in the client's
   /// project.
+  ///
+  /// It is an error if [ackSettings] exceeds the limits described in
+  /// [AckSettings.batching].
   Subscription subscription(
     String unqualifiedName, {
     AckSettings? ackSettings,
@@ -214,12 +226,18 @@ final class PubSub {
   /// The [name] must be in the format
   /// `projects/<project-id>/subscriptions/<subscription-id>`.
   /// Useful for cross-project access.
+  ///
+  /// It is an error if [ackSettings] exceeds the limits described in
+  /// [AckSettings.batching].
   Subscription subscriptionName(String name, {AckSettings? ackSettings}) =>
       Subscription(this, name, ackSettings: ackSettings);
 
   /// Creates the given topic with the given [topic].
   ///
   /// The [topic] must be in the format `projects/<project-id>/topics/<topic-id>`.
+  ///
+  /// It is an error if [publishSettings] exceeds the limits described in
+  /// [PublishSettings.batching]; this is checked before the topic is created.
   ///
   /// Throws a [ConflictException] if the topic already exists.
   ///
@@ -231,10 +249,13 @@ final class PubSub {
     String topic, {
     PublishSettings? publishSettings,
   }) async {
+    // Construct the `Topic` first so that invalid arguments are reported
+    // before the topic exists on the server.
+    final result = topicName(topic, publishSettings: publishSettings);
     final topicProto = grpc.Topic()..name = topic;
     try {
       await _publisher.createTopic(topicProto, options: await _callOptions);
-      return topicName(topic, publishSettings: publishSettings);
+      return result;
     } on GrpcError catch (error) {
       throw _mapGrpcError(error);
     }
@@ -261,6 +282,8 @@ final class PubSub {
   /// For background batching and automatic retries, use [Topic.publish].
   ///
   /// The [topic] must be in the format `projects/<project-id>/topics/<topic-id>`.
+  ///
+  /// It is an error to call this after [close].
   ///
   /// Throws a [NotFoundException] if the topic does not exist.
   ///
@@ -291,6 +314,8 @@ final class PubSub {
   /// Returns a list of server-assigned message IDs matching the order of the
   /// provided [messages].
   ///
+  /// It is an error to call this after [close].
+  ///
   /// Throws a [NotFoundException] if the topic does not exist.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Publisher.Publish).
@@ -299,6 +324,12 @@ final class PubSub {
     String topic,
     List<Message> messages,
   ) async {
+    // A shut-down channel fails every call with UNAVAILABLE, which `Topic`
+    // would otherwise retry until its retry budget runs out. A `StateError`
+    // is not retried.
+    if (_isClosed) {
+      throw StateError('Cannot publish using a closed PubSub client.');
+    }
     if (messages.isEmpty) return <String>[];
     final request = grpc.PublishRequest()..topic = topic;
 
@@ -337,6 +368,10 @@ final class PubSub {
   /// `projects/<project-id>/subscriptions/<subscription-id>`.
   /// The [topic] must be in the format `projects/<project-id>/topics/<topic-id>`.
   ///
+  /// It is an error if [ackSettings] exceeds the limits described in
+  /// [AckSettings.batching]; this is checked before the subscription is
+  /// created.
+  ///
   /// Throws a [ConflictException] if the subscription already exists.
   /// Throws a [NotFoundException] if the corresponding topic doesn't exist.
   ///
@@ -349,6 +384,9 @@ final class PubSub {
     required String topic,
     AckSettings? ackSettings,
   }) async {
+    // Construct the `Subscription` first so that invalid arguments are
+    // reported before the subscription exists on the server.
+    final result = subscriptionName(subscription, ackSettings: ackSettings);
     final subscriptionProto = grpc.Subscription()
       ..name = subscription
       ..topic = topic;
@@ -358,7 +396,7 @@ final class PubSub {
         subscriptionProto,
         options: await _callOptions,
       );
-      return subscriptionName(subscription, ackSettings: ackSettings);
+      return result;
     } on GrpcError catch (error) {
       throw _mapGrpcError(error);
     }

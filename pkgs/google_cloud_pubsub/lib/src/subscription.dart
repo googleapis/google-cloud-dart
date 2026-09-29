@@ -44,10 +44,15 @@ final class AckSettings {
   ///
   /// Pub/Sub accepts at most 512,000 bytes in an `Acknowledge` or
   /// `ModifyAckDeadline` request, which is also the default
-  /// [BatchingSettings.maxBytes]. Asking for more throws an [ArgumentError].
+  /// [BatchingSettings.maxBytes]. Validated when a [Subscription] is created:
+  /// the [Subscription] constructors, and [PubSub.subscription],
+  /// [PubSub.subscriptionName], and [PubSub.createSubscription], throw an
+  /// [ArgumentError] if [BatchingSettings.maxBytes] exceeds 512,000.
   final BatchingSettings batching;
 
-  /// Strategy controlling retries when flushing a batch over a unary RPC.
+  /// How failed `Acknowledge` and `ModifyAckDeadline` requests are retried.
+  ///
+  /// Defaults to [defaultRetry].
   final RetryRunner retry;
 
   /// Creates a new [AckSettings] instance.
@@ -122,7 +127,8 @@ final class Subscription {
   /// A subscription with the given [subscriptionId] in the client's project.
   ///
   /// It is an error if the constructed subscription name is invalid (e.g. if
-  /// [subscriptionId] contains slashes).
+  /// [subscriptionId] contains slashes), or if [ackSettings] exceeds the
+  /// limits described in [AckSettings.batching].
   Subscription.unqualified(
     this.pubsub,
     String subscriptionId, {
@@ -138,7 +144,8 @@ final class Subscription {
   /// Useful for cross-project access.
   ///
   /// It is an error if [name] is not in the format
-  /// `projects/<project-id>/subscriptions/<subscription-id>`.
+  /// `projects/<project-id>/subscriptions/<subscription-id>`, or if
+  /// [ackSettings] exceeds the limits described in [AckSettings.batching].
   Subscription(this.pubsub, this.name, {AckSettings? ackSettings})
     : ackSettings = ackSettings ?? AckSettings() {
     _validateName(name);

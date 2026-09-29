@@ -16,7 +16,6 @@
 library;
 
 import 'dart:async';
-import 'dart:convert';
 import 'dart:math';
 import 'dart:typed_data';
 
@@ -178,7 +177,7 @@ void main() {
       const topic = 'projects/example-project/topics/example-topic';
       final random = Random(20260914);
       final messages = <grpc.PubsubMessage>[];
-      var predicted = lengthDelimitedSize(1, utf8.encode(topic).length);
+      var predicted = publishRequestBaseSize(topic);
 
       for (var i = 0; i < 100; i++) {
         final data = Uint8List.fromList(

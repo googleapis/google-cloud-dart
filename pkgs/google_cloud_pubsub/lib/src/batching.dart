@@ -62,13 +62,16 @@ void checkServerLimits(
 /// A batch is sent as soon as any of [maxMessages], [maxBytes], or [maxDelay]
 /// is reached, whichever happens first.
 ///
-/// [maxBytes] is measured against the serialized protobuf request size:
-/// - `Publish`: up to 10,000,000 bytes and 1,000 messages.
-/// - `Acknowledge` and `ModifyAckDeadline`: up to 512,000 bytes.
+/// [maxBytes] is compared with the size of the serialized protobuf request.
+/// Pub/Sub accepts at most:
+/// - `Publish`: 10,000,000 bytes and 1,000 messages.
+/// - `Acknowledge` and `ModifyAckDeadline`: 512,000 bytes.
 ///
 /// See the [Pub/Sub quotas and limits](https://cloud.google.com/pubsub/quotas).
 final class BatchingSettings {
   /// The maximum number of items to collect before sending a batch.
+  ///
+  /// Defaults to 100. A `Publish` request can contain at most 1,000 messages.
   final int maxMessages;
 
   /// The maximum serialized size in bytes of a request before it is sent.
@@ -79,11 +82,17 @@ final class BatchingSettings {
   /// the current batch first; a single item larger than [maxBytes] is sent in
   /// its own batch.
   ///
-  /// Defaults to 512,000 bytes.
+  /// Defaults to 512,000 bytes, the largest `Acknowledge` or
+  /// `ModifyAckDeadline` request Pub/Sub accepts, so that the default fits
+  /// every kind of request. `Publish` requests may be up to 10,000,000 bytes;
+  /// pass a larger value to send bigger publish batches.
   final int maxBytes;
 
-  /// The maximum time to wait before sending a batch that has reached
-  /// neither [maxMessages] nor [maxBytes].
+  /// The maximum time to wait, after the first item is added to a batch,
+  /// before sending a batch that has reached neither [maxMessages] nor
+  /// [maxBytes].
+  ///
+  /// Defaults to 10 milliseconds.
   final Duration maxDelay;
 
   /// Creates a new [BatchingSettings] instance.
@@ -92,10 +101,8 @@ final class BatchingSettings {
   /// than zero.
   BatchingSettings({
     this.maxMessages = 100,
-    // The same settings class is used for every kind of request, so the
-    // default must fit the smallest server limit: 512,000 bytes for
-    // `Acknowledge` and `ModifyAckDeadline`. `Publish` accepts up to
-    // 10,000,000 bytes; pass a larger value to send bigger publish batches.
+    // `BatchingSettings` is shared by every kind of request, so the default
+    // must fit the smallest server limit; see [maxBytes].
     this.maxBytes = maxAcknowledgeRequestBytes,
     this.maxDelay = const Duration(milliseconds: 10),
   }) {
@@ -129,6 +136,13 @@ final class BatchingSettings {
 final class Batcher<T> {
   final BatchingSettings settings;
   final int Function(T) itemSize;
+
+  /// Sends a batch.
+  ///
+  /// Must report errors for the items in the batch itself (for example by
+  /// completing their futures with the error). An error thrown by [onBatch]
+  /// is only surfaced by [close] if the batch is still in flight when [close]
+  /// is called; otherwise it is dropped.
   final Future<void> Function(List<T>) onBatch;
 
   /// The size in bytes that a batch occupies before any item is added.
@@ -190,7 +204,7 @@ final class Batcher<T> {
           _inFlight.remove(future);
         })
         .catchError((_) {
-          // Errors are handled by onBatch or propagated via close().
+          // Prevent an unhandled error; see the `onBatch` documentation.
         });
   }
 
