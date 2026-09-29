@@ -99,13 +99,14 @@ final class Topic {
   }
 
   void _initBatcher() {
+    checkServerLimits(
+      publishSettings.batching,
+      maxBytes: maxPublishRequestBytes,
+      maxMessages: maxPublishRequestMessages,
+      requestDescription: 'Publish request',
+    );
     _batcher = Batcher<_PublishRequest>(
-      settings: resolveServerLimits(
-        publishSettings.batching,
-        maxBytes: maxPublishRequestBytes,
-        maxMessages: maxPublishRequestMessages,
-        requestDescription: 'Publish request',
-      ),
+      settings: publishSettings.batching,
       // Every request carries the topic name, whatever else it contains.
       baseSize: lengthDelimitedSize(
         _publishRequestTopicField,

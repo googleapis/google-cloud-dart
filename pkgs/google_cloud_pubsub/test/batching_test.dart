@@ -120,46 +120,53 @@ void main() {
     });
   });
 
-  group('BatchingSettings & resolveServerLimits', () {
-    test('validates positive settings and server quotas', () {
+  group('BatchingSettings & checkServerLimits', () {
+    test('validates positive settings', () {
       expect(() => BatchingSettings(maxMessages: 0), throwsArgumentError);
       expect(() => BatchingSettings(maxBytes: 0), throwsArgumentError);
       expect(
         () => BatchingSettings(maxDelay: Duration.zero),
         throwsArgumentError,
       );
+    });
 
-      expect(
-        () => resolveServerLimits(
-          BatchingSettings(maxBytes: 50 * 1000 * 1000),
-          maxBytes: maxPublishRequestBytes,
-          requestDescription: 'Publish request',
-        ),
-        throwsArgumentError,
+    test('default maxBytes fits every request kind', () {
+      final settings = BatchingSettings();
+      expect(settings.maxBytes, maxAcknowledgeRequestBytes);
+      checkServerLimits(
+        settings,
+        maxBytes: maxPublishRequestBytes,
+        maxMessages: maxPublishRequestMessages,
+        requestDescription: 'Publish request',
       );
-      expect(
-        () => resolveServerLimits(
-          BatchingSettings(maxMessages: 5000),
-          maxBytes: maxPublishRequestBytes,
-          maxMessages: maxPublishRequestMessages,
-          requestDescription: 'Publish request',
-        ),
-        throwsArgumentError,
-      );
-
-      // Unspecified maxBytes is narrowed to maxAcknowledgeRequestBytes,
-      // whereas an explicitly set 1 MiB maxBytes throws.
-      final narrowed = resolveServerLimits(
-        BatchingSettings(maxMessages: 10),
+      checkServerLimits(
+        settings,
         maxBytes: maxAcknowledgeRequestBytes,
         requestDescription: 'Acknowledge request',
       );
-      expect(narrowed.maxBytes, maxAcknowledgeRequestBytes);
+    });
+
+    test('throws when settings exceed the server limits', () {
+      // Larger than the default, but within the publish limit.
+      checkServerLimits(
+        BatchingSettings(maxBytes: maxPublishRequestBytes),
+        maxBytes: maxPublishRequestBytes,
+        requestDescription: 'Publish request',
+      );
       expect(
-        () => resolveServerLimits(
-          BatchingSettings(maxBytes: 1024 * 1024),
-          maxBytes: maxAcknowledgeRequestBytes,
-          requestDescription: 'Acknowledge request',
+        () => checkServerLimits(
+          BatchingSettings(maxBytes: maxPublishRequestBytes + 1),
+          maxBytes: maxPublishRequestBytes,
+          requestDescription: 'Publish request',
+        ),
+        throwsArgumentError,
+      );
+      expect(
+        () => checkServerLimits(
+          BatchingSettings(maxMessages: maxPublishRequestMessages + 1),
+          maxBytes: maxPublishRequestBytes,
+          maxMessages: maxPublishRequestMessages,
+          requestDescription: 'Publish request',
         ),
         throwsArgumentError,
       );

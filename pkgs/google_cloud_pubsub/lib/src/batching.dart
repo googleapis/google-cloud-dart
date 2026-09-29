@@ -13,7 +13,6 @@
 // limitations under the License.
 
 import 'dart:async';
-import 'dart:math' as math;
 
 import 'package:meta/meta.dart';
 
@@ -30,16 +29,17 @@ const maxPublishRequestMessages = 1000;
 @internal
 const maxAcknowledgeRequestBytes = 512 * 1000;
 
-/// Validates [settings] against the server limits for a specific RPC and
-/// narrows an unspecified default [BatchingSettings.maxBytes] if needed.
+/// Throws an [ArgumentError] if [settings] asks for larger batches than
+/// Pub/Sub accepts in one request of the kind described by
+/// [requestDescription].
 @internal
-BatchingSettings resolveServerLimits(
+void checkServerLimits(
   BatchingSettings settings, {
   required int maxBytes,
   int? maxMessages,
   required String requestDescription,
 }) {
-  if (settings._maxBytesWasSpecified && settings.maxBytes > maxBytes) {
+  if (settings.maxBytes > maxBytes) {
     throw ArgumentError.value(
       settings.maxBytes,
       'batching.maxBytes',
@@ -55,14 +55,6 @@ BatchingSettings resolveServerLimits(
           'one $requestDescription',
     );
   }
-
-  final resolvedBytes = math.min(settings.maxBytes, maxBytes);
-  if (resolvedBytes == settings.maxBytes) return settings;
-  return BatchingSettings(
-    maxMessages: settings.maxMessages,
-    maxBytes: resolvedBytes,
-    maxDelay: settings.maxDelay,
-  );
 }
 
 /// Settings for batching operations.
@@ -86,9 +78,9 @@ final class BatchingSettings {
   /// name). An item that would push a non-empty batch above [maxBytes] flushes
   /// the current batch first; a single item larger than [maxBytes] is sent in
   /// its own batch.
+  ///
+  /// Defaults to 512,000 bytes.
   final int maxBytes;
-
-  final bool _maxBytesWasSpecified;
 
   /// The maximum time to wait before sending a batch that has reached
   /// neither [maxMessages] nor [maxBytes].
@@ -100,10 +92,13 @@ final class BatchingSettings {
   /// than zero.
   BatchingSettings({
     this.maxMessages = 100,
-    int? maxBytes,
+    // The same settings class is used for every kind of request, so the
+    // default must fit the smallest server limit: 512,000 bytes for
+    // `Acknowledge` and `ModifyAckDeadline`. `Publish` accepts up to
+    // 10,000,000 bytes; pass a larger value to send bigger publish batches.
+    this.maxBytes = maxAcknowledgeRequestBytes,
     this.maxDelay = const Duration(milliseconds: 10),
-  }) : maxBytes = maxBytes ?? 1024 * 1024, // 1 MiB
-       _maxBytesWasSpecified = maxBytes != null {
+  }) {
     if (maxMessages <= 0) {
       throw ArgumentError.value(
         maxMessages,
@@ -111,9 +106,9 @@ final class BatchingSettings {
         'Must be greater than zero',
       );
     }
-    if (this.maxBytes <= 0) {
+    if (maxBytes <= 0) {
       throw ArgumentError.value(
-        this.maxBytes,
+        maxBytes,
         'maxBytes',
         'Must be greater than zero',
       );
