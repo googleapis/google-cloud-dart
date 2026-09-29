@@ -313,6 +313,75 @@ void main() {
           await topic.close();
           expect(await future, 'msg-0');
           expect(() => topic.publish([4]), throwsStateError);
+          expect(topic.isClosed, isTrue);
+        },
+      );
+
+      test('rejects settings above the server limits', () async {
+        final tooManyMessages = PublishSettings(
+          batching: BatchingSettings(maxMessages: 1001),
+        );
+        final tooManyBytes = PublishSettings(
+          batching: BatchingSettings(maxBytes: 10 * 1000 * 1000 + 1),
+        );
+
+        expect(
+          () => client.topic('test-topic', publishSettings: tooManyMessages),
+          throwsArgumentError,
+        );
+        expect(
+          () => client.topicName(
+            'projects/test-project/topics/test-topic',
+            publishSettings: tooManyBytes,
+          ),
+          throwsArgumentError,
+        );
+        await expectLater(
+          client.createTopic(
+            'projects/test-project/topics/test-topic',
+            publishSettings: tooManyBytes,
+          ),
+          throwsArgumentError,
+        );
+        // The settings are checked before the topic is created on the server.
+        expect(fakePublisher.createTopicCallCount, 0);
+      });
+
+      test('fails messages the server returned no message ID for', () async {
+        fakePublisher.publishBehavior = (request) async =>
+            generated.PublishResponse()..messageIds.add('id-1');
+
+        final topic = client.topic(
+          'test-topic',
+          publishSettings: PublishSettings(
+            batching: BatchingSettings(maxMessages: 2),
+          ),
+        );
+
+        final first = topic.publish([1]);
+        final second = topic.publish([2]);
+        expect(await first, 'id-1');
+        await expectLater(second, throwsA(isA<InternalServerErrorException>()));
+      });
+
+      test(
+        'fails buffered messages immediately after PubSub.close()',
+        () async {
+          final topic = client.topic(
+            'test-topic',
+            publishSettings: PublishSettings(
+              batching: BatchingSettings(maxDelay: const Duration(seconds: 10)),
+            ),
+          );
+
+          final future = topic.publish([1]);
+          await client.close();
+          await topic.close();
+
+          // Not retried: the default retry would otherwise keep going for a
+          // minute before giving up.
+          await expectLater(future, throwsStateError);
+          expect(fakePublisher.publishCallCount, 0);
         },
       );
     });

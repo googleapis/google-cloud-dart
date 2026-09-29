@@ -167,11 +167,16 @@ class FakePublisherClient extends Fake implements generated.PublisherClient {
     return FakeResponseFuture(completer.future);
   }
 
+  int createTopicCallCount = 0;
+
   @override
   grpc.ResponseFuture<generated.Topic> createTopic(
     generated.Topic request, {
     grpc.CallOptions? options,
-  }) => FakeResponseFuture(Future.value(request));
+  }) {
+    createTopicCallCount++;
+    return FakeResponseFuture(Future.value(request));
+  }
 
   @override
   grpc.ResponseFuture<protobuf.Empty> deleteTopic(
