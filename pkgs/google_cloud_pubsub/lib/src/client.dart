@@ -711,36 +711,51 @@ final class PubSub {
   // - ValidateMessage
   Exception _mapGrpcError(GrpcError error) {
     final message = error.message ?? 'Unknown gRPC error';
+    final status = Status(code: error.code, message: message);
     return switch (error.code) {
-      StatusCode.invalidArgument => BadRequestException(message),
-      StatusCode.unauthenticated => UnauthorizedException(message),
-      StatusCode.permissionDenied => ForbiddenException(message),
-      StatusCode.notFound => NotFoundException(message),
-      StatusCode.alreadyExists => ConflictException(message),
-      // Attach the gRPC status code so `ExponentialRetry.isRetryable` can
-      // distinguish retryable `ABORTED` from non-retryable `ALREADY_EXISTS`
-      // (both map to HTTP 409 / `ConflictException`).
-      StatusCode.aborted => ConflictException(
+      StatusCode.invalidArgument => BadRequestException(
         message,
-        status: Status(code: StatusCode.aborted, message: message),
+        status: status,
       ),
-      StatusCode.failedPrecondition => PreconditionFailedException(message),
-      StatusCode.outOfRange => RequestRangeNotSatisfiableException(message),
-      StatusCode.resourceExhausted => TooManyRequestsException(message),
-      StatusCode.cancelled => CancelledException(message),
-      StatusCode.deadlineExceeded => GatewayTimeoutException(message),
-      StatusCode.internal => InternalServerErrorException(message),
-      StatusCode.unimplemented => NotImplementedException(message),
-      StatusCode.unavailable => ServiceUnavailableException(message),
-      // Attach the gRPC status code so `ExponentialRetry.isRetryable` does not
-      // retry `DATA_LOSS` even though it maps to `InternalServerErrorException`
-      // alongside retryable `INTERNAL` and `UNKNOWN`.
-      StatusCode.dataLoss => InternalServerErrorException(
+      StatusCode.unauthenticated => UnauthorizedException(
         message,
-        status: Status(code: StatusCode.dataLoss, message: message),
+        status: status,
       ),
-      StatusCode.unknown => InternalServerErrorException(message),
-      _ => ServiceException(message, statusCode: error.code),
+      StatusCode.permissionDenied => ForbiddenException(
+        message,
+        status: status,
+      ),
+      StatusCode.notFound => NotFoundException(message, status: status),
+      StatusCode.alreadyExists ||
+      StatusCode.aborted => ConflictException(message, status: status),
+      StatusCode.failedPrecondition => PreconditionFailedException(
+        message,
+        status: status,
+      ),
+      StatusCode.outOfRange => RequestRangeNotSatisfiableException(
+        message,
+        status: status,
+      ),
+      StatusCode.resourceExhausted => TooManyRequestsException(
+        message,
+        status: status,
+      ),
+      StatusCode.cancelled => CancelledException(message, status: status),
+      StatusCode.deadlineExceeded => GatewayTimeoutException(
+        message,
+        status: status,
+      ),
+      StatusCode.internal || StatusCode.dataLoss || StatusCode.unknown =>
+        InternalServerErrorException(message, status: status),
+      StatusCode.unimplemented => NotImplementedException(
+        message,
+        status: status,
+      ),
+      StatusCode.unavailable => ServiceUnavailableException(
+        message,
+        status: status,
+      ),
+      _ => ServiceException(message, statusCode: error.code, status: status),
     };
   }
 }
