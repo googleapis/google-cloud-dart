@@ -611,6 +611,13 @@ final class PubSub {
   // - ValidateMessage
   Exception _mapGrpcError(GrpcError error) {
     final message = error.message ?? 'Unknown gRPC error';
+    // Preserve the gRPC status code on `ServiceException.status` (matching how
+    // `ServiceException.fromHttpResponse` populates it for REST errors).
+    // Because multiple gRPC codes map to the same HTTP exception class (e.g.
+    // both `ALREADY_EXISTS` and `ABORTED` map to `ConflictException`, and
+    // `INTERNAL`, `UNKNOWN`, and `DATA_LOSS` all map to
+    // `InternalServerErrorException`), `ExponentialRetry.isRetryable` inspects
+    // `status.code` to retry `ABORTED` and avoid retrying `DATA_LOSS`.
     final status = Status(code: error.code, message: message);
     return switch (error.code) {
       StatusCode.invalidArgument => BadRequestException(
