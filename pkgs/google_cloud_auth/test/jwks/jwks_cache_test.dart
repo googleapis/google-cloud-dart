@@ -210,8 +210,39 @@ void main() {
       expect(requests, hasLength(1));
     });
 
-    group('key rotation', () {
-      test('re-fetches once when a cached set lacks the key id', () async {
+    group('unknown key id', () {
+      test('does not trigger a fetch while the cache is fresh', () async {
+        final (:cache, :requests) = buildCache(
+          (_) => http.Response(
+            key.jwksJson(),
+            200,
+            headers: {'cache-control': 'max-age=3600'},
+          ),
+        );
+        addTearDown(cache.close);
+
+        expect(await cache.lookupKey(key.keyId), isNotNull);
+        expect(await cache.lookupKey('never-existed'), isNull);
+        expect(await cache.lookupKey('also-never-existed'), isNull);
+
+        expect(requests, hasLength(1));
+      });
+
+      test('returns null from a cold cache after a single fetch', () async {
+        final (:cache, :requests) = buildCache(
+          (_) => http.Response(
+            key.jwksJson(),
+            200,
+            headers: {'cache-control': 'max-age=3600'},
+          ),
+        );
+        addTearDown(cache.close);
+
+        expect(await cache.lookupKey('never-existed'), isNull);
+        expect(requests, hasLength(1));
+      });
+
+      test('rotated keys are picked up once the cache expires', () async {
         final rotated = await TestKey.generate(keyId: 'rotated-key');
         var fetchCount = 0;
         final (:cache, :requests) = buildCache((_) async {
@@ -226,87 +257,22 @@ void main() {
         addTearDown(cache.close);
 
         expect(await cache.lookupKey(key.keyId), isNotNull);
+        expect(await cache.lookupKey(rotated.keyId), isNull);
         expect(requests, hasLength(1));
 
-        // The rotated key is not in the cached set, so one re-fetch happens.
+        clock.advance(const Duration(hours: 1));
         expect(await cache.lookupKey(rotated.keyId), isNotNull);
-        expect(requests, hasLength(2));
-      });
-
-      test('does not re-fetch when the set was just fetched', () async {
-        final (:cache, :requests) = buildCache(
-          (_) => http.Response(
-            key.jwksJson(),
-            200,
-            headers: {'cache-control': 'max-age=3600'},
-          ),
-        );
-        addTearDown(cache.close);
-
-        // Cold cache: the single fetch is already current, so an unknown kid
-        // must not trigger a second request.
-        expect(await cache.lookupKey('never-existed'), isNull);
-        expect(requests, hasLength(1));
-      });
-
-      test('gives up after one re-fetch', () async {
-        final (:cache, :requests) = buildCache(
-          (_) => http.Response(
-            key.jwksJson(),
-            200,
-            headers: {'cache-control': 'max-age=3600'},
-          ),
-        );
-        addTearDown(cache.close);
-
-        await cache.lookupKey(key.keyId);
-        expect(await cache.lookupKey('never-existed'), isNull);
         expect(requests, hasLength(2));
       });
     });
 
-    group('negative caching', () {
-      test('remembers a 404 and stops re-requesting', () async {
-        final (:cache, :requests) = buildCache(
-          (_) => http.Response('nope', 404),
-        );
-        addTearDown(cache.close);
-
-        await expectLater(
-          cache.lookupKey(key.keyId),
-          throwsA(isA<TokenVerificationException>()),
-        );
-        await expectLater(
-          cache.lookupKey(key.keyId),
-          throwsA(isA<TokenVerificationException>()),
-        );
-
-        expect(requests, hasLength(1));
-      });
-
-      test('retries a 404 after the negative cache expires', () async {
-        final (:cache, :requests) = buildCache(
-          (_) => http.Response('nope', 404),
-        );
-        addTearDown(cache.close);
-
-        await expectLater(
-          cache.lookupKey(key.keyId),
-          throwsA(isA<TokenVerificationException>()),
-        );
-        clock.advance(const Duration(minutes: 6));
-        await expectLater(
-          cache.lookupKey(key.keyId),
-          throwsA(isA<TokenVerificationException>()),
-        );
-
-        expect(requests, hasLength(2));
-      });
-
-      for (final status in [500, 502, 503, 429, 408]) {
-        test('does not cache a transient $status', () async {
+    group('failures', () {
+      // A failed fetch is never cached, matching the reference clients: the
+      // next lookup always tries the endpoint again.
+      for (final status in [404, 500, 429]) {
+        test('are not cached for HTTP $status', () async {
           final (:cache, :requests) = buildCache(
-            (_) => http.Response('busy', status),
+            (_) => http.Response('nope', status),
           );
           addTearDown(cache.close);
 
@@ -323,7 +289,7 @@ void main() {
         });
       }
 
-      test('a success clears a previously cached failure', () async {
+      test('do not prevent recovery on the next lookup', () async {
         var fail = true;
         final (:cache, :requests) = buildCache(
           (_) => fail
@@ -338,10 +304,6 @@ void main() {
         );
 
         fail = false;
-        clock.advance(const Duration(minutes: 6));
-        expect(await cache.lookupKey(key.keyId), isNotNull);
-
-        clock.advance(const Duration(minutes: 1));
         expect(await cache.lookupKey(key.keyId), isNotNull);
         expect(requests, hasLength(2));
       });

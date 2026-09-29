@@ -21,16 +21,13 @@ import 'package:webcrypto/webcrypto.dart';
 import '../verifier/token_verification_exception.dart';
 import 'x509.dart';
 
+// Design based on:
+// - https://github.com/googleapis/google-api-java-client/blob/main/google-api-client/src/main/java/com/google/api/client/googleapis/auth/oauth2/GooglePublicKeysManager.java
+
 /// Used when the response carries no usable freshness information.
 const _defaultCacheDuration = Duration(hours: 1);
 
-/// How long a client error is remembered before the endpoint is retried.
-const _negativeCacheDuration = Duration(minutes: 5);
-
 final _maxAgePattern = RegExp(r'(?:^|[,\s])max-age\s*=\s*"?(\d+)"?');
-
-/// Status codes that are transient and so must never be negatively cached.
-const _transientStatusCodes = {408, 429};
 
 /// Computes how long a response may be treated as fresh.
 ///
@@ -86,9 +83,6 @@ final class JwksCache {
   /// The in-flight fetch, so that concurrent callers share one request.
   Future<Map<String, RsassaPkcs1V15PublicKey>>? _activeFetch;
 
-  TokenVerificationException? _cachedError;
-  DateTime? _cachedErrorExpiry;
-
   JwksCache({
     required this.uri,
     http.Client? httpClient,
@@ -103,23 +97,16 @@ final class JwksCache {
   /// Returns the key identified by [keyId], or `null` if the endpoint does
   /// not publish it.
   ///
-  /// If [keyId] is absent from an already-cached key set, the keys may simply
-  /// have rotated, so the endpoint is re-fetched exactly once before giving
-  /// up.
+  /// Keys are fetched only when nothing is cached or the cached set has
+  /// expired. An unknown [keyId] does not trigger a fetch: doing so would let
+  /// anyone force an outbound request per inbound token just by sending an
+  /// arbitrary `kid`. Google publishes new keys well before signing with them,
+  /// so a cache that honors the endpoint's freshness lifetime sees them in
+  /// time.
   ///
   /// Throws [TokenVerificationException] if the keys cannot be fetched.
-  Future<RsassaPkcs1V15PublicKey?> lookupKey(String keyId) async {
-    final cached = _freshKeys();
-    if (cached == null) {
-      // Nothing usable cached, so this fetch is already as current as it gets.
-      return (await _fetch())[keyId];
-    }
-
-    final key = cached[keyId];
-    if (key != null) return key;
-
-    return (await _fetch())[keyId];
-  }
+  Future<RsassaPkcs1V15PublicKey?> lookupKey(String keyId) async =>
+      (_freshKeys() ?? await _fetch())[keyId];
 
   /// Discards any cached keys and fetches a new set.
   ///
@@ -145,14 +132,6 @@ final class JwksCache {
     final activeFetch = _activeFetch;
     if (activeFetch != null) return activeFetch;
 
-    final cachedError = _cachedError;
-    final cachedErrorExpiry = _cachedErrorExpiry;
-    if (cachedError != null &&
-        cachedErrorExpiry != null &&
-        _clock().isBefore(cachedErrorExpiry)) {
-      return Future.error(cachedError);
-    }
-
     final fetch = _fetchKeys().whenComplete(() {
       _activeFetch = null;
     });
@@ -165,7 +144,6 @@ final class JwksCache {
     try {
       response = await _httpClient.get(uri);
     } on Exception catch (e, stackTrace) {
-      // Network failures are transient; do not negatively cache them.
       throw TokenVerificationException(
         TokenVerificationFailure.keyUnavailable,
         'Failed to fetch public keys from $uri: $e',
@@ -175,24 +153,11 @@ final class JwksCache {
     }
 
     if (response.statusCode != 200) {
-      final error = TokenVerificationException(
+      throw TokenVerificationException(
         TokenVerificationFailure.keyUnavailable,
         'Failed to fetch public keys from $uri: '
         'HTTP ${response.statusCode} ${response.body}',
       );
-      final statusCode = response.statusCode;
-      final isClientError =
-          statusCode >= 400 &&
-          statusCode < 500 &&
-          !_transientStatusCodes.contains(statusCode);
-      if (isClientError) {
-        // A misconfigured URL will keep failing, so stop hammering it. Server
-        // errors and rate limiting are left uncached so that recovery is
-        // immediate.
-        _cachedError = error;
-        _cachedErrorExpiry = _clock().add(_negativeCacheDuration);
-      }
-      throw error;
     }
 
     final keys = await _parseKeys(response.body);
@@ -201,8 +166,6 @@ final class JwksCache {
     _expiry = _clock().add(
       freshnessLifetime(response.headers) ?? _defaultCacheDuration,
     );
-    _cachedError = null;
-    _cachedErrorExpiry = null;
     return keys;
   }
 
