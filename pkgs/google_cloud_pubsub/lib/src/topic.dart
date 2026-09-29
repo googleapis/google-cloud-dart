@@ -14,6 +14,7 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:typed_data';
 
 import '../google_cloud_pubsub.dart';
 import 'batching.dart';
@@ -201,6 +202,13 @@ final class Topic {
   /// network errors occur during publishing, the batch is automatically
   /// retried according to [publishSettings] retry configuration.
   ///
+  /// Only messages published through the same [Topic] object are batched
+  /// together, so create one [Topic] per topic and reuse it rather than calling
+  /// [PubSub.topic] for every message.
+  ///
+  /// [data] and [attributes] are copied, so changing them after this call does
+  /// not affect the published message.
+  ///
   /// To ensure all buffered messages are published before application shutdown,
   /// call and await [close].
   ///
@@ -212,14 +220,20 @@ final class Topic {
   /// [attributes] are optional attributes for the message.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Publisher.Publish).
+  // TODO(sigurdm): Add publisher flow control that limits the number and size
+  // of outstanding messages.
   Future<String> publish(List<int> data, {Map<String, String>? attributes}) {
     if (_isClosed) {
       throw StateError('Cannot publish to a closed Topic.');
     }
     final completer = Completer<String>();
-    _batcher.add(
-      _PublishRequest(Message(data: data, attributes: attributes), completer),
+    // Copy the caller's data and attributes: the message is sent after this
+    // method returns, and its size has already been counted towards the batch.
+    final message = Message(
+      data: Uint8List.fromList(data),
+      attributes: attributes == null ? null : Map.unmodifiable(attributes),
     );
+    _batcher.add(_PublishRequest(message, completer));
     return completer.future;
   }
 

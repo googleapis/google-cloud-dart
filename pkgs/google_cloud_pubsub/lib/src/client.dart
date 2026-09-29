@@ -171,6 +171,10 @@ final class PubSub {
       _subscriberClient ??= grpc.SubscriberClient(_channel);
 
   /// Closes the client and cleans up any resources associated with it.
+  ///
+  /// This does not flush messages buffered by [Topic.publish]. Call and await
+  /// [Topic.close] on every [Topic] you published to before closing the
+  /// client, or the buffered messages fail to publish.
   Future<void> close() async {
     await _channel.shutdown();
   }
