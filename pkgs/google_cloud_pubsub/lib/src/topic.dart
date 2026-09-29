@@ -38,20 +38,6 @@ final class PublishSettings {
   PublishSettings({BatchingSettings? batching, RetryRunner? retry})
     : batching = batching ?? BatchingSettings(),
       retry = retry ?? defaultRetry;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is PublishSettings &&
-          runtimeType == other.runtimeType &&
-          batching == other.batching &&
-          retry == other.retry;
-
-  @override
-  int get hashCode => Object.hash(batching, retry);
-
-  @override
-  String toString() => 'PublishSettings(batching: $batching, retry: $retry)';
 }
 
 final class _PublishRequest {

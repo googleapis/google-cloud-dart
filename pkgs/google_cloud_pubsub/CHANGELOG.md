@@ -12,8 +12,6 @@
 - Added background acknowledgment and deadline modification batching for
   `Subscription.acknowledge` and `Subscription.modifyAckDeadline`.
 - Added `close()` lifecycle methods on `Topic` and `Subscription`.
-- Added `publishMessages` on `PubSub` for publishing multiple messages in a
-  single RPC.
 - Re-exported `RetryRunner` and `ExponentialRetry` from
   `package:google_cloud_rpc` and added `defaultRetry` to configure exponential
   backoff retry parameters for Pub/Sub operations.
