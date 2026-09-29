@@ -43,7 +43,7 @@ import 'dart:typed_data';
 const _tagSequence = 0x30;
 
 /// Reads the DER tag and length starting at [offset].
-/// 
+///
 /// For example:
 ///
 /// ```
