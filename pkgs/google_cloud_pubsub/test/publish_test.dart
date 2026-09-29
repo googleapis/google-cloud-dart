@@ -223,6 +223,53 @@ void main() {
         },
       );
 
+      test(
+        'fails every future in the batch on a non-retryable error',
+        () async {
+          fakePublisher.publishBehavior = (request) async {
+            throw const grpc.GrpcError.notFound('Topic not found');
+          };
+
+          final topic = client.topic(
+            'test-topic',
+            publishSettings: PublishSettings(
+              batching: BatchingSettings(maxMessages: 2),
+            ),
+          );
+
+          final futures = [
+            topic.publish([1]),
+            topic.publish([2]),
+          ];
+          for (final future in futures) {
+            await expectLater(future, throwsA(isA<NotFoundException>()));
+          }
+          expect(fakePublisher.publishCallCount, 1);
+        },
+      );
+
+      test('publishes a copy of data and attributes', () async {
+        final topic = client.topic(
+          'test-topic',
+          publishSettings: PublishSettings(
+            batching: BatchingSettings(maxDelay: const Duration(seconds: 10)),
+          ),
+        );
+
+        final data = Uint8List.fromList([1, 2, 3]);
+        final attributes = {'key': 'value'};
+        final future = topic.publish(data, attributes: attributes);
+        data[0] = 42;
+        attributes['key'] = 'changed';
+        attributes['extra'] = 'added';
+
+        await topic.close();
+        await future;
+        final sent = fakePublisher.recordedRequests.single.messages.single;
+        expect(sent.data, [1, 2, 3]);
+        expect(sent.attributes, {'key': 'value'});
+      });
+
       test('keeps every emitted PublishRequest within maxBytes', () async {
         const limit = 250;
         final topic = client.topic(
