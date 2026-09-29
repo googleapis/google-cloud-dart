@@ -41,10 +41,8 @@ final class AckSettings {
   /// Settings controlling how requests are accumulated and flushed.
   ///
   /// Pub/Sub accepts at most 512,000 bytes in an `Acknowledge` or
-  /// `ModifyAckDeadline` request — much less than it accepts for publishing —
-  /// so [BatchingSettings.maxBytes] defaults to that here. Asking for more
-  /// throws an [ArgumentError]; a [BatchingSettings] whose `maxBytes` was
-  /// never set is narrowed to it instead.
+  /// `ModifyAckDeadline` request, which is also the default
+  /// [BatchingSettings.maxBytes]. Asking for more throws an [ArgumentError].
   final BatchingSettings batching;
 
   /// Strategy controlling retries when flushing a batch over a unary RPC.
@@ -52,8 +50,7 @@ final class AckSettings {
 
   /// Creates a new [AckSettings] instance.
   AckSettings({BatchingSettings? batching, RetryRunner? retry})
-    : batching =
-          batching ?? BatchingSettings(maxBytes: maxAcknowledgeRequestBytes),
+    : batching = batching ?? BatchingSettings(),
       retry = retry ?? defaultRetry;
 }
 
@@ -131,11 +128,12 @@ final class Subscription {
       _requestSubscriptionField,
       utf8.encode(name).length,
     );
-    final settings = resolveServerLimits(
+    checkServerLimits(
       ackSettings.batching,
       maxBytes: maxAcknowledgeRequestBytes,
       requestDescription: 'Acknowledge or ModifyAckDeadline request',
     );
+    final settings = ackSettings.batching;
 
     _ackBatcher = Batcher<_AckRequest>(
       settings: settings,
