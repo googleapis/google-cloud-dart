@@ -84,6 +84,7 @@ void main() {
     });
 
     test('flushes after maxDelay and awaits in-flight on close()', () async {
+      final batchStarted = Completer<void>();
       final inFlight = Completer<void>();
       final batches = <List<int>>[];
       final batcher = Batcher<int>(
@@ -94,11 +95,15 @@ void main() {
         itemSize: (_) => 1,
         onBatch: (batch) async {
           batches.add(batch);
+          batchStarted.complete();
           await inFlight.future;
         },
       )..add(1);
 
-      await Future<void>.delayed(const Duration(milliseconds: 50));
+      // Neither maxMessages nor maxBytes is reached, so only the maxDelay
+      // timer can start the batch.
+      expect(batches, isEmpty);
+      await batchStarted.future;
       expect(batches, [
         [1],
       ]);
@@ -106,6 +111,7 @@ void main() {
       var closed = false;
       final closeFuture = batcher.close().then((_) => closed = true);
       expect(() => batcher.add(2), throwsStateError);
+      await Future<void>.delayed(Duration.zero);
       expect(closed, isFalse);
 
       inFlight.complete();
