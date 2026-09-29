@@ -14,8 +14,10 @@
 
 import 'dart:async';
 
+import 'package:google_cloud_rpc/rpc.dart';
 import 'package:grpc/grpc.dart';
 import 'package:meta/meta.dart';
+
 import '../google_cloud_pubsub.dart';
 import 'generated/google/pubsub/v1/pubsub.pbgrpc.dart' as grpc;
 import 'pubsub_emulator_host_vm.dart';
@@ -518,24 +520,58 @@ final class PubSub {
   // - ValidateMessage
   Exception _mapGrpcError(GrpcError e) {
     final message = e.message ?? 'Unknown gRPC error';
+    // Preserve the gRPC status code on `ServiceException.status` (matching how
+    // `ServiceException.fromHttpResponse` populates it for REST errors).
+    // Because multiple gRPC codes map to the same HTTP exception class (e.g.
+    // both `ALREADY_EXISTS` and `ABORTED` map to `ConflictException`, and
+    // `INTERNAL`, `UNKNOWN`, and `DATA_LOSS` all map to
+    // `InternalServerErrorException`), `ExponentialRetry.isRetryable` inspects
+    // `status.code` to retry `ABORTED` and avoid retrying `DATA_LOSS`.
+    final status = Status(code: e.code, message: message);
     return switch (e.code) {
-      StatusCode.invalidArgument => BadRequestException(message),
-      StatusCode.unauthenticated => UnauthorizedException(message),
-      StatusCode.permissionDenied => ForbiddenException(message),
-      StatusCode.notFound => NotFoundException(message),
-      StatusCode.alreadyExists => ConflictException(message),
-      StatusCode.aborted => ConflictException(message),
-      StatusCode.failedPrecondition => PreconditionFailedException(message),
-      StatusCode.outOfRange => RequestRangeNotSatisfiableException(message),
-      StatusCode.resourceExhausted => TooManyRequestsException(message),
-      StatusCode.cancelled => CancelledException(message),
-      StatusCode.deadlineExceeded => GatewayTimeoutException(message),
-      StatusCode.internal => InternalServerErrorException(message),
-      StatusCode.unimplemented => NotImplementedException(message),
-      StatusCode.unavailable => ServiceUnavailableException(message),
-      StatusCode.dataLoss => InternalServerErrorException(message),
-      StatusCode.unknown => InternalServerErrorException(message),
-      _ => ServiceException(message, statusCode: e.code),
+      StatusCode.invalidArgument => BadRequestException(
+        message,
+        status: status,
+      ),
+      StatusCode.unauthenticated => UnauthorizedException(
+        message,
+        status: status,
+      ),
+      StatusCode.permissionDenied => ForbiddenException(
+        message,
+        status: status,
+      ),
+      StatusCode.notFound => NotFoundException(message, status: status),
+      StatusCode.alreadyExists ||
+      StatusCode.aborted => ConflictException(message, status: status),
+      StatusCode.failedPrecondition => PreconditionFailedException(
+        message,
+        status: status,
+      ),
+      StatusCode.outOfRange => RequestRangeNotSatisfiableException(
+        message,
+        status: status,
+      ),
+      StatusCode.resourceExhausted => TooManyRequestsException(
+        message,
+        status: status,
+      ),
+      StatusCode.cancelled => CancelledException(message, status: status),
+      StatusCode.deadlineExceeded => GatewayTimeoutException(
+        message,
+        status: status,
+      ),
+      StatusCode.internal || StatusCode.dataLoss || StatusCode.unknown =>
+        InternalServerErrorException(message, status: status),
+      StatusCode.unimplemented => NotImplementedException(
+        message,
+        status: status,
+      ),
+      StatusCode.unavailable => ServiceUnavailableException(
+        message,
+        status: status,
+      ),
+      _ => ServiceException(message, statusCode: e.code, status: status),
     };
   }
 }
