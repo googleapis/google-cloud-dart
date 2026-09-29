@@ -52,6 +52,8 @@ final class AckSettings {
 
   /// How failed `Acknowledge` and `ModifyAckDeadline` requests are retried.
   ///
+  /// Also the default reconnection strategy for [Subscription.streamingPull].
+  ///
   /// Defaults to [defaultRetry].
   final RetryRunner retry;
 
