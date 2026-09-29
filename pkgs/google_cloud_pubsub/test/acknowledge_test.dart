@@ -193,6 +193,35 @@ void main() {
           expect(request.writeToBuffer().length, lessThanOrEqualTo(limit));
         }
       });
+
+      test('rejects settings above the server limits', () async {
+        final tooManyBytes = AckSettings(
+          batching: BatchingSettings(maxBytes: 512 * 1000 + 1),
+        );
+
+        expect(
+          () => client.subscription('test-sub', ackSettings: tooManyBytes),
+          throwsArgumentError,
+        );
+        expect(
+          () => client.subscriptionName(
+            'projects/test-project/subscriptions/test-sub',
+            ackSettings: tooManyBytes,
+          ),
+          throwsArgumentError,
+        );
+        await expectLater(
+          client.createSubscription(
+            'projects/test-project/subscriptions/test-sub',
+            topic: 'projects/test-project/topics/test-topic',
+            ackSettings: tooManyBytes,
+          ),
+          throwsArgumentError,
+        );
+        // The settings are checked before the subscription is created on the
+        // server.
+        expect(fakeSubscriber.createSubscriptionCallCount, 0);
+      });
     });
   });
 }

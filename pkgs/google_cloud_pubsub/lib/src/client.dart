@@ -210,6 +210,9 @@ final class PubSub {
 
   /// A [Subscription] object with the given [unqualifiedName] in the client's
   /// project.
+  ///
+  /// It is an error if [ackSettings] exceeds the limits described in
+  /// [AckSettings.batching].
   Subscription subscription(
     String unqualifiedName, {
     AckSettings? ackSettings,
@@ -221,6 +224,9 @@ final class PubSub {
   /// The [name] must be in the format
   /// `projects/<project-id>/subscriptions/<subscription-id>`.
   /// Useful for cross-project access.
+  ///
+  /// It is an error if [ackSettings] exceeds the limits described in
+  /// [AckSettings.batching].
   Subscription subscriptionName(String name, {AckSettings? ackSettings}) =>
       Subscription(this, name, ackSettings: ackSettings);
 
@@ -360,6 +366,10 @@ final class PubSub {
   /// `projects/<project-id>/subscriptions/<subscription-id>`.
   /// The [topic] must be in the format `projects/<project-id>/topics/<topic-id>`.
   ///
+  /// It is an error if [ackSettings] exceeds the limits described in
+  /// [AckSettings.batching]; this is checked before the subscription is
+  /// created.
+  ///
   /// Throws a [ConflictException] if the subscription already exists.
   /// Throws a [NotFoundException] if the corresponding topic doesn't exist.
   ///
@@ -372,6 +382,9 @@ final class PubSub {
     required String topic,
     AckSettings? ackSettings,
   }) async {
+    // Construct the `Subscription` first so that invalid arguments are
+    // reported before the subscription exists on the server.
+    final result = subscriptionName(subscription, ackSettings: ackSettings);
     final subscriptionProto = grpc.Subscription()
       ..name = subscription
       ..topic = topic;
@@ -381,7 +394,7 @@ final class PubSub {
         subscriptionProto,
         options: await _callOptions,
       );
-      return subscriptionName(subscription, ackSettings: ackSettings);
+      return result;
     } on GrpcError catch (error) {
       throw _mapGrpcError(error);
     }
