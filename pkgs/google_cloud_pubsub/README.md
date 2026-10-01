@@ -21,6 +21,7 @@ A Dart client for Google Cloud Pub/Sub.
 
 All access to Google Cloud Pub/Sub is made through the `PubSub` class.
 
+<?code-excerpt "example/example.dart (main)"?>
 ```dart
 import 'dart:convert';
 import 'package:google_cloud_pubsub/google_cloud_pubsub.dart';
@@ -37,7 +38,7 @@ void main() async {
         publishSettings: PublishSettings(
           batching: BatchingSettings(
             maxMessages: 100,
-            maxDelay: Duration(milliseconds: 10),
+            maxDelay: const Duration(milliseconds: 10),
           ),
         ),
       )
@@ -48,7 +49,9 @@ void main() async {
       .subscription(
         'put-your-subscription-name-here',
         ackSettings: AckSettings(
-          batching: BatchingSettings(maxDelay: Duration(milliseconds: 50)),
+          batching: BatchingSettings(
+            maxDelay: const Duration(milliseconds: 50),
+          ),
         ),
       )
       .create(topic: topic.name);
@@ -66,15 +69,13 @@ void main() async {
     subscription.acknowledge(receivedMessage);
   }
 
-  // Or receive messages continuously via resilient parallel streaming pull.
-  // Acknowledgments and deadline modifications are automatically routed over
-  // active streams with fallback to unary RPCs.
-  final stream = subscription.streamingPull(maxConcurrentStreams: 2);
-  final sub = stream.take(1).listen((message) {
+  // Or receive messages continuously via streaming pull.
+  await topic.publish(utf8.encode('message 2'));
+  await for (final message
+      in subscription.streamingPull(maxConcurrentStreams: 2).take(1)) {
     print('Streamed message: ${utf8.decode(message.data)}');
-    subscription.acknowledge(message);
-  });
-  await sub.asFuture<void>();
+    await message.acknowledge();
+  }
 
   print(
     'Your topic is available at:\n'

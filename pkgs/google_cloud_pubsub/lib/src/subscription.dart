@@ -89,7 +89,8 @@ final class Subscription {
   /// It has the format `projects/<project-id>/subscriptions/<subscription-id>`.
   final String name;
 
-  /// Settings controlling background ACKs and deadline modifications.
+  /// Settings controlling background acknowledgment and deadline modification
+  /// batching and retries.
   final AckSettings ackSettings;
 
   late final Batcher<_AckRequest> _ackBatcher;
@@ -120,8 +121,8 @@ final class Subscription {
     this.pubsub,
     String subscriptionId, {
     AckSettings? ackSettings,
-  }) : ackSettings = ackSettings ?? AckSettings(),
-       name = 'projects/${pubsub.projectId}/subscriptions/$subscriptionId' {
+  }) : name = 'projects/${pubsub.projectId}/subscriptions/$subscriptionId',
+       ackSettings = ackSettings ?? AckSettings() {
     _validateName(name);
     _initBatchers();
   }
@@ -203,11 +204,11 @@ final class Subscription {
         isIdempotent: true,
       );
       resolveBatch();
-    } catch (e, s) {
+    } catch (e, stackTrace) {
       // ACKs are best-effort. If the unary fallback fails after retries,
       // the error is suppressed for fire-and-forget, but attached completers
       // must receive the error.
-      resolveBatch(e, s);
+      resolveBatch(e, stackTrace);
     }
   }
 
@@ -272,11 +273,11 @@ final class Subscription {
             isIdempotent: true,
           );
           resolveGroup();
-        } catch (e, s) {
+        } catch (e, stackTrace) {
           // Deadline modifications are best-effort. If the unary fallback fails
           // after retries, the error is suppressed for fire-and-forget, but
           // attached completers must receive the error.
-          resolveGroup(e, s);
+          resolveGroup(e, stackTrace);
         }
       }),
     );
@@ -347,33 +348,30 @@ final class Subscription {
   /// Establishes a bidirectional streaming pull connection to receive
   /// messages.
   ///
-  /// By default, a single stream is opened. Higher throughput can be achieved
-  /// by setting [maxConcurrentStreams] to open multiple parallel streaming pull
-  /// connections. Messages from all streams are multiplexed into the returned
-  /// [Stream]. Multi-stream pull helps overcome throughput limits on
-  /// high-volume subscriptions by bypassing single-stream limitations.
+  /// Opens [maxConcurrentStreams] parallel `StreamingPull` connections and
+  /// multiplexes their messages into the returned [Stream].
   ///
-  /// The stream automatically reconnects on transient network errors using the
-  /// configured [retry] strategy (defaulting to [AckSettings.retry] with
-  /// unlimited total duration). Custom [ExponentialRetry] instances retain
-  /// their configured [ExponentialRetry.maxRetryInterval] (which defaults to 1
-  /// minute) unless `maxRetryInterval: null` is passed for unlimited
-  /// reconnection duration. Reconnections use exponential backoff, which resets
-  /// once a connection has been sustained and healthy (>= 15 seconds) or
-  /// successfully yields messages.
+  /// Each connection automatically reconnects on server disconnects and
+  /// retryable errors using [retry] (defaulting to [AckSettings.retry],
+  /// with [ExponentialRetry.maxRetryInterval] cleared so the stream can
+  /// reconnect indefinitely; an explicit [ExponentialRetry] passed to
+  /// [retry] keeps its configured `maxRetryInterval`). The retry delay
+  /// sequence resets once a connection receives a message or remains
+  /// connected for at least 15 seconds.
   ///
-  /// ACKs and deadline modifications sent via [acknowledge],
-  /// [modifyAckDeadline], or the message handlers are batched in the background
-  /// and sent over the active streams. If all streams are down, they fall back
-  /// to unary RPCs.
+  /// Acknowledgments and deadline modifications from [acknowledge],
+  /// [modifyAckDeadline], [ReceivedMessage.acknowledge], and
+  /// [ReceivedMessage.modifyAckDeadline] are batched and written to an
+  /// active stream when one is open, or sent via unary RPCs with retries
+  /// when no stream is active.
   ///
   /// It is an error if called on a closed [Subscription].
   /// It is an error if [streamAckDeadlineSeconds] is not between 10 and 600
   /// seconds, or if [maxConcurrentStreams] is less than 1.
   ///
-  /// Any errors (such as a [NotFoundException] if the subscription does not
-  /// exist, or non-retryable errors) are emitted asynchronously on the returned
-  /// [Stream] rather than thrown synchronously.
+  /// Non-retryable errors (such as [NotFoundException] if the subscription
+  /// does not exist) and errors after retries are exhausted are emitted on
+  /// the returned [Stream].
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.StreamingPull).
   Stream<ReceivedMessage> streamingPull({
@@ -381,13 +379,12 @@ final class Subscription {
     int maxConcurrentStreams = 1,
     RetryRunner? retry,
   }) {
-    if (streamAckDeadlineSeconds < 10 || streamAckDeadlineSeconds > 600) {
-      throw ArgumentError.value(
-        streamAckDeadlineSeconds,
-        'streamAckDeadlineSeconds',
-        'Must be between 10 and 600 seconds',
-      );
-    }
+    RangeError.checkValueInInterval(
+      streamAckDeadlineSeconds,
+      10,
+      600,
+      'streamAckDeadlineSeconds',
+    );
     if (maxConcurrentStreams < 1) {
       throw ArgumentError.value(
         maxConcurrentStreams,
@@ -399,15 +396,16 @@ final class Subscription {
       throw StateError('Cannot stream messages on a closed Subscription.');
     }
     final effectiveRetry = switch (retry ?? ackSettings.retry) {
-      final ExponentialRetry exp when retry == null => ExponentialRetry(
-        maxRetries: exp.maxRetries,
-        maxRetryInterval: null,
-        initialDelay: exp.initialDelay,
-        delayMultiplier: exp.delayMultiplier,
-        maxDelay: exp.maxDelay,
-        jitter: exp.jitter,
-      ),
-      final r => r,
+      final ExponentialRetry exponentialRetry when retry == null =>
+        ExponentialRetry(
+          maxRetries: exponentialRetry.maxRetries,
+          maxRetryInterval: null,
+          initialDelay: exponentialRetry.initialDelay,
+          delayMultiplier: exponentialRetry.delayMultiplier,
+          maxDelay: exponentialRetry.maxDelay,
+          jitter: exponentialRetry.jitter,
+        ),
+      final retryRunner => retryRunner,
     };
 
     late final StreamController<ReceivedMessage> controller;
@@ -430,13 +428,6 @@ final class Subscription {
       }
       reconnectTimers.clear();
 
-      final requestControllersToClose = requestControllers.toList();
-      requestControllers.clear();
-      for (final requestController in requestControllersToClose) {
-        _activeStreams.remove(requestController);
-        unawaited(requestController.dispose());
-      }
-
       final subscriptionsToCancel = currentSubscriptions.toList();
       currentSubscriptions.clear();
       await Future.wait(
@@ -444,6 +435,13 @@ final class Subscription {
           (subscription) => subscription.cancel().catchError((_) {}),
         ),
       );
+
+      final requestControllersToClose = requestControllers.toList();
+      requestControllers.clear();
+      for (final requestController in requestControllersToClose) {
+        _activeStreams.remove(requestController);
+        unawaited(requestController.dispose());
+      }
     }
 
     Future<void> cancelSession() async {
@@ -604,6 +602,7 @@ final class Subscription {
           )
           .listen(
             (message) {
+              if (_isClosed || isCancelled || controller.isClosed) return;
               markConnected();
               hasReceivedItem = true;
               controller.add(message);
@@ -678,12 +677,12 @@ final class Subscription {
   ///
   /// The acknowledgment is buffered and sent in a batch according to
   /// [AckSettings.batching]. If active [streamingPull] connections exist for
-  /// this subscription, batches are sent directly over an active request
-  /// stream. Otherwise, they are sent via a unary RPC with retries configured
-  /// by [AckSettings.retry].
+  /// this subscription, batches are written to an active request stream.
+  /// Otherwise, they are sent via a unary RPC with retries configured by
+  /// [AckSettings.retry].
   ///
-  /// To ensure all buffered acknowledgments are delivered before application
-  /// shutdown, call and await [close].
+  /// Call and await [close] before shutdown to flush any buffered
+  /// acknowledgments.
   ///
   /// It is an error if called on a closed [Subscription].
   ///
@@ -739,17 +738,17 @@ final class Subscription {
   ///
   /// The request is buffered and sent in a batch according to
   /// [AckSettings.batching]. If active [streamingPull] connections exist for
-  /// this subscription, batches are sent directly over an active request
-  /// stream. Otherwise, they are sent via a unary RPC with retries
-  /// configured by [AckSettings.retry].
+  /// this subscription, batches are written to an active request stream.
+  /// Otherwise, they are sent via a unary RPC with retries configured by
+  /// [AckSettings.retry].
   ///
   /// [ackDeadlineSeconds] must be the new ack deadline in seconds, relative to
   /// the time the request is received. For example, if [ackDeadlineSeconds] is
   /// 10, the new ack deadline is 10 seconds from now. Specifying 0 makes the
   /// message immediately available for redelivery.
   ///
-  /// To ensure all buffered deadline modifications are delivered before
-  /// application shutdown, call and await [close].
+  /// Call and await [close] before shutdown to flush any buffered deadline
+  /// modifications.
   ///
   /// It is an error if called on a closed [Subscription].
   /// It is an error if [ackDeadlineSeconds] is not between 0 and 600 seconds.
@@ -772,13 +771,9 @@ final class Subscription {
     );
   }
 
-  /// Closes the subscription, flushing any pending acknowledgments and
-  /// deadline modifications, waiting for in-flight batches to complete, and
-  /// cancelling any active streaming pulls.
-  ///
-  /// Calling and awaiting [close] during application shutdown ensures that all
-  /// buffered acknowledgments and deadline modifications are sent before the
-  /// process exits, preventing message redelivery.
+  /// Closes the subscription, cancelling any active streaming pulls,
+  /// flushing any buffered acknowledgments and deadline modifications via
+  /// unary RPCs, and waiting for in-flight batches to complete.
   ///
   /// Once closed, it is an error to call [acknowledge], [acknowledgeNow],
   /// [modifyAckDeadline], [modifyAckDeadlineNow], [pull], or [streamingPull].

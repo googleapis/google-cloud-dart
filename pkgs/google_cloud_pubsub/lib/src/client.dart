@@ -92,12 +92,11 @@ final class PubSub {
     required ClientChannel channel,
     grpc.SubscriberClient? subscriberClient,
     grpc.PublisherClient? publisherClient,
-    FutureOr<BaseAuthenticator>? authenticator,
   }) => PubSub._(
     projectId,
     channel,
     false,
-    authenticator,
+    null,
     subscriberClient: subscriberClient,
     publisherClient: publisherClient,
   );
@@ -482,10 +481,20 @@ final class PubSub {
     controller = StreamController<ReceivedMessage>(
       onListen: () async {
         try {
+          if (_isClosed) {
+            throw StateError(
+              'Cannot stream messages using a closed PubSub client.',
+            );
+          }
           final options = await _callOptions;
           if (isCancelled) {
             unawaited(controller.close());
             return;
+          }
+          if (_isClosed) {
+            throw StateError(
+              'Cannot stream messages using a closed PubSub client.',
+            );
           }
           final responseStream = _subscriber.streamingPull(
             requestStream,
@@ -515,11 +524,18 @@ final class PubSub {
                 );
               }
             },
-            onError: (Object error, StackTrace stackTrace) {
-              if (error is GrpcError) {
-                controller.addError(_mapGrpcError(error), stackTrace);
+            onError: (Object e, StackTrace stackTrace) {
+              if (_isClosed) {
+                controller.addError(
+                  StateError(
+                    'Cannot stream messages using a closed PubSub client.',
+                  ),
+                  stackTrace,
+                );
+              } else if (e is GrpcError) {
+                controller.addError(_mapGrpcError(e), stackTrace);
               } else {
-                controller.addError(error, stackTrace);
+                controller.addError(e, stackTrace);
               }
               unawaited(controller.close());
             },
@@ -531,12 +547,12 @@ final class PubSub {
           if (isPaused) {
             streamSubscription?.pause();
           }
-        } catch (error, stackTrace) {
+        } catch (e, stackTrace) {
           if (!isCancelled && !controller.isClosed) {
-            if (error is GrpcError) {
-              controller.addError(_mapGrpcError(error), stackTrace);
+            if (e is GrpcError) {
+              controller.addError(_mapGrpcError(e), stackTrace);
             } else {
-              controller.addError(error, stackTrace);
+              controller.addError(e, stackTrace);
             }
             unawaited(controller.close());
           }
@@ -558,26 +574,22 @@ final class PubSub {
     return controller.stream;
   }
 
-  /// Establishes a stream with the server, which sends messages down to the
-  /// client.
+  /// Establishes a single streaming pull connection with the server.
+  ///
+  /// For automatic reconnection and parallel streams, use
+  /// [Subscription.streamingPull].
   ///
   /// The [subscription] must be in the format
   /// `projects/<project-id>/subscriptions/<subscription-id>`.
   ///
   /// The client streams acknowledgments and ack deadline modifications
-  /// back to the server. If an error occurs (including when the server closes
-  /// the stream with status `UNAVAILABLE` to reassign resources), the stream
-  /// will emit a [ServiceException]. In this case, the caller should
-  /// re-establish the stream. Flow control can be achieved by configuring the
-  /// underlying RPC channel.
+  /// back to the server while the stream is open, falling back to unary
+  /// RPCs if the stream is closed. If an error occurs (including when the
+  /// server closes the stream with `UNAVAILABLE` to reassign resources),
+  /// the stream emits a [ServiceException] and closes.
   ///
-  /// Any errors (such as a [ServiceException] if the stream is broken by
-  /// the server or network) are emitted asynchronously on the returned
-  /// stream rather than thrown synchronously.
-  ///
-  /// It is an error if [subscription] is empty.
-  /// It is an error if [streamAckDeadlineSeconds] is not between 10 and 600
-  /// seconds.
+  /// It is an error if [subscription] is empty, or if
+  /// [streamAckDeadlineSeconds] is not between 10 and 600 seconds.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.StreamingPull).
   Stream<ReceivedMessage> streamingPull(
