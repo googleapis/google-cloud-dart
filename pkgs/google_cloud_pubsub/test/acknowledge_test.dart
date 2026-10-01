@@ -13,42 +13,255 @@
 // limitations under the License.
 
 @TestOn('vm')
-@Tags(['firebase-emulator', 'google-cloud'])
 library;
 
+import 'dart:convert';
+
 import 'package:google_cloud_pubsub/google_cloud_pubsub.dart';
+import 'package:grpc/grpc.dart' as grpc;
 import 'package:test/test.dart';
 
 import 'test_utils.dart';
 
 void main() {
   group('acknowledge', () {
-    late PubSub client;
+    group(
+      'google-cloud / emulator',
+      tags: ['firebase-emulator', 'google-cloud'],
+      () {
+        late PubSub client;
 
-    setUp(() async {
-      client = await createClient();
-    });
+        setUp(() async {
+          client = await createClient();
+        });
 
-    tearDown(() async {
-      await client.close();
-    });
+        tearDown(() async {
+          await client.close();
+        });
 
-    test('acknowledge for non-existent subscription throws '
-        'NotFoundException', () async {
-      final subscriptionName = testResourceName('non-existent');
-      final subscription = client.subscription(subscriptionName);
+        test(
+          'acknowledge for non-existent subscription throws NotFoundException',
+          () async {
+            final subscriptionName = testResourceName('non-existent');
+            final subscription = client.subscription(subscriptionName);
 
-      expect(
-        () => subscription.acknowledgeNow([
-          ReceivedMessage(
-            ackId: 'ack-id',
-            messageId: 'msg-id',
-            publishTime: DateTime.now(),
-            message: Message(data: []),
-          ),
-        ]),
-        throwsA(isA<NotFoundException>()),
+            expect(
+              () => subscription.acknowledgeNow([
+                ReceivedMessage(
+                  ackId: 'ack-id',
+                  messageId: 'msg-id',
+                  publishTime: DateTime.now(),
+                  message: Message(data: []),
+                ),
+              ]),
+              throwsA(isA<NotFoundException>()),
+            );
+          },
+        );
+
+        test(
+          'batched acknowledge flushed on close() prevents redelivery',
+          () async {
+            final topicName = testResourceName('ack-topic');
+            final subscriptionName = testResourceName('ack-sub');
+            final topic = client.topic(topicName);
+            final subscription = client.subscription(
+              subscriptionName,
+              ackSettings: AckSettings(
+                batching: BatchingSettings(
+                  maxMessages: 50,
+                  maxDelay: const Duration(seconds: 30),
+                ),
+              ),
+            );
+
+            await topic.create();
+            addTearDown(() async => await topic.delete());
+
+            await subscription.create(topic: topic.name);
+            addTearDown(() async => await subscription.delete());
+
+            for (var i = 0; i < 5; i++) {
+              await topic.publish(utf8.encode('ack-msg-$i'));
+            }
+            await topic.close();
+
+            final received = await pullReliably(subscription, count: 5);
+            expect(received, hasLength(5));
+            received.forEach(subscription.acknowledge);
+            await subscription.close();
+
+            final reopen = client.subscription(subscriptionName);
+            addTearDown(() async => await reopen.close());
+            // Nacking already-acknowledged messages is a no-op; if `close()`
+            // had not flushed the batch, this would make them redeliverable
+            // immediately alongside the sentinel message below.
+            await reopen.modifyAckDeadlineNow(received, 0);
+            await client.publish(topic.name, utf8.encode('sentinel'));
+
+            final afterAck = await pullReliably(reopen, count: 1);
+            expect(afterAck.map((m) => utf8.decode(m.data)).toList(), [
+              'sentinel',
+            ]);
+            await reopen.acknowledgeNow(afterAck);
+          },
+        );
+      },
+    );
+
+    group('mock', () {
+      late FakeSubscriberClient fakeSubscriber;
+      late PubSub client;
+
+      setUp(() {
+        fakeSubscriber = FakeSubscriberClient();
+        client = PubSub.testing(
+          projectId: 'test-project',
+          channel: FakeClientChannel(),
+          subscriberClient: fakeSubscriber,
+        );
+      });
+
+      tearDown(() async {
+        await client.close();
+      });
+
+      ReceivedMessage dummyMessage(String ackId) => ReceivedMessage(
+        ackId: ackId,
+        messageId: 'msg-$ackId',
+        publishTime: DateTime.now(),
+        message: Message(data: const [1]),
       );
+
+      test(
+        'batches and deduplicates ack IDs, retrying on transient error',
+        () async {
+          var attempts = 0;
+          fakeSubscriber.acknowledgeBehavior = (ackIds) async {
+            if (++attempts == 1) {
+              throw const grpc.GrpcError.unavailable('Transient');
+            }
+          };
+
+          final sub =
+              client.subscription(
+                  'test-sub',
+                  ackSettings: AckSettings(
+                    batching: BatchingSettings(
+                      maxMessages: 10,
+                      maxDelay: const Duration(seconds: 10),
+                    ),
+                    retry: const ExponentialRetry(
+                      initialDelay: Duration(milliseconds: 1),
+                    ),
+                  ),
+                )
+                ..acknowledge(dummyMessage('ack-1'))
+                ..acknowledge(dummyMessage('ack-1'))
+                ..acknowledge(dummyMessage('ack-2'));
+
+          await sub.close();
+          expect(sub.isClosed, isTrue);
+          expect(attempts, 2);
+          expect(fakeSubscriber.lastAckIds, ['ack-1', 'ack-2']);
+          expect(
+            () => sub.acknowledge(dummyMessage('ack-3')),
+            throwsStateError,
+          );
+          expect(
+            () => sub.acknowledgeNow([dummyMessage('ack-3')]),
+            throwsStateError,
+          );
+          expect(sub.pull, throwsStateError);
+          expect(sub.streamingPull, throwsStateError);
+        },
+      );
+
+      test('does not retry non-retryable error', () async {
+        var attempts = 0;
+        fakeSubscriber.acknowledgeBehavior = (ackIds) async {
+          attempts++;
+          throw const grpc.GrpcError.notFound('Subscription not found');
+        };
+
+        final sub = client.subscription(
+          'test-sub',
+          ackSettings: AckSettings(
+            retry: const ExponentialRetry(
+              initialDelay: Duration(milliseconds: 1),
+            ),
+          ),
+        )..acknowledge(dummyMessage('ack-1'));
+
+        await sub.close();
+        expect(attempts, 1);
+      });
+
+      test('does not retry buffered acks after PubSub.close()', () async {
+        final sub = client.subscription(
+          'test-sub',
+          ackSettings: AckSettings(
+            batching: BatchingSettings(maxDelay: const Duration(seconds: 10)),
+          ),
+        )..acknowledge(dummyMessage('ack-1'));
+
+        await client.close();
+        await sub.close();
+        expect(fakeSubscriber.acknowledgeCallCount, 0);
+      });
+
+      test('keeps every emitted AcknowledgeRequest within maxBytes', () async {
+        const limit = 250;
+        final sub = client.subscription(
+          'test-sub',
+          ackSettings: AckSettings(
+            batching: BatchingSettings(
+              maxMessages: 1000,
+              maxBytes: limit,
+              maxDelay: const Duration(seconds: 10),
+            ),
+          ),
+        );
+
+        for (var i = 0; i < 20; i++) {
+          sub.acknowledge(dummyMessage('ack-${'x' * 30}-$i'));
+        }
+        await sub.close();
+
+        expect(fakeSubscriber.recordedAckRequests.length, greaterThan(1));
+        for (final request in fakeSubscriber.recordedAckRequests) {
+          expect(request.writeToBuffer().length, lessThanOrEqualTo(limit));
+        }
+      });
+
+      test('rejects settings above the server limits', () async {
+        final tooManyBytes = AckSettings(
+          batching: BatchingSettings(maxBytes: 512 * 1000 + 1),
+        );
+
+        expect(
+          () => client.subscription('test-sub', ackSettings: tooManyBytes),
+          throwsArgumentError,
+        );
+        expect(
+          () => client.subscriptionName(
+            'projects/test-project/subscriptions/test-sub',
+            ackSettings: tooManyBytes,
+          ),
+          throwsArgumentError,
+        );
+        await expectLater(
+          client.createSubscription(
+            'projects/test-project/subscriptions/test-sub',
+            topic: 'projects/test-project/topics/test-topic',
+            ackSettings: tooManyBytes,
+          ),
+          throwsArgumentError,
+        );
+        // The settings are checked before the subscription is created on the
+        // server.
+        expect(fakeSubscriber.createSubscriptionCallCount, 0);
+      });
     });
   });
 }
