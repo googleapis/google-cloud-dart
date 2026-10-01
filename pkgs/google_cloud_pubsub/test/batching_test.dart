@@ -204,5 +204,62 @@ void main() {
               .length;
       expect(predicted, actual);
     });
+
+    test(
+      'acknowledgeRequestItemSize matches serialized AcknowledgeRequest',
+      () {
+        const subscription =
+            'projects/example-project/subscriptions/example-subscription';
+        final ackIds = List.generate(50, (i) => 'ack-id-${'x' * i}-$i');
+        var predicted = acknowledgeRequestBaseSize(subscription);
+        for (final ackId in ackIds) {
+          predicted += acknowledgeRequestItemSize(ackId);
+        }
+
+        final actual =
+            (grpc.AcknowledgeRequest()
+                  ..subscription = subscription
+                  ..ackIds.addAll(ackIds))
+                .writeToBuffer()
+                .length;
+        expect(predicted, actual);
+      },
+    );
+
+    test('modifyAckDeadlineRequestItemSize bounds serialized '
+        'ModifyAckDeadlineRequest', () {
+      const subscription =
+          'projects/example-project/subscriptions/example-subscription';
+      const singleAckId = 'ack-id-0';
+      const deadline = 600;
+
+      // Exact for a single-item request.
+      final singlePredicted =
+          modifyAckDeadlineRequestBaseSize(subscription) +
+          modifyAckDeadlineRequestItemSize(singleAckId, deadline);
+      final singleActual =
+          (grpc.ModifyAckDeadlineRequest()
+                ..subscription = subscription
+                ..ackIds.add(singleAckId)
+                ..ackDeadlineSeconds = deadline)
+              .writeToBuffer()
+              .length;
+      expect(singlePredicted, singleActual);
+
+      // Conservative upper bound when multiple ack IDs share a deadline.
+      final ackIds = List.generate(50, (i) => 'ack-id-${'x' * i}-$i');
+      var multiPredicted = modifyAckDeadlineRequestBaseSize(subscription);
+      for (final ackId in ackIds) {
+        multiPredicted += modifyAckDeadlineRequestItemSize(ackId, deadline);
+      }
+      final multiActual =
+          (grpc.ModifyAckDeadlineRequest()
+                ..subscription = subscription
+                ..ackIds.addAll(ackIds)
+                ..ackDeadlineSeconds = deadline)
+              .writeToBuffer()
+              .length;
+      expect(multiPredicted, greaterThanOrEqualTo(multiActual));
+    });
   });
 }

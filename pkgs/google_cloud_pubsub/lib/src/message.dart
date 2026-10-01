@@ -112,15 +112,15 @@ final class ReceivedMessage {
   /// For background batched deadline modifications with retries, use
   /// [Subscription.modifyAckDeadline].
   ///
-  /// It is an error if [ackDeadlineSeconds] is negative.
+  /// It is an error if [ackDeadlineSeconds] is not between 0 and 600 seconds.
   /// It is an error if no modify-ack-deadline handler is configured for this
   /// message (e.g. if the message was constructed manually without a handler).
   Future<void> modifyAckDeadline(int ackDeadlineSeconds) async {
-    if (ackDeadlineSeconds < 0) {
+    if (ackDeadlineSeconds < 0 || ackDeadlineSeconds > 600) {
       throw ArgumentError.value(
         ackDeadlineSeconds,
         'ackDeadlineSeconds',
-        'Must be non-negative',
+        'Must be between 0 and 600 seconds',
       );
     }
     final handler = _modifyDeadlineHandler;

@@ -13,27 +13,10 @@
 // limitations under the License.
 
 import 'dart:async';
-import 'dart:convert';
 
 import '../google_cloud_pubsub.dart';
 import 'batching.dart';
 import 'wire_size.dart';
-
-// Field numbers from `google/pubsub/v1/pubsub.proto`, used to predict the
-// serialized size of an acknowledgment request without building one.
-//
-// `AcknowledgeRequest`, `ModifyAckDeadlineRequest` and `StreamingPullRequest`
-// all carry the subscription in field 1. Ack IDs live in field 2 of
-// `AcknowledgeRequest` and of `StreamingPullRequest`, and deadline
-// modifications name their ack IDs in field 4 of both
-// `ModifyAckDeadlineRequest` and `StreamingPullRequest`, so one constant
-// serves the unary and the streaming path alike. Field 3 holds the deadline
-// itself: a single shared value on `ModifyAckDeadlineRequest`, a packed list
-// on `StreamingPullRequest`.
-const _requestSubscriptionField = 1;
-const _ackIdsField = 2;
-const _modifyDeadlineSecondsField = 3;
-const _modifyDeadlineAckIdsField = 4;
 
 /// Settings for background batching and retrying of acknowledgments and
 /// deadline modifications.
@@ -73,6 +56,11 @@ final class _ModifyAckDeadlineRequest {
 }
 
 /// A [Google Cloud Pub/Sub subscription](https://cloud.google.com/pubsub/docs/overview#subscriptions).
+///
+/// Acknowledgments and deadline modifications passed to [acknowledge] and
+/// [modifyAckDeadline] are buffered and sent in batches. Create one
+/// [Subscription] per subscription and reuse it, and call and await [close]
+/// before shutdown to flush buffered requests.
 final class Subscription {
   static final RegExp _subscriptionNameRegExp = RegExp(
     r'^projects/[^/]+/subscriptions/[^/]+$',
@@ -128,13 +116,6 @@ final class Subscription {
   }
 
   void _initBatchers() {
-    // Every unary request carries the subscription name, whatever else it
-    // contains. Requests sent over an established streaming pull omit it, so
-    // counting it always is the conservative choice.
-    final baseSize = lengthDelimitedSize(
-      _requestSubscriptionField,
-      utf8.encode(name).length,
-    );
     checkServerLimits(
       ackSettings.batching,
       maxBytes: maxAcknowledgeRequestBytes,
@@ -144,34 +125,17 @@ final class Subscription {
 
     _ackBatcher = Batcher<_AckRequest>(
       settings: settings,
-      baseSize: baseSize,
-      // Ack IDs are server-generated ASCII, so their UTF-16 length is also
-      // their length in bytes.
-      itemSize: (request) {
-        assert(utf8.encode(request.ackId).length == request.ackId.length);
-        return lengthDelimitedSize(_ackIdsField, request.ackId.length);
-      },
+      baseSize: acknowledgeRequestBaseSize(name),
+      itemSize: (request) => acknowledgeRequestItemSize(request.ackId),
       onBatch: _onAckBatch,
     );
     _modifyAckBatcher = Batcher<_ModifyAckDeadlineRequest>(
       settings: settings,
-      // A unary `ModifyAckDeadlineRequest` carries one shared
-      // `ackDeadlineSeconds`, so charge its tag once up front. Without it a
-      // group of exactly one ack ID would be under-counted by that byte.
-      baseSize: baseSize + tagSize(_modifyDeadlineSecondsField),
-      // A `StreamingPullRequest` instead carries a `modifyDeadlineSeconds`
-      // list parallel to its ack ID list — "The size of this list must be the
-      // same as the size of `modify_deadline_ack_ids`" — so each ack ID also
-      // costs the varint encoding of its own deadline. On the unary path,
-      // where the deadline is shared, that makes this an over-estimate.
-      itemSize: (request) {
-        assert(utf8.encode(request.ackId).length == request.ackId.length);
-        return lengthDelimitedSize(
-              _modifyDeadlineAckIdsField,
-              request.ackId.length,
-            ) +
-            varintSize(request.ackDeadlineSeconds);
-      },
+      baseSize: modifyAckDeadlineRequestBaseSize(name),
+      itemSize: (request) => modifyAckDeadlineRequestItemSize(
+        request.ackId,
+        request.ackDeadlineSeconds,
+      ),
       onBatch: _onModifyAckBatch,
     );
   }
@@ -197,7 +161,7 @@ final class Subscription {
   /// Throws a [ConflictException] if the subscription already exists.
   /// Throws a [NotFoundException] if the corresponding topic doesn't exist.
   ///
-  /// Returns a [Subscription] instance representing the created subscription.
+  /// Returns this [Subscription].
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.CreateSubscription).
   Future<Subscription> create({required String topic}) async {
@@ -241,6 +205,13 @@ final class Subscription {
 
   /// Establishes a stream with the server, which sends messages down to the
   /// client.
+  ///
+  /// The client streams acknowledgments and ack deadline modifications
+  /// back to the server. If an error occurs (including when the server closes
+  /// the stream with status `UNAVAILABLE` to reassign resources), the stream
+  /// will throw a [ServiceException]. In this case, the caller should
+  /// re-establish the stream. Flow control can be achieved by configuring the
+  /// underlying RPC channel.
   ///
   /// Throws a [ServiceException] if the stream is broken by the server or
   /// network.
@@ -352,8 +323,13 @@ final class Subscription {
   ///
   /// Bypasses background batching and immediately executes a unary RPC.
   ///
+  /// [ackDeadlineSeconds] must be the new ack deadline in seconds, relative to
+  /// the time the request is received. For example, if [ackDeadlineSeconds] is
+  /// 10, the new ack deadline is 10 seconds from now. Specifying 0 makes the
+  /// message immediately available for redelivery.
+  ///
   /// It is an error if called on a closed [Subscription].
-  /// It is an error if [ackDeadlineSeconds] is negative.
+  /// It is an error if [ackDeadlineSeconds] is not between 0 and 600 seconds.
   /// Throws a [NotFoundException] if the subscription does not exist.
   /// Throws a [ServiceException] if the RPC fails.
   ///
@@ -365,11 +341,11 @@ final class Subscription {
     if (_isClosed) {
       throw StateError('Cannot modify ack deadline on a closed Subscription.');
     }
-    if (ackDeadlineSeconds < 0) {
+    if (ackDeadlineSeconds < 0 || ackDeadlineSeconds > 600) {
       throw ArgumentError.value(
         ackDeadlineSeconds,
         'ackDeadlineSeconds',
-        'Must be non-negative',
+        'Must be between 0 and 600 seconds',
       );
     }
     if (messages.isEmpty) return Future.value();
@@ -386,11 +362,16 @@ final class Subscription {
   /// [AckSettings.batching] via a unary RPC with retries configured
   /// by [AckSettings.retry].
   ///
+  /// [ackDeadlineSeconds] must be the new ack deadline in seconds, relative to
+  /// the time the request is received. For example, if [ackDeadlineSeconds] is
+  /// 10, the new ack deadline is 10 seconds from now. Specifying 0 makes the
+  /// message immediately available for redelivery.
+  ///
   /// To ensure all buffered deadline modifications are delivered before
   /// application shutdown, call and await [close].
   ///
   /// It is an error if called on a closed [Subscription].
-  /// It is an error if [ackDeadlineSeconds] is negative.
+  /// It is an error if [ackDeadlineSeconds] is not between 0 and 600 seconds.
   ///
   /// This is a non-blocking, fire-and-forget operation. See
   /// [modifyAckDeadlineNow] for an immediate, awaitable alternative.
@@ -398,11 +379,11 @@ final class Subscription {
     if (_isClosed) {
       throw StateError('Cannot modify ack deadline on a closed Subscription.');
     }
-    if (ackDeadlineSeconds < 0) {
+    if (ackDeadlineSeconds < 0 || ackDeadlineSeconds > 600) {
       throw ArgumentError.value(
         ackDeadlineSeconds,
         'ackDeadlineSeconds',
-        'Must be non-negative',
+        'Must be between 0 and 600 seconds',
       );
     }
     _modifyAckBatcher.add(

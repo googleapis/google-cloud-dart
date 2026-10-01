@@ -17,6 +17,7 @@ import 'dart:async';
 import 'package:google_cloud_rpc/rpc.dart';
 import 'package:grpc/grpc.dart';
 import 'package:meta/meta.dart';
+
 import '../google_cloud_pubsub.dart';
 import 'generated/google/pubsub/v1/pubsub.pbgrpc.dart' as grpc;
 import 'pubsub_emulator_host_vm.dart';
@@ -176,10 +177,14 @@ final class PubSub {
 
   /// Closes the client and cleans up any resources associated with it.
   ///
-  /// This does not flush messages buffered by [Topic.publish]. Call and await
-  /// [Topic.close] on every [Topic] you published to before closing the
-  /// client. Once the client is closed, publishing fails immediately with a
-  /// [StateError], including for messages that a [Topic] still has buffered.
+  /// This does not flush messages buffered by [Topic.publish] or
+  /// acknowledgments and deadline modifications buffered by
+  /// [Subscription.acknowledge] and [Subscription.modifyAckDeadline]. Call and
+  /// await [Topic.close] and [Subscription.close] on every [Topic] and
+  /// [Subscription] you used before closing the client. Once the client is
+  /// closed, publishing, acknowledging, and modifying ack deadlines fail
+  /// immediately with a [StateError], including for operations that a [Topic]
+  /// or [Subscription] still has buffered.
   Future<void> close() async {
     _isClosed = true;
     await _channel.shutdown();
@@ -254,8 +259,8 @@ final class PubSub {
     try {
       await _publisher.createTopic(topicProto, options: await _callOptions);
       return result;
-    } on GrpcError catch (error) {
-      throw _mapGrpcError(error);
+    } on GrpcError catch (e) {
+      throw _mapGrpcError(e);
     }
   }
 
@@ -270,8 +275,8 @@ final class PubSub {
     final request = grpc.DeleteTopicRequest()..topic = topic;
     try {
       await _publisher.deleteTopic(request, options: await _callOptions);
-    } on GrpcError catch (error) {
-      throw _mapGrpcError(error);
+    } on GrpcError catch (e) {
+      throw _mapGrpcError(e);
     }
   }
 
@@ -345,8 +350,8 @@ final class PubSub {
         options: await _callOptions,
       );
       return response.messageIds;
-    } on GrpcError catch (error) {
-      throw _mapGrpcError(error);
+    } on GrpcError catch (e) {
+      throw _mapGrpcError(e);
     }
   }
 
@@ -395,8 +400,8 @@ final class PubSub {
         options: await _callOptions,
       );
       return result;
-    } on GrpcError catch (error) {
-      throw _mapGrpcError(error);
+    } on GrpcError catch (e) {
+      throw _mapGrpcError(e);
     }
   }
 
@@ -416,8 +421,8 @@ final class PubSub {
         request,
         options: await _callOptions,
       );
-    } on GrpcError catch (error) {
-      throw _mapGrpcError(error);
+    } on GrpcError catch (e) {
+      throw _mapGrpcError(e);
     }
   }
 
@@ -462,8 +467,8 @@ final class PubSub {
             ),
           )
           .toList();
-    } on GrpcError catch (error) {
-      throw _mapGrpcError(error);
+    } on GrpcError catch (e) {
+      throw _mapGrpcError(e);
     }
   }
 
@@ -517,27 +522,23 @@ final class PubSub {
       );
       // TODO(sigurdm): Retry on broken connections.
       void handleAck(List<String> ackIds) {
-        if (requestController.isClosed) {
-          throw StateError(
-            'Cannot acknowledge message: streaming pull connection has closed.',
+        if (!requestController.isClosed) {
+          requestController.add(
+            grpc.StreamingPullRequest()..ackIds.addAll(ackIds),
           );
         }
-        requestController.add(
-          grpc.StreamingPullRequest()..ackIds.addAll(ackIds),
-        );
       }
 
       void handleModifyDeadline(List<String> ackIds, int seconds) {
-        if (requestController.isClosed) {
-          throw StateError(
-            'Cannot modify ack deadline: streaming pull connection has closed.',
+        if (!requestController.isClosed) {
+          requestController.add(
+            grpc.StreamingPullRequest()
+              ..modifyDeadlineAckIds.addAll(ackIds)
+              ..modifyDeadlineSeconds.addAll(
+                List.filled(ackIds.length, seconds),
+              ),
           );
         }
-        requestController.add(
-          grpc.StreamingPullRequest()
-            ..modifyDeadlineAckIds.addAll(ackIds)
-            ..modifyDeadlineSeconds.addAll(List.filled(ackIds.length, seconds)),
-        );
       }
 
       final responseStream = _subscriber.streamingPull(
@@ -553,8 +554,8 @@ final class PubSub {
           );
         }
       }
-    } on GrpcError catch (error) {
-      throw _mapGrpcError(error);
+    } on GrpcError catch (e) {
+      throw _mapGrpcError(e);
     } finally {
       await requestController.close();
     }
@@ -571,10 +572,18 @@ final class PubSub {
   /// but such a message may be redelivered later. Acknowledging a message more
   /// than once will not result in an error.
   ///
+  /// It is an error to call this after [close].
+  ///
   /// Throws a [NotFoundException] if the subscription does not exist.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.Acknowledge).
   Future<void> acknowledge(String subscription, List<String> ackIds) async {
+    // A shut-down channel fails every call with UNAVAILABLE, which
+    // `Subscription` would otherwise retry until its retry budget runs out. A
+    // `StateError` is not retried.
+    if (_isClosed) {
+      throw StateError('Cannot acknowledge using a closed PubSub client.');
+    }
     if (ackIds.isEmpty) return;
     final request = grpc.AcknowledgeRequest()
       ..subscription = subscription
@@ -582,8 +591,8 @@ final class PubSub {
 
     try {
       await _subscriber.acknowledge(request, options: await _callOptions);
-    } on GrpcError catch (error) {
-      throw _mapGrpcError(error);
+    } on GrpcError catch (e) {
+      throw _mapGrpcError(e);
     }
   }
 
@@ -601,7 +610,8 @@ final class PubSub {
   /// may succeed, but those messages may have already been redelivered or
   /// made available for redelivery.
   ///
-  /// It is an error if [ackDeadlineSeconds] is negative.
+  /// It is an error if [ackDeadlineSeconds] is not between 0 and 600 seconds.
+  /// It is an error to call this after [close].
   ///
   /// Throws a [NotFoundException] if the subscription does not exist.
   ///
@@ -611,11 +621,16 @@ final class PubSub {
     List<String> ackIds,
     int ackDeadlineSeconds,
   ) async {
-    if (ackDeadlineSeconds < 0) {
+    if (ackDeadlineSeconds < 0 || ackDeadlineSeconds > 600) {
       throw ArgumentError.value(
         ackDeadlineSeconds,
         'ackDeadlineSeconds',
-        'Must be non-negative',
+        'Must be between 0 and 600 seconds',
+      );
+    }
+    if (_isClosed) {
+      throw StateError(
+        'Cannot modify ack deadline using a closed PubSub client.',
       );
     }
     if (ackIds.isEmpty) return;
@@ -626,8 +641,8 @@ final class PubSub {
 
     try {
       await _subscriber.modifyAckDeadline(request, options: await _callOptions);
-    } on GrpcError catch (error) {
-      throw _mapGrpcError(error);
+    } on GrpcError catch (e) {
+      throw _mapGrpcError(e);
     }
   }
 
@@ -654,8 +669,8 @@ final class PubSub {
   // - DeleteSchema
   // - ValidateSchema
   // - ValidateMessage
-  Exception _mapGrpcError(GrpcError error) {
-    final message = error.message ?? 'Unknown gRPC error';
+  Exception _mapGrpcError(GrpcError e) {
+    final message = e.message ?? 'Unknown gRPC error';
     // Preserve the gRPC status code on `ServiceException.status` (matching how
     // `ServiceException.fromHttpResponse` populates it for REST errors).
     // Because multiple gRPC codes map to the same HTTP exception class (e.g.
@@ -663,8 +678,8 @@ final class PubSub {
     // `INTERNAL`, `UNKNOWN`, and `DATA_LOSS` all map to
     // `InternalServerErrorException`), `ExponentialRetry.isRetryable` inspects
     // `status.code` to retry `ABORTED` and avoid retrying `DATA_LOSS`.
-    final status = Status(code: error.code, message: message);
-    return switch (error.code) {
+    final status = Status(code: e.code, message: message);
+    return switch (e.code) {
       StatusCode.invalidArgument => BadRequestException(
         message,
         status: status,
@@ -707,7 +722,7 @@ final class PubSub {
         message,
         status: status,
       ),
-      _ => ServiceException(message, statusCode: error.code, status: status),
+      _ => ServiceException(message, statusCode: e.code, status: status),
     };
   }
 }

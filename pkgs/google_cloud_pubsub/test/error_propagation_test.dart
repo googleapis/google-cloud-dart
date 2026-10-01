@@ -586,5 +586,36 @@ void main() {
       expect(receivedMessage.data, equals([1, 2, 3]));
       expect(receivedMessage.attributes, equals({'key': 'value'}));
     });
+
+    test('Message copies data and attributes', () {
+      final rawData = [1, 2, 3];
+      final rawAttributes = {'key': 'value'};
+      final message = Message(data: rawData, attributes: rawAttributes);
+
+      rawData[0] = 99;
+      rawAttributes['key'] = 'mutated';
+
+      expect(message.data, equals([1, 2, 3]));
+      expect(message.attributes, equals({'key': 'value'}));
+      expect(() => message.attributes['other'] = 'x', throwsUnsupportedError);
+    });
+
+    test(
+      'acknowledge and modifyAckDeadline without handler throw StateError',
+      () async {
+        final receivedMessage = ReceivedMessage(
+          ackId: 'ack-123',
+          messageId: 'msg-456',
+          publishTime: DateTime.now(),
+          message: Message(data: [1, 2, 3]),
+        );
+
+        await expectLater(receivedMessage.acknowledge(), throwsStateError);
+        await expectLater(
+          receivedMessage.modifyAckDeadline(10),
+          throwsStateError,
+        );
+      },
+    );
   });
 }

@@ -13,7 +13,6 @@
 // limitations under the License.
 
 import 'dart:async';
-import 'dart:typed_data';
 
 import '../google_cloud_pubsub.dart';
 import 'batching.dart';
@@ -240,12 +239,10 @@ final class Topic {
       throw StateError('Cannot publish to a closed Topic.');
     }
     final completer = Completer<String>();
-    // Copy the caller's data and attributes: the message is sent after this
-    // method returns, and its size has already been counted towards the batch.
-    final message = Message(
-      data: Uint8List.fromList(data),
-      attributes: attributes == null ? null : Map.unmodifiable(attributes),
-    );
+    // `Message` copies `data` and wraps `attributes` in an unmodifiable map so
+    // mutating them after this call does not affect the buffered message or its
+    // precomputed wire size.
+    final message = Message(data: data, attributes: attributes);
     _batcher.add(_PublishRequest(message, completer));
     return completer.future;
   }
