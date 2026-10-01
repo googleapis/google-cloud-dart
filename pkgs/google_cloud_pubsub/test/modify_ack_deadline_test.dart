@@ -18,6 +18,7 @@ library;
 import 'dart:convert';
 
 import 'package:google_cloud_pubsub/google_cloud_pubsub.dart';
+import 'package:grpc/grpc.dart' as grpc;
 import 'package:test/test.dart';
 
 import 'test_utils.dart';
@@ -149,7 +150,80 @@ void main() {
         };
         expect(bySeconds[30], ['ack-1', 'ack-2']);
         expect(bySeconds[0], ['ack-3']);
+        expect(
+          () => sub.modifyAckDeadline(dummyMessage('ack-4'), 10),
+          throwsStateError,
+        );
+        expect(
+          () => sub.modifyAckDeadlineNow([dummyMessage('ack-4')], 10),
+          throwsStateError,
+        );
       });
+
+      test('retries on transient error', () async {
+        var attempts = 0;
+        fakeSubscriber.modifyAckDeadlineBehavior = (ackIds, seconds) async {
+          if (++attempts == 1) {
+            throw const grpc.GrpcError.unavailable('Transient');
+          }
+        };
+
+        final sub = client.subscription(
+          'test-sub',
+          ackSettings: AckSettings(
+            retry: const ExponentialRetry(
+              initialDelay: Duration(milliseconds: 1),
+            ),
+          ),
+        )..modifyAckDeadline(dummyMessage('ack-1'), 30);
+
+        await sub.close();
+        expect(attempts, 2);
+      });
+
+      test('rejects ackDeadlineSeconds outside 0..600', () async {
+        final sub = client.subscription('test-sub');
+        final message = dummyMessage('ack-1');
+
+        for (final invalid in [-1, 601]) {
+          expect(
+            () => sub.modifyAckDeadline(message, invalid),
+            throwsArgumentError,
+          );
+          expect(
+            () => sub.modifyAckDeadlineNow([message], invalid),
+            throwsArgumentError,
+          );
+          await expectLater(
+            client.modifyAckDeadline(
+              'projects/test-project/subscriptions/test-sub',
+              ['ack-1'],
+              invalid,
+            ),
+            throwsArgumentError,
+          );
+          await expectLater(
+            message.modifyAckDeadline(invalid),
+            throwsArgumentError,
+          );
+        }
+      });
+
+      test(
+        'does not retry buffered deadline modifications after PubSub.close()',
+        () async {
+          final sub = client.subscription(
+            'test-sub',
+            ackSettings: AckSettings(
+              batching: BatchingSettings(maxDelay: const Duration(seconds: 10)),
+            ),
+          )..modifyAckDeadline(dummyMessage('ack-1'), 30);
+
+          await client.close();
+          await sub.close();
+          expect(fakeSubscriber.modifyAckDeadlineCallCount, 0);
+        },
+      );
 
       test(
         'keeps every emitted ModifyAckDeadlineRequest within maxBytes',

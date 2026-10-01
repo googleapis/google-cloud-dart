@@ -15,11 +15,12 @@
   every request kind accepts. Creating a `Topic` or `Subscription` whose
   settings exceed what the server accepts for the request being batched throws
   an `ArgumentError`: 10,000,000 bytes and 1,000 messages for publishing,
-  512,000 bytes for acknowledgments.
+  512,000 bytes for acknowledgments and deadline modifications.
 - `Topic.publish` now buffers messages, sends them in batches, and retries
   failed batches using `PublishSettings.retry`.
-- Added background acknowledgment and deadline modification batching for
-  `Subscription.acknowledge` and `Subscription.modifyAckDeadline`.
+- `Subscription.acknowledge` and `Subscription.modifyAckDeadline` now buffer
+  requests, send them in batches, and retry failed batches using
+  `AckSettings.retry`.
 - Added `close()` and `isClosed` on `Topic` and `Subscription`.
 - Re-exported `RetryRunner` and `ExponentialRetry` from
   `package:google_cloud_rpc` and added `defaultRetry` to configure exponential
