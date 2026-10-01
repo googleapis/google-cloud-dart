@@ -24,9 +24,12 @@ final class Message {
   final Uint8List data;
 
   /// Optional attributes for this message.
+  ///
+  /// This map is unmodifiable.
   final Map<String, String> attributes;
 
-  /// Creates a new [Message] with the given [data] and optional [attributes].
+  /// Creates a new [Message] with a copy of [data] and an unmodifiable copy of
+  /// [attributes].
   Message({required List<int> data, Map<String, String>? attributes})
     : data = Uint8List.fromList(data),
       attributes = attributes == null ? const {} : Map.unmodifiable(attributes);
