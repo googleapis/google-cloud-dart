@@ -25,10 +25,8 @@ final class AckSettings {
   ///
   /// Pub/Sub accepts at most 512,000 bytes in an `Acknowledge` or
   /// `ModifyAckDeadline` request, which is also the default
-  /// [BatchingSettings.maxBytes]. Validated when a [Subscription] is created:
-  /// the [Subscription] constructors, and [PubSub.subscription],
-  /// [PubSub.subscriptionName], and [PubSub.createSubscription], throw an
-  /// [ArgumentError] if [BatchingSettings.maxBytes] exceeds 512,000.
+  /// [BatchingSettings.maxBytes]. Creating a [Subscription] with a larger
+  /// [BatchingSettings.maxBytes] throws an [ArgumentError].
   final BatchingSettings batching;
 
   /// How failed `Acknowledge` and `ModifyAckDeadline` requests are retried.
@@ -90,8 +88,7 @@ final class Subscription {
   /// A subscription with the given [subscriptionId] in the client's project.
   ///
   /// It is an error if the constructed subscription name is invalid (e.g. if
-  /// [subscriptionId] contains slashes), or if [ackSettings] exceeds the
-  /// limits described in [AckSettings.batching].
+  /// [subscriptionId] contains slashes).
   Subscription.unqualified(
     this.pubsub,
     String subscriptionId, {
@@ -107,8 +104,7 @@ final class Subscription {
   /// Useful for cross-project access.
   ///
   /// It is an error if [name] is not in the format
-  /// `projects/<project-id>/subscriptions/<subscription-id>`, or if
-  /// [ackSettings] exceeds the limits described in [AckSettings.batching].
+  /// `projects/<project-id>/subscriptions/<subscription-id>`.
   Subscription(this.pubsub, this.name, {AckSettings? ackSettings})
     : ackSettings = ackSettings ?? AckSettings() {
     _validateName(name);
@@ -252,10 +248,14 @@ final class Subscription {
   }
 
   Future<void> _onModifyAckBatch(List<_ModifyAckDeadlineRequest> batch) async {
+    // If the same ackId was modified multiple times within the batch (e.g.
+    // lease extension followed by nack), preserve only the latest deadline.
     final latestByAckId = <String, int>{};
     for (final request in batch) {
       latestByAckId[request.ackId] = request.ackDeadlineSeconds;
     }
+    // Group requests by deadline since each ModifyAckDeadlineRequest carries a
+    // single ackDeadlineSeconds value for all of its ackIds.
     final byDeadline = <int, List<String>>{};
     for (final entry in latestByAckId.entries) {
       byDeadline.putIfAbsent(entry.value, () => []).add(entry.key);
@@ -276,9 +276,8 @@ final class Subscription {
     );
   }
 
-  /// Acknowledges the [messages] immediately via a unary RPC.
-  ///
-  /// Bypasses background batching and immediately executes a unary RPC.
+  /// Acknowledges the [messages] immediately in a single unary RPC without
+  /// batching or retry.
   ///
   /// It is an error if called on a closed [Subscription].
   /// Throws a [NotFoundException] if the subscription does not exist.
@@ -307,9 +306,9 @@ final class Subscription {
   ///
   /// It is an error if called on a closed [Subscription].
   ///
-  /// This is a non-blocking, fire-and-forget operation. If a background ACK
-  /// fails permanently, the message will eventually be redelivered by the
-  /// server after its ack deadline expires.
+  /// This is a non-blocking, fire-and-forget operation. If a background
+  /// acknowledgment fails permanently, the message will eventually be
+  /// redelivered by the server after its ack deadline expires.
   ///
   /// See [acknowledgeNow] for an immediate, awaitable alternative.
   void acknowledge(ReceivedMessage message) {
@@ -319,9 +318,8 @@ final class Subscription {
     _ackBatcher.add(_AckRequest(message.ackId));
   }
 
-  /// Modifies the ack deadline for [messages] immediately via a unary RPC.
-  ///
-  /// Bypasses background batching and immediately executes a unary RPC.
+  /// Modifies the ack deadline for [messages] immediately in a single unary
+  /// RPC without batching or retry.
   ///
   /// [ackDeadlineSeconds] must be the new ack deadline in seconds, relative to
   /// the time the request is received. For example, if [ackDeadlineSeconds] is
