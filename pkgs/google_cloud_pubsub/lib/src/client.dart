@@ -463,7 +463,14 @@ final class PubSub {
     }
   }
 
-  /// Low-level streaming pull over an explicit [requestStream].
+  /// Opens a `StreamingPull` bidirectional stream using [requestStream] for
+  /// client-to-server requests (initial subscription setup, acknowledgments,
+  /// and deadline modifications) and returns the server-to-client stream of
+  /// [ReceivedMessage]s.
+  ///
+  /// Invokes [onConnected] when the server sends the initial response headers,
+  /// and attaches [ackHandler] and [modifyDeadlineHandler] to each yielded
+  /// [ReceivedMessage].
   ///
   /// Used internally by [streamingPull] and [Subscription.streamingPull].
   @internal
@@ -473,112 +480,46 @@ final class PubSub {
     FutureOr<void> Function(List<String> ackIds)? ackHandler,
     FutureOr<void> Function(List<String> ackIds, int ackDeadlineSeconds)?
     modifyDeadlineHandler,
-  }) {
-    late StreamController<ReceivedMessage> controller;
-    StreamSubscription<grpc.StreamingPullResponse>? streamSubscription;
-    var isPaused = false;
-    var isCancelled = false;
-    controller = StreamController<ReceivedMessage>(
-      onListen: () async {
-        try {
-          if (_isClosed) {
-            throw StateError(
-              'Cannot stream messages using a closed PubSub client.',
-            );
-          }
-          final options = await _callOptions;
-          if (isCancelled) {
-            unawaited(controller.close());
-            return;
-          }
-          if (_isClosed) {
-            throw StateError(
-              'Cannot stream messages using a closed PubSub client.',
-            );
-          }
-          final responseStream = _subscriber.streamingPull(
-            requestStream,
-            options: options,
-          );
-          // Any RPC or connection errors are forwarded to the stream listener
-          // below. Suppress errors on this unawaited headers future to avoid
-          // uncaught asynchronous errors in the zone.
-          unawaited(
-            responseStream.headers
-                .then((_) {
-                  if (!isCancelled) {
-                    onConnected?.call();
-                  }
-                })
-                .catchError((_) {}),
-          );
-          streamSubscription = responseStream.listen(
-            (response) {
-              for (final receivedMessage in response.receivedMessages) {
-                controller.add(
-                  _mapReceivedMessage(
-                    receivedMessage,
-                    ackHandler: ackHandler,
-                    modifyDeadlineHandler: modifyDeadlineHandler,
-                  ),
-                );
-              }
-            },
-            onError: (Object e, StackTrace stackTrace) {
-              if (_isClosed) {
-                controller.addError(
-                  StateError(
-                    'Cannot stream messages using a closed PubSub client.',
-                  ),
-                  stackTrace,
-                );
-              } else if (e is GrpcError) {
-                controller.addError(_mapGrpcError(e), stackTrace);
-              } else {
-                controller.addError(e, stackTrace);
-              }
-              unawaited(controller.close());
-            },
-            onDone: () {
-              unawaited(controller.close());
-            },
-            cancelOnError: true,
-          );
-          if (isPaused) {
-            streamSubscription?.pause();
-          }
-        } catch (e, stackTrace) {
-          if (!isCancelled && !controller.isClosed) {
-            if (_isClosed) {
-              controller.addError(
-                StateError(
-                  'Cannot stream messages using a closed PubSub client.',
-                ),
-                stackTrace,
-              );
-            } else if (e is GrpcError) {
-              controller.addError(_mapGrpcError(e), stackTrace);
-            } else {
-              controller.addError(e, stackTrace);
-            }
-            unawaited(controller.close());
-          }
-        }
-      },
-      onPause: () {
-        isPaused = true;
-        streamSubscription?.pause();
-      },
-      onResume: () {
-        isPaused = false;
-        streamSubscription?.resume();
-      },
-      onCancel: () {
-        isCancelled = true;
-        return streamSubscription?.cancel();
-      },
+  }) async* {
+    if (_isClosed) {
+      throw StateError('Cannot stream messages using a closed PubSub client.');
+    }
+    final responseStream = _subscriber.streamingPull(
+      requestStream,
+      options: await _callOptions,
     );
-    return controller.stream;
+    if (onConnected != null) {
+      // Any RPC or connection errors are forwarded to `responseStream` below.
+      // Suppress errors on this unawaited `headers` future to avoid uncaught
+      // asynchronous errors in the zone.
+      unawaited(
+        responseStream.headers.then((_) => onConnected()).catchError((_) {}),
+      );
+    }
+    yield* responseStream
+        .expand(
+          (response) => response.receivedMessages.map(
+            (receivedMessage) => _mapReceivedMessage(
+              receivedMessage,
+              ackHandler: ackHandler,
+              modifyDeadlineHandler: modifyDeadlineHandler,
+            ),
+          ),
+        )
+        .handleError((Object e, StackTrace stackTrace) {
+          if (_isClosed) {
+            Error.throwWithStackTrace(
+              StateError(
+                'Cannot stream messages using a closed PubSub client.',
+              ),
+              stackTrace,
+            );
+          }
+          if (e is GrpcError) {
+            Error.throwWithStackTrace(_mapGrpcError(e), stackTrace);
+          }
+          Error.throwWithStackTrace(e, stackTrace);
+        });
   }
 
   /// Establishes a single streaming pull connection with the server.
