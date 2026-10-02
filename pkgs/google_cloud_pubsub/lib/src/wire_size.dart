@@ -108,13 +108,13 @@ int modifyAckDeadlineRequestBaseSize(String subscription) =>
     tagSize(_modifyDeadlineSecondsField);
 
 /// The number of bytes an item with [ackId] and [ackDeadlineSeconds] adds to
-/// a `ModifyAckDeadlineRequest` batch.
+/// a `ModifyAckDeadlineRequest` or `StreamingPullRequest` batch.
 ///
-/// Charges the varint encoding of [ackDeadlineSeconds] on every item because
-/// the deadline value is supplied per item rather than fixed when the batcher
-/// is created. This is exact for a single-item `ModifyAckDeadlineRequest`
-/// (with a non-zero deadline) and a conservative upper bound when multiple ack
-/// IDs share a deadline.
+/// Charges the varint encoding of [ackDeadlineSeconds] on every item: a
+/// `StreamingPullRequest` carries a `modifyDeadlineSeconds` list parallel to
+/// `modifyDeadlineAckIds`, and on a unary `ModifyAckDeadlineRequest` (where the
+/// deadline is shared) the deadline value is supplied per item rather than
+/// fixed when the batcher is created. This is an upper bound on both paths.
 @internal
 int modifyAckDeadlineRequestItemSize(String ackId, int ackDeadlineSeconds) =>
     lengthDelimitedSize(_modifyDeadlineAckIdsField, utf8.encode(ackId).length) +
