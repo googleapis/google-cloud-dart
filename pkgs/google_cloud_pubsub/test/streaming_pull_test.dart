@@ -20,18 +20,18 @@ import 'dart:convert';
 
 import 'package:google_cloud_pubsub/google_cloud_pubsub.dart';
 import 'package:google_cloud_pubsub/src/generated/google/pubsub/v1/pubsub.pb.dart'
-    as pb;
+    as generated;
 import 'package:grpc/grpc.dart' as grpc;
 import 'package:protobuf/well_known_types/google/protobuf/timestamp.pb.dart'
-    as timestamp_pb;
+    as protobuf;
 import 'package:test/test.dart';
 
 import 'test_utils.dart';
 
 class _StreamingSubscriberFake extends FakeSubscriberClient {
-  final List<StreamController<pb.StreamingPullResponse>> responseControllers =
-      [];
-  final List<List<pb.StreamingPullRequest>> connectionRequests = [];
+  final List<StreamController<generated.StreamingPullResponse>>
+  responseControllers = [];
+  final List<List<generated.StreamingPullRequest>> connectionRequests = [];
   Completer<void> _nextConnection = Completer<void>();
 
   Future<void> waitForConnections(int count) async {
@@ -41,12 +41,12 @@ class _StreamingSubscriberFake extends FakeSubscriberClient {
   }
 
   @override
-  grpc.ResponseStream<pb.StreamingPullResponse> streamingPull(
-    Stream<pb.StreamingPullRequest> request, {
+  grpc.ResponseStream<generated.StreamingPullResponse> streamingPull(
+    Stream<generated.StreamingPullRequest> request, {
     grpc.CallOptions? options,
   }) {
-    final controller = StreamController<pb.StreamingPullResponse>();
-    final recorded = <pb.StreamingPullRequest>[];
+    final controller = StreamController<generated.StreamingPullResponse>();
+    final recorded = <generated.StreamingPullRequest>[];
     responseControllers.add(controller);
     connectionRequests.add(recorded);
     if (!_nextConnection.isCompleted) {
@@ -64,16 +64,16 @@ class _StreamingSubscriberFake extends FakeSubscriberClient {
   }
 }
 
-pb.StreamingPullResponse _makeResponse(String ackId, String text) =>
-    pb.StreamingPullResponse()
+generated.StreamingPullResponse _makeResponse(String ackId, String text) =>
+    generated.StreamingPullResponse()
       ..receivedMessages.add(
-        pb.ReceivedMessage()
+        generated.ReceivedMessage()
           ..ackId = ackId
           ..deliveryAttempt = 1
-          ..message = (pb.PubsubMessage()
+          ..message = (generated.PubsubMessage()
             ..messageId = 'id-$ackId'
             ..data = text.codeUnits
-            ..publishTime = timestamp_pb.Timestamp.fromDateTime(
+            ..publishTime = protobuf.Timestamp.fromDateTime(
               DateTime.utc(2026, 1, 1),
             )),
       );
@@ -502,6 +502,125 @@ void main() {
           await streamSubscription.cancel();
         },
       );
+
+      test(
+        'Subscription.close cancels active streamingPull and flushes pending '
+        'batches via unary RPC',
+        () async {
+          final subscription = client.subscription(
+            'test-sub',
+            ackSettings: AckSettings(
+              batching: BatchingSettings(
+                maxMessages: 10,
+                maxDelay: const Duration(seconds: 10),
+              ),
+            ),
+          );
+
+          final completer = Completer<ReceivedMessage>();
+          final doneCompleter = Completer<void>();
+          subscription.streamingPull().listen(
+            completer.complete,
+            onDone: doneCompleter.complete,
+          );
+
+          await fakeSubscriber.waitForConnections(1);
+          fakeSubscriber.responseControllers[0].add(_makeResponse('a1', 'm1'));
+          final message = await completer.future;
+
+          // Buffer an ack and a deadline modification while the stream is open,
+          // then close the subscription without cancelling the stream first.
+          subscription
+            ..modifyAckDeadline(message, 30)
+            ..acknowledge(message);
+          await subscription.close();
+          await doneCompleter.future;
+
+          expect(fakeSubscriber.modifyAckDeadlineCalled, isTrue);
+          expect(fakeSubscriber.lastModifyAckDeadlineIds, ['a1']);
+          expect(fakeSubscriber.lastModifyAckDeadlineSeconds, 30);
+          expect(fakeSubscriber.acknowledgeCalled, isTrue);
+          expect(fakeSubscriber.lastAckIds, ['a1']);
+        },
+      );
+
+      test(
+        'automatically reconnects when server closes stream cleanly',
+        () async {
+          final subscription = client.subscription('test-sub');
+          final received = <String>[];
+          final streamSubscription = subscription
+              .streamingPull(
+                retry: const ExponentialRetry(
+                  initialDelay: Duration(milliseconds: 5),
+                ),
+              )
+              .listen(
+                (message) => received.add(String.fromCharCodes(message.data)),
+              );
+
+          await fakeSubscriber.waitForConnections(1);
+          await fakeSubscriber.responseControllers[0].close();
+
+          await fakeSubscriber.waitForConnections(2);
+          fakeSubscriber.responseControllers[1].add(
+            _makeResponse('a2', 'after-clean-close'),
+          );
+          await Future<void>.delayed(const Duration(milliseconds: 20));
+
+          expect(received, ['after-clean-close']);
+          await streamSubscription.cancel();
+        },
+      );
+
+      test('PubSub.streamingPull streams acks and falls back to unary RPC '
+          'after stream closes', () async {
+        expect(() => client.streamingPull(''), throwsArgumentError);
+        expect(
+          () => client.streamingPull(
+            'projects/test-project/subscriptions/test-sub',
+            streamAckDeadlineSeconds: 9,
+          ),
+          throwsArgumentError,
+        );
+
+        final completer = Completer<ReceivedMessage>();
+        final streamSubscription = client
+            .streamingPull('projects/test-project/subscriptions/test-sub')
+            .listen(completer.complete);
+
+        await fakeSubscriber.waitForConnections(1);
+        fakeSubscriber.responseControllers[0].add(_makeResponse('a1', 'm1'));
+        final message = await completer.future;
+
+        await message.modifyAckDeadline(20);
+        await message.acknowledge();
+        await Future<void>.delayed(const Duration(milliseconds: 20));
+
+        expect(
+          fakeSubscriber.connectionRequests[0].any(
+            (request) =>
+                request.modifyDeadlineAckIds.contains('a1') &&
+                request.modifyDeadlineSeconds.contains(20),
+          ),
+          isTrue,
+        );
+        expect(
+          fakeSubscriber.connectionRequests[0].any(
+            (request) => request.ackIds.contains('a1'),
+          ),
+          isTrue,
+        );
+
+        await streamSubscription.cancel();
+        await message.modifyAckDeadline(40);
+        await message.acknowledge();
+
+        expect(fakeSubscriber.modifyAckDeadlineCalled, isTrue);
+        expect(fakeSubscriber.lastModifyAckDeadlineSeconds, 40);
+        expect(fakeSubscriber.acknowledgeCalled, isTrue);
+        expect(fakeSubscriber.lastAckIds, ['a1']);
+      });
     });
   });
 }

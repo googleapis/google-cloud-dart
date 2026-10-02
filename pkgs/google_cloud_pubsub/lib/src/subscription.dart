@@ -318,16 +318,17 @@ final class Subscription {
 
   /// Deletes this subscription on the server.
   ///
+  /// All messages retained in the subscription are immediately dropped.
+  ///
   /// Throws a [NotFoundException] if the subscription does not exist.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.DeleteSubscription).
   Future<void> delete() => pubsub.deleteSubscription(name);
 
-  /// Pulls up to [maxMessages] from this subscription.
+  /// Pulls messages from the server.
   ///
   /// It is an error if [maxMessages] is not greater than 0.
   /// It is an error if called on a closed [Subscription].
-  ///
   /// Throws a [NotFoundException] if the subscription does not exist.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.Pull).
@@ -428,6 +429,12 @@ final class Subscription {
       }
       reconnectTimers.clear();
 
+      final requestControllersToClose = requestControllers.toList();
+      requestControllers.clear();
+      for (final requestController in requestControllersToClose) {
+        _activeStreams.remove(requestController);
+      }
+
       final subscriptionsToCancel = currentSubscriptions.toList();
       currentSubscriptions.clear();
       await Future.wait(
@@ -436,10 +443,7 @@ final class Subscription {
         ),
       );
 
-      final requestControllersToClose = requestControllers.toList();
-      requestControllers.clear();
       for (final requestController in requestControllersToClose) {
-        _activeStreams.remove(requestController);
         unawaited(requestController.dispose());
       }
     }
@@ -499,7 +503,7 @@ final class Subscription {
       await pubsub.modifyAckDeadline(name, ackIds, ackDeadlineSeconds);
     }
 
-    void connect(Iterator<Duration> delays) {
+    void connect([Iterator<Duration>? delays]) {
       if (_isClosed || isCancelled || controller.isClosed) return;
 
       late final DisposableStreamController<grpc.StreamingPullRequest>
@@ -547,16 +551,15 @@ final class Subscription {
         if (_isClosed || isCancelled || controller.isClosed) return;
 
         if (error != null && !effectiveRetry.isRetryable(error)) {
-          isCancelled = true;
-          controller.addError(error, stackTrace);
-          await cancelAll();
           activeOrReconnectingStreams = 0;
-          _activeStreamingPulls.remove(session);
-          unawaited(controller.close());
+          await cancelSession();
+          if (!controller.isClosed) {
+            controller.addError(error, stackTrace);
+            unawaited(controller.close());
+          }
           return;
         }
 
-        var nextDelays = delays;
         final uptime = connectionStopwatch?.elapsed ?? Duration.zero;
         // A quiet subscription can stay connected for long periods without
         // receiving messages. Treating a connection that stayed open for at
@@ -564,9 +567,9 @@ final class Subscription {
         // disconnects from accumulating backoff up to `maxDelay`.
         final wasHealthy =
             hasReceivedItem || (uptime >= const Duration(seconds: 15));
-        if (wasHealthy) {
-          nextDelays = effectiveRetry.delays().iterator;
-        }
+        final nextDelays = (wasHealthy || delays == null)
+            ? effectiveRetry.delays().iterator
+            : delays;
         if (nextDelays.moveNext()) {
           late Timer timer;
           timer = Timer(nextDelays.current, () {
@@ -582,13 +585,13 @@ final class Subscription {
             lastStackTrace = stackTrace;
           }
           if (activeOrReconnectingStreams == 0) {
-            isCancelled = true;
-            if (lastError != null) {
-              controller.addError(lastError!, lastStackTrace);
+            await cancelSession();
+            if (!controller.isClosed) {
+              if (lastError != null) {
+                controller.addError(lastError!, lastStackTrace);
+              }
+              unawaited(controller.close());
             }
-            await cancelAll();
-            _activeStreamingPulls.remove(session);
-            unawaited(controller.close());
           }
         }
       }
@@ -628,7 +631,7 @@ final class Subscription {
         }
         _activeStreamingPulls.add(session);
         for (var i = 0; i < maxConcurrentStreams; i++) {
-          connect(effectiveRetry.delays().iterator);
+          connect();
         }
       },
 

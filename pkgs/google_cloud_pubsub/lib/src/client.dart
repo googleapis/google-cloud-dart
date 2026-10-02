@@ -549,7 +549,14 @@ final class PubSub {
           }
         } catch (e, stackTrace) {
           if (!isCancelled && !controller.isClosed) {
-            if (e is GrpcError) {
+            if (_isClosed) {
+              controller.addError(
+                StateError(
+                  'Cannot stream messages using a closed PubSub client.',
+                ),
+                stackTrace,
+              );
+            } else if (e is GrpcError) {
               controller.addError(_mapGrpcError(e), stackTrace);
             } else {
               controller.addError(e, stackTrace);
