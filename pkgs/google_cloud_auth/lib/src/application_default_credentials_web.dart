@@ -20,8 +20,10 @@ import 'google_credentials.dart';
 /// Provides the Application Default Credential from the environment.
 ///
 /// Always throws a [CredentialException] on the web, where environment
-/// variables, local credential files, and the Compute Engine metadata server
-/// are unavailable.
+/// variables and local credential files are unavailable, and where the
+/// Compute Engine metadata server cannot be used (browsers rarely run on
+/// Compute Engine, and the metadata server does not support CORS preflight
+/// requests for the required `Metadata-Flavor` header).
 Future<GoogleCredentials> defaultCredentials({http.Client? client}) async {
   throw CredentialException(
     'Application Default Credentials are not supported on the web.',
