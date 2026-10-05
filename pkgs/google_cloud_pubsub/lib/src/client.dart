@@ -480,8 +480,21 @@ final class PubSub {
     FutureOr<void> Function(List<String> ackIds)? ackHandler,
     FutureOr<void> Function(List<String> ackIds, int ackDeadlineSeconds)?
     modifyDeadlineHandler,
-  }) =>
-      Stream<ReceivedMessage>.multi((controller) async {
+  }) {
+    // An explicit `StreamController` is used instead of an `async*` generator
+    // so we can check `controller.hasListener` after `await _callOptions`.
+    // Calling `_subscriber.streamingPull` starts the HTTP/2 request and
+    // subscribes to `requestStream` immediately, even before `responseStream`
+    // is listened to; if the caller cancels while awaiting `_callOptions`, an
+    // `async*` generator would still start the gRPC call and then exit at
+    // `yield*` without ever cancelling `responseStream`.
+    //
+    // Once started, `controller.addStream(..., cancelOnError: true)` forwards
+    // pause, resume, and cancel to `responseStream` and cancels the RPC on the
+    // first error so `controller.close()` completes immediately.
+    late final StreamController<ReceivedMessage> controller;
+    controller = StreamController<ReceivedMessage>(
+      onListen: () async {
         try {
           if (_isClosed) {
             throw StateError(
@@ -523,23 +536,25 @@ final class PubSub {
           }
         } catch (e, stackTrace) {
           if (controller.hasListener) {
-            controller
-              ..addError(e, stackTrace)
-              ..closeSync();
+            controller.addError(e, stackTrace);
+            unawaited(controller.close());
           }
         }
-      }).handleError((Object e, StackTrace stackTrace) {
-        if (_isClosed) {
-          Error.throwWithStackTrace(
-            StateError('Cannot stream messages using a closed PubSub client.'),
-            stackTrace,
-          );
-        }
-        if (e is GrpcError) {
-          Error.throwWithStackTrace(_mapGrpcError(e), stackTrace);
-        }
-        Error.throwWithStackTrace(e, stackTrace);
-      });
+      },
+    );
+    return controller.stream.handleError((Object e, StackTrace stackTrace) {
+      if (_isClosed) {
+        Error.throwWithStackTrace(
+          StateError('Cannot stream messages using a closed PubSub client.'),
+          stackTrace,
+        );
+      }
+      if (e is GrpcError) {
+        Error.throwWithStackTrace(_mapGrpcError(e), stackTrace);
+      }
+      Error.throwWithStackTrace(e, stackTrace);
+    });
+  }
 
   /// Establishes a single streaming pull connection with the server.
   ///
