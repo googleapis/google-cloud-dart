@@ -17,34 +17,9 @@ import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
 
-// Just enough DER to pull the SubjectPublicKeyInfo out of an X.509
-// certificate, so that it can be handed to
-// `RsassaPkcs1V15PublicKey.importSpkiKey`.
-//
-// A full ASN.1 library is deliberately avoided: the only structure that needs
-// to be understood is the fixed prefix of `TBSCertificate`, and every field
-// before `subjectPublicKeyInfo` can be skipped without being decoded.
-//
-// See https://datatracker.ietf.org/doc/html/rfc5280#section-4.1:
-//
-//   Certificate ::= SEQUENCE {
-//     tbsCertificate       TBSCertificate,
-//     signatureAlgorithm   AlgorithmIdentifier,
-//     signatureValue       BIT STRING }
-//
-//   TBSCertificate ::= SEQUENCE {
-//     version         [0] EXPLICIT Version DEFAULT v1,
-//     serialNumber        CertificateSerialNumber,
-//     signature           AlgorithmIdentifier,
-//     issuer              Name,
-//     validity            Validity,
-//     subject             Name,
-//     subjectPublicKeyInfo SubjectPublicKeyInfo,
-//     ... }
-
 const _tagSequence = 0x30;
 
-/// Reads the DER tag and length starting at [offset].
+/// Reads the DER tag and length.
 ///
 /// For example:
 ///
@@ -81,6 +56,7 @@ const _tagSequence = 0x30;
       );
     }
     if (byteCount > 4) {
+      // No value that we need to parse will be >4GiB.
       throw const FormatException('DER length exceeds the supported range.');
     }
     if (index + byteCount > limit) {
@@ -129,6 +105,23 @@ Uint8List parsePemCertificate(String pem) {
 ///
 /// The returned bytes are a complete SPKI structure suitable for
 /// `RsassaPkcs1V15PublicKey.importSpkiKey`.
+/// 
+/// See https://datatracker.ietf.org/doc/html/rfc5280#section-4.1:
+///
+///   Certificate ::= SEQUENCE {
+///     tbsCertificate       TBSCertificate,
+///     signatureAlgorithm   AlgorithmIdentifier,
+///     signatureValue       BIT STRING }
+///
+///   TBSCertificate ::= SEQUENCE {
+///     version         [0] EXPLICIT Version DEFAULT v1,
+///     serialNumber        CertificateSerialNumber,
+///     signature           AlgorithmIdentifier,
+///     issuer              Name,
+///     validity            Validity,
+///     subject             Name,
+///     subjectPublicKeyInfo SubjectPublicKeyInfo,
+///     ... }
 ///
 /// Throws a [FormatException] if [certificateDer] is not a well-formed
 /// certificate.
@@ -160,8 +153,7 @@ Uint8List extractSubjectPublicKeyInfo(Uint8List certificateDer) {
     offset = first.contentEnd;
   }
 
-  // Skip serialNumber, signature, issuer, validity and subject. The field
-  // after them is subjectPublicKeyInfo.
+  // Skip `serialNumber`, `signature`, `issuer`, `validity` and `subject`.
   for (var i = 0; i < 5; i++) {
     offset = _readTagLengthValue(
       certificateDer,

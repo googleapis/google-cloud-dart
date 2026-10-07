@@ -58,7 +58,8 @@ Duration? freshnessLifetime(Map<String, String> headers) {
   return seconds > 0 ? Duration(seconds: seconds) : Duration.zero;
 }
 
-/// An in-memory cache of RSA public keys used to verify JWS signatures.
+/// An in-memory cache of RSA public keys used to verify
+/// [JSON Web Signatures](https://datatracker.ietf.org/doc/html/rfc7515) (JWS).
 ///
 /// Keys are fetched from [uri], which may serve either of the two formats
 /// Google uses:
@@ -206,6 +207,9 @@ final class JwksCache {
     return keys;
   }
 
+  /// Parse a JSON Web Key (JWK) JSON Object.
+  ///
+  /// See [RFC 7517, Section 4](https://datatracker.ietf.org/doc/html/rfc7517#section-4).
   Future<Map<String, RsassaPkcs1V15PublicKey>> _parseJwks(
     List<dynamic> jwks,
   ) async {
