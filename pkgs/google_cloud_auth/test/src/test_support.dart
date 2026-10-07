@@ -21,56 +21,6 @@ library;
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:webcrypto/webcrypto.dart';
-
-/// An RSA key pair plus the representations the verifier consumes.
-final class TestKey {
-  final String keyId;
-  final RsassaPkcs1V15PrivateKey privateKey;
-  final RsassaPkcs1V15PublicKey publicKey;
-
-  /// The public key as a JWK, ready to embed in a JWKS document.
-  final Map<String, dynamic> jwk;
-
-  /// The public key as DER `SubjectPublicKeyInfo`.
-  final Uint8List spki;
-
-  TestKey._({
-    required this.keyId,
-    required this.privateKey,
-    required this.publicKey,
-    required this.jwk,
-    required this.spki,
-  });
-
-  static Future<TestKey> generate({String keyId = 'test-key-1'}) async {
-    final pair = await RsassaPkcs1V15PrivateKey.generateKey(
-      2048,
-      BigInt.from(65537),
-      Hash.sha256,
-    );
-    final jwk = await pair.publicKey.exportJsonWebKey();
-    return TestKey._(
-      keyId: keyId,
-      privateKey: pair.privateKey,
-      publicKey: pair.publicKey,
-      jwk: {...jwk, 'kid': keyId, 'alg': 'RS256', 'use': 'sig'},
-      spki: await pair.publicKey.exportSpkiKey(),
-    );
-  }
-
-  /// A JWKS document containing this key.
-  String jwksJson({List<Map<String, dynamic>> alsoInclude = const []}) =>
-      jsonEncode({
-        'keys': [jwk, ...alsoInclude],
-      });
-
-  /// A `{kid: pem}` document containing this key, in the legacy format some
-  /// Google endpoints still use.
-  String certificateMapJson() =>
-      jsonEncode({keyId: pemCertificate(synthesizeCertificate(spki))});
-}
-
 /// Encodes a DER tag-length-value triple.
 Uint8List derEncode(int tag, List<int> content) {
   final out = BytesBuilder()..addByte(tag);
@@ -131,29 +81,3 @@ String pemCertificate(Uint8List bytes) {
       '-----END CERTIFICATE-----\n';
 }
 
-/// A real certificate served by Google's Firebase secure token endpoint.
-///
-/// Embedded verbatim as a regression fixture so that the DER walker is
-/// exercised against a genuine Google certificate, not only against
-/// [synthesizeCertificate] output. Certificates are public data.
-const googleSecureTokenCertificatePem = '''
------BEGIN CERTIFICATE-----
-MIIDHDCCAgSgAwIBAgIIFFdImQ/V0kUwDQYJKoZIhvcNAQEFBQAwMTEvMC0GA1UE
-Awwmc2VjdXJldG9rZW4uc3lzdGVtLmdzZXJ2aWNlYWNjb3VudC5jb20wHhcNMjYw
-NTA0MTc0NzI3WhcNMjcwNTA0MTc0NzI3WjAxMS8wLQYDVQQDDCZzZWN1cmV0b2tl
-bi5zeXN0ZW0uZ3NlcnZpY2VhY2NvdW50LmNvbTCCASIwDQYJKoZIhvcNAQEBBQAD
-ggEPADCCAQoCggEBAOKOpTkKGfjHH1ny5ZJXKag63eWg9RvVlfY3SgKULip4mwM1
-HuCIY0aYoXEdKdVFgS/+mPOPDfSSjcYbl1/+QTZH0mBiqatIgQGegNf5naIkF9jd
-SxazYShP8cgjOkRckaFdrMvEa/mNOO5wTk6AEMbUR+V1M8auOAiqeAGOvTTgbOJl
-bRB9NufzI8WbysbEPRtgqDYY9WxXcrukkacecYsaLkj0qy14DTZXt08NB+ZlYnHQ
-2+qoEo33lMMm67gpBTPe3mu4L9CrZ9qDxzH7WqMz+7zGeA9FqDwyMu9UONE+Ssbs
-xYN6dtw12vC1S6ueAzdGgWCOTB8njBAvkrYJ0gMCAwEAAaM4MDYwDAYDVR0TAQH/
-BAIwADAOBgNVHQ8BAf8EBAMCB4AwFgYDVR0lAQH/BAwwCgYIKwYBBQUHAwIwDQYJ
-KoZIhvcNAQEFBQADggEBALxRVxyzG7sUYwBdUGOQ8wWt7o/1tvgAVKa9VpgzzlHb
-W4irMEOCetKswJFN4KieFqfUcwsKucRiDZRm9iIrPTyI3AhH9Yu7UY7lrqkYZ//b
-v1Q+oj1YqYcwHcyhuykzQIf+eq1reBWhG0GaDfxTdIeQkcYBZ5nVNICBXU2QVJLE
-qjM89ncbpinVTzI7kH1uZvqMDeL7/su6GSvoi4oXokOauGcaogwbbE+HK//QMOMK
-XSu2FfrwU5Vua5Mx37jQTnM5ruVJQvnNYsd9QAMfhd7cUMMYuIAW1sQMSk5/F95Q
-QCCW8kDKq9yAOrfHSS2zw5pqsIc/HC/bD3cW9J0CYK8=
------END CERTIFICATE-----
-''';

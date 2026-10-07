@@ -59,23 +59,30 @@ void main() {
   group(
     'extractSubjectPublicKeyInfo',
     () {
-      late TestKey key;
+      late RsassaPkcs1V15PrivateKey privateKey;
+      late Uint8List spki;
 
       setUpAll(() async {
         if (!canUseWebCrypto) return;
-        key = await TestKey.generate();
+        final pair = await RsassaPkcs1V15PrivateKey.generateKey(
+          2048,
+          BigInt.from(65537),
+          Hash.sha256,
+        );
+        privateKey = pair.privateKey;
+        spki = await pair.publicKey.exportSpkiKey();
       });
 
       test('round-trips a generated key through a certificate', () async {
-        final certificate = synthesizeCertificate(key.spki);
+        final certificate = synthesizeCertificate(spki);
 
         final extracted = extractSubjectPublicKeyInfo(certificate);
 
-        expect(extracted, key.spki);
+        expect(extracted, spki);
       });
 
       test('extracted SPKI imports and verifies a real signature', () async {
-        final certificate = synthesizeCertificate(key.spki);
+        final certificate = synthesizeCertificate(spki);
         final extracted = extractSubjectPublicKeyInfo(certificate);
 
         final imported = await RsassaPkcs1V15PublicKey.importSpkiKey(
@@ -84,22 +91,19 @@ void main() {
         );
 
         final message = ascii.encode('payload to sign');
-        final signature = await key.privateKey.signBytes(message);
+        final signature = await privateKey.signBytes(message);
         expect(await imported.verifyBytes(signature, message), isTrue);
       });
 
       test('handles a certificate with no explicit version field', () async {
         // `version` is [0] EXPLICIT and defaults to v1, so it may be absent.
-        final certificate = synthesizeCertificate(
-          key.spki,
-          includeVersion: false,
-        );
+        final certificate = synthesizeCertificate(spki, includeVersion: false);
 
-        expect(extractSubjectPublicKeyInfo(certificate), key.spki);
+        expect(extractSubjectPublicKeyInfo(certificate), spki);
       });
 
       test('parses a real Google certificate', () async {
-        final der = parsePemCertificate(googleSecureTokenCertificatePem);
+        final der = parsePemCertificate(testGoogleSecureTokenCertificatePem);
 
         final spki = extractSubjectPublicKeyInfo(der);
 
@@ -136,7 +140,7 @@ void main() {
         });
 
         test('a certificate truncated mid-structure', () {
-          final certificate = synthesizeCertificate(key.spki);
+          final certificate = synthesizeCertificate(spki);
           final truncated = Uint8List.sublistView(
             certificate,
             0,
