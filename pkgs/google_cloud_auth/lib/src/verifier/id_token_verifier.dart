@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'dart:async';
+
 import 'package:http/http.dart' as http;
 
 import '../jwks/jwks_cache.dart';
@@ -93,7 +95,7 @@ final class IdTokenVerifier {
     Set<String>? expectedIssuers,
     Set<String>? allowedAudiences,
     this.clockSkewTolerance = defaultClockSkewTolerance,
-    http.Client? httpClient,
+    FutureOr<http.Client> Function()? clientFactory,
     DateTime Function()? clock,
   }) : expectedIssuers = expectedIssuers == null
            ? null
@@ -104,7 +106,7 @@ final class IdTokenVerifier {
        _clock = clock ?? DateTime.now,
        _jwksCache = JwksCache(
          uri: jwksUri,
-         httpClient: httpClient,
+         clientFactory: clientFactory,
          clock: clock,
        );
 
@@ -232,9 +234,6 @@ final class IdTokenVerifier {
 
   /// Discards the cached public keys and fetches a new set.
   Future<void> refreshKeys() => _jwksCache.refresh();
-
-  /// Closes the underlying HTTP client, if this verifier created it.
-  void close() => _jwksCache.close();
 }
 
 /// Validated claims extracted from a verified JWT ID token.

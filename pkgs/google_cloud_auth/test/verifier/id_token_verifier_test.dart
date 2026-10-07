@@ -53,9 +53,8 @@ void main() {
     allowedAudiences: allowedAudiences,
     clockSkewTolerance: clockSkewTolerance,
     clock: () => now ?? _now,
-    httpClient: MockClient(
-      (_) async => http.Response(jwksBody ?? key.jwksJson(), 200),
-    ),
+    clientFactory: () =>
+        MockClient((_) async => http.Response(jwksBody ?? key.jwksJson(), 200)),
   );
 
   /// A payload that passes every check, with the given overrides applied.
@@ -507,7 +506,8 @@ void main() {
       final verifier = IdTokenVerifier(
         jwksUri: _jwksUri,
         clock: () => _now,
-        httpClient: MockClient((_) async => http.Response('down', 503)),
+        clientFactory: () =>
+            MockClient((_) async => http.Response('down', 503)),
       );
       final token = await key.mintToken(payload: validPayload());
 
@@ -526,7 +526,7 @@ void main() {
         expectedIssuers: const {_issuer},
         allowedAudiences: const {_audience},
         clock: () => _now,
-        httpClient: MockClient(
+        clientFactory: () => MockClient(
           (_) async => http.Response(key.certificateMapJson(), 200),
         ),
       );

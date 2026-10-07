@@ -54,7 +54,7 @@ void main() {
     final cache = JwksCache(
       uri: _jwksUri,
       clock: clock.call,
-      httpClient: MockClient((request) async {
+      clientFactory: () => MockClient((request) async {
         requests.add(request);
         return handler(request);
       }),
@@ -117,7 +117,6 @@ void main() {
       final (:cache, :requests) = buildCache(
         (_) => http.Response(key.jwksJson(), 200),
       );
-      addTearDown(cache.close);
 
       expect(await cache.lookupKey(key.keyId), isNotNull);
       expect(requests, hasLength(1));
@@ -132,7 +131,6 @@ void main() {
           headers: {'cache-control': 'max-age=3600'},
         ),
       );
-      addTearDown(cache.close);
 
       await cache.lookupKey(key.keyId);
       await cache.lookupKey(key.keyId);
@@ -149,7 +147,6 @@ void main() {
           headers: {'cache-control': 'max-age=600'},
         ),
       );
-      addTearDown(cache.close);
 
       await cache.lookupKey(key.keyId);
       clock.advance(const Duration(seconds: 599));
@@ -169,7 +166,6 @@ void main() {
           headers: {'cache-control': 'max-age=600', 'age': '540'},
         ),
       );
-      addTearDown(cache.close);
 
       await cache.lookupKey(key.keyId);
       clock.advance(const Duration(seconds: 61));
@@ -182,7 +178,6 @@ void main() {
       final (:cache, :requests) = buildCache(
         (_) => http.Response(key.jwksJson(), 200),
       );
-      addTearDown(cache.close);
 
       await cache.lookupKey(key.keyId);
       clock.advance(const Duration(minutes: 59));
@@ -197,7 +192,6 @@ void main() {
     test('concurrent lookups share a single request', () async {
       final completer = Completer<http.Response>();
       final (:cache, :requests) = buildCache((_) => completer.future);
-      addTearDown(cache.close);
 
       final lookups = Future.wait([
         cache.lookupKey(key.keyId),
@@ -219,7 +213,6 @@ void main() {
             headers: {'cache-control': 'max-age=3600'},
           ),
         );
-        addTearDown(cache.close);
 
         expect(await cache.lookupKey(key.keyId), isNotNull);
         expect(await cache.lookupKey('never-existed'), isNull);
@@ -236,7 +229,6 @@ void main() {
             headers: {'cache-control': 'max-age=3600'},
           ),
         );
-        addTearDown(cache.close);
 
         expect(await cache.lookupKey('never-existed'), isNull);
         expect(requests, hasLength(1));
@@ -254,7 +246,6 @@ void main() {
             headers: {'cache-control': 'max-age=3600'},
           );
         });
-        addTearDown(cache.close);
 
         expect(await cache.lookupKey(key.keyId), isNotNull);
         expect(await cache.lookupKey(rotated.keyId), isNull);
@@ -274,7 +265,6 @@ void main() {
           final (:cache, :requests) = buildCache(
             (_) => http.Response('nope', status),
           );
-          addTearDown(cache.close);
 
           await expectLater(
             cache.lookupKey(key.keyId),
@@ -296,7 +286,6 @@ void main() {
               ? http.Response('nope', 404)
               : http.Response(key.jwksJson(), 200),
         );
-        addTearDown(cache.close);
 
         await expectLater(
           cache.lookupKey(key.keyId),
@@ -314,7 +303,6 @@ void main() {
         final (:cache, requests: _) = buildCache(
           (_) => http.Response(key.certificateMapJson(), 200),
         );
-        addTearDown(cache.close);
 
         expect(await cache.lookupKey(key.keyId), isNotNull);
       });
@@ -336,7 +324,6 @@ void main() {
             200,
           ),
         );
-        addTearDown(cache.close);
 
         expect(await cache.lookupKey(key.keyId), isNotNull);
         expect(await cache.lookupKey('ec-key'), isNull);
@@ -353,7 +340,6 @@ void main() {
             200,
           ),
         );
-        addTearDown(cache.close);
 
         await expectLater(
           cache.lookupKey(key.keyId),
@@ -378,7 +364,6 @@ void main() {
             200,
           ),
         );
-        addTearDown(cache.close);
 
         expect(await cache.lookupKey(key.keyId), isNotNull);
         expect(await cache.lookupKey('broken'), isNull);
@@ -388,7 +373,6 @@ void main() {
         final (:cache, requests: _) = buildCache(
           (_) => http.Response(jsonEncode({'keys': <Object?>[]}), 200),
         );
-        addTearDown(cache.close);
 
         await expectLater(
           cache.lookupKey(key.keyId),
@@ -400,7 +384,6 @@ void main() {
         final (:cache, requests: _) = buildCache(
           (_) => http.Response('not json', 200),
         );
-        addTearDown(cache.close);
 
         await expectLater(
           cache.lookupKey(key.keyId),
@@ -419,7 +402,6 @@ void main() {
       final (:cache, requests: _) = buildCache(
         (_) => throw const SocketishException(),
       );
-      addTearDown(cache.close);
 
       await expectLater(
         cache.lookupKey(key.keyId),
@@ -441,7 +423,6 @@ void main() {
           headers: {'cache-control': 'max-age=3600'},
         ),
       );
-      addTearDown(cache.close);
 
       await cache.lookupKey(key.keyId);
       await cache.refresh();

@@ -79,8 +79,7 @@ final class JwksCache {
   /// The endpoint public keys are fetched from.
   final Uri uri;
 
-  final http.Client _httpClient;
-  final bool _ownsClient;
+  final FutureOr<http.Client> Function() _clientFactory;
   final DateTime Function() _clock;
 
   Map<String, RsassaPkcs1V15PublicKey>? _keys;
@@ -91,10 +90,9 @@ final class JwksCache {
 
   JwksCache({
     required this.uri,
-    http.Client? httpClient,
+    FutureOr<http.Client> Function()? clientFactory,
     DateTime Function()? clock,
-  }) : _httpClient = httpClient ?? http.Client(),
-       _ownsClient = httpClient == null,
+  }) : _clientFactory = clientFactory ?? http.Client.new,
        _clock = clock ?? DateTime.now;
 
   /// When the currently cached keys go stale, or `null` if nothing is cached.
@@ -120,11 +118,6 @@ final class JwksCache {
     await _fetch();
   }
 
-  /// Closes the underlying HTTP client, if this cache created it.
-  void close() {
-    if (_ownsClient) _httpClient.close();
-  }
-
   Map<String, RsassaPkcs1V15PublicKey>? _freshKeys() {
     final keys = _keys;
     final expiry = _expiry;
@@ -146,7 +139,12 @@ final class JwksCache {
   Future<Map<String, RsassaPkcs1V15PublicKey>> _fetchKeys() async {
     final http.Response response;
     try {
-      response = await _httpClient.get(uri);
+      final client = await _clientFactory();
+      try {
+        response = await client.get(uri);
+      } finally {
+        client.close();
+      }
     } on Exception catch (e, stackTrace) {
       throw TokenVerificationException(
         TokenVerificationFailure.keyUnavailable,

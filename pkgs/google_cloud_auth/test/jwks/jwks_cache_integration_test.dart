@@ -70,7 +70,7 @@ void main() {
   Future<void> expectAllKeysLoad(Uri uri, Iterable<String> keyIds) async {
     expect(keyIds, isNotEmpty);
 
-    final cache = JwksCache(uri: uri, httpClient: client);
+    final cache = JwksCache(uri: uri);
     for (final keyId in keyIds) {
       expect(await cache.lookupKey(keyId), isNotNull, reason: 'kid $keyId');
     }
