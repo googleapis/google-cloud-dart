@@ -15,8 +15,8 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:google_cloud_auth/google_cloud_auth.dart';
 import 'package:google_cloud_auth/src/jwks/jwks_cache.dart';
+import 'package:google_cloud_auth/src/verifier/token_verification_exception.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:test/test.dart';

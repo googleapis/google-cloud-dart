@@ -23,10 +23,6 @@ import 'dart:typed_data';
 
 import 'package:webcrypto/webcrypto.dart';
 
-/// Encodes [bytes] as unpadded base64url, the encoding used throughout JOSE.
-String base64UrlUnpadded(List<int> bytes) =>
-    base64Url.encode(bytes).replaceAll('=', '');
-
 /// An RSA key pair plus the representations the verifier consumes.
 final class TestKey {
   final String keyId;
@@ -63,33 +59,6 @@ final class TestKey {
     );
   }
 
-  /// Signs a JWT with this key.
-  ///
-  /// [header] entries override the defaults, so a test can e.g. set a wrong
-  /// `alg` or drop the `kid`.
-  Future<String> mintToken({
-    required Map<String, dynamic> payload,
-    Map<String, dynamic> header = const {},
-    bool corruptSignature = false,
-  }) async {
-    final fullHeader = <String, dynamic>{
-      'alg': 'RS256',
-      'typ': 'JWT',
-      'kid': keyId,
-      ...header,
-    }..removeWhere((_, value) => value == null);
-
-    final signingInput =
-        '${base64UrlUnpadded(utf8.encode(jsonEncode(fullHeader)))}'
-        '.'
-        '${base64UrlUnpadded(utf8.encode(jsonEncode(payload)))}';
-
-    final signature = await privateKey.signBytes(ascii.encode(signingInput));
-    if (corruptSignature) signature[0] ^= 0xff;
-
-    return '$signingInput.${base64UrlUnpadded(signature)}';
-  }
-
   /// A JWKS document containing this key.
   String jwksJson({List<Map<String, dynamic>> alsoInclude = const []}) =>
       jsonEncode({
@@ -101,9 +70,6 @@ final class TestKey {
   String certificateMapJson() =>
       jsonEncode({keyId: pemCertificate(synthesizeCertificate(spki))});
 }
-
-/// Converts a JWT `exp`/`iat` style claim from a [DateTime].
-int numericDate(DateTime time) => time.millisecondsSinceEpoch ~/ 1000;
 
 /// Encodes a DER tag-length-value triple.
 Uint8List derEncode(int tag, List<int> content) {
