@@ -400,7 +400,7 @@ void main() {
 
     test('wraps a transport failure', () async {
       final (:cache, requests: _) = buildCache(
-        (_) => throw const SocketishException(),
+        (_) => throw http.ClientException('connection refused'),
       );
 
       await expectLater(
@@ -464,13 +464,4 @@ void main() {
       expect(cache.keys, isNotEmpty);
     },
   );
-}
-
-/// Stands in for a transport-level error, which `http` surfaces as an
-/// arbitrary [Exception].
-final class SocketishException implements Exception {
-  const SocketishException();
-
-  @override
-  String toString() => 'connection refused';
 }
