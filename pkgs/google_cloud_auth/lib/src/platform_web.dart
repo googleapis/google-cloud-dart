@@ -12,5 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export 'package:google_cloud_rpc/exceptions.dart'
-    show ChecksumValidationException;
+import 'credential_exception.dart';
+
+/// Whether the current runtime supports `dart:io` platform and file operations.
+const bool isPlatformIo = false;
+
+/// Whether the current operating system is Linux.
+bool get isPlatformLinux => false;
+
+/// Environment variables are not available on the web.
+String? readPlatformEnvironment(String name) => null;
+
+/// Local file system access is not available on the web.
+Future<String> readCredentialFileAsString(String path) async {
+  throw CredentialException(
+    'Reading credentials from a file ($path) is not supported on the web.',
+  );
+}

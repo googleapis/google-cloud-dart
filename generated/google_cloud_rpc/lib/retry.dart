@@ -12,5 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export 'package:google_cloud_rpc/exceptions.dart'
-    show ChecksumValidationException;
+/// Retry runners and exponential backoff strategies for Google Cloud clients.
+library;
+
+export 'src/retry.dart';

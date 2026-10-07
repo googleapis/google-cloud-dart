@@ -12,12 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/// Design based on:
+/// - https://github.com/googleapis/google-cloud-java/blob/main/google-auth-library-java/oauth2_http/java/com/google/auth/oauth2/ServiceAccountCredentials.java
+/// - https://github.com/googleapis/google-cloud-python/blob/main/packages/google-auth/google/oauth2/service_account.py
+library;
+
 import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:webcrypto/webcrypto.dart';
 
+import 'credential_exception.dart';
+import 'google_credentials.dart';
+import 'platform_web.dart' if (dart.library.io) 'platform_io.dart';
 import 'service_account_signer.dart';
 
 Uint8List _parsePemPkcs8Key(String pemString) {
@@ -41,15 +48,12 @@ String? _optionalString(Map<String, dynamic> info, String key) {
   return value;
 }
 
-// Design based on:
-// - https://github.com/googleapis/google-cloud-java/blob/main/google-auth-library-java/oauth2_http/java/com/google/auth/oauth2/ServiceAccountCredentials.java
-// - https://github.com/googleapis/google-cloud-python/blob/main/packages/google-auth/google/oauth2/service_account.py
-
 /// Credentials for a Google Cloud service account.
 ///
 /// Service accounts are used for server-to-server communication, such as
 /// interactions between a web application server and a Google service.
-final class ServiceAccountCredentials implements ServiceAccountSigner {
+final class ServiceAccountCredentials extends GoogleCredentials
+    implements ServiceAccountSigner {
   /// The email address of the service account.
   @override
   final String clientEmail;
@@ -70,11 +74,6 @@ final class ServiceAccountCredentials implements ServiceAccountSigner {
   /// The OAuth2 token endpoint URI.
   final Uri tokenUri;
 
-  /// The universe domain for the service account.
-  ///
-  /// See [Universes, regions, and zones](https://docs.cloud.google.com/docs/overview#universes_regions_and_zones).
-  final String universeDomain;
-
   final RsassaPkcs1V15PrivateKey _privateKey;
 
   ServiceAccountCredentials._({
@@ -85,17 +84,19 @@ final class ServiceAccountCredentials implements ServiceAccountSigner {
     this.projectId,
     this.quotaProjectId,
     Uri? tokenUri,
-    this.universeDomain = 'googleapis.com',
+    super.universeDomain = GoogleCredentials.defaultUniverseDomain,
   }) : _privateKey = privateKey,
        tokenUri = tokenUri ?? Uri.https('oauth2.$universeDomain', '/token');
 
   /// Creates a [ServiceAccountCredentials] instance from a service account
   /// JSON file at [path].
+  ///
+  /// Throws a [CredentialException] if reading [path] fails or when running on
+  /// the web.
   static Future<ServiceAccountCredentials> fromServiceAccountFile(
     String path,
   ) async {
-    final file = File(path);
-    final contents = await file.readAsString();
+    final contents = await readCredentialFileAsString(path);
     return fromServiceAccountString(contents);
   }
 
@@ -130,7 +131,8 @@ final class ServiceAccountCredentials implements ServiceAccountSigner {
     final projectId = _optionalString(info, 'project_id');
     final quotaProjectId = _optionalString(info, 'quota_project_id');
     final universeDomain =
-        _optionalString(info, 'universe_domain') ?? 'googleapis.com';
+        _optionalString(info, 'universe_domain') ??
+        GoogleCredentials.defaultUniverseDomain;
 
     final tokenUriStr = _optionalString(info, 'token_uri');
     final tokenUri = tokenUriStr != null ? Uri.parse(tokenUriStr) : null;
@@ -177,7 +179,7 @@ final class ServiceAccountCredentials implements ServiceAccountSigner {
     String? projectId,
     String? quotaProjectId,
     Uri? tokenUri,
-    String universeDomain = 'googleapis.com',
+    String universeDomain = GoogleCredentials.defaultUniverseDomain,
   }) async {
     final pkcs8Bytes = _parsePemPkcs8Key(privateKeyPkcs8);
     final privateKey = await RsassaPkcs1V15PrivateKey.importPkcs8Key(
@@ -198,6 +200,18 @@ final class ServiceAccountCredentials implements ServiceAccountSigner {
   }
 
   /// Signs [message] using RSASSA-PKCS1-v1_5 with SHA-256 and the private key.
+  ///
+  /// Throws [SigningException] on failure.
   @override
-  Future<Uint8List> sign(List<int> message) => _privateKey.signBytes(message);
+  Future<Uint8List> sign(List<int> message) async {
+    try {
+      return await _privateKey.signBytes(message);
+    } on Exception catch (e, stackTrace) {
+      throw SigningException(
+        'Failed to sign message: $e',
+        innerException: e,
+        innerStackTrace: stackTrace,
+      );
+    }
+  }
 }

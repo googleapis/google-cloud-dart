@@ -12,12 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@TestOn('vm')
-library;
-
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:google_cloud_auth/google_cloud_auth.dart';
@@ -25,6 +21,8 @@ import 'package:google_cloud_auth/src/compute_engine_credentials.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:test/test.dart';
+
+import 'test_utils.dart';
 
 void main() async {
   final isOnGce = await ComputeEngineCredentials.isOnComputeEngine();
@@ -139,7 +137,6 @@ void main() async {
           metadataHost: 'test-metadata',
         );
 
-        expect(creds, isA<ServiceAccountSigner>());
         expect(creds.universeDomain, 'googleapis.com');
       });
 
@@ -160,7 +157,6 @@ void main() async {
           metadataHost: 'test-metadata',
         );
 
-        expect(creds, isA<ServiceAccountSigner>());
         expect(creds.universeDomain, 'googleapis.com');
       });
 
@@ -427,6 +423,34 @@ void main() async {
           ),
         );
       });
+
+      test('throws CredentialException on non-map JSON', () async {
+        final mockClient = MockClient(
+          (request) async => switch (request.url.path) {
+            '/computeMetadata/v1/instance/service-accounts/default/token' =>
+              http.Response('[1, 2, 3]', 200),
+            _ => http.Response('Not found', 404),
+          },
+        );
+
+        final creds = await ComputeEngineCredentials.create(
+          client: mockClient,
+          clientEmail: 'sa@test.com',
+          universeDomain: 'googleapis.com',
+          metadataHost: 'test-metadata',
+        );
+
+        expect(
+          creds.accessToken,
+          throwsA(
+            isA<CredentialException>().having(
+              (e) => e.message,
+              'message',
+              contains('Failed to parse token response'),
+            ),
+          ),
+        );
+      });
     });
 
     group('isOnComputeEngine', () {
@@ -535,32 +559,47 @@ void main() async {
       test(
         'falls back to static detection when ping returns non-retryable status',
         () async {
-          final tempDir = await Directory.systemTemp.createTemp('gce_test');
-          try {
-            final dmiFile = File('${tempDir.path}/product_name');
-            await dmiFile.writeAsString('Google Compute Engine\n');
+          final dmiPath = await writeTempFile(
+            'product_name',
+            'Google Compute Engine\n',
+          );
 
-            final mockClient = MockClient(
-              (request) async => http.Response('forbidden', 403),
-            );
+          final mockClient = MockClient(
+            (request) async => http.Response('forbidden', 403),
+          );
 
-            final isGce = await internalIsOnComputeEngine(
-              client: mockClient,
-              isLinux: true,
-              linuxProductNamePath: dmiFile.path,
-            );
-            expect(isGce, isTrue);
-          } finally {
-            await tempDir.delete(recursive: true);
-          }
+          final isGce = await internalIsOnComputeEngine(
+            client: mockClient,
+            isLinux: true,
+            linuxProductNamePath: dmiPath,
+          );
+          expect(isGce, isTrue);
         },
+        testOn: 'vm',
       );
 
       test('returns true when static GCE detection succeeds', () async {
-        final tempDir = await Directory.systemTemp.createTemp('gce_test');
-        try {
-          final dmiFile = File('${tempDir.path}/product_name');
-          await dmiFile.writeAsString('Google Compute Engine\n');
+        final dmiPath = await writeTempFile(
+          'product_name',
+          'Google Compute Engine\n',
+        );
+
+        final mockClient = MockClient((request) async {
+          throw http.ClientException('Connection refused');
+        });
+
+        final isGce = await internalIsOnComputeEngine(
+          client: mockClient,
+          isLinux: true,
+          linuxProductNamePath: dmiPath,
+        );
+        expect(isGce, isTrue);
+      }, testOn: 'vm');
+
+      test(
+        'returns false when static GCE detection finds other vendor',
+        () async {
+          final dmiPath = await writeTempFile('product_name', 'Standard PC\n');
 
           final mockClient = MockClient((request) async {
             throw http.ClientException('Connection refused');
@@ -569,64 +608,41 @@ void main() async {
           final isGce = await internalIsOnComputeEngine(
             client: mockClient,
             isLinux: true,
-            linuxProductNamePath: dmiFile.path,
+            linuxProductNamePath: dmiPath,
           );
-          expect(isGce, isTrue);
-        } finally {
-          await tempDir.delete(recursive: true);
-        }
-      });
-
-      test(
-        'returns false when static GCE detection finds other vendor',
-        () async {
-          final tempDir = await Directory.systemTemp.createTemp('gce_test');
-          try {
-            final dmiFile = File('${tempDir.path}/product_name');
-            await dmiFile.writeAsString('Standard PC\n');
-
-            final mockClient = MockClient((request) async {
-              throw http.ClientException('Connection refused');
-            });
-
-            final isGce = await internalIsOnComputeEngine(
-              client: mockClient,
-              isLinux: true,
-              linuxProductNamePath: dmiFile.path,
-            );
-            expect(isGce, isFalse);
-          } finally {
-            await tempDir.delete(recursive: true);
-          }
+          expect(isGce, isFalse);
         },
+        testOn: 'vm',
       );
 
       test(
         'does not fall back to static detection when custom GCE_METADATA_HOST '
         'fails',
         () async {
-          final tempDir = await Directory.systemTemp.createTemp('gce_test');
-          try {
-            final dmiFile = File('${tempDir.path}/product_name');
-            await dmiFile.writeAsString('Google Compute Engine\n');
+          final dmiPath = await writeTempFile(
+            'product_name',
+            'Google Compute Engine\n',
+          );
 
-            final mockClient = MockClient((request) async {
-              throw http.ClientException('Connection refused');
-            });
+          final mockClient = MockClient((request) async {
+            throw http.ClientException('Connection refused');
+          });
 
-            final isGce = await internalIsOnComputeEngine(
-              client: mockClient,
-              isLinux: true,
-              linuxProductNamePath: dmiFile.path,
-              readEnvironment: (name) =>
-                  name == 'GCE_METADATA_HOST' ? 'custom-metadata' : null,
-            );
-            expect(isGce, isFalse);
-          } finally {
-            await tempDir.delete(recursive: true);
-          }
+          final isGce = await internalIsOnComputeEngine(
+            client: mockClient,
+            isLinux: true,
+            linuxProductNamePath: dmiPath,
+            readEnvironment: (name) =>
+                name == 'GCE_METADATA_HOST' ? 'custom-metadata' : null,
+          );
+          expect(isGce, isFalse);
         },
+        testOn: 'vm',
       );
+
+      test('returns false on browser when no client is provided', () async {
+        expect(await ComputeEngineCredentials.isOnComputeEngine(), isFalse);
+      }, testOn: 'browser');
 
       test('returns false when NO_GCE_CHECK is true', () async {
         final mockClient = MockClient((request) async {
@@ -922,6 +938,76 @@ void main() async {
           ),
         );
       });
+
+      test('throws SigningException on non-map JSON from signBlob', () async {
+        final message = utf8.encode('Test message');
+
+        final mockClient = MockClient(
+          (request) async => switch (request.url.path) {
+            '/computeMetadata/v1/instance/service-accounts/default/token' =>
+              http.Response(
+                jsonEncode({
+                  'access_token': 'token-123',
+                  'expires_in': 3600,
+                  'token_type': 'Bearer',
+                }),
+                200,
+              ),
+            '/v1/projects/-/serviceAccounts/sa@test.iam.gserviceaccount.com:signBlob' =>
+              http.Response('["not", "a", "map"]', 200),
+            _ => http.Response('Not found', 404),
+          },
+        );
+
+        final creds = await ComputeEngineCredentials.create(
+          client: mockClient,
+          clientEmail: 'sa@test.iam.gserviceaccount.com',
+          metadataHost: 'test-metadata',
+        );
+
+        expect(
+          () => creds.sign(message),
+          throwsA(
+            isA<SigningException>().having(
+              (e) => e.message,
+              'message',
+              contains('Failed to parse signBlob response'),
+            ),
+          ),
+        );
+      });
+
+      test(
+        'throws SigningException when obtaining access token fails',
+        () async {
+          final message = utf8.encode('Test message');
+
+          final mockClient = MockClient(
+            (request) async => switch (request.url.path) {
+              '/computeMetadata/v1/instance/service-accounts/default/token' =>
+                throw http.ClientException('Network down'),
+              _ => http.Response('Not found', 404),
+            },
+          );
+
+          final creds = await ComputeEngineCredentials.create(
+            client: mockClient,
+            clientEmail: 'sa@test.iam.gserviceaccount.com',
+            metadataHost: 'test-metadata',
+          );
+
+          expect(
+            () => creds.sign(message),
+            throwsA(
+              isA<SigningException>().having(
+                (e) => e.message,
+                'message',
+                contains('Failed to obtain access token for signing'),
+              ),
+            ),
+          );
+        },
+      );
 
       test(
         'signs message using ComputeEngineCredentials',

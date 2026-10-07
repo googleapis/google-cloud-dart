@@ -13,7 +13,7 @@
 // limitations under the License.
 
 @TestOn('vm')
-@Tags(['firebase-emulator'])
+@Tags(['firebase-emulator', 'google-cloud'])
 library;
 
 import 'package:google_cloud_pubsub/google_cloud_pubsub.dart';
@@ -35,9 +35,8 @@ void main() {
 
     test('streaming pull throws ServiceException '
         'when subscription is deleted', () async {
-      final topicName = 'test-topic-${DateTime.now().millisecondsSinceEpoch}';
-      final subscriptionName =
-          'test-sub-${DateTime.now().millisecondsSinceEpoch}';
+      final topicName = testResourceName('test-topic');
+      final subscriptionName = testResourceName('test-sub');
       final topic = client.topic(topicName);
       final subscription = client.subscription(subscriptionName);
 

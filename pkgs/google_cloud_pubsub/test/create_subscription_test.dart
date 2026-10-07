@@ -13,7 +13,7 @@
 // limitations under the License.
 
 @TestOn('vm')
-@Tags(['firebase-emulator'])
+@Tags(['firebase-emulator', 'google-cloud'])
 library;
 
 import 'package:google_cloud_pubsub/google_cloud_pubsub.dart';
@@ -34,9 +34,8 @@ void main() {
     });
 
     test('create existing subscription throws ConflictException', () async {
-      final topicName = 'test-topic-${DateTime.now().millisecondsSinceEpoch}';
-      final subscriptionName =
-          'test-sub-${DateTime.now().millisecondsSinceEpoch}';
+      final topicName = testResourceName('test-topic');
+      final subscriptionName = testResourceName('test-sub');
       final topic = client.topic(topicName);
       final subscription = client.subscription(subscriptionName);
 
@@ -53,8 +52,7 @@ void main() {
 
     test('create subscription for non-existent topic throws '
         'NotFoundException', () async {
-      final subscriptionName =
-          'test-sub-${DateTime.now().millisecondsSinceEpoch}';
+      final subscriptionName = testResourceName('test-sub');
       final subscription = client.subscription(subscriptionName);
 
       expect(

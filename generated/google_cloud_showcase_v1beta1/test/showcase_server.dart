@@ -27,32 +27,66 @@ class PortInUseException implements Exception {
   String toString() => 'PortInUseException: $message';
 }
 
+/// The Go package of the Showcase server to test against.
+const _showcasePackage =
+    'github.com/googleapis/gapic-showcase/cmd/gapic-showcase@v0.40.0';
+
+/// The name of the Showcase executable installed by `go install`.
+final _showcaseExecutable = Platform.isWindows
+    ? 'gapic-showcase.exe'
+    : 'gapic-showcase';
+
 class ShowcaseServer {
   final Process _process;
+
+  static Future<ProcessResult> _runGo(List<String> arguments) async {
+    final ProcessResult result;
+    result = await Process.run('go', arguments);
+    if (result.exitCode != 0) {
+      throw Exception(
+        '`go ${arguments.join(' ')}` failed with exit code ${result.exitCode}: '
+        '${result.stderr}',
+      );
+    }
+    return result;
+  }
 
   static Future<void> _install() async {
     // Install showcase rather than running it using `go run` because `go run`
     // will then spawn showcase as a subprocess, which means that we won't be
     // able to kill it.
-    final result = await Process.run('go', [
-      'install',
-      'github.com/googleapis/gapic-showcase/cmd/gapic-showcase@v0.40.0',
-    ]);
-    if (result.exitCode != 0) {
-      throw Exception('showcase installation failed ${result.stderr}');
-    }
+    await _runGo(['install', _showcasePackage]);
   }
 
-  static Future<String> _goBinaryPath() async {
-    final result = await Process.run('go', ['env', 'GOPATH']);
-    if (result.exitCode != 0) {
-      throw Exception('go env GOPATH failed ${result.stderr}');
+  /// The directory that `go install` puts executables in.
+  ///
+  /// That is `GOBIN`, if it is set, otherwise the `bin` subdirectory of the
+  /// first entry in `GOPATH`.
+  static Future<String> _goBinaryDirectory() async {
+    // `go env` prints one line per requested variable, in the order that they
+    // were requested. Unset variables are printed as empty lines.
+    final result = await _runGo(['env', 'GOBIN', 'GOPATH']);
+    final lines = const LineSplitter().convert(result.stdout as String);
+    if (lines.length < 2) {
+      throw Exception(
+        'unexpected `go env GOBIN GOPATH` output: ${result.stdout}',
+      );
     }
-    return (result.stdout as String).trim();
+    final goBin = lines[0].trim();
+    if (goBin.isNotEmpty) {
+      return goBin;
+    }
+
+    // `GOPATH` may contain several directories; `go install` uses the first.
+    final goPath = lines[1].trim().split(Platform.isWindows ? ';' : ':').first;
+    if (goPath.isEmpty) {
+      throw Exception('neither `GOBIN` nor `GOPATH` is set');
+    }
+    return p.join(goPath, 'bin');
   }
 
   static Future<String> _showcasePath() async =>
-      p.join(await _goBinaryPath(), 'bin', 'gapic-showcase');
+      p.join(await _goBinaryDirectory(), _showcaseExecutable);
 
   ShowcaseServer._(this._process);
 

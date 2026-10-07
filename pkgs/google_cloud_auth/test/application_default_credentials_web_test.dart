@@ -12,33 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@TestOn('vm')
-@Tags(['firebase-emulator', 'google-cloud'])
+@TestOn('browser')
 library;
 
-import 'package:google_cloud_pubsub/google_cloud_pubsub.dart';
+import 'package:google_cloud_auth/google_cloud_auth.dart';
 import 'package:test/test.dart';
 
-import 'test_utils.dart';
-
 void main() {
-  group('pull', () {
-    late PubSub client;
-
-    setUp(() async {
-      client = await createClient();
-    });
-
-    tearDown(() async {
-      await client.close();
-    });
-
-    test('pull from non-existent subscription throws '
-        'NotFoundException', () async {
-      final subscriptionName = testResourceName('non-existent');
-      final subscription = client.subscription(subscriptionName);
-
-      expect(subscription.pull, throwsA(isA<NotFoundException>()));
-    });
+  test('defaultCredentials throws CredentialException on the web', () async {
+    await expectLater(
+      defaultCredentials(),
+      throwsA(
+        isA<CredentialException>().having(
+          (e) => e.message,
+          'message',
+          contains('not supported on the web'),
+        ),
+      ),
+    );
   });
 }

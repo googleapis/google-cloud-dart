@@ -12,9 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/// Design based on:
+/// - https://github.com/googleapis/google-auth-library-java/blob/main/oauth2_http/java/com/google/auth/oauth2/ComputeEngineCredentials.java
+/// - https://github.com/googleapis/google-auth-library-python/blob/main/google/auth/compute_engine/credentials.py
+/// - https://github.com/googleapis/google-auth-library-python/blob/main/google/auth/iam.py
+library;
+
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 
@@ -22,12 +27,9 @@ import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 
 import 'credential_exception.dart';
+import 'google_credentials.dart';
+import 'platform_web.dart' if (dart.library.io) 'platform_io.dart';
 import 'service_account_signer.dart';
-
-// Design based on:
-// - https://github.com/googleapis/google-auth-library-java/blob/main/oauth2_http/java/com/google/auth/oauth2/ComputeEngineCredentials.java
-// - https://github.com/googleapis/google-auth-library-python/blob/main/google/auth/compute_engine/credentials.py
-// - https://github.com/googleapis/google-auth-library-python/blob/main/google/auth/iam.py
 
 const _defaultMetadataHost = 'metadata.google.internal';
 const _linuxProductNamePath = '/sys/class/dmi/id/product_name';
@@ -44,7 +46,7 @@ const _computePingTimeout = Duration(milliseconds: 500);
 Future<bool> _checkStaticGceDetection(String path, bool isLinux) async {
   if (!isLinux) return false;
   try {
-    final content = await File(path).readAsString();
+    final content = await readCredentialFileAsString(path);
     return content.trim().startsWith('Google');
   } catch (_) {
     return false;
@@ -60,7 +62,15 @@ Future<bool> internalIsOnComputeEngine({
   String? linuxProductNamePath,
   bool? isLinux,
 }) async {
-  final readEnv = readEnvironment ?? (name) => Platform.environment[name];
+  // On the web, browser `fetch` cannot access `http://metadata.google.internal`
+  // because the required `Metadata-Flavor: Google` header is not
+  // CORS-safelisted and the GCE metadata server rejects CORS preflights to
+  // prevent browser-based SSRF / DNS-rebinding attacks. Short-circuit unless a
+  // test `client` is injected so browser callers do not fire doomed retries.
+  if (!isPlatformIo && client == null) {
+    return false;
+  }
+  final readEnv = readEnvironment ?? readPlatformEnvironment;
   final noGceCheck = readEnv('NO_GCE_CHECK')?.toLowerCase();
   if (noGceCheck == 'true' || noGceCheck == '1') {
     return false;
@@ -97,7 +107,7 @@ Future<bool> internalIsOnComputeEngine({
     }
     return await _checkStaticGceDetection(
       linuxProductNamePath ?? _linuxProductNamePath,
-      isLinux ?? Platform.isLinux,
+      isLinux ?? isPlatformLinux,
     );
   } finally {
     // If `client` is provided by the caller, there is no guarantee that the
@@ -112,13 +122,11 @@ Future<bool> internalIsOnComputeEngine({
 
 /// Credentials for Google Compute Engine, Cloud Run, Cloud Functions, and
 /// other environments providing a Google Cloud metadata server.
-final class ComputeEngineCredentials implements ServiceAccountSigner {
+final class ComputeEngineCredentials extends GoogleCredentials
+    implements ServiceAccountSigner {
   /// The email address of the service account.
   @override
   final String clientEmail;
-
-  /// The universe domain for the service account.
-  final String universeDomain;
 
   /// The metadata server host.
   final String metadataHost;
@@ -137,7 +145,7 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
 
   ComputeEngineCredentials._({
     required this.clientEmail,
-    required this.universeDomain,
+    required super.universeDomain,
     required this.metadataHost,
     required http.Client client,
     required bool ownsClient,
@@ -156,7 +164,7 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
     if (!forceRefresh &&
         _cachedAccessToken != null &&
         _accessTokenExpiry != null) {
-      if (DateTime.now().isBefore(
+      if (DateTime.timestamp().isBefore(
         _accessTokenExpiry!.subtract(const Duration(minutes: 1)),
       )) {
         return _cachedAccessToken!;
@@ -192,14 +200,19 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
     }
 
     try {
-      final json = jsonDecode(response.body) as Map<String, dynamic>;
-      final accessToken = json['access_token'];
-      final expiresIn = json['expires_in'];
-      if (accessToken is! String || expiresIn is! int) {
+      final decoded = jsonDecode(response.body);
+      if (decoded is! Map<String, dynamic>) {
+        throw const FormatException('Expected JSON object.');
+      }
+      final accessToken = decoded['access_token'];
+      final expiresIn = decoded['expires_in'];
+      if (accessToken is! String || accessToken.isEmpty || expiresIn is! num) {
         throw const FormatException('Missing access_token or expires_in');
       }
       _cachedAccessToken = accessToken;
-      _accessTokenExpiry = DateTime.now().add(Duration(seconds: expiresIn));
+      _accessTokenExpiry = DateTime.timestamp().add(
+        Duration(seconds: expiresIn.toInt()),
+      );
       return accessToken;
     } on FormatException catch (e, stackTrace) {
       throw CredentialException(
@@ -222,7 +235,7 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
   }) async {
     final host =
         metadataHost ??
-        Platform.environment['GCE_METADATA_HOST'] ??
+        readPlatformEnvironment('GCE_METADATA_HOST') ??
         _defaultMetadataHost;
     final httpClient = client ?? http.Client();
     final ownsClient = client == null;
@@ -290,9 +303,9 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
           final trimmed = response.body.trim();
           resolvedUniverseDomain = trimmed.isNotEmpty
               ? trimmed
-              : 'googleapis.com';
+              : GoogleCredentials.defaultUniverseDomain;
         } else if (response.statusCode == 404) {
-          resolvedUniverseDomain = 'googleapis.com';
+          resolvedUniverseDomain = GoogleCredentials.defaultUniverseDomain;
         } else {
           throw CredentialException(
             'Failed to get universe domain from metadata server: '
@@ -326,23 +339,25 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
   /// Signs [message] using the Identity and Access Management (IAM)
   /// `signBlob` API.
   ///
-  /// Throws [CredentialException] on failure.
+  /// Throws [SigningException] on failure.
   @override
   Future<Uint8List> sign(List<int> message) async {
-    final signBlobUrl = Uri(
-      scheme: 'https',
-      host: 'iamcredentials.$universeDomain',
-      pathSegments: [
-        'v1',
-        'projects',
-        '-',
-        'serviceAccounts',
-        '$clientEmail:signBlob',
-      ],
+    final signBlobUrl = Uri.https(
+      'iamcredentials.$universeDomain',
+      '/v1/projects/-/serviceAccounts/$clientEmail:signBlob',
     );
     final requestBody = jsonEncode({'payload': base64.encode(message)});
 
-    var token = await accessToken();
+    String token;
+    try {
+      token = await accessToken();
+    } on Exception catch (e, stackTrace) {
+      throw SigningException(
+        'Failed to obtain access token for signing: $e',
+        innerException: e,
+        innerStackTrace: stackTrace,
+      );
+    }
     var attempts = 0;
     var refreshedToken = false;
 
@@ -368,8 +383,11 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
 
       if (response.statusCode == 200) {
         try {
-          final json = jsonDecode(response.body) as Map<String, dynamic>;
-          final signedBlob = json['signedBlob'];
+          final decoded = jsonDecode(response.body);
+          if (decoded is! Map<String, dynamic>) {
+            throw const FormatException('Expected JSON object.');
+          }
+          final signedBlob = decoded['signedBlob'];
           if (signedBlob is! String) {
             throw const FormatException("Missing 'signedBlob' in response");
           }
@@ -386,7 +404,15 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
       // If token expired (401), retry once with a freshly requested token.
       if (response.statusCode == 401 && !refreshedToken) {
         refreshedToken = true;
-        token = await accessToken(forceRefresh: true);
+        try {
+          token = await accessToken(forceRefresh: true);
+        } on Exception catch (e, stackTrace) {
+          throw SigningException(
+            'Failed to refresh access token for signing: $e',
+            innerException: e,
+            innerStackTrace: stackTrace,
+          );
+        }
         continue;
       }
 
@@ -406,6 +432,7 @@ final class ComputeEngineCredentials implements ServiceAccountSigner {
   }
 
   /// Closes the underlying HTTP client if this instance created it.
+  @override
   void close() {
     if (_ownsClient) {
       _client.close();

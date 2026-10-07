@@ -12,5 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export 'package:google_cloud_rpc/exceptions.dart'
-    show ChecksumValidationException;
+/// Whether `package:webcrypto` can be used on the current platform.
+///
+/// The browser always provides the Web Crypto API, so this is always true.
+const canUseWebCrypto = true;
+
+/// Stub for [writeTempFile] on the web.
+Future<String> writeTempFile(String filename, String content) async {
+  throw UnsupportedError('writeTempFile is only supported on the VM.');
+}
