@@ -84,80 +84,78 @@ void main() {
       },
     );
 
-    group('rejects', () {
-      test('empty input', () {
-        expect(
-          () => extractSubjectPublicKeyInfo(Uint8List(0)),
-          throwsA(isA<FormatException>()),
-        );
-      });
+    test('empty input', () {
+      expect(
+        () => extractSubjectPublicKeyInfo(Uint8List(0)),
+        throwsA(isA<FormatException>()),
+      );
+    });
 
-      test('a non-SEQUENCE outer tag', () {
-        final notACertificate = Uint8List.fromList([0x02, 0x01, 0x00]);
+    test('a non-SEQUENCE outer tag', () {
+      final notACertificate = Uint8List.fromList([0x02, 0x01, 0x00]);
 
-        expect(
-          () => extractSubjectPublicKeyInfo(notACertificate),
-          throwsA(
-            isA<FormatException>().having(
-              (e) => e.message,
-              'message',
-              contains('Certificate SEQUENCE'),
-            ),
+      expect(
+        () => extractSubjectPublicKeyInfo(notACertificate),
+        throwsA(
+          isA<FormatException>().having(
+            (e) => e.message,
+            'message',
+            contains('Certificate SEQUENCE'),
           ),
-        );
-      });
+        ),
+      );
+    });
 
-      test('a certificate truncated mid-structure', () {
-        final certificate = parsePemCertificate(
-          testGoogleSecureTokenCertificatePem,
-        );
-        final truncated = Uint8List.sublistView(
-          certificate,
-          0,
-          certificate.length ~/ 2,
-        );
+    test('a certificate truncated mid-structure', () {
+      final certificate = parsePemCertificate(
+        testGoogleSecureTokenCertificatePem,
+      );
+      final truncated = Uint8List.sublistView(
+        certificate,
+        0,
+        certificate.length ~/ 2,
+      );
 
-        expect(
-          () => extractSubjectPublicKeyInfo(truncated),
-          throwsA(isA<FormatException>()),
-        );
-      });
+      expect(
+        () => extractSubjectPublicKeyInfo(truncated),
+        throwsA(isA<FormatException>()),
+      );
+    });
 
-      test('a TBSCertificate with too few fields', () {
-        // Outer SEQUENCE containing a TBSCertificate SEQUENCE with only one
-        // INTEGER field.
-        final certificate = Uint8List.fromList([
-          0x30,
-          0x05,
-          0x30,
-          0x03,
-          0x02,
-          0x01,
-          0x01,
-        ]);
+    test('a TBSCertificate with too few fields', () {
+      // Outer SEQUENCE containing a TBSCertificate SEQUENCE with only one
+      // INTEGER field.
+      final certificate = Uint8List.fromList([
+        0x30,
+        0x05,
+        0x30,
+        0x03,
+        0x02,
+        0x01,
+        0x01,
+      ]);
 
-        expect(
-          () => extractSubjectPublicKeyInfo(certificate),
-          throwsA(isA<FormatException>()),
-        );
-      });
+      expect(
+        () => extractSubjectPublicKeyInfo(certificate),
+        throwsA(isA<FormatException>()),
+      );
+    });
 
-      test('indefinite-length encoding', () {
-        // 0x80 as a length byte signals indefinite length, which is BER but
-        // not DER and must not be accepted.
-        final certificate = Uint8List.fromList([0x30, 0x80, 0x30, 0x00]);
+    test('indefinite-length encoding', () {
+      // 0x80 as a length byte signals indefinite length, which is BER but
+      // not DER and must not be accepted.
+      final certificate = Uint8List.fromList([0x30, 0x80, 0x30, 0x00]);
 
-        expect(
-          () => extractSubjectPublicKeyInfo(certificate),
-          throwsA(
-            isA<FormatException>().having(
-              (e) => e.message,
-              'message',
-              contains('Indefinite-length'),
-            ),
+      expect(
+        () => extractSubjectPublicKeyInfo(certificate),
+        throwsA(
+          isA<FormatException>().having(
+            (e) => e.message,
+            'message',
+            contains('Indefinite-length'),
           ),
-        );
-      });
+        ),
+      );
     });
   });
 }
