@@ -64,13 +64,10 @@ Duration? freshnessLifetime(Map<String, String> headers) {
 /// Keys are fetched from [uri], which may serve either of the two formats
 /// Google uses:
 ///
-/// - A JSON Web Key Set (JWKS), `{"keys": [...]}`, as served by
-///   `https://www.googleapis.com/oauth2/v3/certs`. This is the preferred
-///   format.
-/// - A map of key ID to PEM-encoded X.509 certificate, `{"<kid>": "<pem>"}`,
-///   as served by some older Google endpoints. Supported because a few
-///   endpoints, notably the Firebase session cookie endpoint, offer nothing
-///   else.
+/// - A JSON Web Key Set (JWKS), `{"keys": [...]}`. Example:
+///   https://www.googleapis.com/oauth2/v3/certs.
+/// - A map of key ID to PEM-encoded X.509 certificate, `{"<kid>": "<pem>"}`.
+///   Example: https://www.googleapis.com/oauth2/v1/certs.
 ///
 /// Only RSA keys usable for RS256 are retained; anything else in the response
 /// is ignored.
@@ -82,7 +79,8 @@ final class JwksCache {
   final FutureOr<http.Client> Function() _clientFactory;
   final DateTime Function() _clock;
 
-  Map<String, RsassaPkcs1V15PublicKey>? _keys;
+  @visibleForTesting
+  Map<String, RsassaPkcs1V15PublicKey>? keys;
   DateTime? _expiry;
 
   /// The in-flight fetch, so that concurrent callers share one request.
@@ -119,7 +117,7 @@ final class JwksCache {
   }
 
   Map<String, RsassaPkcs1V15PublicKey>? _freshKeys() {
-    final keys = _keys;
+    final keys = this.keys;
     final expiry = _expiry;
     if (keys == null || expiry == null) return null;
     return _clock().isBefore(expiry) ? keys : null;
@@ -162,13 +160,12 @@ final class JwksCache {
       );
     }
 
-    final keys = await _parseKeys(response.body);
+    keys = await _parseKeys(response.body);
 
-    _keys = keys;
     _expiry = _clock().add(
       freshnessLifetime(response.headers) ?? _defaultCacheDuration,
     );
-    return keys;
+    return keys!;
   }
 
   Future<Map<String, RsassaPkcs1V15PublicKey>> _parseKeys(String body) async {
@@ -207,7 +204,7 @@ final class JwksCache {
 
   /// Parse a JSON Web Key (JWK) JSON Object.
   ///
-  /// See [RFC 7517, Section 4](https://datatracker.ietf.org/doc/html/rfc7517#section-4).
+  /// See [RFC 7517 § 4](https://datatracker.ietf.org/doc/html/rfc7517#section-4).
   Future<Map<String, RsassaPkcs1V15PublicKey>> _parseJwks(
     List<dynamic> jwks,
   ) async {

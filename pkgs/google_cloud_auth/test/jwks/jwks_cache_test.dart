@@ -430,6 +430,40 @@ void main() {
       expect(requests, hasLength(2));
     });
   });
+
+  test(
+    'JSON Web Key Set',
+    testOn: 'vm',
+    skip: canUseWebCrypto
+        ? null
+        : 'Requires Dart 3.13 or later for native assets',
+    () async {
+      // Will not work in the browser because this endpoint does not support
+      // CORS.
+      final cache = JwksCache(
+        uri: Uri.https('www.googleapis.com', '/oauth2/v3/certs'),
+      );
+      await cache.refresh();
+      expect(cache.keys, isNotEmpty);
+    },
+  );
+
+  test(
+    'PEM-encoded X.509 certificates',
+    testOn: 'vm',
+    skip: canUseWebCrypto
+        ? null
+        : 'Requires Dart 3.13 or later for native assets',
+    () async {
+      // Will not work in the browser because this endpoint does not support
+      // CORS.
+      final cache = JwksCache(
+        uri: Uri.https('www.googleapis.com', '/oauth2/v1/certs'),
+      );
+      await cache.refresh();
+      expect(cache.keys, isNotEmpty);
+    },
+  );
 }
 
 /// Stands in for a transport-level error, which `http` surfaces as an

@@ -106,7 +106,7 @@ Uint8List parsePemCertificate(String pem) {
 /// The returned bytes are a complete SPKI structure suitable for
 /// `RsassaPkcs1V15PublicKey.importSpkiKey`.
 ///
-/// See https://datatracker.ietf.org/doc/html/rfc5280#section-4.1:
+/// See [RFC 5280 § 4.1](https://datatracker.ietf.org/doc/html/rfc5280#section-4.1):
 ///
 ///   Certificate ::= SEQUENCE {
 ///     tbsCertificate       TBSCertificate,
