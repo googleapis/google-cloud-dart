@@ -145,7 +145,6 @@ final class JwksCache {
       }
     } on Exception catch (e, stackTrace) {
       throw TokenVerificationException(
-        TokenVerificationFailure.keyUnavailable,
         'Failed to fetch public keys from $uri: $e',
         innerException: e,
         innerStackTrace: stackTrace,
@@ -154,7 +153,6 @@ final class JwksCache {
 
     if (response.statusCode != 200) {
       throw TokenVerificationException(
-        TokenVerificationFailure.keyUnavailable,
         'Failed to fetch public keys from $uri: '
         'HTTP ${response.statusCode} ${response.body}',
       );
@@ -174,7 +172,6 @@ final class JwksCache {
       json = jsonDecode(body);
     } on FormatException catch (e, stackTrace) {
       throw TokenVerificationException(
-        TokenVerificationFailure.keyUnavailable,
         'Public keys from $uri are not valid JSON: ${e.message}',
         innerException: e,
         innerStackTrace: stackTrace,
@@ -183,7 +180,6 @@ final class JwksCache {
 
     if (json is! Map<String, dynamic>) {
       throw TokenVerificationException(
-        TokenVerificationFailure.keyUnavailable,
         'Public keys from $uri are not a JSON object.',
       );
     }
@@ -195,7 +191,6 @@ final class JwksCache {
 
     if (keys.isEmpty) {
       throw TokenVerificationException(
-        TokenVerificationFailure.keyUnavailable,
         'Public keys from $uri contained no usable RSA keys.',
       );
     }
