@@ -68,7 +68,8 @@ Future<RsassaPkcs1V15PublicKey> getTestPublicKey() async {
   return await RsassaPkcs1V15PublicKey.importSpkiKey(bytes, Hash.sha256);
 }
 
-/// A real certificate served by Google's Firebase secure token endpoint.
+/// A real certificate served by
+/// https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com
 const testGoogleSecureTokenCertificatePem = '''
 -----BEGIN CERTIFICATE-----
 MIIDHDCCAgSgAwIBAgIIFFdImQ/V0kUwDQYJKoZIhvcNAQEFBQAwMTEvMC0GA1UE
