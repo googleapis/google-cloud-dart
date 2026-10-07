@@ -80,4 +80,3 @@ String pemCertificate(Uint8List bytes) {
       '${lines.join('\n')}\n'
       '-----END CERTIFICATE-----\n';
 }
-

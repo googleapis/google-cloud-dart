@@ -28,10 +28,6 @@ const _keyId = 'test-key-1';
 
 late Map<String, Object?> _jwk;
 
-String _jwksJson([List<Map<String, Object?>>? keys]) => jsonEncode({
-  'keys': keys ?? [_jwk],
-});
-
 /// A clock the test advances explicitly.
 final class FakeClock {
   DateTime now = DateTime.utc(2026, 1, 1, 12);
@@ -129,7 +125,12 @@ void main() {
     () {
       test('fetches and returns a key by id', () async {
         final (:cache, :requests) = buildCache(
-          (_) => http.Response(_jwksJson(), 200),
+          (_) => http.Response(
+            jsonEncode({
+              'keys': [_jwk],
+            }),
+            200,
+          ),
         );
 
         expect(await cache.lookupKey(_keyId), isNotNull);
@@ -140,7 +141,9 @@ void main() {
       test('serves later lookups from cache', () async {
         final (:cache, :requests) = buildCache(
           (_) => http.Response(
-            _jwksJson(),
+            jsonEncode({
+              'keys': [_jwk],
+            }),
             200,
             headers: {'cache-control': 'max-age=3600'},
           ),
@@ -156,7 +159,9 @@ void main() {
       test('re-fetches once the max-age has elapsed', () async {
         final (:cache, :requests) = buildCache(
           (_) => http.Response(
-            _jwksJson(),
+            jsonEncode({
+              'keys': [_jwk],
+            }),
             200,
             headers: {'cache-control': 'max-age=600'},
           ),
@@ -175,7 +180,9 @@ void main() {
       test('Age shortens the cache lifetime', () async {
         final (:cache, :requests) = buildCache(
           (_) => http.Response(
-            _jwksJson(),
+            jsonEncode({
+              'keys': [_jwk],
+            }),
             200,
             headers: {'cache-control': 'max-age=600', 'age': '540'},
           ),
@@ -190,7 +197,12 @@ void main() {
 
       test('falls back to a one hour lifetime with no cache headers', () async {
         final (:cache, :requests) = buildCache(
-          (_) => http.Response(_jwksJson(), 200),
+          (_) => http.Response(
+            jsonEncode({
+              'keys': [_jwk],
+            }),
+            200,
+          ),
         );
 
         await cache.lookupKey(_keyId);
@@ -212,7 +224,14 @@ void main() {
           cache.lookupKey(_keyId),
           cache.lookupKey(_keyId),
         ]);
-        completer.complete(http.Response(_jwksJson(), 200));
+        completer.complete(
+          http.Response(
+            jsonEncode({
+              'keys': [_jwk],
+            }),
+            200,
+          ),
+        );
 
         expect(await lookups, everyElement(isNotNull));
         expect(requests, hasLength(1));
@@ -222,7 +241,9 @@ void main() {
         test('does not trigger a fetch while the cache is fresh', () async {
           final (:cache, :requests) = buildCache(
             (_) => http.Response(
-              _jwksJson(),
+              jsonEncode({
+                'keys': [_jwk],
+              }),
               200,
               headers: {'cache-control': 'max-age=3600'},
             ),
@@ -238,7 +259,9 @@ void main() {
         test('returns null from a cold cache after a single fetch', () async {
           final (:cache, :requests) = buildCache(
             (_) => http.Response(
-              _jwksJson(),
+              jsonEncode({
+                'keys': [_jwk],
+              }),
               200,
               headers: {'cache-control': 'max-age=3600'},
             ),
@@ -255,10 +278,14 @@ void main() {
             fetchCount++;
             return http.Response(
               fetchCount == 1
-                  ? _jwksJson()
-                  : _jwksJson([
-                      {..._jwk, 'kid': 'rotated-key'},
-                    ]),
+                  ? jsonEncode({
+                      'keys': [_jwk],
+                    })
+                  : jsonEncode({
+                      'keys': [
+                        {..._jwk, 'kid': 'rotated-key'},
+                      ],
+                    }),
               200,
               headers: {'cache-control': 'max-age=3600'},
             );
@@ -301,7 +328,12 @@ void main() {
           final (:cache, :requests) = buildCache(
             (_) => fail
                 ? http.Response('nope', 404)
-                : http.Response(_jwksJson(), 200),
+                : http.Response(
+                    jsonEncode({
+                      'keys': [_jwk],
+                    }),
+                    200,
+                  ),
           );
 
           await expectLater(
@@ -330,16 +362,18 @@ void main() {
         test('skips non-RSA keys but keeps usable ones', () async {
           final (:cache, requests: _) = buildCache(
             (_) => http.Response(
-              _jwksJson([
-                _jwk,
-                {
-                  'kid': 'ec-key',
-                  'kty': 'EC',
-                  'crv': 'P-256',
-                  'x': 'a',
-                  'y': 'b',
-                },
-              ]),
+              jsonEncode({
+                'keys': [
+                  _jwk,
+                  {
+                    'kid': 'ec-key',
+                    'kty': 'EC',
+                    'crv': 'P-256',
+                    'x': 'a',
+                    'y': 'b',
+                  },
+                ],
+              }),
               200,
             ),
           );
@@ -351,9 +385,11 @@ void main() {
         test('skips keys that declare a non-RS256 algorithm', () async {
           final (:cache, requests: _) = buildCache(
             (_) => http.Response(
-              _jwksJson([
-                {..._jwk, 'alg': 'RS512'},
-              ]),
+              jsonEncode({
+                'keys': [
+                  {..._jwk, 'alg': 'RS512'},
+                ],
+              }),
               200,
             ),
           );
@@ -373,10 +409,12 @@ void main() {
         test('skips an individually malformed key', () async {
           final (:cache, requests: _) = buildCache(
             (_) => http.Response(
-              _jwksJson([
-                _jwk,
-                {'kid': 'broken', 'kty': 'RSA', 'n': '!!!', 'e': 'AQAB'},
-              ]),
+              jsonEncode({
+                'keys': [
+                  _jwk,
+                  {'kid': 'broken', 'kty': 'RSA', 'n': '!!!', 'e': 'AQAB'},
+                ],
+              }),
               200,
             ),
           );
@@ -387,7 +425,7 @@ void main() {
 
         test('throws on a response with no usable keys', () async {
           final (:cache, requests: _) = buildCache(
-            (_) => http.Response(_jwksJson(const []), 200),
+            (_) => http.Response(jsonEncode({'keys': const <Object?>[]}), 200),
           );
 
           await expectLater(
@@ -434,7 +472,9 @@ void main() {
       test('refresh discards cached keys', () async {
         final (:cache, :requests) = buildCache(
           (_) => http.Response(
-            _jwksJson(),
+            jsonEncode({
+              'keys': [_jwk],
+            }),
             200,
             headers: {'cache-control': 'max-age=3600'},
           ),
