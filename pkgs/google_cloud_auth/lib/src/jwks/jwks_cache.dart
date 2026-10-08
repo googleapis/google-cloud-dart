@@ -115,8 +115,12 @@ final class JwksCache {
   ///
   /// Throws [TokenVerificationException] if the keys cannot be fetched.
   Future<void> refresh() async {
+    keys = null;
     _expiry = null;
-    await _fetch();
+    if (_activeFetch == null) {
+      unawaited(_fetch()); // We will await for _activeFetch.
+    }
+    await _activeFetch;
   }
 
   Map<String, RsassaPkcs1V15PublicKey>? _freshKeys() {
