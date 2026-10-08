@@ -35,6 +35,7 @@ final class PubSub {
   grpc.PublisherClient? _publisherClient;
   grpc.SubscriberClient? _subscriberClient;
   final FutureOr<BaseAuthenticator>? _authenticator;
+  bool _isClosed = false;
 
   static String? _calculateProjectId(
     String? projectId,
@@ -171,21 +172,38 @@ final class PubSub {
       _subscriberClient ??= grpc.SubscriberClient(_channel);
 
   /// Closes the client and cleans up any resources associated with it.
+  ///
+  /// This does not flush messages buffered by [Topic.publish]. Call and await
+  /// [Topic.close] on every [Topic] you published to before closing the
+  /// client. Once the client is closed, publishing fails immediately with a
+  /// [StateError], including for messages that a [Topic] still has buffered.
   Future<void> close() async {
+    _isClosed = true;
     await _channel.shutdown();
   }
 
   // Topic-related methods
 
   /// A [Topic] object with the given [unqualifiedName] in the client's project.
-  Topic topic(String unqualifiedName) =>
-      Topic.unqualified(this, unqualifiedName);
+  ///
+  /// It is an error if [publishSettings] exceeds the limits described in
+  /// [PublishSettings.batching].
+  Topic topic(String unqualifiedName, {PublishSettings? publishSettings}) =>
+      Topic.unqualified(
+        this,
+        unqualifiedName,
+        publishSettings: publishSettings,
+      );
 
   /// A [Topic] object with the given [name].
   ///
   /// The [name] must be in the format `projects/<project-id>/topics/<topic-id>`.
   /// Useful for cross-project access.
-  Topic topicName(String name) => Topic(this, name);
+  ///
+  /// It is an error if [publishSettings] exceeds the limits described in
+  /// [PublishSettings.batching].
+  Topic topicName(String name, {PublishSettings? publishSettings}) =>
+      Topic(this, name, publishSettings: publishSettings);
 
   /// A [Subscription] object with the given [unqualifiedName] in the client's
   /// project.
@@ -203,19 +221,28 @@ final class PubSub {
   ///
   /// The [topic] must be in the format `projects/<project-id>/topics/<topic-id>`.
   ///
+  /// It is an error if [publishSettings] exceeds the limits described in
+  /// [PublishSettings.batching]; this is checked before the topic is created.
+  ///
   /// Throws a [ConflictException] if the topic already exists.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Publisher.CreateTopic).
   // TODO(sigurdm): Support configuring topic options (labels,
   // messageStoragePolicy, kmsKeyName, schemaSettings,
   // messageRetentionDuration).
-  Future<Topic> createTopic(String topic) async {
-    final t = grpc.Topic()..name = topic;
+  Future<Topic> createTopic(
+    String topic, {
+    PublishSettings? publishSettings,
+  }) async {
+    // Construct the `Topic` first so that invalid arguments are reported
+    // before the topic exists on the server.
+    final result = topicName(topic, publishSettings: publishSettings);
+    final topicProto = grpc.Topic()..name = topic;
     try {
-      await _publisher.createTopic(t, options: await _callOptions);
-      return topicName(topic);
-    } on GrpcError catch (e) {
-      throw _mapGrpcError(e);
+      await _publisher.createTopic(topicProto, options: await _callOptions);
+      return result;
+    } on GrpcError catch (error) {
+      throw _mapGrpcError(error);
     }
   }
 
@@ -230,41 +257,83 @@ final class PubSub {
     final request = grpc.DeleteTopicRequest()..topic = topic;
     try {
       await _publisher.deleteTopic(request, options: await _callOptions);
-    } on GrpcError catch (e) {
-      throw _mapGrpcError(e);
+    } on GrpcError catch (error) {
+      throw _mapGrpcError(error);
     }
   }
 
-  /// Adds one or more messages to the topic.
+  /// Adds a message to the topic in a single RPC without batching or retry.
+  ///
+  /// For background batching and automatic retries, use [Topic.publish].
   ///
   /// The [topic] must be in the format `projects/<project-id>/topics/<topic-id>`.
   ///
+  /// It is an error to call this after [close].
+  ///
   /// Throws a [NotFoundException] if the topic does not exist.
   ///
+  /// Throws an [InternalServerErrorException] if the server returns no message
+  /// ID.
+  ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Publisher.Publish).
-  // TODO(sigurdm): Support batch publishing (publishMany) for high-throughput.
   Future<String> publish(
     String topic,
     List<int> data, {
     Map<String, String>? attributes,
   }) async {
-    final message = grpc.PubsubMessage()..data = data;
-    if (attributes != null) {
-      message.attributes.addAll(attributes);
+    final messageIds = await publishMessages(topic, [
+      Message(data: data, attributes: attributes),
+    ]);
+    if (messageIds.isEmpty) {
+      throw InternalServerErrorException(
+        'Server returned no message ID for published message.',
+      );
     }
+    return messageIds.first;
+  }
 
-    final request = grpc.PublishRequest()
-      ..topic = topic
-      ..messages.add(message);
+  /// Adds multiple messages to the topic in a single RPC.
+  ///
+  /// The [topic] must be in the format `projects/<project-id>/topics/<topic-id>`.
+  ///
+  /// Returns a list of server-assigned message IDs matching the order of the
+  /// provided [messages].
+  ///
+  /// It is an error to call this after [close].
+  ///
+  /// Throws a [NotFoundException] if the topic does not exist.
+  ///
+  /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Publisher.Publish).
+  @internal
+  Future<List<String>> publishMessages(
+    String topic,
+    List<Message> messages,
+  ) async {
+    // A shut-down channel fails every call with UNAVAILABLE, which `Topic`
+    // would otherwise retry until its retry budget runs out. A `StateError`
+    // is not retried.
+    if (_isClosed) {
+      throw StateError('Cannot publish using a closed PubSub client.');
+    }
+    if (messages.isEmpty) return <String>[];
+    final request = grpc.PublishRequest()..topic = topic;
+
+    for (final message in messages) {
+      final pubsubMessage = grpc.PubsubMessage()..data = message.data;
+      if (message.attributes.isNotEmpty) {
+        pubsubMessage.attributes.addAll(message.attributes);
+      }
+      request.messages.add(pubsubMessage);
+    }
 
     try {
       final response = await _publisher.publish(
         request,
         options: await _callOptions,
       );
-      return response.messageIds.first;
-    } on GrpcError catch (e) {
-      throw _mapGrpcError(e);
+      return response.messageIds;
+    } on GrpcError catch (error) {
+      throw _mapGrpcError(error);
     }
   }
 
