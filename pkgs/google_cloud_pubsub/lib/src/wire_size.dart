@@ -27,8 +27,6 @@ import 'message.dart';
 @internal
 int varintSize(int value) {
   assert(value >= 0);
-  // Protobuf encodes negative int32 and int64 values as 10-byte varints.
-  if (value < 0) return 10;
   var size = 1;
   while (value >= 128) {
     value >>= 7;
@@ -39,9 +37,9 @@ int varintSize(int value) {
 
 /// The number of bytes the protobuf tag of [fieldNumber] occupies.
 ///
-/// A tag is the varint `fieldNumber << 3 | wireType`, where the low 3 bits
+/// A tag is the varint `(fieldNumber << 3) | wireType`, where the low 3 bits
 /// hold the wire type. The wire type never changes the varint's length, so it
-/// is left as zero here.
+/// is elided here.
 @internal
 int tagSize(int fieldNumber) => varintSize(fieldNumber << 3);
 
