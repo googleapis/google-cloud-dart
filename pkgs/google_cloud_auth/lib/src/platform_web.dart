@@ -12,14 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/// Authentication and credential management for Google Cloud.
-library;
+import 'credential_exception.dart';
 
-export 'src/application_default_credentials.dart'
-    if (dart.library.js_interop) 'src/application_default_credentials_web.dart'
-    show defaultCredentials;
-export 'src/compute_engine_credentials.dart' hide internalIsOnComputeEngine;
-export 'src/credential_exception.dart';
-export 'src/google_credentials.dart';
-export 'src/service_account_credentials.dart';
-export 'src/service_account_signer.dart';
+/// Whether the current runtime supports `dart:io` platform and file operations.
+const bool isPlatformIo = false;
+
+/// Whether the current operating system is Linux.
+bool get isPlatformLinux => false;
+
+/// Environment variables are not available on the web.
+String? readPlatformEnvironment(String name) => null;
+
+/// Local file system access is not available on the web.
+Future<String> readCredentialFileAsString(String path) async {
+  throw CredentialException(
+    'Reading credentials from a file ($path) is not supported on the web.',
+  );
+}
