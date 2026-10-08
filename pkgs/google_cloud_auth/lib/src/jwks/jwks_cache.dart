@@ -102,9 +102,6 @@ final class JwksCache {
   }) : _clientFactory = clientFactory ?? http.Client.new,
        _clock = clock ?? DateTime.now;
 
-  /// When the currently cached keys go stale, or `null` if nothing is cached.
-  DateTime? get expiry => _expiry;
-
   /// Returns the key identified by [keyId], or `null` if the endpoint does
   /// not publish it.
   ///
