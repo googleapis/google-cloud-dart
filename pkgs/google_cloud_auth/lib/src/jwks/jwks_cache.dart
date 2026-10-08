@@ -105,8 +105,11 @@ final class JwksCache {
   /// arbitrary `kid`.
   ///
   /// Throws [TokenVerificationException] if the keys cannot be fetched.
-  Future<RsassaPkcs1V15PublicKey?> lookupKey(String keyId) async =>
-      (_freshKeys() ?? await _fetch())[keyId];
+  FutureOr<RsassaPkcs1V15PublicKey?> lookupKey(String keyId) {
+    final fresh = _freshKeys();
+    if (fresh != null) return fresh[keyId];
+    return _fetch().then((keys) => keys[keyId]);
+  }
 
   /// Discards any cached keys and fetches a new set.
   ///
