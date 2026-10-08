@@ -115,8 +115,26 @@ void main() {
       expect(freshnessLifetime({'cache-control': 'public'}), isNull);
     });
 
-    test('does not match max-age inside another directive', () {
+    test('does not match max-age or no-cache inside another directive', () {
       expect(freshnessLifetime({'cache-control': 's-maxage=600'}), isNull);
+      expect(
+        freshnessLifetime({'cache-control': 'x-no-cache=1, max-age=60'}),
+        const Duration(seconds: 60),
+      );
+    });
+
+    test('ignores malformed max-age values', () {
+      expect(freshnessLifetime({'cache-control': 'max-age=120abc'}), isNull);
+      expect(freshnessLifetime({'cache-control': 'max-age="120'}), isNull);
+    });
+
+    test('clamps extreme max-age values to 2^31 - 1 seconds', () {
+      expect(
+        freshnessLifetime({
+          'cache-control': 'max-age=999999999999999999999999999',
+        }),
+        const Duration(seconds: 0x7fffffff),
+      );
     });
   });
 
@@ -220,9 +238,9 @@ void main() {
         final (:cache, :requests) = buildCache((_) => completer.future);
 
         final lookups = Future.wait([
-          cache.lookupKey(_keyId),
-          cache.lookupKey(_keyId),
-          cache.lookupKey(_keyId),
+          Future.value(cache.lookupKey(_keyId)),
+          Future.value(cache.lookupKey(_keyId)),
+          Future.value(cache.lookupKey(_keyId)),
         ]);
         completer.complete(
           http.Response(

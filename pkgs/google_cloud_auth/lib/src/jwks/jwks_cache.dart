@@ -29,7 +29,14 @@ import 'x509.dart';
 /// Used when the response carries no usable freshness information.
 const _defaultCacheDuration = Duration(hours: 1);
 
-final _maxAgePattern = RegExp(r'(?:^|[,\s])max-age\s*=\s*"?(\d+)"?');
+/// Maximum delta-seconds value (2^31 - 1, ~68 years), per
+/// [RFC 9111 §1.2.2](https://datatracker.ietf.org/doc/html/rfc9111#section-1.2.2).
+const _maxDeltaSeconds = 0x7fffffff;
+
+final _noCachePattern = RegExp(r'(?:^|[,\s])no-(?:store|cache)(?:$|[,\s=])');
+final _maxAgePattern = RegExp(
+  r'(?:^|[,\s])max-age\s*=\s*(?:"(\d+)"|(\d+))(?:$|[,\s])',
+);
 
 /// Computes how long a response may be treated as fresh.
 ///
@@ -43,18 +50,20 @@ Duration? freshnessLifetime(Map<String, String> headers) {
   final cacheControl = headers['cache-control']?.toLowerCase();
   if (cacheControl == null) return null;
 
-  if (cacheControl.contains('no-store') || cacheControl.contains('no-cache')) {
+  if (_noCachePattern.hasMatch(cacheControl)) {
     return Duration.zero;
   }
 
   final match = _maxAgePattern.firstMatch(cacheControl);
   if (match == null) return null;
 
-  final maxAge = int.tryParse(match.group(1)!);
-  if (maxAge == null) return null;
+  final digits = match.group(1) ?? match.group(2)!;
+  final maxAge =
+      int.tryParse(digits)?.clamp(0, _maxDeltaSeconds) ?? _maxDeltaSeconds;
 
-  final age = int.tryParse(headers['age'] ?? '') ?? 0;
-  final seconds = maxAge - (age > 0 ? age : 0);
+  final age =
+      int.tryParse(headers['age'] ?? '')?.clamp(0, _maxDeltaSeconds) ?? 0;
+  final seconds = maxAge - age;
   return seconds > 0 ? Duration(seconds: seconds) : Duration.zero;
 }
 
@@ -193,7 +202,8 @@ final class JwksCache {
 
     final keys = switch (json['keys']) {
       final List<dynamic> jwks => await _parseJwks(jwks),
-      _ => await _parseCertificateMap(json),
+      null when !json.containsKey('keys') => await _parseCertificateMap(json),
+      _ => <String, RsassaPkcs1V15PublicKey>{},
     };
 
     if (keys.isEmpty) {

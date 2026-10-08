@@ -61,6 +61,26 @@ void main() {
         throwsA(isA<FormatException>()),
       );
     });
+
+    test('rejects missing or wrong encapsulation boundaries', () {
+      expect(
+        () => parsePemCertificate('AQIDBA=='),
+        throwsA(isA<FormatException>()),
+      );
+      expect(
+        () => parsePemCertificate(
+          '-----BEGIN PUBLIC KEY-----\nAQIDBA==\n-----END PUBLIC KEY-----',
+        ),
+        throwsA(isA<FormatException>()),
+      );
+      expect(
+        () => parsePemCertificate(
+          '-----BEGIN CERTIFICATE-----\nAQIDBA==\n-----END CERTIFICATE-----\n'
+          '-----BEGIN CERTIFICATE-----\nAQIDBA==\n-----END CERTIFICATE-----',
+        ),
+        throwsA(isA<FormatException>()),
+      );
+    });
   });
 
   group('extractSubjectPublicKeyInfo', () {
@@ -106,6 +126,24 @@ void main() {
       );
     });
 
+    test('trailing bytes after outer SEQUENCE', () {
+      final certificate = parsePemCertificate(
+        testGoogleSecureTokenCertificatePem,
+      );
+      final withTrailing = Uint8List.fromList([...certificate, 0x00]);
+
+      expect(
+        () => extractSubjectPublicKeyInfo(withTrailing),
+        throwsA(
+          isA<FormatException>().having(
+            (e) => e.message,
+            'message',
+            contains('trailing bytes'),
+          ),
+        ),
+      );
+    });
+
     test('a certificate truncated mid-structure', () {
       final certificate = parsePemCertificate(
         testGoogleSecureTokenCertificatePem,
@@ -118,7 +156,13 @@ void main() {
 
       expect(
         () => extractSubjectPublicKeyInfo(truncated),
-        throwsA(isA<FormatException>()),
+        throwsA(
+          isA<FormatException>().having(
+            (e) => e.message,
+            'message',
+            contains('Truncated DER'),
+          ),
+        ),
       );
     });
 
@@ -137,7 +181,13 @@ void main() {
 
       expect(
         () => extractSubjectPublicKeyInfo(certificate),
-        throwsA(isA<FormatException>()),
+        throwsA(
+          isA<FormatException>().having(
+            (e) => e.message,
+            'message',
+            contains('Truncated DER'),
+          ),
+        ),
       );
     });
 
@@ -153,6 +203,49 @@ void main() {
             (e) => e.message,
             'message',
             contains('Indefinite-length'),
+          ),
+        ),
+      );
+    });
+
+    test('non-minimal DER length encoding', () {
+      // 0x81 0x02 encodes length 2 in long form (should be short form 0x02).
+      expect(
+        () => extractSubjectPublicKeyInfo(
+          Uint8List.fromList([0x30, 0x81, 0x02, 0x30, 0x00]),
+        ),
+        throwsA(
+          isA<FormatException>().having(
+            (e) => e.message,
+            'message',
+            contains('Non-minimal DER length'),
+          ),
+        ),
+      );
+      // 0x82 0x00 0x80 has a leading zero byte in the length.
+      expect(
+        () => extractSubjectPublicKeyInfo(
+          Uint8List.fromList([0x30, 0x82, 0x00, 0x80, ...List.filled(128, 0)]),
+        ),
+        throwsA(
+          isA<FormatException>().having(
+            (e) => e.message,
+            'message',
+            contains('Non-minimal DER length'),
+          ),
+        ),
+      );
+    });
+
+    test('high-tag-number form', () {
+      expect(
+        () =>
+            extractSubjectPublicKeyInfo(Uint8List.fromList([0x1f, 0x20, 0x00])),
+        throwsA(
+          isA<FormatException>().having(
+            (e) => e.message,
+            'message',
+            contains('High-tag-number'),
           ),
         ),
       );
