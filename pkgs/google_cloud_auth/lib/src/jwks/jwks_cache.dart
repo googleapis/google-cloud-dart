@@ -50,9 +50,7 @@ Duration? freshnessLifetime(Map<String, String> headers) {
   final cacheControl = headers['cache-control']?.toLowerCase();
   if (cacheControl == null) return null;
 
-  if (_noCachePattern.hasMatch(cacheControl)) {
-    return Duration.zero;
-  }
+  if (_noCachePattern.hasMatch(cacheControl)) return .zero;
 
   final match = _maxAgePattern.firstMatch(cacheControl);
   if (match == null) return null;
