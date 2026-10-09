@@ -110,8 +110,7 @@ final class JwksCache {
   ///
   /// Throws [TokenVerificationException] if the keys cannot be fetched.
   FutureOr<RsassaPkcs1V15PublicKey?> lookupKey(String keyId) {
-    final fresh = _freshKeys();
-    if (fresh != null) return fresh[keyId];
+    if (_freshKeys() case final fresh?) return fresh[keyId];
     return _fetch().then((keys) => keys[keyId]);
   }
 
