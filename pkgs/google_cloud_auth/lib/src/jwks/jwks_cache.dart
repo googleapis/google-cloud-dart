@@ -135,16 +135,10 @@ final class JwksCache {
     return _clock().isBefore(expiry) ? keys : null;
   }
 
-  Future<Map<String, RsassaPkcs1V15PublicKey>> _fetch() {
-    final activeFetch = _activeFetch;
-    if (activeFetch != null) return activeFetch;
-
-    final fetch = _fetchKeys().whenComplete(() {
+  Future<Map<String, RsassaPkcs1V15PublicKey>> _fetch() =>
+    _activeFetch ??= _fetchKeys().whenComplete(() {
       _activeFetch = null;
     });
-    _activeFetch = fetch;
-    return fetch;
-  }
 
   Future<Map<String, RsassaPkcs1V15PublicKey>> _fetchKeys() async {
     final http.Response response;
