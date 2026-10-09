@@ -16,6 +16,7 @@
 library;
 
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:google_cloud_pubsub/google_cloud_pubsub.dart';
 import 'package:google_cloud_pubsub/src/generated/google/pubsub/v1/pubsub.pb.dart'
@@ -497,6 +498,7 @@ void main() {
           ..receivedMessages.add(
             generated.ReceivedMessage()
               ..ackId = 'ack-1'
+              ..deliveryAttempt = 3
               ..message = (pb.PubsubMessage()
                 ..messageId = 'msg-1'
                 ..publishTime = pb_ts.Timestamp.fromDateTime(publishTime)
@@ -510,6 +512,7 @@ void main() {
       expect(receivedMessage.ackId, equals('ack-1'));
       expect(receivedMessage.messageId, equals('msg-1'));
       expect(receivedMessage.publishTime, equals(publishTime));
+      expect(receivedMessage.deliveryAttempt, equals(3));
 
       // Test delegation
       expect(receivedMessage.data, equals([1, 2, 3]));
@@ -518,6 +521,37 @@ void main() {
       // Test message composition
       expect(receivedMessage.message.data, equals([1, 2, 3]));
       expect(receivedMessage.message.attributes, equals({'key': 'value'}));
+    });
+
+    test('pull and streamingPull validate parameters synchronously', () async {
+      final subscription = client.subscription('sub');
+      expect(() => subscription.pull(maxMessages: 0), throwsArgumentError);
+      await expectLater(
+        client.pull('projects/test-project/subscriptions/sub', maxMessages: 0),
+        throwsArgumentError,
+      );
+      expect(
+        () => subscription.streamingPull(streamAckDeadlineSeconds: 9),
+        throwsArgumentError,
+      );
+      expect(
+        () => subscription.streamingPull(streamAckDeadlineSeconds: 601),
+        throwsArgumentError,
+      );
+      expect(
+        () => client.streamingPull(
+          'projects/test-project/subscriptions/sub',
+          streamAckDeadlineSeconds: 9,
+        ),
+        throwsArgumentError,
+      );
+      expect(
+        () => client.streamingPull(
+          'projects/test-project/subscriptions/sub',
+          streamAckDeadlineSeconds: 601,
+        ),
+        throwsArgumentError,
+      );
     });
 
     test(
@@ -575,12 +609,14 @@ void main() {
         messageId: 'msg-456',
         publishTime: publishTime,
         message: message,
+        deliveryAttempt: 2,
       );
 
       expect(receivedMessage.ackId, equals('ack-123'));
       expect(receivedMessage.messageId, equals('msg-456'));
       expect(receivedMessage.publishTime, equals(publishTime));
       expect(receivedMessage.message, equals(message));
+      expect(receivedMessage.deliveryAttempt, equals(2));
 
       // Delegation getters
       expect(receivedMessage.data, equals([1, 2, 3]));
@@ -588,7 +624,7 @@ void main() {
     });
 
     test('Message copies data and attributes', () {
-      final rawData = [1, 2, 3];
+      final rawData = Uint8List.fromList([1, 2, 3]);
       final rawAttributes = {'key': 'value'};
       final message = Message(data: rawData, attributes: rawAttributes);
 

@@ -100,9 +100,10 @@ void main() {
             await client.publish(topic.name, utf8.encode('sentinel'));
 
             final afterAck = await pullReliably(reopen, count: 1);
-            expect(afterAck.map((m) => utf8.decode(m.data)).toList(), [
-              'sentinel',
-            ]);
+            expect(
+              afterAck.map((message) => utf8.decode(message.data)).toList(),
+              ['sentinel'],
+            );
             await reopen.acknowledgeNow(afterAck);
           },
         );
@@ -143,7 +144,7 @@ void main() {
             }
           };
 
-          final sub =
+          final subscription =
               client.subscription(
                   'test-sub',
                   ackSettings: AckSettings(
@@ -160,20 +161,20 @@ void main() {
                 ..acknowledge(dummyMessage('ack-1'))
                 ..acknowledge(dummyMessage('ack-2'));
 
-          await sub.close();
-          expect(sub.isClosed, isTrue);
+          await subscription.close();
+          expect(subscription.isClosed, isTrue);
           expect(attempts, 2);
           expect(fakeSubscriber.lastAckIds, ['ack-1', 'ack-2']);
           expect(
-            () => sub.acknowledge(dummyMessage('ack-3')),
+            () => subscription.acknowledge(dummyMessage('ack-3')),
             throwsStateError,
           );
           expect(
-            () => sub.acknowledgeNow([dummyMessage('ack-3')]),
+            () => subscription.acknowledgeNow([dummyMessage('ack-3')]),
             throwsStateError,
           );
-          expect(sub.pull, throwsStateError);
-          expect(sub.streamingPull, throwsStateError);
+          expect(subscription.pull, throwsStateError);
+          expect(subscription.streamingPull, throwsStateError);
         },
       );
 
@@ -184,7 +185,7 @@ void main() {
           throw const grpc.GrpcError.notFound('Subscription not found');
         };
 
-        final sub = client.subscription(
+        final subscription = client.subscription(
           'test-sub',
           ackSettings: AckSettings(
             retry: const ExponentialRetry(
@@ -193,12 +194,12 @@ void main() {
           ),
         )..acknowledge(dummyMessage('ack-1'));
 
-        await sub.close();
+        await subscription.close();
         expect(attempts, 1);
       });
 
       test('does not retry buffered acks after PubSub.close()', () async {
-        final sub = client.subscription(
+        final subscription = client.subscription(
           'test-sub',
           ackSettings: AckSettings(
             batching: BatchingSettings(maxDelay: const Duration(seconds: 10)),
@@ -206,13 +207,13 @@ void main() {
         )..acknowledge(dummyMessage('ack-1'));
 
         await client.close();
-        await sub.close();
+        await subscription.close();
         expect(fakeSubscriber.acknowledgeCallCount, 0);
       });
 
       test('keeps every emitted AcknowledgeRequest within maxBytes', () async {
         const limit = 250;
-        final sub = client.subscription(
+        final subscription = client.subscription(
           'test-sub',
           ackSettings: AckSettings(
             batching: BatchingSettings(
@@ -224,9 +225,9 @@ void main() {
         );
 
         for (var i = 0; i < 20; i++) {
-          sub.acknowledge(dummyMessage('ack-${'x' * 30}-$i'));
+          subscription.acknowledge(dummyMessage('ack-${'x' * 30}-$i'));
         }
-        await sub.close();
+        await subscription.close();
 
         expect(fakeSubscriber.recordedAckRequests.length, greaterThan(1));
         for (final request in fakeSubscriber.recordedAckRequests) {

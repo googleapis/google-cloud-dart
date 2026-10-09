@@ -88,7 +88,8 @@ final class Subscription {
   /// A subscription with the given [subscriptionId] in the client's project.
   ///
   /// It is an error if the constructed subscription name is invalid (e.g. if
-  /// [subscriptionId] contains slashes).
+  /// [subscriptionId] contains slashes), or if [ackSettings] exceeds the
+  /// limits described in [AckSettings.batching].
   Subscription.unqualified(
     this.pubsub,
     String subscriptionId, {
@@ -104,7 +105,8 @@ final class Subscription {
   /// Useful for cross-project access.
   ///
   /// It is an error if [name] is not in the format
-  /// `projects/<project-id>/subscriptions/<subscription-id>`.
+  /// `projects/<project-id>/subscriptions/<subscription-id>`, or if
+  /// [ackSettings] exceeds the limits described in [AckSettings.batching].
   Subscription(this.pubsub, this.name, {AckSettings? ackSettings})
     : ackSettings = ackSettings ?? AckSettings() {
     _validateName(name);
