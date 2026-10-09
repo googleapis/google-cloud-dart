@@ -93,6 +93,11 @@ final class JwksCache {
   /// The in-flight fetch, so that concurrent callers share one request.
   Future<Map<String, RsassaPkcs1V15PublicKey>>? _activeFetch;
 
+  /// Creates a new [JwksCache] backed by the given [uri].
+  ///
+  /// If provided, [clientFactory] will be used to fetch the keys at [uri].
+  /// [JwksCache] may call [clientFactory] may times and will `close` the
+  /// returned [http.Client]s.
   JwksCache({
     required this.uri,
     FutureOr<http.Client> Function()? clientFactory,
