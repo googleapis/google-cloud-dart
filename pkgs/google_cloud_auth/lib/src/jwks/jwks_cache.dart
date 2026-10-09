@@ -215,7 +215,7 @@ final class JwksCache {
   ///
   /// See [RFC 7517 § 4](https://datatracker.ietf.org/doc/html/rfc7517#section-4).
   Future<Map<String, RsassaPkcs1V15PublicKey>> _parseJwks(
-    List<dynamic> jwks,
+    List<Object?> jwks,
   ) async {
     final keys = <String, RsassaPkcs1V15PublicKey>{};
     for (final entry in jwks) {
