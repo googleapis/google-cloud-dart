@@ -125,10 +125,7 @@ final class JwksCache {
   Future<void> refresh() async {
     keys = null;
     _expiry = null;
-    if (_activeFetch == null) {
-      unawaited(_fetch()); // We will await for _activeFetch.
-    }
-    await _activeFetch;
+    await _fetch();
   }
 
   Map<String, RsassaPkcs1V15PublicKey>? _freshKeys() {
