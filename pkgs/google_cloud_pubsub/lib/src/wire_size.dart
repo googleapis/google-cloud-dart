@@ -56,10 +56,11 @@ const _pubsubMessageDataField = 1;
 const _pubsubMessageAttributesField = 2;
 const _mapEntryKeyField = 1;
 const _mapEntryValueField = 2;
-const _requestSubscriptionField = 1;
-const _ackIdsField = 2;
-const _modifyDeadlineSecondsField = 3;
-const _modifyDeadlineAckIdsField = 4;
+const _acknowledgeRequestSubscriptionField = 1;
+const _acknowledgeRequestAckIdsField = 2;
+const _modifyAckDeadlineRequestSubscriptionField = 1;
+const _modifyAckDeadlineRequestAckDeadlineSecondsField = 3;
+const _modifyAckDeadlineRequestAckIdsField = 4;
 
 /// The number of bytes a serialized `PublishRequest` for [topic] occupies
 /// before any message is added: its `topic` field.
@@ -87,23 +88,28 @@ int publishRequestMessageSize(Message message) {
 /// occupies before any ack ID is added: its `subscription` field.
 @internal
 int acknowledgeRequestBaseSize(String subscription) => lengthDelimitedSize(
-  _requestSubscriptionField,
+  _acknowledgeRequestSubscriptionField,
   utf8.encode(subscription).length,
 );
 
 /// The exact number of bytes [ackId] adds to a serialized
 /// `AcknowledgeRequest`.
 @internal
-int acknowledgeRequestItemSize(String ackId) =>
-    lengthDelimitedSize(_ackIdsField, utf8.encode(ackId).length);
+int acknowledgeRequestItemSize(String ackId) => lengthDelimitedSize(
+  _acknowledgeRequestAckIdsField,
+  utf8.encode(ackId).length,
+);
 
 /// The number of bytes a serialized `ModifyAckDeadlineRequest` for
 /// [subscription] occupies before any item is added: its `subscription`
 /// field plus the tag of `ackDeadlineSeconds`.
 @internal
 int modifyAckDeadlineRequestBaseSize(String subscription) =>
-    acknowledgeRequestBaseSize(subscription) +
-    tagSize(_modifyDeadlineSecondsField);
+    lengthDelimitedSize(
+      _modifyAckDeadlineRequestSubscriptionField,
+      utf8.encode(subscription).length,
+    ) +
+    tagSize(_modifyAckDeadlineRequestAckDeadlineSecondsField);
 
 /// The number of bytes an item with [ackId] and [ackDeadlineSeconds] adds to
 /// a `ModifyAckDeadlineRequest` or `StreamingPullRequest` batch.
@@ -115,5 +121,8 @@ int modifyAckDeadlineRequestBaseSize(String subscription) =>
 /// fixed when the batcher is created. This is an upper bound on both paths.
 @internal
 int modifyAckDeadlineRequestItemSize(String ackId, int ackDeadlineSeconds) =>
-    lengthDelimitedSize(_modifyDeadlineAckIdsField, utf8.encode(ackId).length) +
+    lengthDelimitedSize(
+      _modifyAckDeadlineRequestAckIdsField,
+      utf8.encode(ackId).length,
+    ) +
     varintSize(ackDeadlineSeconds);

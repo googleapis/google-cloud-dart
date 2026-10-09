@@ -126,7 +126,7 @@ void main() {
 
       test('deduplicates by keeping latest deadline per ackId and groups by '
           'deadline', () async {
-        final sub =
+        final subscription =
             client.subscription(
                 'test-sub',
                 ackSettings: AckSettings(
@@ -141,21 +141,21 @@ void main() {
               ..modifyAckDeadline(dummyMessage('ack-2'), 30)
               ..modifyAckDeadline(dummyMessage('ack-3'), 0); // nack
 
-        await sub.close();
+        await subscription.close();
 
         expect(fakeSubscriber.recordedModifyAckRequests, hasLength(2));
         final bySeconds = {
-          for (final req in fakeSubscriber.recordedModifyAckRequests)
-            req.ackDeadlineSeconds: req.ackIds,
+          for (final request in fakeSubscriber.recordedModifyAckRequests)
+            request.ackDeadlineSeconds: request.ackIds,
         };
         expect(bySeconds[30], ['ack-1', 'ack-2']);
         expect(bySeconds[0], ['ack-3']);
         expect(
-          () => sub.modifyAckDeadline(dummyMessage('ack-4'), 10),
+          () => subscription.modifyAckDeadline(dummyMessage('ack-4'), 10),
           throwsStateError,
         );
         expect(
-          () => sub.modifyAckDeadlineNow([dummyMessage('ack-4')], 10),
+          () => subscription.modifyAckDeadlineNow([dummyMessage('ack-4')], 10),
           throwsStateError,
         );
       });
@@ -168,7 +168,7 @@ void main() {
           }
         };
 
-        final sub = client.subscription(
+        final subscription = client.subscription(
           'test-sub',
           ackSettings: AckSettings(
             retry: const ExponentialRetry(
@@ -177,21 +177,21 @@ void main() {
           ),
         )..modifyAckDeadline(dummyMessage('ack-1'), 30);
 
-        await sub.close();
+        await subscription.close();
         expect(attempts, 2);
       });
 
       test('rejects ackDeadlineSeconds outside 0..600', () async {
-        final sub = client.subscription('test-sub');
+        final subscription = client.subscription('test-sub');
         final message = dummyMessage('ack-1');
 
         for (final invalid in [-1, 601]) {
           expect(
-            () => sub.modifyAckDeadline(message, invalid),
+            () => subscription.modifyAckDeadline(message, invalid),
             throwsArgumentError,
           );
           expect(
-            () => sub.modifyAckDeadlineNow([message], invalid),
+            () => subscription.modifyAckDeadlineNow([message], invalid),
             throwsArgumentError,
           );
           await expectLater(
@@ -212,7 +212,7 @@ void main() {
       test(
         'does not retry buffered deadline modifications after PubSub.close()',
         () async {
-          final sub = client.subscription(
+          final subscription = client.subscription(
             'test-sub',
             ackSettings: AckSettings(
               batching: BatchingSettings(maxDelay: const Duration(seconds: 10)),
@@ -220,7 +220,7 @@ void main() {
           )..modifyAckDeadline(dummyMessage('ack-1'), 30);
 
           await client.close();
-          await sub.close();
+          await subscription.close();
           expect(fakeSubscriber.modifyAckDeadlineCallCount, 0);
         },
       );
@@ -229,7 +229,7 @@ void main() {
         'keeps every emitted ModifyAckDeadlineRequest within maxBytes',
         () async {
           const limit = 250;
-          final sub = client.subscription(
+          final subscription = client.subscription(
             'test-sub',
             ackSettings: AckSettings(
               batching: BatchingSettings(
@@ -241,9 +241,12 @@ void main() {
           );
 
           for (var i = 0; i < 20; i++) {
-            sub.modifyAckDeadline(dummyMessage('ack-${'x' * 30}-$i'), 600);
+            subscription.modifyAckDeadline(
+              dummyMessage('ack-${'x' * 30}-$i'),
+              600,
+            );
           }
-          await sub.close();
+          await subscription.close();
 
           expect(
             fakeSubscriber.recordedModifyAckRequests.length,

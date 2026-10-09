@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 language: dart
-version: v0.44.1-0.20260915154909-bea74dadf46d
+version: v0.46.1-0.20261005173254-dbbeba2b289f
 sources:
   conformance:
     commit: 216b587a1240d9a70f2d6876939a55f7ecf187a4
