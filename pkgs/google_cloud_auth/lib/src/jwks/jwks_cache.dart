@@ -136,9 +136,9 @@ final class JwksCache {
   }
 
   Future<Map<String, RsassaPkcs1V15PublicKey>> _fetch() =>
-    _activeFetch ??= _fetchKeys().whenComplete(() {
-      _activeFetch = null;
-    });
+      _activeFetch ??= _fetchKeys().whenComplete(() {
+        _activeFetch = null;
+      });
 
   Future<Map<String, RsassaPkcs1V15PublicKey>> _fetchKeys() async {
     final http.Response response;
