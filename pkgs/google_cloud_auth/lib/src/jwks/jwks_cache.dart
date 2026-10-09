@@ -198,7 +198,7 @@ final class JwksCache {
     }
 
     final keys = switch (json['keys']) {
-      final List<dynamic> jwks => await _parseJwks(jwks),
+      final List<Object?> jwks => await _parseJwks(jwks),
       null when !json.containsKey('keys') => await _parseCertificateMap(json),
       _ => <String, RsassaPkcs1V15PublicKey>{},
     };
