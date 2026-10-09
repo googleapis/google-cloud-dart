@@ -239,7 +239,6 @@ restricted by organization rulesets and requires temporary membership in the
 
 > [!TIP]
 >
-> **Pre-staging approval with your PR review (for authors and coding agents):**
 > Temporary [`cloud-sdk-repository-admin`][] access is valid for 8 hours and is
 > granted to your GitHub account rather than a specific commit SHA. To minimize
 > round-trips:
@@ -279,20 +278,13 @@ Because PRs are squash-merged, always resolve the landed merge commit SHA on
 
 - **Tag Format:** `<package_name>-v<version>` (e.g., `google_cloud-v1.0.0` or
   `google_cloud_storage-v0.2.1`).
-- **Publish Command (`gh` CLI):**
+- **Publish Command:**
   ```bash
   MERGE_SHA=$(gh pr view <PR> --json mergeCommit --jq '.mergeCommit.oid')
   gh release create google_cloud_storage-v0.2.1 \
     --target "$MERGE_SHA" \
     --title "Release package:google_cloud_storage v0.2.1" \
     --notes "See CHANGELOG.md."
-  ```
-- **Publish Command (`git` CLI):**
-  ```bash
-  MERGE_SHA=$(gh pr view <PR> --json mergeCommit --jq '.mergeCommit.oid')
-  git fetch origin main
-  git tag google_cloud_storage-v0.2.1 "$MERGE_SHA"
-  git push origin google_cloud_storage-v0.2.1
   ```
 
 When this tag is pushed to GitHub, the workflow:

@@ -31,14 +31,3 @@
   if they use `projectId` (e.g.
   `GOOGLE_CLOUD_PROJECT=demo-project dart test -P firebase-emulator`).
 - Try to fix any test failures before declaring yourself done.
-
-## Pull requests and publishing
-
-- After creating a PR or pushing new commits to a PR, comment `/gcbrun`
-  (`gh pr comment <PR> --body "/gcbrun"`) to trigger the required Google Cloud
-  Build integration test check.
-- To release and tag hand-written packages (`pkgs/`), follow
-  [Publishing Packages](DEVELOPER_GUIDE.md#publishing-packages) in
-  `DEVELOPER_GUIDE.md`.
-- To release and tag generated packages (`generated/`), follow
-  [`generated/RELEASING.md`](generated/RELEASING.md).
