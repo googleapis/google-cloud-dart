@@ -96,7 +96,7 @@ final class JwksCache {
   /// Creates a new [JwksCache] backed by the given [uri].
   ///
   /// If provided, [clientFactory] will be used to fetch the keys at [uri].
-  /// [JwksCache] may call [clientFactory] may times and will `close` the
+  /// [JwksCache] may call [clientFactory] many times and will `close` the
   /// returned [http.Client]s.
   JwksCache({
     required this.uri,
