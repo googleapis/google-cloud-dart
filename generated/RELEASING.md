@@ -114,6 +114,10 @@ last release.
    ```
 2. Obtain approval to publish tags to `google-cloud-dart` from
    [go/cloud-sdk-googleapis#aod](http://go/cloud-sdk-googleapis#aod).
+   (Tip: Because this temporary approval is valid for 8 hours and applies to
+   your GitHub account rather than a specific commit SHA, you can request it
+   when sending the step 5 version-bump PR for review and share both the PR URL
+   and the approval URL with your reviewer in a single message.)
 3. Push the tags:
    ```bash
    git push --tags
