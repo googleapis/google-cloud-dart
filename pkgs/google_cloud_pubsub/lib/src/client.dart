@@ -19,7 +19,6 @@ import 'package:grpc/grpc.dart';
 import 'package:meta/meta.dart';
 
 import '../google_cloud_pubsub.dart';
-import 'disposable_stream_controller.dart';
 import 'generated/google/pubsub/v1/pubsub.pbgrpc.dart' as grpc;
 import 'pubsub_emulator_host_vm.dart';
 
@@ -502,6 +501,8 @@ final class PubSub {
             );
           }
           final options = await _callOptions;
+          // The listener may have removed itself during the asynchronous gap
+          // awaiting `options`.
           if (!controller.hasListener) return;
           final responseStream = _subscriber.streamingPull(
             requestStream,
@@ -602,8 +603,7 @@ final class PubSub {
     String subscription, {
     required int streamAckDeadlineSeconds,
   }) async* {
-    final requestController =
-        DisposableStreamController<grpc.StreamingPullRequest>();
+    final requestController = StreamController<grpc.StreamingPullRequest>();
     try {
       requestController.add(
         grpc.StreamingPullRequest()
@@ -645,7 +645,7 @@ final class PubSub {
         },
       );
     } finally {
-      unawaited(requestController.dispose());
+      unawaited(requestController.close());
     }
   }
 
