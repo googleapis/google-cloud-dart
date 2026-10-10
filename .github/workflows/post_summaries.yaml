@@ -12,25 +12,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# A CI configuration to auto-publish pub packages.
-
-name: Publish
+name: Comment on the pull request
 permissions:
   contents: read
 
 on:
-  pull_request:
-    branches: [ main ]
-  push:
-    tags: [ '[A-z]+-v[0-9]+.[0-9]+.[0-9]+*' ]
+  # Trigger this workflow after the Health or Publish workflow completes. This
+  # workflow will have permissions to create comments on the PR, even if the
+  # original workflow ran on a fork PR.
+  workflow_run: # zizmor: ignore[dangerous-triggers]
+    workflows:
+      - Publish
+      - Health
+    types:
+      - completed
 
 jobs:
-  publish:
+  upload:
     if: ${{ github.repository_owner == 'googleapis' }}
-    uses: dart-lang/ecosystem/.github/workflows/publish.yaml@5576a85fa69edea4343a1b601d4c3e755fcf6ad4
-    with:
-      ignore-packages: generated/**
-      write-comments: false
+    uses: dart-lang/ecosystem/.github/workflows/post_summaries.yaml@5576a85fa69edea4343a1b601d4c3e755fcf6ad4
     permissions:
-      id-token: write
       pull-requests: write

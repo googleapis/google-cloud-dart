@@ -195,7 +195,7 @@ Package publishing is automated using GitHub Actions and the shared
 
 ### Pull Requests (Dry Run)
 When a PR is opened or updated on `main`, the
-[Publish workflow](file:///Users/kevmoo/github/google-cloud-dart/.github/workflows/publish.yaml)
+[Publish workflow](.github/workflows/publish.yaml)
 runs a dry-run check for all packages in the repository. It validates that
 there are no issues that would prevent publishing to `pub.dev`
 (`dart pub publish --dry-run`).
@@ -229,34 +229,62 @@ requests from GitHub Actions via OIDC whenever a matching git tag is pushed.
 
 ### Triggering a Release (Tagging)
 To publish a package to `pub.dev`, a git tag matching the package name and
-version must be created and pushed.
+version must be created and pushed after the release PR merges.
 
-There are two ways to do this:
+#### Prerequisite: Temporary Repository Admin Access
+Creating git tags or GitHub releases in `googleapis/google-cloud-dart` is
+restricted by organization rulesets and requires temporary membership in the
+[`cloud-sdk-repository-admin`][] GitHub team via
+[go/cloud-sdk-googleapis#aod](http://go/cloud-sdk-googleapis#aod).
+
+> [!TIP]
+>
+> Temporary [`cloud-sdk-repository-admin`][] access is valid for 8 hours and is
+> granted to your GitHub account rather than a specific commit SHA. To minimize
+> round-trips:
+> 1. Open the release PR and comment `/gcbrun` to start integration tests.
+> 2. Immediately start the
+>    [go/cloud-sdk-googleapis#aod](http://go/cloud-sdk-googleapis#aod) request
+>    to generate your approval URL.
+> 3. Send your reviewer **both** the **Release PR URL** and the **approval URL**
+>    in a single message so they can approve both in one pass. (If your coding
+>    agent has an internal chat tool configured, it should offer to send this
+>    message directly after your confirmation; otherwise, it should output a
+>    copy-pasteable message with both links.)
+
+Once the release PR is merged and your temporary repository admin access is
+active, there are two ways to create the release tag:
 
 #### Option A: Via the PR Comment UI (Recommended)
 When a PR is created or updated with a version bump, the dry-run workflow
 detects it and posts a summary comment on the PR.
 
-1. In the PR's health/publish summary comment, locate the packages table.
-2. For any package ready to publish, click the pre-constructed **Publish** link
+1. Confirm that the release PR has been merged into `main`.
+2. In the PR's health/publish summary comment, locate the packages table.
+3. For any package ready to publish, click the pre-constructed **Publish** link
    in the table.
-3. This opens GitHub's **Draft a new release** page with the correct tag name
-   (`<package_name>-v<version>`), target branch, and release title already
-   pre-filled.
-4. Click **Publish release** in the GitHub UI to create the tag automatically.
+4. This opens GitHub's **Draft a new release** page with the correct tag name
+   (`<package_name>-v<version>`), target branch (`main`), and release title
+   already pre-filled.
+5. Click **Publish release** in the GitHub UI to create the tag automatically.
 
 This method is highly recommended as it avoids manual terminal execution and
 prevents tag naming typos.
 
 #### Option B: Manual Tagging (CLI)
-Alternatively, you can manually create and push the tag from your terminal:
+Alternatively, you can create and push the release tag from your terminal.
+Because PRs are squash-merged, always resolve the landed merge commit SHA on
+`main` (`mergeCommit.oid`) rather than tagging a local pre-merge branch commit:
 
 - **Tag Format:** `<package_name>-v<version>` (e.g., `google_cloud-v1.0.0` or
   `google_cloud_storage-v0.2.1`).
 - **Publish Command:**
   ```bash
-  git tag google_cloud_storage-v0.2.1
-  git push origin google_cloud_storage-v0.2.1
+  MERGE_SHA=$(gh pr view <PR> --json mergeCommit --jq '.mergeCommit.oid')
+  gh release create google_cloud_storage-v0.2.1 \
+    --target "$MERGE_SHA" \
+    --title "Release package:google_cloud_storage v0.2.1" \
+    --notes "See CHANGELOG.md."
   ```
 
 When this tag is pushed to GitHub, the workflow:
@@ -266,11 +294,14 @@ When this tag is pushed to GitHub, the workflow:
    `pub.dev`.
 
 > [!NOTE]
+>
 > - Packages with `publish_to: none` in their `pubspec.yaml` are
 >   automatically ignored.
 > - The `generated/` directory is explicitly excluded from publishing in this
 >   repository (`ignore-packages: generated/**` in
->   [publish.yaml](file:///Users/kevmoo/github/google-cloud-dart/.github/workflows/publish.yaml)).
+>   [publish.yaml](.github/workflows/publish.yaml)). See
+>   [`generated/RELEASING.md`](generated/RELEASING.md) for releasing generated
+>   packages.
 > - Version numbers ending with `-dev` (e.g., `1.2.3-dev`) are validated but
 >   **not** auto-published to `pub.dev`.
 
@@ -289,6 +320,7 @@ tests by commenting `/gcbrun` on the PR.
 [Google Cloud Console]: https://console.cloud.google.com/
 [Conventional Commits]: https://www.conventionalcommits.org/
 [`cloud-sdk-dart-team`]: https://github.com/orgs/googleapis/teams/cloud-sdk-dart-team
-[`dart-sdk-testing`]: https://pantheon.corp.google.com/welcome?project=dart-sdk-testing
+[`cloud-sdk-repository-admin`]: https://github.com/orgs/googleapis/teams/cloud-sdk-repository-admin
+[`dart-sdk-testing`]: https://console.cloud.google.com/welcome?project=dart-sdk-testing
 [Firebase Emulators Suite]: https://firebase.google.com/docs/emulator-suite
 [automated-publishing-docs]: https://dart.dev/tools/pub/automated-publishing#configuring-automated-publishing-from-github-actions-on-pub-dev
