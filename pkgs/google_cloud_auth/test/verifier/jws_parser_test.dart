@@ -140,6 +140,20 @@ void main() {
       );
     });
 
+    test('a segment with non-ASCII characters', () {
+      // `signedContent` is ASCII-encoded, so non-ASCII input must be rejected
+      // as a FormatException while decoding, before that encoding happens.
+      final header = _segment({'alg': 'RS256'});
+      final payload = _segment({'sub': 'user-1'});
+      for (final token in ['$headeré.$payload.', '$header.$payloadé.']) {
+        expect(
+          () => JwsParts.parse(token),
+          throwsA(isA<FormatException>()),
+          reason: token,
+        );
+      }
+    });
+
     test('a segment that is not JSON', () {
       final notJson = base64UrlUnpadded(utf8.encode('not json'));
       expect(

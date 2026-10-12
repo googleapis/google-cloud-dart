@@ -36,23 +36,23 @@ String? _optionalString(Map<String, Object?> json, String name) {
   return value is String ? value : null;
 }
 
+/// The largest magnitude, in seconds since the epoch, that a [DateTime] can
+/// represent.
+const _maxDateTimeSeconds = 8640000000000;
+
 /// Reads a JWT `NumericDate` claim, returning `null` if absent or malformed.
 ///
 /// See [RFC 7519 §2](https://datatracker.ietf.org/doc/html/rfc7519#section-2).
 DateTime? _timestamp(Map<String, Object?> payload, String name) {
   final value = payload[name];
-  if (value is! num) return null;
-  try {
-    return DateTime.fromMillisecondsSinceEpoch(
-      value.toInt() * 1000,
-      isUtc: true,
-    );
-    // ignore: avoid_catching_errors
-  } on ArgumentError {
-    // A `NumbericDate` has no maximun value defined in RFC-7519 but Dart
-    // 'DateTime` does. So just drop out-of-range `DateTime`s.
+  // A `NumericDate` has no maximum value defined in RFC 7519, but [DateTime]
+  // does, so drop out-of-range values. Checking before converting also avoids
+  // integer overflow on native platforms, and rejects the infinities that
+  // `jsonDecode` produces for numbers too large for a double.
+  if (value is! num || !value.isFinite || value.abs() > _maxDateTimeSeconds) {
     return null;
   }
+  return DateTime.fromMillisecondsSinceEpoch(value.toInt() * 1000, isUtc: true);
 }
 
 /// Normalizes an `aud` claim, which may be a string or a list of strings.

@@ -87,11 +87,14 @@ void main() {
   /// Signs a JWT with [testPrivateKey].
   ///
   /// [header] entries override the defaults, so a test can e.g. set a wrong
-  /// `alg`, or drop the `kid` by setting it to `null`.
+  /// `alg`, or drop the `kid` by setting it to `null`. [editPayloadJson] can
+  /// rewrite the encoded payload, e.g. to include JSON that [jsonEncode]
+  /// cannot produce.
   Future<String> mintToken({
     required Map<String, Object?> payload,
     Map<String, Object?> header = const {},
     bool corruptSignature = false,
+    String Function(String json)? editPayloadJson,
   }) async {
     final fullHeader = <String, Object?>{
       'alg': 'RS256',
@@ -100,10 +103,13 @@ void main() {
       ...header,
     }..removeWhere((_, value) => value == null);
 
+    var payloadJson = jsonEncode(payload);
+    if (editPayloadJson != null) payloadJson = editPayloadJson(payloadJson);
+
     final signingInput =
         '${base64UrlUnpadded(utf8.encode(jsonEncode(fullHeader)))}'
         '.'
-        '${base64UrlUnpadded(utf8.encode(jsonEncode(payload)))}';
+        '${base64UrlUnpadded(utf8.encode(payloadJson))}';
 
     final signature = await privateKey.signBytes(ascii.encode(signingInput));
     if (corruptSignature) signature[0] ^= 0xff;
@@ -398,6 +404,31 @@ void main() {
           // A token without an expiry would otherwise be valid forever.
           final token = await mintToken(
             payload: validPayload({'exp': #absent}),
+          );
+
+          await expectLater(
+            buildVerifier().verify(token),
+            _throwsVerification(contains('no "exp"')),
+          );
+        });
+
+        test('rejects an exp beyond the range of DateTime', () async {
+          // On native platforms, converting this to milliseconds would
+          // overflow and wrap around to 1969.
+          final token = await mintToken(payload: validPayload({'exp': 1e19}));
+
+          await expectLater(
+            buildVerifier().verify(token),
+            _throwsVerification(contains('no "exp"')),
+          );
+        });
+
+        test('rejects an exp too large for a double', () async {
+          // `1e400` is valid JSON, but `jsonDecode` turns it into infinity.
+          final token = await mintToken(
+            payload: validPayload({'exp': 0}),
+            editPayloadJson: (json) =>
+                json.replaceFirst('"exp":0', '"exp":1e400'),
           );
 
           await expectLater(
