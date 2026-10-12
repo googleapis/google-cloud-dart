@@ -22,7 +22,22 @@ import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
 
+/// Matches any character outside the unpadded base64url alphabet.
+///
+/// [RFC 7515 §2](https://datatracker.ietf.org/doc/html/rfc7515#section-2)
+/// forbids padding and other characters, but [Base64Codec.normalize] accepts
+/// `=`, `+`, `/` and `%`-escapes. Since the signature segment isn't covered by
+/// the signature, accepting them would let anyone re-encode a valid token
+/// without invalidating it.
+final _nonBase64UrlCharacter = RegExp(r'[^A-Za-z0-9_-]');
+
 Uint8List _decodeBase64Url(String segment, String name) {
+  if (segment.contains(_nonBase64UrlCharacter)) {
+    throw FormatException(
+      'The JWS $name is not valid base64url: it may only contain A-Z, a-z, '
+      '0-9, "-" and "_".',
+    );
+  }
   try {
     return base64Url.decode(base64Url.normalize(segment));
   } on FormatException catch (e) {

@@ -154,6 +154,36 @@ void main() {
       }
     });
 
+    group('a segment with', () {
+      // RFC 7515 §2 only allows the base64url alphabet, without padding, but
+      // `base64Url.normalize` also accepts these. The signature segment isn't
+      // covered by the signature, so accepting them would let anyone re-encode
+      // a token without invalidating it.
+      final header = _segment({'alg': 'RS256'});
+      final payload = _segment({'sub': 'user-1'});
+
+      for (final (description, signature) in [
+        ('padding', 'AQ=='),
+        ('percent-encoded padding', 'AQ%3D%3D'),
+        ('a percent-encoded character', '%41Q'),
+        ('"+" instead of "-"', '+_-_'),
+        ('"/" instead of "_"', '-/-_'),
+      ]) {
+        test(description, () {
+          expect(
+            () => JwsParts.parse('$header.$payload.$signature'),
+            throwsA(
+              isA<FormatException>().having(
+                (e) => e.message,
+                'message',
+                contains('base64url'),
+              ),
+            ),
+          );
+        });
+      }
+    });
+
     test('a segment that is not JSON', () {
       final notJson = base64UrlUnpadded(utf8.encode('not json'));
       expect(
