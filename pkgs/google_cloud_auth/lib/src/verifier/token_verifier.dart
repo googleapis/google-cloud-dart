@@ -37,23 +37,27 @@ String? _optionalString(Map<String, Object?> json, String name) {
   return value is String ? value : null;
 }
 
-/// The largest magnitude, in seconds since the epoch, that a [DateTime] can
-/// represent.
-const _maxDateTimeSeconds = 8640000000000;
-
-/// Reads a JWT `NumericDate` claim, returning `null` if absent or malformed.
+/// Reads a JWT `NumericDate` claim, returning `null` if it is absent,
+/// malformed or outside the range of [DateTime].
 ///
 /// See [RFC 7519 §2](https://datatracker.ietf.org/doc/html/rfc7519#section-2).
 DateTime? _timestamp(Map<String, Object?> payload, String name) {
   final value = payload[name];
+  if (value is! num) return null;
   // A `NumericDate` has no maximum value defined in RFC 7519, but [DateTime]
-  // does, so drop out-of-range values. Checking before converting also avoids
-  // integer overflow on native platforms, and rejects the infinities that
-  // `jsonDecode` produces for numbers too large for a double.
-  if (value is! num || !value.isFinite || value.abs() > _maxDateTimeSeconds) {
+  // does. `toInt` throws for the infinities that `jsonDecode` produces for
+  // numbers too large for a double, and the constructor throws for values
+  // outside the range of [DateTime]. The multiplication is done with doubles
+  // because integers silently wrap around on native platforms, which could
+  // turn an out-of-range value into an in-range one.
+  try {
+    return DateTime.fromMillisecondsSinceEpoch(
+      (value.toDouble() * 1000).toInt(),
+      isUtc: true,
+    );
+  } catch (_) {
     return null;
   }
-  return DateTime.fromMillisecondsSinceEpoch(value.toInt() * 1000, isUtc: true);
 }
 
 /// Normalizes an `aud` claim, which may be a string or a list of strings.
@@ -320,14 +324,15 @@ final class TokenVerifier {
       );
     }
 
+    // Apply the tolerance to `now` rather than to the token's timestamps,
+    // which may be at the limits of what [DateTime] can represent.
     final now = _clock();
-    if (!now.isBefore(expiry.add(clockSkewTolerance))) {
+    if (!now.subtract(clockSkewTolerance).isBefore(expiry)) {
       throw TokenVerificationException('The token expired at $expiry.');
     }
 
     final issuedAt = _timestamp(payload, 'iat');
-    if (issuedAt != null &&
-        now.isBefore(issuedAt.subtract(clockSkewTolerance))) {
+    if (issuedAt != null && now.add(clockSkewTolerance).isBefore(issuedAt)) {
       throw TokenVerificationException(
         'The token was issued at $issuedAt, which is in the future.',
       );

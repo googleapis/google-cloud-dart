@@ -454,6 +454,20 @@ void main() {
           );
         });
 
+        test('accepts the largest exp that DateTime can represent', () async {
+          // Adding the skew tolerance to this would overflow `DateTime`.
+          final token = await mintToken(
+            payload: validPayload({'exp': 8640000000000}),
+          );
+
+          final claims = await buildVerifier().verify(token);
+
+          expect(
+            claims.expiry,
+            DateTime.fromMillisecondsSinceEpoch(8640000000000000, isUtc: true),
+          );
+        });
+
         test('rejects an exp beyond the range of DateTime', () async {
           // On native platforms, converting this to milliseconds would
           // overflow and wrap around to 1969.
@@ -464,6 +478,23 @@ void main() {
             _throwsVerification(contains('no "exp"')),
           );
         });
+
+        test(
+          'rejects an exp whose milliseconds overflow a 64-bit int',
+          () async {
+            // This is 2^64 / 1000, rounded up, so on native platforms
+            // multiplying it by 1000 as an integer would wrap around to 384, a
+            // valid time in 1970.
+            final token = await mintToken(
+              payload: validPayload({'exp': 18446744073709552}),
+            );
+
+            await expectLater(
+              buildVerifier().verify(token),
+              _throwsVerification(contains('no "exp"')),
+            );
+          },
+        );
 
         test('rejects an exp too large for a double', () async {
           // `1e400` is valid JSON, but `jsonDecode` turns it into infinity.
@@ -476,6 +507,21 @@ void main() {
           await expectLater(
             buildVerifier().verify(token),
             _throwsVerification(contains('no "exp"')),
+          );
+        });
+
+        test('keeps the fractional part of an exp', () async {
+          final token = await mintToken(
+            payload: validPayload({
+              'exp': _numericDate(_now.add(const Duration(hours: 1))) + 0.5,
+            }),
+          );
+
+          final claims = await buildVerifier().verify(token);
+
+          expect(
+            claims.expiry,
+            _now.add(const Duration(hours: 1, milliseconds: 500)),
           );
         });
       });
@@ -515,6 +561,21 @@ void main() {
           final claims = await buildVerifier().verify(token);
 
           expect(claims.issuedAt, isNull);
+        });
+
+        test('accepts the smallest iat that DateTime can represent', () async {
+          // Subtracting the skew tolerance from this would overflow
+          // `DateTime`.
+          final token = await mintToken(
+            payload: validPayload({'iat': -8640000000000}),
+          );
+
+          final claims = await buildVerifier().verify(token);
+
+          expect(
+            claims.issuedAt,
+            DateTime.fromMillisecondsSinceEpoch(-8640000000000000, isUtc: true),
+          );
         });
       });
 
