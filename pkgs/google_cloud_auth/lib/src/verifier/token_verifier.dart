@@ -56,6 +56,8 @@ DateTime? _timestamp(Map<String, Object?> payload, String name) {
 }
 
 /// Normalizes an `aud` claim, which may be a string or a list of strings.
+///
+/// See [RFC 7519 §4.1.3](https://datatracker.ietf.org/doc/html/rfc7519#section-4.1.3).
 List<String> _audienceList(Object? audience) => switch (audience) {
   final String value => [value],
   final List<Object?> values => values.whereType<String>().toList(),
@@ -64,27 +66,34 @@ List<String> _audienceList(Object? audience) => switch (audience) {
 
 /// Validated claims extracted from a verified JWT ID token.
 final class IdTokenClaims {
-  // Present on essentially all ID tokens, but not required: neither the Java
-  // nor the Python reference verifier enforces it, and some Google tokens
-  // legitimately omit it.
   /// The `sub` (subject) claim, or `null` if absent.
+  ///
+  /// See [RFC 7519 §4.1.2](https://datatracker.ietf.org/doc/html/rfc7519#section-4.1.2).
   final String? subject;
 
   /// The `iss` (issuer) claim, or `null` if absent.
   ///
   /// Guaranteed non-null when the verifier was configured with
   /// [TokenVerifier.expectedIssuers].
+  ///
+  /// See [RFC 7519 §4.1.1](https://datatracker.ietf.org/doc/html/rfc7519#section-4.1.1).
   final String? issuer;
 
   /// The `aud` (audience) claim, normalized to a list.
   ///
   /// Empty if the token carries no audience.
+  ///
+  /// See [RFC 7519 §4.1.3](https://datatracker.ietf.org/doc/html/rfc7519#section-4.1.3).
   final List<String> audience;
 
   /// The `exp` (expiration time) claim.
+  ///
+  /// See [RFC 7519 §4.1.4](https://datatracker.ietf.org/doc/html/rfc7519#section-4.1.4).
   final DateTime expiry;
 
   /// The `iat` (issued at) claim, or `null` if absent.
+  ///
+  /// See [RFC 7519 §4.1.6](https://datatracker.ietf.org/doc/html/rfc7519#section-4.1.6).
   final DateTime? issuedAt;
 
   /// The complete token payload.
@@ -104,12 +113,18 @@ final class IdTokenClaims {
   });
 
   /// The `email` claim, or `null` if absent.
+  ///
+  /// This is not a stable or unique identifier for the user: an issuer may
+  /// reuse an address for a different user, and a user's address may change.
+  /// Identify users by [issuer] and [subject] together instead; see
+  /// [OpenID Connect Core 1.0 §5.7](https://openid.net/specs/openid-connect-core-1_0.html#ClaimStability).
+  ///
+  /// See [OpenID Connect Core 1.0 §5.1](https://openid.net/specs/openid-connect-core-1_0.html#StandardClaims).
   String? get email => _optionalString(allClaims, 'email');
 
   /// Whether the `email_verified` claim is set.
   ///
-  /// Accepts both the boolean `true` and the string `"true"`, matching the
-  /// coercion the Java reference implementation performs.
+  /// See [OpenID Connect Core 1.0 §5.1](https://openid.net/specs/openid-connect-core-1_0.html#StandardClaims).
   bool get isEmailVerified {
     final value = allClaims['email_verified'];
     return value == true || value == 'true';
