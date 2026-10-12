@@ -114,10 +114,11 @@ final class IdTokenClaims {
 /// Example:
 ///
 /// ```dart
-/// final verifier = IdTokenVerifier(
-///   jwksUri: Uri.https('token.actions.githubusercontent.com', '/.well-known/jwks'),
-///   expectedIssuers: {'https://token.actions.githubusercontent.com'},
-///   allowedAudiences: {'https://pub.dev'},
+/// final verifier = TokenVerifier(
+///   jwksUri: Uri.https('www.googleapis.com', '/oauth2/v3/certs'),
+///   // Google ID tokens use either form of the issuer.
+///   expectedIssuers: {'https://accounts.google.com', 'accounts.google.com'},
+///   allowedAudiences: {'https://my-service.example.com'},
 /// );
 /// final claims = await verifier.verify(inboundToken);
 /// ```
