@@ -18,7 +18,7 @@ import 'package:webcrypto/webcrypto.dart';
 
 export 'src/test_utils_web.dart'
     if (dart.library.io) 'src/test_utils_io.dart'
-    show canUseWebCrypto, writeTempFile;
+    show canUseWebCrypto, readEnvironment, writeTempFile;
 
 const testPrivateKey = '''-----BEGIN PRIVATE KEY-----
 MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC86+n/Af9C9sBo

@@ -29,6 +29,15 @@ const _keyId = 'test-key-1';
 
 final _now = DateTime.utc(2026, 6, 1, 12);
 
+/// Where to request a GitHub Actions OIDC token, and the bearer token to use.
+///
+/// GitHub only sets these in jobs granted the `id-token: write` permission.
+/// See https://docs.github.com/en/actions/reference/security/oidc.
+final _githubTokenRequestUrl = readEnvironment('ACTIONS_ID_TOKEN_REQUEST_URL');
+final _githubTokenRequestToken = readEnvironment(
+  'ACTIONS_ID_TOKEN_REQUEST_TOKEN',
+);
+
 /// Converts [time] to a JWT `NumericDate`, in seconds since the epoch.
 int _numericDate(DateTime time) => time.millisecondsSinceEpoch ~/ 1000;
 
@@ -540,6 +549,48 @@ void main() {
 
         expect((await verifier.verify(token)).subject, 'user-123');
       });
+
+      test(
+        'verifies a GitHub Actions OIDC token',
+        () async {
+          // Request a token the same way `core.getIDToken()` from
+          // `@actions/core` does.
+          const audience = 'google-cloud-dart-test';
+          final requestUrl = Uri.parse(_githubTokenRequestUrl!);
+          final response = await http.get(
+            requestUrl.replace(
+              queryParameters: {
+                ...requestUrl.queryParameters,
+                'audience': audience,
+              },
+            ),
+            headers: {'Authorization': 'Bearer $_githubTokenRequestToken'},
+          );
+          expect(response.statusCode, 200, reason: response.body);
+          final token =
+              (jsonDecode(response.body) as Map<String, Object?>)['value']!
+                  as String;
+
+          final verifier = TokenVerifier(
+            jwksUri: Uri.https(
+              'token.actions.githubusercontent.com',
+              '/.well-known/jwks',
+            ),
+            expectedIssuers: const {
+              'https://token.actions.githubusercontent.com',
+            },
+            allowedAudiences: const {audience},
+          );
+          final claims = await verifier.verify(token);
+
+          final repository = readEnvironment('GITHUB_REPOSITORY');
+          expect(claims.subject, startsWith('repo:$repository:'));
+          expect(claims.allClaims['repository'], repository);
+        },
+        skip: _githubTokenRequestUrl == null || _githubTokenRequestToken == null
+            ? 'Requires a GitHub Actions job with "id-token: write" permission'
+            : null,
+      );
     },
     skip: canUseWebCrypto
         ? null

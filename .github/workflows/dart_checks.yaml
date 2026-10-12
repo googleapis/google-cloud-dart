@@ -165,6 +165,23 @@ jobs:
         run: firebase emulators:exec --config=firestore_emulators/firebase.json \
           "dart test -P firebase-emulator ."
 
+  github_oidc_tests:
+    name: GitHub OIDC Tests
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # Lets `token_verifier_test.dart` request a GitHub Actions OIDC token.
+      # GitHub downgrades this to read for pull requests from forks, where the
+      # test is skipped.
+      id-token: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: dart-lang/setup-dart@6afc89df92d6eb3834022f73cd65adc8cdfcb92d
+        with:
+          sdk: stable
+      - run: dart pub get
+      - run: dart test -p vm pkgs/google_cloud_auth/test/verifier/token_verifier_test.dart
+
   generator:
     name: Generators
     runs-on: ubuntu-latest
