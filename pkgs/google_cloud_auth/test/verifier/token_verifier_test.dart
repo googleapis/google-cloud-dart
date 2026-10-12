@@ -240,6 +240,38 @@ void main() {
         });
       });
 
+      group('critical header parameter', () {
+        test('rejects an unsupported extension', () async {
+          // The example from RFC 7515 §4.1.11.
+          final token = await mintToken(
+            payload: validPayload(),
+            header: {
+              'crit': ['exp'],
+              'exp': 1363284000,
+            },
+          );
+
+          await expectLater(
+            buildVerifier().verify(token),
+            _throwsVerification(contains('"crit"')),
+          );
+        });
+
+        test('rejects an empty list', () async {
+          // RFC 7515 forbids producers from sending this, so it isn't treated
+          // as listing no extensions.
+          final token = await mintToken(
+            payload: validPayload(),
+            header: {'crit': <String>[]},
+          );
+
+          await expectLater(
+            buildVerifier().verify(token),
+            _throwsVerification(contains('"crit"')),
+          );
+        });
+      });
+
       group('issuer', () {
         test('rejects a mismatch', () async {
           final token = await mintToken(

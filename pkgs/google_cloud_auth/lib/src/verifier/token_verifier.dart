@@ -272,6 +272,16 @@ final class TokenVerifier {
       );
     }
 
+    // A token is invalid if its "crit" header parameter lists an extension
+    // that the recipient doesn't support (RFC 7515 §4.1.11), and none are
+    // supported.
+    if (parts.header.containsKey('crit')) {
+      throw TokenVerificationException(
+        'The token has a "crit" (critical) header parameter, but no critical '
+        'extensions are supported.',
+      );
+    }
+
     final keyId = parts.keyId;
     if (keyId == null) {
       throw TokenVerificationException(
