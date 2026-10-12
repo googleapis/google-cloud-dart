@@ -81,7 +81,7 @@ jobs:
     name: VM Unit Tests (${{ matrix.os }}, ${{ matrix.sdk }})
     permissions:
       contents: read
-      # Lets `gooogle_cloud_auth` tests request a GitHub Actions OIDC token.
+      # Lets `google_cloud_auth` tests request a GitHub Actions OIDC token.
       id-token: write
     strategy:
       fail-fast: false

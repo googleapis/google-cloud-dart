@@ -248,7 +248,7 @@ final class TokenVerifier {
 
   /// Verifies that [rawToken] is a valid JSON Web Signature (JWS).
   ///
-  /// Validatew the JWS according to:
+  /// Validates the JWS according to:
   /// 1. [RFC 7519 §7.2](https://datatracker.ietf.org/doc/html/rfc7519#section-7.2)
   /// 2. [RFC 7515 §5.2](https://datatracker.ietf.org/doc/html/rfc7515#section-5.2)
   /// 3. [OpenID Connect Core 1.0 §3.1.3.7](https://openid.net/specs/openid-connect-core-1_0.html#IDTokenValidation)

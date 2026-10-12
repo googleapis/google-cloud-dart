@@ -130,7 +130,7 @@ void main() {
   }..removeWhere((_, value) => value == #absent);
 
   group(
-    'IdTokenVerifier.verify',
+    'TokenVerifier.verify',
     () {
       test('accepts a valid token and returns its claims', () async {
         final token = await mintToken(payload: validPayload());
@@ -144,7 +144,7 @@ void main() {
         expect(claims.issuedAt, _now.subtract(const Duration(minutes: 1)));
       });
 
-      test('exposes custom claims through unverifiedPayload', () async {
+      test('exposes custom claims through allClaims', () async {
         final token = await mintToken(
           payload: validPayload({
             'tenant': 'acme',
