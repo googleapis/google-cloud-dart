@@ -37,10 +37,22 @@ String? _optionalString(Map<String, Object?> json, String name) {
 }
 
 /// Reads a JWT `NumericDate` claim, returning `null` if absent or malformed.
+///
+/// See [RFC 7519 §2](https://datatracker.ietf.org/doc/html/rfc7519#section-2).
 DateTime? _timestamp(Map<String, Object?> payload, String name) {
   final value = payload[name];
   if (value is! num) return null;
-  return DateTime.fromMillisecondsSinceEpoch(value.toInt() * 1000, isUtc: true);
+  try {
+    return DateTime.fromMillisecondsSinceEpoch(
+      value.toInt() * 1000,
+      isUtc: true,
+    );
+    // ignore: avoid_catching_errors
+  } on ArgumentError {
+    // A `NumbericDate` has no maximun value defined in RFC-7519 but Dart
+    // 'DateTime` does. So just drop out-of-range `DateTime`s.
+    return null;
+  }
 }
 
 /// Normalizes an `aud` claim, which may be a string or a list of strings.
@@ -146,6 +158,10 @@ final class TokenVerifier {
   /// removes an important defense against a token minted for a different
   /// service being replayed against this one. Set it unless the audience is
   /// genuinely checked elsewhere.
+  ///
+  /// If provided, [clientFactory] will be used to fetch the keys at [jwksUri].
+  /// [TokenVerifier] may call [clientFactory] many times and will `close` the
+  /// returned [http.Client]s.
   TokenVerifier({
     required Uri jwksUri,
     Set<String>? expectedIssuers,
