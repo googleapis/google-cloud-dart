@@ -96,7 +96,7 @@ final class JwsParts {
   String? get keyId => _optionalString(header, 'kid');
 
   /// Parse a JWS in compact serialization.
-  /// 
+  ///
   /// Throws [FormatException] if the token is malformed.
   ///
   /// See [RFC 7515 § 3.3](https://datatracker.ietf.org/doc/html/rfc7515#section-3.3).

@@ -287,16 +287,58 @@ void main() {
       });
 
       group('audience', () {
-        test('accepts a list containing an allowed audience', () async {
+        test('accepts a list of allowed audiences', () async {
           final token = await mintToken(
             payload: validPayload({
               'aud': ['other', _audience],
             }),
           );
 
-          final claims = await buildVerifier().verify(token);
+          final claims = await buildVerifier(
+            allowedAudiences: {'other', _audience},
+          ).verify(token);
 
           expect(claims.audience, ['other', _audience]);
+        });
+
+        test('rejects a list containing a disallowed audience', () async {
+          // OpenID Connect Core 1.0 §3.1.3.7: a token that is also intended
+          // for an untrusted audience must be rejected, even though it names
+          // this one too.
+          final token = await mintToken(
+            payload: validPayload({
+              'aud': ['other', _audience],
+            }),
+          );
+
+          await expectLater(
+            buildVerifier().verify(token),
+            _throwsVerification(contains('"aud"')),
+          );
+        });
+
+        test('rejects an empty audience list', () async {
+          final token = await mintToken(
+            payload: validPayload({'aud': <String>[]}),
+          );
+
+          await expectLater(
+            buildVerifier().verify(token),
+            _throwsVerification(contains('"aud"')),
+          );
+        });
+
+        test('rejects a list containing a non-string audience', () async {
+          final token = await mintToken(
+            payload: validPayload({
+              'aud': [_audience, 123],
+            }),
+          );
+
+          await expectLater(
+            buildVerifier().verify(token),
+            _throwsVerification(contains('"aud"')),
+          );
         });
 
         test('rejects a mismatch', () async {

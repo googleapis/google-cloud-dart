@@ -20,6 +20,7 @@ library;
 import 'dart:async';
 
 import 'package:http/http.dart' as http;
+import 'package:meta/meta.dart';
 
 import '../jwks/jwks_cache.dart';
 import 'jws_parser.dart';
@@ -63,6 +64,20 @@ List<String> _audienceList(Object? audience) => switch (audience) {
   final List<Object?> values => values.whereType<String>().toList(),
   _ => const [],
 };
+
+/// Whether the `aud` claim [audience] names at least one audience, and only
+/// audiences in [allowed].
+///
+/// A token that is also intended for an audience outside [allowed] must be
+/// rejected, even if it names an allowed audience too. See
+/// [OpenID Connect Core 1.0 §3.1.3.7](https://openid.net/specs/openid-connect-core-1_0.html#IDTokenValidation).
+bool _hasOnlyAllowedAudiences(Object? audience, Set<String> allowed) =>
+    switch (audience) {
+      final String value => allowed.contains(value),
+      final List<Object?> values =>
+        values.isNotEmpty && values.every(allowed.contains),
+      _ => false,
+    };
 
 /// Validated claims extracted from a verified JWT ID token.
 final class IdTokenClaims {
@@ -151,6 +166,11 @@ final class IdTokenClaims {
 /// ```
 final class TokenVerifier {
   /// The default tolerance applied to `exp` and `iat` comparisons.
+  ///
+  /// [RFC 7519 §4.1.4](https://datatracker.ietf.org/doc/html/rfc7519#section-4.1.4)
+  /// says:
+  /// > Implementers MAY provide for some small leeway, usually no more than
+  /// > a few minutes, to account for clock skew.
   static const defaultClockSkewTolerance = Duration(minutes: 5);
 
   /// Accepted `iss` values, or `null` to skip the issuer check.
@@ -158,7 +178,8 @@ final class TokenVerifier {
 
   /// Accepted `aud` values, or `null` to skip the audience check.
   ///
-  /// A token is accepted when *any* of its audiences is in this set.
+  /// A token is accepted only if its `aud` claim names at least one audience
+  /// and *every* audience it names is in this set.
   final Set<String>? allowedAudiences;
 
   /// How far the local clock may disagree with the token's timestamps.
@@ -169,21 +190,37 @@ final class TokenVerifier {
 
   /// Creates a verifier for tokens signed by the keys published at [jwksUri].
   ///
-  /// Leaving [allowedAudiences] unset disables the audience check, which
-  /// removes an important defense against a token minted for a different
-  /// service being replayed against this one. Set it unless the audience is
-  /// genuinely checked elsewhere.
+  /// [jwksUri] may serve a JWKS document or a legacy map from key ID to PEM
+  /// certificate.
   ///
-  /// If provided, [clientFactory] will be used to fetch the keys at [jwksUri].
-  /// [TokenVerifier] may call [clientFactory] many times and will `close` the
-  /// returned [http.Client]s.
+  /// If [expectedIssuers] is set, tokens whose `iss` claim is missing or not
+  /// in the set are rejected. If it is `null`, the issuer is not checked.
+  /// Google ID tokens may have either `https://accounts.google.com` or
+  /// `accounts.google.com` as their issuer, so include both.
+  ///
+  /// If [allowedAudiences] is set, a token is accepted only if its `aud` claim
+  /// names at least one audience and every audience it names is in the set,
+  /// so a token that is also intended for another, untrusted service is
+  /// rejected. Leaving it `null` disables the audience check, which removes an
+  /// important defense against a token minted for a different service being
+  /// replayed against this one. Set it unless the audience is genuinely
+  /// checked elsewhere.
+  ///
+  /// [clockSkewTolerance] is how far the local clock may disagree with the
+  /// token's timestamps: a token is accepted until [clockSkewTolerance] after
+  /// its `exp`, and rejected if its `iat` is more than [clockSkewTolerance] in
+  /// the future. Defaults to [defaultClockSkewTolerance].
+  ///
+  /// If provided, [clientFactory] is called each time the keys are fetched,
+  /// and the [http.Client] it returns is closed afterwards, so it must return
+  /// a new client on every call.
   TokenVerifier({
     required Uri jwksUri,
     Set<String>? expectedIssuers,
     Set<String>? allowedAudiences,
     this.clockSkewTolerance = defaultClockSkewTolerance,
     FutureOr<http.Client> Function()? clientFactory,
-    DateTime Function()? clock,
+    @visibleForTesting DateTime Function()? clock,
   }) : expectedIssuers = expectedIssuers == null
            ? null
            : Set.unmodifiable(expectedIssuers),
@@ -200,12 +237,12 @@ final class TokenVerifier {
   /// The endpoint public keys are fetched from.
   Uri get jwksUri => _jwksCache.uri;
 
-  /// Verifies [rawToken] and returns its validated claims.
-  ///
-  /// Checks, in order: that the token is a well-formed JWS, that its
-  /// algorithm is RS256, that its signature matches the public key named by
-  /// its `kid`, and then [expectedIssuers], [allowedAudiences], `exp` and
-  /// `iat`.
+  /// Verifies that [rawToken] is a valid JSON Web Signature (JWS).
+  /// 
+  /// Validatew the JWS according to:
+  /// 1. [RFC 7519 §7.2](https://datatracker.ietf.org/doc/html/rfc7519#section-7.2)
+  /// 2. [RFC 7515 §5.2](https://datatracker.ietf.org/doc/html/rfc7515#section-5.2)
+  /// 3. [OpenID Connect Core 1.0 §3.1.3.7](https://openid.net/specs/openid-connect-core-1_0.html#IDTokenValidation)
   ///
   /// Throws [TokenVerificationException] if any check fails, or if the public
   /// keys cannot be fetched.
@@ -266,10 +303,11 @@ final class TokenVerifier {
 
     final audience = _audienceList(payload['aud']);
     final allowedAudiences = this.allowedAudiences;
-    if (allowedAudiences != null && !audience.any(allowedAudiences.contains)) {
+    if (allowedAudiences != null &&
+        !_hasOnlyAllowedAudiences(payload['aud'], allowedAudiences)) {
       throw TokenVerificationException(
-        'The token "aud" (audience) claim is ${audience.join(', ')}, but one '
-        'of ${allowedAudiences.join(', ')} was expected.',
+        'The token "aud" (audience) claim is ${payload['aud']}, but it must be '
+        'one or more of ${allowedAudiences.join(', ')}.',
       );
     }
 
