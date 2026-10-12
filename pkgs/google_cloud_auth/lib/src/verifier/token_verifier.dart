@@ -60,28 +60,33 @@ DateTime? _timestamp(Map<String, Object?> payload, String name) {
   }
 }
 
-/// Normalizes an `aud` claim, which may be a string or a list of strings.
+/// Reads an `aud` claim, which may be a single string or a list of strings,
+/// returning an empty list if it is absent or `null`.
+///
+/// Throws [TokenVerificationException] if the claim has any other form, rather
+/// than dropping the parts that aren't strings, which would make the token
+/// look like it names fewer audiences than it does.
 ///
 /// See [RFC 7519 §4.1.3](https://datatracker.ietf.org/doc/html/rfc7519#section-4.1.3).
 List<String> _audienceList(Object? audience) => switch (audience) {
+  null => const [],
   final String value => [value],
-  final List<Object?> values => values.whereType<String>().toList(),
-  _ => const [],
+  final List<Object?> values when values.every((value) => value is String) =>
+    values.cast<String>(),
+  _ => throw TokenVerificationException(
+    'The token "aud" (audience) claim must be a string or a list of strings, '
+    'but was $audience.',
+  ),
 };
 
-/// Whether the `aud` claim [audience] names at least one audience, and only
-/// audiences in [allowed].
+/// Whether [audience] names at least one audience, and only audiences in
+/// [allowed].
 ///
 /// A token that is also intended for an audience outside [allowed] must be
 /// rejected, even if it names an allowed audience too. See
 /// [OpenID Connect Core 1.0 §3.1.3.7](https://openid.net/specs/openid-connect-core-1_0.html#IDTokenValidation).
-bool _hasOnlyAllowedAudiences(Object? audience, Set<String> allowed) =>
-    switch (audience) {
-      final String value => allowed.contains(value),
-      final List<Object?> values =>
-        values.isNotEmpty && values.every(allowed.contains),
-      _ => false,
-    };
+bool _hasOnlyAllowedAudiences(List<String> audience, Set<String> allowed) =>
+    audience.isNotEmpty && audience.every(allowed.contains);
 
 /// Validated claims extracted from a verified JWT ID token.
 final class IdTokenClaims {
@@ -318,7 +323,7 @@ final class TokenVerifier {
     final audience = _audienceList(payload['aud']);
     final allowedAudiences = this.allowedAudiences;
     if (allowedAudiences != null &&
-        !_hasOnlyAllowedAudiences(payload['aud'], allowedAudiences)) {
+        !_hasOnlyAllowedAudiences(audience, allowedAudiences)) {
       throw TokenVerificationException(
         'The token "aud" (audience) claim is ${payload['aud']}, but it must be '
         'one or more of ${allowedAudiences.join(', ')}.',

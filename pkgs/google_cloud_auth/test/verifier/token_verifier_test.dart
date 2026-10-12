@@ -422,6 +422,39 @@ void main() {
 
           expect(claims.audience, ['anything']);
         });
+
+        test(
+          'rejects a malformed audience when no audiences are configured',
+          () async {
+            for (final audience in [
+              [_audience, 123],
+              123,
+              {'name': _audience},
+            ]) {
+              final token = await mintToken(
+                payload: validPayload({'aud': audience}),
+              );
+
+              await expectLater(
+                buildVerifier(allowedAudiences: null).verify(token),
+                _throwsVerification(
+                  contains('must be a string or a list of strings'),
+                ),
+                reason: '$audience',
+              );
+            }
+          },
+        );
+
+        test('treats a null audience as absent', () async {
+          final token = await mintToken(payload: validPayload({'aud': null}));
+
+          final claims = await buildVerifier(
+            allowedAudiences: null,
+          ).verify(token);
+
+          expect(claims.audience, isEmpty);
+        });
       });
 
       group('expiration', () {
