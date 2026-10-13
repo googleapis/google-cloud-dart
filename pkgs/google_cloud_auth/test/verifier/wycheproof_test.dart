@@ -13,8 +13,7 @@
 // limitations under the License.
 
 /// Tests [TokenVerifier] against the RSA JSON Web Signature test vectors from
-/// [Project Wycheproof](https://github.com/C2SP/wycheproof) JSON Web Signature
-/// test vectors.
+/// [Project Wycheproof](https://github.com/C2SP/wycheproof).
 library;
 
 import 'dart:convert';
