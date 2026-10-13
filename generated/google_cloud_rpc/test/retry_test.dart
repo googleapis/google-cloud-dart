@@ -271,17 +271,6 @@ void main() {
       expect(noRetry.isRetryable(http.ClientException('failure')), isFalse);
       expect(noRetry.delays(), isEmpty);
     });
-
-    test('value equality', () {
-      // ignore: prefer_const_constructors
-      expect(NoRetry(), equals(noRetry));
-      // ignore: prefer_const_constructors
-      expect(NoRetry().hashCode, equals(noRetry.hashCode));
-      expect(
-        noRetry,
-        isNot(equals(const ExponentialRetry.onCodes([], maxRetries: 0))),
-      );
-    });
   });
 
   group('ExponentialRetry', () {
@@ -447,31 +436,6 @@ void main() {
       }
       expect(delays.any((d) => d < const Duration(seconds: 2)), isTrue);
       expect(delays.any((d) => d > const Duration(seconds: 8)), isTrue);
-    });
-
-    test('value equality and hashCode', () {
-      // ignore: prefer_const_constructors
-      final a = ExponentialRetry(retryIf: _isBadRequest, maxRetries: 3);
-      // ignore: prefer_const_constructors
-      final b = ExponentialRetry(retryIf: _isBadRequest, maxRetries: 3);
-      // ignore: prefer_const_constructors
-      final c = ExponentialRetry(retryIf: _isBadRequest, maxRetries: 4);
-      expect(identical(a, b), isFalse);
-      expect(a, equals(b));
-      expect(a.hashCode, equals(b.hashCode));
-      expect(a, isNot(equals(c)));
-
-      // ignore: prefer_const_constructors
-      final d = ExponentialRetry.onCodes([Code.unavailable], maxRetries: 3);
-      // ignore: prefer_const_constructors
-      final e = ExponentialRetry.onCodes([Code.unavailable], maxRetries: 3);
-      // ignore: prefer_const_constructors
-      final f = ExponentialRetry.onCodes([Code.aborted], maxRetries: 3);
-      expect(identical(d, e), isFalse);
-      expect(d, equals(e));
-      expect(d.hashCode, equals(e.hashCode));
-      expect(d, isNot(equals(f)));
-      expect(d, isNot(equals(a)));
     });
 
     test('toString includes the retryable codes', () {

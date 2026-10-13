@@ -192,12 +192,6 @@ final class NoRetry extends RetryRunner {
       const [];
 
   @override
-  bool operator ==(Object other) => other is NoRetry;
-
-  @override
-  int get hashCode => (NoRetry).hashCode;
-
-  @override
   String toString() => 'NoRetry()';
 }
 
@@ -355,33 +349,6 @@ final class ExponentialRetry extends RetryRunner {
   }
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is ExponentialRetry &&
-          runtimeType == other.runtimeType &&
-          _retryIf == other._retryIf &&
-          _listEquals(retryableCodes, other.retryableCodes) &&
-          maxRetries == other.maxRetries &&
-          maxRetryInterval == other.maxRetryInterval &&
-          initialDelay == other.initialDelay &&
-          delayMultiplier == other.delayMultiplier &&
-          maxDelay == other.maxDelay;
-
-  @override
-  int get hashCode => Object.hash(
-    _retryIf,
-    switch (retryableCodes) {
-      final codes? => Object.hashAll(codes),
-      null => null,
-    },
-    maxRetries,
-    maxRetryInterval,
-    initialDelay,
-    delayMultiplier,
-    maxDelay,
-  );
-
-  @override
   String toString() {
     final codes = retryableCodes?.map((code) => code.value).join(', ');
     return 'ExponentialRetry('
@@ -392,15 +359,6 @@ final class ExponentialRetry extends RetryRunner {
         'delayMultiplier: $delayMultiplier, '
         'maxDelay: $maxDelay)';
   }
-}
-
-bool _listEquals<T>(List<T>? a, List<T>? b) {
-  if (identical(a, b)) return true;
-  if (a == null || b == null || a.length != b.length) return false;
-  for (var i = 0; i < a.length; i++) {
-    if (a[i] != b[i]) return false;
-  }
-  return true;
 }
 
 /// The numeric value and the HTTP status code of each `google.rpc.Code`,
