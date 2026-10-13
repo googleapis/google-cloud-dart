@@ -163,7 +163,6 @@ Iterable<Duration> _delaySequence({
     if (randomGenerator == null) {
       delay = baseDelay;
     } else {
-      // `nextDouble` is in [0, 1), so the factor is in (1 - jitter, 1].
       final jitterFactor = 1.0 - jitter * randomGenerator.nextDouble();
       delay = Duration(
         microseconds: (baseDelay.inMicroseconds * jitterFactor).round(),
@@ -227,15 +226,13 @@ final class NoDelayRetry extends ExponentialRetry {
 /// Before each retry, it waits for a random time between zero and the current
 /// delay ("full jitter"), so that clients that fail at the same time don't all
 /// retry at once. The delay starts at [initialDelay], is multiplied by
-/// [delayMultiplier] after each retry, and never exceeds [maxDelay]. This is
-/// the backoff that the Google Cloud client libraries for Go, Java and Python
-/// use.
+/// [delayMultiplier] after each retry, and never exceeds [maxDelay].
 ///
 /// There are two ways to choose which failures are retried:
 ///
-/// - [ExponentialRetry.onCodes] retries errors with the given status codes, as
-///   `gax.OnCodes` does in Go and the retryable codes of a method's settings
-///   do in Java. For example:
+/// 1. [ExponentialRetry.onCodes] retries errors with the given status codes.
+///
+///   For example:
 ///
 ///   ```dart
 ///   const retry = ExponentialRetry.onCodes(
@@ -245,12 +242,7 @@ final class NoDelayRetry extends ExponentialRetry {
 ///   );
 ///   ```
 ///
-/// - [ExponentialRetry.new] takes a `retryIf` predicate, as
-///   `google.api_core.retry.Retry` does in Python.
-///
-/// The backoff parameters also correspond to Python's `Retry`: [initialDelay]
-/// is `initial`, [maxDelay] is `maximum`, [delayMultiplier] is `multiplier` and
-/// [maxRetryInterval] is `timeout`. Their defaults are the same as Python's.
+/// 2. [ExponentialRetry.new] takes a `retryIf` predicate.
 final class ExponentialRetry extends RetryRunner {
   final bool Function(Object error)? _retryIf;
 
@@ -284,6 +276,13 @@ final class ExponentialRetry extends RetryRunner {
   /// value, the wait time will be clamped to this value.
   final Duration maxDelay;
 
+  // The backoff parameters correspond to Python's `Retry`:
+  // - [initialDelay] is `initial`
+  // - [maxDelay] is `maximum`
+  // - [delayMultiplier] is `multiplier`
+  // - [maxRetryInterval] is `timeout`
+  // Their defaults are the same as Python's:
+  // https://github.com/googleapis/google-cloud-python/blob/3c5919af3d6e6af44e06e6981b6430e3d853b20c/packages/google-api-core/google/api_core/retry/retry_base.py#L42-L45
   /// Creates a retry runner that retries the errors that [retryIf] accepts.
   ///
   /// For example, to retry `UNAVAILABLE` errors and timeouts:
