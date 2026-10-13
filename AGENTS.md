@@ -13,7 +13,9 @@
 
 - Follow the style described in
   [Effective Dart](https://dart.dev/effective-dart):
-    - Do not prefix functions and methods with "get".
+    - AVOID starting a function or method name with `get`
+    - PREFER starting a boolean variable or property comment with "Whether"
+      followed by a noun or gerund phrase
 - Prefer the use of `Uri.https(...)` over `Uri.parse(...)` when the scheme is
   known to be https.
 
