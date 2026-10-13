@@ -45,9 +45,7 @@ Uint8List _decodeBase64Url(String segment, String name) {
   }
 }
 
-Map<String, Object?> _decodeJsonSegment(String segment, String name) {
-  final bytes = _decodeBase64Url(segment, name);
-
+Map<String, Object?> _decodeJsonObject(Uint8List bytes, String name) {
   final Object? decoded;
   try {
     decoded = jsonDecode(utf8.decode(bytes));
@@ -77,8 +75,10 @@ final class JwsParts {
   /// The decoded JOSE header.
   final Map<String, Object?> header;
 
-  /// The decoded payload, also known as the claims set.
-  final Map<String, Object?> payload;
+  /// The decoded payload.
+  ///
+  /// For a JWT, this is the UTF-8 encoded claims set; see [decodeClaims].
+  final Uint8List payload;
 
   /// The raw signature bytes.
   ///
@@ -110,6 +110,15 @@ final class JwsParts {
   /// The `kid` (key ID) header parameter, or `null` if absent.
   String? get keyId => _optionalString(header, 'kid');
 
+  /// Parses [payload] as a JWT claims set.
+  ///
+  /// Throws [FormatException] if it is not a UTF-8 encoded JSON object.
+  ///
+  /// Verify [signature] first, so that only claims known to come from the
+  /// issuer are parsed. See
+  /// [RFC 7519 §7.2](https://datatracker.ietf.org/doc/html/rfc7519#section-7.2).
+  Map<String, Object?> decodeClaims() => _decodeJsonObject(payload, 'payload');
+
   /// Parse a JWS in compact serialization.
   ///
   /// Throws [FormatException] if the token is malformed.
@@ -125,8 +134,8 @@ final class JwsParts {
     }
 
     return JwsParts._(
-      header: _decodeJsonSegment(parts[0], 'header'),
-      payload: _decodeJsonSegment(parts[1], 'payload'),
+      header: _decodeJsonObject(_decodeBase64Url(parts[0], 'header'), 'header'),
+      payload: _decodeBase64Url(parts[1], 'payload'),
       signature: _decodeBase64Url(parts[2], 'signature'),
       signedContent: ascii.encode(token.substring(0, token.lastIndexOf('.'))),
     );

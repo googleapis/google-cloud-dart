@@ -306,7 +306,20 @@ final class TokenVerifier {
       throw TokenVerificationException('The token signature is invalid.');
     }
 
-    return _verifyClaims(parts.payload);
+    // Only parse the claims once the signature shows that they come from the
+    // issuer, as RFC 7519 §7.2 orders the steps.
+    final Map<String, Object?> claims;
+    try {
+      claims = parts.decodeClaims();
+    } on FormatException catch (e, stackTrace) {
+      throw TokenVerificationException(
+        'The token payload is not a JWT claims set: ${e.message}',
+        innerException: e,
+        innerStackTrace: stackTrace,
+      );
+    }
+
+    return _verifyClaims(claims);
   }
 
   IdTokenClaims _verifyClaims(Map<String, Object?> payload) {
