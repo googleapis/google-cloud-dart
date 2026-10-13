@@ -18,18 +18,28 @@ import 'package:clock/clock.dart';
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 
+import '../rpc.dart';
 import 'exceptions.dart';
 
-/// An abstract class for running a function with retry logic.
+/// Decides which failures are retried and how long to wait between attempts.
+///
+/// A [RetryRunner] does not know whether an operation is safe to repeat. That
+/// is decided by the code that chooses the runner for each operation, as in
+/// the Google Cloud client libraries for other languages. For example, a
+/// generated client uses its default runner only for the methods that the
+/// service's retry configuration marks as retryable, and [noRetry] for the
+/// others, unless the caller provides a runner for the call.
 sealed class RetryRunner {
-  /// Runs the given function with retry logic.
-  Future<T> run<T>(
-    Future<T> Function() body, {
-    required bool isIdempotent,
-    Clock clock = const Clock(),
-  });
+  const RetryRunner();
 
-  /// Returns whether [error] is considered retryable by this runner.
+  /// Runs [body], retrying it while it fails with an error that
+  /// [isRetryable] accepts and the retry budget allows.
+  ///
+  /// Only [Exception]s are retried. An [Error], which indicates a bug, is
+  /// always rethrown.
+  Future<T> run<T>(Future<T> Function() body, {Clock clock = const Clock()});
+
+  /// Returns whether a failure with [error] should be retried.
   bool isRetryable(Object error);
 
   /// Generates a sequence of wait durations for retries or reconnections.
@@ -162,19 +172,71 @@ Iterable<Duration> _delaySequence({
   }
 }
 
+/// A [RetryRunner] that never retries.
+///
+/// Use the [noRetry] constant rather than creating new instances.
+final class NoRetry extends RetryRunner {
+  const NoRetry();
+
+  @override
+  Future<T> run<T>(
+    Future<T> Function() body, {
+    Clock clock = const Clock(),
+  }) async => body();
+
+  @override
+  bool isRetryable(Object error) => false;
+
+  @override
+  Iterable<Duration> delays({Clock clock = const Clock(), Random? random}) =>
+      const [];
+
+  @override
+  bool operator ==(Object other) => other is NoRetry;
+
+  @override
+  int get hashCode => (NoRetry).hashCode;
+
+  @override
+  String toString() => 'NoRetry()';
+}
+
+/// A [RetryRunner] that never retries.
+///
+/// Pass this to disable retries, for a single call or for a whole client.
+const noRetry = NoRetry();
+
 @visibleForTesting
 final class NoDelayRetry extends ExponentialRetry {
-  const NoDelayRetry()
+  const NoDelayRetry({super.retryIf, super.maxRetries})
     : super(initialDelay: Duration.zero, maxDelay: Duration.zero);
 }
 
 /// A retry runner that implements exponential backoff.
 ///
 /// When [run] is called, it will attempt to execute the given function. If the
-/// function throws a recoverable exception (such as [RequestTimeoutException])
-/// and the function is idempotent, it will retry the function with increasing
-/// wait times between attempts.
-final class ExponentialRetry implements RetryRunner {
+/// function throws an exception that [retryIf] accepts, it will retry the
+/// function with increasing wait times between attempts, until the function
+/// succeeds or the retry budget ([maxRetries] and [maxRetryInterval]) is
+/// exhausted.
+///
+/// This corresponds to `google.api_core.retry.Retry` in the Python client
+/// libraries: [retryIf] is `predicate`, [initialDelay] is `initial`,
+/// [maxDelay] is `maximum`, [delayMultiplier] is `multiplier` and
+/// [maxRetryInterval] is `timeout`.
+final class ExponentialRetry extends RetryRunner {
+  /// Returns whether a failure with the given error should be retried.
+  ///
+  /// Defaults to [isTransientError]. To retry the status codes from a
+  /// service's retry configuration, use [hasStatusCode]. For example:
+  ///
+  /// ```dart
+  /// final retry = ExponentialRetry(
+  ///   retryIf: (e) => hasStatusCode(e, const [Code.unavailable]),
+  /// );
+  /// ```
+  final bool Function(Object error) retryIf;
+
   /// The maximum number of times to retry before failing.
   ///
   /// A `null` value indicates that the number of retries is unlimited.
@@ -213,6 +275,7 @@ final class ExponentialRetry implements RetryRunner {
   final double jitter;
 
   const ExponentialRetry({
+    this.retryIf = isTransientError,
     this.maxRetries,
     // Defaults taken from Python:
     // https://docs.cloud.google.com/storage/docs/retry-strategy#tools
@@ -224,39 +287,7 @@ final class ExponentialRetry implements RetryRunner {
   });
 
   @override
-  bool isRetryable(Object error) {
-    if (error is! Exception) return false;
-    return switch (error) {
-      // InternalServerErrorException (HTTP 500 / gRPC INTERNAL or UNKNOWN) is
-      // retryable unless it carries gRPC status DATA_LOSS (code 15).
-      InternalServerErrorException(:final status) => status?.code != 15,
-      // ConflictException (HTTP 409 / gRPC ALREADY_EXISTS) is not retryable
-      // unless it carries gRPC status ABORTED (code 10).
-      ConflictException(:final status) => status?.code == 10,
-      BadGatewayException() ||
-      RequestTimeoutException() ||
-      ServiceUnavailableException() ||
-      GatewayTimeoutException() ||
-      TooManyRequestsException() => true,
-      ServiceException(:final status, :final statusCode) =>
-        switch (status?.code) {
-          // gRPC status codes: UNKNOWN(2), DEADLINE_EXCEEDED(4),
-          // RESOURCE_EXHAUSTED(8), ABORTED(10), INTERNAL(13), UNAVAILABLE(14).
-          2 || 4 || 8 || 10 || 13 || 14 => true,
-          null =>
-            statusCode == 408 ||
-                statusCode == 429 ||
-                statusCode == 500 ||
-                statusCode == 502 ||
-                statusCode == 503 ||
-                statusCode == 504,
-          _ => false,
-        },
-      http.ClientException() => true,
-      ChecksumValidationException() => true,
-      _ => false,
-    };
-  }
+  bool isRetryable(Object error) => retryIf(error);
 
   @override
   Iterable<Duration> delays({Clock clock = const Clock(), Random? random}) =>
@@ -274,7 +305,6 @@ final class ExponentialRetry implements RetryRunner {
   @override
   Future<T> run<T>(
     Future<T> Function() body, {
-    required bool isIdempotent,
     Clock clock = const Clock(),
   }) async {
     final iterator = delays(clock: clock).iterator;
@@ -283,8 +313,7 @@ final class ExponentialRetry implements RetryRunner {
       try {
         return await body();
       } on Exception catch (e) {
-        if (!isIdempotent) rethrow;
-        if (!isRetryable(e)) rethrow;
+        if (!retryIf(e)) rethrow;
         if (!iterator.moveNext()) rethrow;
         await Future<void>.delayed(iterator.current);
       }
@@ -296,6 +325,7 @@ final class ExponentialRetry implements RetryRunner {
       identical(this, other) ||
       other is ExponentialRetry &&
           runtimeType == other.runtimeType &&
+          retryIf == other.retryIf &&
           maxRetries == other.maxRetries &&
           maxRetryInterval == other.maxRetryInterval &&
           initialDelay == other.initialDelay &&
@@ -305,6 +335,7 @@ final class ExponentialRetry implements RetryRunner {
 
   @override
   int get hashCode => Object.hash(
+    retryIf,
     maxRetries,
     maxRetryInterval,
     initialDelay,
@@ -324,5 +355,116 @@ final class ExponentialRetry implements RetryRunner {
       'jitter: $jitter)';
 }
 
-/// The default retry strategy.
-const defaultRetry = ExponentialRetry();
+/// Returns whether [error] is a transient failure, which is usually worth
+/// retrying.
+///
+/// These are the errors that the
+/// [Cloud Storage retry strategy](https://docs.cloud.google.com/storage/docs/retry-strategy)
+/// considers transient:
+///
+/// - failures to communicate with the service ([http.ClientException]).
+/// - HTTP 408, 429, 500, 502, 503 and 504 responses, and errors with the
+///   equivalent gRPC status codes (`UNKNOWN`, `DEADLINE_EXCEEDED`,
+///   `RESOURCE_EXHAUSTED`, `INTERNAL` and `UNAVAILABLE`), except for
+///   `DATA_LOSS`.
+/// - errors with the gRPC status code `ABORTED`.
+/// - checksum mismatches ([ChecksumValidationException]).
+///
+/// This is the default [ExponentialRetry.retryIf], in the same way that
+/// `if_transient_error` is the default `predicate` of `Retry` in the Python
+/// client libraries.
+bool isTransientError(Object error) {
+  if (error is! Exception) return false;
+  return switch (error) {
+    // InternalServerErrorException (HTTP 500 / gRPC INTERNAL or UNKNOWN) is
+    // retryable unless it carries gRPC status DATA_LOSS (code 15).
+    InternalServerErrorException(:final status) => status?.code != 15,
+    // ConflictException (HTTP 409 / gRPC ALREADY_EXISTS) is not retryable
+    // unless it carries gRPC status ABORTED (code 10).
+    ConflictException(:final status) => status?.code == 10,
+    BadGatewayException() ||
+    RequestTimeoutException() ||
+    ServiceUnavailableException() ||
+    GatewayTimeoutException() ||
+    TooManyRequestsException() => true,
+    ServiceException(:final status, :final statusCode) =>
+      switch (status?.code) {
+        // gRPC status codes: UNKNOWN(2), DEADLINE_EXCEEDED(4),
+        // RESOURCE_EXHAUSTED(8), ABORTED(10), INTERNAL(13), UNAVAILABLE(14).
+        2 || 4 || 8 || 10 || 13 || 14 => true,
+        null =>
+          statusCode == 408 ||
+              statusCode == 429 ||
+              statusCode == 500 ||
+              statusCode == 502 ||
+              statusCode == 503 ||
+              statusCode == 504,
+        _ => false,
+      },
+    http.ClientException() => true,
+    ChecksumValidationException() => true,
+    _ => false,
+  };
+}
+
+/// The numeric value and the HTTP status code of each `google.rpc.Code`,
+/// keyed by name.
+///
+/// See [`google/rpc/code.proto`](https://github.com/googleapis/googleapis/blob/master/google/rpc/code.proto).
+const _statusCodes = <String, (int, int)>{
+  'CANCELLED': (1, 499),
+  'UNKNOWN': (2, 500),
+  'INVALID_ARGUMENT': (3, 400),
+  'DEADLINE_EXCEEDED': (4, 504),
+  'NOT_FOUND': (5, 404),
+  'ALREADY_EXISTS': (6, 409),
+  'PERMISSION_DENIED': (7, 403),
+  'RESOURCE_EXHAUSTED': (8, 429),
+  'FAILED_PRECONDITION': (9, 400),
+  'ABORTED': (10, 409),
+  'OUT_OF_RANGE': (11, 400),
+  'UNIMPLEMENTED': (12, 501),
+  'INTERNAL': (13, 500),
+  'UNAVAILABLE': (14, 503),
+  'DATA_LOSS': (15, 500),
+  'UNAUTHENTICATED': (16, 401),
+};
+
+/// Returns whether [error] reports one of the canonical status [codes].
+///
+/// This is used to retry the status codes in a service's retry configuration
+/// (its `retryableStatusCodes`), as the generated clients for other languages
+/// do. For example:
+///
+/// ```dart
+/// final retry = ExponentialRetry(
+///   retryIf: (e) => hasStatusCode(e, const [Code.unavailable]),
+/// );
+/// ```
+///
+/// An error from a gRPC transport is matched by its gRPC status code. An
+/// error from a REST transport is matched by the HTTP status code that
+/// `google.rpc.Code` maps each code to, such as 503 for [Code.unavailable].
+/// So for REST, codes that share an HTTP status code, such as [Code.aborted]
+/// and [Code.alreadyExists] (409), can't be told apart.
+///
+/// A failure to communicate with the service ([http.ClientException]) counts
+/// as [Code.unavailable], which is how gRPC reports it.
+bool hasStatusCode(Object error, Iterable<Code> codes) {
+  switch (error) {
+    case http.ClientException():
+      return codes.contains(Code.unavailable);
+    case ServiceException(:final status, :final statusCode):
+      final grpcCode = status?.code;
+      // A REST error's `status` carries the HTTP status code instead.
+      final isGrpc = grpcCode != null && grpcCode > 0 && grpcCode <= 16;
+      return codes.any((code) {
+        if (_statusCodes[code.value] case (final number, final httpStatus)) {
+          return isGrpc ? grpcCode == number : statusCode == httpStatus;
+        }
+        return false;
+      });
+    default:
+      return false;
+  }
+}

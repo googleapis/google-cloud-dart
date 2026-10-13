@@ -221,7 +221,7 @@ class ResumableUploadSink implements StreamSink<List<int>> {
           throw ServiceException.fromHttpResponse(res, res.body);
         }
       }
-    }, isIdempotent: true);
+    });
   }
 
   Future<void> _flush() async {
@@ -321,16 +321,20 @@ class ResumableUploadSink implements StreamSink<List<int>> {
 
 /// Upload an object using a [Sink].
 ///
-/// [isIdempotent] indicates whether the upload is idempotent (i.e. if
-/// `ifGenerationMatch` is set). Only idempotent uploads can be retried.
+/// [startRetry] retries the request that starts the upload session. Retrying
+/// it is only safe if the upload is idempotent (i.e. if `ifGenerationMatch`
+/// is set), so callers should pass [noRetry] otherwise.
+///
+/// [chunkRetry] retries uploading the data. That is always safe, because the
+/// upload resumes from the last byte that the server acknowledged.
 @internal
 ResumableUploadSink uploadFileStream(
   FutureOr<http.Client> client,
   Uri url, {
   ObjectMetadata? metadata,
   FutureOr<Map<String, String>>? headers,
-  required bool isIdempotent,
-  required RetryRunner retry,
+  required RetryRunner startRetry,
+  required RetryRunner chunkRetry,
 }) {
   final md = switch (metadata) {
     ObjectMetadata(contentType: _?) => metadata,
@@ -344,7 +348,7 @@ ResumableUploadSink uploadFileStream(
 
   final body = jsonEncode(metadataJson);
 
-  final response = retry.run(() async {
+  final response = startRetry.run(() async {
     final resolvedClient = await client;
     final resolvedHeaders = await headers;
     final res = await resolvedClient.post(
@@ -356,7 +360,7 @@ ResumableUploadSink uploadFileStream(
       throw ServiceException.fromHttpResponse(res, res.body);
     }
     return res;
-  }, isIdempotent: isIdempotent);
+  });
 
-  return ResumableUploadSink._(client, response, retry, headers: headers);
+  return ResumableUploadSink._(client, response, chunkRetry, headers: headers);
 }

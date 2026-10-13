@@ -21,6 +21,8 @@ import 'package:google_cloud_rpc/rpc.dart';
 import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 
+bool _isBadRequest(Object error) => error is BadRequestException;
+
 void main() {
   group('delaySequence', () {
     test('calculates exponential backoff correctly', () {
@@ -130,77 +132,207 @@ void main() {
     });
   });
 
-  group('defaultRetry.isRetryable', () {
+  group('isTransientError', () {
     test('classifies retryable exceptions', () {
-      expect(defaultRetry.isRetryable(TooManyRequestsException('429')), isTrue);
+      expect(isTransientError(TooManyRequestsException('429')), isTrue);
+      expect(isTransientError(InternalServerErrorException('500')), isTrue);
+      expect(isTransientError(BadGatewayException('502')), isTrue);
+      expect(isTransientError(ServiceUnavailableException('503')), isTrue);
+      expect(isTransientError(GatewayTimeoutException('504')), isTrue);
+      expect(isTransientError(RequestTimeoutException('408')), isTrue);
+      expect(isTransientError(http.ClientException('network')), isTrue);
       expect(
-        defaultRetry.isRetryable(InternalServerErrorException('500')),
-        isTrue,
-      );
-      expect(defaultRetry.isRetryable(BadGatewayException('502')), isTrue);
-      expect(
-        defaultRetry.isRetryable(ServiceUnavailableException('503')),
-        isTrue,
-      );
-      expect(defaultRetry.isRetryable(GatewayTimeoutException('504')), isTrue);
-      expect(defaultRetry.isRetryable(RequestTimeoutException('408')), isTrue);
-      expect(defaultRetry.isRetryable(http.ClientException('network')), isTrue);
-      expect(
-        defaultRetry.isRetryable(ChecksumValidationException('bad checksum')),
+        isTransientError(ChecksumValidationException('bad checksum')),
         isTrue,
       );
       expect(
-        defaultRetry.isRetryable(
+        isTransientError(
           ConflictException('aborted', status: Status(code: 10)),
+        ),
+        isTrue,
+      );
+      expect(
+        isTransientError(
+          ServiceException(
+            'unavailable',
+            statusCode: 0,
+            status: Status(code: 14),
+          ),
         ),
         isTrue,
       );
     });
 
     test('classifies non-retryable exceptions', () {
-      expect(defaultRetry.isRetryable(BadRequestException('400')), isFalse);
-      expect(defaultRetry.isRetryable(NotFoundException('404')), isFalse);
-      expect(defaultRetry.isRetryable(ConflictException('409')), isFalse);
+      expect(isTransientError(BadRequestException('400')), isFalse);
+      expect(isTransientError(NotFoundException('404')), isFalse);
+      expect(isTransientError(ConflictException('409')), isFalse);
       expect(
-        defaultRetry.isRetryable(
+        isTransientError(
           InternalServerErrorException('data loss', status: Status(code: 15)),
         ),
         isFalse,
       );
+      expect(
+        isTransientError(
+          ServiceException('invalid', statusCode: 0, status: Status(code: 3)),
+        ),
+        isFalse,
+      );
+      expect(isTransientError(const FormatException('bad json')), isFalse);
+    });
+
+    test('does not retry errors', () {
+      expect(isTransientError(StateError('bug')), isFalse);
+    });
+  });
+
+  group('hasStatusCode', () {
+    test('matches gRPC status codes', () {
+      final unavailable = ServiceUnavailableException(
+        'unavailable',
+        status: Status(code: 14),
+      );
+      expect(hasStatusCode(unavailable, const [Code.unavailable]), isTrue);
+      expect(
+        hasStatusCode(unavailable, const [
+          Code.deadlineExceeded,
+          Code.unavailable,
+        ]),
+        isTrue,
+      );
+      expect(
+        hasStatusCode(unavailable, const [Code.deadlineExceeded]),
+        isFalse,
+      );
+    });
+
+    test('distinguishes gRPC status codes with the same HTTP status', () {
+      final aborted = ConflictException('aborted', status: Status(code: 10));
+      expect(hasStatusCode(aborted, const [Code.aborted]), isTrue);
+      expect(hasStatusCode(aborted, const [Code.alreadyExists]), isFalse);
+
+      final dataLoss = InternalServerErrorException(
+        'data loss',
+        status: Status(code: 15),
+      );
+      expect(hasStatusCode(dataLoss, const [Code.dataLoss]), isTrue);
+      expect(hasStatusCode(dataLoss, const [Code.internal]), isFalse);
+    });
+
+    test('matches HTTP status codes', () {
+      expect(
+        hasStatusCode(ServiceUnavailableException('503'), const [
+          Code.unavailable,
+        ]),
+        isTrue,
+      );
+      expect(
+        hasStatusCode(GatewayTimeoutException('504'), const [
+          Code.deadlineExceeded,
+        ]),
+        isTrue,
+      );
+      expect(
+        hasStatusCode(TooManyRequestsException('429'), const [
+          Code.resourceExhausted,
+        ]),
+        isTrue,
+      );
+      expect(
+        hasStatusCode(BadRequestException('400'), const [
+          Code.deadlineExceeded,
+          Code.unavailable,
+        ]),
+        isFalse,
+      );
+    });
+
+    test('matches HTTP status codes when the status has the HTTP code', () {
+      // A REST error response like `{"error": {"code": 503, ...}}`.
+      final error = ServiceUnavailableException(
+        'unavailable',
+        status: Status(code: 503, message: 'unavailable'),
+      );
+      expect(hasStatusCode(error, const [Code.unavailable]), isTrue);
+      expect(hasStatusCode(error, const [Code.internal]), isFalse);
+    });
+
+    test('cannot distinguish codes that share an HTTP status code', () {
+      expect(
+        hasStatusCode(ConflictException('409'), const [Code.aborted]),
+        isTrue,
+      );
+      expect(
+        hasStatusCode(ConflictException('409'), const [Code.alreadyExists]),
+        isTrue,
+      );
+    });
+
+    test('treats a transport failure as UNAVAILABLE', () {
+      final error = http.ClientException('connection refused');
+      expect(hasStatusCode(error, const [Code.unavailable]), isTrue);
+      expect(hasStatusCode(error, const [Code.deadlineExceeded]), isFalse);
+    });
+
+    test('does not match other errors', () {
+      expect(
+        hasStatusCode(const FormatException('bad json'), const [
+          Code.unavailable,
+        ]),
+        isFalse,
+      );
+      expect(hasStatusCode(StateError('bug'), const [Code.unknown]), isFalse);
+      expect(hasStatusCode(ServiceUnavailableException('503'), []), isFalse);
+    });
+  });
+
+  group('NoRetry', () {
+    test('returns the result', () async {
+      expect(await noRetry.run(() async => 5), 5);
+    });
+
+    test('does not retry', () async {
+      var count = 0;
+      await expectLater(
+        noRetry.run<int>(() async {
+          ++count;
+          throw http.ClientException('transport failure');
+        }),
+        throwsA(isA<http.ClientException>()),
+      );
+      expect(count, 1);
+    });
+
+    test('rejects every error and has no delays', () {
+      expect(noRetry.isRetryable(http.ClientException('failure')), isFalse);
+      expect(noRetry.delays(), isEmpty);
+    });
+
+    test('value equality', () {
+      // ignore: prefer_const_constructors
+      expect(NoRetry(), equals(noRetry));
+      // ignore: prefer_const_constructors
+      expect(NoRetry().hashCode, equals(noRetry.hashCode));
+      expect(noRetry, isNot(equals(const ExponentialRetry(maxRetries: 0))));
     });
   });
 
   group('ExponentialRetry', () {
     test('first try succeeds', () async {
-      expect(
-        await const ExponentialRetry().run(() async => 5, isIdempotent: true),
-        5,
-      );
+      expect(await const ExponentialRetry().run(() async => 5), 5);
     });
 
     test('first try fails, unretryable failure', () async {
-      expect(
-        () => const ExponentialRetry().run<int>(
-          () => throw BadRequestException('bad request'),
-          isIdempotent: true,
-        ),
+      var count = 0;
+      await expectLater(
+        const ExponentialRetry().run<int>(() async {
+          ++count;
+          throw BadRequestException('bad request');
+        }),
         throwsA(isA<BadRequestException>()),
       );
-    });
-
-    test('first try fails, non-idempotent', () async {
-      var count = 0;
-      expect(
-        () => const ExponentialRetry(maxRetries: 5).run(() async {
-          ++count;
-          if (count == 1) {
-            throw http.ClientException('transport failure');
-          } else {
-            fail('unexpected retry: $count');
-          }
-        }, isIdempotent: false),
-        throwsA(isA<http.ClientException>()),
-      );
+      expect(count, 1);
     });
 
     test('first try fails, no retries', () async {
@@ -213,7 +345,7 @@ void main() {
           } else {
             fail('unexpected retry: $count');
           }
-        }, isIdempotent: true),
+        }),
         throwsA(isA<http.ClientException>()),
       );
     });
@@ -230,9 +362,94 @@ void main() {
           } else {
             fail('unexpected retry: $count');
           }
-        }, isIdempotent: true),
+        }),
         5,
       );
+    });
+
+    test('stops after maxRetries', () async {
+      var count = 0;
+      await expectLater(
+        const NoDelayRetry(maxRetries: 2).run<int>(() async {
+          ++count;
+          throw http.ClientException('transport failure');
+        }),
+        throwsA(isA<http.ClientException>()),
+      );
+      expect(count, 3);
+    });
+
+    test('retries the errors that retryIf accepts', () async {
+      var count = 0;
+      expect(
+        await const NoDelayRetry(retryIf: _isBadRequest).run(() async {
+          if (++count == 1) throw BadRequestException('bad request');
+          return 5;
+        }),
+        5,
+      );
+      expect(count, 2);
+    });
+
+    test('does not retry the errors that retryIf rejects', () async {
+      var count = 0;
+      await expectLater(
+        const NoDelayRetry(retryIf: _isBadRequest).run<int>(() async {
+          ++count;
+          throw http.ClientException('transport failure');
+        }),
+        throwsA(isA<http.ClientException>()),
+      );
+      expect(count, 1);
+    });
+
+    test('retries status codes with hasStatusCode', () async {
+      final retry = NoDelayRetry(
+        retryIf: (e) => hasStatusCode(e, const [Code.unavailable]),
+      );
+
+      var count = 0;
+      expect(
+        await retry.run(() async {
+          if (++count == 1) throw ServiceUnavailableException('503');
+          return 5;
+        }),
+        5,
+      );
+      expect(count, 2);
+
+      count = 0;
+      await expectLater(
+        retry.run<int>(() async {
+          ++count;
+          throw InternalServerErrorException('500');
+        }),
+        throwsA(isA<InternalServerErrorException>()),
+      );
+      expect(count, 1);
+    });
+
+    test('never retries an Error', () async {
+      var count = 0;
+      await expectLater(
+        NoDelayRetry(retryIf: (_) => true).run<int>(() async {
+          ++count;
+          throw StateError('bug');
+        }),
+        throwsStateError,
+      );
+      expect(count, 1);
+    });
+
+    test('isRetryable uses retryIf', () {
+      const retry = ExponentialRetry(retryIf: _isBadRequest);
+      expect(retry.isRetryable(BadRequestException('400')), isTrue);
+      expect(retry.isRetryable(ServiceUnavailableException('503')), isFalse);
+    });
+
+    test('retryIf defaults to isTransientError', () {
+      expect(const ExponentialRetry().retryIf, equals(isTransientError));
+      expect(const NoDelayRetry().retryIf, equals(isTransientError));
     });
 
     test('value equality and hashCode', () {
@@ -242,10 +459,17 @@ void main() {
       final b = ExponentialRetry(maxRetries: 3, jitter: 0.2);
       // ignore: prefer_const_constructors
       final c = ExponentialRetry(maxRetries: 4, jitter: 0.2);
+      // ignore: prefer_const_constructors
+      final d = ExponentialRetry(
+        retryIf: _isBadRequest,
+        maxRetries: 3,
+        jitter: 0.2,
+      );
       expect(identical(a, b), isFalse);
       expect(a, equals(b));
       expect(a.hashCode, equals(b.hashCode));
       expect(a, isNot(equals(c)));
+      expect(a, isNot(equals(d)));
     });
   });
 }

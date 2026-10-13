@@ -31,14 +31,36 @@ library;
 // ignore_for_file: non_constant_identifier_names
 // ignore_for_file: unintended_html_in_doc_comment
 
+// `dart:core` is imported with a prefix to use its `Duration`, which
+// `google.protobuf.Duration` shadows. Importing it explicitly disables the
+// implicit import, so it's also imported without a prefix.
+import 'dart:core';
+import 'dart:core' as $core;
+
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/src/encoding.dart';
+import 'package:google_cloud_rpc/retry.dart';
+import 'package:google_cloud_rpc/rpc.dart';
 import 'package:google_cloud_rpc/service_client.dart';
 import 'package:http/http.dart' as http;
 
 import 'version.dart';
 
 const _apiKeys = ['GOOGLE_API_KEY'];
+
+// The default retry strategy for the methods that have this `retryPolicy` in
+// `google/cloud/language/v2/language_grpc_service_config.json`. The method
+// config's `timeout` limits the time spent retrying.
+bool _retryPolicy0RetryIf(Object error) =>
+    hasStatusCode(error, const [Code.deadlineExceeded, Code.unavailable]);
+
+const _retryPolicy0 = ExponentialRetry(
+  retryIf: _retryPolicy0RetryIf,
+  initialDelay: $core.Duration(milliseconds: 100),
+  delayMultiplier: 1.3,
+  maxDelay: $core.Duration(seconds: 60),
+  maxRetryInterval: $core.Duration(seconds: 600),
+);
 
 /// Provides text analysis operations such as sentiment analysis and entity
 /// recognition.
@@ -47,6 +69,8 @@ final class LanguageService {
   final Uri _endPoint;
 
   final ServiceClient _client;
+
+  final RetryRunner? _retry;
 
   /// Creates a `LanguageService` using [client] for transport.
   ///
@@ -59,18 +83,26 @@ final class LanguageService {
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
   ///
+  /// If [retry] is set, it replaces the default retry strategy of every
+  /// method that is retried by default. Methods that are not retried by
+  /// default, because repeating them might not be safe, are only retried if
+  /// they're called with a `retry` argument. Pass [noRetry] to disable
+  /// retries.
+  ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
   /// `x-google-api-client` header. This argument is only meant for use by
   /// hand-written official Google Cloud API clients.
   LanguageService({
     required http.Client client,
     Uri? endPoint,
+    RetryRunner? retry,
     String? gcclVersion,
   }) : _client = ServiceClient(
          client: client,
          gapicVersion: packageVersion,
          gcclVersion: gcclVersion,
        ),
+       _retry = retry,
        _endPoint = endPoint == null
            ? Uri.https(_defaultHost, '')
            : Uri(
@@ -96,14 +128,24 @@ final class LanguageService {
 
   /// Analyzes the sentiment of the provided text.
   ///
+  /// If [retry] is set, failed requests are retried using it. Otherwise,
+  /// they're retried using the `retry` strategy given to
+  /// [LanguageService.new], or, by default, if they fail with
+  /// `DEADLINE_EXCEEDED` or `UNAVAILABLE`.
+  ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<AnalyzeSentimentResponse> analyzeSentiment(
-    AnalyzeSentimentRequest request,
-  ) async {
+    AnalyzeSentimentRequest request, {
+    RetryRunner? retry,
+  }) async {
     final url = _endPoint.replace(path: '/v2/documents:analyzeSentiment');
-    final response = await _client.post(url, body: request);
+    final response = await _client.post(
+      url,
+      body: request,
+      retry: retry ?? _retry ?? _retryPolicy0,
+    );
     return AnalyzeSentimentResponse.fromJson(response);
   }
 
@@ -111,47 +153,93 @@ final class LanguageService {
   /// along with entity types, probability, mentions for each entity, and
   /// other properties.
   ///
+  /// If [retry] is set, failed requests are retried using it. Otherwise,
+  /// they're retried using the `retry` strategy given to
+  /// [LanguageService.new], or, by default, if they fail with
+  /// `DEADLINE_EXCEEDED` or `UNAVAILABLE`.
+  ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<AnalyzeEntitiesResponse> analyzeEntities(
-    AnalyzeEntitiesRequest request,
-  ) async {
+    AnalyzeEntitiesRequest request, {
+    RetryRunner? retry,
+  }) async {
     final url = _endPoint.replace(path: '/v2/documents:analyzeEntities');
-    final response = await _client.post(url, body: request);
+    final response = await _client.post(
+      url,
+      body: request,
+      retry: retry ?? _retry ?? _retryPolicy0,
+    );
     return AnalyzeEntitiesResponse.fromJson(response);
   }
 
   /// Classifies a document into categories.
   ///
+  /// If [retry] is set, failed requests are retried using it. Otherwise,
+  /// they're retried using the `retry` strategy given to
+  /// [LanguageService.new], or, by default, if they fail with
+  /// `DEADLINE_EXCEEDED` or `UNAVAILABLE`.
+  ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
-  Future<ClassifyTextResponse> classifyText(ClassifyTextRequest request) async {
+  Future<ClassifyTextResponse> classifyText(
+    ClassifyTextRequest request, {
+    RetryRunner? retry,
+  }) async {
     final url = _endPoint.replace(path: '/v2/documents:classifyText');
-    final response = await _client.post(url, body: request);
+    final response = await _client.post(
+      url,
+      body: request,
+      retry: retry ?? _retry ?? _retryPolicy0,
+    );
     return ClassifyTextResponse.fromJson(response);
   }
 
   /// Moderates a document for harmful and sensitive categories.
   ///
+  /// If [retry] is set, failed requests are retried using it. Otherwise,
+  /// they're retried using the `retry` strategy given to
+  /// [LanguageService.new], or, by default, if they fail with
+  /// `DEADLINE_EXCEEDED` or `UNAVAILABLE`.
+  ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
-  Future<ModerateTextResponse> moderateText(ModerateTextRequest request) async {
+  Future<ModerateTextResponse> moderateText(
+    ModerateTextRequest request, {
+    RetryRunner? retry,
+  }) async {
     final url = _endPoint.replace(path: '/v2/documents:moderateText');
-    final response = await _client.post(url, body: request);
+    final response = await _client.post(
+      url,
+      body: request,
+      retry: retry ?? _retry ?? _retryPolicy0,
+    );
     return ModerateTextResponse.fromJson(response);
   }
 
   /// A convenience method that provides all features in one call.
   ///
+  /// If [retry] is set, failed requests are retried using it. Otherwise,
+  /// they're retried using the `retry` strategy given to
+  /// [LanguageService.new], or, by default, if they fail with
+  /// `DEADLINE_EXCEEDED` or `UNAVAILABLE`.
+  ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
-  Future<AnnotateTextResponse> annotateText(AnnotateTextRequest request) async {
+  Future<AnnotateTextResponse> annotateText(
+    AnnotateTextRequest request, {
+    RetryRunner? retry,
+  }) async {
     final url = _endPoint.replace(path: '/v2/documents:annotateText');
-    final response = await _client.post(url, body: request);
+    final response = await _client.post(
+      url,
+      body: request,
+      retry: retry ?? _retry ?? _retryPolicy0,
+    );
     return AnnotateTextResponse.fromJson(response);
   }
 
@@ -182,6 +270,8 @@ base class FakeLanguageService implements LanguageService {
   Uri get _endPoint => throw UnsupportedError('_endPoint');
   @override
   ServiceClient get _client => throw UnsupportedError('_client');
+  @override
+  RetryRunner? get _retry => throw UnsupportedError('_retry');
 
   bool isClosed = false;
 
@@ -204,13 +294,19 @@ base class FakeLanguageService implements LanguageService {
 
   /// Analyzes the sentiment of the provided text.
   ///
+  /// If [retry] is set, failed requests are retried using it. Otherwise,
+  /// they're retried using the `retry` strategy given to
+  /// [LanguageService.new], or, by default, if they fail with
+  /// `DEADLINE_EXCEEDED` or `UNAVAILABLE`.
+  ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   @override
   Future<AnalyzeSentimentResponse> analyzeSentiment(
-    AnalyzeSentimentRequest request,
-  ) async {
+    AnalyzeSentimentRequest request, {
+    RetryRunner? retry,
+  }) async {
     if (isClosed) throw StateError('Service is closed');
 
     if (_analyzeSentiment case final analyzeSentiment?) {
@@ -223,13 +319,19 @@ base class FakeLanguageService implements LanguageService {
   /// along with entity types, probability, mentions for each entity, and
   /// other properties.
   ///
+  /// If [retry] is set, failed requests are retried using it. Otherwise,
+  /// they're retried using the `retry` strategy given to
+  /// [LanguageService.new], or, by default, if they fail with
+  /// `DEADLINE_EXCEEDED` or `UNAVAILABLE`.
+  ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   @override
   Future<AnalyzeEntitiesResponse> analyzeEntities(
-    AnalyzeEntitiesRequest request,
-  ) async {
+    AnalyzeEntitiesRequest request, {
+    RetryRunner? retry,
+  }) async {
     if (isClosed) throw StateError('Service is closed');
 
     if (_analyzeEntities case final analyzeEntities?) {
@@ -240,11 +342,19 @@ base class FakeLanguageService implements LanguageService {
 
   /// Classifies a document into categories.
   ///
+  /// If [retry] is set, failed requests are retried using it. Otherwise,
+  /// they're retried using the `retry` strategy given to
+  /// [LanguageService.new], or, by default, if they fail with
+  /// `DEADLINE_EXCEEDED` or `UNAVAILABLE`.
+  ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   @override
-  Future<ClassifyTextResponse> classifyText(ClassifyTextRequest request) async {
+  Future<ClassifyTextResponse> classifyText(
+    ClassifyTextRequest request, {
+    RetryRunner? retry,
+  }) async {
     if (isClosed) throw StateError('Service is closed');
 
     if (_classifyText case final classifyText?) {
@@ -255,11 +365,19 @@ base class FakeLanguageService implements LanguageService {
 
   /// Moderates a document for harmful and sensitive categories.
   ///
+  /// If [retry] is set, failed requests are retried using it. Otherwise,
+  /// they're retried using the `retry` strategy given to
+  /// [LanguageService.new], or, by default, if they fail with
+  /// `DEADLINE_EXCEEDED` or `UNAVAILABLE`.
+  ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   @override
-  Future<ModerateTextResponse> moderateText(ModerateTextRequest request) async {
+  Future<ModerateTextResponse> moderateText(
+    ModerateTextRequest request, {
+    RetryRunner? retry,
+  }) async {
     if (isClosed) throw StateError('Service is closed');
 
     if (_moderateText case final moderateText?) {
@@ -270,11 +388,19 @@ base class FakeLanguageService implements LanguageService {
 
   /// A convenience method that provides all features in one call.
   ///
+  /// If [retry] is set, failed requests are retried using it. Otherwise,
+  /// they're retried using the `retry` strategy given to
+  /// [LanguageService.new], or, by default, if they fail with
+  /// `DEADLINE_EXCEEDED` or `UNAVAILABLE`.
+  ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   @override
-  Future<AnnotateTextResponse> annotateText(AnnotateTextRequest request) async {
+  Future<AnnotateTextResponse> annotateText(
+    AnnotateTextRequest request, {
+    RetryRunner? retry,
+  }) async {
     if (isClosed) throw StateError('Service is closed');
 
     if (_annotateText case final annotateText?) {

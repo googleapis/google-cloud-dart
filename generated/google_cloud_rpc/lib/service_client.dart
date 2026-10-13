@@ -18,6 +18,7 @@ import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:http/http.dart' as http;
 
 import 'exceptions.dart';
+import 'retry.dart';
 import 'src/version.dart';
 import 'src/web.dart' if (dart.library.io) 'src/vm.dart' show clientDartVersion;
 
@@ -37,6 +38,14 @@ const String _contentTypeKey = 'content-type';
 const String _typeJson = 'application/json';
 
 /// A low-level mechanism to communicate with Google APIs.
+///
+/// Every request method takes a `retry` argument that decides whether, and
+/// how, failed attempts are retried. It defaults to [noRetry]: a
+/// [ServiceClient] doesn't know whether an operation is safe to repeat, so the
+/// caller must decide.
+///
+/// Streaming requests are only retried until the response starts. After that,
+/// elements may already have been delivered, so a retry could repeat them.
 class ServiceClient {
   final http.Client client;
 
@@ -93,64 +102,102 @@ class ServiceClient {
     return buffer.toString();
   }
 
-  Future<Map<String, dynamic>> get(Uri url) => _makeRequest(url, 'GET');
+  Future<Map<String, dynamic>> get(Uri url, {RetryRunner retry = noRetry}) =>
+      _makeRequest(url, 'GET', retry: retry);
 
   Stream<Map<String, dynamic>> getStreaming(
     Uri url, {
     required bool enableSse,
-  }) => _makeStreamingRequest(url, 'GET', enableSse: enableSse);
+    RetryRunner retry = noRetry,
+  }) => _makeStreamingRequest(url, 'GET', enableSse: enableSse, retry: retry);
 
-  Future<Map<String, dynamic>> delete(Uri url) => _makeRequest(url, 'DELETE');
+  Future<Map<String, dynamic>> delete(Uri url, {RetryRunner retry = noRetry}) =>
+      _makeRequest(url, 'DELETE', retry: retry);
 
   Stream<Map<String, dynamic>> deleteStreaming(
     Uri url, {
     required bool enableSse,
-  }) => _makeStreamingRequest(url, 'DELETE', enableSse: enableSse);
+    RetryRunner retry = noRetry,
+  }) =>
+      _makeStreamingRequest(url, 'DELETE', enableSse: enableSse, retry: retry);
 
-  Future<Map<String, dynamic>> patch(Uri url, {JsonEncodable? body}) =>
-      _makeRequest(url, 'PATCH', body);
+  Future<Map<String, dynamic>> patch(
+    Uri url, {
+    JsonEncodable? body,
+    RetryRunner retry = noRetry,
+  }) => _makeRequest(url, 'PATCH', body: body, retry: retry);
 
   Stream<Map<String, dynamic>> patchStreaming(
     Uri url, {
     required bool enableSse,
     JsonEncodable? body,
-  }) => _makeStreamingRequest(url, 'PATCH', body: body, enableSse: enableSse);
+    RetryRunner retry = noRetry,
+  }) => _makeStreamingRequest(
+    url,
+    'PATCH',
+    body: body,
+    enableSse: enableSse,
+    retry: retry,
+  );
 
-  Future<Map<String, dynamic>> post(Uri url, {JsonEncodable? body}) =>
-      _makeRequest(url, 'POST', body);
+  Future<Map<String, dynamic>> post(
+    Uri url, {
+    JsonEncodable? body,
+    RetryRunner retry = noRetry,
+  }) => _makeRequest(url, 'POST', body: body, retry: retry);
 
   Stream<Map<String, dynamic>> postStreaming(
     Uri url, {
     required bool enableSse,
     JsonEncodable? body,
-  }) => _makeStreamingRequest(url, 'POST', body: body, enableSse: enableSse);
+    RetryRunner retry = noRetry,
+  }) => _makeStreamingRequest(
+    url,
+    'POST',
+    body: body,
+    enableSse: enableSse,
+    retry: retry,
+  );
 
-  Future<Map<String, dynamic>> put(Uri url, {JsonEncodable? body}) =>
-      _makeRequest(url, 'PUT', body);
+  Future<Map<String, dynamic>> put(
+    Uri url, {
+    JsonEncodable? body,
+    RetryRunner retry = noRetry,
+  }) => _makeRequest(url, 'PUT', body: body, retry: retry);
 
   Stream<Map<String, dynamic>> putStreaming(
     Uri url, {
     required bool enableSse,
     JsonEncodable? body,
-  }) => _makeStreamingRequest(url, 'PUT', body: body, enableSse: enableSse);
+    RetryRunner retry = noRetry,
+  }) => _makeStreamingRequest(
+    url,
+    'PUT',
+    body: body,
+    enableSse: enableSse,
+    retry: retry,
+  );
 
   /// Closes the client and cleans up any resources associated with it.
   ///
   /// Once [close] is called, no other methods should be called.
   void close() => client.close();
 
-  Future<Map<String, dynamic>> _makeRequest(
+  /// Sends a single request, throwing a [ServiceException] if the response
+  /// does not have a 2xx status code.
+  Future<http.StreamedResponse> _send(
     Uri url,
-    String method, [
-    JsonEncodable? requestBody,
-  ]) async {
+    String method,
+    String? encodedBody,
+  ) async {
+    // `send` finalizes the request, so every attempt needs a new one.
     final request = http.Request(method, url);
-    if (requestBody != null) {
-      request.body = requestBody._asEncodedJson;
+    if (encodedBody != null) {
+      request.body = encodedBody;
     }
     request.headers.addAll({
       _clientKey: clientHeader,
-      if (requestBody != null) _contentTypeKey: _typeJson,
+      if (encodedBody != null) _contentTypeKey: _typeJson,
     });
 
     final response = await client.send(request);
@@ -164,10 +211,23 @@ class ServiceClient {
       }
       throw ServiceException.fromHttpResponse(response, responseBody);
     }
-    final responseBody = await response.stream.bytesToString();
-    return responseBody.isEmpty
-        ? {}
-        : jsonDecode(responseBody) as Map<String, dynamic>;
+    return response;
+  }
+
+  Future<Map<String, dynamic>> _makeRequest(
+    Uri url,
+    String method, {
+    JsonEncodable? body,
+    required RetryRunner retry,
+  }) {
+    final encodedBody = body?._asEncodedJson;
+    return retry.run(() async {
+      final response = await _send(url, method, encodedBody);
+      final responseBody = await response.stream.bytesToString();
+      return responseBody.isEmpty
+          ? <String, dynamic>{}
+          : jsonDecode(responseBody) as Map<String, dynamic>;
+    });
   }
 
   /// Make a request that streams its results using
@@ -179,51 +239,41 @@ class ServiceClient {
     String method, {
     JsonEncodable? body,
     required bool enableSse,
+    required RetryRunner retry,
   }) async* {
-    final request = http.Request(
-      method,
-      enableSse ? _makeUrlStreaming(url) : url,
-    );
-    if (body != null) {
-      request.body = body._asEncodedJson;
-    }
-    request.headers.addAll({
-      _clientKey: clientHeader,
-      if (body != null) _contentTypeKey: _typeJson,
-    });
-
-    final response = await client.send(request);
-    final statusOK = response.statusCode >= 200 && response.statusCode < 300;
-    if (!statusOK) {
-      String? responseBody;
-      try {
-        responseBody = await response.stream.bytesToString();
-      } on FormatException {
-        // The response body is not valid UTF-8.
+    final requestUrl = enableSse ? _makeUrlStreaming(url) : url;
+    final encodedBody = body?._asEncodedJson;
+    final messages = await retry.run(() async {
+      final response = await _send(requestUrl, method, encodedBody);
+      switch (http.MediaType.parse(
+        response.headers['content-type'] ?? '',
+      ).mimeType) {
+        case 'application/json':
+          // The server responded with a non-streaming response, which should
+          // be a list of JSON objects. The whole body is read as part of the
+          // attempt, so a failure while reading it can be retried.
+          final responseBody = await response.stream.bytesToString();
+          final json = (jsonDecode(responseBody) as List)
+              .cast<Map<String, dynamic>>();
+          return Stream.fromIterable(json);
+        case 'text/event-stream':
+          // The server responded with an event stream, which is what we
+          // expect. Events reach the caller as they arrive, so failures after
+          // this point are not retried.
+          return _decodeEvents(response);
+        default:
+          throw ServiceException(
+            'Unsupported content type: ${response.headers['content-type']}',
+            statusCode: response.statusCode,
+          );
       }
-      throw ServiceException.fromHttpResponse(response, responseBody);
-    }
+    });
+    yield* messages;
+  }
 
-    switch (http.MediaType.parse(
-      response.headers['content-type'] ?? '',
-    ).mimeType) {
-      case 'application/json':
-        // The server responded with a non-streaming response, which should be a
-        // list of JSON objects.
-        final responseBody = await response.stream.bytesToString();
-        final json = (jsonDecode(responseBody) as List)
-            .cast<Map<String, dynamic>>();
-        yield* Stream.fromIterable(json);
-        return;
-      case 'text/event-stream':
-        // The server responded with an event stream, which is what we expect.
-        break;
-      default:
-        throw ServiceException(
-          'Unsupported content type: ${response.headers['content-type']}',
-          statusCode: response.statusCode,
-        );
-    }
+  static Stream<Map<String, dynamic>> _decodeEvents(
+    http.StreamedResponse response,
+  ) async* {
     final lines = response.stream.toStringStream().transform(
       const LineSplitter(),
     );

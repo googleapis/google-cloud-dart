@@ -60,13 +60,19 @@ void main() async {
 
 ## Retries
 
-By default, most [idempotent Google Cloud Storage operations][] are retried if
-they fail with a transient error (such as a network failure).
+By default, [idempotent Google Cloud Storage operations][] are retried if they
+fail with a transient error (such as a network failure). Operations that aren't
+idempotent are not retried, because repeating them could have unintended
+effects.
 
 The documentation for each `Storage` method indicates whether the operation is
-idempotent.
+idempotent. Some operations are only idempotent if a precondition, such as
+`ifGenerationMatch`, is set.
 
-You can control the retry behavior using the `retry` parameter on each method.
+You can change how idempotent operations are retried with the `retry` parameter
+of the `Storage` constructor. You can also pass `retry` to a method to control
+how that call is retried. A `retry` argument passed to a method is always used,
+even if the operation isn't idempotent. To disable retries, pass `noRetry`.
 
 For example:
 
@@ -75,13 +81,24 @@ For example:
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 
 void main() async {
-  final storage = Storage();
+  // Retry idempotent operations at most twice.
+  final storage = Storage(retry: const ExponentialRetry(maxRetries: 2));
 
-  // This operation is only idempotent if `ifMetagenerationMatch` is provided.
+  // This operation is only idempotent if `ifMetagenerationMatch` is provided,
+  // so it is retried using the retry strategy passed to `Storage`.
   await storage.patchBucket(
     'my-bucket',
     BucketMetadataPatchBuilder()..labels = {'key': 'value'},
     ifMetagenerationMatch: BigInt.from(1),
+  );
+
+  // Without `ifGenerationMatch`, this operation isn't idempotent, so it's only
+  // retried because `retry` is passed. That's safe if nothing else writes
+  // this object.
+  await storage.uploadObjectFromString(
+    'my-bucket',
+    'status.txt',
+    'OK',
     retry: const ExponentialRetry(maxRetries: 2),
   );
 

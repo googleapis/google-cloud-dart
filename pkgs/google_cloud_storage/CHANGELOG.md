@@ -1,5 +1,24 @@
-## 0.6.5-wip
+## 0.7.0-wip
 
+* **Breaking:** A `retry` argument passed to a `Storage`, `Bucket` or
+  `StorageObject` method is now always used, even if the operation isn't
+  idempotent, as in the Python client library. Previously, it was ignored for
+  operations that weren't idempotent. Omit `retry` to only retry idempotent
+  operations.
+* **Breaking:** `RetryRunner.run` no longer takes an `isIdempotent` argument.
+  A `RetryRunner` now only decides which errors are retried, and how long to
+  wait between attempts; whoever chooses the runner decides whether an
+  operation is safe to retry.
+* Add a `retry` parameter to the `Storage` constructor. It is used for
+  idempotent operations that are called without a `retry` argument, and
+  defaults to `defaultRetry`.
+* `Storage.listBuckets` and `Storage.listObjects` now retry failed page
+  requests, and take a `retry` argument.
+* Add `ExponentialRetry.retryIf` to choose which errors are retried, with the
+  `isTransientError` (the default) and `hasStatusCode` predicates.
+* Add `noRetry` to disable retries.
+* `defaultRetry` is now defined by this package instead of
+  `package:google_cloud_rpc`. Its value is unchanged.
 * Move retry classes (`RetryRunner`, `ExponentialRetry`) and
   `ChecksumValidationException` to `package:google_cloud_rpc` (re-exported for
   backwards compatibility).
