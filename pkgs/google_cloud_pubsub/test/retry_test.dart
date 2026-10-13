@@ -23,15 +23,24 @@ import 'test_utils.dart';
 
 void main() {
   group('defaultRetry', () {
-    test('has expected default backoff parameters', () {
+    test('follows the Publish retry policy in the service config', () {
+      expect(defaultRetry.retryableCodes, [
+        Code.aborted,
+        Code.cancelled,
+        Code.deadlineExceeded,
+        Code.internal,
+        Code.resourceExhausted,
+        Code.unavailable,
+        Code.unknown,
+      ]);
       expect(defaultRetry.maxRetryInterval, equals(const Duration(minutes: 1)));
       expect(
         defaultRetry.initialDelay,
         equals(const Duration(milliseconds: 100)),
       );
-      expect(defaultRetry.delayMultiplier, equals(1.3));
+      expect(defaultRetry.delayMultiplier, equals(4));
       expect(defaultRetry.maxDelay, equals(const Duration(seconds: 60)));
-      expect(defaultRetry.jitter, equals(0.2));
+      expect(defaultRetry.jitter, equals(1.0));
       expect(defaultRetry.maxRetries, isNull);
     });
 

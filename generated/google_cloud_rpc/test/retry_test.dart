@@ -98,11 +98,10 @@ void main() {
       expect(delays, hasLength(20));
       for (final d in delays) {
         expect(d.inMilliseconds, greaterThanOrEqualTo(8000));
-        expect(d.inMilliseconds, lessThanOrEqualTo(12000));
+        // Jitter only shortens delays, so they never exceed `maxDelay`.
+        expect(d, lessThanOrEqualTo(const Duration(seconds: 10)));
       }
       expect(delays.toSet().length, greaterThan(1));
-      // Jitter is applied after the delay is capped at `maxDelay`.
-      expect(delays.any((d) => d > const Duration(seconds: 10)), isTrue);
     });
 
     test('matches the documented jitter example', () {
@@ -111,7 +110,7 @@ void main() {
         initialDelay: const Duration(seconds: 1),
         maxDelay: const Duration(seconds: 10),
         delayMultiplier: 2,
-        jitter: 0.2,
+        jitter: 0.5,
         random: Random(42),
       ).toList();
 
@@ -126,64 +125,27 @@ void main() {
       expect(delays, hasLength(unjittered.length));
       expect(delays, isNot(unjittered));
       for (var i = 0; i < delays.length; i++) {
-        expect(delays[i], greaterThanOrEqualTo(unjittered[i] * 0.8));
-        expect(delays[i], lessThanOrEqualTo(unjittered[i] * 1.2));
+        expect(delays[i], greaterThanOrEqualTo(unjittered[i] * 0.5));
+        expect(delays[i], lessThanOrEqualTo(unjittered[i]));
       }
     });
-  });
 
-  group('isTransientError', () {
-    test('classifies retryable exceptions', () {
-      expect(isTransientError(TooManyRequestsException('429')), isTrue);
-      expect(isTransientError(InternalServerErrorException('500')), isTrue);
-      expect(isTransientError(BadGatewayException('502')), isTrue);
-      expect(isTransientError(ServiceUnavailableException('503')), isTrue);
-      expect(isTransientError(GatewayTimeoutException('504')), isTrue);
-      expect(isTransientError(RequestTimeoutException('408')), isTrue);
-      expect(isTransientError(http.ClientException('network')), isTrue);
-      expect(
-        isTransientError(ChecksumValidationException('bad checksum')),
-        isTrue,
-      );
-      expect(
-        isTransientError(
-          ConflictException('aborted', status: Status(code: 10)),
-        ),
-        isTrue,
-      );
-      expect(
-        isTransientError(
-          ServiceException(
-            'unavailable',
-            statusCode: 0,
-            status: Status(code: 14),
-          ),
-        ),
-        isTrue,
-      );
-    });
+    test('full jitter picks delays between zero and the delay', () {
+      final delays = delaySequence(
+        maxRetries: 100,
+        initialDelay: const Duration(seconds: 10),
+        delayMultiplier: 1.0,
+        maxDelay: const Duration(seconds: 10),
+        jitter: 1.0,
+        random: Random(42),
+      ).toList();
 
-    test('classifies non-retryable exceptions', () {
-      expect(isTransientError(BadRequestException('400')), isFalse);
-      expect(isTransientError(NotFoundException('404')), isFalse);
-      expect(isTransientError(ConflictException('409')), isFalse);
-      expect(
-        isTransientError(
-          InternalServerErrorException('data loss', status: Status(code: 15)),
-        ),
-        isFalse,
-      );
-      expect(
-        isTransientError(
-          ServiceException('invalid', statusCode: 0, status: Status(code: 3)),
-        ),
-        isFalse,
-      );
-      expect(isTransientError(const FormatException('bad json')), isFalse);
-    });
-
-    test('does not retry errors', () {
-      expect(isTransientError(StateError('bug')), isFalse);
+      for (final d in delays) {
+        expect(d, greaterThanOrEqualTo(Duration.zero));
+        expect(d, lessThanOrEqualTo(const Duration(seconds: 10)));
+      }
+      expect(delays.any((d) => d < const Duration(seconds: 2)), isTrue);
+      expect(delays.any((d) => d > const Duration(seconds: 8)), isTrue);
     });
   });
 
@@ -314,19 +276,27 @@ void main() {
       expect(NoRetry(), equals(noRetry));
       // ignore: prefer_const_constructors
       expect(NoRetry().hashCode, equals(noRetry.hashCode));
-      expect(noRetry, isNot(equals(const ExponentialRetry(maxRetries: 0))));
+      expect(
+        noRetry,
+        isNot(equals(const ExponentialRetry.onCodes([], maxRetries: 0))),
+      );
     });
   });
 
   group('ExponentialRetry', () {
     test('first try succeeds', () async {
-      expect(await const ExponentialRetry().run(() async => 5), 5);
+      expect(
+        await const ExponentialRetry.onCodes([
+          Code.unavailable,
+        ]).run(() async => 5),
+        5,
+      );
     });
 
     test('first try fails, unretryable failure', () async {
       var count = 0;
       await expectLater(
-        const ExponentialRetry().run<int>(() async {
+        const ExponentialRetry.onCodes([Code.unavailable]).run<int>(() async {
           ++count;
           throw BadRequestException('bad request');
         }),
@@ -338,14 +308,15 @@ void main() {
     test('first try fails, no retries', () async {
       var count = 0;
       expect(
-        () => const ExponentialRetry(maxRetries: 0).run(() async {
-          ++count;
-          if (count == 1) {
-            throw http.ClientException('transport failure');
-          } else {
-            fail('unexpected retry: $count');
-          }
-        }),
+        () => const ExponentialRetry.onCodes([Code.unavailable], maxRetries: 0)
+            .run(() async {
+              ++count;
+              if (count == 1) {
+                throw http.ClientException('transport failure');
+              } else {
+                fail('unexpected retry: $count');
+              }
+            }),
         throwsA(isA<http.ClientException>()),
       );
     });
@@ -353,7 +324,9 @@ void main() {
     test('second try succeeds', () async {
       var count = 0;
       expect(
-        await const ExponentialRetry(initialDelay: Duration()).run(() async {
+        await const ExponentialRetry.onCodes([
+          Code.unavailable,
+        ], initialDelay: Duration()).run(() async {
           ++count;
           if (count == 1) {
             throw http.ClientException('transport failure');
@@ -370,13 +343,39 @@ void main() {
     test('stops after maxRetries', () async {
       var count = 0;
       await expectLater(
-        const NoDelayRetry(maxRetries: 2).run<int>(() async {
-          ++count;
-          throw http.ClientException('transport failure');
-        }),
+        const NoDelayRetry.onCodes([Code.unavailable], maxRetries: 2).run<int>(
+          () async {
+            ++count;
+            throw http.ClientException('transport failure');
+          },
+        ),
         throwsA(isA<http.ClientException>()),
       );
       expect(count, 3);
+    });
+
+    test('onCodes retries the given status codes', () async {
+      const retry = NoDelayRetry.onCodes([Code.unavailable]);
+
+      var count = 0;
+      expect(
+        await retry.run(() async {
+          if (++count == 1) throw ServiceUnavailableException('503');
+          return 5;
+        }),
+        5,
+      );
+      expect(count, 2);
+
+      count = 0;
+      await expectLater(
+        retry.run<int>(() async {
+          ++count;
+          throw InternalServerErrorException('500');
+        }),
+        throwsA(isA<InternalServerErrorException>()),
+      );
+      expect(count, 1);
     });
 
     test('retries the errors that retryIf accepts', () async {
@@ -403,32 +402,6 @@ void main() {
       expect(count, 1);
     });
 
-    test('retries status codes with hasStatusCode', () async {
-      final retry = NoDelayRetry(
-        retryIf: (e) => hasStatusCode(e, const [Code.unavailable]),
-      );
-
-      var count = 0;
-      expect(
-        await retry.run(() async {
-          if (++count == 1) throw ServiceUnavailableException('503');
-          return 5;
-        }),
-        5,
-      );
-      expect(count, 2);
-
-      count = 0;
-      await expectLater(
-        retry.run<int>(() async {
-          ++count;
-          throw InternalServerErrorException('500');
-        }),
-        throwsA(isA<InternalServerErrorException>()),
-      );
-      expect(count, 1);
-    });
-
     test('never retries an Error', () async {
       var count = 0;
       await expectLater(
@@ -445,31 +418,83 @@ void main() {
       const retry = ExponentialRetry(retryIf: _isBadRequest);
       expect(retry.isRetryable(BadRequestException('400')), isTrue);
       expect(retry.isRetryable(ServiceUnavailableException('503')), isFalse);
+      expect(retry.retryableCodes, isNull);
     });
 
-    test('retryIf defaults to isTransientError', () {
-      expect(const ExponentialRetry().retryIf, equals(isTransientError));
-      expect(const NoDelayRetry().retryIf, equals(isTransientError));
+    test('isRetryable uses retryableCodes', () {
+      const retry = ExponentialRetry.onCodes([Code.unavailable, Code.aborted]);
+      expect(retry.isRetryable(ServiceUnavailableException('503')), isTrue);
+      expect(retry.isRetryable(http.ClientException('failure')), isTrue);
+      expect(retry.isRetryable(BadRequestException('400')), isFalse);
+      expect(retry.retryableCodes, [Code.unavailable, Code.aborted]);
+    });
+
+    test('uses full jitter by default', () {
+      const retry = ExponentialRetry.onCodes(
+        [Code.unavailable],
+        maxRetries: 50,
+        initialDelay: Duration(seconds: 10),
+        delayMultiplier: 1,
+        maxDelay: Duration(seconds: 10),
+      );
+      expect(retry.jitter, 1.0);
+
+      final delays = retry.delays(random: Random(42)).toList();
+      expect(delays, hasLength(50));
+      for (final d in delays) {
+        expect(d, lessThanOrEqualTo(const Duration(seconds: 10)));
+      }
+      expect(delays.any((d) => d < const Duration(seconds: 5)), isTrue);
+    });
+
+    test('jitter must be between 0 and 1', () {
+      expect(
+        // ignore: prefer_const_constructors
+        () => ExponentialRetry.onCodes([Code.unavailable], jitter: 1.5),
+        throwsA(isA<AssertionError>()),
+      );
+      expect(
+        // ignore: prefer_const_constructors
+        () => ExponentialRetry(retryIf: _isBadRequest, jitter: -0.1),
+        throwsA(isA<AssertionError>()),
+      );
     });
 
     test('value equality and hashCode', () {
       // ignore: prefer_const_constructors
-      final a = ExponentialRetry(maxRetries: 3, jitter: 0.2);
+      final a = ExponentialRetry(retryIf: _isBadRequest, maxRetries: 3);
       // ignore: prefer_const_constructors
-      final b = ExponentialRetry(maxRetries: 3, jitter: 0.2);
+      final b = ExponentialRetry(retryIf: _isBadRequest, maxRetries: 3);
       // ignore: prefer_const_constructors
-      final c = ExponentialRetry(maxRetries: 4, jitter: 0.2);
-      // ignore: prefer_const_constructors
-      final d = ExponentialRetry(
-        retryIf: _isBadRequest,
-        maxRetries: 3,
-        jitter: 0.2,
-      );
+      final c = ExponentialRetry(retryIf: _isBadRequest, maxRetries: 4);
       expect(identical(a, b), isFalse);
       expect(a, equals(b));
       expect(a.hashCode, equals(b.hashCode));
       expect(a, isNot(equals(c)));
-      expect(a, isNot(equals(d)));
+
+      // ignore: prefer_const_constructors
+      final d = ExponentialRetry.onCodes([Code.unavailable], maxRetries: 3);
+      // ignore: prefer_const_constructors
+      final e = ExponentialRetry.onCodes([Code.unavailable], maxRetries: 3);
+      // ignore: prefer_const_constructors
+      final f = ExponentialRetry.onCodes([Code.aborted], maxRetries: 3);
+      expect(identical(d, e), isFalse);
+      expect(d, equals(e));
+      expect(d.hashCode, equals(e.hashCode));
+      expect(d, isNot(equals(f)));
+      expect(d, isNot(equals(a)));
+    });
+
+    test('toString includes the retryable codes', () {
+      expect(
+        const ExponentialRetry.onCodes([
+          Code.deadlineExceeded,
+          Code.unavailable,
+        ]).toString(),
+        startsWith(
+          'ExponentialRetry(retryableCodes: [DEADLINE_EXCEEDED, UNAVAILABLE], ',
+        ),
+      );
     });
   });
 }

@@ -67,7 +67,7 @@ final class Bucket {
 
   /// Deletes this already-empty [Google Cloud Storage bucket][].
   ///
-  /// This operation is idempotent if `ifMetagenerationMatch` is set.
+  /// This operation is always idempotent.
   ///
   /// {@macro storage_retry}
   ///

@@ -72,7 +72,9 @@ idempotent. Some operations are only idempotent if a precondition, such as
 You can change how idempotent operations are retried with the `retry` parameter
 of the `Storage` constructor. You can also pass `retry` to a method to control
 how that call is retried. A `retry` argument passed to a method is always used,
-even if the operation isn't idempotent. To disable retries, pass `noRetry`.
+even if the operation isn't idempotent. To disable retries, pass `noRetry`. To
+retry the same errors as `defaultRetry` with different limits or delays, create
+an `ExponentialRetry` with `retryIf: isTransientError`.
 
 For example:
 
@@ -82,7 +84,9 @@ import 'package:google_cloud_storage/google_cloud_storage.dart';
 
 void main() async {
   // Retry idempotent operations at most twice.
-  final storage = Storage(retry: const ExponentialRetry(maxRetries: 2));
+  final storage = Storage(
+    retry: const ExponentialRetry(retryIf: isTransientError, maxRetries: 2),
+  );
 
   // This operation is only idempotent if `ifMetagenerationMatch` is provided,
   // so it is retried using the retry strategy passed to `Storage`.
@@ -99,7 +103,7 @@ void main() async {
     'my-bucket',
     'status.txt',
     'OK',
-    retry: const ExponentialRetry(maxRetries: 2),
+    retry: defaultRetry,
   );
 
   storage.close();

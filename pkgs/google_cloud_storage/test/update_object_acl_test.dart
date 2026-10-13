@@ -197,7 +197,34 @@ void main() async {
       expect(count, 1);
     });
 
-    test('idempotent transport failure', () async {
+    test('non-idempotent transport failure with generation', () async {
+      var count = 0;
+      final mockClient = MockClient((request) async {
+        count++;
+        if (count == 1) {
+          throw http.ClientException('Some transport failure');
+        } else {
+          throw StateError('Unexpected call count: $count');
+        }
+      });
+
+      final storage = Storage(client: mockClient, projectId: 'fake project');
+
+      // Changing an object ACL is never idempotent.
+      await expectLater(
+        storage.updateObjectAcl(
+          'bucket',
+          'object',
+          'user-test',
+          'OWNER',
+          generation: BigInt.from(1),
+        ),
+        throwsA(isA<http.ClientException>()),
+      );
+      expect(count, 1);
+    });
+
+    test('transport failure with retry', () async {
       var count = 0;
       final mockClient = MockClient((request) async {
         count++;
@@ -221,7 +248,7 @@ void main() async {
         'object',
         'user-test',
         'OWNER',
-        generation: BigInt.from(1),
+        retry: const NoDelayRetry(retryIf: isTransientError),
       );
       expect(acl.entity, 'user-test');
       expect(acl.role, 'OWNER');

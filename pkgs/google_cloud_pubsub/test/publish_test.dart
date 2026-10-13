@@ -206,9 +206,9 @@ void main() {
             'test-topic',
             publishSettings: PublishSettings(
               batching: BatchingSettings(maxMessages: 2),
-              retry: const ExponentialRetry(
-                initialDelay: Duration(milliseconds: 1),
-              ),
+              retry: const ExponentialRetry.onCodes([
+                Code.unavailable,
+              ], initialDelay: Duration(milliseconds: 1)),
             ),
           );
 

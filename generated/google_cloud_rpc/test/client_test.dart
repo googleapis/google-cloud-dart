@@ -627,7 +627,9 @@ void main() {
   });
 
   group('retry', () {
-    const noDelayRetry = NoDelayRetry(maxRetries: 2);
+    const noDelayRetry = NoDelayRetry.onCodes([
+      Code.unavailable,
+    ], maxRetries: 2);
     final payload = TestMessage('<test payload>');
 
     group('non-streaming', () {

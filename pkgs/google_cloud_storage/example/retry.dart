@@ -17,7 +17,9 @@ import 'package:google_cloud_storage/google_cloud_storage.dart';
 
 void main() async {
   // Retry idempotent operations at most twice.
-  final storage = Storage(retry: const ExponentialRetry(maxRetries: 2));
+  final storage = Storage(
+    retry: const ExponentialRetry(retryIf: isTransientError, maxRetries: 2),
+  );
 
   // This operation is only idempotent if `ifMetagenerationMatch` is provided,
   // so it is retried using the retry strategy passed to `Storage`.
@@ -34,7 +36,7 @@ void main() async {
     'my-bucket',
     'status.txt',
     'OK',
-    retry: const ExponentialRetry(maxRetries: 2),
+    retry: defaultRetry,
   );
 
   storage.close();

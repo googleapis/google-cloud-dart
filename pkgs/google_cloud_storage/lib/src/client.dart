@@ -317,7 +317,7 @@ final class Storage {
 
   /// Deletes an already-empty [Google Cloud Storage bucket][].
   ///
-  /// This operation is idempotent if `ifMetagenerationMatch` is set.
+  /// This operation is always idempotent.
   ///
   /// {@macro storage_retry}
   ///
@@ -340,18 +340,17 @@ final class Storage {
     BigInt? ifMetagenerationMatch,
     String? userProject,
     RetryRunner? retry,
-  }) =>
-      _retryFor(retry, idempotent: ifMetagenerationMatch != null).run(() async {
-        final serviceClient = await _serviceClient;
-        final url = _requestUrl(
-          ['storage', 'v1', 'b', bucket],
-          {
-            'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
-            'userProject': ?userProject,
-          },
-        );
-        await serviceClient.delete(url);
-      });
+  }) => _retryFor(retry, idempotent: true).run(() async {
+    final serviceClient = await _serviceClient;
+    final url = _requestUrl(
+      ['storage', 'v1', 'b', bucket],
+      {
+        'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
+        'userProject': ?userProject,
+      },
+    );
+    await serviceClient.delete(url);
+  });
 
   /// Deletes an ACL entry on the specified [Google Cloud Storage bucket].
   ///
@@ -730,7 +729,7 @@ final class Storage {
 
   /// Deletes an ACL entry on the specified [Google Cloud Storage object].
   ///
-  /// This operation is idempotent if [generation] is set.
+  /// This operation is not idempotent.
   ///
   /// {@macro storage_retry}
   ///
@@ -765,7 +764,7 @@ final class Storage {
     String entity, {
     BigInt? generation,
     RetryRunner? retry,
-  }) => _retryFor(retry, idempotent: generation != null).run(() async {
+  }) => _retryFor(retry, idempotent: false).run(() async {
     final serviceClient = await _serviceClient;
     final url = _requestUrl(
       ['storage', 'v1', 'b', bucket, 'o', object, 'acl', entity],
@@ -1263,7 +1262,7 @@ final class Storage {
   /// Patches an Access Control List (ACL) entry on the specified
   /// [Google Cloud Storage object].
   ///
-  /// This operation is idempotent if [generation] is set.
+  /// This operation is not idempotent.
   ///
   /// {@macro storage_retry}
   ///
@@ -1291,7 +1290,7 @@ final class Storage {
     String role, {
     BigInt? generation,
     RetryRunner? retry,
-  }) => _retryFor(retry, idempotent: generation != null).run(() async {
+  }) => _retryFor(retry, idempotent: false).run(() async {
     final serviceClient = await _serviceClient;
     final url = _requestUrl(
       ['storage', 'v1', 'b', bucket, 'o', object, 'acl', entity],
@@ -1420,7 +1419,7 @@ final class Storage {
   /// Updates an Access Control List (ACL) entry on the specified
   /// [Google Cloud Storage object].
   ///
-  /// This operation is idempotent if [generation] is set.
+  /// This operation is not idempotent.
   ///
   /// {@macro storage_retry}
   ///
@@ -1448,7 +1447,7 @@ final class Storage {
     String role, {
     BigInt? generation,
     RetryRunner? retry,
-  }) => _retryFor(retry, idempotent: generation != null).run(() async {
+  }) => _retryFor(retry, idempotent: false).run(() async {
     final serviceClient = await _serviceClient;
     final url = _requestUrl(
       ['storage', 'v1', 'b', bucket, 'o', object, 'acl', entity],

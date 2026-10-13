@@ -471,7 +471,7 @@ void main() {
         final sink = storage.uploadObjectFromSink(
           bucketName,
           'object',
-          retry: const NoDelayRetry(),
+          retry: const NoDelayRetry(retryIf: isTransientError),
         )..add(large);
         await sink.close();
 
@@ -497,7 +497,7 @@ void main() {
           bucketName,
           'object',
           ifGenerationMatch: BigInt.zero, // Makes session creation idempotent
-          retry: const NoDelayRetry(),
+          retry: const NoDelayRetry(retryIf: isTransientError),
         )..add(small);
         await sink.close();
 
@@ -641,7 +641,7 @@ void main() {
       final sink = storage.uploadObjectFromSink(
         'bucket',
         'object',
-        retry: const NoDelayRetry(),
+        retry: const NoDelayRetry(retryIf: isTransientError),
       );
 
       final chunk = Uint8List(256 * 1024);
@@ -709,7 +709,7 @@ void main() {
       final sink = storage.uploadObjectFromSink(
         'bucket',
         'object',
-        retry: const NoDelayRetry(),
+        retry: const NoDelayRetry(retryIf: isTransientError),
       );
 
       final chunk = Uint8List(256 * 1024);
@@ -779,7 +779,7 @@ void main() {
         final sink = storage.uploadObjectFromSink(
           'bucket',
           'object',
-          retry: const NoDelayRetry(),
+          retry: const NoDelayRetry(retryIf: isTransientError),
         );
 
         final chunk = Uint8List(256 * 1024);

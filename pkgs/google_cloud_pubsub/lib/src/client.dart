@@ -594,8 +594,8 @@ final class PubSub {
     // Because multiple gRPC codes map to the same HTTP exception class (e.g.
     // both `ALREADY_EXISTS` and `ABORTED` map to `ConflictException`, and
     // `INTERNAL`, `UNKNOWN`, and `DATA_LOSS` all map to
-    // `InternalServerErrorException`), `isTransientError` inspects
-    // `status.code` to retry `ABORTED` and avoid retrying `DATA_LOSS`.
+    // `InternalServerErrorException`), `hasStatusCode` inspects `status.code`
+    // so that `defaultRetry` retries `ABORTED` but not `DATA_LOSS`.
     final status = Status(code: e.code, message: message);
     return switch (e.code) {
       StatusCode.invalidArgument => BadRequestException(

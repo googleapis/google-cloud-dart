@@ -68,10 +68,11 @@ sealed class RetryRunner {
 ///
 /// A non-zero `jitter` randomizes the delays, so that clients that fail at the
 /// same time don't all retry at the same time. Each delay is multiplied by its
-/// own random factor between `1 - jitter` and `1 + jitter`. The factor is
-/// applied after the delay is capped at `maxDelay`, so a delay can be up to
-/// `jitter * maxDelay` longer than `maxDelay`. For example, with a `jitter` of
-/// `0.2`:
+/// own random factor between `1 - jitter` and `1`, so delays never exceed
+/// `maxDelay`. With a `jitter` of `1.0` ("full jitter"), each delay is chosen
+/// uniformly between zero and the computed delay, as the Google Cloud client
+/// libraries for Python, Go and Java do. For example, with a `jitter` of
+/// `0.5`:
 ///
 /// ```dart
 /// delaySequence(
@@ -79,14 +80,14 @@ sealed class RetryRunner {
 ///     initialDelay: Duration(seconds: 1),
 ///     maxDelay: Duration(seconds: 10),
 ///     delayMultiplier: 2,
-///     jitter: 0.2);
+///     jitter: 0.5);
 /// // [
-/// //   between 0.8 and 1.2 seconds,
-/// //   between 1.6 and 2.4 seconds,
-/// //   between 3.2 and 4.8 seconds,
-/// //   between 6.4 and 9.6 seconds,
-/// //   between 8 and 12 seconds,
-/// //   between 8 and 12 seconds,
+/// //   between 0.5 and 1 seconds,
+/// //   between 1 and 2 seconds,
+/// //   between 2 and 4 seconds,
+/// //   between 4 and 8 seconds,
+/// //   between 5 and 10 seconds,
+/// //   between 5 and 10 seconds,
 /// // ]
 /// ```
 ///
@@ -96,6 +97,7 @@ sealed class RetryRunner {
 ///
 /// If `maxRetryInterval` is set then the sequence must be iterated-over in
 /// real time.
+@internal
 @visibleForTesting
 Iterable<Duration> delaySequence({
   int? maxRetries,
@@ -162,8 +164,8 @@ Iterable<Duration> _delaySequence({
     if (randomGenerator == null) {
       delay = baseDelay;
     } else {
-      final jitterFactor =
-          (1.0 - jitter) + (2.0 * jitter * randomGenerator.nextDouble());
+      // `nextDouble` is in [0, 1), so the factor is in (1 - jitter, 1].
+      final jitterFactor = 1.0 - jitter * randomGenerator.nextDouble();
       delay = Duration(
         microseconds: (baseDelay.inMicroseconds * jitterFactor).round(),
       );
@@ -208,34 +210,49 @@ const noRetry = NoRetry();
 
 @visibleForTesting
 final class NoDelayRetry extends ExponentialRetry {
-  const NoDelayRetry({super.retryIf, super.maxRetries})
+  const NoDelayRetry({required super.retryIf, super.maxRetries})
     : super(initialDelay: Duration.zero, maxDelay: Duration.zero);
+
+  const NoDelayRetry.onCodes(super.retryableCodes, {super.maxRetries})
+    : super.onCodes(initialDelay: Duration.zero, maxDelay: Duration.zero);
 }
 
 /// A retry runner that implements exponential backoff.
 ///
 /// When [run] is called, it will attempt to execute the given function. If the
-/// function throws an exception that [retryIf] accepts, it will retry the
+/// function throws an exception that [isRetryable] accepts, it will retry the
 /// function with increasing wait times between attempts, until the function
 /// succeeds or the retry budget ([maxRetries] and [maxRetryInterval]) is
 /// exhausted.
 ///
-/// This corresponds to `google.api_core.retry.Retry` in the Python client
-/// libraries: [retryIf] is `predicate`, [initialDelay] is `initial`,
-/// [maxDelay] is `maximum`, [delayMultiplier] is `multiplier` and
-/// [maxRetryInterval] is `timeout`.
+/// There are two ways to choose which failures are retried:
+///
+/// - [ExponentialRetry.onCodes] retries errors with the given status codes, as
+///   `gax.OnCodes` does in Go and the retryable codes of a method's settings
+///   do in Java. For example:
+///
+///   ```dart
+///   const retry = ExponentialRetry.onCodes(
+///     [Code.unavailable],
+///     initialDelay: Duration(milliseconds: 100),
+///     delayMultiplier: 1.3,
+///   );
+///   ```
+///
+/// - [ExponentialRetry.new] takes a `retryIf` predicate, as
+///   `google.api_core.retry.Retry` does in Python.
+///
+/// The backoff parameters also correspond to Python's `Retry`: [initialDelay]
+/// is `initial`, [maxDelay] is `maximum`, [delayMultiplier] is `multiplier` and
+/// [maxRetryInterval] is `timeout`. Their defaults are the same as Python's.
 final class ExponentialRetry extends RetryRunner {
-  /// Returns whether a failure with the given error should be retried.
+  final bool Function(Object error)? _retryIf;
+
+  /// The status codes that are retried, if this runner was created with
+  /// [ExponentialRetry.onCodes].
   ///
-  /// Defaults to [isTransientError]. To retry the status codes from a
-  /// service's retry configuration, use [hasStatusCode]. For example:
-  ///
-  /// ```dart
-  /// final retry = ExponentialRetry(
-  ///   retryIf: (e) => hasStatusCode(e, const [Code.unavailable]),
-  /// );
-  /// ```
-  final bool Function(Object error) retryIf;
+  /// `null` if a `retryIf` predicate decides which errors are retried.
+  final List<Code>? retryableCodes;
 
   /// The maximum number of times to retry before failing.
   ///
@@ -247,7 +264,8 @@ final class ExponentialRetry extends RetryRunner {
   /// A `null` value indicates that the total retry time is unlimited.
   final Duration? maxRetryInterval;
 
-  /// The minimum amount of time to wait before retrying.
+  /// The minimum amount of time to wait before retrying, before applying
+  /// [jitter].
   final Duration initialDelay;
 
   /// The multiplier for the wait time between retries.
@@ -256,38 +274,64 @@ final class ExponentialRetry extends RetryRunner {
   /// The maximum amount of time to wait between retries.
   ///
   /// If the calculated exponential wait time between retries exceeds this
-  /// value, the wait time will be clamped to this value before applying
-  /// [jitter].
+  /// value, the wait time will be clamped to this value.
   final Duration maxDelay;
 
   /// The fraction, between `0.0` and `1.0`, by which each delay is randomly
-  /// lengthened or shortened.
+  /// shortened.
   ///
   /// Each delay is multiplied by its own random factor between `1 - jitter`
-  /// and `1 + jitter`, so a [jitter] of `0.2` varies each delay by up to ±20%.
-  /// This spreads out the retries of clients that failed at the same time, so
-  /// that they don't all retry at once.
+  /// and `1`. This spreads out the retries of clients that failed at the same
+  /// time, so that they don't all retry at once.
   ///
-  /// The factor is applied after the delay is capped at [maxDelay], so a delay
-  /// can be up to `jitter * maxDelay` longer than [maxDelay].
-  ///
-  /// Defaults to `0.0` (no jitter).
+  /// Defaults to `1.0` ("full jitter"): each delay is chosen uniformly between
+  /// zero and the calculated delay, as in the Google Cloud client libraries for
+  /// Python, Go and Java. Pass `0.0` to disable jitter.
   final double jitter;
 
+  /// Creates a retry runner that retries the errors that [retryIf] accepts.
+  ///
+  /// For example, to retry `UNAVAILABLE` errors and timeouts:
+  ///
+  /// ```dart
+  /// final retry = ExponentialRetry(
+  ///   retryIf: (e) =>
+  ///       hasStatusCode(e, const [Code.unavailable]) || e is TimeoutException,
+  /// );
+  /// ```
   const ExponentialRetry({
-    this.retryIf = isTransientError,
+    required bool Function(Object error) retryIf,
     this.maxRetries,
-    // Defaults taken from Python:
-    // https://docs.cloud.google.com/storage/docs/retry-strategy#tools
     this.initialDelay = const Duration(seconds: 1),
     this.delayMultiplier = 2,
     this.maxDelay = const Duration(seconds: 60),
     this.maxRetryInterval = const Duration(minutes: 2),
-    this.jitter = 0.0,
-  });
+    this.jitter = 1.0,
+  }) : _retryIf = retryIf,
+       retryableCodes = null,
+       assert(jitter >= 0.0 && jitter <= 1.0);
+
+  /// Creates a retry runner that retries errors with one of the status
+  /// [retryableCodes].
+  ///
+  /// [hasStatusCode] decides whether an error has one of the codes.
+  const ExponentialRetry.onCodes(
+    List<Code> this.retryableCodes, {
+    this.maxRetries,
+    this.initialDelay = const Duration(seconds: 1),
+    this.delayMultiplier = 2,
+    this.maxDelay = const Duration(seconds: 60),
+    this.maxRetryInterval = const Duration(minutes: 2),
+    this.jitter = 1.0,
+  }) : _retryIf = null,
+       assert(jitter >= 0.0 && jitter <= 1.0);
 
   @override
-  bool isRetryable(Object error) => retryIf(error);
+  bool isRetryable(Object error) => switch ((retryableCodes, _retryIf)) {
+    (final codes?, _) => hasStatusCode(error, codes),
+    (_, final retryIf?) => retryIf(error),
+    _ => false,
+  };
 
   @override
   Iterable<Duration> delays({Clock clock = const Clock(), Random? random}) =>
@@ -313,7 +357,7 @@ final class ExponentialRetry extends RetryRunner {
       try {
         return await body();
       } on Exception catch (e) {
-        if (!retryIf(e)) rethrow;
+        if (!isRetryable(e)) rethrow;
         if (!iterator.moveNext()) rethrow;
         await Future<void>.delayed(iterator.current);
       }
@@ -325,7 +369,8 @@ final class ExponentialRetry extends RetryRunner {
       identical(this, other) ||
       other is ExponentialRetry &&
           runtimeType == other.runtimeType &&
-          retryIf == other.retryIf &&
+          _retryIf == other._retryIf &&
+          _listEquals(retryableCodes, other.retryableCodes) &&
           maxRetries == other.maxRetries &&
           maxRetryInterval == other.maxRetryInterval &&
           initialDelay == other.initialDelay &&
@@ -335,7 +380,11 @@ final class ExponentialRetry extends RetryRunner {
 
   @override
   int get hashCode => Object.hash(
-    retryIf,
+    _retryIf,
+    switch (retryableCodes) {
+      final codes? => Object.hashAll(codes),
+      null => null,
+    },
     maxRetries,
     maxRetryInterval,
     initialDelay,
@@ -345,66 +394,26 @@ final class ExponentialRetry extends RetryRunner {
   );
 
   @override
-  String toString() =>
-      'ExponentialRetry('
-      'maxRetries: $maxRetries, '
-      'maxRetryInterval: $maxRetryInterval, '
-      'initialDelay: $initialDelay, '
-      'delayMultiplier: $delayMultiplier, '
-      'maxDelay: $maxDelay, '
-      'jitter: $jitter)';
+  String toString() {
+    final codes = retryableCodes?.map((code) => code.value).join(', ');
+    return 'ExponentialRetry('
+        '${codes == null ? '' : 'retryableCodes: [$codes], '}'
+        'maxRetries: $maxRetries, '
+        'maxRetryInterval: $maxRetryInterval, '
+        'initialDelay: $initialDelay, '
+        'delayMultiplier: $delayMultiplier, '
+        'maxDelay: $maxDelay, '
+        'jitter: $jitter)';
+  }
 }
 
-/// Returns whether [error] is a transient failure, which is usually worth
-/// retrying.
-///
-/// These are the errors that the
-/// [Cloud Storage retry strategy](https://docs.cloud.google.com/storage/docs/retry-strategy)
-/// considers transient:
-///
-/// - failures to communicate with the service ([http.ClientException]).
-/// - HTTP 408, 429, 500, 502, 503 and 504 responses, and errors with the
-///   equivalent gRPC status codes (`UNKNOWN`, `DEADLINE_EXCEEDED`,
-///   `RESOURCE_EXHAUSTED`, `INTERNAL` and `UNAVAILABLE`), except for
-///   `DATA_LOSS`.
-/// - errors with the gRPC status code `ABORTED`.
-/// - checksum mismatches ([ChecksumValidationException]).
-///
-/// This is the default [ExponentialRetry.retryIf], in the same way that
-/// `if_transient_error` is the default `predicate` of `Retry` in the Python
-/// client libraries.
-bool isTransientError(Object error) {
-  if (error is! Exception) return false;
-  return switch (error) {
-    // InternalServerErrorException (HTTP 500 / gRPC INTERNAL or UNKNOWN) is
-    // retryable unless it carries gRPC status DATA_LOSS (code 15).
-    InternalServerErrorException(:final status) => status?.code != 15,
-    // ConflictException (HTTP 409 / gRPC ALREADY_EXISTS) is not retryable
-    // unless it carries gRPC status ABORTED (code 10).
-    ConflictException(:final status) => status?.code == 10,
-    BadGatewayException() ||
-    RequestTimeoutException() ||
-    ServiceUnavailableException() ||
-    GatewayTimeoutException() ||
-    TooManyRequestsException() => true,
-    ServiceException(:final status, :final statusCode) =>
-      switch (status?.code) {
-        // gRPC status codes: UNKNOWN(2), DEADLINE_EXCEEDED(4),
-        // RESOURCE_EXHAUSTED(8), ABORTED(10), INTERNAL(13), UNAVAILABLE(14).
-        2 || 4 || 8 || 10 || 13 || 14 => true,
-        null =>
-          statusCode == 408 ||
-              statusCode == 429 ||
-              statusCode == 500 ||
-              statusCode == 502 ||
-              statusCode == 503 ||
-              statusCode == 504,
-        _ => false,
-      },
-    http.ClientException() => true,
-    ChecksumValidationException() => true,
-    _ => false,
-  };
+bool _listEquals<T>(List<T>? a, List<T>? b) {
+  if (identical(a, b)) return true;
+  if (a == null || b == null || a.length != b.length) return false;
+  for (var i = 0; i < a.length; i++) {
+    if (a[i] != b[i]) return false;
+  }
+  return true;
 }
 
 /// The numeric value and the HTTP status code of each `google.rpc.Code`,
@@ -430,17 +439,12 @@ const _statusCodes = <String, (int, int)>{
   'UNAUTHENTICATED': (16, 401),
 };
 
-/// Returns whether [error] reports one of the canonical status [codes].
+/// Whether [error] reports one of the canonical status [codes].
 ///
-/// This is used to retry the status codes in a service's retry configuration
-/// (its `retryableStatusCodes`), as the generated clients for other languages
-/// do. For example:
-///
-/// ```dart
-/// final retry = ExponentialRetry(
-///   retryIf: (e) => hasStatusCode(e, const [Code.unavailable]),
-/// );
-/// ```
+/// [ExponentialRetry.onCodes] uses this to retry the status codes in a
+/// service's retry configuration (its `retryableStatusCodes`), as the generated
+/// clients for other languages do. It can also be combined with other
+/// conditions in an [ExponentialRetry] `retryIf` predicate.
 ///
 /// An error from a gRPC transport is matched by its gRPC status code. An
 /// error from a REST transport is matched by the HTTP status code that

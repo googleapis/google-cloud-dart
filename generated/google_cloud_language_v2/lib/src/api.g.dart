@@ -40,7 +40,6 @@ import 'dart:core' as $core;
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/src/encoding.dart';
 import 'package:google_cloud_rpc/retry.dart';
-import 'package:google_cloud_rpc/rpc.dart';
 import 'package:google_cloud_rpc/service_client.dart';
 import 'package:http/http.dart' as http;
 
@@ -51,11 +50,8 @@ const _apiKeys = ['GOOGLE_API_KEY'];
 // The default retry strategy for the methods that have this `retryPolicy` in
 // `google/cloud/language/v2/language_grpc_service_config.json`. The method
 // config's `timeout` limits the time spent retrying.
-bool _retryPolicy0RetryIf(Object error) =>
-    hasStatusCode(error, const [Code.deadlineExceeded, Code.unavailable]);
-
-const _retryPolicy0 = ExponentialRetry(
-  retryIf: _retryPolicy0RetryIf,
+const _retryPolicy0 = ExponentialRetry.onCodes(
+  [Code.deadlineExceeded, Code.unavailable],
   initialDelay: $core.Duration(milliseconds: 100),
   delayMultiplier: 1.3,
   maxDelay: $core.Duration(seconds: 60),

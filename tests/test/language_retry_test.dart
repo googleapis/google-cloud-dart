@@ -18,12 +18,12 @@ library;
 
 import 'package:google_cloud_language_v2/language.dart';
 import 'package:google_cloud_language_v2/testing.dart';
-import 'package:google_cloud_rpc/rpc.dart' show Code;
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:test/test.dart';
 
-const _noDelayRetry = ExponentialRetry(
+const _noDelayRetry = ExponentialRetry.onCodes(
+  [Code.unavailable],
   initialDelay: Duration.zero,
   maxDelay: Duration.zero,
   maxRetries: 3,
@@ -182,8 +182,8 @@ void main() {
 
       final response = await service.analyzeSentiment(
         request,
-        retry: ExponentialRetry(
-          retryIf: (e) => hasStatusCode(e, const [Code.resourceExhausted]),
+        retry: const ExponentialRetry.onCodes(
+          [Code.resourceExhausted],
           initialDelay: Duration.zero,
           maxDelay: Duration.zero,
         ),
@@ -191,6 +191,24 @@ void main() {
 
       expect(response.languageCode, 'en');
       expect(requests, hasLength(2));
+    });
+
+    test('can use a predicate', () async {
+      final service = LanguageService(client: mockClient([429, 500, 200]));
+
+      final response = await service.analyzeSentiment(
+        request,
+        retry: ExponentialRetry(
+          retryIf: (e) =>
+              hasStatusCode(e, const [Code.resourceExhausted]) ||
+              _isInternalServerError(e),
+          initialDelay: Duration.zero,
+          maxDelay: Duration.zero,
+        ),
+      );
+
+      expect(response.languageCode, 'en');
+      expect(requests, hasLength(3));
     });
   });
 

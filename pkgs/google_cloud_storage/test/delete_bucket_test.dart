@@ -117,12 +117,14 @@ void main() async {
       expect(count, 2);
     });
 
-    test('non-idempotent transport failure', () async {
+    test('idempotent transport failure without precondition', () async {
       var count = 0;
       final mockClient = MockClient((request) async {
         count++;
         if (count == 1) {
           throw http.ClientException('Some transport failure');
+        } else if (count == 2) {
+          return http.Response('', 204);
         } else {
           throw StateError('Unexpected call count: $count');
         }
@@ -130,11 +132,9 @@ void main() async {
 
       final storage = Storage(client: mockClient, projectId: 'fake project');
 
-      await expectLater(
-        () => storage.deleteBucket('bucket'),
-        throwsA(isA<http.ClientException>()),
-      );
-      expect(count, 1);
+      // Deleting a bucket is always idempotent.
+      await storage.deleteBucket('bucket');
+      expect(count, 2);
     });
   });
 }

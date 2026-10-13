@@ -12,10 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'package:google_cloud_rpc/rpc.dart' show Status;
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:test/test.dart';
+
+const _noDelayRetry = NoDelayRetry(retryIf: isTransientError);
 
 /// A client that returns [responses] in order and records the requests.
 MockClient _mockClient(
@@ -43,7 +46,7 @@ void main() {
       final storage = Storage(
         client: _mockClient(requests, [_unavailable, _ok]),
         projectId: 'project',
-        retry: const NoDelayRetry(),
+        retry: _noDelayRetry,
       );
 
       await storage.bucketMetadata('bucket');
@@ -54,7 +57,7 @@ void main() {
       final storage = Storage(
         client: _mockClient(requests, [_unavailable, _ok]),
         projectId: 'project',
-        retry: const NoDelayRetry(),
+        retry: _noDelayRetry,
       );
 
       await expectLater(
@@ -68,14 +71,18 @@ void main() {
       final storage = Storage(
         client: _mockClient(requests, [_unavailable, _ok, _unavailable, _ok]),
         projectId: 'project',
-        retry: const NoDelayRetry(),
+        retry: _noDelayRetry,
       );
 
-      await storage.deleteBucket('bucket', ifMetagenerationMatch: BigInt.one);
+      await storage.deleteObject(
+        'bucket',
+        'object',
+        ifGenerationMatch: BigInt.one,
+      );
       expect(requests, hasLength(2));
 
       await expectLater(
-        storage.deleteBucket('bucket'),
+        storage.deleteObject('bucket', 'object'),
         throwsA(isA<ServiceUnavailableException>()),
       );
       expect(requests, hasLength(3));
@@ -103,11 +110,7 @@ void main() {
         projectId: 'project',
       );
 
-      await storage.deleteBucketAcl(
-        'bucket',
-        'allUsers',
-        retry: const NoDelayRetry(),
-      );
+      await storage.deleteBucketAcl('bucket', 'allUsers', retry: _noDelayRetry);
       expect(requests, hasLength(2));
     });
 
@@ -118,7 +121,7 @@ void main() {
         retry: noRetry,
       );
 
-      await storage.bucketMetadata('bucket', retry: const NoDelayRetry());
+      await storage.bucketMetadata('bucket', retry: _noDelayRetry);
       expect(requests, hasLength(2));
     });
 
@@ -126,7 +129,7 @@ void main() {
       final storage = Storage(
         client: _mockClient(requests, [_unavailable, _ok]),
         projectId: 'project',
-        retry: const NoDelayRetry(),
+        retry: _noDelayRetry,
       );
 
       await expectLater(
@@ -134,6 +137,64 @@ void main() {
         throwsA(isA<ServiceUnavailableException>()),
       );
       expect(requests, hasLength(1));
+    });
+  });
+
+  // See https://docs.cloud.google.com/storage/docs/retry-strategy#idempotency
+  group('idempotency', () {
+    test('deleting a bucket is always idempotent', () async {
+      final storage = Storage(
+        client: _mockClient(requests, [_unavailable, _ok]),
+        projectId: 'project',
+        retry: _noDelayRetry,
+      );
+
+      await storage.deleteBucket('bucket');
+      expect(requests, hasLength(2));
+    });
+
+    test('changing an object ACL is never idempotent', () async {
+      final storage = Storage(
+        client: _mockClient(requests, [
+          _unavailable,
+          _unavailable,
+          _unavailable,
+        ]),
+        projectId: 'project',
+        retry: _noDelayRetry,
+      );
+      final generation = BigInt.one;
+
+      await expectLater(
+        storage.deleteObjectAcl(
+          'bucket',
+          'object',
+          'allUsers',
+          generation: generation,
+        ),
+        throwsA(isA<ServiceUnavailableException>()),
+      );
+      await expectLater(
+        storage.patchObjectAcl(
+          'bucket',
+          'object',
+          'allUsers',
+          'READER',
+          generation: generation,
+        ),
+        throwsA(isA<ServiceUnavailableException>()),
+      );
+      await expectLater(
+        storage.updateObjectAcl(
+          'bucket',
+          'object',
+          'allUsers',
+          'READER',
+          generation: generation,
+        ),
+        throwsA(isA<ServiceUnavailableException>()),
+      );
+      expect(requests.map((r) => r.method), ['DELETE', 'PATCH', 'PUT']);
     });
   });
 
@@ -148,7 +209,7 @@ void main() {
         () => http.Response('{"items": [{"name": "b"}]}', 200),
       ]),
       projectId: 'project',
-      retry: const NoDelayRetry(),
+      retry: _noDelayRetry,
     );
 
     final objects = await storage.listObjects('bucket').toList();
@@ -171,7 +232,7 @@ void main() {
       final storage = Storage(
         client: _mockClient(requests, [_unavailable, session]),
         projectId: 'project',
-        retry: const NoDelayRetry(),
+        retry: _noDelayRetry,
       );
 
       final sink = storage.uploadObjectFromSink('bucket', 'object')
@@ -187,7 +248,7 @@ void main() {
       final storage = Storage(
         client: _mockClient(requests, [_unavailable, session, _ok]),
         projectId: 'project',
-        retry: const NoDelayRetry(),
+        retry: _noDelayRetry,
       );
 
       final sink = storage.uploadObjectFromSink(
@@ -208,7 +269,7 @@ void main() {
           _ok,
         ]),
         projectId: 'project',
-        retry: const NoDelayRetry(),
+        retry: _noDelayRetry,
       );
 
       final sink = storage.uploadObjectFromSink('bucket', 'object')
@@ -216,6 +277,72 @@ void main() {
       await sink.close();
       expect(requests.map((r) => r.method), ['POST', 'PUT', 'PUT']);
       expect(requests.last.headers['Content-Range'], 'bytes */*');
+    });
+  });
+
+  group('defaultRetry', () {
+    test('retries transient errors with full jitter', () {
+      expect(
+        defaultRetry.isRetryable(ServiceUnavailableException('503')),
+        isTrue,
+      );
+      expect(defaultRetry.isRetryable(BadRequestException('400')), isFalse);
+      expect(defaultRetry.jitter, 1.0);
+    });
+  });
+
+  group('isTransientError', () {
+    test('classifies retryable exceptions', () {
+      expect(isTransientError(TooManyRequestsException('429')), isTrue);
+      expect(isTransientError(InternalServerErrorException('500')), isTrue);
+      expect(isTransientError(BadGatewayException('502')), isTrue);
+      expect(isTransientError(ServiceUnavailableException('503')), isTrue);
+      expect(isTransientError(GatewayTimeoutException('504')), isTrue);
+      expect(isTransientError(RequestTimeoutException('408')), isTrue);
+      expect(isTransientError(http.ClientException('network')), isTrue);
+      expect(
+        isTransientError(ChecksumValidationException('bad checksum')),
+        isTrue,
+      );
+      expect(
+        isTransientError(
+          ConflictException('aborted', status: Status(code: 10)),
+        ),
+        isTrue,
+      );
+      expect(
+        isTransientError(
+          ServiceException(
+            'unavailable',
+            statusCode: 0,
+            status: Status(code: 14),
+          ),
+        ),
+        isTrue,
+      );
+    });
+
+    test('classifies non-retryable exceptions', () {
+      expect(isTransientError(BadRequestException('400')), isFalse);
+      expect(isTransientError(NotFoundException('404')), isFalse);
+      expect(isTransientError(ConflictException('409')), isFalse);
+      expect(
+        isTransientError(
+          InternalServerErrorException('data loss', status: Status(code: 15)),
+        ),
+        isFalse,
+      );
+      expect(
+        isTransientError(
+          ServiceException('invalid', statusCode: 0, status: Status(code: 3)),
+        ),
+        isFalse,
+      );
+      expect(isTransientError(const FormatException('bad json')), isFalse);
+    });
+
+    test('does not retry errors', () {
+      expect(isTransientError(StateError('bug')), isFalse);
     });
   });
 }

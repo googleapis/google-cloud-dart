@@ -1,5 +1,19 @@
 ## 0.7.0-wip
 
+* **Breaking:** `ExponentialRetry` no longer has a built-in list of errors to
+  retry. Pass a `retryIf` predicate, or use the new `ExponentialRetry.onCodes`
+  constructor to retry errors with the given status codes, as `gax.OnCodes`
+  does in Go. To retry the same errors as before, use the new
+  `isTransientError` predicate. For example, replace
+  `ExponentialRetry(maxRetries: 3)` with
+  `ExponentialRetry(retryIf: isTransientError, maxRetries: 3)`.
+* **Breaking:** `ExponentialRetry`, including `defaultRetry`, now randomly
+  shortens each delay between retries, so that clients that fail at the same
+  time don't all retry at once. The new `jitter` parameter is the fraction by
+  which a delay can be shortened. It defaults to `1.0` ("full jitter", where
+  each delay is chosen uniformly between zero and the calculated delay), as in
+  the Python, Go and Java client libraries. Pass `jitter: 0.0` for fixed
+  delays.
 * **Breaking:** A `retry` argument passed to a `Storage`, `Bucket` or
   `StorageObject` method is now always used, even if the operation isn't
   idempotent, as in the Python client library. Previously, it was ignored for
@@ -14,16 +28,20 @@
   defaults to `defaultRetry`.
 * `Storage.listBuckets` and `Storage.listObjects` now retry failed page
   requests, and take a `retry` argument.
-* Add `ExponentialRetry.retryIf` to choose which errors are retried, with the
-  `isTransientError` (the default) and `hasStatusCode` predicates.
+* `Storage.deleteBucket` and `Bucket.delete` are now retried by default, even
+  without `ifMetagenerationMatch`, because deleting a bucket is always
+  idempotent.
+* `Storage.deleteObjectAcl`, `Storage.patchObjectAcl` and
+  `Storage.updateObjectAcl` are no longer retried by default when `generation`
+  is set, because changing an ACL is never idempotent.
+* Add `isTransientError`, which returns whether an error is one that the Cloud
+  Storage retry strategy considers transient. It is the predicate of
+  `defaultRetry`, like `ShouldRetry` in the Go client library.
 * Add `noRetry` to disable retries.
-* `defaultRetry` is now defined by this package instead of
-  `package:google_cloud_rpc`. Its value is unchanged.
+* Re-export `hasStatusCode` and `Code` from `package:google_cloud_rpc`.
 * Move retry classes (`RetryRunner`, `ExponentialRetry`) and
   `ChecksumValidationException` to `package:google_cloud_rpc` (re-exported for
   backwards compatibility).
-* Add a `jitter` parameter to `ExponentialRetry` that randomizes the delay
-  between retries.
 * Add `RetryRunner.isRetryable` and `RetryRunner.delays`.
 
 ## 0.6.4
