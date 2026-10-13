@@ -18,7 +18,7 @@ import 'package:webcrypto/webcrypto.dart';
 
 export 'src/test_utils_web.dart'
     if (dart.library.io) 'src/test_utils_io.dart'
-    show canUseWebCrypto, writeTempFile;
+    show canUseWebCrypto, readEnvironment, writeTempFile;
 
 const testPrivateKey = '''-----BEGIN PRIVATE KEY-----
 MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC86+n/Af9C9sBo
@@ -49,6 +49,15 @@ OP9gIW99PMdNXeCY/3cnegSg7Va7NyeMEBju8vRPdbtUzEdoYhRbWuMJZ+FQ3/t0
 Cx62UQBVeiF3/RKuqixbLV4=
 -----END PRIVATE KEY-----''';
 
+Future<RsassaPkcs1V15PrivateKey> testWebCryptoPrivateKey() async {
+  final match = RegExp(
+    r'-----BEGIN PRIVATE KEY-----(.*?)-----END PRIVATE KEY-----',
+    dotAll: true,
+  ).firstMatch(testPrivateKey)!;
+  final bytes = base64.decode(match.group(1)!.replaceAll(RegExp(r'\s'), ''));
+  return await RsassaPkcs1V15PrivateKey.importPkcs8Key(bytes, Hash.sha256);
+}
+
 const testPublicKey = '''-----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvOvp/wH/QvbAaJl9YzjB
 uvyjWvedBwmBX3Ph0bkxMT9xuDFibxZ5siOlcbddxWG4b6G4JBALA2XF+vGp+T/v
@@ -67,6 +76,40 @@ Future<RsassaPkcs1V15PublicKey> getTestPublicKey() async {
   final bytes = base64.decode(match.group(1)!.replaceAll(RegExp(r'\s'), ''));
   return await RsassaPkcs1V15PublicKey.importSpkiKey(bytes, Hash.sha256);
 }
+
+/// A self-signed certificate for [testPublicKey], generated with:
+///
+/// ```shell
+/// openssl req -new -x509 -key test_private_key.pem -sha256 -days 36500 \
+///   -subj "/CN=google-cloud-dart test"
+/// ```
+///
+/// where `test_private_key.pem` contains [testPrivateKey].
+const testCertificatePem = '''
+-----BEGIN CERTIFICATE-----
+MIIDJTCCAg2gAwIBAgIUKNxxUJgThYeQZuEMbRzQ4N0g2FwwDQYJKoZIhvcNAQEL
+BQAwITEfMB0GA1UEAwwWZ29vZ2xlLWNsb3VkLWRhcnQgdGVzdDAgFw0yNjEwMDky
+MzM0NDdaGA8yMTI2MDkxNTIzMzQ0N1owITEfMB0GA1UEAwwWZ29vZ2xlLWNsb3Vk
+LWRhcnQgdGVzdDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBALzr6f8B
+/0L2wGiZfWM4wbr8o1r3nQcJgV9z4dG5MTE/cbgxYm8WebIjpXG3XcVhuG+huCQQ
+CwNlxfrxqfk/7/3B1HctdEgu4gRgnkvSxv+/4r2qPfkDBhGZ9RU9KEuKTHJSHD4d
+4kLMNZGC2qhiavGu6ZEXiv9otCxAVb7XD/bQh3OzIapBByxmWeJ3dAEpcyfMEpzU
+WjgbUV3+Vo48rt68Lg96oePEc6+xWYdyvs/mhktI1bgu5dvV4g2uh42V23Baawgm
+eRsTxrAkLu1uKtHPYiOKrZgJIZqE3yOrgQY0eT8HlN3/sXgaAkocC5Aie8NqOjxB
+WKtniccYjesPu/UCAwEAAaNTMFEwHQYDVR0OBBYEFABu+8kCRG8J6cSCrfoyZhrO
+bPcxMB8GA1UdIwQYMBaAFABu+8kCRG8J6cSCrfoyZhrObPcxMA8GA1UdEwEB/wQF
+MAMBAf8wDQYJKoZIhvcNAQELBQADggEBAF8M0jHjmVyWO/8eezt11NcSBfPvvuYT
+m7LU77efIW2g4VuZ6P99i7pQDzc2rUVT6F77u29ufJ0t9FPTvo5U4W2SNOfG56JF
+eOd3iQ1RwbyM+VavPq0K0Zq7kyosR/7HfiE3nkZ7hrhVzUZU9UhqUJpuyGJKD4J0
+wwHtGqGs8qA0vn7zxUh2sbqmerGdHKni02dTqgbhWTRFQHiI/nCQpCntjm4BLGyi
+fWXuEbrN7ZI04p6zZRLTy+RU4+I3fu258GzJjDiQEbWDg8R8VHyg7d7vClK2P/nc
+VZ72j/u6NQxS1lQ94zQCokMcTTvA96vGGWgJ1S1QYTHPkRzhtvo1zCo=
+-----END CERTIFICATE-----
+''';
+
+/// Encodes [bytes] as unpadded base64url, the encoding used throughout JOSE.
+String base64UrlUnpadded(List<int> bytes) =>
+    base64Url.encode(bytes).replaceAll('=', '');
 
 /// A real certificate served by
 /// https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com
