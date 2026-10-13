@@ -29,7 +29,7 @@ final canUseWebCrypto = () {
   return false;
 }();
 
-/// Returns the value of the environment variable [name], or `null` if unset.
+/// The value of the environment variable [name], or `null` if unset.
 String? readEnvironment(String name) => Platform.environment[name];
 
 /// Writes [content] to [filename] in a temporary directory cleaned up after the
