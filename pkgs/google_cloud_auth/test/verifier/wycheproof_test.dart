@@ -12,6 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/// Tests [TokenVerifier] against the RSA JSON Web Signature test vectors from
+/// [Project Wycheproof](https://github.com/C2SP/wycheproof) JSON Web Signature
+/// test vectors.
+library;
+
 import 'dart:convert';
 
 import 'package:google_cloud_auth/google_cloud_auth.dart';
@@ -21,10 +26,6 @@ import 'package:test/test.dart';
 
 import '../test_utils.dart';
 import 'wycheproof_vectors.dart';
-
-/// Part of the message for a token whose signature is valid but whose payload
-/// is not a JWT claims set.
-const _notAClaimsSet = 'not a JWT claims set';
 
 void main() {
   final vectors =
@@ -37,17 +38,7 @@ void main() {
   group(
     'Wycheproof JSON Web Signature',
     () {
-      test('includes valid and invalid vectors', () {
-        // Guards against the vectors being filtered down to nothing.
-        expect(
-          {
-            for (final group in groups)
-              for (final vector in testsIn(group)) vector['result'],
-          },
-          {'valid', 'invalid'},
-        );
-      });
-
+      var testCount = 0;
       for (final group in groups) {
         final verifier = TokenVerifier(
           jwksUri: Uri.https('example.com', '/certs'),
@@ -62,10 +53,11 @@ void main() {
         );
 
         for (final vector in testsIn(group)) {
+          testCount++;
           final tcId = vector['tcId']! as int;
-          // `verify` throws for every vector, even the valid ones: Wycheproof
-          // tests JWS signatures, not JWTs, so its payloads (such as "foo" or
-          // random bytes) are never JWT claims sets.
+          // `verify` throws for every vector, even the valid ones because
+          // Wycheproof tests JWS signatures, not JWTs, so its payloads (such
+          // as "foo" or random bytes) are never JWT claims sets.
           //
           // But `verify` only parses the claims after verifying the signature,
           // so the reason it throws shows whether the signature was accepted:
@@ -83,14 +75,15 @@ void main() {
                   (e) => e.message,
                   'message',
                   isValid
-                      ? contains(_notAClaimsSet)
-                      : isNot(contains(_notAClaimsSet)),
+                      ? contains('not a JWT claims set')
+                      : isNot(contains('not a JWT claims set')),
                 ),
               ),
             );
           });
         }
       }
+      assert(testCount > 200, 'fewer tests than expected: $testCount');
     },
     skip: canUseWebCrypto
         ? null

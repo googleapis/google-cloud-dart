@@ -17,7 +17,7 @@
 /// test vectors.
 ///
 /// We generate Dart code instead of loading the JSON test files because loading
-/// the files at runtime isn't supported in the browser.
+/// files at runtime isn't supported in the browser.
 ///
 /// Run from the package directory:
 ///

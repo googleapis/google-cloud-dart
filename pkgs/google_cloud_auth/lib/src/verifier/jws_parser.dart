@@ -70,6 +70,9 @@ String? _optionalString(Map<String, Object?> json, String name) {
 /// Instances are produced by [JwsParts.parse], which performs **no**
 /// cryptographic verification. Treat the contents as untrusted input unless
 /// the token has separately been verified.
+///
+/// The field names correspond to entities defined in
+/// [RFC 7515 §2](https://datatracker.ietf.org/doc/html/rfc7515#section-2).
 @internal
 final class JwsParts {
   /// The decoded JOSE header.
