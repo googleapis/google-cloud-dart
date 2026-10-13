@@ -26,13 +26,6 @@ import 'wycheproof_vectors.dart';
 /// is not a JWT claims set.
 const _notAClaimsSet = 'not a JWT claims set';
 
-/// Vectors that are known to fail, by `tcId`, with the reason.
-const _knownFailures = {
-  355:
-      'JwksCache ignores "key_ops", so it verifies signatures with a key that '
-      'is only for encryption.',
-};
-
 void main() {
   final vectors =
       jsonDecode(wycheproofJsonWebSignatureVectors) as Map<String, Object?>;
@@ -95,7 +88,7 @@ void main() {
                 ),
               ),
             );
-          }, skip: _knownFailures[tcId]);
+          });
         }
       }
     },

@@ -424,6 +424,34 @@ void main() {
           );
         });
 
+        test('skips keys that are not for verifying signatures', () async {
+          // See RFC 7517 §4.2 and §4.3.
+          final (:cache, requests: _) = buildCache(
+            (_) => http.Response(
+              jsonEncode({
+                'keys': [
+                  {..._jwk, 'kid': 'for-encryption', 'use': 'enc'},
+                  {
+                    ..._jwk,
+                    'kid': 'encrypt-only',
+                    'key_ops': ['encrypt'],
+                  },
+                  {
+                    ..._jwk,
+                    'kid': 'verify-only',
+                    'key_ops': ['verify'],
+                  },
+                ],
+              }),
+              200,
+            ),
+          );
+
+          expect(await cache.lookupKey('verify-only'), isNotNull);
+          expect(await cache.lookupKey('for-encryption'), isNull);
+          expect(await cache.lookupKey('encrypt-only'), isNull);
+        });
+
         test('skips an individually malformed key', () async {
           final (:cache, requests: _) = buildCache(
             (_) => http.Response(
