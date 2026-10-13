@@ -243,8 +243,8 @@ final class ExponentialRetry extends RetryRunner {
   /// The status codes that are retried, if this runner was created with
   /// [ExponentialRetry.onCodes].
   ///
-  /// `null` if a `retryIf` predicate decides which errors are retried.
-  final List<Code>? retryableCodes;
+  /// `null` if [_retryIf] decides which errors are retried.
+  final List<Code>? _retryableCodes;
 
   /// The maximum number of times to retry before failing.
   ///
@@ -295,23 +295,24 @@ final class ExponentialRetry extends RetryRunner {
     this.maxDelay = const Duration(seconds: 60),
     this.maxRetryInterval = const Duration(minutes: 2),
   }) : _retryIf = retryIf,
-       retryableCodes = null;
+       _retryableCodes = null;
 
   /// Creates a retry runner that retries errors with one of the status
   /// [retryableCodes].
   ///
   /// [hasStatusCode] decides whether an error has one of the codes.
   const ExponentialRetry.onCodes(
-    List<Code> this.retryableCodes, {
+    List<Code> retryableCodes, {
     this.maxRetries,
     this.initialDelay = const Duration(seconds: 1),
     this.delayMultiplier = 2,
     this.maxDelay = const Duration(seconds: 60),
     this.maxRetryInterval = const Duration(minutes: 2),
-  }) : _retryIf = null;
+  }) : _retryableCodes = retryableCodes,
+       _retryIf = null;
 
   @override
-  bool isRetryable(Object error) => switch ((retryableCodes, _retryIf)) {
+  bool isRetryable(Object error) => switch ((_retryableCodes, _retryIf)) {
     (final codes?, _) => hasStatusCode(error, codes),
     (_, final retryIf?) => retryIf(error),
     _ => false,
@@ -350,7 +351,7 @@ final class ExponentialRetry extends RetryRunner {
 
   @override
   String toString() {
-    final codes = retryableCodes?.map((code) => code.value).join(', ');
+    final codes = _retryableCodes?.map((code) => code.value).join(', ');
     return 'ExponentialRetry('
         '${codes == null ? '' : 'retryableCodes: [$codes], '}'
         'maxRetries: $maxRetries, '

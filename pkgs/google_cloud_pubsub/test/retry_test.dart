@@ -24,15 +24,6 @@ import 'test_utils.dart';
 void main() {
   group('defaultRetry', () {
     test('follows the Publish retry policy in the service config', () {
-      expect(defaultRetry.retryableCodes, [
-        Code.aborted,
-        Code.cancelled,
-        Code.deadlineExceeded,
-        Code.internal,
-        Code.resourceExhausted,
-        Code.unavailable,
-        Code.unknown,
-      ]);
       expect(defaultRetry.maxRetryInterval, equals(const Duration(minutes: 1)));
       expect(
         defaultRetry.initialDelay,
@@ -41,6 +32,41 @@ void main() {
       expect(defaultRetry.delayMultiplier, equals(4));
       expect(defaultRetry.maxDelay, equals(const Duration(seconds: 60)));
       expect(defaultRetry.maxRetries, isNull);
+    });
+
+    test('retries the status codes in the Publish retry policy', () async {
+      final fakePublisher = FakePublisherClient();
+      final client = PubSub.testing(
+        projectId: 'test-project',
+        channel: FakeClientChannel(),
+        publisherClient: fakePublisher,
+      );
+      addTearDown(client.close);
+
+      const retryable = {
+        grpc.StatusCode.aborted,
+        grpc.StatusCode.cancelled,
+        grpc.StatusCode.deadlineExceeded,
+        grpc.StatusCode.internal,
+        grpc.StatusCode.resourceExhausted,
+        grpc.StatusCode.unavailable,
+        grpc.StatusCode.unknown,
+      };
+      for (var code = 1; code <= 16; code++) {
+        fakePublisher.publishBehavior = (_) async =>
+            throw grpc.GrpcError.custom(code, 'error');
+        await expectLater(
+          client.publish('projects/test-project/topics/t', [1]),
+          throwsA(
+            isA<ServiceException>().having(
+              defaultRetry.isRetryable,
+              'retryable',
+              retryable.contains(code),
+            ),
+          ),
+          reason: 'gRPC status code $code',
+        );
+      }
     });
 
     test(

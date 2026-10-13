@@ -408,15 +408,23 @@ void main() {
       const retry = ExponentialRetry(retryIf: _isBadRequest);
       expect(retry.isRetryable(BadRequestException('400')), isTrue);
       expect(retry.isRetryable(ServiceUnavailableException('503')), isFalse);
-      expect(retry.retryableCodes, isNull);
     });
 
-    test('isRetryable uses retryableCodes', () {
+    test('isRetryable uses the retryable codes', () {
       const retry = ExponentialRetry.onCodes([Code.unavailable, Code.aborted]);
       expect(retry.isRetryable(ServiceUnavailableException('503')), isTrue);
       expect(retry.isRetryable(http.ClientException('failure')), isTrue);
+      expect(
+        retry.isRetryable(
+          ConflictException('aborted', status: Status(code: 10)),
+        ),
+        isTrue,
+      );
       expect(retry.isRetryable(BadRequestException('400')), isFalse);
-      expect(retry.retryableCodes, [Code.unavailable, Code.aborted]);
+      expect(
+        retry.isRetryable(ConflictException('exists', status: Status(code: 6))),
+        isFalse,
+      );
     });
 
     test('uses full jitter', () {
