@@ -7,13 +7,10 @@
   `isTransientError` predicate. For example, replace
   `ExponentialRetry(maxRetries: 3)` with
   `ExponentialRetry(retryIf: isTransientError, maxRetries: 3)`.
-* **Breaking:** `ExponentialRetry`, including `defaultRetry`, now randomly
-  shortens each delay between retries, so that clients that fail at the same
-  time don't all retry at once. The new `jitter` parameter is the fraction by
-  which a delay can be shortened. It defaults to `1.0` ("full jitter", where
-  each delay is chosen uniformly between zero and the calculated delay), as in
-  the Python, Go and Java client libraries. Pass `jitter: 0.0` for fixed
-  delays.
+* **Breaking:** `ExponentialRetry`, including `defaultRetry`, now waits for a
+  random time between zero and the calculated delay before each retry ("full
+  jitter"), as the Python, Go and Java client libraries do, so that clients
+  that fail at the same time don't all retry at once.
 * **Breaking:** A `retry` argument passed to a `Storage`, `Bucket` or
   `StorageObject` method is now always used, even if the operation isn't
   idempotent, as in the Python client library. Previously, it was ignored for

@@ -40,7 +40,6 @@ void main() {
       );
       expect(defaultRetry.delayMultiplier, equals(4));
       expect(defaultRetry.maxDelay, equals(const Duration(seconds: 60)));
-      expect(defaultRetry.jitter, equals(1.0));
       expect(defaultRetry.maxRetries, isNull);
     });
 

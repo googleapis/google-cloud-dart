@@ -21,6 +21,8 @@ import 'package:meta/meta.dart';
 import '../rpc.dart';
 import 'exceptions.dart';
 
+/// An abstract class for running a function with retry logic.
+///
 /// Decides which failures are retried and how long to wait between attempts.
 ///
 /// A [RetryRunner] does not know whether an operation is safe to repeat. That
@@ -34,15 +36,12 @@ sealed class RetryRunner {
 
   /// Runs [body], retrying it while it fails with an error that
   /// [isRetryable] accepts and the retry budget allows.
-  ///
-  /// Only [Exception]s are retried. An [Error], which indicates a bug, is
-  /// always rethrown.
   Future<T> run<T>(Future<T> Function() body, {Clock clock = const Clock()});
 
-  /// Returns whether a failure with [error] should be retried.
+  /// Whether a failure with [error] should be retried.
   bool isRetryable(Object error);
 
-  /// Generates a sequence of wait durations for retries or reconnections.
+  /// A sequence of wait durations for retries or reconnections.
   Iterable<Duration> delays({Clock clock = const Clock(), Random? random});
 }
 
@@ -69,10 +68,10 @@ sealed class RetryRunner {
 /// A non-zero `jitter` randomizes the delays, so that clients that fail at the
 /// same time don't all retry at the same time. Each delay is multiplied by its
 /// own random factor between `1 - jitter` and `1`, so delays never exceed
-/// `maxDelay`. With a `jitter` of `1.0` ("full jitter"), each delay is chosen
-/// uniformly between zero and the computed delay, as the Google Cloud client
-/// libraries for Python, Go and Java do. For example, with a `jitter` of
-/// `0.5`:
+/// `maxDelay`. [ExponentialRetry] uses a `jitter` of `1.0` ("full jitter"), so
+/// each delay is chosen uniformly between zero and the computed delay, as in
+/// the Google Cloud client libraries for Python, Go and Java. For example,
+/// with a `jitter` of `0.2`:
 ///
 /// ```dart
 /// delaySequence(
@@ -80,14 +79,14 @@ sealed class RetryRunner {
 ///     initialDelay: Duration(seconds: 1),
 ///     maxDelay: Duration(seconds: 10),
 ///     delayMultiplier: 2,
-///     jitter: 0.5);
+///     jitter: 0.2);
 /// // [
-/// //   between 0.5 and 1 seconds,
-/// //   between 1 and 2 seconds,
-/// //   between 2 and 4 seconds,
-/// //   between 4 and 8 seconds,
-/// //   between 5 and 10 seconds,
-/// //   between 5 and 10 seconds,
+/// //   between 0.8 and 1 seconds,
+/// //   between 1.6 and 2 seconds,
+/// //   between 3.2 and 4 seconds,
+/// //   between 6.4 and 8 seconds,
+/// //   between 8 and 10 seconds,
+/// //   between 8 and 10 seconds,
 /// // ]
 /// ```
 ///
@@ -225,6 +224,13 @@ final class NoDelayRetry extends ExponentialRetry {
 /// succeeds or the retry budget ([maxRetries] and [maxRetryInterval]) is
 /// exhausted.
 ///
+/// Before each retry, it waits for a random time between zero and the current
+/// delay ("full jitter"), so that clients that fail at the same time don't all
+/// retry at once. The delay starts at [initialDelay], is multiplied by
+/// [delayMultiplier] after each retry, and never exceeds [maxDelay]. This is
+/// the backoff that the Google Cloud client libraries for Go, Java and Python
+/// use.
+///
 /// There are two ways to choose which failures are retried:
 ///
 /// - [ExponentialRetry.onCodes] retries errors with the given status codes, as
@@ -264,8 +270,9 @@ final class ExponentialRetry extends RetryRunner {
   /// A `null` value indicates that the total retry time is unlimited.
   final Duration? maxRetryInterval;
 
-  /// The minimum amount of time to wait before retrying, before applying
-  /// [jitter].
+  /// The delay before the first retry.
+  ///
+  /// The actual wait is a random time between zero and this delay.
   final Duration initialDelay;
 
   /// The multiplier for the wait time between retries.
@@ -276,18 +283,6 @@ final class ExponentialRetry extends RetryRunner {
   /// If the calculated exponential wait time between retries exceeds this
   /// value, the wait time will be clamped to this value.
   final Duration maxDelay;
-
-  /// The fraction, between `0.0` and `1.0`, by which each delay is randomly
-  /// shortened.
-  ///
-  /// Each delay is multiplied by its own random factor between `1 - jitter`
-  /// and `1`. This spreads out the retries of clients that failed at the same
-  /// time, so that they don't all retry at once.
-  ///
-  /// Defaults to `1.0` ("full jitter"): each delay is chosen uniformly between
-  /// zero and the calculated delay, as in the Google Cloud client libraries for
-  /// Python, Go and Java. Pass `0.0` to disable jitter.
-  final double jitter;
 
   /// Creates a retry runner that retries the errors that [retryIf] accepts.
   ///
@@ -306,10 +301,8 @@ final class ExponentialRetry extends RetryRunner {
     this.delayMultiplier = 2,
     this.maxDelay = const Duration(seconds: 60),
     this.maxRetryInterval = const Duration(minutes: 2),
-    this.jitter = 1.0,
   }) : _retryIf = retryIf,
-       retryableCodes = null,
-       assert(jitter >= 0.0 && jitter <= 1.0);
+       retryableCodes = null;
 
   /// Creates a retry runner that retries errors with one of the status
   /// [retryableCodes].
@@ -322,9 +315,7 @@ final class ExponentialRetry extends RetryRunner {
     this.delayMultiplier = 2,
     this.maxDelay = const Duration(seconds: 60),
     this.maxRetryInterval = const Duration(minutes: 2),
-    this.jitter = 1.0,
-  }) : _retryIf = null,
-       assert(jitter >= 0.0 && jitter <= 1.0);
+  }) : _retryIf = null;
 
   @override
   bool isRetryable(Object error) => switch ((retryableCodes, _retryIf)) {
@@ -341,7 +332,7 @@ final class ExponentialRetry extends RetryRunner {
         initialDelay: initialDelay,
         maxDelay: maxDelay,
         delayMultiplier: delayMultiplier,
-        jitter: jitter,
+        jitter: 1.0,
         clock: clock,
         random: random,
       );
@@ -375,8 +366,7 @@ final class ExponentialRetry extends RetryRunner {
           maxRetryInterval == other.maxRetryInterval &&
           initialDelay == other.initialDelay &&
           delayMultiplier == other.delayMultiplier &&
-          maxDelay == other.maxDelay &&
-          jitter == other.jitter;
+          maxDelay == other.maxDelay;
 
   @override
   int get hashCode => Object.hash(
@@ -390,7 +380,6 @@ final class ExponentialRetry extends RetryRunner {
     initialDelay,
     delayMultiplier,
     maxDelay,
-    jitter,
   );
 
   @override
@@ -402,8 +391,7 @@ final class ExponentialRetry extends RetryRunner {
         'maxRetryInterval: $maxRetryInterval, '
         'initialDelay: $initialDelay, '
         'delayMultiplier: $delayMultiplier, '
-        'maxDelay: $maxDelay, '
-        'jitter: $jitter)';
+        'maxDelay: $maxDelay)';
   }
 }
 

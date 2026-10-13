@@ -111,7 +111,7 @@ void main() {
         initialDelay: const Duration(seconds: 1),
         maxDelay: const Duration(seconds: 10),
         delayMultiplier: 2,
-        jitter: 0.5,
+        jitter: 0.2,
         random: Random(42),
       ).toList();
 
@@ -126,7 +126,7 @@ void main() {
       expect(delays, hasLength(unjittered.length));
       expect(delays, isNot(unjittered));
       for (var i = 0; i < delays.length; i++) {
-        expect(delays[i], greaterThanOrEqualTo(unjittered[i] * 0.5));
+        expect(delays[i], greaterThanOrEqualTo(unjittered[i] * 0.8));
         expect(delays[i], lessThanOrEqualTo(unjittered[i]));
       }
     });
@@ -430,7 +430,7 @@ void main() {
       expect(retry.retryableCodes, [Code.unavailable, Code.aborted]);
     });
 
-    test('uses full jitter by default', () {
+    test('uses full jitter', () {
       const retry = ExponentialRetry.onCodes(
         [Code.unavailable],
         maxRetries: 50,
@@ -438,27 +438,15 @@ void main() {
         delayMultiplier: 1,
         maxDelay: Duration(seconds: 10),
       );
-      expect(retry.jitter, 1.0);
 
       final delays = retry.delays(random: Random(42)).toList();
       expect(delays, hasLength(50));
       for (final d in delays) {
+        expect(d, greaterThanOrEqualTo(Duration.zero));
         expect(d, lessThanOrEqualTo(const Duration(seconds: 10)));
       }
-      expect(delays.any((d) => d < const Duration(seconds: 5)), isTrue);
-    });
-
-    test('jitter must be between 0 and 1', () {
-      expect(
-        // ignore: prefer_const_constructors
-        () => ExponentialRetry.onCodes([Code.unavailable], jitter: 1.5),
-        throwsA(isA<AssertionError>()),
-      );
-      expect(
-        // ignore: prefer_const_constructors
-        () => ExponentialRetry(retryIf: _isBadRequest, jitter: -0.1),
-        throwsA(isA<AssertionError>()),
-      );
+      expect(delays.any((d) => d < const Duration(seconds: 2)), isTrue);
+      expect(delays.any((d) => d > const Duration(seconds: 8)), isTrue);
     });
 
     test('value equality and hashCode', () {

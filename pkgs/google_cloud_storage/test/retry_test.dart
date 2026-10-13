@@ -280,13 +280,16 @@ void main() {
   });
 
   group('defaultRetry', () {
-    test('retries transient errors with full jitter', () {
+    test('retries transient errors with the Python backoff', () {
       expect(
         defaultRetry.isRetryable(ServiceUnavailableException('503')),
         isTrue,
       );
       expect(defaultRetry.isRetryable(BadRequestException('400')), isFalse);
-      expect(defaultRetry.jitter, 1.0);
+      expect(defaultRetry.initialDelay, const Duration(seconds: 1));
+      expect(defaultRetry.delayMultiplier, 2);
+      expect(defaultRetry.maxDelay, const Duration(seconds: 60));
+      expect(defaultRetry.maxRetryInterval, const Duration(minutes: 2));
     });
   });
 

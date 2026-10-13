@@ -43,9 +43,6 @@ const String _typeJson = 'application/json';
 /// how, failed attempts are retried. It defaults to [noRetry]: a
 /// [ServiceClient] doesn't know whether an operation is safe to repeat, so the
 /// caller must decide.
-///
-/// Streaming requests are only retried until the response starts. After that,
-/// elements may already have been delivered, so a retry could repeat them.
 class ServiceClient {
   final http.Client client;
 
@@ -225,7 +222,7 @@ class ServiceClient {
       final response = await _send(url, method, encodedBody);
       final responseBody = await response.stream.bytesToString();
       return responseBody.isEmpty
-          ? <String, dynamic>{}
+          ? {}
           : jsonDecode(responseBody) as Map<String, dynamic>;
     });
   }
