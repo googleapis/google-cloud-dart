@@ -18,6 +18,7 @@ import 'package:clock/clock.dart';
 import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:google_cloud_rpc/retry.dart';
 import 'package:google_cloud_rpc/rpc.dart';
+import 'package:google_cloud_rpc/src/retry.dart' show delaySequence;
 import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 

@@ -25,14 +25,15 @@ export 'package:google_cloud_rpc/retry.dart';
 /// Python client library: a `1s` initial delay, a `2x` multiplier, a `60s`
 /// maximum delay, a `2 minute` maximum retry interval, and full jitter.
 ///
-/// `Storage` only uses it for idempotent operations, unless a method is passed
+/// `Storage` methods use it for idempotent operations, unless they're passed
 /// a `retry` argument.
 ///
 /// To change the backoff but keep retrying the same errors, use
 /// [isTransientError] as the predicate. For example:
 ///
 /// ```dart
-/// final storage = Storage(
+/// await storage.bucketMetadata(
+///   'my-bucket',
 ///   retry: const ExponentialRetry(retryIf: isTransientError, maxRetries: 3),
 /// );
 /// ```

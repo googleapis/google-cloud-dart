@@ -56,7 +56,6 @@ final class Storage {
   final FutureOr<http.Client> _httpClient;
   final FutureOr<String> _projectId;
   final Uri _baseUrl;
-  final RetryRunner _retry;
 
   /// A value that can be passed as the `projectId` parameter to the [Storage]
   /// constructor to explicitly indicate that there is no project.
@@ -125,7 +124,7 @@ final class Storage {
     return Uri.https('storage.googleapis.com');
   }
 
-  Storage._(this._projectId, this._baseUrl, this._httpClient, this._retry);
+  Storage._(this._projectId, this._baseUrl, this._httpClient);
 
   /// Constructs a client used to communicate with [Google Cloud Storage][].
   ///
@@ -156,13 +155,10 @@ final class Storage {
   /// or TLS (e.g. the emulator) then set [useAuthWithCustomEndpoint] to
   /// `false`.
   ///
-  /// [retry] decides how failed requests are retried when a method is called
-  /// without its own `retry` argument. It is only used for [idempotent][]
-  /// operations: those that are always idempotent, and those that
-  /// preconditions such as `ifGenerationMatch` make idempotent. Other
-  /// operations are only retried if their `retry` argument is set. The
-  /// documentation for each method says when the operation is idempotent. To
-  /// disable retries, pass [noRetry].
+  /// Methods retry failed requests using [defaultRetry] if the operation is
+  /// [idempotent][], and don't retry them otherwise. Pass a `retry` argument
+  /// to a method to change how that call is retried. The documentation for
+  /// each method says when the operation is idempotent.
   ///
   /// [Google Cloud Storage]: https://cloud.google.com/storage
   /// [Cloud Storage for Firebase Emulator]: https://firebase.google.com/docs/emulator-suite/connect_storage
@@ -173,7 +169,6 @@ final class Storage {
     String? apiEndpoint,
     bool useAuthWithCustomEndpoint = true,
     FutureOr<http.Client>? client,
-    RetryRunner retry = defaultRetry,
   }) {
     // Ensure that the same value of `storageEmulatorHost` is used everywhere in
     // the constructor.
@@ -182,7 +177,6 @@ final class Storage {
       _calculateProjectId(projectId, emulatorHost),
       _calculateBaseUrl(apiEndpoint, useAuthWithCustomEndpoint, emulatorHost),
       _calculateClient(client, emulatorHost),
-      retry,
     );
   }
 
@@ -197,11 +191,11 @@ final class Storage {
   /// The retry strategy for an operation.
   ///
   /// The caller's [retry] is always used, so passing it is how a caller opts
-  /// in to retrying an operation that isn't idempotent. Otherwise, the
-  /// client's retry strategy is used if the operation is [idempotent], and the
+  /// in to retrying an operation that isn't idempotent. Otherwise,
+  /// [defaultRetry] is used if the operation is [idempotent], and the
   /// operation isn't retried if it isn't.
   RetryRunner _retryFor(RetryRunner? retry, {required bool idempotent}) =>
-      retry ?? (idempotent ? _retry : noRetry);
+      retry ?? (idempotent ? defaultRetry : noRetry);
 
   /// Closes the client and cleans up any resources associated with it.
   ///
@@ -242,8 +236,7 @@ final class Storage {
   /// {@template storage_retry}
   /// If [retry] is set, failed requests are retried using it, even if the
   /// operation is not idempotent. Otherwise, failed requests are retried using
-  /// the `retry` strategy given to [Storage.new], but only if the operation is
-  /// idempotent.
+  /// [defaultRetry], but only if the operation is idempotent.
   /// {@endtemplate}
   ///
   /// Throws [NotFoundException] if the bucket does not exist.
@@ -1547,9 +1540,9 @@ final class Storage {
   /// {@macro storage_retry}
   ///
   /// That only applies to the request that starts the upload. Once the upload
-  /// has started, failed requests are always retried, using [retry] or the
-  /// `retry` strategy given to [Storage.new], because the upload resumes from
-  /// the last byte that Google Cloud Storage received.
+  /// has started, failed requests are always retried, using [retry] or
+  /// [defaultRetry], because the upload resumes from the last byte that Google
+  /// Cloud Storage received.
   ///
   /// If [metadata] is non-null, it will be used as the object's metadata. If
   /// [metadata] is `null` or `metadata.contentType` is `null`, the content type
@@ -1600,7 +1593,7 @@ final class Storage {
       final ServiceClient sc => {'x-goog-api-client': sc.clientHeader},
     },
     startRetry: _retryFor(retry, idempotent: ifGenerationMatch != null),
-    chunkRetry: retry ?? _retry,
+    chunkRetry: retry ?? defaultRetry,
   );
 
   /// Creates or updates the content of a [Google Cloud Storage object][].

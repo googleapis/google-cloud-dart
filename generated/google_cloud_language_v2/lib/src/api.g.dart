@@ -66,8 +66,6 @@ final class LanguageService {
 
   final ServiceClient _client;
 
-  final RetryRunner? _retry;
-
   /// Creates a `LanguageService` using [client] for transport.
   ///
   /// The provided [http.Client] must be configured to provide whatever
@@ -79,26 +77,18 @@ final class LanguageService {
   /// could be used to force the `Firestore` service to communicate with the
   /// local emulator.
   ///
-  /// If [retry] is set, it replaces the default retry strategy of every
-  /// method that is retried by default. Methods that are not retried by
-  /// default, because repeating them might not be safe, are only retried if
-  /// they're called with a `retry` argument. Pass [noRetry] to disable
-  /// retries.
-  ///
   /// If [gcclVersion] is set then `gccl/<version>` will be included in the
   /// `x-google-api-client` header. This argument is only meant for use by
   /// hand-written official Google Cloud API clients.
   LanguageService({
     required http.Client client,
     Uri? endPoint,
-    RetryRunner? retry,
     String? gcclVersion,
   }) : _client = ServiceClient(
          client: client,
          gapicVersion: packageVersion,
          gcclVersion: gcclVersion,
        ),
-       _retry = retry,
        _endPoint = endPoint == null
            ? Uri.https(_defaultHost, '')
            : Uri(
@@ -125,9 +115,7 @@ final class LanguageService {
   /// Analyzes the sentiment of the provided text.
   ///
   /// If [retry] is set, failed requests are retried using it. Otherwise,
-  /// they're retried using the `retry` strategy given to
-  /// [LanguageService.new], or, by default, if they fail with
-  /// `DEADLINE_EXCEEDED` or `UNAVAILABLE`.
+  /// they're retried if they fail with `DEADLINE_EXCEEDED` or `UNAVAILABLE`.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [ServiceException] if the API method failed for
@@ -140,7 +128,7 @@ final class LanguageService {
     final response = await _client.post(
       url,
       body: request,
-      retry: retry ?? _retry ?? _retryPolicy0,
+      retry: retry ?? _retryPolicy0,
     );
     return AnalyzeSentimentResponse.fromJson(response);
   }
@@ -150,9 +138,7 @@ final class LanguageService {
   /// other properties.
   ///
   /// If [retry] is set, failed requests are retried using it. Otherwise,
-  /// they're retried using the `retry` strategy given to
-  /// [LanguageService.new], or, by default, if they fail with
-  /// `DEADLINE_EXCEEDED` or `UNAVAILABLE`.
+  /// they're retried if they fail with `DEADLINE_EXCEEDED` or `UNAVAILABLE`.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [ServiceException] if the API method failed for
@@ -165,7 +151,7 @@ final class LanguageService {
     final response = await _client.post(
       url,
       body: request,
-      retry: retry ?? _retry ?? _retryPolicy0,
+      retry: retry ?? _retryPolicy0,
     );
     return AnalyzeEntitiesResponse.fromJson(response);
   }
@@ -173,9 +159,7 @@ final class LanguageService {
   /// Classifies a document into categories.
   ///
   /// If [retry] is set, failed requests are retried using it. Otherwise,
-  /// they're retried using the `retry` strategy given to
-  /// [LanguageService.new], or, by default, if they fail with
-  /// `DEADLINE_EXCEEDED` or `UNAVAILABLE`.
+  /// they're retried if they fail with `DEADLINE_EXCEEDED` or `UNAVAILABLE`.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [ServiceException] if the API method failed for
@@ -188,7 +172,7 @@ final class LanguageService {
     final response = await _client.post(
       url,
       body: request,
-      retry: retry ?? _retry ?? _retryPolicy0,
+      retry: retry ?? _retryPolicy0,
     );
     return ClassifyTextResponse.fromJson(response);
   }
@@ -196,9 +180,7 @@ final class LanguageService {
   /// Moderates a document for harmful and sensitive categories.
   ///
   /// If [retry] is set, failed requests are retried using it. Otherwise,
-  /// they're retried using the `retry` strategy given to
-  /// [LanguageService.new], or, by default, if they fail with
-  /// `DEADLINE_EXCEEDED` or `UNAVAILABLE`.
+  /// they're retried if they fail with `DEADLINE_EXCEEDED` or `UNAVAILABLE`.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [ServiceException] if the API method failed for
@@ -211,7 +193,7 @@ final class LanguageService {
     final response = await _client.post(
       url,
       body: request,
-      retry: retry ?? _retry ?? _retryPolicy0,
+      retry: retry ?? _retryPolicy0,
     );
     return ModerateTextResponse.fromJson(response);
   }
@@ -219,9 +201,7 @@ final class LanguageService {
   /// A convenience method that provides all features in one call.
   ///
   /// If [retry] is set, failed requests are retried using it. Otherwise,
-  /// they're retried using the `retry` strategy given to
-  /// [LanguageService.new], or, by default, if they fail with
-  /// `DEADLINE_EXCEEDED` or `UNAVAILABLE`.
+  /// they're retried if they fail with `DEADLINE_EXCEEDED` or `UNAVAILABLE`.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [ServiceException] if the API method failed for
@@ -234,7 +214,7 @@ final class LanguageService {
     final response = await _client.post(
       url,
       body: request,
-      retry: retry ?? _retry ?? _retryPolicy0,
+      retry: retry ?? _retryPolicy0,
     );
     return AnnotateTextResponse.fromJson(response);
   }
@@ -266,8 +246,6 @@ base class FakeLanguageService implements LanguageService {
   Uri get _endPoint => throw UnsupportedError('_endPoint');
   @override
   ServiceClient get _client => throw UnsupportedError('_client');
-  @override
-  RetryRunner? get _retry => throw UnsupportedError('_retry');
 
   bool isClosed = false;
 
@@ -291,9 +269,7 @@ base class FakeLanguageService implements LanguageService {
   /// Analyzes the sentiment of the provided text.
   ///
   /// If [retry] is set, failed requests are retried using it. Otherwise,
-  /// they're retried using the `retry` strategy given to
-  /// [LanguageService.new], or, by default, if they fail with
-  /// `DEADLINE_EXCEEDED` or `UNAVAILABLE`.
+  /// they're retried if they fail with `DEADLINE_EXCEEDED` or `UNAVAILABLE`.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [ServiceException] if the API method failed for
@@ -316,9 +292,7 @@ base class FakeLanguageService implements LanguageService {
   /// other properties.
   ///
   /// If [retry] is set, failed requests are retried using it. Otherwise,
-  /// they're retried using the `retry` strategy given to
-  /// [LanguageService.new], or, by default, if they fail with
-  /// `DEADLINE_EXCEEDED` or `UNAVAILABLE`.
+  /// they're retried if they fail with `DEADLINE_EXCEEDED` or `UNAVAILABLE`.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [ServiceException] if the API method failed for
@@ -339,9 +313,7 @@ base class FakeLanguageService implements LanguageService {
   /// Classifies a document into categories.
   ///
   /// If [retry] is set, failed requests are retried using it. Otherwise,
-  /// they're retried using the `retry` strategy given to
-  /// [LanguageService.new], or, by default, if they fail with
-  /// `DEADLINE_EXCEEDED` or `UNAVAILABLE`.
+  /// they're retried if they fail with `DEADLINE_EXCEEDED` or `UNAVAILABLE`.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [ServiceException] if the API method failed for
@@ -362,9 +334,7 @@ base class FakeLanguageService implements LanguageService {
   /// Moderates a document for harmful and sensitive categories.
   ///
   /// If [retry] is set, failed requests are retried using it. Otherwise,
-  /// they're retried using the `retry` strategy given to
-  /// [LanguageService.new], or, by default, if they fail with
-  /// `DEADLINE_EXCEEDED` or `UNAVAILABLE`.
+  /// they're retried if they fail with `DEADLINE_EXCEEDED` or `UNAVAILABLE`.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [ServiceException] if the API method failed for
@@ -385,9 +355,7 @@ base class FakeLanguageService implements LanguageService {
   /// A convenience method that provides all features in one call.
   ///
   /// If [retry] is set, failed requests are retried using it. Otherwise,
-  /// they're retried using the `retry` strategy given to
-  /// [LanguageService.new], or, by default, if they fail with
-  /// `DEADLINE_EXCEEDED` or `UNAVAILABLE`.
+  /// they're retried if they fail with `DEADLINE_EXCEEDED` or `UNAVAILABLE`.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [ServiceException] if the API method failed for

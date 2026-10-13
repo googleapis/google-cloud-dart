@@ -17,15 +17,12 @@
 * **Breaking:** A `retry` argument passed to a `Storage`, `Bucket` or
   `StorageObject` method is now always used, even if the operation isn't
   idempotent, as in the Python client library. Previously, it was ignored for
-  operations that weren't idempotent. Omit `retry` to only retry idempotent
-  operations.
+  operations that weren't idempotent. Omit `retry` to retry only idempotent
+  operations, using `defaultRetry`.
 * **Breaking:** `RetryRunner.run` no longer takes an `isIdempotent` argument.
   A `RetryRunner` now only decides which errors are retried, and how long to
   wait between attempts; whoever chooses the runner decides whether an
   operation is safe to retry.
-* Add a `retry` parameter to the `Storage` constructor. It is used for
-  idempotent operations that are called without a `retry` argument, and
-  defaults to `defaultRetry`.
 * `Storage.listBuckets` and `Storage.listObjects` now retry failed page
   requests, and take a `retry` argument.
 * `Storage.deleteBucket` and `Bucket.delete` are now retried by default, even

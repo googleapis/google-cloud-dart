@@ -69,12 +69,11 @@ The documentation for each `Storage` method indicates whether the operation is
 idempotent. Some operations are only idempotent if a precondition, such as
 `ifGenerationMatch`, is set.
 
-You can change how idempotent operations are retried with the `retry` parameter
-of the `Storage` constructor. You can also pass `retry` to a method to control
-how that call is retried. A `retry` argument passed to a method is always used,
-even if the operation isn't idempotent. To disable retries, pass `noRetry`. To
-retry the same errors as `defaultRetry` with different limits or delays, create
-an `ExponentialRetry` with `retryIf: isTransientError`.
+You can pass `retry` to a method to control how that call is retried. A `retry`
+argument is always used, even if the operation isn't idempotent. To disable
+retries, pass `noRetry`. To retry the same errors as `defaultRetry` with
+different limits or delays, create an `ExponentialRetry` with
+`retryIf: isTransientError`.
 
 For example:
 
@@ -83,17 +82,20 @@ For example:
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 
 void main() async {
-  // Retry idempotent operations at most twice.
-  final storage = Storage(
-    retry: const ExponentialRetry(retryIf: isTransientError, maxRetries: 2),
-  );
+  final storage = Storage();
 
   // This operation is only idempotent if `ifMetagenerationMatch` is provided,
-  // so it is retried using the retry strategy passed to `Storage`.
+  // so it is retried using `defaultRetry`.
   await storage.patchBucket(
     'my-bucket',
     BucketMetadataPatchBuilder()..labels = {'key': 'value'},
     ifMetagenerationMatch: BigInt.from(1),
+  );
+
+  // Retry this operation at most twice.
+  await storage.bucketMetadata(
+    'my-bucket',
+    retry: const ExponentialRetry(retryIf: isTransientError, maxRetries: 2),
   );
 
   // Without `ifGenerationMatch`, this operation isn't idempotent, so it's only

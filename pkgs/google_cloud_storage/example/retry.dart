@@ -16,17 +16,20 @@
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 
 void main() async {
-  // Retry idempotent operations at most twice.
-  final storage = Storage(
-    retry: const ExponentialRetry(retryIf: isTransientError, maxRetries: 2),
-  );
+  final storage = Storage();
 
   // This operation is only idempotent if `ifMetagenerationMatch` is provided,
-  // so it is retried using the retry strategy passed to `Storage`.
+  // so it is retried using `defaultRetry`.
   await storage.patchBucket(
     'my-bucket',
     BucketMetadataPatchBuilder()..labels = {'key': 'value'},
     ifMetagenerationMatch: BigInt.from(1),
+  );
+
+  // Retry this operation at most twice.
+  await storage.bucketMetadata(
+    'my-bucket',
+    retry: const ExponentialRetry(retryIf: isTransientError, maxRetries: 2),
   );
 
   // Without `ifGenerationMatch`, this operation isn't idempotent, so it's only

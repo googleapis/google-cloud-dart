@@ -120,39 +120,8 @@ void main() {
     });
   });
 
-  group('client retry', () {
-    test('noRetry disables retries', () async {
-      final service = LanguageService(
-        client: mockClient([503, 200]),
-        retry: noRetry,
-      );
-
-      await expectLater(
-        service.analyzeSentiment(request),
-        throwsA(isA<ServiceUnavailableException>()),
-      );
-      expect(requests, hasLength(1));
-    });
-
-    test('replaces the default retry policy', () async {
-      final service = LanguageService(
-        client: mockClient([500, 200]),
-        retry: const ExponentialRetry(
-          retryIf: _isInternalServerError,
-          initialDelay: Duration.zero,
-          maxDelay: Duration.zero,
-        ),
-      );
-
-      final response = await service.analyzeSentiment(request);
-
-      expect(response.languageCode, 'en');
-      expect(requests, hasLength(2));
-    });
-  });
-
   group('call retry', () {
-    test('overrides the default retry policy', () async {
+    test('noRetry disables retries', () async {
       final service = LanguageService(client: mockClient([503, 200]));
 
       await expectLater(
@@ -162,19 +131,32 @@ void main() {
       expect(requests, hasLength(1));
     });
 
-    test('overrides the client retry', () async {
-      final service = LanguageService(
-        client: mockClient([503, 200]),
-        retry: noRetry,
-      );
+    test('replaces the default retry policy', () async {
+      final service = LanguageService(client: mockClient([500, 200]));
 
       final response = await service.analyzeSentiment(
         request,
-        retry: _noDelayRetry,
+        retry: const ExponentialRetry(
+          retryIf: _isInternalServerError,
+          initialDelay: Duration.zero,
+          maxDelay: Duration.zero,
+        ),
       );
 
       expect(response.languageCode, 'en');
       expect(requests, hasLength(2));
+    });
+
+    test('can change the retry limits', () async {
+      final service = LanguageService(
+        client: mockClient([503, 503, 503, 503, 200]),
+      );
+
+      await expectLater(
+        service.analyzeSentiment(request, retry: _noDelayRetry),
+        throwsA(isA<ServiceUnavailableException>()),
+      );
+      expect(requests, hasLength(4));
     });
 
     test('can use status codes', () async {

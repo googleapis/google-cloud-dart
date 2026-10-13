@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'dart:async';
+
 import 'package:google_cloud_rpc/rpc.dart' show Status;
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 import 'package:http/http.dart' as http;
@@ -36,20 +38,29 @@ http.Response _unavailable() => http.Response('', 503);
 
 http.Response _ok() => http.Response('{}', 200);
 
+/// Runs [body] with timers that fire immediately, so that [defaultRetry]
+/// retries without waiting.
+Future<T> _withoutDelays<T>(Future<T> Function() body) => runZoned(
+  body,
+  zoneSpecification: ZoneSpecification(
+    createTimer: (self, parent, zone, duration, callback) =>
+        parent.createTimer(zone, Duration.zero, callback),
+  ),
+);
+
 void main() {
   late List<http.Request> requests;
 
   setUp(() => requests = []);
 
-  group('client retry', () {
+  group('default retry', () {
     test('is used for idempotent operations', () async {
       final storage = Storage(
         client: _mockClient(requests, [_unavailable, _ok]),
         projectId: 'project',
-        retry: _noDelayRetry,
       );
 
-      await storage.bucketMetadata('bucket');
+      await _withoutDelays(() => storage.bucketMetadata('bucket'));
       expect(requests, hasLength(2));
     });
 
@@ -57,11 +68,10 @@ void main() {
       final storage = Storage(
         client: _mockClient(requests, [_unavailable, _ok]),
         projectId: 'project',
-        retry: _noDelayRetry,
       );
 
       await expectLater(
-        storage.deleteBucketAcl('bucket', 'allUsers'),
+        _withoutDelays(() => storage.deleteBucketAcl('bucket', 'allUsers')),
         throwsA(isA<ServiceUnavailableException>()),
       );
       expect(requests, hasLength(1));
@@ -71,39 +81,36 @@ void main() {
       final storage = Storage(
         client: _mockClient(requests, [_unavailable, _ok, _unavailable, _ok]),
         projectId: 'project',
-        retry: _noDelayRetry,
       );
 
-      await storage.deleteObject(
-        'bucket',
-        'object',
-        ifGenerationMatch: BigInt.one,
+      await _withoutDelays(
+        () => storage.deleteObject(
+          'bucket',
+          'object',
+          ifGenerationMatch: BigInt.one,
+        ),
       );
       expect(requests, hasLength(2));
 
       await expectLater(
-        storage.deleteObject('bucket', 'object'),
+        _withoutDelays(() => storage.deleteObject('bucket', 'object')),
         throwsA(isA<ServiceUnavailableException>()),
       );
       expect(requests, hasLength(3));
     });
-
-    test('noRetry disables retries', () async {
-      final storage = Storage(
-        client: _mockClient(requests, [_unavailable, _ok]),
-        projectId: 'project',
-        retry: noRetry,
-      );
-
-      await expectLater(
-        storage.bucketMetadata('bucket'),
-        throwsA(isA<ServiceUnavailableException>()),
-      );
-      expect(requests, hasLength(1));
-    });
   });
 
   group('call retry', () {
+    test('is used for idempotent operations', () async {
+      final storage = Storage(
+        client: _mockClient(requests, [_unavailable, _unavailable, _ok]),
+        projectId: 'project',
+      );
+
+      await storage.bucketMetadata('bucket', retry: _noDelayRetry);
+      expect(requests, hasLength(3));
+    });
+
     test('is used for non-idempotent operations', () async {
       final storage = Storage(
         client: _mockClient(requests, [_unavailable, _ok]),
@@ -114,22 +121,10 @@ void main() {
       expect(requests, hasLength(2));
     });
 
-    test('overrides the client retry', () async {
-      final storage = Storage(
-        client: _mockClient(requests, [_unavailable, _ok]),
-        projectId: 'project',
-        retry: noRetry,
-      );
-
-      await storage.bucketMetadata('bucket', retry: _noDelayRetry);
-      expect(requests, hasLength(2));
-    });
-
     test('noRetry disables retries', () async {
       final storage = Storage(
         client: _mockClient(requests, [_unavailable, _ok]),
         projectId: 'project',
-        retry: _noDelayRetry,
       );
 
       await expectLater(
@@ -146,10 +141,9 @@ void main() {
       final storage = Storage(
         client: _mockClient(requests, [_unavailable, _ok]),
         projectId: 'project',
-        retry: _noDelayRetry,
       );
 
-      await storage.deleteBucket('bucket');
+      await _withoutDelays(() => storage.deleteBucket('bucket'));
       expect(requests, hasLength(2));
     });
 
@@ -161,39 +155,40 @@ void main() {
           _unavailable,
         ]),
         projectId: 'project',
-        retry: _noDelayRetry,
       );
       final generation = BigInt.one;
 
-      await expectLater(
-        storage.deleteObjectAcl(
-          'bucket',
-          'object',
-          'allUsers',
-          generation: generation,
-        ),
-        throwsA(isA<ServiceUnavailableException>()),
-      );
-      await expectLater(
-        storage.patchObjectAcl(
-          'bucket',
-          'object',
-          'allUsers',
-          'READER',
-          generation: generation,
-        ),
-        throwsA(isA<ServiceUnavailableException>()),
-      );
-      await expectLater(
-        storage.updateObjectAcl(
-          'bucket',
-          'object',
-          'allUsers',
-          'READER',
-          generation: generation,
-        ),
-        throwsA(isA<ServiceUnavailableException>()),
-      );
+      await _withoutDelays(() async {
+        await expectLater(
+          storage.deleteObjectAcl(
+            'bucket',
+            'object',
+            'allUsers',
+            generation: generation,
+          ),
+          throwsA(isA<ServiceUnavailableException>()),
+        );
+        await expectLater(
+          storage.patchObjectAcl(
+            'bucket',
+            'object',
+            'allUsers',
+            'READER',
+            generation: generation,
+          ),
+          throwsA(isA<ServiceUnavailableException>()),
+        );
+        await expectLater(
+          storage.updateObjectAcl(
+            'bucket',
+            'object',
+            'allUsers',
+            'READER',
+            generation: generation,
+          ),
+          throwsA(isA<ServiceUnavailableException>()),
+        );
+      });
       expect(requests.map((r) => r.method), ['DELETE', 'PATCH', 'PUT']);
     });
   });
@@ -209,10 +204,11 @@ void main() {
         () => http.Response('{"items": [{"name": "b"}]}', 200),
       ]),
       projectId: 'project',
-      retry: _noDelayRetry,
     );
 
-    final objects = await storage.listObjects('bucket').toList();
+    final objects = await _withoutDelays(
+      () => storage.listObjects('bucket').toList(),
+    );
 
     expect(objects.map((o) => o.name), ['a', 'b']);
     expect(requests, hasLength(3));
@@ -232,15 +228,16 @@ void main() {
       final storage = Storage(
         client: _mockClient(requests, [_unavailable, session]),
         projectId: 'project',
-        retry: _noDelayRetry,
       );
 
-      final sink = storage.uploadObjectFromSink('bucket', 'object')
-        ..add([1, 2, 3]);
-      await expectLater(
-        sink.close(),
-        throwsA(isA<ServiceUnavailableException>()),
-      );
+      await _withoutDelays(() async {
+        final sink = storage.uploadObjectFromSink('bucket', 'object')
+          ..add([1, 2, 3]);
+        await expectLater(
+          sink.close(),
+          throwsA(isA<ServiceUnavailableException>()),
+        );
+      });
       expect(requests, hasLength(1));
     });
 
@@ -248,19 +245,20 @@ void main() {
       final storage = Storage(
         client: _mockClient(requests, [_unavailable, session, _ok]),
         projectId: 'project',
-        retry: _noDelayRetry,
       );
 
-      final sink = storage.uploadObjectFromSink(
-        'bucket',
-        'object',
-        ifGenerationMatch: BigInt.zero,
-      )..add([1, 2, 3]);
-      await sink.close();
+      await _withoutDelays(() async {
+        final sink = storage.uploadObjectFromSink(
+          'bucket',
+          'object',
+          ifGenerationMatch: BigInt.zero,
+        )..add([1, 2, 3]);
+        await sink.close();
+      });
       expect(requests.map((r) => r.method), ['POST', 'POST', 'PUT']);
     });
 
-    test('retries uploading data with the client retry', () async {
+    test('retries uploading data of a non-idempotent upload', () async {
       final storage = Storage(
         client: _mockClient(requests, [
           session,
@@ -269,12 +267,13 @@ void main() {
           _ok,
         ]),
         projectId: 'project',
-        retry: _noDelayRetry,
       );
 
-      final sink = storage.uploadObjectFromSink('bucket', 'object')
-        ..add([1, 2, 3]);
-      await sink.close();
+      await _withoutDelays(() async {
+        final sink = storage.uploadObjectFromSink('bucket', 'object')
+          ..add([1, 2, 3]);
+        await sink.close();
+      });
       expect(requests.map((r) => r.method), ['POST', 'PUT', 'PUT']);
       expect(requests.last.headers['Content-Range'], 'bytes */*');
     });
