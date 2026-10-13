@@ -334,9 +334,8 @@ final class TokenVerifier {
     }
 
     final audience = _audienceList(payload['aud']);
-    final allowedAudiences = this.allowedAudiences;
-    if (allowedAudiences != null &&
-        !_hasOnlyAllowedAudiences(audience, allowedAudiences)) {
+    if (allowedAudiences case final allowedAudiences?
+        when !_hasOnlyAllowedAudiences(audience, allowedAudiences)) {
       throw TokenVerificationException(
         'The token "aud" (audience) claim is ${payload['aud']}, but it must be '
         'one or more of ${allowedAudiences.join(', ')}.',
