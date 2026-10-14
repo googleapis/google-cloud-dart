@@ -32,7 +32,7 @@ void main() {
   final groups = (vectors['testGroups']! as List).cast<Map<String, Object?>>();
 
   List<Map<String, Object?>> testsIn(Map<String, Object?> group) =>
-      (group['tests']! as List).cast<Map<String, Object?>>();
+      (group['tests'] as List).cast<Map<String, Object?>>();
 
   group(
     'Wycheproof JSON Web Signature',
