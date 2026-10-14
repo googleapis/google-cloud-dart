@@ -744,9 +744,8 @@ void main() {
           sampleUrl,
           retry: const NoDelayRetry.onCodes([Code.unavailable]),
         ),
-        {
-        'fruit': 'apple',
-      });
+        {'fruit': 'apple'},
+      );
       expect(count, 2);
     });
 

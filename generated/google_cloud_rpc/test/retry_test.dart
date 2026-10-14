@@ -23,8 +23,6 @@ import 'package:google_cloud_rpc/src/retry.dart'
 import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 
-bool _isBadRequest(Object error) => error is BadRequestException;
-
 void main() {
   group('delaySequence', () {
     test('calculates exponential backoff correctly', () {
@@ -378,10 +376,12 @@ void main() {
     test('retries the errors that retryIf accepts', () async {
       var count = 0;
       expect(
-        await const NoDelayRetry(retryIf: _isBadRequest).run(() async {
-          if (++count == 1) throw BadRequestException('bad request');
-          return 5;
-        }),
+        await NoDelayRetry(retryIf: (e) => e is BadRequestException).run(
+          () async {
+            if (++count == 1) throw BadRequestException('bad request');
+            return 5;
+          },
+        ),
         5,
       );
       expect(count, 2);
@@ -390,10 +390,12 @@ void main() {
     test('does not retry the errors that retryIf rejects', () async {
       var count = 0;
       await expectLater(
-        const NoDelayRetry(retryIf: _isBadRequest).run<int>(() async {
-          ++count;
-          throw http.ClientException('transport failure');
-        }),
+        NoDelayRetry(retryIf: (e) => e is BadRequestException).run<int>(
+          () async {
+            ++count;
+            throw http.ClientException('transport failure');
+          },
+        ),
         throwsA(isA<http.ClientException>()),
       );
       expect(count, 1);
@@ -412,7 +414,7 @@ void main() {
     });
 
     test('isRetryable uses retryIf', () {
-      const retry = ExponentialRetry(retryIf: _isBadRequest);
+      final retry = ExponentialRetry(retryIf: (e) => e is BadRequestException);
       expect(retry.isRetryable(BadRequestException('400')), isTrue);
       expect(retry.isRetryable(ServiceUnavailableException('503')), isFalse);
     });
