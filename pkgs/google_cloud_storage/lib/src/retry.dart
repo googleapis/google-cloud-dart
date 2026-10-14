@@ -21,7 +21,7 @@ export 'package:google_cloud_rpc/retry.dart';
 /// The default retry strategy for Google Cloud Storage operations.
 ///
 /// Retries the errors that the [Cloud Storage retry strategy][] considers
-/// transient ([isTransientError])
+/// transient (using [isTransientError]).
 ///
 /// `Storage` methods use it for idempotent operations, unless they're
 /// explicitly passed a `retry` argument.
@@ -39,8 +39,7 @@ export 'package:google_cloud_rpc/retry.dart';
 /// [Cloud Storage retry strategy]: https://docs.cloud.google.com/storage/docs/retry-strategy
 const defaultRetry = ExponentialRetry(retryIf: isTransientError);
 
-/// Returns whether [error] is a transient failure, which is usually worth
-/// retrying.
+/// Returns whether [error] is a transient failure.
 ///
 /// These are the errors that the
 /// [Cloud Storage retry strategy](https://docs.cloud.google.com/storage/docs/retry-strategy)
@@ -54,9 +53,12 @@ const defaultRetry = ExponentialRetry(retryIf: isTransientError);
 /// - errors with the gRPC status code `ABORTED`.
 /// - checksum mismatches ([ChecksumValidationException]).
 ///
-/// This is the predicate of [defaultRetry]. It corresponds to `_should_retry`
-/// in the Python client library and `ShouldRetry` in the Go client library.
 bool isTransientError(Object error) {
+  // This is the predicate of [defaultRetry]. It is based on `_should_retry`
+  // in the Python client library and `ShouldRetry` in the Go client library:
+  // https://github.com/googleapis/google-cloud-python/blob/3c5919af3d6e6af44e06e6981b6430e3d853b20c/packages/google-cloud-storage/google/cloud/storage/retry.py#L31-L75
+  // https://github.com/googleapis/google-cloud-go/blob/8adf43699b7ab05b265af9be1bf8326831c0d8ae/storage/invoke.go#L230-L298
+
   if (error is! Exception) return false;
   return switch (error) {
     // InternalServerErrorException (HTTP 500 / gRPC INTERNAL or UNKNOWN) is
