@@ -24,13 +24,6 @@ import 'exceptions.dart';
 /// An abstract class for running a function with retry logic.
 ///
 /// Decides which failures are retried and how long to wait between attempts.
-///
-/// A [RetryRunner] does not know whether an operation is safe to repeat. That
-/// is decided by the code that chooses the runner for each operation, as in
-/// the Google Cloud client libraries for other languages. For example, a
-/// generated client uses its default runner only for the methods that the
-/// service's retry configuration marks as retryable, and [noRetry] for the
-/// others, unless the caller provides a runner for the call.
 sealed class RetryRunner {
   const RetryRunner();
 
@@ -237,7 +230,20 @@ final class NoDelayRetry extends ExponentialRetry {
 ///   ```
 ///
 /// 2. [ExponentialRetry.new] takes a `retryIf` predicate.
+///
+///   For example:
+///
+///   ```dart
+///   final retry = ExponentialRetry(
+///     retryIf: (e) =>
+///         e is ServiceUnavailableException || e is TimeoutException,
+///     maxRetries: 3,
+///   );
+///   ```
 final class ExponentialRetry extends RetryRunner {
+  /// The predicate that decides which failures are retried.
+  ///
+  /// `null` if [_retryableCodes] decides which failures are retried.
   final bool Function(Object error)? _retryIf;
 
   /// The status codes that are retried, if this runner was created with
