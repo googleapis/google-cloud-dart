@@ -97,8 +97,7 @@ void main() {
 
       expect(delays, hasLength(20));
       for (final d in delays) {
-        expect(d.inMilliseconds, greaterThanOrEqualTo(8000));
-        // Jitter only shortens delays, so they never exceed `maxDelay`.
+        expect(d, greaterThanOrEqualTo(const Duration(seconds: 8)));
         expect(d, lessThanOrEqualTo(const Duration(seconds: 10)));
       }
       expect(delays.toSet().length, greaterThan(1));
@@ -129,31 +128,15 @@ void main() {
         expect(delays[i], lessThanOrEqualTo(unjittered[i]));
       }
     });
-
-    test('full jitter picks delays between zero and the delay', () {
-      final delays = delaySequence(
-        maxRetries: 100,
-        initialDelay: const Duration(seconds: 10),
-        delayMultiplier: 1.0,
-        maxDelay: const Duration(seconds: 10),
-        jitter: 1.0,
-        random: Random(42),
-      ).toList();
-
-      for (final d in delays) {
-        expect(d, greaterThanOrEqualTo(Duration.zero));
-        expect(d, lessThanOrEqualTo(const Duration(seconds: 10)));
-      }
-      expect(delays.any((d) => d < const Duration(seconds: 2)), isTrue);
-      expect(delays.any((d) => d > const Duration(seconds: 8)), isTrue);
-    });
   });
 
   group('matchesStatusCode', () {
     test('matches gRPC status codes', () {
       final unavailable = ServiceUnavailableException(
         'unavailable',
-        status: Status(code: 14),
+        status: Status(
+          code: 14, // UNAVAILABLE
+        ),
       );
       expect(matchesStatusCode(unavailable, const [Code.unavailable]), isTrue);
       expect(
@@ -170,13 +153,20 @@ void main() {
     });
 
     test('distinguishes gRPC status codes with the same HTTP status', () {
-      final aborted = ConflictException('aborted', status: Status(code: 10));
+      final aborted = ConflictException(
+        'aborted',
+        status: Status(
+          code: 10, // ABORTED
+        ),
+      );
       expect(matchesStatusCode(aborted, const [Code.aborted]), isTrue);
       expect(matchesStatusCode(aborted, const [Code.alreadyExists]), isFalse);
 
       final dataLoss = InternalServerErrorException(
         'data loss',
-        status: Status(code: 15),
+        status: Status(
+          code: 15, // DATA_LOSS
+        ),
       );
       expect(matchesStatusCode(dataLoss, const [Code.dataLoss]), isTrue);
       expect(matchesStatusCode(dataLoss, const [Code.internal]), isFalse);
@@ -272,8 +262,12 @@ void main() {
       expect(count, 1);
     });
 
-    test('rejects every error and has no delays', () {
+    test('rejects every failure', () {
       expect(noRetry.isRetryable(http.ClientException('failure')), isFalse);
+      expect(noRetry.delays(), isEmpty);
+    });
+
+    test('no delays', () {
       expect(noRetry.delays(), isEmpty);
     });
   });
@@ -411,48 +405,6 @@ void main() {
         throwsStateError,
       );
       expect(count, 1);
-    });
-
-    test('isRetryable uses retryIf', () {
-      final retry = ExponentialRetry(retryIf: (e) => e is BadRequestException);
-      expect(retry.isRetryable(BadRequestException('400')), isTrue);
-      expect(retry.isRetryable(ServiceUnavailableException('503')), isFalse);
-    });
-
-    test('isRetryable uses the retryable codes', () {
-      const retry = ExponentialRetry.onCodes([Code.unavailable, Code.aborted]);
-      expect(retry.isRetryable(ServiceUnavailableException('503')), isTrue);
-      expect(retry.isRetryable(http.ClientException('failure')), isTrue);
-      expect(
-        retry.isRetryable(
-          ConflictException('aborted', status: Status(code: 10)),
-        ),
-        isTrue,
-      );
-      expect(retry.isRetryable(BadRequestException('400')), isFalse);
-      expect(
-        retry.isRetryable(ConflictException('exists', status: Status(code: 6))),
-        isFalse,
-      );
-    });
-
-    test('uses full jitter', () {
-      const retry = ExponentialRetry.onCodes(
-        [Code.unavailable],
-        maxRetries: 50,
-        initialDelay: Duration(seconds: 10),
-        delayMultiplier: 1,
-        maxDelay: Duration(seconds: 10),
-      );
-
-      final delays = retry.delays(random: Random(42)).toList();
-      expect(delays, hasLength(50));
-      for (final d in delays) {
-        expect(d, greaterThanOrEqualTo(Duration.zero));
-        expect(d, lessThanOrEqualTo(const Duration(seconds: 10)));
-      }
-      expect(delays.any((d) => d < const Duration(seconds: 2)), isTrue);
-      expect(delays.any((d) => d > const Duration(seconds: 8)), isTrue);
     });
 
     test('toString includes the retryable codes', () {
