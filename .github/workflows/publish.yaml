@@ -27,7 +27,7 @@ on:
 jobs:
   publish:
     if: ${{ github.repository_owner == 'googleapis' }}
-    uses: dart-lang/ecosystem/.github/workflows/publish.yaml@5576a85fa69edea4343a1b601d4c3e755fcf6ad4
+    uses: dart-lang/ecosystem/.github/workflows/publish.yaml@622ef61a7edd5de7df38661e163e55c57606c96a
     with:
       ignore-packages: generated/**
       write-comments: false
