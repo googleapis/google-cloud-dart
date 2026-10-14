@@ -21,15 +21,13 @@ export 'package:google_cloud_rpc/retry.dart';
 /// The default retry strategy for Google Cloud Storage operations.
 ///
 /// Retries the errors that the [Cloud Storage retry strategy][] considers
-/// transient ([isTransientError]), with the same exponential backoff as the
-/// Python client library: a `1s` initial delay, a `2x` multiplier, a `60s`
-/// maximum delay, a `2 minute` maximum retry interval, and full jitter.
+/// transient ([isTransientError])
 ///
-/// `Storage` methods use it for idempotent operations, unless they're passed
-/// a `retry` argument.
+/// `Storage` methods use it for idempotent operations, unless they're
+/// explicitly passed a `retry` argument.
 ///
 /// To change the backoff but keep retrying the same errors, use
-/// [isTransientError] as the predicate. For example:
+/// [isTransientError] as the `retryIf` predicate. For example:
 ///
 /// ```dart
 /// await storage.bucketMetadata(
