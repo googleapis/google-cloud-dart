@@ -627,9 +627,6 @@ void main() {
   });
 
   group('retry', () {
-    const noDelayRetry = NoDelayRetry.onCodes([
-      Code.unavailable,
-    ], maxRetries: 2);
     final payload = TestMessage('<test payload>');
 
     group('non-streaming', () {
@@ -677,7 +674,13 @@ void main() {
             Response('{"fruit":"apple"}', 200),
           ]);
 
-          expect(await send(method, retry: noDelayRetry), {'fruit': 'apple'});
+          expect(
+            await send(
+              method,
+              retry: const NoDelayRetry.onCodes([Code.unavailable]),
+            ),
+            {'fruit': 'apple'},
+          );
           expect(requests, hasLength(2));
           for (final request in requests) {
             expect(request.method, method);
@@ -697,17 +700,22 @@ void main() {
         responses.addAll([for (var i = 0; i < 3; ++i) Response('', 503)]);
 
         await expectLater(
-          send('GET', retry: noDelayRetry),
+          send(
+            'GET',
+            retry: const NoDelayRetry.onCodes([
+              Code.unavailable,
+            ], maxRetries: 2),
+          ),
           throwsA(isA<ServiceUnavailableException>()),
         );
         expect(requests, hasLength(3));
       });
 
-      test('does not retry errors that the runner rejects', () async {
+      test('does not retry unmatched codes', () async {
         responses.addAll([Response('', 400), Response('{}', 200)]);
 
         await expectLater(
-          send('GET', retry: noDelayRetry),
+          send('GET', retry: const NoDelayRetry.onCodes([Code.unavailable])),
           throwsA(isA<BadRequestException>()),
         );
         expect(requests, hasLength(1));
@@ -731,7 +739,12 @@ void main() {
         }),
       );
 
-      expect(await service.get(sampleUrl, retry: noDelayRetry), {
+      expect(
+        await service.get(
+          sampleUrl,
+          retry: const NoDelayRetry.onCodes([Code.unavailable]),
+        ),
+        {
         'fruit': 'apple',
       });
       expect(count, 2);
@@ -763,7 +776,7 @@ void main() {
         expect(count, 1);
       });
 
-      test('is retried until the response starts', () async {
+      test('retried until the response starts', () async {
         final requests = <Request>[];
         final service = ServiceClient(
           client: MockClient((request) async {
@@ -783,7 +796,7 @@ void main() {
             sampleUrl,
             enableSse: true,
             body: payload,
-            retry: noDelayRetry,
+            retry: const NoDelayRetry.onCodes([Code.unavailable]),
           ),
           emitsInOrder([
             {'fruit': 'apple'},
@@ -827,7 +840,7 @@ void main() {
           service.getStreaming(
             sampleUrl,
             enableSse: false,
-            retry: noDelayRetry,
+            retry: const NoDelayRetry.onCodes([Code.unavailable]),
           ),
           emitsInOrder([
             {'fruit': 'apple'},
@@ -837,7 +850,7 @@ void main() {
         expect(count, 2);
       });
 
-      test('is not retried after events are delivered', () async {
+      test('not retried after events are delivered', () async {
         Stream<List<int>> events() async* {
           yield utf8.encode('data: {"fruit":"apple"}\n');
           throw ClientException('connection reset');
@@ -856,7 +869,11 @@ void main() {
         );
 
         await expectLater(
-          service.getStreaming(sampleUrl, enableSse: true, retry: noDelayRetry),
+          service.getStreaming(
+            sampleUrl,
+            enableSse: true,
+            retry: const NoDelayRetry.onCodes([Code.unavailable]),
+          ),
           emitsInOrder([
             {'fruit': 'apple'},
             emitsError(isA<ClientException>()),
