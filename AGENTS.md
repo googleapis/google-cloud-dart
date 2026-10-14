@@ -26,14 +26,6 @@
 - Don't edit `generated/*/CHANGELOG.md`. `librarian bump` writes the entries
   from PR titles at release time (see
   [generated/RELEASING.md](generated/RELEASING.md)).
-- `package:google_cloud_protobuf/protobuf.dart` exports
-  `google.protobuf.Duration` as `Duration`, which shadows `dart:core`'s
-  `Duration` in generated code. To use `dart:core`'s, write `$core.Duration`
-  and add both `import 'dart:core' as $core;` and `import 'dart:core';` (an
-  explicit `dart:core` import disables the implicit one).
-- `ProtoEnum` (the base of enums such as `Code`) overrides `==`, so enum
-  values can't be elements of `const` sets or keys of `const` maps. Use `const`
-  lists instead.
 
 ## Testing instructions
 
