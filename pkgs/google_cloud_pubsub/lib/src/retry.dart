@@ -16,14 +16,12 @@ import 'package:google_cloud_rpc/retry.dart';
 
 export 'package:google_cloud_rpc/retry.dart';
 
-/// The default retry strategy for publishing messages.
+/// The default retry strategy for Pub/Sub unary operations.
 ///
-/// Follows the `Publish` retry policy in the `google.pubsub.v1` gRPC service
-/// configuration, as the Pub/Sub client libraries for other languages do. It
-/// retries errors with the status codes `ABORTED`, `CANCELLED`,
-/// `DEADLINE_EXCEEDED`, `INTERNAL`, `RESOURCE_EXHAUSTED`, `UNAVAILABLE` and
-/// `UNKNOWN`, with a `100ms` initial delay, a `4x` multiplier, a `60s` maximum
-/// delay, a `1 minute` maximum retry interval, and full jitter.
+/// Follows the [`Publish`][] retry policy in the `google.pubsub.v1` gRPC
+/// service configuration.
+///
+/// [`Publish`]: https://github.com/googleapis/googleapis/blob/8c6e40489b4ab4f1886154a32ece2f0b5db52b27/google/pubsub/v1/pubsub_grpc_service_config.json#L41-L64
 const defaultRetry = ExponentialRetry.onCodes(
   [
     Code.aborted,

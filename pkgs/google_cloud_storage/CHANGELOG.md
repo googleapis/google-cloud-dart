@@ -2,20 +2,10 @@
 
 * **Breaking:** `ExponentialRetry` no longer has a built-in list of errors to
   retry. Pass a `retryIf` predicate, or use the new `ExponentialRetry.onCodes`
-  constructor to retry errors with the given status codes, as `gax.OnCodes`
-  does in Go. To retry the same errors as `defaultRetry`, use the new
-  `isTransientError` predicate. For example, replace
-  `ExponentialRetry(maxRetries: 3)` with
-  `ExponentialRetry(retryIf: isTransientError, maxRetries: 3)`.
-* **Breaking:** `ExponentialRetry`, including `defaultRetry`, now waits for a
-  random time between zero and the calculated delay before each retry ("full
-  jitter"), as the Python, Go and Java client libraries do, so that clients
-  that fail at the same time don't all retry at once.
+  constructor to retry errors with the given status codes.
 * **Breaking:** A `retry` argument passed to a `Storage`, `Bucket` or
   `StorageObject` method is now always used, even if the operation isn't
-  idempotent, as in the Python client library. Previously, it was ignored for
-  operations that weren't idempotent. Omit `retry` to retry only idempotent
-  operations, using `defaultRetry`.
+  idempotent. Omit `retry` to retry only idempotent operations.
 * **Breaking:** `RetryRunner.run` no longer takes an `isIdempotent` argument.
   A `RetryRunner` now only decides which errors are retried, and how long to
   wait between attempts; whoever chooses the runner decides whether an
@@ -29,11 +19,9 @@
   `Storage.updateObjectAcl` are no longer retried by default when `generation`
   is set, because changing an ACL is never idempotent.
 * `defaultRetry` now retries all HTTP 5xx responses, not just 500, 502, 503
-  and 504, as the Cloud Storage retry strategy recommends and the Go and Rust
-  client libraries do.
+  and 504, as the Cloud Storage retry strategy recommends.
 * Add `isTransientError`, which returns whether an error is one that the Cloud
-  Storage retry strategy considers transient. It is the predicate of
-  `defaultRetry`, like `ShouldRetry` in the Go client library.
+  Storage retry strategy considers transient.
 * Add `noRetry` to disable retries.
 * Re-export `Code` from `package:google_cloud_rpc`.
 * Move retry classes (`RetryRunner`, `ExponentialRetry`) and
