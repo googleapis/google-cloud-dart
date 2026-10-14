@@ -45,7 +45,7 @@ final class StorageObject {
   /// This operation is idempotent if `generation` or `ifGenerationMatch` is
   /// set.
   ///
-  /// {@macro storage_retry}
+  /// {@macro storage_retry_sometimes_idempotent}
   ///
   /// Throws [NotFoundException] if the object does not exist.
   ///
@@ -81,7 +81,7 @@ final class StorageObject {
   ///
   /// This operation is read-only and always idempotent.
   ///
-  /// {@macro storage_retry}
+  /// {@macro storage_retry_idempotent}
   ///
   /// If non-null, [generation] downloads a specific version of the object
   /// instead of the latest version.
@@ -124,7 +124,7 @@ final class StorageObject {
   ///
   /// This operation is not idempotent.
   ///
-  /// {@macro storage_retry}
+  /// {@macro storage_retry_not_idempotent}
   ///
   /// If the bucket has uniform bucket-level access enabled, this operation
   /// will fail with [BadRequestException].
@@ -139,7 +139,7 @@ final class StorageObject {
   ///
   /// This operation is idempotent if [ifMetagenerationMatch] is set.
   ///
-  /// {@macro storage_retry}
+  /// {@macro storage_retry_sometimes_idempotent}
   ///
   /// If set, [generation] selects a specific revision of this object (as
   /// opposed to the latest version) to patch.
@@ -194,7 +194,7 @@ final class StorageObject {
   ///
   /// This operation is read-only and always idempotent.
   ///
-  /// {@macro storage_retry}
+  /// {@macro storage_retry_idempotent}
   ///
   /// Throws [NotFoundException] if the object does not exist.
   ///
@@ -246,7 +246,7 @@ final class StorageObject {
   /// [ifGenerationMatch] is set (using both is recommended for maximum safety).
   /// https://docs.cloud.google.com/storage/docs/retry-strategy#idempotency-operations
   ///
-  /// {@macro storage_retry}
+  /// {@macro storage_retry_sometimes_idempotent}
   ///
   /// Throws [NotFoundException] if the object does not exist.
   ///
@@ -299,7 +299,7 @@ final class StorageObject {
   ///
   /// This operation is idempotent if [ifGenerationMatch] is set.
   ///
-  /// {@macro storage_retry}
+  /// {@macro storage_retry_sometimes_idempotent}
   ///
   /// Throws [NotFoundException] if the source object does not exist.
   ///
@@ -370,7 +370,7 @@ final class StorageObject {
   ///
   /// This operation is idempotent if `ifGenerationMatch` is set.
   ///
-  /// {@macro storage_retry}
+  /// {@macro storage_retry_sometimes_idempotent}
   ///
   /// If [metadata] is non-null, it will be used as the object's metadata. If
   /// `metadata.name` does not match [name], a [BadRequestException] is thrown.
@@ -420,7 +420,7 @@ final class StorageObject {
   ///
   /// This operation is idempotent if `ifGenerationMatch` is set.
   ///
-  /// {@macro storage_retry}
+  /// {@macro storage_retry_sometimes_idempotent}
   ///
   /// If [metadata] is non-null, it will be used as the object's metadata. If
   /// [metadata] is `null` or `metadata.contentType` is `null`, the content type

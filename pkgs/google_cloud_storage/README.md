@@ -61,9 +61,7 @@ void main() async {
 ## Retries
 
 By default, [idempotent Google Cloud Storage operations][] are retried if they
-fail with a transient error (such as a network failure). Operations that aren't
-idempotent are not retried, because repeating them could have unintended
-effects.
+fail with a transient error (such as a network failure).
 
 The documentation for each `Storage` method indicates whether the operation is
 idempotent. Some operations are only idempotent if a precondition, such as
@@ -85,7 +83,7 @@ void main() async {
   final storage = Storage();
 
   // This operation is only idempotent if `ifMetagenerationMatch` is provided,
-  // so it is retried using `defaultRetry`.
+  // so it is retried by default.
   await storage.patchBucket(
     'my-bucket',
     BucketMetadataPatchBuilder()..labels = {'key': 'value'},
@@ -99,7 +97,7 @@ void main() async {
   );
 
   // Without `ifGenerationMatch`, this operation isn't idempotent, so it's only
-  // retried because `retry` is passed. That's safe if nothing else writes
+  // retried because `retry` is passed. That's safe if nothing else writes to
   // this object.
   await storage.uploadObjectFromString(
     'my-bucket',

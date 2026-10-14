@@ -50,7 +50,7 @@ final class Bucket {
   /// This operation is always idempotent. Throws [ConflictException] if the
   /// bucket already exists.
   ///
-  /// {@macro storage_retry}
+  /// {@macro storage_retry_idempotent}
   ///
   /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/buckets/insert).
   ///
@@ -69,7 +69,7 @@ final class Bucket {
   ///
   /// This operation is always idempotent.
   ///
-  /// {@macro storage_retry}
+  /// {@macro storage_retry_idempotent}
   ///
   /// Throws [NotFoundException] if the bucket does not exist. Throws
   /// [ConflictException] if the bucket is not empty.
@@ -100,7 +100,7 @@ final class Bucket {
   ///
   /// This operation is read-only and always idempotent.
   ///
-  /// {@macro storage_retry}
+  /// {@macro storage_retry_idempotent}
   ///
   /// Throws [NotFoundException] if the bucket does not exist.
   ///
@@ -138,7 +138,7 @@ final class Bucket {
   ///
   /// This operation is idempotent if [ifMetagenerationMatch] is set.
   ///
-  /// {@macro storage_retry}
+  /// {@macro storage_retry_sometimes_idempotent}
   ///
   /// If set, [ifMetagenerationMatch] makes updating the bucket metadata
   /// conditional on whether the bucket's metageneration matches the provided

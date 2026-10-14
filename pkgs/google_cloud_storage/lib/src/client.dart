@@ -188,12 +188,6 @@ final class Storage {
     queryParameters: queryParameters,
   );
 
-  /// The retry strategy for an operation.
-  ///
-  /// The caller's [retry] is always used, so passing it is how a caller opts
-  /// in to retrying an operation that isn't idempotent. Otherwise,
-  /// [defaultRetry] is used if the operation is [idempotent], and the
-  /// operation isn't retried if it isn't.
   RetryRunner _retryFor(RetryRunner? retry, {required bool idempotent}) =>
       retry ?? (idempotent ? defaultRetry : noRetry);
 
@@ -233,10 +227,9 @@ final class Storage {
   ///
   /// This operation is read-only and always idempotent.
   ///
-  /// {@template storage_retry}
-  /// If [retry] is set, failed requests are retried using it, even if the
-  /// operation is not idempotent. Otherwise, failed requests are retried using
-  /// [defaultRetry], but only if the operation is idempotent.
+  /// {@template storage_retry_idempotent}
+  /// Failed requests are retried using [retry], or [defaultRetry] if [retry] is
+  /// not set.
   /// {@endtemplate}
   ///
   /// Throws [NotFoundException] if the bucket does not exist.
@@ -283,7 +276,7 @@ final class Storage {
   /// This operation is always idempotent. Throws [ConflictException] if the
   /// bucket already exists.
   ///
-  /// {@macro storage_retry}
+  /// {@macro storage_retry_idempotent}
   ///
   /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/buckets/insert).
   ///
@@ -312,7 +305,7 @@ final class Storage {
   ///
   /// This operation is always idempotent.
   ///
-  /// {@macro storage_retry}
+  /// {@macro storage_retry_idempotent}
   ///
   /// Throws [NotFoundException] if the bucket does not exist. Throws
   /// [ConflictException] if the bucket is not empty.
@@ -349,7 +342,9 @@ final class Storage {
   ///
   /// This operation is not idempotent.
   ///
-  /// {@macro storage_retry}
+  /// {@template storage_retry_not_idempotent}
+  /// Failed requests are only retried if [retry] is set.
+  /// {@endtemplate}
   ///
   /// If the bucket has uniform bucket-level access enabled, this operation
   /// will fail with [BadRequestException].
@@ -376,7 +371,7 @@ final class Storage {
   ///
   /// This operation is read-only and always idempotent.
   ///
-  /// {@macro storage_retry}
+  /// {@macro storage_retry_idempotent}
   ///
   /// {@macro acl_entity_docs}
   ///
@@ -400,7 +395,7 @@ final class Storage {
   ///
   /// This operation is not idempotent.
   ///
-  /// {@macro storage_retry}
+  /// {@macro storage_retry_not_idempotent}
   ///
   /// If the bucket has uniform bucket-level access enabled, this operation
   /// will fail with [BadRequestException].
@@ -444,7 +439,7 @@ final class Storage {
   ///
   /// This operation is read-only and always idempotent.
   ///
-  /// {@macro storage_retry}
+  /// {@macro storage_retry_idempotent}
   ///
   /// Throws [NotFoundException] if the bucket does not exist.
   ///
@@ -469,7 +464,7 @@ final class Storage {
   ///
   /// This operation is read-only and always idempotent.
   ///
-  /// {@macro storage_retry}
+  /// {@macro storage_retry_idempotent}
   ///
   /// {@template storage_list_retry}
   /// Each page of results is requested, and retried, separately. So a failed
@@ -532,7 +527,11 @@ final class Storage {
   ///
   /// This operation is idempotent if [ifMetagenerationMatch] is set.
   ///
-  /// {@macro storage_retry}
+  /// {@template storage_retry_sometimes_idempotent}
+  /// If [retry] is set, failed requests are retried using it, even if the
+  /// operation is not idempotent. Otherwise, failed requests are retried using
+  /// [defaultRetry], but only if the operation is idempotent.
+  /// {@endtemplate}
   ///
   /// If set, [ifMetagenerationMatch] makes updating the bucket metadata
   /// conditional on whether the bucket's metageneration matches the provided
@@ -608,7 +607,7 @@ final class Storage {
   ///
   /// This operation is not idempotent.
   ///
-  /// {@macro storage_retry}
+  /// {@macro storage_retry_not_idempotent}
   ///
   /// If the bucket has uniform bucket-level access enabled, this operation
   /// will fail with [BadRequestException].
@@ -642,7 +641,7 @@ final class Storage {
   ///
   /// This operation is not idempotent.
   ///
-  /// {@macro storage_retry}
+  /// {@macro storage_retry_not_idempotent}
   ///
   /// If the bucket has uniform bucket-level access enabled, this operation
   /// will fail with [BadRequestException].
@@ -678,7 +677,7 @@ final class Storage {
   /// This operation is idempotent if `generation` or `ifGenerationMatch` is
   /// set.
   ///
-  /// {@macro storage_retry}
+  /// {@macro storage_retry_sometimes_idempotent}
   ///
   /// Throws [NotFoundException] if the object does not exist.
   ///
@@ -724,7 +723,7 @@ final class Storage {
   ///
   /// This operation is not idempotent.
   ///
-  /// {@macro storage_retry}
+  /// {@macro storage_retry_not_idempotent}
   ///
   /// Throws [NotFoundException] if the object or ACL does not exist.
   ///
@@ -770,7 +769,7 @@ final class Storage {
   ///
   /// This operation is read-only and always idempotent.
   ///
-  /// {@macro storage_retry}
+  /// {@macro storage_retry_idempotent}
   ///
   /// If non-null, [generation] downloads a specific version of the object
   /// instead of the latest version.
@@ -823,7 +822,7 @@ final class Storage {
   ///
   /// This operation is read-only and always idempotent.
   ///
-  /// {@macro storage_retry}
+  /// {@macro storage_retry_idempotent}
   ///
   /// {@macro acl_entity_docs}
   ///
@@ -856,7 +855,7 @@ final class Storage {
   ///
   /// This operation is not idempotent.
   ///
-  /// {@macro storage_retry}
+  /// {@macro storage_retry_not_idempotent}
   ///
   /// If the bucket has uniform bucket-level access enabled, this operation
   /// will fail with [BadRequestException].
@@ -905,7 +904,7 @@ final class Storage {
   ///
   /// This operation is read-only and always idempotent.
   ///
-  /// {@macro storage_retry}
+  /// {@macro storage_retry_idempotent}
   ///
   /// Throws [NotFoundException] if the object does not exist.
   ///
@@ -940,7 +939,7 @@ final class Storage {
   ///
   /// This operation is read-only and always idempotent.
   ///
-  /// {@macro storage_retry}
+  /// {@macro storage_retry_idempotent}
   ///
   /// {@macro storage_list_retry}
   ///
@@ -1037,7 +1036,7 @@ final class Storage {
   ///
   /// This operation is not idempotent.
   ///
-  /// {@macro storage_retry}
+  /// {@macro storage_retry_not_idempotent}
   ///
   /// If the bucket has uniform bucket-level access enabled, this operation
   /// will fail with [BadRequestException].
@@ -1055,7 +1054,7 @@ final class Storage {
   ///
   /// This operation is read-only and always idempotent.
   ///
-  /// {@macro storage_retry}
+  /// {@macro storage_retry_idempotent}
   ///
   /// Throws [NotFoundException] if the object does not exist.
   ///
@@ -1113,7 +1112,7 @@ final class Storage {
   /// This operation is atomic and idempotent if [ifSourceGenerationMatch] or
   /// [ifGenerationMatch] is set.
   ///
-  /// {@macro storage_retry}
+  /// {@macro storage_retry_sometimes_idempotent}
   ///
   /// Throws [NotFoundException] if the source object does not exist.
   ///
@@ -1178,7 +1177,7 @@ final class Storage {
   ///
   /// This operation is idempotent if [ifMetagenerationMatch] is set.
   ///
-  /// {@macro storage_retry}
+  /// {@macro storage_retry_sometimes_idempotent}
   ///
   /// If set, [generation] selects a specific revision of this object (as
   /// opposed to the latest version) to patch.
@@ -1257,7 +1256,7 @@ final class Storage {
   ///
   /// This operation is not idempotent.
   ///
-  /// {@macro storage_retry}
+  /// {@macro storage_retry_not_idempotent}
   ///
   /// If the bucket has uniform bucket-level access enabled, this operation
   /// will fail with [BadRequestException].
@@ -1304,7 +1303,7 @@ final class Storage {
   ///
   /// This operation is idempotent if [ifGenerationMatch] is set.
   ///
-  /// {@macro storage_retry}
+  /// {@macro storage_retry_sometimes_idempotent}
   ///
   /// Throws [NotFoundException] if the source object does not exist.
   ///
@@ -1414,7 +1413,7 @@ final class Storage {
   ///
   /// This operation is not idempotent.
   ///
-  /// {@macro storage_retry}
+  /// {@macro storage_retry_not_idempotent}
   ///
   /// If the bucket has uniform bucket-level access enabled, this operation
   /// will fail with [BadRequestException].
@@ -1457,7 +1456,7 @@ final class Storage {
   ///
   /// This operation is idempotent if `ifGenerationMatch` is set.
   ///
-  /// {@macro storage_retry}
+  /// {@macro storage_retry_sometimes_idempotent}
   ///
   /// If [metadata] is non-null, it will be used as the object's metadata. If
   /// `metadata.name` does not match [name], a [BadRequestException] is thrown.
@@ -1537,7 +1536,7 @@ final class Storage {
   ///
   /// This operation is idempotent if `ifGenerationMatch` is set.
   ///
-  /// {@macro storage_retry}
+  /// {@macro storage_retry_sometimes_idempotent}
   ///
   /// That only applies to the request that starts the upload. Once the upload
   /// has started, failed requests are always retried, using [retry] or
@@ -1600,7 +1599,7 @@ final class Storage {
   ///
   /// This operation is idempotent if `ifGenerationMatch` is set.
   ///
-  /// {@macro storage_retry}
+  /// {@macro storage_retry_sometimes_idempotent}
   ///
   /// If [metadata] is non-null, it will be used as the object's metadata. If
   /// [metadata] is `null` or `metadata.contentType` is `null`, the content type
