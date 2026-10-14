@@ -277,7 +277,7 @@ final class ExponentialRetry extends RetryRunner {
   /// ```dart
   /// final retry = ExponentialRetry(
   ///   retryIf: (e) =>
-  ///       hasStatusCode(e, const [Code.unavailable]) || e is TimeoutException,
+  ///       e is ServiceUnavailableException || e is TimeoutException,
   /// );
   /// ```
   const ExponentialRetry({
@@ -296,7 +296,14 @@ final class ExponentialRetry extends RetryRunner {
   /// Creates a retry runner that retries errors with one of the status
   /// [retryableCodes].
   ///
-  /// [hasStatusCode] decides whether an error has one of the codes.
+  /// An error from a gRPC transport is matched by its gRPC status code. An
+  /// error from a REST transport is matched by the HTTP status code that
+  /// `google.rpc.Code` maps each code to, such as 503 for [Code.unavailable].
+  /// So for REST, codes that share an HTTP status code, such as [Code.aborted]
+  /// and [Code.alreadyExists] (409), can't be told apart.
+  ///
+  /// A failure to communicate with the service ([http.ClientException]) counts
+  /// as [Code.unavailable], which is how gRPC reports it.
   const ExponentialRetry.onCodes(
     List<Code> retryableCodes, {
     this.maxRetries,
@@ -309,7 +316,7 @@ final class ExponentialRetry extends RetryRunner {
 
   @override
   bool isRetryable(Object error) => switch ((_retryableCodes, _retryIf)) {
-    (final codes?, _) => hasStatusCode(error, codes),
+    (final codes?, _) => matchesStatusCode(error, codes),
     (_, final retryIf?) => retryIf(error),
     _ => false,
   };
@@ -383,20 +390,11 @@ const _statusCodes = <String, (int, int)>{
 
 /// Whether [error] reports one of the canonical status [codes].
 ///
-/// [ExponentialRetry.onCodes] uses this to retry the status codes in a
-/// service's retry configuration (its `retryableStatusCodes`), as the generated
-/// clients for other languages do. It can also be combined with other
-/// conditions in an [ExponentialRetry] `retryIf` predicate.
-///
-/// An error from a gRPC transport is matched by its gRPC status code. An
-/// error from a REST transport is matched by the HTTP status code that
-/// `google.rpc.Code` maps each code to, such as 503 for [Code.unavailable].
-/// So for REST, codes that share an HTTP status code, such as [Code.aborted]
-/// and [Code.alreadyExists] (409), can't be told apart.
-///
-/// A failure to communicate with the service ([http.ClientException]) counts
-/// as [Code.unavailable], which is how gRPC reports it.
-bool hasStatusCode(Object error, Iterable<Code> codes) {
+/// This is how [ExponentialRetry.onCodes] decides which errors to retry. See
+/// its documentation for how errors are matched.
+@internal
+@visibleForTesting
+bool matchesStatusCode(Object error, Iterable<Code> codes) {
   switch (error) {
     case http.ClientException():
       return codes.contains(Code.unavailable);

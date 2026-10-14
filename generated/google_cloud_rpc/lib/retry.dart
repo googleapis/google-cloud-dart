@@ -16,4 +16,4 @@
 library;
 
 export 'src/api.g.dart' show Code;
-export 'src/retry.dart' hide delaySequence;
+export 'src/retry.dart' hide delaySequence, matchesStatusCode;

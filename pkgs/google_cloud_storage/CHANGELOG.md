@@ -32,7 +32,7 @@
   Storage retry strategy considers transient. It is the predicate of
   `defaultRetry`, like `ShouldRetry` in the Go client library.
 * Add `noRetry` to disable retries.
-* Re-export `hasStatusCode` and `Code` from `package:google_cloud_rpc`.
+* Re-export `Code` from `package:google_cloud_rpc`.
 * Move retry classes (`RetryRunner`, `ExponentialRetry`) and
   `ChecksumValidationException` to `package:google_cloud_rpc` (re-exported for
   backwards compatibility).

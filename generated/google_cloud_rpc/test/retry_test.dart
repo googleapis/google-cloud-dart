@@ -18,7 +18,8 @@ import 'package:clock/clock.dart';
 import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:google_cloud_rpc/retry.dart';
 import 'package:google_cloud_rpc/rpc.dart';
-import 'package:google_cloud_rpc/src/retry.dart' show delaySequence;
+import 'package:google_cloud_rpc/src/retry.dart'
+    show delaySequence, matchesStatusCode;
 import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 
@@ -150,60 +151,60 @@ void main() {
     });
   });
 
-  group('hasStatusCode', () {
+  group('matchesStatusCode', () {
     test('matches gRPC status codes', () {
       final unavailable = ServiceUnavailableException(
         'unavailable',
         status: Status(code: 14),
       );
-      expect(hasStatusCode(unavailable, const [Code.unavailable]), isTrue);
+      expect(matchesStatusCode(unavailable, const [Code.unavailable]), isTrue);
       expect(
-        hasStatusCode(unavailable, const [
+        matchesStatusCode(unavailable, const [
           Code.deadlineExceeded,
           Code.unavailable,
         ]),
         isTrue,
       );
       expect(
-        hasStatusCode(unavailable, const [Code.deadlineExceeded]),
+        matchesStatusCode(unavailable, const [Code.deadlineExceeded]),
         isFalse,
       );
     });
 
     test('distinguishes gRPC status codes with the same HTTP status', () {
       final aborted = ConflictException('aborted', status: Status(code: 10));
-      expect(hasStatusCode(aborted, const [Code.aborted]), isTrue);
-      expect(hasStatusCode(aborted, const [Code.alreadyExists]), isFalse);
+      expect(matchesStatusCode(aborted, const [Code.aborted]), isTrue);
+      expect(matchesStatusCode(aborted, const [Code.alreadyExists]), isFalse);
 
       final dataLoss = InternalServerErrorException(
         'data loss',
         status: Status(code: 15),
       );
-      expect(hasStatusCode(dataLoss, const [Code.dataLoss]), isTrue);
-      expect(hasStatusCode(dataLoss, const [Code.internal]), isFalse);
+      expect(matchesStatusCode(dataLoss, const [Code.dataLoss]), isTrue);
+      expect(matchesStatusCode(dataLoss, const [Code.internal]), isFalse);
     });
 
     test('matches HTTP status codes', () {
       expect(
-        hasStatusCode(ServiceUnavailableException('503'), const [
+        matchesStatusCode(ServiceUnavailableException('503'), const [
           Code.unavailable,
         ]),
         isTrue,
       );
       expect(
-        hasStatusCode(GatewayTimeoutException('504'), const [
+        matchesStatusCode(GatewayTimeoutException('504'), const [
           Code.deadlineExceeded,
         ]),
         isTrue,
       );
       expect(
-        hasStatusCode(TooManyRequestsException('429'), const [
+        matchesStatusCode(TooManyRequestsException('429'), const [
           Code.resourceExhausted,
         ]),
         isTrue,
       );
       expect(
-        hasStatusCode(BadRequestException('400'), const [
+        matchesStatusCode(BadRequestException('400'), const [
           Code.deadlineExceeded,
           Code.unavailable,
         ]),
@@ -217,36 +218,42 @@ void main() {
         'unavailable',
         status: Status(code: 503, message: 'unavailable'),
       );
-      expect(hasStatusCode(error, const [Code.unavailable]), isTrue);
-      expect(hasStatusCode(error, const [Code.internal]), isFalse);
+      expect(matchesStatusCode(error, const [Code.unavailable]), isTrue);
+      expect(matchesStatusCode(error, const [Code.internal]), isFalse);
     });
 
     test('cannot distinguish codes that share an HTTP status code', () {
       expect(
-        hasStatusCode(ConflictException('409'), const [Code.aborted]),
+        matchesStatusCode(ConflictException('409'), const [Code.aborted]),
         isTrue,
       );
       expect(
-        hasStatusCode(ConflictException('409'), const [Code.alreadyExists]),
+        matchesStatusCode(ConflictException('409'), const [Code.alreadyExists]),
         isTrue,
       );
     });
 
     test('treats a transport failure as UNAVAILABLE', () {
       final error = http.ClientException('connection refused');
-      expect(hasStatusCode(error, const [Code.unavailable]), isTrue);
-      expect(hasStatusCode(error, const [Code.deadlineExceeded]), isFalse);
+      expect(matchesStatusCode(error, const [Code.unavailable]), isTrue);
+      expect(matchesStatusCode(error, const [Code.deadlineExceeded]), isFalse);
     });
 
     test('does not match other errors', () {
       expect(
-        hasStatusCode(const FormatException('bad json'), const [
+        matchesStatusCode(const FormatException('bad json'), const [
           Code.unavailable,
         ]),
         isFalse,
       );
-      expect(hasStatusCode(StateError('bug'), const [Code.unknown]), isFalse);
-      expect(hasStatusCode(ServiceUnavailableException('503'), []), isFalse);
+      expect(
+        matchesStatusCode(StateError('bug'), const [Code.unknown]),
+        isFalse,
+      );
+      expect(
+        matchesStatusCode(ServiceUnavailableException('503'), []),
+        isFalse,
+      );
     });
   });
 

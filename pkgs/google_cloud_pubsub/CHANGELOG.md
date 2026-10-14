@@ -12,15 +12,14 @@
   message more than once, which Pub/Sub's at-least-once delivery allows.
 - Added `Topic.close()` and `Topic.isClosed`.
 - Re-exported the retry API from `package:google_cloud_rpc` (`RetryRunner`,
-  `ExponentialRetry`, `noRetry`, `hasStatusCode` and `Code`) and added
-  `defaultRetry`, the default retry strategy for publishing. It follows the
-  `Publish` retry policy in the Pub/Sub service configuration, as the client
-  libraries for other languages do: it retries errors with the status codes
-  `ABORTED`, `CANCELLED`, `DEADLINE_EXCEEDED`, `INTERNAL`,
-  `RESOURCE_EXHAUSTED`, `UNAVAILABLE` and `UNKNOWN`, with a 100ms initial
-  delay, a 4x multiplier, a 60s maximum delay, a 1 minute maximum retry
-  interval and full jitter. Use `ExponentialRetry.onCodes` to retry other
-  status codes.
+  `ExponentialRetry`, `noRetry` and `Code`) and added `defaultRetry`, the
+  default retry strategy for publishing. It follows the `Publish` retry policy
+  in the Pub/Sub service configuration, as the client libraries for other
+  languages do: it retries errors with the status codes `ABORTED`,
+  `CANCELLED`, `DEADLINE_EXCEEDED`, `INTERNAL`, `RESOURCE_EXHAUSTED`,
+  `UNAVAILABLE` and `UNKNOWN`, with a 100ms initial delay, a 4x multiplier, a
+  60s maximum delay, a 1 minute maximum retry interval and full jitter. Use
+  `ExponentialRetry.onCodes` to retry other status codes.
 - Initial release of the experimental Google Cloud Pub/Sub client.
 - Supports basic topic and subscription management.
 - Supports publishing and pulling messages (including streaming pull).
