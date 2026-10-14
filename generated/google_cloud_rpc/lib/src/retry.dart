@@ -270,13 +270,6 @@ final class ExponentialRetry extends RetryRunner {
   /// value, the wait time will be clamped to this value.
   final Duration maxDelay;
 
-  // The backoff parameters correspond to Python's `Retry`:
-  // - [initialDelay] is `initial`
-  // - [maxDelay] is `maximum`
-  // - [delayMultiplier] is `multiplier`
-  // - [maxRetryInterval] is `timeout`
-  // Their defaults are the same as Python's:
-  // https://github.com/googleapis/google-cloud-python/blob/3c5919af3d6e6af44e06e6981b6430e3d853b20c/packages/google-api-core/google/api_core/retry/retry_base.py#L42-L45
   /// Creates a retry runner that retries the errors that [retryIf] accepts.
   ///
   /// For example, to retry `UNAVAILABLE` errors and timeouts:
@@ -290,6 +283,9 @@ final class ExponentialRetry extends RetryRunner {
   const ExponentialRetry({
     required bool Function(Object error) retryIf,
     this.maxRetries,
+    // The defaults are the same as Python's:
+    // https://github.com/googleapis/google-cloud-python/blob/3c5919af3d6e6af44e06e6981b6430e3d853b20c/packages/google-api-core/google/api_core/retry/retry_base.py#L42-L45
+
     this.initialDelay = const Duration(seconds: 1),
     this.delayMultiplier = 2,
     this.maxDelay = const Duration(seconds: 60),

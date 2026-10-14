@@ -26,6 +26,5 @@ library;
 // ignore_for_file: unintended_html_in_doc_comment
 
 export 'package:google_cloud_rpc/exceptions.dart';
-export 'package:google_cloud_rpc/retry.dart' hide NoDelayRetry;
 
 export 'src/api.g.dart' hide FakeLanguageService;
