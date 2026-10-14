@@ -44,7 +44,6 @@ const defaultRetry = ExponentialRetry(retryIf: isTransientError);
 /// These are the errors that the
 /// [Cloud Storage retry strategy](https://docs.cloud.google.com/storage/docs/retry-strategy)
 /// considers transient:
-///
 /// - failures to communicate with the service ([http.ClientException]).
 /// - HTTP 408, 429 and 5xx responses.
 /// - checksum mismatches ([ChecksumValidationException]).
