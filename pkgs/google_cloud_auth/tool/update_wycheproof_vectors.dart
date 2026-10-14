@@ -103,7 +103,7 @@ $json
 ''');
 
   final testCount = groups.fold(0, (count, group) {
-    final tests = group['tests']! as List;
+    final tests = group['tests'] as List;
     return count + tests.length;
   });
   print('Wrote ${groups.length} groups ($testCount tests) to $_outputPath.');
