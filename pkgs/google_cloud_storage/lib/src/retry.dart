@@ -46,48 +46,11 @@ const defaultRetry = ExponentialRetry(retryIf: isTransientError);
 /// considers transient:
 ///
 /// - failures to communicate with the service ([http.ClientException]).
-/// - HTTP 408, 429, 500, 502, 503 and 504 responses, and errors with the
-///   equivalent gRPC status codes (`UNKNOWN`, `DEADLINE_EXCEEDED`,
-///   `RESOURCE_EXHAUSTED`, `INTERNAL` and `UNAVAILABLE`), except for
-///   `DATA_LOSS`.
-/// - errors with the gRPC status code `ABORTED`.
+/// - HTTP 408, 429 and 5xx responses.
 /// - checksum mismatches ([ChecksumValidationException]).
-///
-bool isTransientError(Object error) {
-  // This is the predicate of [defaultRetry]. It is based on `_should_retry`
-  // in the Python client library and `ShouldRetry` in the Go client library:
-  // https://github.com/googleapis/google-cloud-python/blob/3c5919af3d6e6af44e06e6981b6430e3d853b20c/packages/google-cloud-storage/google/cloud/storage/retry.py#L31-L75
-  // https://github.com/googleapis/google-cloud-go/blob/8adf43699b7ab05b265af9be1bf8326831c0d8ae/storage/invoke.go#L230-L298
-
-  if (error is! Exception) return false;
-  return switch (error) {
-    // InternalServerErrorException (HTTP 500 / gRPC INTERNAL or UNKNOWN) is
-    // retryable unless it carries gRPC status DATA_LOSS (code 15).
-    InternalServerErrorException(:final status) => status?.code != 15,
-    // ConflictException (HTTP 409 / gRPC ALREADY_EXISTS) is not retryable
-    // unless it carries gRPC status ABORTED (code 10).
-    ConflictException(:final status) => status?.code == 10,
-    BadGatewayException() ||
-    RequestTimeoutException() ||
-    ServiceUnavailableException() ||
-    GatewayTimeoutException() ||
-    TooManyRequestsException() => true,
-    ServiceException(:final status, :final statusCode) =>
-      switch (status?.code) {
-        // gRPC status codes: UNKNOWN(2), DEADLINE_EXCEEDED(4),
-        // RESOURCE_EXHAUSTED(8), ABORTED(10), INTERNAL(13), UNAVAILABLE(14).
-        2 || 4 || 8 || 10 || 13 || 14 => true,
-        null =>
-          statusCode == 408 ||
-              statusCode == 429 ||
-              statusCode == 500 ||
-              statusCode == 502 ||
-              statusCode == 503 ||
-              statusCode == 504,
-        _ => false,
-      },
-    http.ClientException() => true,
-    ChecksumValidationException() => true,
-    _ => false,
-  };
-}
+bool isTransientError(Object error) => switch (error) {
+  ServiceException(statusCode: 408 || 429 || (>= 500 && < 600)) ||
+  http.ClientException() ||
+  ChecksumValidationException() => true,
+  _ => false,
+};

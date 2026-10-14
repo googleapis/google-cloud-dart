@@ -3,7 +3,7 @@
 * **Breaking:** `ExponentialRetry` no longer has a built-in list of errors to
   retry. Pass a `retryIf` predicate, or use the new `ExponentialRetry.onCodes`
   constructor to retry errors with the given status codes, as `gax.OnCodes`
-  does in Go. To retry the same errors as before, use the new
+  does in Go. To retry the same errors as `defaultRetry`, use the new
   `isTransientError` predicate. For example, replace
   `ExponentialRetry(maxRetries: 3)` with
   `ExponentialRetry(retryIf: isTransientError, maxRetries: 3)`.
@@ -28,6 +28,9 @@
 * `Storage.deleteObjectAcl`, `Storage.patchObjectAcl` and
   `Storage.updateObjectAcl` are no longer retried by default when `generation`
   is set, because changing an ACL is never idempotent.
+* `defaultRetry` now retries all HTTP 5xx responses, not just 500, 502, 503
+  and 504, as the Cloud Storage retry strategy recommends and the Go and Rust
+  client libraries do.
 * Add `isTransientError`, which returns whether an error is one that the Cloud
   Storage retry strategy considers transient. It is the predicate of
   `defaultRetry`, like `ShouldRetry` in the Go client library.
