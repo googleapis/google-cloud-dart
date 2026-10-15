@@ -472,29 +472,130 @@ final class PubSub {
     }
   }
 
-  /// Establishes a stream with the server, which sends messages down to the
-  /// client.
+  /// Opens a `StreamingPull` bidirectional stream using [requestStream] for
+  /// client-to-server requests (initial subscription setup, acknowledgments,
+  /// and deadline modifications) and returns the server-to-client stream of
+  /// [ReceivedMessage]s.
+  ///
+  /// Invokes [onConnected] when the server sends the initial response headers,
+  /// and attaches [ackHandler] and [modifyDeadlineHandler] to each yielded
+  /// [ReceivedMessage].
+  ///
+  /// Used internally by [streamingPull] and [Subscription.streamingPull].
+  @internal
+  Stream<ReceivedMessage> streamingPullWithStream(
+    Stream<grpc.StreamingPullRequest> requestStream, {
+    void Function()? onConnected,
+    FutureOr<void> Function(List<String> ackIds)? ackHandler,
+    FutureOr<void> Function(List<String> ackIds, int ackDeadlineSeconds)?
+    modifyDeadlineHandler,
+  }) {
+    // An explicit `StreamController` is used instead of an `async*` generator
+    // so we can check `controller.hasListener` after `await _callOptions`.
+    // Calling `_subscriber.streamingPull` starts the HTTP/2 request and
+    // subscribes to `requestStream` immediately, even before `responseStream`
+    // is listened to; if the caller cancels while awaiting `_callOptions`, an
+    // `async*` generator would still start the gRPC call and then exit at
+    // `yield*` without ever cancelling `responseStream`.
+    //
+    // Once started, `controller.addStream(..., cancelOnError: true)` forwards
+    // pause, resume, and cancel to `responseStream` and cancels the RPC on the
+    // first error so `controller.close()` completes immediately.
+    late final StreamController<ReceivedMessage> controller;
+    controller = StreamController<ReceivedMessage>(
+      onListen: () async {
+        try {
+          if (_isClosed) {
+            throw StateError(
+              'Cannot stream messages using a closed PubSub client.',
+            );
+          }
+          final options = await _callOptions;
+          // The listener may have removed itself during the asynchronous gap
+          // awaiting `options`.
+          if (!controller.hasListener) return;
+          final responseStream = _subscriber.streamingPull(
+            requestStream,
+            options: options,
+          );
+          if (onConnected != null) {
+            // Any RPC or connection errors are forwarded to `responseStream`
+            // below. Suppress errors on this unawaited `headers` future to
+            // avoid uncaught asynchronous errors in the zone.
+            unawaited(
+              responseStream.headers
+                  .then((_) {
+                    if (controller.hasListener) onConnected();
+                  })
+                  .catchError((_) {}),
+            );
+          }
+          await controller.addStream(
+            responseStream.expand(
+              (response) => response.receivedMessages.map(
+                (receivedMessage) => _mapReceivedMessage(
+                  receivedMessage,
+                  ackHandler: ackHandler,
+                  modifyDeadlineHandler: modifyDeadlineHandler,
+                ),
+              ),
+            ),
+            cancelOnError: true,
+          );
+          if (controller.hasListener) {
+            unawaited(controller.close());
+          }
+        } catch (e, stackTrace) {
+          if (controller.hasListener) {
+            controller.addError(e, stackTrace);
+            unawaited(controller.close());
+          }
+        }
+      },
+    );
+    return controller.stream.handleError((Object e, StackTrace stackTrace) {
+      if (_isClosed) {
+        Error.throwWithStackTrace(
+          StateError('Cannot stream messages using a closed PubSub client.'),
+          stackTrace,
+        );
+      }
+      if (e is GrpcError) {
+        Error.throwWithStackTrace(_mapGrpcError(e), stackTrace);
+      }
+      Error.throwWithStackTrace(e, stackTrace);
+    });
+  }
+
+  /// Establishes a single streaming pull connection with the server.
+  ///
+  /// For automatic reconnection and parallel streams, use
+  /// [Subscription.streamingPull].
   ///
   /// The [subscription] must be in the format
   /// `projects/<project-id>/subscriptions/<subscription-id>`.
   ///
   /// The client streams acknowledgments and ack deadline modifications
-  /// back to the server. If an error occurs (including when the server closes
-  /// the stream with status `UNAVAILABLE` to reassign resources), the stream
-  /// will throw a [ServiceException]. In this case, the caller should
-  /// re-establish the stream. Flow control can be achieved by configuring the
-  /// underlying RPC channel.
+  /// back to the server while the stream is open, falling back to unary
+  /// RPCs if the stream is closed. If an error occurs (including when the
+  /// server closes the stream with `UNAVAILABLE` to reassign resources),
+  /// the stream emits a [ServiceException] and closes.
   ///
-  /// Throws a [ServiceException] if the stream is broken by the server or
-  /// network.
-  /// It is an error if [streamAckDeadlineSeconds] is not between 10 and 600
-  /// seconds.
+  /// It is an error if [subscription] is empty, or if
+  /// [streamAckDeadlineSeconds] is not between 10 and 600 seconds.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.StreamingPull).
   Stream<ReceivedMessage> streamingPull(
     String subscription, {
     int streamAckDeadlineSeconds = 10,
   }) {
+    if (subscription.isEmpty) {
+      throw ArgumentError.value(
+        subscription,
+        'subscription',
+        'Must not be empty',
+      );
+    }
     if (streamAckDeadlineSeconds < 10 || streamAckDeadlineSeconds > 600) {
       throw ArgumentError.value(
         streamAckDeadlineSeconds,
@@ -514,50 +615,47 @@ final class PubSub {
   }) async* {
     final requestController = StreamController<grpc.StreamingPullRequest>();
     try {
-      final options = await _callOptions;
       requestController.add(
         grpc.StreamingPullRequest()
           ..subscription = subscription
           ..streamAckDeadlineSeconds = streamAckDeadlineSeconds,
       );
-      // TODO(sigurdm): Retry on broken connections.
-      void handleAck(List<String> ackIds) {
-        if (!requestController.isClosed) {
-          requestController.add(
-            grpc.StreamingPullRequest()..ackIds.addAll(ackIds),
-          );
-        }
-      }
-
-      void handleModifyDeadline(List<String> ackIds, int seconds) {
-        if (!requestController.isClosed) {
-          requestController.add(
-            grpc.StreamingPullRequest()
-              ..modifyDeadlineAckIds.addAll(ackIds)
-              ..modifyDeadlineSeconds.addAll(
-                List.filled(ackIds.length, seconds),
-              ),
-          );
-        }
-      }
-
-      final responseStream = _subscriber.streamingPull(
+      yield* streamingPullWithStream(
         requestController.stream,
-        options: options,
+        ackHandler: (ackIds) async {
+          if (ackIds.isEmpty) return;
+          if (!requestController.isClosed && requestController.hasListener) {
+            requestController.add(
+              grpc.StreamingPullRequest()..ackIds.addAll(ackIds),
+            );
+            return;
+          }
+          await acknowledge(subscription, ackIds);
+        },
+        modifyDeadlineHandler: (ackIds, ackDeadlineSeconds) async {
+          if (ackDeadlineSeconds < 0 || ackDeadlineSeconds > 600) {
+            throw ArgumentError.value(
+              ackDeadlineSeconds,
+              'ackDeadlineSeconds',
+              'Must be between 0 and 600 seconds',
+            );
+          }
+          if (ackIds.isEmpty) return;
+          if (!requestController.isClosed && requestController.hasListener) {
+            requestController.add(
+              grpc.StreamingPullRequest()
+                ..modifyDeadlineAckIds.addAll(ackIds)
+                ..modifyDeadlineSeconds.addAll(
+                  List.filled(ackIds.length, ackDeadlineSeconds),
+                ),
+            );
+            return;
+          }
+          await modifyAckDeadline(subscription, ackIds, ackDeadlineSeconds);
+        },
       );
-      await for (final response in responseStream) {
-        for (final receivedMessage in response.receivedMessages) {
-          yield _mapReceivedMessage(
-            receivedMessage,
-            ackHandler: handleAck,
-            modifyDeadlineHandler: handleModifyDeadline,
-          );
-        }
-      }
-    } on GrpcError catch (e) {
-      throw _mapGrpcError(e);
     } finally {
-      await requestController.close();
+      unawaited(requestController.close());
     }
   }
 
