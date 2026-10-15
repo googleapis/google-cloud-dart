@@ -22,11 +22,11 @@
   and 504, as the Cloud Storage retry strategy recommends.
 * Add `isTransientError`, which returns whether an error is one that the Cloud
   Storage retry strategy considers transient.
-* Add `noRetry` to disable retries.
-* Re-export `Code` from `package:google_cloud_rpc`.
-* Move retry classes (`RetryRunner`, `ExponentialRetry`) and
-  `ChecksumValidationException` to `package:google_cloud_rpc` (re-exported for
-  backwards compatibility).
+* **Breaking:** Move retry classes (`RetryRunner`, `ExponentialRetry`) to
+  `package:google_cloud_rpc/retry.dart` (no longer exported by
+  `package:google_cloud_storage`).
+* Move `ChecksumValidationException` to `package:google_cloud_rpc` (re-exported
+  for backwards compatibility).
 * Add `RetryRunner.isRetryable` and `RetryRunner.delays`.
 
 ## 0.6.4
