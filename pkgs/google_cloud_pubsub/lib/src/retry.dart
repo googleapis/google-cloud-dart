@@ -14,18 +14,24 @@
 
 import 'package:google_cloud_rpc/retry.dart';
 
-export 'package:google_cloud_rpc/retry.dart' hide defaultRetry;
-
 /// The default retry strategy for Pub/Sub unary operations.
 ///
-/// Uses the backoff parameters from the `google.pubsub.v1` gRPC service
-/// configuration (`100ms` initial delay, `1.3x` multiplier, `60s` maximum
-/// delay, and `1 minute` maximum retry interval) with `±20%` jitter to
-/// desynchronize concurrent retries and stream reconnections.
-const defaultRetry = ExponentialRetry(
+/// Follows the [`Publish`][] retry policy in the `google.pubsub.v1` gRPC
+/// service configuration.
+///
+/// [`Publish`]: https://github.com/googleapis/googleapis/blob/8c6e40489b4ab4f1886154a32ece2f0b5db52b27/google/pubsub/v1/pubsub_grpc_service_config.json#L41-L64
+const defaultRetry = ExponentialRetry.onCodes(
+  [
+    Code.aborted,
+    Code.cancelled,
+    Code.deadlineExceeded,
+    Code.internal,
+    Code.resourceExhausted,
+    Code.unavailable,
+    Code.unknown,
+  ],
   initialDelay: Duration(milliseconds: 100),
-  delayMultiplier: 1.3,
+  delayMultiplier: 4,
   maxDelay: Duration(seconds: 60),
   maxRetryInterval: Duration(minutes: 1),
-  jitter: 0.2,
 );

@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'package:google_cloud_rpc/retry.dart';
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
@@ -177,7 +178,7 @@ void main() async {
       updateObjectAclTest(() => storage);
     });
 
-    test('non-idempotent transport failure', () async {
+    test('transport failure', () async {
       var count = 0;
       final mockClient = MockClient((request) async {
         count++;
@@ -197,7 +198,7 @@ void main() async {
       expect(count, 1);
     });
 
-    test('idempotent transport failure', () async {
+    test('transport failure with explicit retry', () async {
       var count = 0;
       final mockClient = MockClient((request) async {
         count++;
@@ -221,7 +222,7 @@ void main() async {
         'object',
         'user-test',
         'OWNER',
-        generation: BigInt.from(1),
+        retry: const NoDelayRetry(retryIf: isTransientError),
       );
       expect(acl.entity, 'user-test');
       expect(acl.role, 'OWNER');

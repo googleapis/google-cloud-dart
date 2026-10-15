@@ -22,6 +22,7 @@ import 'dart:typed_data';
 import 'package:google_cloud_pubsub/google_cloud_pubsub.dart';
 import 'package:google_cloud_pubsub/src/generated/google/pubsub/v1/pubsub.pb.dart'
     as generated;
+import 'package:google_cloud_rpc/retry.dart';
 import 'package:grpc/grpc.dart' as grpc;
 import 'package:test/test.dart';
 
@@ -206,9 +207,9 @@ void main() {
             'test-topic',
             publishSettings: PublishSettings(
               batching: BatchingSettings(maxMessages: 2),
-              retry: const ExponentialRetry(
-                initialDelay: Duration(milliseconds: 1),
-              ),
+              retry: const ExponentialRetry.onCodes([
+                Code.unavailable,
+              ], initialDelay: Duration(milliseconds: 1)),
             ),
           );
 

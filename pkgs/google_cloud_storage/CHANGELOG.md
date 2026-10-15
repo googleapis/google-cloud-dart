@@ -1,10 +1,32 @@
-## 0.6.5-wip
+## 0.7.0-wip
 
-* Move retry classes (`RetryRunner`, `ExponentialRetry`) and
-  `ChecksumValidationException` to `package:google_cloud_rpc` (re-exported for
-  backwards compatibility).
-* Add a `jitter` parameter to `ExponentialRetry` that randomizes the delay
-  between retries.
+* **Breaking:** `ExponentialRetry` no longer has a built-in list of errors to
+  retry. Pass a `retryIf` predicate, or use the new `ExponentialRetry.onCodes`
+  constructor to retry errors with the given status codes.
+* **Breaking:** A `retry` argument passed to a `Storage`, `Bucket` or
+  `StorageObject` method is now always used, even if the operation isn't
+  idempotent. Omit `retry` to retry only idempotent operations.
+* **Breaking:** `RetryRunner.run` no longer takes an `isIdempotent` argument.
+  A `RetryRunner` now only decides which errors are retried, and how long to
+  wait between attempts; whoever chooses the runner decides whether an
+  operation is safe to retry.
+* `Storage.listBuckets` and `Storage.listObjects` now retry failed page
+  requests, and take a `retry` argument.
+* `Storage.deleteBucket` and `Bucket.delete` are now retried by default, even
+  without `ifMetagenerationMatch`, because deleting a bucket is always
+  idempotent.
+* `Storage.deleteObjectAcl`, `Storage.patchObjectAcl` and
+  `Storage.updateObjectAcl` are no longer retried by default when `generation`
+  is set, because changing an ACL is never idempotent.
+* `defaultRetry` now retries all HTTP 5xx responses, not just 500, 502, 503
+  and 504, as the Cloud Storage retry strategy recommends.
+* Add `isTransientError`, which returns whether an error is one that the Cloud
+  Storage retry strategy considers transient.
+* **Breaking:** Move retry classes (`RetryRunner`, `ExponentialRetry`) to
+  `package:google_cloud_rpc/retry.dart` (no longer exported by
+  `package:google_cloud_storage`).
+* Move `ChecksumValidationException` to `package:google_cloud_rpc` (re-exported
+  for backwards compatibility).
 * Add `RetryRunner.isRetryable` and `RetryRunner.delays`.
 
 ## 0.6.4

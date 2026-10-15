@@ -15,6 +15,8 @@
 import 'dart:async';
 import 'dart:typed_data';
 
+import 'package:google_cloud_rpc/retry.dart';
+
 import '../google_cloud_pubsub.dart';
 import 'batching.dart';
 import 'wire_size.dart';
@@ -126,13 +128,11 @@ final class Topic {
   Future<void> _onBatch(List<_PublishRequest> batch) async {
     try {
       final messages = batch.map((item) => item.message).toList();
-      // `RetryRunner.run` only retries when `isIdempotent` is true. Although a
-      // retried `Publish` RPC can produce duplicate messages if the server
-      // processed the original request before a lost response, Pub/Sub delivery
-      // is at-least-once by design and retries transient publish failures.
+      // A retried `Publish` RPC can produce duplicate messages if the server
+      // processed the original request before a lost response. That is
+      // acceptable because Pub/Sub delivery is at-least-once by design.
       final messageIds = await publishSettings.retry.run(
         () => pubsub.publishMessages(name, messages),
-        isIdempotent: true,
       );
 
       for (var i = 0; i < batch.length; i++) {
