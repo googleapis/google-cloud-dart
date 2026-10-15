@@ -23,12 +23,11 @@ All access to Google Cloud Storage is made through the `Storage` class.
 
 <?code-excerpt "example/main.dart (main)"?>
 ```dart
-import 'package:google_cloud_rpc/retry.dart';
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 
 void main() async {
   // By default, the `Storage` class will use the currently configured project
-  // and automatically attempt to authenticate using Applica tion Default
+  // and automatically attempt to authenticate using Application Default
   // Credentials.
   final storage = Storage();
 
@@ -78,6 +77,7 @@ For example:
 
 <?code-excerpt "example/retry.dart (retry)"?>
 ```dart
+import 'package:google_cloud_rpc/retry.dart';
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 
 void main() async {
