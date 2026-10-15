@@ -18,6 +18,7 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:crypto/crypto.dart' as crypto;
+import 'package:google_cloud_rpc/retry.dart';
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 import 'package:google_cloud_storage/src/crc32c.dart';
 import 'package:google_cloud_storage/src/version.dart';

@@ -14,8 +14,6 @@
 
 import 'package:google_cloud_rpc/retry.dart';
 
-export 'package:google_cloud_rpc/retry.dart';
-
 /// The default retry strategy for Pub/Sub unary operations.
 ///
 /// Follows the [`Publish`][] retry policy in the `google.pubsub.v1` gRPC

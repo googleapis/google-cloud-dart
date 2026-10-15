@@ -13,6 +13,7 @@
 // limitations under the License.
 
 // #docregion retry
+import 'package:google_cloud_rpc/retry.dart';
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 
 void main() async {

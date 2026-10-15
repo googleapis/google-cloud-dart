@@ -15,6 +15,8 @@
 import 'dart:async';
 import 'dart:typed_data';
 
+import 'package:google_cloud_rpc/retry.dart';
+
 import '../google_cloud_pubsub.dart';
 import 'batching.dart';
 import 'wire_size.dart';

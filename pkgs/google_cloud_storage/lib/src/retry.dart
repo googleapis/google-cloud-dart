@@ -16,8 +16,6 @@ import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:google_cloud_rpc/retry.dart';
 import 'package:http/http.dart' as http;
 
-export 'package:google_cloud_rpc/retry.dart';
-
 /// The default retry strategy for Google Cloud Storage operations.
 ///
 /// Retries the errors that the [Cloud Storage retry strategy][] considers
