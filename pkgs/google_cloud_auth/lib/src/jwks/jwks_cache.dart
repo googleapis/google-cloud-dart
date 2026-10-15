@@ -221,7 +221,13 @@ final class JwksCache {
       // ES256 keys on some endpoints, and those are deliberately unsupported.
       if (entry['kty'] != 'RSA') continue;
       if (entry['alg'] case final alg? when alg != 'RS256') continue;
+      // The optional "use" and "key_ops" parameters must allow verification;
+      // see RFC 7517 §4.2 and §4.3.
       if (entry['use'] case final use? when use != 'sig') continue;
+      if (entry['key_ops'] case final keyOps?
+          when keyOps is! List || !keyOps.contains('verify')) {
+        continue;
+      }
 
       try {
         keys[keyId] = await RsassaPkcs1V15PublicKey.importJsonWebKey(

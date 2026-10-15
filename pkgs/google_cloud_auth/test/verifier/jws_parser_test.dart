@@ -33,10 +33,32 @@ void main() {
       final parts = JwsParts.parse(token);
 
       expect(parts.header, {'alg': 'RS256', 'kid': 'abc'});
-      expect(parts.payload, {'sub': 'user-1', 'exp': 123});
+      expect(parts.decodeClaims(), {'sub': 'user-1', 'exp': 123});
       expect(parts.signature, [1, 2, 3]);
       expect(parts.algorithm, 'RS256');
       expect(parts.keyId, 'abc');
+    });
+
+    test('a payload that is not a JWT claims set', () {
+      // A JWS payload can be any bytes, so they are only parsed as JSON when
+      // the claims are requested, after the signature has been verified.
+      final token =
+          '${_segment({'alg': 'RS256'})}'
+          '.${base64UrlUnpadded(utf8.encode('not json'))}.';
+
+      final parts = JwsParts.parse(token);
+
+      expect(utf8.decode(parts.payload), 'not json');
+      expect(
+        parts.decodeClaims,
+        throwsA(
+          isA<FormatException>().having(
+            (e) => e.message,
+            'message',
+            contains('payload is not valid JSON'),
+          ),
+        ),
+      );
     });
 
     test('signedContent covers exactly the header and payload segments', () {
@@ -67,7 +89,7 @@ void main() {
 
       final token = '${_segment({'alg': 'RS256'})}.$encoded.';
 
-      expect(JwsParts.parse(token).payload, payload);
+      expect(JwsParts.parse(token).decodeClaims(), payload);
     });
 
     test('missing algorithm', () {
