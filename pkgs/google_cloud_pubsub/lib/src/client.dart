@@ -103,17 +103,21 @@ final class PubSub {
   /// Turns the protobuf-generated [grpc.ReceivedMessage] into a
   /// [ReceivedMessage].
   static ReceivedMessage _mapReceivedMessage(
-    grpc.ReceivedMessage m, {
+    grpc.ReceivedMessage receivedMessage, {
     FutureOr<void> Function(List<String> ackIds)? ackHandler,
-    FutureOr<void> Function(List<String> ackIds, int seconds)?
+    FutureOr<void> Function(List<String> ackIds, int ackDeadlineSeconds)?
     modifyDeadlineHandler,
   }) => ReceivedMessage(
-    ackId: m.ackId,
-    messageId: m.message.messageId,
-    publishTime: m.message.publishTime.toDateTime(),
+    ackId: receivedMessage.ackId,
+    messageId: receivedMessage.message.messageId,
+    publishTime: receivedMessage.message.publishTime.toDateTime(),
+    deliveryAttempt: receivedMessage.deliveryAttempt,
     ackHandler: ackHandler,
     modifyDeadlineHandler: modifyDeadlineHandler,
-    message: Message(data: m.message.data, attributes: m.message.attributes),
+    message: Message(
+      data: receivedMessage.message.data,
+      attributes: receivedMessage.message.attributes,
+    ),
   );
 
   /// Constructs a client used to communicate with [Google Cloud Pub/Sub][].
@@ -173,10 +177,14 @@ final class PubSub {
 
   /// Closes the client and cleans up any resources associated with it.
   ///
-  /// This does not flush messages buffered by [Topic.publish]. Call and await
-  /// [Topic.close] on every [Topic] you published to before closing the
-  /// client. Once the client is closed, publishing fails immediately with a
-  /// [StateError], including for messages that a [Topic] still has buffered.
+  /// This does not flush messages buffered by [Topic.publish] or
+  /// acknowledgments and deadline modifications buffered by
+  /// [Subscription.acknowledge] and [Subscription.modifyAckDeadline]. Call and
+  /// await [Topic.close] and [Subscription.close] on every [Topic] and
+  /// [Subscription] you used before closing the client. Once the client is
+  /// closed, publishing, acknowledging, and modifying ack deadlines fail
+  /// immediately with a [StateError], including for operations that a [Topic]
+  /// or [Subscription] still has buffered.
   Future<void> close() async {
     _isClosed = true;
     await _channel.shutdown();
@@ -207,15 +215,25 @@ final class PubSub {
 
   /// A [Subscription] object with the given [unqualifiedName] in the client's
   /// project.
-  Subscription subscription(String unqualifiedName) =>
-      Subscription.unqualified(this, unqualifiedName);
+  ///
+  /// It is an error if [ackSettings] exceeds the limits described in
+  /// [AckSettings.batching].
+  Subscription subscription(
+    String unqualifiedName, {
+    AckSettings? ackSettings,
+  }) =>
+      Subscription.unqualified(this, unqualifiedName, ackSettings: ackSettings);
 
   /// A [Subscription] object with the given [name].
   ///
   /// The [name] must be in the format
   /// `projects/<project-id>/subscriptions/<subscription-id>`.
   /// Useful for cross-project access.
-  Subscription subscriptionName(String name) => Subscription(this, name);
+  ///
+  /// It is an error if [ackSettings] exceeds the limits described in
+  /// [AckSettings.batching].
+  Subscription subscriptionName(String name, {AckSettings? ackSettings}) =>
+      Subscription(this, name, ackSettings: ackSettings);
 
   /// Creates the given topic with the given [topic].
   ///
@@ -241,8 +259,8 @@ final class PubSub {
     try {
       await _publisher.createTopic(topicProto, options: await _callOptions);
       return result;
-    } on GrpcError catch (error) {
-      throw _mapGrpcError(error);
+    } on GrpcError catch (e) {
+      throw _mapGrpcError(e);
     }
   }
 
@@ -257,8 +275,8 @@ final class PubSub {
     final request = grpc.DeleteTopicRequest()..topic = topic;
     try {
       await _publisher.deleteTopic(request, options: await _callOptions);
-    } on GrpcError catch (error) {
-      throw _mapGrpcError(error);
+    } on GrpcError catch (e) {
+      throw _mapGrpcError(e);
     }
   }
 
@@ -332,8 +350,8 @@ final class PubSub {
         options: await _callOptions,
       );
       return response.messageIds;
-    } on GrpcError catch (error) {
-      throw _mapGrpcError(error);
+    } on GrpcError catch (e) {
+      throw _mapGrpcError(e);
     }
   }
 
@@ -353,6 +371,10 @@ final class PubSub {
   /// `projects/<project-id>/subscriptions/<subscription-id>`.
   /// The [topic] must be in the format `projects/<project-id>/topics/<topic-id>`.
   ///
+  /// It is an error if [ackSettings] exceeds the limits described in
+  /// [AckSettings.batching]; this is checked before the subscription is
+  /// created.
+  ///
   /// Throws a [ConflictException] if the subscription already exists.
   /// Throws a [NotFoundException] if the corresponding topic doesn't exist.
   ///
@@ -363,14 +385,21 @@ final class PubSub {
   Future<Subscription> createSubscription(
     String subscription, {
     required String topic,
+    AckSettings? ackSettings,
   }) async {
-    final sub = grpc.Subscription()
+    // Construct the `Subscription` first so that invalid arguments are
+    // reported before the subscription exists on the server.
+    final result = subscriptionName(subscription, ackSettings: ackSettings);
+    final subscriptionProto = grpc.Subscription()
       ..name = subscription
       ..topic = topic;
 
     try {
-      await _subscriber.createSubscription(sub, options: await _callOptions);
-      return subscriptionName(subscription);
+      await _subscriber.createSubscription(
+        subscriptionProto,
+        options: await _callOptions,
+      );
+      return result;
     } on GrpcError catch (e) {
       throw _mapGrpcError(e);
     }
@@ -402,6 +431,8 @@ final class PubSub {
   /// The [subscription] must be in the format
   /// `projects/<project-id>/subscriptions/<subscription-id>`.
   ///
+  /// It is an error if [maxMessages] is not greater than 0.
+  ///
   /// Throws a [NotFoundException] if the subscription does not exist.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.Pull).
@@ -409,6 +440,13 @@ final class PubSub {
     String subscription, {
     int maxMessages = 1,
   }) async {
+    if (maxMessages <= 0) {
+      throw ArgumentError.value(
+        maxMessages,
+        'maxMessages',
+        'Must be greater than zero',
+      );
+    }
     final request = grpc.PullRequest()
       ..subscription = subscription
       ..maxMessages = maxMessages;
@@ -421,11 +459,11 @@ final class PubSub {
 
       return response.receivedMessages
           .map(
-            (m) => _mapReceivedMessage(
-              m,
+            (receivedMessage) => _mapReceivedMessage(
+              receivedMessage,
               ackHandler: (ackIds) => acknowledge(subscription, ackIds),
-              modifyDeadlineHandler: (ackIds, seconds) =>
-                  modifyAckDeadline(subscription, ackIds, seconds),
+              modifyDeadlineHandler: (ackIds, ackDeadlineSeconds) =>
+                  modifyAckDeadline(subscription, ackIds, ackDeadlineSeconds),
             ),
           )
           .toList();
@@ -449,11 +487,30 @@ final class PubSub {
   ///
   /// Throws a [ServiceException] if the stream is broken by the server or
   /// network.
+  /// It is an error if [streamAckDeadlineSeconds] is not between 10 and 600
+  /// seconds.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.StreamingPull).
   Stream<ReceivedMessage> streamingPull(
     String subscription, {
     int streamAckDeadlineSeconds = 10,
+  }) {
+    if (streamAckDeadlineSeconds < 10 || streamAckDeadlineSeconds > 600) {
+      throw ArgumentError.value(
+        streamAckDeadlineSeconds,
+        'streamAckDeadlineSeconds',
+        'Must be between 10 and 600 seconds',
+      );
+    }
+    return _streamingPull(
+      subscription,
+      streamAckDeadlineSeconds: streamAckDeadlineSeconds,
+    );
+  }
+
+  Stream<ReceivedMessage> _streamingPull(
+    String subscription, {
+    required int streamAckDeadlineSeconds,
   }) async* {
     final requestController = StreamController<grpc.StreamingPullRequest>();
     try {
@@ -489,9 +546,9 @@ final class PubSub {
         options: options,
       );
       await for (final response in responseStream) {
-        for (final m in response.receivedMessages) {
+        for (final receivedMessage in response.receivedMessages) {
           yield _mapReceivedMessage(
-            m,
+            receivedMessage,
             ackHandler: handleAck,
             modifyDeadlineHandler: handleModifyDeadline,
           );
@@ -515,10 +572,19 @@ final class PubSub {
   /// but such a message may be redelivered later. Acknowledging a message more
   /// than once will not result in an error.
   ///
+  /// It is an error to call this after [close].
+  ///
   /// Throws a [NotFoundException] if the subscription does not exist.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.Acknowledge).
   Future<void> acknowledge(String subscription, List<String> ackIds) async {
+    // A shut-down channel fails every call with UNAVAILABLE, which
+    // `Subscription` would otherwise retry until its retry budget runs out. A
+    // `StateError` is not retried.
+    if (_isClosed) {
+      throw StateError('Cannot acknowledge using a closed PubSub client.');
+    }
+    if (ackIds.isEmpty) return;
     final request = grpc.AcknowledgeRequest()
       ..subscription = subscription
       ..ackIds.addAll(ackIds);
@@ -544,6 +610,9 @@ final class PubSub {
   /// may succeed, but those messages may have already been redelivered or
   /// made available for redelivery.
   ///
+  /// It is an error if [ackDeadlineSeconds] is not between 0 and 600 seconds.
+  /// It is an error to call this after [close].
+  ///
   /// Throws a [NotFoundException] if the subscription does not exist.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.ModifyAckDeadline).
@@ -552,6 +621,19 @@ final class PubSub {
     List<String> ackIds,
     int ackDeadlineSeconds,
   ) async {
+    if (ackDeadlineSeconds < 0 || ackDeadlineSeconds > 600) {
+      throw ArgumentError.value(
+        ackDeadlineSeconds,
+        'ackDeadlineSeconds',
+        'Must be between 0 and 600 seconds',
+      );
+    }
+    if (_isClosed) {
+      throw StateError(
+        'Cannot modify ack deadline using a closed PubSub client.',
+      );
+    }
+    if (ackIds.isEmpty) return;
     final request = grpc.ModifyAckDeadlineRequest()
       ..subscription = subscription
       ..ackIds.addAll(ackIds)
