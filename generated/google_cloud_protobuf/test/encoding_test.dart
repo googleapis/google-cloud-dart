@@ -157,4 +157,26 @@ void main() {
       expect(encodeDouble(double.negativeInfinity), '-Infinity');
     });
   });
+
+  group('uuid4', () {
+    const count = 1000; // Verify this many random UUIDs.
+
+    // Lowercase hexadecimal digits, with the version digit fixed to `4` and
+    // the variant digit one of `8`, `9`, `a`, or `b`.
+    final canonicalUuid4 = RegExp(
+      r'^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$',
+      caseSensitive: true,
+    );
+
+    test('canonical format', () {
+      for (var i = 0; i < count; i++) {
+        expect(uuid4(), matches(canonicalUuid4));
+      }
+    });
+
+    test('unique', () {
+      final uuids = {for (var i = 0; i < count; i++) uuid4()};
+      expect(uuids, hasLength(count));
+    });
+  });
 }
