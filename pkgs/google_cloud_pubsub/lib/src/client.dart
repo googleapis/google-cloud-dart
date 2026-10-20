@@ -709,6 +709,7 @@ final class PubSub {
   /// made available for redelivery.
   ///
   /// It is an error if [ackDeadlineSeconds] is not between 0 and 600 seconds.
+  ///
   /// It is an error to call this after [close].
   ///
   /// Throws a [NotFoundException] if the subscription does not exist.

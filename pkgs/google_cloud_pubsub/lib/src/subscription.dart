@@ -37,7 +37,6 @@ final class AckSettings {
   /// Defaults to [defaultRetry].
   final RetryRunner retry;
 
-  /// Creates a new [AckSettings] instance.
   AckSettings({BatchingSettings? batching, RetryRunner? retry})
     : batching = batching ?? BatchingSettings(),
       retry = retry ?? defaultRetry;
@@ -73,7 +72,7 @@ final class _ActiveStreamingPull {
 ///
 /// Acknowledgments and deadline modifications passed to [acknowledge] and
 /// [modifyAckDeadline] are buffered and sent in batches. Create one
-/// [Subscription] per subscription and reuse it, and call and await [close]
+/// [Subscription] per subscription and reuse it, and call and `await` [close]
 /// before shutdown to flush buffered requests.
 final class Subscription {
   static final RegExp _subscriptionNameRegExp = RegExp(
@@ -204,11 +203,14 @@ final class Subscription {
         isIdempotent: true,
       );
       resolveBatch();
-    } catch (e, stackTrace) {
+    } on Exception catch (e, stackTrace) {
       // ACKs are best-effort. If the unary fallback fails after retries,
       // the error is suppressed for fire-and-forget, but attached completers
       // must receive the error.
       resolveBatch(e, stackTrace);
+    } catch (e, stackTrace) {
+      resolveBatch(e, stackTrace);
+      rethrow;
     }
   }
 
@@ -273,11 +275,14 @@ final class Subscription {
             isIdempotent: true,
           );
           resolveGroup();
-        } catch (e, stackTrace) {
+        } on Exception catch (e, stackTrace) {
           // Deadline modifications are best-effort. If the unary fallback fails
           // after retries, the error is suppressed for fire-and-forget, but
           // attached completers must receive the error.
           resolveGroup(e, stackTrace);
+        } catch (e, stackTrace) {
+          resolveGroup(e, stackTrace);
+          rethrow;
         }
       }),
     );
@@ -302,9 +307,8 @@ final class Subscription {
   /// The [topic] must exist on the server.
   ///
   /// Throws a [ConflictException] if the subscription already exists.
-  /// Throws a [NotFoundException] if the corresponding topic doesn't exist.
   ///
-  /// Returns this [Subscription].
+  /// Throws a [NotFoundException] if the corresponding topic doesn't exist.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.CreateSubscription).
   Future<Subscription> create({required String topic}) async {
@@ -328,7 +332,9 @@ final class Subscription {
   /// Pulls messages from the server.
   ///
   /// It is an error if [maxMessages] is not greater than 0.
+  ///
   /// It is an error if called on a closed [Subscription].
+  ///
   /// Throws a [NotFoundException] if the subscription does not exist.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.Pull).
@@ -367,6 +373,7 @@ final class Subscription {
   /// when no stream is active.
   ///
   /// It is an error if called on a closed [Subscription].
+  ///
   /// It is an error if [streamAckDeadlineSeconds] is not between 10 and 600
   /// seconds, or if [maxConcurrentStreams] is less than 1.
   ///
@@ -659,7 +666,9 @@ final class Subscription {
   /// batching or retry.
   ///
   /// It is an error if called on a closed [Subscription].
+  ///
   /// Throws a [NotFoundException] if the subscription does not exist.
+  ///
   /// Throws a [ServiceException] if the RPC fails.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.Acknowledge).
@@ -682,7 +691,7 @@ final class Subscription {
   /// Otherwise, they are sent via a unary RPC with retries configured by
   /// [AckSettings.retry].
   ///
-  /// Call and await [close] before shutdown to flush any buffered
+  /// Call and `await` [close] before shutdown to flush any buffered
   /// acknowledgments.
   ///
   /// It is an error if called on a closed [Subscription].
@@ -708,8 +717,11 @@ final class Subscription {
   /// message immediately available for redelivery.
   ///
   /// It is an error if called on a closed [Subscription].
+  ///
   /// It is an error if [ackDeadlineSeconds] is not between 0 and 600 seconds.
+  ///
   /// Throws a [NotFoundException] if the subscription does not exist.
+  ///
   /// Throws a [ServiceException] if the RPC fails.
   ///
   /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.ModifyAckDeadline).
@@ -748,10 +760,11 @@ final class Subscription {
   /// 10, the new ack deadline is 10 seconds from now. Specifying 0 makes the
   /// message immediately available for redelivery.
   ///
-  /// Call and await [close] before shutdown to flush any buffered deadline
+  /// Call and `await` [close] before shutdown to flush any buffered deadline
   /// modifications.
   ///
   /// It is an error if called on a closed [Subscription].
+  ///
   /// It is an error if [ackDeadlineSeconds] is not between 0 and 600 seconds.
   ///
   /// This is a non-blocking, fire-and-forget operation. See

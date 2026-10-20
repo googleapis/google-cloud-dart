@@ -198,7 +198,7 @@ void main() {
         expect(attempts, 1);
       });
 
-      test('does not retry buffered acks after PubSub.close()', () async {
+      test('fails buffered acks immediately after PubSub.close()', () async {
         final subscription = client.subscription(
           'test-sub',
           ackSettings: AckSettings(
@@ -207,7 +207,7 @@ void main() {
         )..acknowledge(dummyMessage('ack-1'));
 
         await client.close();
-        await subscription.close();
+        await expectLater(subscription.close(), throwsStateError);
         expect(fakeSubscriber.acknowledgeCallCount, 0);
       });
 

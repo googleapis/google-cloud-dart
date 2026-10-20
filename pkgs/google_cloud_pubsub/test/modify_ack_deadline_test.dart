@@ -209,21 +209,19 @@ void main() {
         }
       });
 
-      test(
-        'does not retry buffered deadline modifications after PubSub.close()',
-        () async {
-          final subscription = client.subscription(
-            'test-sub',
-            ackSettings: AckSettings(
-              batching: BatchingSettings(maxDelay: const Duration(seconds: 10)),
-            ),
-          )..modifyAckDeadline(dummyMessage('ack-1'), 30);
+      test('fails buffered deadline modifications immediately after '
+          'PubSub.close()', () async {
+        final subscription = client.subscription(
+          'test-sub',
+          ackSettings: AckSettings(
+            batching: BatchingSettings(maxDelay: const Duration(seconds: 10)),
+          ),
+        )..modifyAckDeadline(dummyMessage('ack-1'), 30);
 
-          await client.close();
-          await subscription.close();
-          expect(fakeSubscriber.modifyAckDeadlineCallCount, 0);
-        },
-      );
+        await client.close();
+        await expectLater(subscription.close(), throwsStateError);
+        expect(fakeSubscriber.modifyAckDeadlineCallCount, 0);
+      });
 
       test(
         'keeps every emitted ModifyAckDeadlineRequest within maxBytes',
