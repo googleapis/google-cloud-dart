@@ -15,6 +15,8 @@
 # A CI configuration to auto-publish pub packages.
 
 name: Publish
+permissions:
+  contents: read
 
 on:
   pull_request:
@@ -25,9 +27,10 @@ on:
 jobs:
   publish:
     if: ${{ github.repository_owner == 'googleapis' }}
-    uses: dart-lang/ecosystem/.github/workflows/publish.yaml@main
+    uses: dart-lang/ecosystem/.github/workflows/publish.yaml@622ef61a7edd5de7df38661e163e55c57606c96a
     with:
       ignore-packages: generated/**
+      write-comments: false
     permissions:
       id-token: write
       pull-requests: write

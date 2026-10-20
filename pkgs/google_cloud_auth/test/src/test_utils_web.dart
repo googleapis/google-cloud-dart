@@ -17,6 +17,9 @@
 /// The browser always provides the Web Crypto API, so this is always true.
 const canUseWebCrypto = true;
 
+/// Environment variables are not available on the web.
+String? readEnvironment(String name) => null;
+
 /// Stub for [writeTempFile] on the web.
 Future<String> writeTempFile(String filename, String content) async {
   throw UnsupportedError('writeTempFile is only supported on the VM.');
