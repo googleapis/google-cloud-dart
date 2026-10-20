@@ -36,9 +36,9 @@ String? _readEnvironment(String name) => Platform.environment[name];
 
 /// Provides the Application Default Credential from the environment.
 ///
-/// If provided, [clientFactory] is called each time an HTTP request is made,
-/// and the [http.Client] it returns is closed afterwards, so it must return
-/// a new client on every call.
+/// If provided, [clientFactory] is called to create the [http.Client]s used
+/// to make requests. Each client it returns is closed after use, so it must
+/// return a new client on every call.
 ///
 /// Throws a [CredentialException] if no credentials could be found or loaded.
 Future<GoogleCredentials> defaultCredentials({

@@ -222,9 +222,9 @@ final class ComputeEngineCredentials extends GoogleCredentials
   /// Creates a [ComputeEngineCredentials] instance, discovering configuration
   /// from the Compute Engine metadata server.
   ///
-  /// If provided, [clientFactory] is called each time an HTTP request is made,
-  /// and the [http.Client] it returns is closed afterwards, so it must return
-  /// a new client on every call.
+  /// If provided, [clientFactory] is called to create the [http.Client]s used
+  /// to make requests. Each client it returns is closed after use, so it must
+  /// return a new client on every call.
   ///
   /// Throws [CredentialException] on failure.
   static Future<ComputeEngineCredentials> create({
@@ -367,12 +367,11 @@ final class ComputeEngineCredentials extends GoogleCredentials
     }
     var attempts = 0;
     var refreshedToken = false;
-
-    while (true) {
-      attempts++;
-      final http.Response response;
-      try {
-        final client = await _clientFactory();
+    final client = await _clientFactory();
+    try {
+      while (true) {
+        attempts++;
+        final http.Response response;
         try {
           response = await client.post(
             signBlobUrl,
@@ -382,64 +381,64 @@ final class ComputeEngineCredentials extends GoogleCredentials
             },
             body: requestBody,
           );
-        } finally {
-          client.close();
-        }
-      } on Exception catch (e, stackTrace) {
-        throw SigningException(
-          'Failed to sign message via IAM signBlob API: $e',
-          innerException: e,
-          innerStackTrace: stackTrace,
-        );
-      }
-
-      if (response.statusCode == 200) {
-        try {
-          final decoded = jsonDecode(response.body);
-          if (decoded is! Map<String, dynamic>) {
-            throw const FormatException('Expected JSON object.');
-          }
-          final signedBlob = decoded['signedBlob'];
-          if (signedBlob is! String) {
-            throw const FormatException("Missing 'signedBlob' in response");
-          }
-          return Uint8List.fromList(base64.decode(signedBlob));
-        } on FormatException catch (e, stackTrace) {
-          throw SigningException(
-            'Failed to parse signBlob response: ${e.message}',
-            innerException: e,
-            innerStackTrace: stackTrace,
-          );
-        }
-      }
-
-      // If token expired (401), retry once with a freshly requested token.
-      if (response.statusCode == 401 && !refreshedToken) {
-        refreshedToken = true;
-        try {
-          token = await accessToken(forceRefresh: true);
         } on Exception catch (e, stackTrace) {
           throw SigningException(
-            'Failed to refresh access token for signing: $e',
+            'Failed to sign message via IAM signBlob API: $e',
             innerException: e,
             innerStackTrace: stackTrace,
           );
         }
-        continue;
-      }
 
-      // If retryable status code (5xx), back off and retry up to 3 times.
-      if (_retryableStatusCodes.contains(response.statusCode) &&
-          attempts <= 3) {
-        final delayMs = (pow(2, attempts) * 100).toInt();
-        await Future<void>.delayed(Duration(milliseconds: delayMs));
-        continue;
-      }
+        if (response.statusCode == 200) {
+          try {
+            final decoded = jsonDecode(response.body);
+            if (decoded is! Map<String, dynamic>) {
+              throw const FormatException('Expected JSON object.');
+            }
+            final signedBlob = decoded['signedBlob'];
+            if (signedBlob is! String) {
+              throw const FormatException("Missing 'signedBlob' in response");
+            }
+            return Uint8List.fromList(base64.decode(signedBlob));
+          } on FormatException catch (e, stackTrace) {
+            throw SigningException(
+              'Failed to parse signBlob response: ${e.message}',
+              innerException: e,
+              innerStackTrace: stackTrace,
+            );
+          }
+        }
 
-      throw SigningException(
-        'Failed to sign message via IAM signBlob API: '
-        'HTTP ${response.statusCode} - ${response.body}',
-      );
+        // If token expired (401), retry once with a freshly requested token.
+        if (response.statusCode == 401 && !refreshedToken) {
+          refreshedToken = true;
+          try {
+            token = await accessToken(forceRefresh: true);
+          } on Exception catch (e, stackTrace) {
+            throw SigningException(
+              'Failed to refresh access token for signing: $e',
+              innerException: e,
+              innerStackTrace: stackTrace,
+            );
+          }
+          continue;
+        }
+
+        // If retryable status code (5xx), back off and retry up to 3 times.
+        if (_retryableStatusCodes.contains(response.statusCode) &&
+            attempts <= 3) {
+          final delayMs = (pow(2, attempts) * 100).toInt();
+          await Future<void>.delayed(Duration(milliseconds: delayMs));
+          continue;
+        }
+
+        throw SigningException(
+          'Failed to sign message via IAM signBlob API: '
+          'HTTP ${response.statusCode} - ${response.body}',
+        );
+      }
+    } finally {
+      client.close();
     }
   }
 }
