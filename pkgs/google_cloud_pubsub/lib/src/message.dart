@@ -43,7 +43,6 @@ final class Message {
 
 /// A message received from a subscription.
 final class ReceivedMessage {
-  /// The message details.
   final Message message;
 
   /// The acknowledgment ID for this message.
@@ -52,20 +51,19 @@ final class ReceivedMessage {
   /// The server-assigned ID of this message.
   final String messageId;
 
-  /// The time at which the message was published.
   final DateTime publishTime;
 
   /// The delivery attempt count for this message.
   ///
-  /// This value is greater than 0 only if the subscription has a dead-letter
-  /// policy configured. Otherwise, it is 0.
+  /// This value is greater than 0 only if the subscription has a
+  /// [dead-letter policy](https://docs.cloud.google.com/pubsub/docs/dead-letter-topics)
+  /// configured. Otherwise, it is 0.
   final int deliveryAttempt;
 
   final FutureOr<void> Function(List<String> ackIds)? _ackHandler;
   final FutureOr<void> Function(List<String> ackIds, int ackDeadlineSeconds)?
   _modifyDeadlineHandler;
 
-  /// Creates a new [ReceivedMessage].
   ReceivedMessage({
     required this.message,
     required this.ackId,
@@ -78,16 +76,14 @@ final class ReceivedMessage {
   }) : _ackHandler = ackHandler,
        _modifyDeadlineHandler = modifyDeadlineHandler;
 
-  /// The message data.
   Uint8List get data => message.data;
 
   /// Optional attributes for this message.
+  ///
+  /// This map is unmodifiable.
   Map<String, String> get attributes => message.attributes;
 
   /// Acknowledges the message.
-  ///
-  /// Returns a [Future] that completes when the acknowledgment has been
-  /// processed.
   ///
   /// For background batched acknowledgment with retries, use
   /// [Subscription.acknowledge].
@@ -104,9 +100,6 @@ final class ReceivedMessage {
 
   /// Modifies the ack deadline for this message.
   ///
-  /// Returns a [Future] that completes when the deadline modification has been
-  /// processed.
-  ///
   /// [ackDeadlineSeconds] must be the new ack deadline in seconds, relative to
   /// the time this method is called. For example, if [ackDeadlineSeconds] is
   /// 10, the new ack deadline is 10 seconds from now. Specifying 0 makes the
@@ -116,6 +109,7 @@ final class ReceivedMessage {
   /// [Subscription.modifyAckDeadline].
   ///
   /// It is an error if [ackDeadlineSeconds] is not between 0 and 600 seconds.
+  ///
   /// It is an error if no modify-ack-deadline handler is configured for this
   /// message (e.g. if the message was constructed manually without a handler).
   Future<void> modifyAckDeadline(int ackDeadlineSeconds) async {

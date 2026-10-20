@@ -487,6 +487,7 @@ final class PubSub {
   ///
   /// Throws a [ServiceException] if the stream is broken by the server or
   /// network.
+  ///
   /// It is an error if [streamAckDeadlineSeconds] is not between 10 and 600
   /// seconds.
   ///
@@ -611,6 +612,7 @@ final class PubSub {
   /// made available for redelivery.
   ///
   /// It is an error if [ackDeadlineSeconds] is not between 0 and 600 seconds.
+  ///
   /// It is an error to call this after [close].
   ///
   /// Throws a [NotFoundException] if the subscription does not exist.
