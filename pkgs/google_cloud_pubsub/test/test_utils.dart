@@ -144,6 +144,7 @@ class FakePublisherClient extends Fake implements generated.PublisherClient {
   int publishCallCount = 0;
   bool get publishCalled => publishCallCount > 0;
   final List<generated.PublishRequest> recordedRequests = [];
+  grpc.CallOptions? lastOptions;
 
   @override
   grpc.ResponseFuture<generated.PublishResponse> publish(
@@ -151,6 +152,7 @@ class FakePublisherClient extends Fake implements generated.PublisherClient {
     grpc.CallOptions? options,
   }) {
     publishCallCount++;
+    lastOptions = options;
     recordedRequests.add(request);
     final completer = Completer<generated.PublishResponse>();
     if (publishBehavior case final behavior?) {
@@ -175,6 +177,7 @@ class FakePublisherClient extends Fake implements generated.PublisherClient {
     grpc.CallOptions? options,
   }) {
     createTopicCallCount++;
+    lastOptions = options;
     return FakeResponseFuture(Future.value(request));
   }
 
@@ -182,11 +185,15 @@ class FakePublisherClient extends Fake implements generated.PublisherClient {
   grpc.ResponseFuture<protobuf.Empty> deleteTopic(
     generated.DeleteTopicRequest request, {
     grpc.CallOptions? options,
-  }) => FakeResponseFuture(Future.value(protobuf.Empty()));
+  }) {
+    lastOptions = options;
+    return FakeResponseFuture(Future.value(protobuf.Empty()));
+  }
 }
 
 class FakeSubscriberClient extends Fake implements generated.SubscriberClient {
   int createSubscriptionCallCount = 0;
+  grpc.CallOptions? lastOptions;
 
   @override
   grpc.ResponseFuture<generated.Subscription> createSubscription(
@@ -194,6 +201,7 @@ class FakeSubscriberClient extends Fake implements generated.SubscriberClient {
     grpc.CallOptions? options,
   }) {
     createSubscriptionCallCount++;
+    lastOptions = options;
     return FakeResponseFuture(Future.value(request));
   }
 
@@ -223,6 +231,7 @@ class FakeSubscriberClient extends Fake implements generated.SubscriberClient {
     grpc.CallOptions? options,
   }) {
     acknowledgeCallCount++;
+    lastOptions = options;
     recordedAckRequests.add(request);
     final completer = Completer<protobuf.Empty>();
     if (acknowledgeBehavior case final behavior?) {
@@ -241,6 +250,7 @@ class FakeSubscriberClient extends Fake implements generated.SubscriberClient {
     grpc.CallOptions? options,
   }) {
     modifyAckDeadlineCallCount++;
+    lastOptions = options;
     recordedModifyAckRequests.add(request);
     final completer = Completer<protobuf.Empty>();
     if (modifyAckDeadlineBehavior case final behavior?) {
