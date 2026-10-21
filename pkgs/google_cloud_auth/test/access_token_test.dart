@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'dart:async';
 import 'dart:convert';
 
 import 'package:google_cloud_auth/google_cloud_auth.dart';
@@ -184,29 +183,35 @@ void main() {
 
   group('AccessTokenCache', () {
     late DateTime now;
-    late int fetchCount;
-
-    AccessTokenCache newCache({
-      Duration expiresIn = const Duration(hours: 1),
-    }) => AccessTokenCache(() async {
-      fetchCount++;
-      return (accessToken: 'token-$fetchCount', expiresIn: expiresIn);
-    }, clock: () => now);
 
     setUp(() {
       now = DateTime.utc(2026);
-      fetchCount = 0;
     });
 
     test('fetches a token on first use', () async {
-      final cache = newCache();
+      var fetchCount = 0;
+      final cache = AccessTokenCache(() async {
+        fetchCount++;
+        return (
+          accessToken: 'token-$fetchCount',
+          expiresIn: const Duration(hours: 1),
+        );
+      }, clock: () => now);
 
       expect(await cache.accessToken(), 'token-1');
       expect(fetchCount, 1);
     });
 
     test('reuses a token until a minute before it expires', () async {
-      final cache = newCache();
+      var fetchCount = 0;
+      final cache = AccessTokenCache(() async {
+        fetchCount++;
+        return (
+          accessToken: 'token-$fetchCount',
+          expiresIn: const Duration(hours: 1),
+        );
+      }, clock: () => now);
+
       await cache.accessToken();
 
       now = now.add(const Duration(minutes: 58, seconds: 59));
@@ -219,7 +224,14 @@ void main() {
     });
 
     test('does not reuse a token that expires within a minute', () async {
-      final cache = newCache(expiresIn: const Duration(seconds: 30));
+      var fetchCount = 0;
+      final cache = AccessTokenCache(() async {
+        fetchCount++;
+        return (
+          accessToken: 'token-$fetchCount',
+          expiresIn: const Duration(seconds: 30),
+        );
+      }, clock: () => now);
 
       expect(await cache.accessToken(), 'token-1');
       expect(await cache.accessToken(), 'token-2');
@@ -227,7 +239,15 @@ void main() {
     });
 
     test('fetches a new token when forceRefresh is true', () async {
-      final cache = newCache();
+      var fetchCount = 0;
+      final cache = AccessTokenCache(() async {
+        fetchCount++;
+        return (
+          accessToken: 'token-$fetchCount',
+          expiresIn: const Duration(hours: 1),
+        );
+      }, clock: () => now);
+
       await cache.accessToken();
 
       expect(await cache.accessToken(forceRefresh: true), 'token-2');
