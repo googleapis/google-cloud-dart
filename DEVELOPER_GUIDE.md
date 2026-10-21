@@ -296,9 +296,10 @@ When this tag is pushed to GitHub, the workflow:
 > [!NOTE]
 >
 > - Do **not** bulk-push more than 3 `pkgs/*` tags in a single `git push`
->   (e.g., `git push --tags`): GitHub drops `on: push: tags:` webhook events
->   above 3 tags, skipping `pub.dev` publishing. Use the PR comment **Publish**
->   links or run `gh release create` per package instead.
+>   (e.g., `git push --tags`): GitHub does not create `on: push: tags:` events
+>   at all when more than 3 tags are pushed together, skipping `pub.dev`
+>   publishing for every tag in that push. Use the PR comment **Publish** links
+>   or run `gh release create` per package instead.
 > - Packages with `publish_to: none` in their `pubspec.yaml` are
 >   automatically ignored.
 > - The `generated/` directory is explicitly excluded from publishing in this
