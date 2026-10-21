@@ -141,7 +141,7 @@ final class ServiceAccountCredentials extends GoogleCredentials
   /// JSON string [jsonString].
   static Future<ServiceAccountCredentials> fromServiceAccountString(
     String jsonString,
-  ) async => fromServiceAccountInfo(decodeJsonObject(jsonString));
+  ) => fromServiceAccountInfo(decodeJsonObject(jsonString));
 
   /// Creates a [ServiceAccountCredentials] instance from a PKCS#8 private key
   /// PEM string.
