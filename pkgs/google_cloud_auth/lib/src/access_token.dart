@@ -20,6 +20,10 @@ import 'package:meta/meta.dart';
 
 import 'credential_exception.dart';
 
+/// The maximum number of characters of an error response body to include in
+/// exception messages.
+const _maxErrorBodyLength = 500;
+
 /// An access token and the duration for which it is valid, as returned by a
 /// token endpoint.
 @internal
@@ -61,9 +65,13 @@ Future<TokenResponse> fetchAccessToken({
   }
 
   if (response.statusCode != 200) {
+    final body = response.body;
+    final truncatedBody = body.length > _maxErrorBodyLength
+        ? '${body.substring(0, _maxErrorBodyLength)}...'
+        : body;
     throw CredentialException(
       'Bad HTTP status response when fetching access token from $source: '
-      '${response.statusCode}',
+      '${response.statusCode} $truncatedBody',
     );
   }
 

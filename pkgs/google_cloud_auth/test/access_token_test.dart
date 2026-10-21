@@ -115,7 +115,27 @@ void main() {
             (e) => e.message,
             'message',
             'Bad HTTP status response when fetching access token from test '
-                'endpoint: 400',
+                'endpoint: 400 {"error": "invalid_grant"}',
+          ),
+        ),
+      );
+    });
+
+    test('truncates long HTTP error bodies', () async {
+      await expectLater(
+        fetchAccessToken(
+          clientFactory: () => MockClient(
+            (request) async => http.Response('${'a' * 500}${'b' * 500}', 500),
+          ),
+          send: (client) => client.get(_tokenUri),
+          source: 'test endpoint',
+        ),
+        throwsA(
+          isA<CredentialException>().having(
+            (e) => e.message,
+            'message',
+            'Bad HTTP status response when fetching access token from test '
+                'endpoint: 500 ${'a' * 500}...',
           ),
         ),
       );

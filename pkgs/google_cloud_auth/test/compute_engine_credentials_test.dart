@@ -251,7 +251,7 @@ void main() async {
             isA<CredentialException>().having(
               (e) => e.message,
               'message',
-              contains('Compute Engine metadata server: 401'),
+              contains('Compute Engine metadata server: 401 Unauthorized'),
             ),
           ),
         );
