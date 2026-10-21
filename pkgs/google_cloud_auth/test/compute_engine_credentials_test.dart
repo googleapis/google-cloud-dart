@@ -37,7 +37,7 @@ void main() async {
         });
 
         final creds = await ComputeEngineCredentials.create(
-          client: mockClient,
+          clientFactory: () => mockClient,
           clientEmail: 'explicit@iam.gserviceaccount.com',
           universeDomain: 'explicit.domain.com',
           metadataHost: 'test-metadata',
@@ -63,7 +63,7 @@ void main() async {
         });
 
         final creds = await ComputeEngineCredentials.create(
-          client: mockClient,
+          clientFactory: () => mockClient,
           metadataHost: 'test-metadata',
         );
 
@@ -80,7 +80,7 @@ void main() async {
 
           expect(
             () => ComputeEngineCredentials.create(
-              client: mockClient,
+              clientFactory: () => mockClient,
               metadataHost: 'test-metadata',
             ),
             throwsA(
@@ -101,7 +101,7 @@ void main() async {
 
         expect(
           () => ComputeEngineCredentials.create(
-            client: mockClient,
+            clientFactory: () => mockClient,
             metadataHost: 'test-metadata',
           ),
           throwsA(
@@ -132,7 +132,7 @@ void main() async {
         );
 
         final creds = await ComputeEngineCredentials.create(
-          client: mockClient,
+          clientFactory: () => mockClient,
           clientEmail: 'test-sa@project.iam.gserviceaccount.com',
           metadataHost: 'test-metadata',
         );
@@ -152,7 +152,7 @@ void main() async {
         );
 
         final creds = await ComputeEngineCredentials.create(
-          client: mockClient,
+          clientFactory: () => mockClient,
           clientEmail: 'test-sa@project.iam.gserviceaccount.com',
           metadataHost: 'test-metadata',
         );
@@ -176,7 +176,7 @@ void main() async {
 
         expect(
           () => ComputeEngineCredentials.create(
-            client: mockClient,
+            clientFactory: () => mockClient,
             metadataHost: 'test-metadata',
           ),
           throwsA(
@@ -209,7 +209,7 @@ void main() async {
         });
 
         final creds = await ComputeEngineCredentials.create(
-          client: mockClient,
+          clientFactory: () => mockClient,
           clientEmail: 'sa@test.com',
           universeDomain: 'googleapis.com',
           metadataHost: 'test-metadata',
@@ -243,7 +243,7 @@ void main() async {
         });
 
         final creds = await ComputeEngineCredentials.create(
-          client: mockClient,
+          clientFactory: () => mockClient,
           clientEmail: 'sa@test.com',
           universeDomain: 'googleapis.com',
           metadataHost: 'test-metadata',
@@ -303,7 +303,7 @@ void main() async {
           });
 
           final creds = await ComputeEngineCredentials.create(
-            client: mockClient,
+            clientFactory: () => mockClient,
             clientEmail: 'sa@test.com',
             universeDomain: 'googleapis.com',
             metadataHost: 'test-metadata',
@@ -338,7 +338,7 @@ void main() async {
         );
 
         final creds = await ComputeEngineCredentials.create(
-          client: mockClient,
+          clientFactory: () => mockClient,
           clientEmail: 'sa@test.com',
           universeDomain: 'googleapis.com',
           metadataHost: 'test-metadata',
@@ -366,7 +366,7 @@ void main() async {
         );
 
         final creds = await ComputeEngineCredentials.create(
-          client: mockClient,
+          clientFactory: () => mockClient,
           clientEmail: 'sa@test.com',
           universeDomain: 'googleapis.com',
           metadataHost: 'test-metadata',
@@ -400,7 +400,7 @@ void main() async {
         );
 
         final creds = await ComputeEngineCredentials.create(
-          client: mockClient,
+          clientFactory: () => mockClient,
           clientEmail: 'sa@test.com',
           universeDomain: 'googleapis.com',
           metadataHost: 'test-metadata',
@@ -434,7 +434,7 @@ void main() async {
         );
 
         final creds = await ComputeEngineCredentials.create(
-          client: mockClient,
+          clientFactory: () => mockClient,
           clientEmail: 'sa@test.com',
           universeDomain: 'googleapis.com',
           metadataHost: 'test-metadata',
@@ -466,7 +466,9 @@ void main() async {
             );
           });
 
-          final isGce = await internalIsOnComputeEngine(client: mockClient);
+          final isGce = await internalIsOnComputeEngine(
+            clientFactory: () => mockClient,
+          );
           expect(isGce, isTrue);
         },
       );
@@ -484,7 +486,7 @@ void main() async {
         });
 
         final isGce = await internalIsOnComputeEngine(
-          client: mockClient,
+          clientFactory: () => mockClient,
           isLinux: false,
         );
         expect(isGce, isFalse);
@@ -500,7 +502,7 @@ void main() async {
         });
 
         final isGce = await internalIsOnComputeEngine(
-          client: mockClient,
+          clientFactory: () => mockClient,
           isLinux: false,
         );
         expect(isGce, isFalse);
@@ -514,7 +516,7 @@ void main() async {
         });
 
         final isGce = await internalIsOnComputeEngine(
-          client: mockClient,
+          clientFactory: () => mockClient,
           isLinux: false,
         );
         expect(isGce, isFalse);
@@ -529,7 +531,7 @@ void main() async {
         });
 
         final isGce = await internalIsOnComputeEngine(
-          client: mockClient,
+          clientFactory: () => mockClient,
           isLinux: false,
         );
         expect(isGce, isFalse);
@@ -551,7 +553,9 @@ void main() async {
           );
         });
 
-        final isGce = await internalIsOnComputeEngine(client: mockClient);
+        final isGce = await internalIsOnComputeEngine(
+          clientFactory: () => mockClient,
+        );
         expect(isGce, isTrue);
         expect(callCount, 3);
       });
@@ -569,7 +573,7 @@ void main() async {
           );
 
           final isGce = await internalIsOnComputeEngine(
-            client: mockClient,
+            clientFactory: () => mockClient,
             isLinux: true,
             linuxProductNamePath: dmiPath,
           );
@@ -589,7 +593,7 @@ void main() async {
         });
 
         final isGce = await internalIsOnComputeEngine(
-          client: mockClient,
+          clientFactory: () => mockClient,
           isLinux: true,
           linuxProductNamePath: dmiPath,
         );
@@ -606,7 +610,7 @@ void main() async {
           });
 
           final isGce = await internalIsOnComputeEngine(
-            client: mockClient,
+            clientFactory: () => mockClient,
             isLinux: true,
             linuxProductNamePath: dmiPath,
           );
@@ -629,7 +633,7 @@ void main() async {
           });
 
           final isGce = await internalIsOnComputeEngine(
-            client: mockClient,
+            clientFactory: () => mockClient,
             isLinux: true,
             linuxProductNamePath: dmiPath,
             readEnvironment: (name) =>
@@ -650,7 +654,7 @@ void main() async {
         });
 
         final isGce = await internalIsOnComputeEngine(
-          client: mockClient,
+          clientFactory: () => mockClient,
           readEnvironment: (name) => name == 'NO_GCE_CHECK' ? 'true' : null,
         );
         expect(isGce, isFalse);
@@ -662,7 +666,7 @@ void main() async {
         });
 
         final isGce = await internalIsOnComputeEngine(
-          client: mockClient,
+          clientFactory: () => mockClient,
           readEnvironment: (name) => name == 'NO_GCE_CHECK' ? '1' : null,
         );
         expect(isGce, isFalse);
@@ -679,7 +683,7 @@ void main() async {
         });
 
         final isGce = await internalIsOnComputeEngine(
-          client: mockClient,
+          clientFactory: () => mockClient,
           readEnvironment: (name) =>
               name == 'GCE_METADATA_HOST' ? 'custom-metadata' : null,
         );
@@ -735,7 +739,7 @@ void main() async {
         });
 
         final creds = await ComputeEngineCredentials.create(
-          client: mockClient,
+          clientFactory: () => mockClient,
           clientEmail: 'sa@test.iam.gserviceaccount.com',
           metadataHost: 'test-metadata',
         );
@@ -790,7 +794,7 @@ void main() async {
         });
 
         final creds = await ComputeEngineCredentials.create(
-          client: mockClient,
+          clientFactory: () => mockClient,
           clientEmail: 'sa@test.iam.gserviceaccount.com',
           metadataHost: 'test-metadata',
         );
@@ -836,7 +840,7 @@ void main() async {
         });
 
         final creds = await ComputeEngineCredentials.create(
-          client: mockClient,
+          clientFactory: () => mockClient,
           clientEmail: 'sa@test.iam.gserviceaccount.com',
           metadataHost: 'test-metadata',
         );
@@ -878,7 +882,7 @@ void main() async {
         );
 
         final creds = await ComputeEngineCredentials.create(
-          client: mockClient,
+          clientFactory: () => mockClient,
           clientEmail: 'sa@test.iam.gserviceaccount.com',
           metadataHost: 'test-metadata',
         );
@@ -916,7 +920,7 @@ void main() async {
         );
 
         final creds = await ComputeEngineCredentials.create(
-          client: mockClient,
+          clientFactory: () => mockClient,
           clientEmail: 'sa@test.iam.gserviceaccount.com',
           metadataHost: 'test-metadata',
         );
@@ -960,7 +964,7 @@ void main() async {
         );
 
         final creds = await ComputeEngineCredentials.create(
-          client: mockClient,
+          clientFactory: () => mockClient,
           clientEmail: 'sa@test.iam.gserviceaccount.com',
           metadataHost: 'test-metadata',
         );
@@ -991,7 +995,7 @@ void main() async {
           );
 
           final creds = await ComputeEngineCredentials.create(
-            client: mockClient,
+            clientFactory: () => mockClient,
             clientEmail: 'sa@test.iam.gserviceaccount.com',
             metadataHost: 'test-metadata',
           );

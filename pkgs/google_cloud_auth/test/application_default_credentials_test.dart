@@ -45,8 +45,7 @@ void main() {
         return;
       }
       // Credentials should always be available when running on GCE.
-      final creds = await defaultCredentials();
-      creds.close();
+      await defaultCredentials();
     });
 
     group('ServiceAccountCredentials', () {
@@ -301,7 +300,7 @@ void main() {
     );
 
     final credentials = await internalDefaultCredentials(
-      client: mockClient,
+      clientFactory: () => mockClient,
       readEnvironment: (String name) => null,
       wellKnownFilePath: '${tempDir.path}/non_existent.json',
     );
@@ -343,7 +342,7 @@ void main() {
     });
 
     final credentials = await internalDefaultCredentials(
-      client: mockClient,
+      clientFactory: () => mockClient,
       readEnvironment: (String name) => switch (name) {
         'GCE_METADATA_HOST' => 'custom-metadata-host',
         _ => null,
@@ -366,7 +365,7 @@ void main() {
 
     expect(
       () => internalDefaultCredentials(
-        client: mockClient,
+        clientFactory: () => mockClient,
         readEnvironment: (String name) => null,
         wellKnownFilePath: '${tempDir.path}/non_existent.json',
       ),
