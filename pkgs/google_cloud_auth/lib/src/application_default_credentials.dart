@@ -18,7 +18,6 @@
 library;
 
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
@@ -28,6 +27,7 @@ import 'package:path/path.dart' as p;
 import 'compute_engine_credentials.dart';
 import 'credential_exception.dart';
 import 'google_credentials.dart';
+import 'json_utils.dart';
 import 'service_account_credentials.dart';
 
 const _credentialsFileName = 'application_default_credentials.json';
@@ -108,11 +108,7 @@ Future<ServiceAccountCredentials> _loadCredentialsFile(File file) async {
 
   final Map<String, dynamic> json;
   try {
-    final decoded = jsonDecode(content);
-    if (decoded is! Map<String, dynamic>) {
-      throw const FormatException('Expected JSON object.');
-    }
-    json = decoded;
+    json = decodeJsonObject(content);
   } on FormatException catch (e, stackTrace) {
     throw CredentialException(
       'The file at ${file.path} is not a valid JSON file: ${e.message}',

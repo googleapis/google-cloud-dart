@@ -28,6 +28,7 @@ import 'package:meta/meta.dart';
 
 import 'credential_exception.dart';
 import 'google_credentials.dart';
+import 'json_utils.dart';
 import 'platform_web.dart' if (dart.library.io) 'platform_io.dart';
 import 'service_account_signer.dart';
 
@@ -391,14 +392,11 @@ final class ComputeEngineCredentials extends GoogleCredentials
 
         if (response.statusCode == 200) {
           try {
-            final decoded = jsonDecode(response.body);
-            if (decoded is! Map<String, dynamic>) {
-              throw const FormatException('Expected JSON object.');
-            }
-            final signedBlob = decoded['signedBlob'];
-            if (signedBlob is! String) {
-              throw const FormatException("Missing 'signedBlob' in response");
-            }
+            final signedBlob = requiredString(
+              decodeJsonObject(response.body),
+              'signedBlob',
+              'signBlob response',
+            );
             return Uint8List.fromList(base64.decode(signedBlob));
           } on FormatException catch (e, stackTrace) {
             throw SigningException(
