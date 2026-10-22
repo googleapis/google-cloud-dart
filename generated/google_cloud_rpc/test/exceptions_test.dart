@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import 'package:google_cloud_rpc/exceptions.dart';
+import 'package:google_cloud_rpc/retry.dart';
 import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 
@@ -88,7 +89,7 @@ void main() {
       expect(e.message, 'bad request');
       expect(e.statusCode, 400);
       expect(e.status, isNotNull);
-      expect(e.status!.code, 400);
+      expect(e.status!.code, 3); // INVALID_ARGUMENT
       expect(e.status!.message, 'bad request');
       expect(e.toString(), 'BadRequestException: bad request');
     });
@@ -110,7 +111,59 @@ void main() {
       expect(e.message, 'conflict');
       expect(e.statusCode, 409);
       expect(e.status, isNotNull);
+      expect(e.status!.code, 6); // ALREADY_EXISTS
       expect(e.toString(), 'ConflictException: conflict');
+      expect(const ExponentialRetry().isRetryable(e), isFalse);
+    });
+
+    test('valid error 409 aborted', () {
+      const responseBody = '''
+{
+  "error": {
+    "code": 409,
+    "message": "aborted due to cross-transaction contention",
+    "status": "ABORTED"
+  }
+}
+''';
+      final response = http.Response(responseBody, 409);
+      final e = ServiceException.fromHttpResponse(response, responseBody);
+      expect(e, isA<ConflictException>());
+      expect(e.statusCode, 409);
+      expect(e.status!.code, 10); // ABORTED
+      expect(e.status!.message, 'aborted due to cross-transaction contention');
+      expect(const ExponentialRetry().isRetryable(e), isTrue);
+    });
+
+    test('valid error without status keeps the HTTP status code', () {
+      const responseBody = '''
+{
+  "error": {
+    "code": 409,
+    "message": "conflict"
+  }
+}
+''';
+      final response = http.Response(responseBody, 409);
+      final e = ServiceException.fromHttpResponse(response, responseBody);
+      expect(e, isA<ConflictException>());
+      expect(e.status!.code, 409);
+    });
+
+    test('valid error with an unknown status keeps the HTTP status code', () {
+      const responseBody = '''
+{
+  "error": {
+    "code": 400,
+    "message": "bad request",
+    "status": "NOT_A_CODE"
+  }
+}
+''';
+      final response = http.Response(responseBody, 400);
+      final e = ServiceException.fromHttpResponse(response, responseBody);
+      expect(e, isA<BadRequestException>());
+      expect(e.status!.code, 400);
     });
 
     test('valid error other', () {
@@ -132,6 +185,7 @@ void main() {
       expect(e.message, 'internal error');
       expect(e.statusCode, 418);
       expect(e.status, isNotNull);
+      expect(e.status!.code, 13); // INTERNAL
       expect(e.toString(), 'ServiceException: internal error');
     });
 
