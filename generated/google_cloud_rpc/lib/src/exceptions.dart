@@ -39,6 +39,11 @@ final class ServiceException implements Exception {
 
   /// The status message returned by the server.
   ///
+  /// Its [Status.code] is the `google.rpc.Code` of the error (e.g. 10 for
+  /// `ABORTED`), whether the error was received over gRPC or as JSON. Only a
+  /// JSON error that does not name its `google.rpc.Code` has the HTTP status
+  /// code there instead.
+  ///
   /// You can find out more about this error model and how to work with it in
   /// the [API Design Guide](https://cloud.google.com/apis/design/errors).
   final Status? status;
@@ -106,7 +111,7 @@ final class ServiceException implements Exception {
         when error['code'] is int? &&
             error['message'] is String? &&
             error['details'] is List<Object?>?) {
-      status = Status.fromJson(error);
+      status = _statusFromJsonError(error);
     } else {
       return ServiceException._fromDecodedResponse(
         responseBody,
@@ -125,6 +130,44 @@ final class ServiceException implements Exception {
 
   @override
   String toString() => '$_name: $message';
+}
+
+/// The `google.rpc.Code` values by name.
+const _codesByName = {
+  'OK': 0,
+  'CANCELLED': 1,
+  'UNKNOWN': 2,
+  'INVALID_ARGUMENT': 3,
+  'DEADLINE_EXCEEDED': 4,
+  'NOT_FOUND': 5,
+  'ALREADY_EXISTS': 6,
+  'PERMISSION_DENIED': 7,
+  'RESOURCE_EXHAUSTED': 8,
+  'FAILED_PRECONDITION': 9,
+  'ABORTED': 10,
+  'OUT_OF_RANGE': 11,
+  'UNIMPLEMENTED': 12,
+  'INTERNAL': 13,
+  'UNAVAILABLE': 14,
+  'DATA_LOSS': 15,
+  'UNAUTHENTICATED': 16,
+};
+
+/// The [Status] in the `error` of a JSON error response.
+///
+/// In JSON, the `code` of an error is its HTTP status code, and its
+/// `google.rpc.Code` is in `status`, by name (see
+/// https://cloud.google.com/apis/design/errors#http_mapping). The returned
+/// [Status.code] is that `google.rpc.Code`, as for an error received over gRPC,
+/// unless `status` is missing or names no `google.rpc.Code`.
+Status _statusFromJsonError(Map<String, Object?> error) {
+  final status = Status.fromJson(error);
+  final code = switch (error['status']) {
+    final String name => _codesByName[name],
+    _ => null,
+  };
+  if (code == null) return status;
+  return Status(code: code, message: status.message, details: status.details);
 }
 
 /// Exception thrown when the server returns a "304 Not Modified" response.
