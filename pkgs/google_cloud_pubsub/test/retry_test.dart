@@ -29,12 +29,10 @@ void main() {
         defaultRetry.initialDelay,
         equals(const Duration(milliseconds: 100)),
       );
-      expect(defaultRetry.delayMultiplier, equals(1.3));
+      expect(defaultRetry.delayMultiplier, equals(4));
       expect(defaultRetry.maxDelay, equals(const Duration(seconds: 60)));
-      expect(defaultRetry.jitter, equals(0.2));
       expect(defaultRetry.maxRetries, isNull);
     });
-
     test(
       'mapped ABORTED is retryable while DATA_LOSS and ALREADY_EXISTS are not',
       () async {

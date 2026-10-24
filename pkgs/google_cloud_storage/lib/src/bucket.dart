@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'package:google_cloud_rpc/retry.dart';
 import 'package:meta/meta.dart';
 
 import '../google_cloud_storage.dart';
@@ -50,13 +51,15 @@ final class Bucket {
   /// This operation is always idempotent. Throws [ConflictException] if the
   /// bucket already exists.
   ///
+  /// {@macro storage_retry_idempotent}
+  ///
   /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/buckets/insert).
   ///
   /// [Google Cloud Storage bucket]: https://docs.cloud.google.com/storage/docs/buckets
   Future<BucketMetadata> create({
     BucketMetadata? metadata,
     bool enableObjectRetention = false,
-    RetryRunner retry = defaultRetry,
+    RetryRunner? retry,
   }) => storage.createBucket(
     metadata?.copyWith(name: name) ?? BucketMetadata(name: name),
     enableObjectRetention: enableObjectRetention,
@@ -65,7 +68,9 @@ final class Bucket {
 
   /// Deletes this already-empty [Google Cloud Storage bucket][].
   ///
-  /// This operation is idempotent if `ifMetagenerationMatch` is set.
+  /// This operation is always idempotent.
+  ///
+  /// {@macro storage_retry_idempotent}
   ///
   /// Throws [NotFoundException] if the bucket does not exist. Throws
   /// [ConflictException] if the bucket is not empty.
@@ -84,7 +89,7 @@ final class Bucket {
   Future<void> delete({
     BigInt? ifMetagenerationMatch,
     String? userProject,
-    RetryRunner retry = defaultRetry,
+    RetryRunner? retry,
   }) => storage.deleteBucket(
     name,
     ifMetagenerationMatch: ifMetagenerationMatch,
@@ -95,6 +100,8 @@ final class Bucket {
   /// Information about this [Google Cloud Storage bucket][].
   ///
   /// This operation is read-only and always idempotent.
+  ///
+  /// {@macro storage_retry_idempotent}
   ///
   /// Throws [NotFoundException] if the bucket does not exist.
   ///
@@ -119,7 +126,7 @@ final class Bucket {
     BigInt? ifMetagenerationMatch,
     String? userProject,
     String? projection,
-    RetryRunner retry = defaultRetry,
+    RetryRunner? retry,
   }) => storage.bucketMetadata(
     name,
     ifMetagenerationMatch: ifMetagenerationMatch,
@@ -131,6 +138,8 @@ final class Bucket {
   /// Update this [Google Cloud Storage bucket][].
   ///
   /// This operation is idempotent if [ifMetagenerationMatch] is set.
+  ///
+  /// {@macro storage_retry_sometimes_idempotent}
   ///
   /// If set, [ifMetagenerationMatch] makes updating the bucket metadata
   /// conditional on whether the bucket's metageneration matches the provided
@@ -161,7 +170,7 @@ final class Bucket {
     String? predefinedDefaultObjectAcl,
     String? projection,
     String? userProject,
-    RetryRunner retry = defaultRetry,
+    RetryRunner? retry,
   }) => storage.patchBucket(
     name,
     metadata,

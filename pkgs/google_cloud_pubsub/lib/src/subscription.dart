@@ -14,6 +14,8 @@
 
 import 'dart:async';
 
+import 'package:google_cloud_rpc/retry.dart';
+
 import '../google_cloud_pubsub.dart';
 import 'batching.dart';
 import 'generated/google/pubsub/v1/pubsub.pbgrpc.dart' as grpc;
@@ -198,10 +200,7 @@ final class Subscription {
     // Fall back to unary RPC if no active streams or if subscription is
     // closing.
     try {
-      await ackSettings.retry.run(
-        () => pubsub.acknowledge(name, ackIds),
-        isIdempotent: true,
-      );
+      await ackSettings.retry.run(() => pubsub.acknowledge(name, ackIds));
       resolveBatch();
     } on Exception catch (e, stackTrace) {
       // ACKs are best-effort. If the unary fallback fails after retries,
@@ -272,7 +271,6 @@ final class Subscription {
         try {
           await ackSettings.retry.run(
             () => pubsub.modifyAckDeadline(name, ackIds, deadline),
-            isIdempotent: true,
           );
           resolveGroup();
         } on Exception catch (e, stackTrace) {
@@ -406,12 +404,12 @@ final class Subscription {
     final effectiveRetry = switch (retry ?? ackSettings.retry) {
       final ExponentialRetry exponentialRetry when retry == null =>
         ExponentialRetry(
+          retryIf: exponentialRetry.isRetryable,
           maxRetries: exponentialRetry.maxRetries,
           maxRetryInterval: null,
           initialDelay: exponentialRetry.initialDelay,
           delayMultiplier: exponentialRetry.delayMultiplier,
           maxDelay: exponentialRetry.maxDelay,
-          jitter: exponentialRetry.jitter,
         ),
       final retryRunner => retryRunner,
     };
