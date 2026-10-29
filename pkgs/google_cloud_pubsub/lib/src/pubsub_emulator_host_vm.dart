@@ -104,3 +104,10 @@ String? get projectFromEnvironment {
   if (project?.isEmpty ?? true) return null;
   return project;
 }
+
+/// The Dart version to use in `x-goog-api-client` headers.
+@internal
+final clientDartVersion = Platform.version
+    .split(RegExp('[^0-9]+'))
+    .take(3)
+    .join('.');

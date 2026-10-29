@@ -21,6 +21,7 @@ import 'package:meta/meta.dart';
 import '../google_cloud_pubsub.dart';
 import 'generated/google/pubsub/v1/pubsub.pbgrpc.dart' as grpc;
 import 'pubsub_emulator_host_vm.dart';
+import 'version.dart';
 
 const _pubsubScopes = ['https://www.googleapis.com/auth/pubsub'];
 
@@ -164,10 +165,16 @@ final class PubSub {
     );
   }
 
+  static final _defaultCallOptions = CallOptions(
+    metadata: {
+      'x-goog-api-client': 'gl-dart/$clientDartVersion gccl/$packageVersion',
+    },
+  );
+
   Future<CallOptions> get _callOptions async {
-    if (_isEmulator) return CallOptions();
+    if (_isEmulator) return _defaultCallOptions;
     final authenticator = await _authenticator;
-    return authenticator?.toCallOptions ?? CallOptions();
+    return _defaultCallOptions.mergedWith(authenticator?.toCallOptions);
   }
 
   grpc.PublisherClient get _publisher =>
