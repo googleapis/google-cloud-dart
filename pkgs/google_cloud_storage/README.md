@@ -60,29 +60,51 @@ void main() async {
 
 ## Retries
 
-By default, most [idempotent Google Cloud Storage operations][] are retried if
-they fail with a transient error (such as a network failure).
+By default, [idempotent Google Cloud Storage operations][] are retried if they
+fail with a transient error (such as a network failure).
 
 The documentation for each `Storage` method indicates whether the operation is
-idempotent.
+idempotent. Some operations are only idempotent if a precondition, such as
+`ifGenerationMatch`, is set.
 
-You can control the retry behavior using the `retry` parameter on each method.
+You can pass `retry` to a method to control how that call is retried. A `retry`
+argument is always used, even if the operation isn't idempotent. To disable
+retries, pass `noRetry`. To retry the same errors as `defaultRetry` with
+different limits or delays, create an `ExponentialRetry` with
+`retryIf: isTransientError`.
 
 For example:
 
 <?code-excerpt "example/retry.dart (retry)"?>
 ```dart
+import 'package:google_cloud_rpc/retry.dart';
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 
 void main() async {
   final storage = Storage();
 
-  // This operation is only idempotent if `ifMetagenerationMatch` is provided.
+  // This operation is only idempotent if `ifMetagenerationMatch` is provided,
+  // so it is retried by default.
   await storage.patchBucket(
     'my-bucket',
     BucketMetadataPatchBuilder()..labels = {'key': 'value'},
     ifMetagenerationMatch: BigInt.from(1),
-    retry: const ExponentialRetry(maxRetries: 2),
+  );
+
+  // Retry this operation at most twice.
+  await storage.bucketMetadata(
+    'my-bucket',
+    retry: const ExponentialRetry(retryIf: isTransientError, maxRetries: 2),
+  );
+
+  // Without `ifGenerationMatch`, this operation isn't idempotent, so it's only
+  // retried because `retry` is passed. That's safe if nothing else writes to
+  // this object.
+  await storage.uploadObjectFromString(
+    'my-bucket',
+    'status.txt',
+    'OK',
+    retry: defaultRetry,
   );
 
   storage.close();

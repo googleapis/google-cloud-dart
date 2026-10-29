@@ -18,21 +18,23 @@ import 'package:clock/clock.dart';
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 
+import '../rpc.dart';
 import 'exceptions.dart';
 
 /// An abstract class for running a function with retry logic.
+///
+/// Decides which failures are retried and how long to wait between attempts.
 sealed class RetryRunner {
-  /// Runs the given function with retry logic.
-  Future<T> run<T>(
-    Future<T> Function() body, {
-    required bool isIdempotent,
-    Clock clock = const Clock(),
-  });
+  const RetryRunner();
 
-  /// Returns whether [error] is considered retryable by this runner.
+  /// Runs [body], retrying it while it fails with an error that
+  /// [isRetryable] accepts and the retry budget allows.
+  Future<T> run<T>(Future<T> Function() body, {Clock clock = const Clock()});
+
+  /// Whether a failure with [error] should be retried.
   bool isRetryable(Object error);
 
-  /// Generates a sequence of wait durations for retries or reconnections.
+  /// A sequence of wait durations for retries or reconnections.
   Iterable<Duration> delays({Clock clock = const Clock(), Random? random});
 }
 
@@ -58,10 +60,11 @@ sealed class RetryRunner {
 ///
 /// A non-zero `jitter` randomizes the delays, so that clients that fail at the
 /// same time don't all retry at the same time. Each delay is multiplied by its
-/// own random factor between `1 - jitter` and `1 + jitter`. The factor is
-/// applied after the delay is capped at `maxDelay`, so a delay can be up to
-/// `jitter * maxDelay` longer than `maxDelay`. For example, with a `jitter` of
-/// `0.2`:
+/// own random factor between `1 - jitter` and `1`, so delays never exceed
+/// `maxDelay`. [ExponentialRetry] uses a `jitter` of `1.0` ("full jitter"), so
+/// each delay is chosen uniformly between zero and the computed delay, as in
+/// the Google Cloud client libraries for Python, Go and Java. For example,
+/// with a `jitter` of `0.2`:
 ///
 /// ```dart
 /// delaySequence(
@@ -71,12 +74,12 @@ sealed class RetryRunner {
 ///     delayMultiplier: 2,
 ///     jitter: 0.2);
 /// // [
-/// //   between 0.8 and 1.2 seconds,
-/// //   between 1.6 and 2.4 seconds,
-/// //   between 3.2 and 4.8 seconds,
-/// //   between 6.4 and 9.6 seconds,
-/// //   between 8 and 12 seconds,
-/// //   between 8 and 12 seconds,
+/// //   between 0.8 and 1 seconds,
+/// //   between 1.6 and 2 seconds,
+/// //   between 3.2 and 4 seconds,
+/// //   between 6.4 and 8 seconds,
+/// //   between 8 and 10 seconds,
+/// //   between 8 and 10 seconds,
 /// // ]
 /// ```
 ///
@@ -86,6 +89,7 @@ sealed class RetryRunner {
 ///
 /// If `maxRetryInterval` is set then the sequence must be iterated-over in
 /// real time.
+@internal
 @visibleForTesting
 Iterable<Duration> delaySequence({
   int? maxRetries,
@@ -152,8 +156,7 @@ Iterable<Duration> _delaySequence({
     if (randomGenerator == null) {
       delay = baseDelay;
     } else {
-      final jitterFactor =
-          (1.0 - jitter) + (2.0 * jitter * randomGenerator.nextDouble());
+      final jitterFactor = 1.0 - jitter * randomGenerator.nextDouble();
       delay = Duration(
         microseconds: (baseDelay.inMicroseconds * jitterFactor).round(),
       );
@@ -162,19 +165,93 @@ Iterable<Duration> _delaySequence({
   }
 }
 
+/// A [RetryRunner] that never retries.
+///
+/// Use the [noRetry] constant rather than creating new instances.
+final class NoRetry extends RetryRunner {
+  const NoRetry();
+
+  @override
+  Future<T> run<T>(
+    Future<T> Function() body, {
+    Clock clock = const Clock(),
+  }) async => body();
+
+  @override
+  bool isRetryable(Object error) => false;
+
+  @override
+  Iterable<Duration> delays({Clock clock = const Clock(), Random? random}) =>
+      const [];
+
+  @override
+  String toString() => 'NoRetry()';
+}
+
+/// A [RetryRunner] that never retries.
+///
+/// Pass this to disable retries, for a single call or for a whole client.
+const noRetry = NoRetry();
+
 @visibleForTesting
 final class NoDelayRetry extends ExponentialRetry {
-  const NoDelayRetry()
+  const NoDelayRetry({required super.retryIf, super.maxRetries})
     : super(initialDelay: Duration.zero, maxDelay: Duration.zero);
+
+  const NoDelayRetry.onCodes(super.retryableCodes, {super.maxRetries})
+    : super.onCodes(initialDelay: Duration.zero, maxDelay: Duration.zero);
 }
 
 /// A retry runner that implements exponential backoff.
 ///
 /// When [run] is called, it will attempt to execute the given function. If the
-/// function throws a recoverable exception (such as [RequestTimeoutException])
-/// and the function is idempotent, it will retry the function with increasing
-/// wait times between attempts.
-final class ExponentialRetry implements RetryRunner {
+/// function throws an exception that [isRetryable] accepts, it will retry the
+/// function with increasing wait times between attempts, until the function
+/// succeeds or the retry budget ([maxRetries] and [maxRetryInterval]) is
+/// exhausted.
+///
+/// Before each retry, it waits for a random time between zero and the current
+/// delay ("full jitter"), so that clients that fail at the same time don't all
+/// retry at once. The delay starts at [initialDelay], is multiplied by
+/// [delayMultiplier] after each retry, and never exceeds [maxDelay].
+///
+/// There are two ways to choose which failures are retried:
+///
+/// 1. [ExponentialRetry.onCodes] retries errors with the given status codes.
+///
+///   For example:
+///
+///   ```dart
+///   const retry = ExponentialRetry.onCodes(
+///     [Code.unavailable],
+///     initialDelay: Duration(milliseconds: 100),
+///     delayMultiplier: 1.3,
+///   );
+///   ```
+///
+/// 2. [ExponentialRetry.new] takes a `retryIf` predicate.
+///
+///   For example:
+///
+///   ```dart
+///   final retry = ExponentialRetry(
+///     retryIf: (e) =>
+///         e is ServiceUnavailableException || e is TimeoutException,
+///     maxRetries: 3,
+///   );
+///   ```
+final class ExponentialRetry extends RetryRunner {
+  /// The predicate that decides which failures are retried.
+  ///
+  /// `null` if [_retryableCodes] decides which failures are retried.
+  final bool Function(Object error)? _retryIf;
+
+  /// The status codes that are retried, if this runner was created with
+  /// [ExponentialRetry.onCodes].
+  ///
+  /// `null` if [_retryIf] decides which errors are retried.
+  final List<Code>? _retryableCodes;
+
   /// The maximum number of times to retry before failing.
   ///
   /// A `null` value indicates that the number of retries is unlimited.
@@ -185,7 +262,9 @@ final class ExponentialRetry implements RetryRunner {
   /// A `null` value indicates that the total retry time is unlimited.
   final Duration? maxRetryInterval;
 
-  /// The minimum amount of time to wait before retrying.
+  /// The delay before the first retry.
+  ///
+  /// The actual wait is a random time between zero and this delay.
   final Duration initialDelay;
 
   /// The multiplier for the wait time between retries.
@@ -194,69 +273,59 @@ final class ExponentialRetry implements RetryRunner {
   /// The maximum amount of time to wait between retries.
   ///
   /// If the calculated exponential wait time between retries exceeds this
-  /// value, the wait time will be clamped to this value before applying
-  /// [jitter].
+  /// value, the wait time will be clamped to this value.
   final Duration maxDelay;
 
-  /// The fraction, between `0.0` and `1.0`, by which each delay is randomly
-  /// lengthened or shortened.
+  /// Creates a retry runner that retries the errors that [retryIf] accepts.
   ///
-  /// Each delay is multiplied by its own random factor between `1 - jitter`
-  /// and `1 + jitter`, so a [jitter] of `0.2` varies each delay by up to ±20%.
-  /// This spreads out the retries of clients that failed at the same time, so
-  /// that they don't all retry at once.
+  /// For example, to retry `UNAVAILABLE` errors and timeouts:
   ///
-  /// The factor is applied after the delay is capped at [maxDelay], so a delay
-  /// can be up to `jitter * maxDelay` longer than [maxDelay].
-  ///
-  /// Defaults to `0.0` (no jitter).
-  final double jitter;
-
+  /// ```dart
+  /// final retry = ExponentialRetry(
+  ///   retryIf: (e) =>
+  ///       e is ServiceUnavailableException || e is TimeoutException,
+  /// );
+  /// ```
   const ExponentialRetry({
+    required bool Function(Object error) retryIf,
     this.maxRetries,
-    // Defaults taken from Python:
-    // https://docs.cloud.google.com/storage/docs/retry-strategy#tools
+    // The defaults are the same as Python's:
+    // https://github.com/googleapis/google-cloud-python/blob/3c5919af3d6e6af44e06e6981b6430e3d853b20c/packages/google-api-core/google/api_core/retry/retry_base.py#L42-L45
+
     this.initialDelay = const Duration(seconds: 1),
     this.delayMultiplier = 2,
     this.maxDelay = const Duration(seconds: 60),
     this.maxRetryInterval = const Duration(minutes: 2),
-    this.jitter = 0.0,
-  });
+  }) : _retryIf = retryIf,
+       _retryableCodes = null;
+
+  /// Creates a retry runner that retries errors with one of the status
+  /// [retryableCodes].
+  ///
+  /// An error from a gRPC transport is matched by its gRPC status code. An
+  /// error from a REST transport is matched by the HTTP status code that
+  /// `google.rpc.Code` maps each code to, such as 503 for [Code.unavailable].
+  /// So for REST, codes that share an HTTP status code, such as [Code.aborted]
+  /// and [Code.alreadyExists] (409), can't be told apart.
+  ///
+  /// A failure to communicate with the service ([http.ClientException]) counts
+  /// as [Code.unavailable], which is how gRPC reports it.
+  const ExponentialRetry.onCodes(
+    List<Code> retryableCodes, {
+    this.maxRetries,
+    this.initialDelay = const Duration(seconds: 1),
+    this.delayMultiplier = 2,
+    this.maxDelay = const Duration(seconds: 60),
+    this.maxRetryInterval = const Duration(minutes: 2),
+  }) : _retryableCodes = retryableCodes,
+       _retryIf = null;
 
   @override
-  bool isRetryable(Object error) {
-    if (error is! Exception) return false;
-    return switch (error) {
-      // InternalServerErrorException (HTTP 500 / gRPC INTERNAL or UNKNOWN) is
-      // retryable unless it carries gRPC status DATA_LOSS (code 15).
-      InternalServerErrorException(:final status) => status?.code != 15,
-      // ConflictException (HTTP 409 / gRPC ALREADY_EXISTS) is not retryable
-      // unless it carries gRPC status ABORTED (code 10).
-      ConflictException(:final status) => status?.code == 10,
-      BadGatewayException() ||
-      RequestTimeoutException() ||
-      ServiceUnavailableException() ||
-      GatewayTimeoutException() ||
-      TooManyRequestsException() => true,
-      ServiceException(:final status, :final statusCode) =>
-        switch (status?.code) {
-          // gRPC status codes: UNKNOWN(2), DEADLINE_EXCEEDED(4),
-          // RESOURCE_EXHAUSTED(8), ABORTED(10), INTERNAL(13), UNAVAILABLE(14).
-          2 || 4 || 8 || 10 || 13 || 14 => true,
-          null =>
-            statusCode == 408 ||
-                statusCode == 429 ||
-                statusCode == 500 ||
-                statusCode == 502 ||
-                statusCode == 503 ||
-                statusCode == 504,
-          _ => false,
-        },
-      http.ClientException() => true,
-      ChecksumValidationException() => true,
-      _ => false,
-    };
-  }
+  bool isRetryable(Object error) => switch ((_retryableCodes, _retryIf)) {
+    (final codes?, _) => matchesStatusCode(error, codes),
+    (_, final retryIf?) => retryIf(error),
+    _ => false,
+  };
 
   @override
   Iterable<Duration> delays({Clock clock = const Clock(), Random? random}) =>
@@ -266,7 +335,7 @@ final class ExponentialRetry implements RetryRunner {
         initialDelay: initialDelay,
         maxDelay: maxDelay,
         delayMultiplier: delayMultiplier,
-        jitter: jitter,
+        jitter: 1.0,
         clock: clock,
         random: random,
       );
@@ -274,7 +343,6 @@ final class ExponentialRetry implements RetryRunner {
   @override
   Future<T> run<T>(
     Future<T> Function() body, {
-    required bool isIdempotent,
     Clock clock = const Clock(),
   }) async {
     final iterator = delays(clock: clock).iterator;
@@ -283,7 +351,6 @@ final class ExponentialRetry implements RetryRunner {
       try {
         return await body();
       } on Exception catch (e) {
-        if (!isIdempotent) rethrow;
         if (!isRetryable(e)) rethrow;
         if (!iterator.moveNext()) rethrow;
         await Future<void>.delayed(iterator.current);
@@ -292,37 +359,62 @@ final class ExponentialRetry implements RetryRunner {
   }
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is ExponentialRetry &&
-          runtimeType == other.runtimeType &&
-          maxRetries == other.maxRetries &&
-          maxRetryInterval == other.maxRetryInterval &&
-          initialDelay == other.initialDelay &&
-          delayMultiplier == other.delayMultiplier &&
-          maxDelay == other.maxDelay &&
-          jitter == other.jitter;
-
-  @override
-  int get hashCode => Object.hash(
-    maxRetries,
-    maxRetryInterval,
-    initialDelay,
-    delayMultiplier,
-    maxDelay,
-    jitter,
-  );
-
-  @override
-  String toString() =>
-      'ExponentialRetry('
-      'maxRetries: $maxRetries, '
-      'maxRetryInterval: $maxRetryInterval, '
-      'initialDelay: $initialDelay, '
-      'delayMultiplier: $delayMultiplier, '
-      'maxDelay: $maxDelay, '
-      'jitter: $jitter)';
+  String toString() {
+    final codes = _retryableCodes?.map((code) => code.value).join(', ');
+    return 'ExponentialRetry('
+        '${codes == null ? '' : 'retryableCodes: [$codes], '}'
+        'maxRetries: $maxRetries, '
+        'maxRetryInterval: $maxRetryInterval, '
+        'initialDelay: $initialDelay, '
+        'delayMultiplier: $delayMultiplier, '
+        'maxDelay: $maxDelay)';
+  }
 }
 
-/// The default retry strategy.
-const defaultRetry = ExponentialRetry();
+/// The numeric value and the HTTP status code of each `google.rpc.Code`,
+/// keyed by name.
+///
+/// See [`google/rpc/code.proto`](https://github.com/googleapis/googleapis/blob/master/google/rpc/code.proto).
+const _statusCodes = <String, (int, int)>{
+  'CANCELLED': (1, 499),
+  'UNKNOWN': (2, 500),
+  'INVALID_ARGUMENT': (3, 400),
+  'DEADLINE_EXCEEDED': (4, 504),
+  'NOT_FOUND': (5, 404),
+  'ALREADY_EXISTS': (6, 409),
+  'PERMISSION_DENIED': (7, 403),
+  'RESOURCE_EXHAUSTED': (8, 429),
+  'FAILED_PRECONDITION': (9, 400),
+  'ABORTED': (10, 409),
+  'OUT_OF_RANGE': (11, 400),
+  'UNIMPLEMENTED': (12, 501),
+  'INTERNAL': (13, 500),
+  'UNAVAILABLE': (14, 503),
+  'DATA_LOSS': (15, 500),
+  'UNAUTHENTICATED': (16, 401),
+};
+
+/// Whether [error] reports one of the canonical status [codes].
+///
+/// This is how [ExponentialRetry.onCodes] decides which errors to retry. See
+/// its documentation for how errors are matched.
+@internal
+@visibleForTesting
+bool matchesStatusCode(Object error, Iterable<Code> codes) {
+  switch (error) {
+    case http.ClientException():
+      return codes.contains(Code.unavailable);
+    case ServiceException(:final status, :final statusCode):
+      final grpcCode = status?.code;
+      // A REST error's `status` carries the HTTP status code instead.
+      final isGrpc = grpcCode != null && grpcCode > 0 && grpcCode <= 16;
+      return codes.any((code) {
+        if (_statusCodes[code.value] case (final number, final httpStatus)) {
+          return isGrpc ? grpcCode == number : statusCode == httpStatus;
+        }
+        return false;
+      });
+    default:
+      return false;
+  }
+}
