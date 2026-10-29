@@ -13,12 +13,12 @@
 // limitations under the License.
 
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 
 import 'credential_exception.dart';
+import 'json_utils.dart';
 
 /// The maximum number of characters of an error response body to include in
 /// exception messages.
@@ -76,16 +76,8 @@ Future<TokenResponse> fetchAccessToken({
   }
 
   try {
-    final json = jsonDecode(response.body);
-    if (json is! Map<String, dynamic>) {
-      throw const FormatException('Expected a JSON object.');
-    }
-    final accessToken = json['access_token'];
-    if (accessToken is! String || accessToken.isEmpty) {
-      throw const FormatException(
-        "Missing required 'access_token' in token response.",
-      );
-    }
+    final json = decodeJsonObject(response.body);
+    final accessToken = requiredString(json, 'access_token', 'token response');
     final expiresIn = switch (json['expires_in']) {
       null => throw const FormatException(
         "Missing required 'expires_in' in token response.",
