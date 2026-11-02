@@ -18,6 +18,7 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:crypto/crypto.dart' as crypto;
+import 'package:google_cloud_rpc/retry.dart';
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 import 'package:google_cloud_storage/src/crc32c.dart';
 import 'package:google_cloud_storage/src/version.dart';
@@ -471,7 +472,7 @@ void main() {
         final sink = storage.uploadObjectFromSink(
           bucketName,
           'object',
-          retry: const NoDelayRetry(),
+          retry: const NoDelayRetry(retryIf: isTransientError),
         )..add(large);
         await sink.close();
 
@@ -497,7 +498,7 @@ void main() {
           bucketName,
           'object',
           ifGenerationMatch: BigInt.zero, // Makes session creation idempotent
-          retry: const NoDelayRetry(),
+          retry: const NoDelayRetry(retryIf: isTransientError),
         )..add(small);
         await sink.close();
 
@@ -641,7 +642,7 @@ void main() {
       final sink = storage.uploadObjectFromSink(
         'bucket',
         'object',
-        retry: const NoDelayRetry(),
+        retry: const NoDelayRetry(retryIf: isTransientError),
       );
 
       final chunk = Uint8List(256 * 1024);
@@ -709,7 +710,7 @@ void main() {
       final sink = storage.uploadObjectFromSink(
         'bucket',
         'object',
-        retry: const NoDelayRetry(),
+        retry: const NoDelayRetry(retryIf: isTransientError),
       );
 
       final chunk = Uint8List(256 * 1024);
@@ -779,7 +780,7 @@ void main() {
         final sink = storage.uploadObjectFromSink(
           'bucket',
           'object',
-          retry: const NoDelayRetry(),
+          retry: const NoDelayRetry(retryIf: isTransientError),
         );
 
         final chunk = Uint8List(256 * 1024);
