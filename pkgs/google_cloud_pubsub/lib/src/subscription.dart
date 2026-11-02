@@ -553,7 +553,8 @@ final class Subscription {
         cleanupCurrentConnection();
         if (_isClosed || isCancelled || controller.isClosed) return;
 
-        if (error != null && !effectiveRetry.isRetryable(error)) {
+        if (error != null &&
+            (error is! Exception || !effectiveRetry.isRetryable(error))) {
           activeOrReconnectingStreams = 0;
           await cancelSession();
           if (!controller.isClosed) {

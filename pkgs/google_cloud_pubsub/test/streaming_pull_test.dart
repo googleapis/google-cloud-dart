@@ -352,6 +352,26 @@ void main() {
         },
       );
 
+      test(
+        'an Error fails immediately even if retryIf accepts everything',
+        () async {
+          final subscription = client.subscription('test-sub');
+          final errorCompleter = Completer<Object>();
+          final streamSubscription = subscription
+              .streamingPull(retry: NoDelayRetry(retryIf: (_) => true))
+              .listen((_) {}, onError: errorCompleter.complete);
+
+          await fakeSubscriber.waitForConnections(1);
+          fakeSubscriber.responseControllers[0].addError(StateError('bug'));
+
+          final error = await errorCompleter.future;
+          expect(error, isA<StateError>());
+          expect(fakeSubscriber.responseControllers, hasLength(1));
+
+          await streamSubscription.cancel();
+        },
+      );
+
       test('exhausting retries on one stream keeps sibling stream alive until '
           'all streams fail', () async {
         final subscription = client.subscription('test-sub');
