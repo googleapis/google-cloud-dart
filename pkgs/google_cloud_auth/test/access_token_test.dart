@@ -299,5 +299,26 @@ void main() {
       fail = false;
       expect(await cache.accessToken(forceRefresh: true), 'token-3');
     });
+
+    test('shares an in-flight fetch between concurrent callers', () async {
+      var fetchCount = 0;
+      final cache = AccessTokenCache(() async {
+        fetchCount++;
+        return (
+          accessToken: 'token-$fetchCount',
+          expiresIn: const Duration(hours: 1),
+        );
+      }, clock: () => now);
+
+      expect(
+        await (
+          cache.accessToken(),
+          cache.accessToken(),
+          cache.accessToken(forceRefresh: true),
+        ).wait,
+        ('token-1', 'token-1', 'token-1'),
+      );
+      expect(fetchCount, 1);
+    });
   });
 }
