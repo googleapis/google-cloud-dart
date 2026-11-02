@@ -33,7 +33,9 @@ sealed class RetryRunner {
   Future<T> run<T>(Future<T> Function() body, {Clock clock = const Clock()});
 
   /// Whether a failure with [error] should be retried.
-  bool isRetryable(Object error);
+  ///
+  /// Failures that aren't [Exception]s, such as [Error]s, are never retried.
+  bool isRetryable(Exception error);
 
   /// A sequence of wait durations for retries or reconnections.
   Iterable<Duration> delays({Clock clock = const Clock(), Random? random});
@@ -179,7 +181,7 @@ final class NoRetry extends RetryRunner {
   }) async => body();
 
   @override
-  bool isRetryable(Object error) => false;
+  bool isRetryable(Exception error) => false;
 
   @override
   Iterable<Duration> delays({Clock clock = const Clock(), Random? random}) =>
@@ -206,7 +208,7 @@ final class NoDelayRetry extends ExponentialRetry {
 /// A retry runner that implements exponential backoff.
 ///
 /// When [run] is called, it will attempt to execute the given function. If the
-/// function throws an exception that [isRetryable] accepts, it will retry the
+/// function throws an [Exception] that [isRetryable] accepts, it will retry the
 /// function with increasing wait times between attempts, until the function
 /// succeeds or the retry budget ([maxRetries] and [maxRetryInterval]) is
 /// exhausted.
@@ -245,7 +247,7 @@ final class ExponentialRetry extends RetryRunner {
   /// The predicate that decides which failures are retried.
   ///
   /// `null` if [_retryableCodes] decides which failures are retried.
-  final bool Function(Object error)? _retryIf;
+  final bool Function(Exception error)? _retryIf;
 
   /// The status codes that are retried, if this runner was created with
   /// [ExponentialRetry.onCodes].
@@ -288,7 +290,7 @@ final class ExponentialRetry extends RetryRunner {
   /// );
   /// ```
   const ExponentialRetry({
-    required bool Function(Object error) retryIf,
+    required bool Function(Exception error) retryIf,
     this.maxRetries,
     // The defaults are the same as Python's:
     // https://github.com/googleapis/google-cloud-python/blob/3c5919af3d6e6af44e06e6981b6430e3d853b20c/packages/google-api-core/google/api_core/retry/retry_base.py#L42-L45
@@ -323,7 +325,7 @@ final class ExponentialRetry extends RetryRunner {
        _retryIf = null;
 
   @override
-  bool isRetryable(Object error) => switch ((_retryableCodes, _retryIf)) {
+  bool isRetryable(Exception error) => switch ((_retryableCodes, _retryIf)) {
     (final codes?, _) => matchesStatusCode(error, codes),
     (_, final retryIf?) => retryIf(error),
     _ => false,

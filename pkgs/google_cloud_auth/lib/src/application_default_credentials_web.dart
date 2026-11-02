@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'dart:async';
+
 import 'package:http/http.dart' as http;
 
 import 'credential_exception.dart';
@@ -24,7 +26,9 @@ import 'google_credentials.dart';
 /// Compute Engine metadata server cannot be used (browsers rarely run on
 /// Compute Engine, and the metadata server does not support CORS preflight
 /// requests for the required `Metadata-Flavor` header).
-Future<GoogleCredentials> defaultCredentials({http.Client? client}) async {
+Future<GoogleCredentials> defaultCredentials({
+  FutureOr<http.Client> Function()? clientFactory,
+}) async {
   throw CredentialException(
     'Application Default Credentials are not supported on the web.',
   );

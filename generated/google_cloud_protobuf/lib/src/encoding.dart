@@ -22,9 +22,12 @@
 library;
 
 import 'dart:convert';
+import 'dart:math';
 import 'dart:typed_data';
 
 export 'dart:typed_data' show Uint8List;
+
+final _random = Random.secure();
 
 /// Decodes: `BOOL_TYPE`.
 bool decodeBool(Object? value) => value as bool;
@@ -89,6 +92,28 @@ Object? encodeDouble(double? value) {
   }
 
   return value.isNaN || value.isInfinite ? '$value' : value;
+}
+
+/// Creates a randomly generated version 4 UUID, as defined by
+/// [RFC 4122](https://www.rfc-editor.org/rfc/rfc4122#section-4.4).
+String uuid4() {
+  final bytes = Uint8List(16);
+  for (var i = 0; i < bytes.length; i++) {
+    bytes[i] = _random.nextInt(256);
+  }
+  // Set the version (the 4 most significant bits of octet 6) to 0b0100.
+  bytes[6] = (bytes[6] & 0x0f) | 0x40;
+  // Set the variant (the 2 most significant bits of octet 8) to 0b10.
+  bytes[8] = (bytes[8] & 0x3f) | 0x80;
+
+  final uuid = StringBuffer();
+  for (var i = 0; i < bytes.length; i++) {
+    if (i == 4 || i == 6 || i == 8 || i == 10) {
+      uuid.write('-');
+    }
+    uuid.write(bytes[i].toRadixString(16).padLeft(2, '0'));
+  }
+  return uuid.toString();
 }
 
 /// Extensions methods used for comparing to proto default values.

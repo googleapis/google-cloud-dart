@@ -12,9 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/// @docImport 'subscription.dart';
+/// @docImport 'topic.dart';
+library;
+
 import 'package:google_cloud_rpc/retry.dart';
 
-/// The default retry strategy for Pub/Sub unary operations.
+/// The default retry strategy for [PublishSettings] and [AckSettings].
 ///
 /// Follows the [`Publish`][] retry policy in the `google.pubsub.v1` gRPC
 /// service configuration.

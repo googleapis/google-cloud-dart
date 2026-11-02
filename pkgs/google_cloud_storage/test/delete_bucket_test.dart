@@ -113,7 +113,7 @@ void main() async {
 
       final storage = Storage(client: mockClient, projectId: 'fake project');
 
-      await storage.deleteBucket('bucket', ifMetagenerationMatch: BigInt.one);
+      await storage.deleteBucket('bucket');
       expect(count, 2);
     });
   });
