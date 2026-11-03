@@ -89,15 +89,20 @@ void main() {
 
             final received = await pullReliably(subscription, count: 5);
             expect(received, hasLength(5));
+            // Shorten the lease before acknowledging so that if `close()` did
+            // not flush the batch (maxDelay: 30s), the lease expires during the
+            // wait below and the messages become redeliverable alongside the
+            // sentinel message. Calling `modifyAckDeadlineNow(received, 0)`
+            // after `close()` would race with production Pub/Sub's asynchronous
+            // ack buffering and nack the messages before the ack is applied.
+            await subscription.modifyAckDeadlineNow(received, 3);
             received.forEach(subscription.acknowledge);
             await subscription.close();
 
+            await Future<void>.delayed(const Duration(seconds: 4));
+
             final reopen = client.subscription(subscriptionName);
             addTearDown(() async => await reopen.close());
-            // Nacking already-acknowledged messages is a no-op; if `close()`
-            // had not flushed the batch, this would make them redeliverable
-            // immediately alongside the sentinel message below.
-            await reopen.modifyAckDeadlineNow(received, 0);
             await client.publish(topic.name, utf8.encode('sentinel'));
 
             final afterAck = await pullReliably(reopen, count: 1);
