@@ -15,4 +15,5 @@
 /// Retry runners and exponential backoff strategies for Google Cloud clients.
 library;
 
-export 'src/retry.dart';
+export 'src/api.g.dart' show Code;
+export 'src/retry.dart' hide delaySequence, matchesStatusCode;

@@ -18,6 +18,7 @@ library;
 import 'dart:convert';
 
 import 'package:google_cloud_pubsub/google_cloud_pubsub.dart';
+import 'package:google_cloud_rpc/retry.dart';
 import 'package:grpc/grpc.dart' as grpc;
 import 'package:test/test.dart';
 
@@ -152,9 +153,9 @@ void main() {
                       maxMessages: 10,
                       maxDelay: const Duration(seconds: 10),
                     ),
-                    retry: const ExponentialRetry(
-                      initialDelay: Duration(milliseconds: 1),
-                    ),
+                    retry: const ExponentialRetry.onCodes([
+                      Code.unavailable,
+                    ], initialDelay: Duration(milliseconds: 1)),
                   ),
                 )
                 ..acknowledge(dummyMessage('ack-1'))
@@ -188,9 +189,9 @@ void main() {
         final subscription = client.subscription(
           'test-sub',
           ackSettings: AckSettings(
-            retry: const ExponentialRetry(
-              initialDelay: Duration(milliseconds: 1),
-            ),
+            retry: const ExponentialRetry.onCodes([
+              Code.unavailable,
+            ], initialDelay: Duration(milliseconds: 1)),
           ),
         )..acknowledge(dummyMessage('ack-1'));
 

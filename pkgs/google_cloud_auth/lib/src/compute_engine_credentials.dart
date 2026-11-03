@@ -26,8 +26,10 @@ import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 
+import 'access_token.dart';
 import 'credential_exception.dart';
 import 'google_credentials.dart';
+import 'json_utils.dart';
 import 'platform_web.dart' if (dart.library.io) 'platform_io.dart';
 import 'service_account_signer.dart';
 
@@ -57,7 +59,7 @@ Future<bool> _checkStaticGceDetection(String path, bool isLinux) async {
 /// injection.
 @internal
 Future<bool> internalIsOnComputeEngine({
-  http.Client? client,
+  FutureOr<http.Client> Function()? clientFactory,
   String? Function(String name)? readEnvironment,
   String? linuxProductNamePath,
   bool? isLinux,
@@ -66,8 +68,9 @@ Future<bool> internalIsOnComputeEngine({
   // because the required `Metadata-Flavor: Google` header is not
   // CORS-safelisted and the GCE metadata server rejects CORS preflights to
   // prevent browser-based SSRF / DNS-rebinding attacks. Short-circuit unless a
-  // test `client` is injected so browser callers do not fire doomed retries.
-  if (!isPlatformIo && client == null) {
+  // custom `clientFactory` is injected so browser callers do not fire doomed
+  // retries.
+  if (!isPlatformIo && clientFactory == null) {
     return false;
   }
   final readEnv = readEnvironment ?? readPlatformEnvironment;
@@ -78,8 +81,7 @@ Future<bool> internalIsOnComputeEngine({
 
   final customHost = readEnv('GCE_METADATA_HOST');
   final host = customHost ?? _defaultMetadataHost;
-  final httpClient = client ?? http.Client();
-  final closeClient = client == null;
+  final httpClient = await (clientFactory ?? http.Client.new)();
   final inFlightRequests = <Future<void>>[];
 
   try {
@@ -110,13 +112,7 @@ Future<bool> internalIsOnComputeEngine({
       isLinux ?? isPlatformLinux,
     );
   } finally {
-    // If `client` is provided by the caller, there is no guarantee that the
-    // caller doesn't call `close` while there are still requests in flight,
-    // which the `http.Client` API contract doesn't allow. Therefore, only
-    // tests are allowed to provide `client`.
-    if (closeClient) {
-      unawaited(inFlightRequests.wait.whenComplete(httpClient.close));
-    }
+    unawaited(inFlightRequests.wait.whenComplete(httpClient.close));
   }
 }
 
@@ -131,26 +127,28 @@ final class ComputeEngineCredentials extends GoogleCredentials
   /// The metadata server host.
   final String metadataHost;
 
-  final http.Client _client;
-  final bool _ownsClient;
+  final FutureOr<http.Client> Function() _clientFactory;
 
-  String? _cachedAccessToken;
-  DateTime? _accessTokenExpiry;
-
-  /// The active request to fetch a new token.
-  ///
-  /// This is used to prevent multiple concurrent requests from fetching new
-  /// tokens at the same time.
-  Future<String>? _activeTokenRequest;
+  late final _accessTokenCache = AccessTokenCache(
+    () => fetchAccessToken(
+      clientFactory: _clientFactory,
+      source: 'Compute Engine metadata server',
+      send: (client) => client.get(
+        Uri.http(
+          metadataHost,
+          '/computeMetadata/v1/instance/service-accounts/default/token',
+        ),
+        headers: _metadataFlavorHeader,
+      ),
+    ),
+  );
 
   ComputeEngineCredentials._({
     required this.clientEmail,
     required super.universeDomain,
     required this.metadataHost,
-    required http.Client client,
-    required bool ownsClient,
-  }) : _client = client,
-       _ownsClient = ownsClient;
+    required FutureOr<http.Client> Function() clientFactory,
+  }) : _clientFactory = clientFactory;
 
   /// A non-expired current OAuth2 access token for the service account.
   ///
@@ -160,75 +158,19 @@ final class ComputeEngineCredentials extends GoogleCredentials
   /// It is safe to call this method concurrently.
   ///
   /// Throws [CredentialException] on failure.
-  Future<String> accessToken({bool forceRefresh = false}) async {
-    if (!forceRefresh &&
-        _cachedAccessToken != null &&
-        _accessTokenExpiry != null) {
-      if (DateTime.timestamp().isBefore(
-        _accessTokenExpiry!.subtract(const Duration(minutes: 1)),
-      )) {
-        return _cachedAccessToken!;
-      }
-    }
-
-    return await (_activeTokenRequest ??= _fetchAccessToken().whenComplete(() {
-      _activeTokenRequest = null;
-    }));
-  }
-
-  Future<String> _fetchAccessToken() async {
-    final tokenUri = Uri.http(
-      metadataHost,
-      '/computeMetadata/v1/instance/service-accounts/default/token',
-    );
-    final http.Response response;
-    try {
-      response = await _client.get(tokenUri, headers: _metadataFlavorHeader);
-    } on Exception catch (e, stackTrace) {
-      throw CredentialException(
-        'Failed to get access token from Compute Engine metadata server: $e',
-        innerException: e,
-        innerStackTrace: stackTrace,
-      );
-    }
-
-    if (response.statusCode != 200) {
-      throw CredentialException(
-        'Failed to get access token from Compute Engine metadata server: '
-        'HTTP ${response.statusCode} ${response.body}',
-      );
-    }
-
-    try {
-      final decoded = jsonDecode(response.body);
-      if (decoded is! Map<String, dynamic>) {
-        throw const FormatException('Expected JSON object.');
-      }
-      final accessToken = decoded['access_token'];
-      final expiresIn = decoded['expires_in'];
-      if (accessToken is! String || accessToken.isEmpty || expiresIn is! num) {
-        throw const FormatException('Missing access_token or expires_in');
-      }
-      _cachedAccessToken = accessToken;
-      _accessTokenExpiry = DateTime.timestamp().add(
-        Duration(seconds: expiresIn.toInt()),
-      );
-      return accessToken;
-    } on FormatException catch (e, stackTrace) {
-      throw CredentialException(
-        'Failed to parse token response from metadata server: $e',
-        innerException: e,
-        innerStackTrace: stackTrace,
-      );
-    }
-  }
+  Future<String> accessToken({bool forceRefresh = false}) =>
+      _accessTokenCache.accessToken(forceRefresh: forceRefresh);
 
   /// Creates a [ComputeEngineCredentials] instance, discovering configuration
   /// from the Compute Engine metadata server.
   ///
+  /// If provided, [clientFactory] is called to create the [http.Client]s used
+  /// to make requests. Each client it returns is closed after use, so it must
+  /// return a new client on every call.
+  ///
   /// Throws [CredentialException] on failure.
   static Future<ComputeEngineCredentials> create({
-    http.Client? client,
+    FutureOr<http.Client> Function()? clientFactory,
     String? clientEmail,
     String? universeDomain,
     String? metadataHost,
@@ -237,96 +179,97 @@ final class ComputeEngineCredentials extends GoogleCredentials
         metadataHost ??
         readPlatformEnvironment('GCE_METADATA_HOST') ??
         _defaultMetadataHost;
-    final httpClient = client ?? http.Client();
-    final ownsClient = client == null;
+    final effectiveClientFactory = clientFactory ?? http.Client.new;
 
-    try {
-      var resolvedEmail = clientEmail;
-      if (resolvedEmail == null || resolvedEmail.isEmpty) {
-        final emailUri = Uri.http(
-          host,
-          '/computeMetadata/v1/instance/service-accounts/default/email',
-        );
-        final http.Response response;
+    var resolvedEmail = clientEmail;
+    if (resolvedEmail == null || resolvedEmail.isEmpty) {
+      final emailUri = Uri.http(
+        host,
+        '/computeMetadata/v1/instance/service-accounts/default/email',
+      );
+      final http.Response response;
+      try {
+        final httpClient = await effectiveClientFactory();
         try {
           response = await httpClient.get(
             emailUri,
             headers: _metadataFlavorHeader,
           );
-        } on Exception catch (e, stackTrace) {
-          throw CredentialException(
-            'Failed to get default service account email from metadata server: '
-            '$e',
-            innerException: e,
-            innerStackTrace: stackTrace,
-          );
+        } finally {
+          httpClient.close();
         }
-        if (response.statusCode != 200) {
-          throw CredentialException(
-            'Failed to get default service account email from metadata server: '
-            'HTTP ${response.statusCode} ${response.body}',
-          );
-        }
-        resolvedEmail = response.body.trim();
-        if (resolvedEmail.isEmpty) {
-          throw CredentialException(
-            'Empty service account email received from metadata server.',
-          );
-        }
-      }
-
-      var resolvedUniverseDomain = universeDomain;
-      if (resolvedUniverseDomain == null || resolvedUniverseDomain.isEmpty) {
-        final universeUri = Uri.http(
-          host,
-          '/computeMetadata/v1/universe/universe-domain',
+      } on Exception catch (e, stackTrace) {
+        throw CredentialException(
+          'Failed to get default service account email from metadata server: '
+          '$e',
+          innerException: e,
+          innerStackTrace: stackTrace,
         );
-        final http.Response response;
+      }
+      if (response.statusCode != 200) {
+        throw CredentialException(
+          'Failed to get default service account email from metadata server: '
+          'HTTP ${response.statusCode} ${response.body}',
+        );
+      }
+      resolvedEmail = response.body.trim();
+      if (resolvedEmail.isEmpty) {
+        throw CredentialException(
+          'Empty service account email received from metadata server.',
+        );
+      }
+    }
+
+    var resolvedUniverseDomain = universeDomain;
+    if (resolvedUniverseDomain == null || resolvedUniverseDomain.isEmpty) {
+      final universeUri = Uri.http(
+        host,
+        '/computeMetadata/v1/universe/universe-domain',
+      );
+      final http.Response response;
+      try {
+        final httpClient = await effectiveClientFactory();
         try {
           response = await httpClient.get(
             universeUri,
             headers: _metadataFlavorHeader,
           );
-        } on Exception catch (e, stackTrace) {
-          throw CredentialException(
-            'Failed to get universe domain from metadata server: $e',
-            innerException: e,
-            innerStackTrace: stackTrace,
-          );
+        } finally {
+          httpClient.close();
         }
-        // 404 indicates an older metadata server without universe-domain
-        // support, and early versions returned an empty string for the default
-        // universe; both default to 'googleapis.com'.
-        // See:
-        // https://github.com/googleapis/google-auth-library-java/blob/9ac2d4340ebc6a8582b898e97f65aeed3c1776d6/oauth2_http/java/com/google/auth/oauth2/ComputeEngineCredentials.java#L282
-        if (response.statusCode == 200) {
-          final trimmed = response.body.trim();
-          resolvedUniverseDomain = trimmed.isNotEmpty
-              ? trimmed
-              : GoogleCredentials.defaultUniverseDomain;
-        } else if (response.statusCode == 404) {
-          resolvedUniverseDomain = GoogleCredentials.defaultUniverseDomain;
-        } else {
-          throw CredentialException(
-            'Failed to get universe domain from metadata server: '
-            'HTTP ${response.statusCode} ${response.body}',
-          );
-        }
+      } on Exception catch (e, stackTrace) {
+        throw CredentialException(
+          'Failed to get universe domain from metadata server: $e',
+          innerException: e,
+          innerStackTrace: stackTrace,
+        );
       }
-
-      return ComputeEngineCredentials._(
-        clientEmail: resolvedEmail,
-        universeDomain: resolvedUniverseDomain,
-        metadataHost: host,
-        client: httpClient,
-        ownsClient: ownsClient,
-      );
-    } catch (e) {
-      if (ownsClient) {
-        httpClient.close();
+      // 404 indicates an older metadata server without universe-domain
+      // support, and early versions returned an empty string for the default
+      // universe; both default to 'googleapis.com'.
+      // See:
+      // https://github.com/googleapis/google-auth-library-java/blob/9ac2d4340ebc6a8582b898e97f65aeed3c1776d6/oauth2_http/java/com/google/auth/oauth2/ComputeEngineCredentials.java#L282
+      if (response.statusCode == 200) {
+        final trimmed = response.body.trim();
+        resolvedUniverseDomain = trimmed.isNotEmpty
+            ? trimmed
+            : GoogleCredentials.defaultUniverseDomain;
+      } else if (response.statusCode == 404) {
+        resolvedUniverseDomain = GoogleCredentials.defaultUniverseDomain;
+      } else {
+        throw CredentialException(
+          'Failed to get universe domain from metadata server: '
+          'HTTP ${response.statusCode} ${response.body}',
+        );
       }
-      rethrow;
     }
+
+    return ComputeEngineCredentials._(
+      clientEmail: resolvedEmail,
+      universeDomain: resolvedUniverseDomain,
+      metadataHost: host,
+      clientFactory: effectiveClientFactory,
+    );
   }
 
   // Equivalent of:
@@ -334,7 +277,13 @@ final class ComputeEngineCredentials extends GoogleCredentials
   // - https://github.com/googleapis/google-auth-library-python/blob/2ea24b03436765fa3cf279ce148482ff6332136b/google/auth/compute_engine/_metadata.py#L122-L160
   /// Checks if the application is running in an environment with an accessible
   /// Compute Engine metadata server.
-  static Future<bool> isOnComputeEngine() => internalIsOnComputeEngine();
+  ///
+  /// If provided, [clientFactory] is called to create the [http.Client] used
+  /// to ping the metadata server, and the returned client is closed
+  /// afterwards.
+  static Future<bool> isOnComputeEngine({
+    FutureOr<http.Client> Function()? clientFactory,
+  }) => internalIsOnComputeEngine(clientFactory: clientFactory);
 
   /// Signs [message] using the Identity and Access Management (IAM)
   /// `signBlob` API.
@@ -360,82 +309,75 @@ final class ComputeEngineCredentials extends GoogleCredentials
     }
     var attempts = 0;
     var refreshedToken = false;
-
-    while (true) {
-      attempts++;
-      final http.Response response;
-      try {
-        response = await _client.post(
-          signBlobUrl,
-          headers: {
-            'Authorization': 'Bearer $token',
-            'Content-Type': 'application/json',
-          },
-          body: requestBody,
-        );
-      } on Exception catch (e, stackTrace) {
-        throw SigningException(
-          'Failed to sign message via IAM signBlob API: $e',
-          innerException: e,
-          innerStackTrace: stackTrace,
-        );
-      }
-
-      if (response.statusCode == 200) {
+    final client = await _clientFactory();
+    try {
+      while (true) {
+        attempts++;
+        final http.Response response;
         try {
-          final decoded = jsonDecode(response.body);
-          if (decoded is! Map<String, dynamic>) {
-            throw const FormatException('Expected JSON object.');
-          }
-          final signedBlob = decoded['signedBlob'];
-          if (signedBlob is! String) {
-            throw const FormatException("Missing 'signedBlob' in response");
-          }
-          return Uint8List.fromList(base64.decode(signedBlob));
-        } on FormatException catch (e, stackTrace) {
-          throw SigningException(
-            'Failed to parse signBlob response: ${e.message}',
-            innerException: e,
-            innerStackTrace: stackTrace,
+          response = await client.post(
+            signBlobUrl,
+            headers: {
+              'Authorization': 'Bearer $token',
+              'Content-Type': 'application/json',
+            },
+            body: requestBody,
           );
-        }
-      }
-
-      // If token expired (401), retry once with a freshly requested token.
-      if (response.statusCode == 401 && !refreshedToken) {
-        refreshedToken = true;
-        try {
-          token = await accessToken(forceRefresh: true);
         } on Exception catch (e, stackTrace) {
           throw SigningException(
-            'Failed to refresh access token for signing: $e',
+            'Failed to sign message via IAM signBlob API: $e',
             innerException: e,
             innerStackTrace: stackTrace,
           );
         }
-        continue;
+
+        if (response.statusCode == 200) {
+          try {
+            final signedBlob = requiredString(
+              decodeJsonObject(response.body),
+              'signedBlob',
+              'signBlob response',
+            );
+            return Uint8List.fromList(base64.decode(signedBlob));
+          } on FormatException catch (e, stackTrace) {
+            throw SigningException(
+              'Failed to parse signBlob response: ${e.message}',
+              innerException: e,
+              innerStackTrace: stackTrace,
+            );
+          }
+        }
+
+        // If token expired (401), retry once with a freshly requested token.
+        if (response.statusCode == 401 && !refreshedToken) {
+          refreshedToken = true;
+          try {
+            token = await accessToken(forceRefresh: true);
+          } on Exception catch (e, stackTrace) {
+            throw SigningException(
+              'Failed to refresh access token for signing: $e',
+              innerException: e,
+              innerStackTrace: stackTrace,
+            );
+          }
+          continue;
+        }
+
+        // If retryable status code (5xx), back off and retry up to 3 times.
+        if (_retryableStatusCodes.contains(response.statusCode) &&
+            attempts <= 3) {
+          final delayMs = (pow(2, attempts) * 100).toInt();
+          await Future<void>.delayed(Duration(milliseconds: delayMs));
+          continue;
+        }
+
+        throw SigningException(
+          'Failed to sign message via IAM signBlob API: '
+          'HTTP ${response.statusCode} - ${response.body}',
+        );
       }
-
-      // If retryable status code (5xx), back off and retry up to 3 times.
-      if (_retryableStatusCodes.contains(response.statusCode) &&
-          attempts <= 3) {
-        final delayMs = (pow(2, attempts) * 100).toInt();
-        await Future<void>.delayed(Duration(milliseconds: delayMs));
-        continue;
-      }
-
-      throw SigningException(
-        'Failed to sign message via IAM signBlob API: '
-        'HTTP ${response.statusCode} - ${response.body}',
-      );
-    }
-  }
-
-  /// Closes the underlying HTTP client if this instance created it.
-  @override
-  void close() {
-    if (_ownsClient) {
-      _client.close();
+    } finally {
+      client.close();
     }
   }
 }

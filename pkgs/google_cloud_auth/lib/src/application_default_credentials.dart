@@ -17,7 +17,7 @@
 /// - https://github.com/googleapis/google-auth-library-python/blob/main/google/auth/_default.py
 library;
 
-import 'dart:convert';
+import 'dart:async';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
@@ -27,6 +27,7 @@ import 'package:path/path.dart' as p;
 import 'compute_engine_credentials.dart';
 import 'credential_exception.dart';
 import 'google_credentials.dart';
+import 'json_utils.dart';
 import 'service_account_credentials.dart';
 
 const _credentialsFileName = 'application_default_credentials.json';
@@ -35,14 +36,19 @@ String? _readEnvironment(String name) => Platform.environment[name];
 
 /// Provides the Application Default Credential from the environment.
 ///
+/// If provided, [clientFactory] is called to create the [http.Client]s used
+/// to make requests. Each client it returns is closed after use, so it must
+/// return a new client on every call.
+///
 /// Throws a [CredentialException] if no credentials could be found or loaded.
-Future<GoogleCredentials> defaultCredentials({http.Client? client}) =>
-    internalDefaultCredentials(client: client);
+Future<GoogleCredentials> defaultCredentials({
+  FutureOr<http.Client> Function()? clientFactory,
+}) => internalDefaultCredentials(clientFactory: clientFactory);
 
 /// [defaultCredentials] with some extra parameters for testing.
 @internal
 Future<GoogleCredentials> internalDefaultCredentials({
-  http.Client? client,
+  FutureOr<http.Client> Function()? clientFactory,
   @visibleForTesting
   String? Function(String name) readEnvironment = _readEnvironment,
   @visibleForTesting String? wellKnownFilePath,
@@ -72,11 +78,11 @@ Future<GoogleCredentials> internalDefaultCredentials({
 
   // Check Google Compute Engine metadata server
   if (await internalIsOnComputeEngine(
-    client: client,
+    clientFactory: clientFactory,
     readEnvironment: readEnvironment,
   )) {
     return await ComputeEngineCredentials.create(
-      client: client,
+      clientFactory: clientFactory,
       metadataHost: readEnvironment('GCE_METADATA_HOST')?.trim(),
     );
   }
@@ -102,11 +108,7 @@ Future<ServiceAccountCredentials> _loadCredentialsFile(File file) async {
 
   final Map<String, dynamic> json;
   try {
-    final decoded = jsonDecode(content);
-    if (decoded is! Map<String, dynamic>) {
-      throw const FormatException('Expected JSON object.');
-    }
-    json = decoded;
+    json = decodeJsonObject(content);
   } on FormatException catch (e, stackTrace) {
     throw CredentialException(
       'The file at ${file.path} is not a valid JSON file: ${e.message}',
