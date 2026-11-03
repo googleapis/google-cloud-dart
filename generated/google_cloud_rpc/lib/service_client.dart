@@ -66,8 +66,6 @@ const String _typeJson = 'application/json';
 ///
 /// An attempt that times out may continue in the background, but its response
 /// is discarded.
-///
-/// Cancelling the subscription to a streaming request.
 class ServiceClient {
   // As of 2026-10-16 there is no consistent timeout behavior for RPCs across
   // implementations.
@@ -403,7 +401,16 @@ class ServiceClient {
     Future<void> startRequest() async {
       try {
         final encodedBody = body?._asEncodedJson;
-        final messages = await retry.run(() => attempt(encodedBody));
+        final messages = await retry.run(() async {
+          try {
+            return await attempt(encodedBody);
+          } on Exception {
+            // Don't retry a failure after the caller stopped listening:
+            // `ExponentialRetry` would wait before noticing.
+            if (cancelled.isCompleted) throw _CancelledError();
+            rethrow;
+          }
+        });
         if (cancelled.isCompleted) {
           // The caller stopped listening as the last attempt completed.
           unawaited(messages.listen(null).cancel());
@@ -507,7 +514,10 @@ class ServiceClient {
             controller.close();
           },
         );
-        // `Timer` treats a negative duration as zero.
+        // `Timer` treats a negative duration as zero. Even if no time remains,
+        // data that's already buffered arrives before the timer fires. There is
+        // no reason to go out of way to throw away a response that has already
+        // arrived.
         timer = Timer(timeout - stopwatch.elapsed, () {
           unawaited(subscription.cancel());
           controller

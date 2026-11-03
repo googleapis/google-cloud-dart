@@ -1592,6 +1592,8 @@ void main() {
             // According to the clock, `timeout` passes before the response
             // starts.
             now = now.add(timeout);
+            // The body never completes: a complete body would arrive before
+            // the expired timeout fired.
             return StreamedResponse(
               StreamController<List<int>>().stream,
               200,
