@@ -1279,26 +1279,34 @@ void main() {
         },
       );
 
-      fakeAsyncTest('times out if the response does not start by `min(timeout, '
-          'streamWaitTimeout)`', (async) {
+      fakeAsyncTest('the shorter of timeout and streamWaitTimeout limits the '
+          'wait for the response to start', (async) {
         final service = fakeAsyncService(MockClient(noResponse));
 
-        expect(
-          service.getStreaming(
-            sampleUrl,
-            enableSse: true,
-            timeout: timeout * 2,
-            streamWaitTimeout: timeout,
-          ),
-          emitsInOrder([
+        for (final (requestTimeout, streamWaitTimeout) in [
+          (null, timeout),
+          (timeout, null),
+          (timeout, timeout * 2),
+          (timeout * 2, timeout),
+        ]) {
+          expect(
+            service.getStreaming(
+              sampleUrl,
+              enableSse: true,
+              timeout: requestTimeout,
+              streamWaitTimeout: streamWaitTimeout,
+            ),
             emitsError(
               isA<TimeoutException>()
                   .having((e) => e.duration, 'duration', timeout)
-                  .having((e) => e.message, 'message', contains('$sampleUrl')),
+                  .having(
+                    (e) => e.message,
+                    'message',
+                    contains('did not return any data'),
+                  ),
             ),
-            emitsDone,
-          ]),
-        );
+          );
+        }
         async.elapse(timeout);
       });
 
