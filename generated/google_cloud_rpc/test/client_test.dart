@@ -1580,7 +1580,6 @@ void main() {
     });
 
     group('measures elapsed time with package:clock', () {
-      // Never passes in real time during a test.
       const timeout = Duration(minutes: 1);
       late DateTime now;
       late ServiceClient service;
