@@ -1028,43 +1028,52 @@ void main() {
       };
 
       for (final method in ['DELETE', 'GET', 'PATCH', 'POST', 'PUT']) {
-        fakeAsyncTest('a response that arrives in time', (async) {
-          responses.add(Response('{"fruit":"apple"}', 200));
+        group(method, () {
+          fakeAsyncTest('a response that arrives in time', (async) {
+            responses.add(Response('{"fruit":"apple"}', 200));
 
-          expect(send('GET', timeout: timeout), completion({'fruit': 'apple'}));
-          async.elapse(timeout ~/ 2);
-          expect(
-            async.pendingTimersDebugString,
-            isEmpty,
-            reason: 'no timer should outlive the request',
-          );
-        });
+            expect(
+              send(method, timeout: timeout),
+              completion({'fruit': 'apple'}),
+            );
+            async.elapse(timeout ~/ 2);
+            expect(
+              async.pendingTimersDebugString,
+              isEmpty,
+              reason: 'no timer should outlive the request',
+            );
+          });
 
-        test('rejects a timeout that is not positive', () {
-          expect(
-            () => send('GET', timeout: Duration.zero),
-            throwsArgumentError,
-          );
-          expect(
-            () => send('GET', timeout: const Duration(seconds: -1)),
-            throwsArgumentError,
-          );
-          expect(requests, isEmpty);
-        });
+          test('rejects a timeout that is not positive', () {
+            expect(
+              () => send(method, timeout: Duration.zero),
+              throwsArgumentError,
+            );
+            expect(
+              () => send(method, timeout: const Duration(seconds: -1)),
+              throwsArgumentError,
+            );
+            expect(requests, isEmpty);
+          });
 
-        fakeAsyncTest('$method times out if there is no response', (async) {
-          responses.add(null); // No response.
+          fakeAsyncTest('$method times out if there is no response', (async) {
+            responses.add(null); // No response.
 
-          expect(
-            send(method, timeout: timeout),
-            throwsA(
-              isA<TimeoutException>()
-                  .having((e) => e.duration, 'duration', timeout)
-                  .having((e) => e.message, 'message', contains('$sampleUrl')),
-            ),
-          );
-          async.elapse(timeout);
-          expect(requests, hasLength(1));
+            expect(
+              send(method, timeout: timeout),
+              throwsA(
+                isA<TimeoutException>()
+                    .having((e) => e.duration, 'duration', timeout)
+                    .having(
+                      (e) => e.message,
+                      'message',
+                      contains('$sampleUrl'),
+                    ),
+              ),
+            );
+            async.elapse(timeout);
+            expect(requests, hasLength(1));
+          });
         });
       }
 
