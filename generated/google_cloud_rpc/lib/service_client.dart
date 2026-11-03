@@ -516,8 +516,8 @@ class ServiceClient {
         );
         // `Timer` treats a negative duration as zero. Even if no time remains,
         // data that's already buffered arrives before the timer fires. There is
-        // no reason to go out of way to throw away a response that has already
-        // arrived.
+        // no reason to go out of our way to throw away a response that has
+        // already arrived.
         timer = Timer(timeout - stopwatch.elapsed, () {
           unawaited(subscription.cancel());
           controller
