@@ -21,6 +21,7 @@ import 'dart:convert';
 import 'package:google_cloud_pubsub/google_cloud_pubsub.dart';
 import 'package:google_cloud_pubsub/src/generated/google/pubsub/v1/pubsub.pb.dart'
     as generated;
+import 'package:google_cloud_rpc/retry.dart';
 import 'package:grpc/grpc.dart' as grpc;
 import 'package:protobuf/well_known_types/google/protobuf/timestamp.pb.dart'
     as protobuf;
@@ -254,9 +255,9 @@ void main() {
         final received = <String>[];
         final streamSubscription = subscription
             .streamingPull(
-              retry: const ExponentialRetry(
-                initialDelay: Duration(milliseconds: 5),
-              ),
+              retry: const ExponentialRetry.onCodes([
+                Code.unavailable,
+              ], initialDelay: Duration(milliseconds: 5)),
             )
             .listen(
               (message) => received.add(String.fromCharCodes(message.data)),
@@ -289,7 +290,8 @@ void main() {
           final received = <String>[];
           final streamSubscription = subscription
               .streamingPull(
-                retry: const ExponentialRetry(
+                retry: const ExponentialRetry.onCodes(
+                  [Code.unavailable],
                   maxRetries: 1,
                   initialDelay: Duration(milliseconds: 5),
                 ),
@@ -350,6 +352,26 @@ void main() {
         },
       );
 
+      test(
+        'an Error fails immediately even if retryIf accepts everything',
+        () async {
+          final subscription = client.subscription('test-sub');
+          final errorCompleter = Completer<Object>();
+          final streamSubscription = subscription
+              .streamingPull(retry: NoDelayRetry(retryIf: (_) => true))
+              .listen((_) {}, onError: errorCompleter.complete);
+
+          await fakeSubscriber.waitForConnections(1);
+          fakeSubscriber.responseControllers[0].addError(StateError('bug'));
+
+          final error = await errorCompleter.future;
+          expect(error, isA<StateError>());
+          expect(fakeSubscriber.responseControllers, hasLength(1));
+
+          await streamSubscription.cancel();
+        },
+      );
+
       test('exhausting retries on one stream keeps sibling stream alive until '
           'all streams fail', () async {
         final subscription = client.subscription('test-sub');
@@ -359,7 +381,9 @@ void main() {
         final streamSubscription = subscription
             .streamingPull(
               maxConcurrentStreams: 2,
-              retry: const ExponentialRetry(maxRetries: 0),
+              retry: const ExponentialRetry.onCodes([
+                Code.unavailable,
+              ], maxRetries: 0),
             )
             .listen(
               (message) => received.add(String.fromCharCodes(message.data)),
@@ -551,9 +575,9 @@ void main() {
           final received = <String>[];
           final streamSubscription = subscription
               .streamingPull(
-                retry: const ExponentialRetry(
-                  initialDelay: Duration(milliseconds: 5),
-                ),
+                retry: const ExponentialRetry.onCodes([
+                  Code.unavailable,
+                ], initialDelay: Duration(milliseconds: 5)),
               )
               .listen(
                 (message) => received.add(String.fromCharCodes(message.data)),
