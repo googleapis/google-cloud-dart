@@ -1062,23 +1062,24 @@ void main() {
     });
 
     test('includes the wait for the response to start', () async {
-      const timeout = Duration(milliseconds: 200);
-      final responseBody = StreamController<List<int>>();
       final service = ServiceClient(
         client: MockClient.streaming((request, body) async {
           // Half of `timeout` passes before the response starts.
           await Future<void>.delayed(timeout ~/ 2);
-          return StreamedResponse(responseBody.stream, 200);
+          // The body would arrive in time if `timeout` restarted when the
+          // response started. Its delay starts with the response, so the
+          // result doesn't depend on how promptly timers fire.
+          return StreamedResponse(
+            Stream.fromFuture(
+              Future.delayed(
+                timeout * 0.75,
+                () => utf8.encode('{"fruit":"apple"}'),
+              ),
+            ),
+            200,
+          );
         }),
       );
-      // The body would arrive in time if `timeout` started when the response
-      // started.
-      final sender = Timer(timeout * 1.25, () {
-        responseBody
-          ..add(utf8.encode('{"fruit":"apple"}'))
-          ..close();
-      });
-      addTearDown(sender.cancel);
 
       await expectLater(
         service.get(sampleUrl, timeout: timeout),
@@ -1460,21 +1461,25 @@ void main() {
       });
 
       test('timeout includes the wait for the response to start', () async {
-        const timeout = Duration(milliseconds: 200);
-        final events = StreamController<List<int>>();
         final service = ServiceClient(
           client: MockClient.streaming((request, body) async {
             // Half of `timeout` passes before the response starts.
             await Future<void>.delayed(timeout ~/ 2);
-            return StreamedResponse(events.stream, 200, headers: sseHeaders);
+            // The event would arrive in time if `timeout` restarted when the
+            // response started. Its delay starts with the response, so the
+            // result doesn't depend on how promptly timers fire.
+            return StreamedResponse(
+              Stream.fromFuture(
+                Future.delayed(
+                  timeout * 0.75,
+                  () => utf8.encode('data: {"fruit":"apple"}\n'),
+                ),
+              ),
+              200,
+              headers: sseHeaders,
+            );
           }),
         );
-        // This event would arrive in time if `timeout` started when the
-        // response started.
-        final sender = Timer(timeout * 1.25, () {
-          events.add(utf8.encode('data: {"fruit":"apple"}\n'));
-        });
-        addTearDown(sender.cancel);
 
         await expectLater(
           service.getStreaming(sampleUrl, enableSse: true, timeout: timeout),
