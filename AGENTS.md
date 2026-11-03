@@ -30,9 +30,9 @@
   completes, so `cancel()` can hang and the connection stays open. Use a
   `StreamController` or stream transformations instead.
 - dartdoc resolves references in `{@macro}` text in the library that uses the
-  macro, and ignores that library's `@docImport`s. Use backticks instead of a
-  reference for names that aren't imported everywhere a template is used, and
-  check with `dart doc --dry-run`.
+  macro, and ignores that library's `@docImport`s. Give every library that uses
+  a template a real import of each name the template references (for example,
+  `dart:async` for `TimeoutException`), and check with `dart doc --dry-run`.
 
 ## Generated code
 

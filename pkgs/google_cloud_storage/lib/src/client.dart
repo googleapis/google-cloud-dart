@@ -239,7 +239,7 @@ final class Storage {
   ///
   /// {@template storage_timeout}
   /// If set, [timeout] limits how long each request can take. A request that
-  /// takes longer fails with a `TimeoutException`, which [isTransientError]
+  /// takes longer fails with a [TimeoutException], which [isTransientError]
   /// considers transient.
   /// {@endtemplate}
   ///

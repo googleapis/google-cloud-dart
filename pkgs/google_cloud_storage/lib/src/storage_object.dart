@@ -15,6 +15,8 @@
 /// @docImport 'retry.dart';
 library;
 
+// Lets dartdoc resolve `[TimeoutException]` in `{@macro storage_timeout}`.
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:google_cloud_rpc/exceptions.dart';
