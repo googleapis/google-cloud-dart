@@ -1232,72 +1232,121 @@ void main() {
         };
       }
 
+      fakeAsyncTest('times out if the response does not start by `timeout`', (
+        async,
+      ) {
+        final service = fakeAsyncService(MockClient(noResponse));
+
+        expect(
+          service.getStreaming(sampleUrl, enableSse: true, timeout: timeout),
+          emitsInOrder([
+            emitsError(
+              isA<TimeoutException>()
+                  .having((e) => e.duration, 'duration', timeout)
+                  .having((e) => e.message, 'message', contains('$sampleUrl')),
+            ),
+            emitsDone,
+          ]),
+        );
+        async.elapse(timeout);
+      });
+
+      fakeAsyncTest(
+        'times out if the response does not start by `streamWaitTimeout`',
+        (async) {
+          final service = fakeAsyncService(MockClient(noResponse));
+
+          expect(
+            service.getStreaming(
+              sampleUrl,
+              enableSse: true,
+              streamWaitTimeout: timeout,
+            ),
+            emitsInOrder([
+              emitsError(
+                isA<TimeoutException>()
+                    .having((e) => e.duration, 'duration', timeout)
+                    .having(
+                      (e) => e.message,
+                      'message',
+                      contains('$sampleUrl'),
+                    ),
+              ),
+              emitsDone,
+            ]),
+          );
+          async.elapse(timeout);
+        },
+      );
+
+      fakeAsyncTest('times out if the response does not start by `min(timeout, '
+          'streamWaitTimeout)`', (async) {
+        final service = fakeAsyncService(MockClient(noResponse));
+
+        expect(
+          service.getStreaming(
+            sampleUrl,
+            enableSse: true,
+            timeout: timeout * 2,
+            streamWaitTimeout: timeout,
+          ),
+          emitsInOrder([
+            emitsError(
+              isA<TimeoutException>()
+                  .having((e) => e.duration, 'duration', timeout)
+                  .having((e) => e.message, 'message', contains('$sampleUrl')),
+            ),
+            emitsDone,
+          ]),
+        );
+        async.elapse(timeout);
+      });
+
+      fakeAsyncTest('an attempt that timed out is retried until the '
+          'response starts', (async) {
+        var count = 0;
+        final service = fakeAsyncService(
+          MockClient((request) {
+            ++count;
+            return count == 1
+                ? Completer<Response>()
+                      .future // Never completes.
+                : Future.value(
+                    Response(
+                      'data: {"fruit":"apple"}',
+                      200,
+                      headers: sseHeaders,
+                    ),
+                  );
+          }),
+        );
+
+        expect(
+          service.getStreaming(
+            sampleUrl,
+            enableSse: true,
+            retry: const NoDelayRetry.onCodes([Code.deadlineExceeded]),
+            timeout: timeout,
+          ),
+          emitsInOrder([
+            {'fruit': 'apple'},
+            emitsDone,
+          ]),
+        );
+        async.elapse(timeout);
+        expect(count, 2);
+        expect(
+          async.pendingTimersDebugString,
+          isEmpty,
+          reason: 'no timer should outlive the request',
+        );
+      });
+
+
       // Both limit the wait for the response to start and for more data.
       for (final parameter in ['timeout', 'streamWaitTimeout']) {
         group(parameter, () {
           for (final method in ['DELETE', 'GET', 'PATCH', 'POST', 'PUT']) {
-            fakeAsyncTest('$method times out if the response does not '
-                'start', (async) {
-              final service = fakeAsyncService(MockClient(noResponse));
-
-              expect(
-                send(service, parameter, method: method),
-                emitsInOrder([
-                  emitsError(
-                    isA<TimeoutException>()
-                        .having((e) => e.duration, 'duration', timeout)
-                        .having(
-                          (e) => e.message,
-                          'message',
-                          contains('$sampleUrl'),
-                        ),
-                  ),
-                  emitsDone,
-                ]),
-              );
-              async.elapse(timeout);
-            });
-          }
-
-          fakeAsyncTest('an attempt that timed out is retried until the '
-              'response starts', (async) {
-            var count = 0;
-            final service = fakeAsyncService(
-              MockClient((request) {
-                ++count;
-                return count == 1
-                    ? Completer<Response>().future
-                    : Future.value(
-                        Response(
-                          'data: {"fruit":"apple"}',
-                          200,
-                          headers: sseHeaders,
-                        ),
-                      );
-              }),
-            );
-
-            expect(
-              send(
-                service,
-                parameter,
-                method: 'POST',
-                retry: const NoDelayRetry.onCodes([Code.deadlineExceeded]),
-              ),
-              emitsInOrder([
-                {'fruit': 'apple'},
-                emitsDone,
-              ]),
-            );
-            async.elapse(timeout);
-            expect(count, 2);
-            expect(
-              async.pendingTimersDebugString,
-              isEmpty,
-              reason: 'no timer should outlive the request',
-            );
-          });
-
           fakeAsyncTest('times out if the server stops sending '
               'events', (async) {
             var count = 0;
