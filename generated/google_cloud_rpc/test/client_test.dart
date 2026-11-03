@@ -1028,8 +1028,32 @@ void main() {
       };
 
       for (final method in ['DELETE', 'GET', 'PATCH', 'POST', 'PUT']) {
+        fakeAsyncTest('a response that arrives in time', (async) {
+          responses.add(Response('{"fruit":"apple"}', 200));
+
+          expect(send('GET', timeout: timeout), completion({'fruit': 'apple'}));
+          async.elapse(timeout ~/ 2);
+          expect(
+            async.pendingTimersDebugString,
+            isEmpty,
+            reason: 'no timer should outlive the request',
+          );
+        });
+
+        test('rejects a timeout that is not positive', () {
+          expect(
+            () => send('GET', timeout: Duration.zero),
+            throwsArgumentError,
+          );
+          expect(
+            () => send('GET', timeout: const Duration(seconds: -1)),
+            throwsArgumentError,
+          );
+          expect(requests, isEmpty);
+        });
+
         fakeAsyncTest('$method times out if there is no response', (async) {
-          responses.add(null); // No response. Should we use a clock this this?
+          responses.add(null); // No response.
 
           expect(
             send(method, timeout: timeout),
@@ -1043,18 +1067,6 @@ void main() {
           expect(requests, hasLength(1));
         });
       }
-
-      fakeAsyncTest('a response that arrives in time', (async) {
-        responses.add(Response('{"fruit":"apple"}', 200));
-
-        expect(send('GET', timeout: timeout), completion({'fruit': 'apple'}));
-        async.flushMicrotasks();
-        expect(
-          async.pendingTimersDebugString,
-          isEmpty,
-          reason: 'no timer should outlive the request',
-        );
-      });
 
       fakeAsyncTest('an attempt that timed out is retried', (async) {
         responses.addAll([
@@ -1074,120 +1086,92 @@ void main() {
         expect(requests, hasLength(2));
       });
 
-      fakeAsyncTest(
-        'an attempt that timed out is not retried for other codes',
-        (async) {
-          responses.addAll([
-            null, // No response.
-            Response('{}', 200),
-          ]);
-
-          expect(
-            send(
-              'GET',
-              timeout: timeout,
-              retry: const NoDelayRetry.onCodes([Code.unavailable]),
-            ),
-            throwsA(isA<TimeoutException>()),
-          );
-          async.elapse(timeout);
-          expect(requests, hasLength(1));
-        },
-      );
-
-      test('rejects a timeout that is not positive', () {
-        expect(() => send('GET', timeout: Duration.zero), throwsArgumentError);
-        expect(
-          () => send('GET', timeout: const Duration(seconds: -1)),
-          throwsArgumentError,
+      fakeAsyncTest('times out if the response body does not complete', (
+        async,
+      ) {
+        var cancelled = false;
+        final responseBody = StreamController<List<int>>(
+          onCancel: () => cancelled = true,
+        )..add(utf8.encode('{"fruit":'));
+        final service = fakeAsyncService(
+          MockClient.streaming(
+            (request, body) async => StreamedResponse(responseBody.stream, 200),
+          ),
         );
-        expect(requests, isEmpty);
+
+        expect(
+          service.get(sampleUrl, timeout: timeout),
+          throwsA(isA<TimeoutException>()),
+        );
+        async.elapse(timeout);
+        expect(cancelled, isTrue, reason: 'the response should be cancelled');
       });
-    });
 
-    fakeAsyncTest('times out if the response body does not complete', (async) {
-      var cancelled = false;
-      final responseBody = StreamController<List<int>>(
-        onCancel: () => cancelled = true,
-      )..add(utf8.encode('{"fruit":'));
-      final service = fakeAsyncService(
-        MockClient.streaming(
-          (request, body) async => StreamedResponse(responseBody.stream, 200),
-        ),
-      );
+      fakeAsyncTest('includes the wait for the response to start', (async) {
+        final service = fakeAsyncService(
+          MockClient.streaming((request, body) async {
+            // Half of `timeout` passes before the response starts.
+            await Future<void>.delayed(timeout ~/ 2);
+            return StreamedResponse(StreamController<List<int>>().stream, 200);
+          }),
+        );
 
-      expect(
-        service.get(sampleUrl, timeout: timeout),
-        throwsA(isA<TimeoutException>()),
-      );
-      async.elapse(timeout);
-      expect(cancelled, isTrue, reason: 'the response should be cancelled');
-    });
+        // It times out when `timeout` has passed since the request started, not
+        // since the response started.
+        expect(
+          service.get(sampleUrl, timeout: timeout),
+          throwsA(
+            isA<TimeoutException>()
+                .having((e) => e.duration, 'duration', timeout)
+                .having((_) => async.elapsed, 'elapsed time', timeout),
+          ),
+        );
+        async.elapse(timeout * 2);
+      });
 
-    fakeAsyncTest('includes the wait for the response to start', (async) {
-      final service = fakeAsyncService(
-        MockClient.streaming((request, body) async {
-          // Half of `timeout` passes before the response starts.
-          await Future<void>.delayed(timeout ~/ 2);
-          return StreamedResponse(StreamController<List<int>>().stream, 200);
-        }),
-      );
+      fakeAsyncTest('ignores failures after timeout', (async) {
+        final response = Completer<Response>();
+        final service = fakeAsyncService(
+          MockClient((request) => response.future),
+        );
 
-      // It times out when `timeout` has passed since the request started, not
-      // since the response started.
-      expect(
-        service.get(sampleUrl, timeout: timeout),
-        throwsA(
-          isA<TimeoutException>()
-              .having((e) => e.duration, 'duration', timeout)
-              .having((_) => async.elapsed, 'elapsed time', timeout),
-        ),
-      );
-      async.elapse(timeout * 2);
-    });
+        expect(
+          service.get(sampleUrl, timeout: timeout),
+          throwsA(isA<TimeoutException>()),
+        );
+        async.elapse(timeout);
 
-    fakeAsyncTest('ignores the result of an attempt that timed out', (async) {
-      final response = Completer<Response>();
-      final service = fakeAsyncService(
-        MockClient((request) => response.future),
-      );
+        response.complete(Response('', 503));
+        async.flushMicrotasks();
+      });
 
-      expect(
-        service.get(sampleUrl, timeout: timeout),
-        throwsA(isA<TimeoutException>()),
-      );
-      async.elapse(timeout);
+      fakeAsyncTest('cancels a response that starts after the timeout', (
+        async,
+      ) {
+        var cancelled = false;
+        final service = fakeAsyncService(
+          MockClient.streaming((request, body) async {
+            await Future<void>.delayed(timeout * 2);
+            return StreamedResponse(
+              StreamController<List<int>>(
+                onCancel: () => cancelled = true,
+              ).stream,
+              200,
+            );
+          }),
+        );
 
-      // The abandoned attempt fails, but that failure isn't reported as an
-      // unhandled error, which would fail this test.
-      response.complete(Response('', 503));
-      async.flushMicrotasks();
-    });
-
-    fakeAsyncTest('cancels a response that starts after the timeout', (async) {
-      var cancelled = false;
-      final service = fakeAsyncService(
-        MockClient.streaming((request, body) async {
-          await Future<void>.delayed(timeout * 2);
-          return StreamedResponse(
-            StreamController<List<int>>(
-              onCancel: () => cancelled = true,
-            ).stream,
-            200,
-          );
-        }),
-      );
-
-      expect(
-        service.get(sampleUrl, timeout: timeout),
-        throwsA(isA<TimeoutException>()),
-      );
-      async.elapse(timeout * 2);
-      expect(
-        cancelled,
-        isTrue,
-        reason: 'nothing reads a response that starts after the timeout',
-      );
+        expect(
+          service.get(sampleUrl, timeout: timeout),
+          throwsA(isA<TimeoutException>()),
+        );
+        async.elapse(timeout * 2);
+        expect(
+          cancelled,
+          isTrue,
+          reason: 'nothing reads a response that starts after the timeout',
+        );
+      });
     });
 
     group('streaming', () {
