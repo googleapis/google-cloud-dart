@@ -338,6 +338,8 @@ class ServiceClient {
     required Duration? timeout,
     required Duration? streamWaitTimeout,
   }) {
+    _checkTimeout(timeout, 'timeout');
+    _checkTimeout(streamWaitTimeout, 'streamWaitTimeout');
     final cancelled = Completer<void>();
     late final StreamController<Map<String, dynamic>> controller;
     // Before the response starts, `timeout` and `streamWaitTimeout` limit the
@@ -400,8 +402,6 @@ class ServiceClient {
 
     Future<void> startRequest() async {
       try {
-        _checkTimeout(timeout, 'timeout');
-        _checkTimeout(streamWaitTimeout, 'streamWaitTimeout');
         final encodedBody = body?._asEncodedJson;
         final messages = await retry.run(() => attempt(encodedBody));
         if (cancelled.isCompleted) {

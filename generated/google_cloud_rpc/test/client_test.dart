@@ -1338,12 +1338,19 @@ void main() {
             );
           });
 
-          test('rejects a value that is not positive', () async {
+          test('rejects a value that is not positive', () {
             final service = ServiceClient(client: MockClient(noResponse));
 
-            await expectLater(
-              send(service, parameter, limit: Duration.zero),
-              emitsError(
+            expect(
+              () => send(service, parameter, limit: Duration.zero),
+              throwsA(
+                isA<ArgumentError>().having((e) => e.name, 'name', parameter),
+              ),
+            );
+            expect(
+              () =>
+                  send(service, parameter, limit: const Duration(seconds: -1)),
+              throwsA(
                 isA<ArgumentError>().having((e) => e.name, 'name', parameter),
               ),
             );
