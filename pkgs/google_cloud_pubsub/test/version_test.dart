@@ -19,8 +19,8 @@ import 'dart:io';
 import 'dart:isolate';
 
 import 'package:google_cloud_pubsub/google_cloud_pubsub.dart';
-import 'package:google_cloud_pubsub/src/pubsub_emulator_host_vm.dart';
 import 'package:google_cloud_pubsub/src/version.dart';
+import 'package:google_cloud_rpc/service_client.dart' show clientDartVersion;
 import 'package:test/test.dart';
 
 import 'test_utils.dart';
