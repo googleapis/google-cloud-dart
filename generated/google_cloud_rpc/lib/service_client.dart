@@ -400,7 +400,7 @@ class ServiceClient {
       }
     }
 
-    Future<void> run() async {
+    Future<void> startRequest() async {
       try {
         _checkTimeout(timeout, 'timeout');
         _checkTimeout(streamWaitTimeout, 'streamWaitTimeout');
@@ -421,7 +421,7 @@ class ServiceClient {
     }
 
     controller = StreamController(
-      onListen: () => unawaited(run()),
+      onListen: () => unawaited(startRequest()),
       onCancel: () {
         if (!cancelled.isCompleted) cancelled.complete();
       },
