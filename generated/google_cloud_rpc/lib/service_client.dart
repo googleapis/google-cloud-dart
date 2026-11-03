@@ -16,7 +16,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:clock/clock.dart';
-// `show` because protobuf's `Duration` would shadow `dart:core`'s.
 import 'package:google_cloud_protobuf/protobuf.dart' show JsonEncodable;
 import 'package:http/http.dart' as http;
 
@@ -65,11 +64,10 @@ const String _typeJson = 'application/json';
 /// events reach the caller as they arrive, so a timeout after the response
 /// starts ends the stream with a [TimeoutException], and isn't retried.
 ///
-/// An attempt that times out isn't aborted: its request may continue in the
-/// background, but its response is discarded.
+/// An attempt that times out may continue in the background, but its response
+/// is discarded.
 ///
-/// Cancelling the subscription to a streaming request stops it: no more
-/// attempts are made, and its response is discarded.
+/// Cancelling the subscription to a streaming request.
 class ServiceClient {
   // As of 2026-10-16 there is no consistent timeout behavior for RPCs across
   // implementations.
