@@ -24,7 +24,8 @@ import 'exceptions.dart';
 ///
 /// The format is either `major.minor.patch` or the special value `0`, which
 /// indicates that the version is unknown.
-const String clientDartVersion = '0';
+// ignore: prefer_const_declarations
+final String clientDartVersion = '0';
 
 /// A [http.Client] authenticated using an API key.
 ///
