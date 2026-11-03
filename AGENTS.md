@@ -24,6 +24,15 @@
 - `package:google_cloud_protobuf/protobuf.dart` exports a protobuf `Duration`
   that silently shadows `dart:core`'s `Duration`. Import it with `show` (or
   `hide Duration`) in libraries that use `dart:core`'s `Duration`.
+- Don't use `async*` for a stream that holds a request or response open. A
+  generator that is suspended at an `await` (including in an `await for` loop)
+  doesn't notice that its subscription was cancelled until the `await`
+  completes, so `cancel()` can hang and the connection stays open. Use a
+  `StreamController` or stream transformations instead.
+- dartdoc resolves references in `{@macro}` text in the library that uses the
+  macro, and ignores that library's `@docImport`s. Use backticks instead of a
+  reference for names that aren't imported everywhere a template is used, and
+  check with `dart doc --dry-run`.
 
 ## Generated code
 

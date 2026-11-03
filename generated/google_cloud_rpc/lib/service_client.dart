@@ -15,6 +15,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:clock/clock.dart';
 // `show` because protobuf's `Duration` would shadow `dart:core`'s.
 import 'package:google_cloud_protobuf/protobuf.dart' show JsonEncodable;
 import 'package:http/http.dart' as http;
@@ -64,8 +65,11 @@ const String _typeJson = 'application/json';
 /// events reach the caller as they arrive, so a timeout after the response
 /// starts ends the stream with a [TimeoutException], and isn't retried.
 ///
-/// An attempt that times out may continue in the background, and its result
-/// is ignored.
+/// An attempt that times out isn't aborted: its request may continue in the
+/// background, but its response is discarded.
+///
+/// Cancelling the subscription to a streaming request stops it: no more
+/// attempts are made, and its response is discarded.
 class ServiceClient {
   // As of 2026-10-16 there is no consistent timeout behavior for RPCs across
   // implementations.
@@ -86,7 +90,7 @@ class ServiceClient {
   //   data (`streamIdleTimeout`).
   // - Python (gRPC) has a deadline that applies to the entire stream.
   // - Python (REST) has a deadline that applies to the gap between messages.
-  // - Node.js and Rust have deadlines that applies to the whole stream.
+  // - Node.js and Rust have deadlines that apply to the whole stream.
   //
   // This client follows the Java strategy, except that it does not support
   // `streamIdleTimeout`.
@@ -305,15 +309,22 @@ class ServiceClient {
   }) {
     _checkTimeout(timeout, 'timeout');
     final encodedBody = body?._asEncodedJson;
-    return retry.run(
-      () => _withTimeout(url, timeout, () async {
-        final response = await _send(url, method, encodedBody);
-        final responseBody = await response.stream.bytesToString();
-        return responseBody.isEmpty
-            ? {}
-            : jsonDecode(responseBody) as Map<String, dynamic>;
-      }),
-    );
+    return retry.run(() async {
+      // `timeout` limits the whole attempt, including reading the response.
+      final stopwatch = clock.stopwatch()..start();
+      final response = await _sendWithTimeout(
+        url,
+        method,
+        encodedBody,
+        timeout,
+      );
+      final responseBody = await utf8.decodeStream(
+        _withRemainingTimeout(response.stream, url, timeout, stopwatch),
+      );
+      return responseBody.isEmpty
+          ? {}
+          : jsonDecode(responseBody) as Map<String, dynamic>;
+    });
   }
 
   /// Make a request that streams its results using
@@ -328,9 +339,9 @@ class ServiceClient {
     required RetryRunner retry,
     required Duration? timeout,
     required Duration? streamWaitTimeout,
-  }) async* {
-    _checkTimeout(timeout, 'timeout');
-    _checkTimeout(streamWaitTimeout, 'streamWaitTimeout');
+  }) {
+    final cancelled = Completer<void>();
+    late final StreamController<Map<String, dynamic>> controller;
     // Before the response starts, `timeout` and `streamWaitTimeout` limit the
     // same wait, so only the shorter one matters.
     final startTimeout = switch ((timeout, streamWaitTimeout)) {
@@ -340,26 +351,22 @@ class ServiceClient {
       (Duration t1, Duration t2) => t1 < t2 ? t1 : t2,
     };
     final requestUrl = enableSse ? _makeUrlStreaming(url) : url;
-    final encodedBody = body?._asEncodedJson;
-    final messages = await retry.run(() async {
+
+    Future<Stream<Map<String, dynamic>>> attempt(String? encodedBody) async {
+      if (cancelled.isCompleted) throw _CancelledError();
       // `timeout` limits the whole attempt, including any part of an event
       // stream that is read after the attempt completes.
-      final stopwatch = Stopwatch()..start();
-      final pendingResponse = _send(requestUrl, method, encodedBody);
-      final response = startTimeout == null
-          ? await pendingResponse
-          : await pendingResponse.timeout(
-              startTimeout,
-              onTimeout: () {
-                // The request keeps running in the background. If its response
-                // starts anyway, cancel it, because nothing will read it.
-                pendingResponse.then(_cancel).ignore();
-                throw TimeoutException(
-                  'Request to $requestUrl did not return any data',
-                  startTimeout,
-                );
-              },
-            );
+      final stopwatch = clock.stopwatch()..start();
+      final response = await _sendWithTimeout(
+        requestUrl,
+        method,
+        encodedBody,
+        startTimeout,
+      );
+      if (cancelled.isCompleted) {
+        _cancel(response).ignore();
+        throw _CancelledError();
+      }
       final bytes = _withRemainingTimeout(
         _withStallTimeout(response.stream, requestUrl, streamWaitTimeout),
         requestUrl,
@@ -373,7 +380,9 @@ class ServiceClient {
           // The server responded with a non-streaming response, which should
           // be a list of JSON objects. The whole body is read as part of the
           // attempt, so a failure while reading it can be retried.
-          final responseBody = await utf8.decodeStream(bytes);
+          final responseBody = await utf8.decodeStream(
+            _untilCancelled(bytes, cancelled.future),
+          );
           final json = (jsonDecode(responseBody) as List)
               .cast<Map<String, dynamic>>();
           return Stream.fromIterable(json);
@@ -389,28 +398,63 @@ class ServiceClient {
             statusCode: response.statusCode,
           );
       }
-    });
-    yield* messages;
+    }
+
+    Future<void> run() async {
+      try {
+        _checkTimeout(timeout, 'timeout');
+        _checkTimeout(streamWaitTimeout, 'streamWaitTimeout');
+        final encodedBody = body?._asEncodedJson;
+        final messages = await retry.run(() => attempt(encodedBody));
+        if (cancelled.isCompleted) {
+          // The caller stopped listening as the last attempt completed.
+          unawaited(messages.listen(null).cancel());
+          return;
+        }
+        await controller.addStream(messages, cancelOnError: true);
+      } catch (e, s) {
+        // Once the caller stops listening, there is nobody to report to.
+        if (!cancelled.isCompleted) controller.addError(e, s);
+      } finally {
+        unawaited(controller.close());
+      }
+    }
+
+    controller = StreamController(
+      onListen: () => unawaited(run()),
+      onCancel: () {
+        if (!cancelled.isCompleted) cancelled.complete();
+      },
+    );
+    return controller.stream;
   }
 
-  /// Runs [attempt], failing with a [TimeoutException] if it doesn't complete
-  /// within [timeout].
+  /// Sends a request, failing with a [TimeoutException] if the response
+  /// doesn't start within [timeout].
   ///
-  /// An attempt that times out keeps running in the background, and its
-  /// result is ignored.
-  static Future<T> _withTimeout<T>(
+  /// A request that times out isn't aborted, so it may keep running in the
+  /// background. If its response starts anyway, the response is cancelled,
+  /// because nothing will read it.
+  Future<http.StreamedResponse> _sendWithTimeout(
     Uri url,
+    String method,
+    String? encodedBody,
     Duration? timeout,
-    Future<T> Function() attempt,
   ) {
-    if (timeout == null) return attempt();
+    final pendingResponse = _send(url, method, encodedBody);
+    if (timeout == null) return pendingResponse;
     // TODO: Use `http.Abortable` when it is widely available. In practice,
     // `client` will almost always be a `package:googleapis_auth` wrapper, which
     // does not forward `Abortable.abortTrigger` to the underlying client.
-    return attempt().timeout(
+    return pendingResponse.timeout(
       timeout,
-      onTimeout: () =>
-          throw TimeoutException('Request to $url did not complete', timeout),
+      onTimeout: () {
+        pendingResponse.then(_cancel).ignore();
+        throw TimeoutException(
+          'Request to $url did not return any data',
+          timeout,
+        );
+      },
     );
   }
 
@@ -485,27 +529,64 @@ class ServiceClient {
     return controller.stream;
   }
 
+  /// [stream], ending with a [_CancelledError] if [cancelled] completes before
+  /// [stream] is done.
+  ///
+  /// After [cancelled] completes, the subscription to [stream] is cancelled,
+  /// even if it is paused.
+  static Stream<T> _untilCancelled<T>(
+    Stream<T> stream,
+    Future<void> cancelled,
+  ) {
+    late final StreamSubscription<T> subscription;
+    late final StreamController<T> controller;
+    controller = StreamController<T>(
+      onListen: () {
+        subscription = stream.listen(
+          controller.add,
+          onError: controller.addError,
+          onDone: controller.close,
+        );
+        unawaited(
+          cancelled.then((_) {
+            if (controller.isClosed) return;
+            unawaited(subscription.cancel());
+            controller
+              ..addError(_CancelledError())
+              ..close();
+          }),
+        );
+      },
+      onPause: () => subscription.pause(),
+      onResume: () => subscription.resume(),
+      onCancel: () => subscription.cancel(),
+    );
+    return controller.stream;
+  }
+
   static void _checkTimeout(Duration? timeout, String name) {
     if (timeout != null && timeout <= Duration.zero) {
       throw ArgumentError.value(timeout, name, 'must be positive');
     }
   }
 
-  static Stream<Map<String, dynamic>> _decodeEvents(
-    Stream<List<int>> bytes,
-  ) async* {
-    final lines = utf8.decoder.bind(bytes).transform(const LineSplitter());
-    await for (final line in lines) {
-      // Google APIs only generate "data" events.
-      // The SSE specification does not require a space after the colon but
-      // Google APIs always generate one.
-      const dataPrefix = 'data: ';
-      if (line.startsWith(dataPrefix)) {
-        final jsonText = line.substring(dataPrefix.length);
-        final json = jsonDecode(jsonText) as Map<String, dynamic>;
-        yield json;
-      }
-    }
+  static Stream<Map<String, dynamic>> _decodeEvents(Stream<List<int>> bytes) {
+    // Google APIs only generate "data" events.
+    // The SSE specification does not require a space after the colon but
+    // Google APIs always generate one.
+    const dataPrefix = 'data: ';
+    // This doesn't use `async*` because a generator that is waiting for the
+    // next event doesn't notice that its subscription was cancelled, so the
+    // response would stay open until the server sent another event.
+    return utf8.decoder
+        .bind(bytes)
+        .transform(const LineSplitter())
+        .where((line) => line.startsWith(dataPrefix))
+        .map(
+          (line) =>
+              jsonDecode(line.substring(dataPrefix.length))
+                  as Map<String, dynamic>,
+        );
   }
 
   static Uri _makeUrlStreaming(Uri url) {
@@ -514,6 +595,12 @@ class ServiceClient {
     return url.replace(queryParameters: query);
   }
 }
+
+/// Stops the attempts of a streaming request after the caller cancels its
+/// subscription.
+///
+/// It's never reported, because nobody is listening.
+final class _CancelledError extends Error {}
 
 extension on JsonEncodable {
   String get _asEncodedJson => jsonEncode(toJson());

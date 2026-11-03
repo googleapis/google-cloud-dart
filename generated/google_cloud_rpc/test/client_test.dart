@@ -15,6 +15,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:clock/clock.dart';
 import 'package:google_cloud_protobuf/protobuf.dart' show JsonEncodable;
 import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:google_cloud_rpc/retry.dart';
@@ -974,7 +975,7 @@ void main() {
 
       for (final method in ['DELETE', 'GET', 'PATCH', 'POST', 'PUT']) {
         test('$method times out if there is no response', () async {
-          responses.add(null);
+          responses.add(null); // No response. Should we use a clock this this?
 
           await expectLater(
             send(method, timeout: timeout),
@@ -997,7 +998,10 @@ void main() {
       });
 
       test('an attempt that timed out is retried', () async {
-        responses.addAll([null, Response('{"fruit":"apple"}', 200)]);
+        responses.addAll([
+          null, // No response.
+          Response('{"fruit":"apple"}', 200),
+        ]);
 
         expect(
           await send(
@@ -1013,7 +1017,10 @@ void main() {
       test(
         'an attempt that timed out is not retried for other codes',
         () async {
-          responses.addAll([null, Response('{}', 200)]);
+          responses.addAll([
+            null, // No response.
+            Response('{}', 200),
+          ]);
 
           await expectLater(
             send(
@@ -1038,15 +1045,13 @@ void main() {
     });
 
     test('times out if the response body does not complete', () async {
+      var cancelled = false;
+      final responseBody = StreamController<List<int>>(
+        onCancel: () => cancelled = true,
+      )..add(utf8.encode('{"fruit":'));
       final service = ServiceClient(
         client: MockClient.streaming(
-          (request, body) async => StreamedResponse(
-            Stream.fromFutures([
-              Future.value(utf8.encode('{"fruit":')),
-              Completer<List<int>>().future,
-            ]),
-            200,
-          ),
+          (request, body) async => StreamedResponse(responseBody.stream, 200),
         ),
       );
 
@@ -1054,6 +1059,7 @@ void main() {
         service.get(sampleUrl, timeout: timeout),
         throwsA(isA<TimeoutException>()),
       );
+      expect(cancelled, isTrue, reason: 'the response should be cancelled');
     });
 
     test('ignores the result of an attempt that timed out', () async {
@@ -1071,6 +1077,35 @@ void main() {
       // unhandled error, which would fail this test.
       response.complete(Response('', 503));
       await pumpEventQueue();
+    });
+
+    test('cancels a response that starts after the timeout', () async {
+      final responded = Completer<void>();
+      var cancelled = false;
+      final service = ServiceClient(
+        client: MockClient.streaming((request, body) async {
+          await Future<void>.delayed(timeout * 2);
+          responded.complete();
+          return StreamedResponse(
+            StreamController<List<int>>(
+              onCancel: () => cancelled = true,
+            ).stream,
+            200,
+          );
+        }),
+      );
+
+      await expectLater(
+        service.get(sampleUrl, timeout: timeout),
+        throwsA(isA<TimeoutException>()),
+      );
+      await responded.future;
+      await pumpEventQueue();
+      expect(
+        cancelled,
+        isTrue,
+        reason: 'nothing reads a response that starts after the timeout',
+      );
     });
 
     group('streaming', () {
@@ -1535,6 +1570,170 @@ void main() {
           {'fruit': 'banana'},
         ]);
       });
+    });
+
+    group('measures elapsed time with package:clock', () {
+      // Never passes in real time during a test.
+      const timeout = Duration(minutes: 1);
+      late DateTime now;
+      late ServiceClient service;
+
+      setUp(() {
+        now = DateTime(2026);
+        service = ServiceClient(
+          client: MockClient.streaming((request, body) async {
+            // According to the clock, `timeout` passes before the response
+            // starts.
+            now = now.add(timeout);
+            return StreamedResponse(
+              StreamController<List<int>>().stream,
+              200,
+              headers: sseHeaders,
+            );
+          }),
+        );
+      });
+
+      test('non-streaming', () async {
+        await withClock(
+          Clock(() => now),
+          () => expectLater(
+            service.get(sampleUrl, timeout: timeout),
+            throwsA(isA<TimeoutException>()),
+          ),
+        );
+      });
+
+      test('streaming', () async {
+        await withClock(
+          Clock(() => now),
+          () => expectLater(
+            service.getStreaming(sampleUrl, enableSse: true, timeout: timeout),
+            emitsInOrder([emitsError(isA<TimeoutException>()), emitsDone]),
+          ),
+        );
+      });
+    });
+  });
+
+  group('cancelling a streaming request', () {
+    const timeout = Duration(milliseconds: 50);
+    const sseHeaders = {'content-type': 'text/event-stream'};
+
+    test('while waiting for the response stops retrying', () async {
+      var requests = 0;
+      final requested = Completer<void>();
+      final service = ServiceClient(
+        client: MockClient((request) {
+          ++requests;
+          if (!requested.isCompleted) requested.complete();
+          return Completer<Response>().future;
+        }),
+      );
+
+      final subscription = service
+          .getStreaming(
+            sampleUrl,
+            enableSse: true,
+            timeout: timeout,
+            retry: const NoDelayRetry.onCodes([
+              Code.deadlineExceeded,
+            ], maxRetries: 2),
+          )
+          .listen(neverCalled);
+      await requested.future;
+
+      // The waiting attempt would time out and be retried, but nobody is
+      // listening, so `cancel` doesn't wait for it, or report its failure.
+      await expectLater(subscription.cancel(), completes);
+      await Future<void>.delayed(timeout * 4);
+      expect(requests, 1, reason: 'there should be no more attempts');
+    });
+
+    test('cancels a response that starts afterwards', () async {
+      final requested = Completer<void>();
+      final respond = Completer<void>();
+      var cancelled = false;
+      final service = ServiceClient(
+        client: MockClient.streaming((request, body) async {
+          requested.complete();
+          await respond.future;
+          return StreamedResponse(
+            StreamController<List<int>>(
+              onCancel: () => cancelled = true,
+            ).stream,
+            200,
+            headers: sseHeaders,
+          );
+        }),
+      );
+
+      final subscription = service
+          .getStreaming(sampleUrl, enableSse: true)
+          .listen(neverCalled);
+      await requested.future;
+      final cancelling = subscription.cancel();
+      respond.complete();
+      await pumpEventQueue();
+      expect(
+        cancelled,
+        isTrue,
+        reason: 'nothing reads a response that starts after cancelling',
+      );
+      await cancelling;
+    });
+
+    test('while reading a JSON list response cancels the response', () async {
+      final reading = Completer<void>();
+      var cancelled = false;
+      final jsonList = StreamController<List<int>>(
+        onListen: reading.complete,
+        onCancel: () => cancelled = true,
+      )..add(utf8.encode('[{"fruit":"apple"},'));
+      final service = ServiceClient(
+        client: MockClient.streaming(
+          (request, body) async => StreamedResponse(
+            jsonList.stream,
+            200,
+            headers: {'content-type': 'application/json'},
+          ),
+        ),
+      );
+
+      final subscription = service
+          .getStreaming(sampleUrl, enableSse: false)
+          .listen(neverCalled);
+      await reading.future;
+      final cancelling = subscription.cancel();
+      await pumpEventQueue();
+      expect(cancelled, isTrue, reason: 'the response should be cancelled');
+      await cancelling;
+    });
+
+    test('while waiting for more events cancels the response', () async {
+      var cancelled = false;
+      final events = StreamController<List<int>>(
+        onCancel: () => cancelled = true,
+      )..add(utf8.encode('data: {"fruit":"apple"}\n'));
+      final service = ServiceClient(
+        client: MockClient.streaming(
+          (request, body) async =>
+              StreamedResponse(events.stream, 200, headers: sseHeaders),
+        ),
+      );
+
+      final received = Completer<void>();
+      final subscription = service
+          .getStreaming(sampleUrl, enableSse: true)
+          .listen((_) => received.complete());
+      await received.future;
+      // Let the request wait for more events, which the server never sends.
+      await pumpEventQueue();
+
+      final cancelling = subscription.cancel();
+      await pumpEventQueue();
+      expect(cancelled, isTrue, reason: 'the response should be cancelled');
+      await cancelling;
     });
   });
 }

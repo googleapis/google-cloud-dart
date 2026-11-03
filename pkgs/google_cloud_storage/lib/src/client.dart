@@ -239,7 +239,7 @@ final class Storage {
   ///
   /// {@template storage_timeout}
   /// If set, [timeout] limits how long each request can take. A request that
-  /// takes longer fails with a [TimeoutException], which [isTransientError]
+  /// takes longer fails with a `TimeoutException`, which [isTransientError]
   /// considers transient.
   /// {@endtemplate}
   ///
@@ -1464,6 +1464,9 @@ final class Storage {
     Duration? timeout,
   }) => _retryFor(retry, idempotent: ifGenerationMatch != null).run(() async {
     final serviceClient = await _serviceClient;
+    // TODO: Resume from the last `rewriteToken` when retrying. Currently, a
+    // retry (for example, after a request times out) restarts the rewrite from
+    // the beginning, discarding the progress made so far.
     String? rewriteToken;
     ObjectMetadata? result;
     var body = metadata == null
