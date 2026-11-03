@@ -111,53 +111,6 @@ void main() async {
 }
 ```
 
-## Timeouts
-
-By default, requests have no time limit. Pass `timeout` to a method to limit
-how long each request can take. A request that takes longer fails with a
-`TimeoutException`.
-
-The timeout applies to each request separately. `isTransientError` considers a
-request that timed out to be transient, so it is retried in the same way as a
-network failure.
-
-Methods that upload or download object content don't take a `timeout` yet.
-
-For example:
-
-<?code-excerpt "example/timeout.dart (timeout)"?>
-```dart
-import 'dart:async';
-
-import 'package:google_cloud_rpc/retry.dart';
-import 'package:google_cloud_storage/google_cloud_storage.dart';
-
-void main() async {
-  final storage = Storage();
-
-  // Give up on each request after 10 seconds. This operation is idempotent, so
-  // a request that times out is retried using `defaultRetry`.
-  await storage.bucketMetadata(
-    'my-bucket',
-    timeout: const Duration(seconds: 10),
-  );
-
-  // Make a single request, and give up after 5 seconds.
-  try {
-    await storage.objectMetadata(
-      'my-bucket',
-      'my-object',
-      timeout: const Duration(seconds: 5),
-      retry: noRetry,
-    );
-  } on TimeoutException {
-    print('Cloud Storage did not respond in time.');
-  }
-
-  storage.close();
-}
-```
-
 ## Feature Planning
 
 <a href="https://github.com/orgs/googleapis/projects/37/views/1"

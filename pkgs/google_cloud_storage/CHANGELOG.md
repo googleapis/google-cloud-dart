@@ -28,12 +28,6 @@
 * Move `ChecksumValidationException` to `package:google_cloud_rpc` (re-exported
   for backwards compatibility).
 * Add `RetryRunner.isRetryable` and `RetryRunner.delays`.
-* Add a `timeout` argument to the `Storage`, `Bucket` and `StorageObject`
-  methods that don't upload or download object content. A request that takes
-  longer fails with a `TimeoutException`.
-* `isTransientError`, and so `defaultRetry`, now considers a
-  `TimeoutException` transient, as the Cloud Storage retry strategy recommends
-  for socket timeouts.
 
 ## 0.6.4
 

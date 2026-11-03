@@ -12,9 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// Lets dartdoc resolve `[TimeoutException]` in `{@macro storage_timeout}`.
-import 'dart:async';
-
 import 'package:google_cloud_rpc/retry.dart';
 import 'package:meta/meta.dart';
 
@@ -56,8 +53,6 @@ final class Bucket {
   ///
   /// {@macro storage_retry_idempotent}
   ///
-  /// {@macro storage_timeout}
-  ///
   /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/buckets/insert).
   ///
   /// [Google Cloud Storage bucket]: https://docs.cloud.google.com/storage/docs/buckets
@@ -65,12 +60,10 @@ final class Bucket {
     BucketMetadata? metadata,
     bool enableObjectRetention = false,
     RetryRunner? retry,
-    Duration? timeout,
   }) => storage.createBucket(
     metadata?.copyWith(name: name) ?? BucketMetadata(name: name),
     enableObjectRetention: enableObjectRetention,
     retry: retry,
-    timeout: timeout,
   );
 
   /// Deletes this already-empty [Google Cloud Storage bucket][].
@@ -78,8 +71,6 @@ final class Bucket {
   /// This operation is always idempotent.
   ///
   /// {@macro storage_retry_idempotent}
-  ///
-  /// {@macro storage_timeout}
   ///
   /// Throws [NotFoundException] if the bucket does not exist. Throws
   /// [ConflictException] if the bucket is not empty.
@@ -99,13 +90,11 @@ final class Bucket {
     BigInt? ifMetagenerationMatch,
     String? userProject,
     RetryRunner? retry,
-    Duration? timeout,
   }) => storage.deleteBucket(
     name,
     ifMetagenerationMatch: ifMetagenerationMatch,
     userProject: userProject,
     retry: retry,
-    timeout: timeout,
   );
 
   /// Information about this [Google Cloud Storage bucket][].
@@ -113,8 +102,6 @@ final class Bucket {
   /// This operation is read-only and always idempotent.
   ///
   /// {@macro storage_retry_idempotent}
-  ///
-  /// {@macro storage_timeout}
   ///
   /// Throws [NotFoundException] if the bucket does not exist.
   ///
@@ -140,14 +127,12 @@ final class Bucket {
     String? userProject,
     String? projection,
     RetryRunner? retry,
-    Duration? timeout,
   }) => storage.bucketMetadata(
     name,
     ifMetagenerationMatch: ifMetagenerationMatch,
     userProject: userProject,
     projection: projection,
     retry: retry,
-    timeout: timeout,
   );
 
   /// Update this [Google Cloud Storage bucket][].
@@ -155,8 +140,6 @@ final class Bucket {
   /// This operation is idempotent if [ifMetagenerationMatch] is set.
   ///
   /// {@macro storage_retry_sometimes_idempotent}
-  ///
-  /// {@macro storage_timeout}
   ///
   /// If set, [ifMetagenerationMatch] makes updating the bucket metadata
   /// conditional on whether the bucket's metageneration matches the provided
@@ -188,7 +171,6 @@ final class Bucket {
     String? projection,
     String? userProject,
     RetryRunner? retry,
-    Duration? timeout,
   }) => storage.patchBucket(
     name,
     metadata,
@@ -198,6 +180,5 @@ final class Bucket {
     projection: projection,
     userProject: userProject,
     retry: retry,
-    timeout: timeout,
   );
 }

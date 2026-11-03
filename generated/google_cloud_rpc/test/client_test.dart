@@ -15,7 +15,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:clock/clock.dart';
 import 'package:google_cloud_protobuf/protobuf.dart' show JsonEncodable;
 import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:google_cloud_rpc/retry.dart';
@@ -1062,6 +1061,37 @@ void main() {
       expect(cancelled, isTrue, reason: 'the response should be cancelled');
     });
 
+    test('includes the wait for the response to start', () async {
+      const timeout = Duration(milliseconds: 200);
+      final responseBody = StreamController<List<int>>();
+      final service = ServiceClient(
+        client: MockClient.streaming((request, body) async {
+          // Half of `timeout` passes before the response starts.
+          await Future<void>.delayed(timeout ~/ 2);
+          return StreamedResponse(responseBody.stream, 200);
+        }),
+      );
+      // The body would arrive in time if `timeout` started when the response
+      // started.
+      final sender = Timer(timeout * 1.25, () {
+        responseBody
+          ..add(utf8.encode('{"fruit":"apple"}'))
+          ..close();
+      });
+      addTearDown(sender.cancel);
+
+      await expectLater(
+        service.get(sampleUrl, timeout: timeout),
+        throwsA(
+          isA<TimeoutException>().having(
+            (e) => e.duration,
+            'duration',
+            timeout,
+          ),
+        ),
+      );
+    });
+
     test('ignores the result of an attempt that timed out', () async {
       final response = Completer<Response>();
       final service = ServiceClient(
@@ -1576,50 +1606,6 @@ void main() {
           {'fruit': 'apple'},
           {'fruit': 'banana'},
         ]);
-      });
-    });
-
-    group('measures elapsed time with package:clock', () {
-      const timeout = Duration(minutes: 1);
-      late DateTime now;
-      late ServiceClient service;
-
-      setUp(() {
-        now = DateTime(2026);
-        service = ServiceClient(
-          client: MockClient.streaming((request, body) async {
-            // According to the clock, `timeout` passes before the response
-            // starts.
-            now = now.add(timeout);
-            // The body never completes: a complete body would arrive before
-            // the expired timeout fired.
-            return StreamedResponse(
-              StreamController<List<int>>().stream,
-              200,
-              headers: sseHeaders,
-            );
-          }),
-        );
-      });
-
-      test('non-streaming', () async {
-        await withClock(
-          Clock(() => now),
-          () => expectLater(
-            service.get(sampleUrl, timeout: timeout),
-            throwsA(isA<TimeoutException>()),
-          ),
-        );
-      });
-
-      test('streaming', () async {
-        await withClock(
-          Clock(() => now),
-          () => expectLater(
-            service.getStreaming(sampleUrl, enableSse: true, timeout: timeout),
-            emitsInOrder([emitsError(isA<TimeoutException>()), emitsDone]),
-          ),
-        );
       });
     });
   });

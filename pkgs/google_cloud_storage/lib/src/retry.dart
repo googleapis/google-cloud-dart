@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'dart:async';
-
 import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:google_cloud_rpc/retry.dart';
 import 'package:http/http.dart' as http;
@@ -45,13 +43,11 @@ const defaultRetry = ExponentialRetry(retryIf: isTransientError);
 /// [Cloud Storage retry strategy](https://docs.cloud.google.com/storage/docs/retry-strategy)
 /// considers transient:
 /// - failures to communicate with the service ([http.ClientException]).
-/// - requests that timed out ([TimeoutException]).
 /// - HTTP 408, 429 and 5xx responses.
 /// - checksum mismatches ([ChecksumValidationException]).
 bool isTransientError(Object error) => switch (error) {
   ServiceException(statusCode: 408 || 429 || (>= 500 && < 600)) ||
   http.ClientException() ||
-  TimeoutException() ||
   ChecksumValidationException() => true,
   _ => false,
 };
