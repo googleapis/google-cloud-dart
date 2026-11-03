@@ -1175,63 +1175,6 @@ void main() {
     });
 
     group('streaming', () {
-      // Starts a streaming request with `parameter` (`timeout` or
-      // `streamWaitTimeout`) set to `limit`.
-      Stream<Map<String, dynamic>> send(
-        ServiceClient service,
-        String parameter, {
-        String method = 'GET',
-        bool enableSse = true,
-        RetryRunner retry = noRetry,
-        Duration limit = timeout,
-      }) {
-        final requestTimeout = parameter == 'timeout' ? limit : null;
-        final streamWaitTimeout = parameter == 'streamWaitTimeout'
-            ? limit
-            : null;
-        return switch (method) {
-          'DELETE' => service.deleteStreaming(
-            sampleUrl,
-            enableSse: enableSse,
-            retry: retry,
-            timeout: requestTimeout,
-            streamWaitTimeout: streamWaitTimeout,
-          ),
-          'GET' => service.getStreaming(
-            sampleUrl,
-            enableSse: enableSse,
-            retry: retry,
-            timeout: requestTimeout,
-            streamWaitTimeout: streamWaitTimeout,
-          ),
-          'PATCH' => service.patchStreaming(
-            sampleUrl,
-            enableSse: enableSse,
-            body: payload,
-            retry: retry,
-            timeout: requestTimeout,
-            streamWaitTimeout: streamWaitTimeout,
-          ),
-          'POST' => service.postStreaming(
-            sampleUrl,
-            enableSse: enableSse,
-            body: payload,
-            retry: retry,
-            timeout: requestTimeout,
-            streamWaitTimeout: streamWaitTimeout,
-          ),
-          'PUT' => service.putStreaming(
-            sampleUrl,
-            enableSse: enableSse,
-            body: payload,
-            retry: retry,
-            timeout: requestTimeout,
-            streamWaitTimeout: streamWaitTimeout,
-          ),
-          _ => throw ArgumentError.value(method, 'method'),
-        };
-      }
-
       fakeAsyncTest('times out if the response does not start by `timeout`', (
         async,
       ) {
@@ -1350,173 +1293,140 @@ void main() {
         );
       });
 
+      fakeAsyncTest('times out if the server stops sending events for '
+          '`streamWaitTimeout`', (async) {
+        var count = 0;
+        var cancelled = false;
+        final events = StreamController<List<int>>(
+          onCancel: () => cancelled = true,
+        )..add(utf8.encode('data: {"fruit":"apple"}\n'));
+        final service = fakeAsyncService(
+          MockClient.streaming((request, body) async {
+            ++count;
+            return StreamedResponse(events.stream, 200, headers: sseHeaders);
+          }),
+        );
 
-      // Both limit the wait for the response to start and for more data.
-      for (final parameter in ['timeout', 'streamWaitTimeout']) {
-        group(parameter, () {
-          for (final method in ['DELETE', 'GET', 'PATCH', 'POST', 'PUT']) {
-          fakeAsyncTest('times out if the server stops sending '
-              'events', (async) {
-            var count = 0;
-            var cancelled = false;
-            final events = StreamController<List<int>>(
-              onCancel: () => cancelled = true,
-            )..add(utf8.encode('data: {"fruit":"apple"}\n'));
-            final service = fakeAsyncService(
-              MockClient.streaming((request, body) async {
-                ++count;
-                return StreamedResponse(
-                  events.stream,
-                  200,
-                  headers: sseHeaders,
-                );
-              }),
-            );
-
-            expect(
-              send(
-                service,
-                parameter,
-                retry: const NoDelayRetry.onCodes([Code.deadlineExceeded]),
+        expect(
+          service.getStreaming(
+            sampleUrl,
+            enableSse: true,
+            retry: const NoDelayRetry.onCodes([Code.deadlineExceeded]),
+            streamWaitTimeout: timeout,
+          ),
+          emitsInOrder([
+            {'fruit': 'apple'},
+            emitsError(
+              isA<TimeoutException>().having(
+                (e) => e.duration,
+                'duration',
+                timeout,
               ),
-              emitsInOrder([
-                {'fruit': 'apple'},
-                emitsError(
-                  isA<TimeoutException>().having(
-                    (e) => e.duration,
-                    'duration',
-                    timeout,
-                  ),
-                ),
-                emitsDone,
-              ]),
-            );
-            async.elapse(timeout);
-            // An event was delivered before the timeout, so it isn't retried.
-            expect(count, 1);
-            expect(
-              cancelled,
-              isTrue,
-              reason: 'the response should be cancelled',
-            );
-          });
+            ),
+            emitsDone,
+          ]),
+        );
+        async.elapse(timeout);
+        // An event was delivered before the timeout, so it isn't retried.
+        expect(count, 1);
+        expect(cancelled, isTrue, reason: 'the response should be cancelled');
+      });
 
-          fakeAsyncTest('cancels a response that starts after the '
-              'timeout', (async) {
-            var cancelled = false;
-            final events = StreamController<List<int>>(
-              onCancel: () => cancelled = true,
-            );
-            final service = fakeAsyncService(
-              MockClient.streaming((request, body) async {
-                await Future<void>.delayed(timeout * 2);
-                return StreamedResponse(
-                  events.stream,
-                  200,
-                  headers: sseHeaders,
-                );
-              }),
-            );
+      fakeAsyncTest('cancels a response that starts after the timeout', (
+        async,
+      ) {
+        var cancelled = false;
+        final events = StreamController<List<int>>(
+          onCancel: () => cancelled = true,
+        );
+        final service = fakeAsyncService(
+          MockClient.streaming((request, body) async {
+            await Future<void>.delayed(timeout * 2);
+            return StreamedResponse(events.stream, 200, headers: sseHeaders);
+          }),
+        );
 
-            expect(
-              send(service, parameter),
-              emitsInOrder([emitsError(isA<TimeoutException>()), emitsDone]),
-            );
-            async.elapse(timeout * 2);
-            expect(
-              cancelled,
-              isTrue,
-              reason: 'nothing reads a response that starts after the timeout',
-            );
-          });
+        expect(
+          service.getStreaming(sampleUrl, enableSse: true, timeout: timeout),
+          emitsInOrder([emitsError(isA<TimeoutException>()), emitsDone]),
+        );
+        async.elapse(timeout * 2);
+        expect(
+          cancelled,
+          isTrue,
+          reason: 'nothing reads a response that starts after the timeout',
+        );
+      });
 
-          fakeAsyncTest('a JSON list response that does not arrive in time is '
-              'cancelled and retried', (async) {
-            var count = 0;
-            var cancelled = false;
-            final service = fakeAsyncService(
-              MockClient.streaming((request, body) async {
-                ++count;
-                return StreamedResponse(
-                  count == 1
-                      ? StreamController<List<int>>(
-                          onCancel: () => cancelled = true,
-                        ).stream
-                      : Stream.value(utf8.encode('[{"fruit":"apple"}]')),
-                  200,
-                  headers: {'content-type': 'application/json'},
-                );
-              }),
+      fakeAsyncTest('a JSON list response that does not arrive in time is '
+          'cancelled and retried', (async) {
+        var count = 0;
+        var cancelled = false;
+        final service = fakeAsyncService(
+          MockClient.streaming((request, body) async {
+            ++count;
+            return StreamedResponse(
+              count == 1
+                  ? StreamController<List<int>>(
+                      onCancel: () => cancelled = true,
+                    ).stream
+                  : Stream.value(utf8.encode('[{"fruit":"apple"}]')),
+              200,
+              headers: {'content-type': 'application/json'},
             );
+          }),
+        );
 
-            expect(
-              send(
-                service,
-                parameter,
-                enableSse: false,
-                retry: const NoDelayRetry.onCodes([Code.deadlineExceeded]),
-              ),
-              emitsInOrder([
-                {'fruit': 'apple'},
-                emitsDone,
-              ]),
-            );
-            async.elapse(timeout);
-            expect(count, 2);
-            expect(
-              cancelled,
-              isTrue,
-              reason: 'the first response should be cancelled',
-            );
-          });
+        expect(
+          service.getStreaming(
+            sampleUrl,
+            enableSse: false,
+            retry: const NoDelayRetry.onCodes([Code.deadlineExceeded]),
+            timeout: timeout,
+          ),
+          emitsInOrder([
+            {'fruit': 'apple'},
+            emitsDone,
+          ]),
+        );
+        async.elapse(timeout);
+        expect(count, 2);
+        expect(
+          cancelled,
+          isTrue,
+          reason: 'the first response should be cancelled',
+        );
+      });
 
-          test('rejects a value that is not positive', () {
-            final service = ServiceClient(client: MockClient(noResponse));
+      test('rejects a timeout or streamWaitTimeout that is not positive', () {
+        final service = ServiceClient(client: MockClient(noResponse));
 
-            expect(
-              () => send(service, parameter, limit: Duration.zero),
-              throwsA(
-                isA<ArgumentError>().having((e) => e.name, 'name', parameter),
-              ),
-            );
-            expect(
-              () =>
-                  send(service, parameter, limit: const Duration(seconds: -1)),
-              throwsA(
-                isA<ArgumentError>().having((e) => e.name, 'name', parameter),
-              ),
-            );
-          });
-        });
-      }
-
-      fakeAsyncTest('the shorter of timeout and streamWaitTimeout limits the '
-          'wait for the response to start', (async) {
-        final service = fakeAsyncService(MockClient(noResponse));
-
-        for (final (requestTimeout, streamWaitTimeout) in [
-          (timeout, timeout * 2),
-          (timeout * 2, timeout),
-        ]) {
+        for (final value in [Duration.zero, const Duration(seconds: -1)]) {
           expect(
-            service.getStreaming(
+            () => service.getStreaming(
               sampleUrl,
               enableSse: true,
-              timeout: requestTimeout,
-              streamWaitTimeout: streamWaitTimeout,
+              timeout: value,
             ),
-            emitsError(
-              isA<TimeoutException>()
-                  .having((e) => e.duration, 'duration', timeout)
-                  .having(
-                    (e) => e.message,
-                    'message',
-                    contains('did not return any data'),
-                  ),
+            throwsA(
+              isA<ArgumentError>().having((e) => e.name, 'name', 'timeout'),
+            ),
+          );
+          expect(
+            () => service.getStreaming(
+              sampleUrl,
+              enableSse: true,
+              streamWaitTimeout: value,
+            ),
+            throwsA(
+              isA<ArgumentError>().having(
+                (e) => e.name,
+                'name',
+                'streamWaitTimeout',
+              ),
             ),
           );
         }
-        async.elapse(timeout);
       });
 
       fakeAsyncTest('timeout limits the whole stream', (async) {

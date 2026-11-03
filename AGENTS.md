@@ -49,6 +49,9 @@
 ## Testing instructions
 
 - Run `dart test .` frequently (note the `.` when running from the root).
+  The root `dart_test.yaml`, which runs tests on the VM and in Chrome, doesn't
+  apply when you run `dart test` in a package directory, so add
+  `-p vm -p chrome` there.
 - Before running tests with the `-P google-cloud` flag, find the currently
   configured project using `gcloud config get-value project` and ask the
   user to confirm that this specific project is safe to use.
