@@ -141,7 +141,6 @@ void main() {
           final done = Completer<void>();
           var deliveries = 0;
           String? firstMessageId;
-          ReceivedMessage? secondDelivery;
 
           final streamSubscription = subscription
               .streamingPull(
@@ -156,7 +155,11 @@ void main() {
                   await message.modifyAckDeadline(0);
                 } else if (deliveries == 2) {
                   expect(message.messageId, firstMessageId);
-                  secondDelivery = message;
+                  // Shorten the lease so that if the stream-routed
+                  // `acknowledge()` were not processed, the message would
+                  // expire during the wait below and be redelivered before the
+                  // sentinel message.
+                  await message.modifyAckDeadline(3);
                   await message.acknowledge();
                   if (!done.isCompleted) done.complete();
                 }
@@ -172,9 +175,13 @@ void main() {
           await streamSubscription.cancel();
           await subscription.close();
 
+          // Wait past the 3-second deadline rather than sending
+          // `modifyAckDeadlineNow(..., 0)`, which can race with asynchronous
+          // server-side ack processing in production Pub/Sub.
+          await Future<void>.delayed(const Duration(seconds: 4));
+
           final reopen = client.subscription(subscriptionName);
           addTearDown(() async => await reopen.close());
-          await reopen.modifyAckDeadlineNow([secondDelivery!], 0);
           await client.publish(topic.name, utf8.encode('sentinel'));
 
           final afterAck = await pullReliably(reopen, count: 1);
