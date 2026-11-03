@@ -583,9 +583,6 @@ class ServiceClient {
     // The SSE specification does not require a space after the colon but
     // Google APIs always generate one.
     const dataPrefix = 'data: ';
-    // This doesn't use `async*` because a generator that is waiting for the
-    // next event doesn't notice that its subscription was cancelled, so the
-    // response would stay open until the server sent another event.
     return utf8.decoder
         .bind(bytes)
         .transform(const LineSplitter())
@@ -607,7 +604,8 @@ class ServiceClient {
 /// Stops the attempts of a streaming request after the caller cancels its
 /// subscription.
 ///
-/// It's never reported, because nobody is listening.
+/// Because this is only raised after the caller cancels its subscription, it
+/// is never surfaced outside of this library.
 final class _CancelledError extends Error {}
 
 extension on JsonEncodable {
