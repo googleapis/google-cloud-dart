@@ -41,6 +41,10 @@
 - Don't edit `generated/*/CHANGELOG.md`. `librarian bump` writes the entries
   from PR titles at release time (see
   [generated/RELEASING.md](generated/RELEASING.md)).
+- To add a dependency to a generated package, add it to the package's `dart`
+  section in `librarian.yaml` (for example,
+  `dev_dependencies: fake_async,test`) and to its `pubspec.yaml`, which is
+  generated from that section (dev dependencies get the constraint `any`).
 
 ## Testing instructions
 
@@ -56,3 +60,16 @@
   if they use `projectId` (e.g.
   `GOOGLE_CLOUD_PROJECT=demo-project dart test -P firebase-emulator`).
 - Try to fix any test failures before declaring yourself done.
+- Tests that depend on the passage of time use `package:fake_async`, so they
+  are fast and deterministic (see `fakeAsyncTest` in
+  `generated/google_cloud_rpc/test/client_test.dart`). Code under test must
+  read the time from `package:clock` (`clock.now()`, `clock.stopwatch()`)
+  rather than `DateTime.now()` or `Stopwatch`, which fake time doesn't control.
+  Cancelling a subscription usually returns a root-zone future, which
+  `fakeAsync` doesn't control:
+    - A stream can wait for it before delivering an error or done event.
+      `fakeAsyncService` in the same file works around this for
+      `ServiceClient`.
+    - On the web, `await for` waits for it when the stream ends, so use
+      `listen` (and `pause(resumeSignal)` for a slow caller) instead. Don't
+      `expect` the future that `cancel()` returns either.

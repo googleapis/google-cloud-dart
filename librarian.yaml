@@ -452,7 +452,7 @@ libraries:
       - lib/src/rpc.p.dart
     dart:
       dependencies: clock,googleapis_auth,http,meta
-      dev_dependencies: test
+      dev_dependencies: fake_async,test
       part_file: rpc.p.dart
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_rpc
   - name: google_cloud_secretmanager_v1
