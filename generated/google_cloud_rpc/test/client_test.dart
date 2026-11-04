@@ -1427,6 +1427,7 @@ void main() {
       });
 
       fakeAsyncTest('timeout limits the whole stream', (async) {
+        var cancelled = false;
         late final Timer timer;
         final events = StreamController<List<int>>(
           onCancel: () {
@@ -1503,6 +1504,7 @@ void main() {
       });
 
       fakeAsyncTest('timeout counts time that the stream was paused', (async) {
+        var cancelled = false;
         late final Timer timer;
         final events = StreamController<List<int>>(
           onCancel: () {
