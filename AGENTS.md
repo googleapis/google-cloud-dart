@@ -8,10 +8,6 @@
 - Wrap Markdown (`*.md`) files at 80 columns.
 - Update this file if you discover something useful about developing in this
   repository.
-- In a sandboxed shell that cannot read the home directory, `dart` commands
-  may crash while reading `~/.dart-tool/dart-flutter-telemetry.config`. Pass
-  `--suppress-analytics` to avoid this (e.g.
-  `dart --suppress-analytics analyze .`).
 
 ## Style
 
@@ -45,7 +41,3 @@
   if they use `projectId` (e.g.
   `GOOGLE_CLOUD_PROJECT=demo-project dart test -P firebase-emulator`).
 - Try to fix any test failures before declaring yourself done.
-- Running VM tests for packages that depend on `package:webcrypto` (e.g.
-  `google_cloud_auth`) runs a native build hook that searches for build tools
-  (such as CMake) outside of the repository, so `dart test` may fail in a
-  sandboxed shell that restricts file system access.
