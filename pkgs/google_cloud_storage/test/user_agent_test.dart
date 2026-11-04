@@ -13,8 +13,6 @@
 // limitations under the License.
 
 import 'package:google_cloud_storage/google_cloud_storage.dart';
-import 'package:google_cloud_storage/src/user_agent_web.dart'
-    if (dart.library.io) 'package:google_cloud_storage/src/user_agent_vm.dart';
 import 'package:google_cloud_storage/src/version.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
@@ -140,17 +138,6 @@ void main() {
         actualRequest = request;
         return http.Response('{"items": []}', 200);
       });
-
-      final wrappedClient = clientWithUserAgent(mockClient);
-      addTearDown(wrappedClient.close);
-
-      final directRequest = http.Request(
-        'GET',
-        Uri.https('storage.googleapis.com', '/storage/v1/b'),
-      )..headers['User-Agent'] = 'custom-agent/1.0.0';
-      await wrappedClient.send(directRequest);
-
-      expect(actualRequest.headers['user-agent'], 'custom-agent/1.0.0');
 
       final storage = Storage(
         client: _CustomUserAgentClient(mockClient, 'custom-wrapper/2.0.0'),

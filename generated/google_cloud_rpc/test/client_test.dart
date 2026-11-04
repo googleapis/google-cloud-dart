@@ -31,6 +31,7 @@ class TestMessage extends JsonEncodable {
   Object? toJson() => message;
 }
 
+const _isVm = bool.fromEnvironment('dart.library.io');
 final sampleUrl = Uri.https('example.org', '/path');
 final apiBaseHeaderPattern =
     r'^gl-dart/(?:3\.\d+\.\d+|0) ' +
@@ -84,11 +85,20 @@ void main() {
         'x-goog-api-client': matches(
           apiBaseHeaderPattern + RegExp.escape(' gccl/0.6.4-wip'),
         ),
+        if (_isVm) 'user-agent': 'gcloud-dart/0.6.4-wip',
       });
       expect(
         customService.clientHeader,
         matches(apiBaseHeaderPattern + RegExp.escape(' gccl/0.6.4-wip')),
       );
+      expect(
+        customService.userAgentHeader,
+        _isVm ? 'gcloud-dart/0.6.4-wip' : isNull,
+      );
+      final defaultService = ServiceClient(
+        client: MockClient((_) async => Response('', 200)),
+      );
+      expect(defaultService.userAgentHeader, isNull);
     });
 
     test('appends gapic token when gapicVersion provided', () async {
@@ -133,6 +143,7 @@ void main() {
           'x-goog-api-client': matches(
             apiBaseHeaderPattern + RegExp.escape(' gapic/0.1.0 gccl/0.2.0'),
           ),
+          if (_isVm) 'user-agent': 'gcloud-dart/0.2.0',
         });
         expect(
           customService.clientHeader,
@@ -140,8 +151,30 @@ void main() {
             apiBaseHeaderPattern + RegExp.escape(' gapic/0.1.0 gccl/0.2.0'),
           ),
         );
+        expect(
+          customService.userAgentHeader,
+          _isVm ? 'gcloud-dart/0.2.0' : isNull,
+        );
       },
     );
+
+    test('omits user-agent header when gcclVersion is blank', () async {
+      late Request customRequest;
+      final customService = ServiceClient(
+        client: MockClient((request) async {
+          customRequest = request;
+          return Response('', 200);
+        }),
+        gcclVersion: '   ',
+      );
+
+      await customService.get(sampleUrl);
+
+      expect(customService.userAgentHeader, isNull);
+      expect(customRequest.headers, {
+        'x-goog-api-client': matches(apiBaseHeaderPattern),
+      });
+    });
 
     group('requests with body', () {
       late Request actualRequest;
@@ -306,6 +339,35 @@ void main() {
         });
       }
     });
+
+    test(
+      'appends gccl token and user-agent when gcclVersion provided',
+      () async {
+        late Request customRequest;
+        final customService = ServiceClient(
+          client: MockClient((request) async {
+            customRequest = request;
+            return Response(
+              '',
+              200,
+              headers: {'content-type': 'text/event-stream'},
+            );
+          }),
+          gcclVersion: '0.6.4-wip',
+        );
+
+        await customService
+            .getStreaming(sampleUrl, enableSse: true)
+            .drain<Object?>();
+
+        expect(customRequest.headers, {
+          'x-goog-api-client': matches(
+            apiBaseHeaderPattern + RegExp.escape(' gccl/0.6.4-wip'),
+          ),
+          if (_isVm) 'user-agent': 'gcloud-dart/0.6.4-wip',
+        });
+      },
+    );
 
     group('requests without body with SSE', () {
       late Request actualRequest;

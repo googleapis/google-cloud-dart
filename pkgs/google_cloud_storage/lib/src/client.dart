@@ -38,7 +38,6 @@ import 'object_metadata_patch_builder.dart'
 import 'resumeable_upload.dart';
 import 'storage_emulator_host_web.dart'
     if (dart.library.io) 'storage_emulator_host_vm.dart';
-import 'user_agent_web.dart' if (dart.library.io) 'user_agent_vm.dart';
 import 'version.dart';
 
 class _JsonEncodableWrapper implements JsonEncodable {
@@ -79,17 +78,16 @@ final class Storage {
   static FutureOr<http.Client> _calculateClient(
     FutureOr<http.Client>? client,
     String? emulatorHost,
-  ) {
-    final resolvedClient = switch ((client, emulatorHost)) {
-      (final client?, _) => client,
-      (null, _?) => http.Client(),
-      (null, null) => defaultHttpClient(),
-    };
-    return switch (resolvedClient) {
-      final Future<http.Client> future => future.then(clientWithUserAgent),
-      final http.Client syncClient => clientWithUserAgent(syncClient),
-    };
-  }
+  ) => switch ((client, emulatorHost)) {
+    (final client?, _) => client,
+    (null, _?) => http.Client(),
+    (null, null) => defaultHttpClient(),
+  };
+
+  static Map<String, String> _headers(ServiceClient serviceClient) => {
+    'x-goog-api-client': serviceClient.clientHeader,
+    'user-agent': ?serviceClient.userAgentHeader,
+  };
 
   static FutureOr<String> _calculateProjectId(
     String? projectId,
@@ -821,7 +819,7 @@ final class Storage {
           'userProject': ?userProject,
         },
       ),
-      headers: {'x-goog-api-client': serviceClient.clientHeader},
+      headers: _headers(serviceClient),
     );
   });
 
@@ -1535,7 +1533,7 @@ final class Storage {
       ),
       content,
       metadata: metadata,
-      headers: {'x-goog-api-client': serviceClient.clientHeader},
+      headers: _headers(serviceClient),
     );
   });
 
@@ -1594,10 +1592,8 @@ final class Storage {
     ),
     metadata: metadata,
     headers: switch (_serviceClient) {
-      final Future<ServiceClient> f => f.then(
-        (sc) => {'x-goog-api-client': sc.clientHeader},
-      ),
-      final ServiceClient sc => {'x-goog-api-client': sc.clientHeader},
+      final Future<ServiceClient> f => f.then(_headers),
+      final ServiceClient sc => _headers(sc),
     },
     startRetry: _retryFor(retry, idempotent: ifGenerationMatch != null),
     chunkRetry: retry ?? defaultRetry,
