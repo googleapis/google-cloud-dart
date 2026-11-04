@@ -74,7 +74,7 @@ final class UserCredentials extends GoogleCredentials {
        _refreshToken = refreshToken,
        _clientFactory = clientFactory ?? http.Client.new;
 
-  /// Creates [UserCredentials] from parsed authorized user JSON [info].
+  /// Creates [UserCredentials] from parsed authorized user JSON.
   ///
   /// [info] must contain `client_id`, `client_secret`, and `refresh_token`
   /// fields, and may contain a `quota_project_id` field. If present, the
@@ -117,8 +117,7 @@ final class UserCredentials extends GoogleCredentials {
     );
   }
 
-  /// Creates [UserCredentials] from an authorized user JSON string
-  /// [jsonString].
+  /// Creates [UserCredentials] from an authorized user JSON string.
   ///
   /// See [UserCredentials.fromAuthorizedUserInfo] for the supported fields.
   ///
