@@ -791,7 +791,7 @@ void main() {
       },
     );
 
-    test('sends gccl token in x-goog-api-client', () async {
+    test('sends client headers', () async {
       final actualRequests = <http.Request>[];
       final mockClient = MockClient((request) async {
         actualRequests.add(request);
@@ -818,12 +818,63 @@ void main() {
         ..add([1, 2, 3]);
       await sink.close();
 
-      expect(actualRequests, isNotEmpty);
+      expect(actualRequests, hasLength(2));
       expect(
         actualRequests,
         everyElement(
           (http.Request r) =>
-              r.headers['x-goog-api-client']!.contains('gccl/$packageVersion'),
+              r.headers['x-goog-api-client']!.contains(
+                'gccl/$packageVersion',
+              ) &&
+              r.headers['user-agent'] ==
+                  (const bool.fromEnvironment('dart.library.io')
+                      ? 'gcloud-dart/$packageVersion'
+                      : null),
+        ),
+      );
+    });
+
+    test('sends client headers with async client', () async {
+      final actualRequests = <http.Request>[];
+      final mockClient = MockClient((request) async {
+        actualRequests.add(request);
+        if (request.method == 'POST') {
+          return http.Response(
+            '',
+            200,
+            headers: {
+              'location': 'https://storage.googleapis.com/upload-session',
+            },
+          );
+        }
+        return http.Response(
+          '{"name": "test-obj", "bucket": "test-bucket"}',
+          200,
+        );
+      });
+
+      final storage = Storage(
+        client: Future.value(mockClient),
+        projectId: 'test-project',
+      );
+      addTearDown(storage.close);
+
+      final sink = storage.uploadObjectFromSink('test-bucket', 'test-obj')
+        ..add([1, 2, 3]);
+      await sink.close();
+
+      expect(actualRequests, hasLength(2));
+      expect(
+        actualRequests,
+        everyElement(
+          (http.Request r) =>
+              r.headers['x-goog-api-client']!.contains(
+                'gccl/$packageVersion',
+              ) &&
+              r.headers['user-agent'] ==
+                  (const bool.fromEnvironment('dart.library.io')
+                      ? 'gcloud-dart/$packageVersion'
+                      : null),
         ),
       );
     });
