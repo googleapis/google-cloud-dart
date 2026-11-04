@@ -1132,6 +1132,8 @@ void main() {
           throwsA(
             isA<TimeoutException>()
                 .having((e) => e.duration, 'duration', timeout)
+                // Check that the expected elapsed time has passed at the time
+                // that the exception was thrown.
                 .having((_) => async.elapsed, 'elapsed time', timeout),
           ),
         );
@@ -1445,7 +1447,7 @@ void main() {
         );
         // The server sends events well within `streamWaitTimeout`, but never
         // stops.
-        Timer.periodic(timeout ~/ 10, (_) {
+        Timer.periodic(const Duration(milliseconds: 7), (_) {
           events.add(utf8.encode('data: {"fruit":"apple"}\n'));
         });
         final service = fakeAsyncService(
@@ -1459,18 +1461,17 @@ void main() {
           service.getStreaming(
             sampleUrl,
             enableSse: true,
-            timeout: timeout,
-            streamWaitTimeout: timeout ~/ 2,
+            timeout: const Duration(milliseconds: 50),
+            streamWaitTimeout: const Duration(milliseconds: 10),
           ),
           emitsInOrder([
-            {'fruit': 'apple'},
-            emitsThrough(
-              emitsError(
-                isA<TimeoutException>().having(
-                  (e) => e.duration,
-                  'duration',
-                  timeout,
-                ),
+            // The events sent at 7, 14, ..., 49 ms.
+            for (var i = 0; i < 7; ++i) {'fruit': 'apple'},
+            emitsError(
+              isA<TimeoutException>().having(
+                (e) => e.duration,
+                'duration',
+                timeout,
               ),
             ),
             emitsDone,
@@ -1502,6 +1503,8 @@ void main() {
             emitsError(
               isA<TimeoutException>()
                   .having((e) => e.duration, 'duration', timeout)
+                  // Check that the expected elapsed time has passed at the time
+                  // that the exception was thrown.
                   .having((_) => async.elapsed, 'elapsed time', timeout),
             ),
             emitsDone,
@@ -1511,12 +1514,18 @@ void main() {
       });
 
       fakeAsyncTest(
-        'timeout counts time that the caller spends between events',
+        'timeout counts time that the stream was paused',
         (async) {
           var cancelled = false;
           final events = StreamController<List<int>>(
             onCancel: () => cancelled = true,
           )..add(utf8.encode('data: {"fruit":"apple"}\n'));
+        // The server keeps sending events while the caller is paused but they
+        // won't be received because the subscription is paused after the first
+        // event is received.
+        Timer.periodic(timeout ~/ 10, (_) {
+          events.add(utf8.encode('data: {"fruit":"banana"}\n'));
+        });
           final service = fakeAsyncService(
             MockClient.streaming(
               (request, body) async =>
@@ -1592,8 +1601,9 @@ void main() {
         expect(done, isTrue);
       });
 
-      fakeAsyncTest('streamWaitTimeout does not limit the whole '
-          'stream', (async) {
+      fakeAsyncTest('streamWaitTimeout does not limit the whole stream', (
+        async,
+      ) {
         Stream<List<int>> events() async* {
           for (var i = 0; i < 6; ++i) {
             await Future<void>.delayed(timeout ~/ 4);
@@ -1623,8 +1633,8 @@ void main() {
         async.elapse(timeout * 2);
       });
 
-      fakeAsyncTest('time that the caller spends between events does not '
-          'count towards streamWaitTimeout', (async) {
+      fakeAsyncTest('time that the caller spends between events does not count '
+          'towards streamWaitTimeout', (async) {
         final events = StreamController<List<int>>()
           ..add(utf8.encode('data: {"fruit":"apple"}\n'));
         final service = fakeAsyncService(
