@@ -38,7 +38,10 @@ void main() {
   });
 
   group('applicationDefaultCredentials', () {
-    test('available on Google Compute Engine', tags: 'google-cloud', () async {
+    test(
+      'always available when a GCP project is available',
+      tags: 'google-cloud',
+      () async {
       await defaultCredentials();
     });
 
