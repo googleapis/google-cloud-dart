@@ -38,6 +38,7 @@ import 'object_metadata_patch_builder.dart'
 import 'resumeable_upload.dart';
 import 'storage_emulator_host_web.dart'
     if (dart.library.io) 'storage_emulator_host_vm.dart';
+import 'user_agent_web.dart' if (dart.library.io) 'user_agent_vm.dart';
 import 'version.dart';
 
 class _JsonEncodableWrapper implements JsonEncodable {
@@ -78,11 +79,17 @@ final class Storage {
   static FutureOr<http.Client> _calculateClient(
     FutureOr<http.Client>? client,
     String? emulatorHost,
-  ) => switch ((client, emulatorHost)) {
-    (final client?, _) => client,
-    (null, _?) => http.Client(),
-    (null, null) => defaultHttpClient(),
-  };
+  ) {
+    final resolvedClient = switch ((client, emulatorHost)) {
+      (final client?, _) => client,
+      (null, _?) => http.Client(),
+      (null, null) => defaultHttpClient(),
+    };
+    return switch (resolvedClient) {
+      final Future<http.Client> future => future.then(clientWithUserAgent),
+      final http.Client syncClient => clientWithUserAgent(syncClient),
+    };
+  }
 
   static FutureOr<String> _calculateProjectId(
     String? projectId,
