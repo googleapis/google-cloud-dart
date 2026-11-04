@@ -38,13 +38,7 @@ void main() {
   });
 
   group('applicationDefaultCredentials', () {
-    test('available on Google Compute Engine', () async {
-      // TODO(https://github.com/dart-lang/test/issues/2576): Throw then this
-      // is fixed.
-      if (!await ComputeEngineCredentials.isOnComputeEngine()) {
-        return;
-      }
-      // Credentials should always be available when running on GCE.
+    test('available on Google Compute Engine', tags: 'google-cloud', () async {
       await defaultCredentials();
     });
 

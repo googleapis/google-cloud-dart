@@ -32,6 +32,12 @@ const _infoDescription = 'authorized user info';
 final _tokenUri = Uri.https('oauth2.googleapis.com', '/token');
 
 /// Credentials for a Google user account, authorized using OAuth 2.0.
+///
+/// This is the credential type associated with:
+///
+/// ```shell
+/// gcloud auth application-default login
+/// ```
 final class UserCredentials extends GoogleCredentials {
   /// The quota project ID associated with the credentials, if available.
   final String? quotaProjectId;

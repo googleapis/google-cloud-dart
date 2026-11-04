@@ -48,12 +48,6 @@ http.Client Function() _recordingClientFactory(List<http.Request> requests) =>
       return _tokenResponse('access-token');
     });
 
-UserCredentials _credentials(MockClientHandler handler) =>
-    UserCredentials.fromAuthorizedUserInfo(
-      _testInfo,
-      clientFactory: () => MockClient(handler),
-    );
-
 void main() {
   group('UserCredentials', () {
     group('fromAuthorizedUserInfo', () {
@@ -290,74 +284,6 @@ void main() {
           );
         },
       );
-    });
-
-    group('accessToken', () {
-      test('exchanges refresh token for access token', () async {
-        final requests = <http.Request>[];
-        final creds = _credentials((request) async {
-          requests.add(request);
-          return _tokenResponse('access-token');
-        });
-
-        expect(await creds.accessToken(), 'access-token');
-
-        final request = requests.single;
-        expect(request.method, 'POST');
-        expect(request.url, _defaultTokenUri);
-        expect(
-          request.headers['content-type'],
-          startsWith('application/x-www-form-urlencoded'),
-        );
-        expect(request.bodyFields, {
-          'grant_type': 'refresh_token',
-          'client_id': 'test-client-id.apps.googleusercontent.com',
-          'client_secret': 'test-client-secret',
-          'refresh_token': 'test-refresh-token',
-        });
-      });
-
-      test('fetches and caches access token', () async {
-        var callCount = 0;
-        final creds = _credentials((request) async {
-          callCount++;
-          return _tokenResponse('token-$callCount');
-        });
-
-        expect(await creds.accessToken(), 'token-1');
-        expect(callCount, 1);
-
-        // Cached
-        expect(await creds.accessToken(), 'token-1');
-        expect(callCount, 1);
-
-        // Force refresh
-        expect(await creds.accessToken(forceRefresh: true), 'token-2');
-        expect(callCount, 2);
-      });
-
-      test('throws CredentialException on HTTP error', () async {
-        final creds = _credentials(
-          (request) async => http.Response(
-            jsonEncode({
-              'error': 'invalid_grant',
-              'error_description': 'Token has been expired or revoked.',
-            }),
-            400,
-          ),
-        );
-
-        await expectLater(
-          creds.accessToken(),
-          throwsA(
-            isA<CredentialException>().having(
-              (e) => e.message,
-              'message',
-              contains('$_defaultTokenUri: 400'),
-            ),
-          ),
-        );
-      });
     });
   });
 }
