@@ -142,8 +142,7 @@ void main() {
 
         test('throws on empty $key', () {
           expect(
-            () =>
-                UserCredentials.fromAuthorizedUserInfo({
+            () => UserCredentials.fromAuthorizedUserInfo({
               ..._minimumUserInfo,
               key: '',
             }),

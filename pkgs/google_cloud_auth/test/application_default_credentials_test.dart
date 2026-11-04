@@ -42,8 +42,9 @@ void main() {
       'always available when a GCP project is available',
       tags: 'google-cloud',
       () async {
-      await defaultCredentials();
-    });
+        await defaultCredentials();
+      },
+    );
 
     group('ServiceAccountCredentials', () {
       group('from GOOGLE_APPLICATION_CREDENTIALS', () {
