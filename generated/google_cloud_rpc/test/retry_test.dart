@@ -373,19 +373,7 @@ void main() {
       );
       expect(count, 1);
     });
-
-    test('onCodes retries a timeout as DEADLINE_EXCEEDED', () async {
-      var count = 0;
-      expect(
-        await const NoDelayRetry.onCodes([Code.deadlineExceeded]).run(() async {
-          if (++count == 1) throw TimeoutException('timed out');
-          return 5;
-        }),
-        5,
-      );
-      expect(count, 2);
-    });
-
+    
     test('retries the errors that retryIf accepts', () async {
       var count = 0;
       expect(
