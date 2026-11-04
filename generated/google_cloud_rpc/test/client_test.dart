@@ -539,18 +539,34 @@ void main() {
       );
     });
 
-    test('200 response, unexpected content-type', () async {
+    test('200 response, unsupported content type', () async {
+      var cancelled = false;
       final service = ServiceClient(
-        client: MockClient(
-          (request) async =>
-              Response('', 200, headers: {'content-type': 'text/plain'}),
+        client: MockClient.streaming(
+          (request, body) async => StreamedResponse(
+            StreamController<List<int>>(
+              onCancel: () => cancelled = true,
+            ).stream,
+            200,
+            headers: {'content-type': 'text/html'},
+          ),
         ),
       );
 
-      expect(
+      await expectLater(
         service.postStreaming(sampleUrl, enableSse: true),
-        emitsInOrder([emitsError(isA<ServiceException>()), emitsDone]),
+        emitsInOrder([
+          emitsError(
+            isA<ServiceException>().having(
+              (e) => e.message,
+              'message',
+              contains('text/html'),
+            ),
+          ),
+          emitsDone,
+        ]),
       );
+      expect(cancelled, isTrue, reason: 'the response should be cancelled');
     });
 
     test('200 response, empty event stream response', () async {
@@ -679,36 +695,6 @@ void main() {
           emitsDone,
         ]),
       );
-    });
-
-    test('200 response, unsupported content type', () async {
-      var cancelled = false;
-      final service = ServiceClient(
-        client: MockClient.streaming(
-          (request, body) async => StreamedResponse(
-            StreamController<List<int>>(
-              onCancel: () => cancelled = true,
-            ).stream,
-            200,
-            headers: {'content-type': 'text/html'},
-          ),
-        ),
-      );
-
-      await expectLater(
-        service.postStreaming(sampleUrl, enableSse: true),
-        emitsInOrder([
-          emitsError(
-            isA<ServiceException>().having(
-              (e) => e.message,
-              'message',
-              contains('text/html'),
-            ),
-          ),
-          emitsDone,
-        ]),
-      );
-      expect(cancelled, isTrue, reason: 'the response should be cancelled');
     });
   });
 
@@ -1513,60 +1499,57 @@ void main() {
         async.elapse(timeout * 2);
       });
 
-      fakeAsyncTest(
-        'timeout counts time that the stream was paused',
-        (async) {
-          var cancelled = false;
-          final events = StreamController<List<int>>(
-            onCancel: () => cancelled = true,
-          )..add(utf8.encode('data: {"fruit":"apple"}\n'));
+      fakeAsyncTest('timeout counts time that the stream was paused', (async) {
+        var cancelled = false;
+        final events = StreamController<List<int>>(
+          onCancel: () => cancelled = true,
+        )..add(utf8.encode('data: {"fruit":"apple"}\n'));
         // The server keeps sending events while the caller is paused but they
         // won't be received because the subscription is paused after the first
         // event is received.
         Timer.periodic(timeout ~/ 10, (_) {
           events.add(utf8.encode('data: {"fruit":"banana"}\n'));
         });
-          final service = fakeAsyncService(
-            MockClient.streaming(
-              (request, body) async =>
-                  StreamedResponse(events.stream, 200, headers: sseHeaders),
-            ),
-          );
+        final service = fakeAsyncService(
+          MockClient.streaming(
+            (request, body) async =>
+                StreamedResponse(events.stream, 200, headers: sseHeaders),
+          ),
+        );
 
-          final received = <Object>[];
-          var done = false;
-          late final StreamSubscription<Map<String, dynamic>> subscription;
-          subscription = service
-              .getStreaming(sampleUrl, enableSse: true, timeout: timeout)
-              .listen(
-                (event) {
-                  received.add(event);
-                  // The caller takes longer than `timeout` to handle this
-                  // event.
-                  subscription.pause(Future<void>.delayed(timeout * 3));
-                },
-                onError: received.add,
-                onDone: () => done = true,
-              );
+        final received = <Object>[];
+        var done = false;
+        late final StreamSubscription<Map<String, dynamic>> subscription;
+        subscription = service
+            .getStreaming(sampleUrl, enableSse: true, timeout: timeout)
+            .listen(
+              (event) {
+                received.add(event);
+                // The caller takes longer than `timeout` to handle this
+                // event.
+                subscription.pause(Future<void>.delayed(timeout * 3));
+              },
+              onError: received.add,
+              onDone: () => done = true,
+            );
 
-          async.elapse(timeout);
-          expect(
-            cancelled,
-            isTrue,
-            reason: 'the response should be cancelled when `timeout` passes',
-          );
-          async.elapse(timeout * 2);
-          expect(received, [
-            {'fruit': 'apple'},
-            isA<TimeoutException>().having(
-              (e) => e.duration,
-              'duration',
-              timeout,
-            ),
-          ]);
-          expect(done, isTrue);
-        },
-      );
+        async.elapse(timeout);
+        expect(
+          cancelled,
+          isTrue,
+          reason: 'the response should be cancelled when `timeout` passes',
+        );
+        async.elapse(timeout * 2);
+        expect(received, [
+          {'fruit': 'apple'},
+          isA<TimeoutException>().having(
+            (e) => e.duration,
+            'duration',
+            timeout,
+          ),
+        ]);
+        expect(done, isTrue);
+      });
 
       fakeAsyncTest('timeout stops when the response ends', (async) {
         final service = fakeAsyncService(

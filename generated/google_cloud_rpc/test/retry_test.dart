@@ -373,7 +373,7 @@ void main() {
       );
       expect(count, 1);
     });
-    
+
     test('retries the errors that retryIf accepts', () async {
       var count = 0;
       expect(
