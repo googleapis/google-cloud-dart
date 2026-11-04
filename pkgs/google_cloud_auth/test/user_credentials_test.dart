@@ -21,8 +21,7 @@ import 'package:test/test.dart';
 
 import 'test_utils.dart';
 
-const _testInfo = {
-  'type': 'authorized_user',
+const _minimumUserInfo = {
   'client_id': 'test-client-id.apps.googleusercontent.com',
   'client_secret': 'test-client-secret',
   'refresh_token': 'test-refresh-token',
@@ -30,22 +29,20 @@ const _testInfo = {
 
 final _defaultTokenUri = Uri.https('oauth2.googleapis.com', '/token');
 
-http.Response _tokenResponse(String accessToken) => http.Response(
-  jsonEncode({
-    'access_token': accessToken,
-    'expires_in': 3600,
-    'scope': 'https://www.googleapis.com/auth/cloud-platform',
-    'token_type': 'Bearer',
-  }),
-  200,
-);
-
 /// A client factory whose clients add each request to [requests] and respond
 /// with an access token.
 http.Client Function() _recordingClientFactory(List<http.Request> requests) =>
     () => MockClient((request) async {
       requests.add(request);
-      return _tokenResponse('access-token');
+      return http.Response(
+        jsonEncode({
+          'access_token': 'accessToken',
+          'expires_in': 3600,
+          'scope': 'https://www.googleapis.com/auth/cloud-platform',
+          'token_type': 'Bearer',
+        }),
+        200,
+      );
     });
 
 void main() {
@@ -100,7 +97,7 @@ void main() {
       test('ignores token_uri', () async {
         final requests = <http.Request>[];
         final creds = UserCredentials.fromAuthorizedUserInfo({
-          ..._testInfo,
+          ..._minimumUserInfo,
           'token_uri': 'https://example.com/token',
         }, clientFactory: _recordingClientFactory(requests));
 
@@ -110,7 +107,7 @@ void main() {
 
       test('accepts empty universe_domain', () {
         final creds = UserCredentials.fromAuthorizedUserInfo({
-          ..._testInfo,
+          ..._minimumUserInfo,
           'universe_domain': '',
         });
 
@@ -120,7 +117,7 @@ void main() {
       test('throws on invalid type', () {
         expect(
           () => UserCredentials.fromAuthorizedUserInfo({
-            ..._testInfo,
+            ..._minimumUserInfo,
             'type': 'service_account',
           }),
           throwsFormatException,
@@ -129,7 +126,7 @@ void main() {
 
       for (final key in ['client_id', 'client_secret', 'refresh_token']) {
         test('throws on missing $key', () {
-          final info = Map.of(_testInfo)..remove(key);
+          final info = Map.of(_minimumUserInfo)..remove(key);
 
           expect(
             () => UserCredentials.fromAuthorizedUserInfo(info),
@@ -146,7 +143,10 @@ void main() {
         test('throws on empty $key', () {
           expect(
             () =>
-                UserCredentials.fromAuthorizedUserInfo({..._testInfo, key: ''}),
+                UserCredentials.fromAuthorizedUserInfo({
+              ..._minimumUserInfo,
+              key: '',
+            }),
             throwsFormatException,
           );
         });
@@ -154,7 +154,7 @@ void main() {
         test('throws on non-string $key', () {
           expect(
             () => UserCredentials.fromAuthorizedUserInfo({
-              ..._testInfo,
+              ..._minimumUserInfo,
               key: 12345,
             }),
             throwsFormatException,
@@ -165,7 +165,7 @@ void main() {
       test('throws on non-string quota_project_id', () {
         expect(
           () => UserCredentials.fromAuthorizedUserInfo({
-            ..._testInfo,
+            ..._minimumUserInfo,
             'quota_project_id': 12345,
           }),
           throwsFormatException,
@@ -175,7 +175,7 @@ void main() {
       test('throws on non-string universe_domain', () {
         expect(
           () => UserCredentials.fromAuthorizedUserInfo({
-            ..._testInfo,
+            ..._minimumUserInfo,
             'universe_domain': 12345,
           }),
           throwsFormatException,
@@ -185,7 +185,7 @@ void main() {
       test('throws on non-default universe_domain', () {
         expect(
           () => UserCredentials.fromAuthorizedUserInfo({
-            ..._testInfo,
+            ..._minimumUserInfo,
             'universe_domain': 'custom.domain.com',
           }),
           throwsA(
@@ -203,7 +203,10 @@ void main() {
       test('loads credentials from string', () async {
         final requests = <http.Request>[];
         final creds = UserCredentials.fromAuthorizedUserString(
-          jsonEncode({..._testInfo, 'quota_project_id': 'quota-project'}),
+          jsonEncode({
+            ..._minimumUserInfo,
+            'quota_project_id': 'quota-project',
+          }),
           clientFactory: _recordingClientFactory(requests),
         );
 
