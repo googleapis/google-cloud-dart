@@ -1427,13 +1427,16 @@ void main() {
       });
 
       fakeAsyncTest('timeout limits the whole stream', (async) {
-        var cancelled = false;
+        late final Timer timer;
         final events = StreamController<List<int>>(
-          onCancel: () => cancelled = true,
+          onCancel: () {
+            cancelled = true;
+            timer.cancel();
+          },
         );
         // The server sends events well within `streamWaitTimeout`, but never
         // stops.
-        Timer.periodic(const Duration(milliseconds: 7), (_) {
+        timer = Timer.periodic(const Duration(milliseconds: 7), (_) {
           events.add(utf8.encode('data: {"fruit":"apple"}\n'));
         });
         final service = fakeAsyncService(
