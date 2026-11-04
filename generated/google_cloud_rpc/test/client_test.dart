@@ -1500,14 +1500,17 @@ void main() {
       });
 
       fakeAsyncTest('timeout counts time that the stream was paused', (async) {
-        var cancelled = false;
+        late final Timer timer;
         final events = StreamController<List<int>>(
-          onCancel: () => cancelled = true,
+          onCancel: () {
+            cancelled = true;
+            timer.cancel();
+          },
         )..add(utf8.encode('data: {"fruit":"apple"}\n'));
         // The server keeps sending events while the caller is paused but they
         // won't be received because the subscription is paused after the first
         // event is received.
-        Timer.periodic(timeout ~/ 10, (_) {
+        timer = Timer.periodic(timeout ~/ 10, (_) {
           events.add(utf8.encode('data: {"fruit":"banana"}\n'));
         });
         final service = fakeAsyncService(
