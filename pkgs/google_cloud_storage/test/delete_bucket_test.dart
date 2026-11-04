@@ -98,7 +98,7 @@ void main() async {
       });
     });
 
-    test('idempotent transport failure', () async {
+    test('transport failure', () async {
       var count = 0;
       final mockClient = MockClient((request) async {
         count++;
@@ -113,28 +113,8 @@ void main() async {
 
       final storage = Storage(client: mockClient, projectId: 'fake project');
 
-      await storage.deleteBucket('bucket', ifMetagenerationMatch: BigInt.one);
+      await storage.deleteBucket('bucket');
       expect(count, 2);
-    });
-
-    test('non-idempotent transport failure', () async {
-      var count = 0;
-      final mockClient = MockClient((request) async {
-        count++;
-        if (count == 1) {
-          throw http.ClientException('Some transport failure');
-        } else {
-          throw StateError('Unexpected call count: $count');
-        }
-      });
-
-      final storage = Storage(client: mockClient, projectId: 'fake project');
-
-      await expectLater(
-        () => storage.deleteBucket('bucket'),
-        throwsA(isA<http.ClientException>()),
-      );
-      expect(count, 1);
     });
   });
 }

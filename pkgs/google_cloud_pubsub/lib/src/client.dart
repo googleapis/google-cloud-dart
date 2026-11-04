@@ -21,6 +21,7 @@ import 'package:meta/meta.dart';
 import '../google_cloud_pubsub.dart';
 import 'generated/google/pubsub/v1/pubsub.pbgrpc.dart' as grpc;
 import 'pubsub_emulator_host_vm.dart';
+import 'version.dart';
 
 const _pubsubScopes = ['https://www.googleapis.com/auth/pubsub'];
 
@@ -164,10 +165,16 @@ final class PubSub {
     );
   }
 
+  static final _defaultCallOptions = CallOptions(
+    metadata: {
+      'x-goog-api-client': 'gl-dart/$clientDartVersion gccl/$packageVersion',
+    },
+  );
+
   Future<CallOptions> get _callOptions async {
-    if (_isEmulator) return CallOptions();
+    if (_isEmulator) return _defaultCallOptions;
     final authenticator = await _authenticator;
-    return authenticator?.toCallOptions ?? CallOptions();
+    return _defaultCallOptions.mergedWith(authenticator?.toCallOptions);
   }
 
   grpc.PublisherClient get _publisher =>
@@ -775,8 +782,9 @@ final class PubSub {
     // Because multiple gRPC codes map to the same HTTP exception class (e.g.
     // both `ALREADY_EXISTS` and `ABORTED` map to `ConflictException`, and
     // `INTERNAL`, `UNKNOWN`, and `DATA_LOSS` all map to
-    // `InternalServerErrorException`), `ExponentialRetry.isRetryable` inspects
-    // `status.code` to retry `ABORTED` and avoid retrying `DATA_LOSS`.
+    // `InternalServerErrorException`), `ExponentialRetry.onCodes` matches on
+    // `status.code` so that `defaultRetry` retries `ABORTED` but not
+    // `DATA_LOSS`.
     final status = Status(code: e.code, message: message);
     return switch (e.code) {
       StatusCode.invalidArgument => BadRequestException(

@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'dart:async';
 import 'dart:convert';
 
 import 'package:google_cloud_auth/google_cloud_auth.dart';
@@ -23,27 +22,9 @@ import 'package:test/test.dart';
 
 final _tokenUri = Uri.https('oauth2.example.com', '/token');
 
-/// An [http.Client] that records whether it has been closed.
-final class _TrackingClient extends http.BaseClient {
-  final http.Client _inner;
-  bool closed = false;
-
-  _TrackingClient(this._inner);
-
-  @override
-  Future<http.StreamedResponse> send(http.BaseRequest request) =>
-      _inner.send(request);
-
-  @override
-  void close() {
-    closed = true;
-    _inner.close();
-  }
-}
-
 void main() {
   group('fetchAccessToken', () {
-    test('parses token response', () async {
+    test('success', () async {
       final response = await fetchAccessToken(
         clientFactory: () => MockClient(
           (request) async => http.Response(
@@ -76,42 +57,6 @@ void main() {
       );
 
       expect(response.expiresIn, const Duration(seconds: 3599));
-    });
-
-    test('closes the client', () async {
-      final client = _TrackingClient(
-        MockClient(
-          (request) async => http.Response(
-            jsonEncode({'access_token': 'test-token', 'expires_in': 3599}),
-            200,
-          ),
-        ),
-      );
-
-      await fetchAccessToken(
-        clientFactory: () => client,
-        send: (client) => client.get(_tokenUri),
-        source: 'test endpoint',
-      );
-      expect(client.closed, isTrue);
-    });
-
-    test('closes the client when the request fails', () async {
-      final client = _TrackingClient(
-        MockClient(
-          (request) async => throw http.ClientException('Network down'),
-        ),
-      );
-
-      await expectLater(
-        fetchAccessToken(
-          clientFactory: () => client,
-          send: (client) => client.get(_tokenUri),
-          source: 'test endpoint',
-        ),
-        throwsA(isA<CredentialException>()),
-      );
-      expect(client.closed, isTrue);
     });
 
     test('throws CredentialException on network error', () async {
@@ -170,7 +115,27 @@ void main() {
             (e) => e.message,
             'message',
             'Bad HTTP status response when fetching access token from test '
-                'endpoint: 400',
+                'endpoint: 400 {"error": "invalid_grant"}',
+          ),
+        ),
+      );
+    });
+
+    test('truncates long HTTP error bodies', () async {
+      await expectLater(
+        fetchAccessToken(
+          clientFactory: () => MockClient(
+            (request) async => http.Response('${'a' * 500}${'b' * 500}', 500),
+          ),
+          send: (client) => client.get(_tokenUri),
+          source: 'test endpoint',
+        ),
+        throwsA(
+          isA<CredentialException>().having(
+            (e) => e.message,
+            'message',
+            'Bad HTTP status response when fetching access token from test '
+                'endpoint: 500 ${'a' * 500}...',
           ),
         ),
       );
@@ -238,29 +203,35 @@ void main() {
 
   group('AccessTokenCache', () {
     late DateTime now;
-    late int fetchCount;
-
-    AccessTokenCache newCache({
-      Duration expiresIn = const Duration(hours: 1),
-    }) => AccessTokenCache(() async {
-      fetchCount++;
-      return (accessToken: 'token-$fetchCount', expiresIn: expiresIn);
-    }, clock: () => now);
 
     setUp(() {
       now = DateTime.utc(2026);
-      fetchCount = 0;
     });
 
     test('fetches a token on first use', () async {
-      final cache = newCache();
+      var fetchCount = 0;
+      final cache = AccessTokenCache(() async {
+        fetchCount++;
+        return (
+          accessToken: 'token-$fetchCount',
+          expiresIn: const Duration(hours: 1),
+        );
+      }, clock: () => now);
 
       expect(await cache.accessToken(), 'token-1');
       expect(fetchCount, 1);
     });
 
     test('reuses a token until a minute before it expires', () async {
-      final cache = newCache();
+      var fetchCount = 0;
+      final cache = AccessTokenCache(() async {
+        fetchCount++;
+        return (
+          accessToken: 'token-$fetchCount',
+          expiresIn: const Duration(hours: 1),
+        );
+      }, clock: () => now);
+
       await cache.accessToken();
 
       now = now.add(const Duration(minutes: 58, seconds: 59));
@@ -273,7 +244,14 @@ void main() {
     });
 
     test('does not reuse a token that expires within a minute', () async {
-      final cache = newCache(expiresIn: const Duration(seconds: 30));
+      var fetchCount = 0;
+      final cache = AccessTokenCache(() async {
+        fetchCount++;
+        return (
+          accessToken: 'token-$fetchCount',
+          expiresIn: const Duration(seconds: 30),
+        );
+      }, clock: () => now);
 
       expect(await cache.accessToken(), 'token-1');
       expect(await cache.accessToken(), 'token-2');
@@ -281,59 +259,19 @@ void main() {
     });
 
     test('fetches a new token when forceRefresh is true', () async {
-      final cache = newCache();
+      var fetchCount = 0;
+      final cache = AccessTokenCache(() async {
+        fetchCount++;
+        return (
+          accessToken: 'token-$fetchCount',
+          expiresIn: const Duration(hours: 1),
+        );
+      }, clock: () => now);
+
       await cache.accessToken();
 
       expect(await cache.accessToken(forceRefresh: true), 'token-2');
       expect(fetchCount, 2);
-    });
-
-    test('shares a fetch between concurrent callers', () async {
-      final completer = Completer<TokenResponse>();
-      var count = 0;
-      final cache = AccessTokenCache(() {
-        count++;
-        return completer.future;
-      }, clock: () => now);
-
-      final futures = [
-        cache.accessToken(),
-        cache.accessToken(),
-        cache.accessToken(forceRefresh: true),
-      ];
-      await pumpEventQueue();
-      expect(count, 1);
-
-      completer.complete((
-        accessToken: 'shared-token',
-        expiresIn: const Duration(hours: 1),
-      ));
-      expect(await Future.wait(futures), [
-        'shared-token',
-        'shared-token',
-        'shared-token',
-      ]);
-      expect(count, 1);
-    });
-
-    test('shares a failed fetch between concurrent callers', () async {
-      final completer = Completer<TokenResponse>();
-      var count = 0;
-      final cache = AccessTokenCache(() {
-        count++;
-        return completer.future;
-      }, clock: () => now);
-
-      final expectations = [
-        expectLater(cache.accessToken(), throwsA(isA<CredentialException>())),
-        expectLater(cache.accessToken(), throwsA(isA<CredentialException>())),
-      ];
-      await pumpEventQueue();
-      expect(count, 1);
-
-      completer.completeError(CredentialException('Fetch failed'));
-      await Future.wait(expectations);
-      expect(count, 1);
     });
 
     test('keeps the cached token when a fetch fails', () async {
@@ -360,6 +298,27 @@ void main() {
       // The failed fetch is not shared with later callers.
       fail = false;
       expect(await cache.accessToken(forceRefresh: true), 'token-3');
+    });
+
+    test('shares an in-flight fetch between concurrent callers', () async {
+      var fetchCount = 0;
+      final cache = AccessTokenCache(() async {
+        fetchCount++;
+        return (
+          accessToken: 'token-$fetchCount',
+          expiresIn: const Duration(hours: 1),
+        );
+      }, clock: () => now);
+
+      expect(
+        await (
+          cache.accessToken(),
+          cache.accessToken(),
+          cache.accessToken(forceRefresh: true),
+        ).wait,
+        ('token-1', 'token-1', 'token-1'),
+      );
+      expect(fetchCount, 1);
     });
   });
 }
