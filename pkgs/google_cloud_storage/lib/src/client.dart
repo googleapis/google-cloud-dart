@@ -84,6 +84,11 @@ final class Storage {
     (null, null) => defaultHttpClient(),
   };
 
+  static Map<String, String> _headers(ServiceClient serviceClient) => {
+    'x-goog-api-client': serviceClient.clientHeader,
+    'user-agent': ?serviceClient.userAgentHeader,
+  };
+
   static FutureOr<String> _calculateProjectId(
     String? projectId,
     String? emulatorHost,
@@ -814,7 +819,7 @@ final class Storage {
           'userProject': ?userProject,
         },
       ),
-      headers: {'x-goog-api-client': serviceClient.clientHeader},
+      headers: _headers(serviceClient),
     );
   });
 
@@ -1528,7 +1533,7 @@ final class Storage {
       ),
       content,
       metadata: metadata,
-      headers: {'x-goog-api-client': serviceClient.clientHeader},
+      headers: _headers(serviceClient),
     );
   });
 
@@ -1587,10 +1592,8 @@ final class Storage {
     ),
     metadata: metadata,
     headers: switch (_serviceClient) {
-      final Future<ServiceClient> f => f.then(
-        (sc) => {'x-goog-api-client': sc.clientHeader},
-      ),
-      final ServiceClient sc => {'x-goog-api-client': sc.clientHeader},
+      final Future<ServiceClient> f => f.then(_headers),
+      final ServiceClient sc => _headers(sc),
     },
     startRetry: _retryFor(retry, idempotent: ifGenerationMatch != null),
     chunkRetry: retry ?? defaultRetry,
