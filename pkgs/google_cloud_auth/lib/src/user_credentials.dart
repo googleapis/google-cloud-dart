@@ -90,8 +90,7 @@ final class UserCredentials extends GoogleCredentials {
     Map<String, dynamic> info, {
     FutureOr<http.Client> Function()? clientFactory,
   }) {
-    final type = info['type'];
-    if (type != null && type != 'authorized_user') {
+    if (info['type'] case final type? when type != 'authorized_user') {
       throw const FormatException(
         "The value of 'type' must be 'authorized_user'.",
       );
