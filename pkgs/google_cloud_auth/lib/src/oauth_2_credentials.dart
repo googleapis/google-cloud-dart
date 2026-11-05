@@ -20,8 +20,9 @@ library;
 import 'credential_exception.dart';
 import 'credentials.dart';
 
-abstract base class Oauth2Credentials extends Credentials {
-  const Oauth2Credentials({
+/// A base class for credentials used to authorize calls using OAuth2.
+abstract base class OAuth2Credentials extends Credentials {
+  const OAuth2Credentials({
     super.universeDomain = Credentials.defaultUniverseDomain,
   });
 
