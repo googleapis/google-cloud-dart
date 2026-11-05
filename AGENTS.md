@@ -13,9 +13,19 @@
 
 - Follow the style described in
   [Effective Dart](https://dart.dev/effective-dart):
-    - Do not prefix functions and methods with "get".
+    - AVOID starting a function or method name with `get`
+    - PREFER starting a boolean variable or property comment with "Whether"
+      followed by a noun or gerund phrase
 - Prefer the use of `Uri.https(...)` over `Uri.parse(...)` when the scheme is
   known to be https.
+
+## Generated code
+
+- Regenerating the packages in `generated/` overwrites every file except those
+  in the package's `keep` list in `librarian.yaml`.
+- Don't edit `generated/*/CHANGELOG.md`. `librarian bump` writes the entries
+  from PR titles at release time (see
+  [generated/RELEASING.md](generated/RELEASING.md)).
 
 ## Testing instructions
 

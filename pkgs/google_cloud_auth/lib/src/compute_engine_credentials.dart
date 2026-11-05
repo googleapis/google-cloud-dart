@@ -26,8 +26,10 @@ import 'dart:typed_data';
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 
+import 'access_token.dart';
 import 'credential_exception.dart';
 import 'google_credentials.dart';
+import 'json_utils.dart';
 import 'platform_web.dart' if (dart.library.io) 'platform_io.dart';
 import 'service_account_signer.dart';
 
@@ -127,14 +129,19 @@ final class ComputeEngineCredentials extends GoogleCredentials
 
   final FutureOr<http.Client> Function() _clientFactory;
 
-  String? _cachedAccessToken;
-  DateTime? _accessTokenExpiry;
-
-  /// The active request to fetch a new token.
-  ///
-  /// This is used to prevent multiple concurrent requests from fetching new
-  /// tokens at the same time.
-  Future<String>? _activeTokenRequest;
+  late final _accessTokenCache = AccessTokenCache(
+    () => fetchAccessToken(
+      clientFactory: _clientFactory,
+      source: 'Compute Engine metadata server',
+      send: (client) => client.get(
+        Uri.http(
+          metadataHost,
+          '/computeMetadata/v1/instance/service-accounts/default/token',
+        ),
+        headers: _metadataFlavorHeader,
+      ),
+    ),
+  );
 
   ComputeEngineCredentials._({
     required this.clientEmail,
@@ -151,73 +158,8 @@ final class ComputeEngineCredentials extends GoogleCredentials
   /// It is safe to call this method concurrently.
   ///
   /// Throws [CredentialException] on failure.
-  Future<String> accessToken({bool forceRefresh = false}) async {
-    if (!forceRefresh &&
-        _cachedAccessToken != null &&
-        _accessTokenExpiry != null) {
-      if (DateTime.timestamp().isBefore(
-        _accessTokenExpiry!.subtract(const Duration(minutes: 1)),
-      )) {
-        return _cachedAccessToken!;
-      }
-    }
-
-    return await (_activeTokenRequest ??= _fetchAccessToken().whenComplete(() {
-      _activeTokenRequest = null;
-    }));
-  }
-
-  Future<String> _fetchAccessToken() async {
-    final tokenUri = Uri.http(
-      metadataHost,
-      '/computeMetadata/v1/instance/service-accounts/default/token',
-    );
-    final http.Response response;
-    try {
-      final client = await _clientFactory();
-      try {
-        response = await client.get(tokenUri, headers: _metadataFlavorHeader);
-      } finally {
-        client.close();
-      }
-    } on Exception catch (e, stackTrace) {
-      throw CredentialException(
-        'Failed to get access token from Compute Engine metadata server: $e',
-        innerException: e,
-        innerStackTrace: stackTrace,
-      );
-    }
-
-    if (response.statusCode != 200) {
-      throw CredentialException(
-        'Failed to get access token from Compute Engine metadata server: '
-        'HTTP ${response.statusCode} ${response.body}',
-      );
-    }
-
-    try {
-      final decoded = jsonDecode(response.body);
-      if (decoded is! Map<String, dynamic>) {
-        throw const FormatException('Expected JSON object.');
-      }
-      final accessToken = decoded['access_token'];
-      final expiresIn = decoded['expires_in'];
-      if (accessToken is! String || accessToken.isEmpty || expiresIn is! num) {
-        throw const FormatException('Missing access_token or expires_in');
-      }
-      _cachedAccessToken = accessToken;
-      _accessTokenExpiry = DateTime.timestamp().add(
-        Duration(seconds: expiresIn.toInt()),
-      );
-      return accessToken;
-    } on FormatException catch (e, stackTrace) {
-      throw CredentialException(
-        'Failed to parse token response from metadata server: $e',
-        innerException: e,
-        innerStackTrace: stackTrace,
-      );
-    }
-  }
+  Future<String> accessToken({bool forceRefresh = false}) =>
+      _accessTokenCache.accessToken(forceRefresh: forceRefresh);
 
   /// Creates a [ComputeEngineCredentials] instance, discovering configuration
   /// from the Compute Engine metadata server.
@@ -391,14 +333,11 @@ final class ComputeEngineCredentials extends GoogleCredentials
 
         if (response.statusCode == 200) {
           try {
-            final decoded = jsonDecode(response.body);
-            if (decoded is! Map<String, dynamic>) {
-              throw const FormatException('Expected JSON object.');
-            }
-            final signedBlob = decoded['signedBlob'];
-            if (signedBlob is! String) {
-              throw const FormatException("Missing 'signedBlob' in response");
-            }
+            final signedBlob = requiredString(
+              decodeJsonObject(response.body),
+              'signedBlob',
+              'signBlob response',
+            );
             return Uint8List.fromList(base64.decode(signedBlob));
           } on FormatException catch (e, stackTrace) {
             throw SigningException(
