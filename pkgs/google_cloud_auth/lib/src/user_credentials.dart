@@ -128,7 +128,7 @@ final class UserCredentials extends GoogleCredentials {
   factory UserCredentials.fromAuthorizedUserString(
     String jsonString, {
     FutureOr<http.Client> Function()? clientFactory,
-  }) => UserCredentials.fromAuthorizedUserInfo(
+  }) => .fromAuthorizedUserInfo(
     decodeJsonObject(jsonString),
     clientFactory: clientFactory,
   );
