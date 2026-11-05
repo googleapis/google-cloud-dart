@@ -41,7 +41,7 @@ abstract base class OAuth2Credentials extends Credentials {
     Uri? uri,
     bool forceRefresh = false,
   }) async => {
-    'authorization': [
+    'Authorization': [
       'Bearer ${await accessToken(forceRefresh: forceRefresh)}',
     ],
   };

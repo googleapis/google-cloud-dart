@@ -24,7 +24,7 @@ void main() {
   group('Oauth2Credentials', () {
     test('requestMetadata', () async {
       expect(await FakeCredentials().requestMetadata(), {
-        'authorization': ['Bearer abc123'],
+        'Authorization': ['Bearer abc123'],
       });
     });
   });
