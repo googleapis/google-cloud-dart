@@ -38,15 +38,13 @@ void main() {
   });
 
   group('applicationDefaultCredentials', () {
-    test('available on Google Compute Engine', () async {
-      // TODO(https://github.com/dart-lang/test/issues/2576): Throw then this
-      // is fixed.
-      if (!await ComputeEngineCredentials.isOnComputeEngine()) {
-        return;
-      }
-      // Credentials should always be available when running on GCE.
-      await defaultCredentials();
-    });
+    test(
+      'always available when a GCP project is available',
+      tags: 'google-cloud',
+      () async {
+        await defaultCredentials();
+      },
+    );
 
     group('ServiceAccountCredentials', () {
       group('from GOOGLE_APPLICATION_CREDENTIALS', () {
@@ -273,6 +271,126 @@ void main() {
           );
         });
       });
+    });
+
+    group('UserCredentials', () {
+      const userInfo = {
+        'type': 'authorized_user',
+        'client_id': 'test-client-id.apps.googleusercontent.com',
+        'client_secret': 'test-client-secret',
+        'refresh_token': 'test-refresh-token',
+        'quota_project_id': 'test-project',
+      };
+
+      test('from GOOGLE_APPLICATION_CREDENTIALS', () async {
+        final userFile = File('${tempDir.path}/user_creds.json');
+        await userFile.writeAsString(jsonEncode(userInfo));
+
+        final credentials = await internalDefaultCredentials(
+          readEnvironment: (String name) {
+            if (name == 'GOOGLE_APPLICATION_CREDENTIALS') return userFile.path;
+            return null;
+          },
+        );
+
+        expect(
+          credentials,
+          isA<UserCredentials>().having(
+            (e) => e.quotaProjectId,
+            'quotaProjectId',
+            'test-project',
+          ),
+        );
+      });
+
+      test('from well-known file', () async {
+        final userFile = File(
+          '${tempDir.path}/application_default_credentials.json',
+        );
+        await userFile.writeAsString(jsonEncode(userInfo));
+
+        final credentials = await internalDefaultCredentials(
+          readEnvironment: (String name) => null,
+          wellKnownFilePath: userFile.path,
+        );
+
+        expect(
+          credentials,
+          isA<UserCredentials>().having(
+            (e) => e.quotaProjectId,
+            'quotaProjectId',
+            'test-project',
+          ),
+        );
+      });
+
+      test('uses clientFactory to get access tokens', () async {
+        final userFile = File(
+          '${tempDir.path}/application_default_credentials.json',
+        );
+        await userFile.writeAsString(jsonEncode(userInfo));
+        final mockClient = MockClient((request) async {
+          expect(request.url, Uri.https('oauth2.googleapis.com', '/token'));
+          return http.Response(
+            jsonEncode({
+              'access_token': 'user-access-token',
+              'expires_in': 3600,
+              'token_type': 'Bearer',
+            }),
+            200,
+          );
+        });
+
+        final credentials = await internalDefaultCredentials(
+          clientFactory: () => mockClient,
+          readEnvironment: (String name) => null,
+          wellKnownFilePath: userFile.path,
+        );
+
+        expect(
+          await (credentials as UserCredentials).accessToken(),
+          'user-access-token',
+        );
+      });
+
+      test('malformed user credentials missing refresh_token', () async {
+        final userFile = File('${tempDir.path}/incomplete_user_creds.json');
+        await userFile.writeAsString(
+          jsonEncode(Map.of(userInfo)..remove('refresh_token')),
+        );
+
+        expect(
+          () => internalDefaultCredentials(
+            readEnvironment: (String name) {
+              if (name == 'GOOGLE_APPLICATION_CREDENTIALS') {
+                return userFile.path;
+              }
+              return null;
+            },
+          ),
+          throwsA(
+            isA<CredentialException>().having(
+              (e) => e.message,
+              'message',
+              contains('Failed to parse user credentials'),
+            ),
+          ),
+        );
+      });
+
+      test(
+        'gets access token from the environment',
+        tags: ['google-cloud'],
+        () async {
+          final credentials = await defaultCredentials();
+          // TODO(https://github.com/dart-lang/test/issues/2576): Throw when
+          // this is fixed.
+          if (credentials is! UserCredentials) {
+            return;
+          }
+          expect(await credentials.accessToken(), isNotEmpty);
+        },
+      );
     });
   });
 

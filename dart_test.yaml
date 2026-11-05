@@ -19,10 +19,13 @@ test-randomize-ordering-seed: random
 concurrency: 1
 
 tags:
+  # Tests that require access to a GCP project. The test could be run on GCP
+  # or on a workstation with `GOOGLE_CLOUD_PROJECT` environment variable set
+  # and credentials acquired with `gcloud auth application-default login`.
   google-cloud:
   firebase-emulator:
   storage-testbench:
-  no-ulba:  # tests that don't work with uniform bucket level access
+  no-ulba:  # Tests that don't work with uniform bucket level access.
 exclude_tags: google-cloud || firebase-emulator || storage-testbench
 
 presets:
