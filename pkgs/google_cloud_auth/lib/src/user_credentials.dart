@@ -92,7 +92,7 @@ final class UserCredentials extends GoogleCredentials {
   }) {
     if (info['type'] case final type? when type != 'authorized_user') {
       throw const FormatException(
-        "The value of 'type' must be 'authorized_user'.",
+        "The value of 'type' must be 'authorized_user' or omitted.",
       );
     }
 
