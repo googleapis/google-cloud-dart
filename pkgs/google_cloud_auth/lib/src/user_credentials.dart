@@ -147,12 +147,6 @@ final class UserCredentials extends GoogleCredentials {
   static Future<UserCredentials> fromAuthorizedUserFile(
     String path, {
     FutureOr<http.Client> Function()? clientFactory,
-  }) async {
-    final contents = await readCredentialFileAsString(path);
-    return UserCredentials.fromAuthorizedUserString(
-      contents,
-      clientFactory: clientFactory,
-    );
   }) async => .fromAuthorizedUserString(
     await readCredentialFileAsString(path),
     clientFactory: clientFactory,
