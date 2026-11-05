@@ -23,6 +23,7 @@ import 'dart:typed_data';
 import 'package:webcrypto/webcrypto.dart';
 
 import 'credential_exception.dart';
+import 'credentials.dart';
 import 'google_credentials.dart';
 import 'json_utils.dart';
 import 'platform_web.dart' if (dart.library.io) 'platform_io.dart';
@@ -191,7 +192,8 @@ final class ServiceAccountCredentials extends GoogleCredentials
 
   @override
   Future<String> accessToken({bool forceRefresh = false}) {
-    // TODO: implement accessToken
-    throw UnimplementedError();
+    throw UnimplementedError(
+      'TODO(https://github.com/googleapis/google-cloud-dart/issues/391)',
+    );
   }
 }

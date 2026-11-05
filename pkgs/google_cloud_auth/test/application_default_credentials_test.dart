@@ -18,6 +18,7 @@ library;
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:google_cloud/google_cloud.dart';
 import 'package:google_cloud_auth/google_cloud_auth.dart';
 import 'package:google_cloud_auth/src/application_default_credentials.dart';
 import 'package:http/http.dart' as http;
@@ -39,10 +40,25 @@ void main() {
 
   group('applicationDefaultCredentials', () {
     test(
-      'always available when a GCP project is available',
+      'produces useable request metadata',
       tags: 'google-cloud',
       () async {
-        await defaultCredentials();
+      final credentials = await defaultCredentials();
+      final metadata = await credentials.requestMetadata();
+
+      final client = http.Client();
+      addTearDown(client.close);
+
+      final response = await client.get(
+        Uri.https('storage.googleapis.com', 'storage/v1/b', {
+          'project': await computeProjectId(),
+        }),
+        headers: {
+          for (var MapEntry(key: key, value: values) in metadata.entries)
+            key: values.join(', '),
+        },
+      );
+      expect(response.statusCode, 200);
       },
     );
 

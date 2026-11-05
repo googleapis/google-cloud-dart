@@ -17,52 +17,14 @@
 /// - https://github.com/googleapis/google-auth-library-python/blob/main/google/auth/credentials.py
 library;
 
-abstract base class Credentials {
-  /// The default universe domain for Google Cloud services.
-  static const defaultUniverseDomain = 'googleapis.com';
-
-  /// The universe domain for the credentials.
-  ///
-  /// See [Universes, regions, and zones](https://docs.cloud.google.com/docs/overview#universes_regions_and_zones).
-  final String universeDomain;
-
-  /// Creates a [GoogleCredentials] instance with the specified
-  /// [universeDomain].
-  const Credentials({this.universeDomain = defaultUniverseDomain});
-
-  /// Get the current request metadata, refreshing tokens if required.
-  ///
-  /// This should be called by the transport layer on each request,
-  /// and the data should be populated in headers or other context.
-  ///
-  /// If a quota project is associated with these credentials then
-  /// "x-google-user-project" will be set.
-  Future<Map<String, List<String>>> requestMetadata({
-    Uri? uri,
-    bool forceRefresh = false,
-  });
-}
-
-abstract base class Oauth2Credentials extends Credentials {
-  Future<String> accessToken({bool forceRefresh = false});
-
-  const Oauth2Credentials({
-    super.universeDomain = Credentials.defaultUniverseDomain,
-  });
-
-  @override
-  Future<Map<String, List<String>>> requestMetadata({
-    Uri? uri,
-    bool forceRefresh = false,
-  }) async => {
-    'authorization': [
-      'Bearer ${await accessToken(forceRefresh: forceRefresh)}',
-    ],
-  };
-}
+import 'credentials.dart';
+import 'oauth_2_credentials.dart';
 
 abstract base class GoogleCredentials extends Oauth2Credentials {
   const GoogleCredentials({
     super.universeDomain = Credentials.defaultUniverseDomain,
   });
+
+  // TODO(https://github.com/googleapis/google-cloud-dart/issues/392):
+  // implement a mechanism to insert `x-goog-user-project`.
 }

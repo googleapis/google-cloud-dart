@@ -28,6 +28,7 @@ import 'package:meta/meta.dart';
 
 import 'access_token.dart';
 import 'credential_exception.dart';
+import 'credentials.dart';
 import 'google_credentials.dart';
 import 'json_utils.dart';
 import 'platform_web.dart' if (dart.library.io) 'platform_io.dart';
