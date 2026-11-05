@@ -28,6 +28,9 @@ import 'package:test/test.dart';
 
 import 'test_utils.dart';
 
+const _isVm = bool.fromEnvironment('dart.library.io');
+const _expectedUserAgent = _isVm ? 'gcloud-dart/$packageVersion' : null;
+
 Uint8List randomUint8List(int length, {int? seed}) {
   final random = Random(seed);
   final l = Uint8List(length);
@@ -822,14 +825,17 @@ void main() {
       expect(
         actualRequests,
         everyElement(
-          (http.Request r) =>
-              r.headers['x-goog-api-client']!.contains(
-                'gccl/$packageVersion',
-              ) &&
-              r.headers['user-agent'] ==
-                  (const bool.fromEnvironment('dart.library.io')
-                      ? 'gcloud-dart/$packageVersion'
-                      : null),
+          isA<http.Request>()
+              .having(
+                (r) => r.headers['x-goog-api-client'],
+                'x-goog-api-client',
+                contains('gccl/$packageVersion'),
+              )
+              .having(
+                (r) => r.headers['user-agent'],
+                'user-agent',
+                _expectedUserAgent,
+              ),
         ),
       );
     });
@@ -867,14 +873,17 @@ void main() {
       expect(
         actualRequests,
         everyElement(
-          (http.Request r) =>
-              r.headers['x-goog-api-client']!.contains(
-                'gccl/$packageVersion',
-              ) &&
-              r.headers['user-agent'] ==
-                  (const bool.fromEnvironment('dart.library.io')
-                      ? 'gcloud-dart/$packageVersion'
-                      : null),
+          isA<http.Request>()
+              .having(
+                (r) => r.headers['x-goog-api-client'],
+                'x-goog-api-client',
+                contains('gccl/$packageVersion'),
+              )
+              .having(
+                (r) => r.headers['user-agent'],
+                'user-agent',
+                _expectedUserAgent,
+              ),
         ),
       );
     });
