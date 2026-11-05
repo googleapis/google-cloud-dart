@@ -39,10 +39,7 @@ void main() {
   });
 
   group('applicationDefaultCredentials', () {
-    test(
-      'produces useable request metadata',
-      tags: 'google-cloud',
-      () async {
+    test('produces useable request metadata', tags: 'google-cloud', () async {
       final credentials = await defaultCredentials();
       final metadata = await credentials.requestMetadata();
 
@@ -59,8 +56,7 @@ void main() {
         },
       );
       expect(response.statusCode, 200);
-      },
-    );
+    });
 
     group('ServiceAccountCredentials', () {
       group('from GOOGLE_APPLICATION_CREDENTIALS', () {
