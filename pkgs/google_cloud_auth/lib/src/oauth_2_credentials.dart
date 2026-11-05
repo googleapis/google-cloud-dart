@@ -17,14 +17,23 @@
 /// - https://github.com/googleapis/google-auth-library-python/blob/main/google/auth/credentials.py
 library;
 
+import 'credential_exception.dart';
 import 'credentials.dart';
 
 abstract base class Oauth2Credentials extends Credentials {
-  Future<String> accessToken({bool forceRefresh = false});
-
   const Oauth2Credentials({
     super.universeDomain = Credentials.defaultUniverseDomain,
   });
+
+  /// A non-expired current OAuth2 access token.
+  ///
+  /// If the cached token is expired or if [forceRefresh] is `true`, then a new
+  /// token is fetched.
+  ///
+  /// It is safe to call this method concurrently.
+  ///
+  /// Throws [CredentialException] on failure.
+  Future<String> accessToken({bool forceRefresh = false});
 
   @override
   Future<Map<String, List<String>>> requestMetadata({

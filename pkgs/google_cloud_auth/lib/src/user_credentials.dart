@@ -153,15 +153,6 @@ final class UserCredentials extends GoogleCredentials {
     clientFactory: clientFactory,
   );
 
-  /// A non-expired current OAuth2 access token for the user.
-  ///
-  /// If the cached token is expired or if [forceRefresh] is `true`, then a new
-  /// token is obtained from the Google OAuth 2.0 token endpoint using the
-  /// refresh token.
-  ///
-  /// It is safe to call this method concurrently.
-  ///
-  /// Throws [CredentialException] on failure.
   @override
   Future<String> accessToken({bool forceRefresh = false}) =>
       _accessTokenCache.accessToken(forceRefresh: forceRefresh);
