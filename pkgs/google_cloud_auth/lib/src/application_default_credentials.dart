@@ -28,7 +28,9 @@ import 'compute_engine_credentials.dart';
 import 'credential_exception.dart';
 import 'google_credentials.dart';
 import 'json_utils.dart';
+import 'platform_io.dart' show readCredentialFileAsString;
 import 'service_account_credentials.dart';
+import 'user_credentials.dart';
 
 const _credentialsFileName = 'application_default_credentials.json';
 
@@ -63,7 +65,7 @@ Future<GoogleCredentials> internalDefaultCredentials({
         'file that does not exist: $envPath',
       );
     }
-    return await _loadCredentialsFile(file);
+    return await _loadCredentialsFile(file, clientFactory: clientFactory);
   }
 
   // Check well-known credentials file
@@ -72,7 +74,7 @@ Future<GoogleCredentials> internalDefaultCredentials({
   if (adcPath != null) {
     final file = File(adcPath);
     if (await file.exists()) {
-      return await _loadCredentialsFile(file);
+      return await _loadCredentialsFile(file, clientFactory: clientFactory);
     }
   }
 
@@ -88,23 +90,17 @@ Future<GoogleCredentials> internalDefaultCredentials({
   }
 
   throw CredentialException(
-    'Could not load Application Default Credentials. No service account '
-    'credentials found in GOOGLE_APPLICATION_CREDENTIALS, the well-known '
-    'credentials file, or the Compute Engine metadata server.',
+    'Could not load Application Default Credentials. No credentials found in '
+    'GOOGLE_APPLICATION_CREDENTIALS, the well-known credentials file, or the '
+    'Compute Engine metadata server.',
   );
 }
 
-Future<ServiceAccountCredentials> _loadCredentialsFile(File file) async {
-  final String content;
-  try {
-    content = await file.readAsString();
-  } on IOException catch (e, stackTrace) {
-    throw CredentialException(
-      'Failed to read credentials file at ${file.path}: $e',
-      innerException: e,
-      innerStackTrace: stackTrace,
-    );
-  }
+Future<GoogleCredentials> _loadCredentialsFile(
+  File file, {
+  FutureOr<http.Client> Function()? clientFactory,
+}) async {
+  final content = await readCredentialFileAsString(file.path);
 
   final Map<String, dynamic> json;
   try {
@@ -131,6 +127,21 @@ Future<ServiceAccountCredentials> _loadCredentialsFile(File file) async {
     } on Exception catch (e, stackTrace) {
       throw CredentialException(
         'Failed to load service account credentials from ${file.path}: $e',
+        innerException: e,
+        innerStackTrace: stackTrace,
+      );
+    }
+  }
+
+  if (type == 'authorized_user') {
+    try {
+      return UserCredentials.fromAuthorizedUserInfo(
+        json,
+        clientFactory: clientFactory,
+      );
+    } on FormatException catch (e, stackTrace) {
+      throw CredentialException(
+        'Failed to parse user credentials from ${file.path}: ${e.message}',
         innerException: e,
         innerStackTrace: stackTrace,
       );
