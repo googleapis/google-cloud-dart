@@ -99,10 +99,10 @@ final class UserCredentials extends GoogleCredentials {
     final universeDomain = optionalString(info, 'universe_domain');
     if (universeDomain != null &&
         universeDomain.isNotEmpty &&
-        universeDomain != GoogleCredentials.defaultUniverseDomain) {
+        universeDomain != Credentials.defaultUniverseDomain) {
       throw FormatException(
         'User credentials are only supported in the '
-        "'${GoogleCredentials.defaultUniverseDomain}' universe domain, but "
+        "'${Credentials.defaultUniverseDomain}' universe domain, but "
         "the universe domain is '$universeDomain'.",
       );
     }
@@ -161,6 +161,7 @@ final class UserCredentials extends GoogleCredentials {
   /// It is safe to call this method concurrently.
   ///
   /// Throws [CredentialException] on failure.
+  @override
   Future<String> accessToken({bool forceRefresh = false}) =>
       _accessTokenCache.accessToken(forceRefresh: forceRefresh);
 }

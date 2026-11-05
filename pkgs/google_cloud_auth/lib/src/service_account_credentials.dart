@@ -78,7 +78,7 @@ final class ServiceAccountCredentials extends GoogleCredentials
     this.projectId,
     this.quotaProjectId,
     Uri? tokenUri,
-    super.universeDomain = GoogleCredentials.defaultUniverseDomain,
+    super.universeDomain = Credentials.defaultUniverseDomain,
   }) : _privateKey = privateKey,
        tokenUri = tokenUri ?? Uri.https('oauth2.$universeDomain', '/token');
 
@@ -114,7 +114,7 @@ final class ServiceAccountCredentials extends GoogleCredentials
     final quotaProjectId = optionalString(info, 'quota_project_id');
     final universeDomain =
         optionalString(info, 'universe_domain') ??
-        GoogleCredentials.defaultUniverseDomain;
+        Credentials.defaultUniverseDomain;
 
     final tokenUriStr = optionalString(info, 'token_uri');
     final tokenUri = tokenUriStr != null ? Uri.parse(tokenUriStr) : null;
@@ -153,7 +153,7 @@ final class ServiceAccountCredentials extends GoogleCredentials
     String? projectId,
     String? quotaProjectId,
     Uri? tokenUri,
-    String universeDomain = GoogleCredentials.defaultUniverseDomain,
+    String universeDomain = Credentials.defaultUniverseDomain,
   }) async {
     final pkcs8Bytes = _parsePemPkcs8Key(privateKeyPkcs8);
     final privateKey = await RsassaPkcs1V15PrivateKey.importPkcs8Key(
@@ -187,5 +187,11 @@ final class ServiceAccountCredentials extends GoogleCredentials
         innerStackTrace: stackTrace,
       );
     }
+  }
+
+  @override
+  Future<String> accessToken({bool forceRefresh = false}) {
+    // TODO: implement accessToken
+    throw UnimplementedError();
   }
 }

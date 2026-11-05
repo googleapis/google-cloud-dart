@@ -158,6 +158,7 @@ final class ComputeEngineCredentials extends GoogleCredentials
   /// It is safe to call this method concurrently.
   ///
   /// Throws [CredentialException] on failure.
+  @override
   Future<String> accessToken({bool forceRefresh = false}) =>
       _accessTokenCache.accessToken(forceRefresh: forceRefresh);
 
@@ -253,9 +254,9 @@ final class ComputeEngineCredentials extends GoogleCredentials
         final trimmed = response.body.trim();
         resolvedUniverseDomain = trimmed.isNotEmpty
             ? trimmed
-            : GoogleCredentials.defaultUniverseDomain;
+            : Credentials.defaultUniverseDomain;
       } else if (response.statusCode == 404) {
-        resolvedUniverseDomain = GoogleCredentials.defaultUniverseDomain;
+        resolvedUniverseDomain = Credentials.defaultUniverseDomain;
       } else {
         throw CredentialException(
           'Failed to get universe domain from metadata server: '

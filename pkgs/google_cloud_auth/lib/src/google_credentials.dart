@@ -17,8 +17,7 @@
 /// - https://github.com/googleapis/google-auth-library-python/blob/main/google/auth/credentials.py
 library;
 
-/// Credentials used to authenticate with Google APIs and services.
-abstract base class GoogleCredentials {
+abstract base class Credentials {
   /// The default universe domain for Google Cloud services.
   static const defaultUniverseDomain = 'googleapis.com';
 
@@ -29,5 +28,41 @@ abstract base class GoogleCredentials {
 
   /// Creates a [GoogleCredentials] instance with the specified
   /// [universeDomain].
-  const GoogleCredentials({this.universeDomain = defaultUniverseDomain});
+  const Credentials({this.universeDomain = defaultUniverseDomain});
+
+  /// Get the current request metadata, refreshing tokens if required.
+  ///
+  /// This should be called by the transport layer on each request,
+  /// and the data should be populated in headers or other context.
+  ///
+  /// If a quota project is associated with these credentials then
+  /// "x-google-user-project" will be set.
+  Future<Map<String, List<String>>> requestMetadata({
+    Uri? uri,
+    bool forceRefresh = false,
+  });
+}
+
+abstract base class Oauth2Credentials extends Credentials {
+  Future<String> accessToken({bool forceRefresh = false});
+
+  const Oauth2Credentials({
+    super.universeDomain = Credentials.defaultUniverseDomain,
+  });
+
+  @override
+  Future<Map<String, List<String>>> requestMetadata({
+    Uri? uri,
+    bool forceRefresh = false,
+  }) async => {
+    'authorization': [
+      'Bearer ${await accessToken(forceRefresh: forceRefresh)}',
+    ],
+  };
+}
+
+abstract base class GoogleCredentials extends Oauth2Credentials {
+  const GoogleCredentials({
+    super.universeDomain = Credentials.defaultUniverseDomain,
+  });
 }
