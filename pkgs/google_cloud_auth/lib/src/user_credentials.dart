@@ -153,7 +153,10 @@ final class UserCredentials extends GoogleCredentials {
       contents,
       clientFactory: clientFactory,
     );
-  }
+  }) async => .fromAuthorizedUserString(
+    await readCredentialFileAsString(path),
+    clientFactory: clientFactory,
+  );
 
   /// A non-expired current OAuth2 access token for the user.
   ///
