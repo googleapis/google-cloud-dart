@@ -35,7 +35,7 @@ abstract base class Credentials {
   /// and the data should be populated in headers or other context.
   ///
   /// If a quota project is associated with these credentials then
-  /// "x-google-user-project" will be set.
+  /// "x-goog-user-project" will be set.
   Future<Map<String, List<String>>> requestMetadata({
     Uri? uri,
     bool forceRefresh = false,
