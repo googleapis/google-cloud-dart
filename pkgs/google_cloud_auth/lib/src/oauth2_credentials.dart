@@ -41,7 +41,9 @@ abstract base class OAuth2Credentials extends Credentials {
     Uri? uri,
     bool forceRefresh = false,
   }) async => {
-    'Authorization': [
+    // RFC 9113 §8.2.1 forbids uppercase header names and `package:grpc` 5.2.0
+    // just uses given metadata keys verbatim.
+    'authorization': [
       'Bearer ${await accessToken(forceRefresh: forceRefresh)}',
     ],
   };

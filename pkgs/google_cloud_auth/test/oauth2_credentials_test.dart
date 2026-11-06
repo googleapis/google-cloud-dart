@@ -12,19 +12,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:google_cloud_auth/src/google_credentials.dart';
+import 'package:google_cloud_auth/google_cloud_auth.dart';
 import 'package:test/test.dart';
 
-final class FakeCredentials extends GoogleCredentials {
+final class FakeCredentials extends OAuth2Credentials {
+  final accessTokenCalls = <({bool forceRefresh})>[];
+
   @override
-  Future<String> accessToken({bool forceRefresh = false}) async => 'abc123';
+  Future<String> accessToken({bool forceRefresh = false}) async {
+    accessTokenCalls.add((forceRefresh: forceRefresh));
+    return 'abc123';
+  }
 }
 
 void main() {
-  group('Oauth2Credentials', () {
-    test('requestMetadata', () async {
+  group('OAuth2Credentials', () {
+    test('requestMetadata without forceRefresh', () async {
+      final creds = FakeCredentials();
+      expect(await creds.requestMetadata(), {
+        'authorization': ['Bearer abc123'],
+      });
+      expect(creds.accessTokenCalls, [(forceRefresh: false)]);
+    });
+
+    test('requestMetadata with forceRefresh', () async {
       expect(await FakeCredentials().requestMetadata(), {
-        'Authorization': ['Bearer abc123'],
+        'authorization': ['Bearer abc123'],
       });
     });
   });
