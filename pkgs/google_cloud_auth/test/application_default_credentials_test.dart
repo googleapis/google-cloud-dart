@@ -21,6 +21,7 @@ import 'dart:io';
 import 'package:google_cloud/google_cloud.dart';
 import 'package:google_cloud_auth/google_cloud_auth.dart';
 import 'package:google_cloud_auth/src/application_default_credentials.dart';
+import 'package:grpc/grpc.dart' as grpc;
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:test/test.dart';
@@ -39,23 +40,62 @@ void main() {
   });
 
   group('applicationDefaultCredentials', () {
-    test('produces useable request metadata', tags: 'google-cloud', () async {
-      final credentials = await defaultCredentials();
-      final metadata = await credentials.requestMetadata();
+    group('produces useable request metadata', tags: 'google-cloud', () {
+      test('for HTTP', () async {
+        final credentials = await defaultCredentials();
+        final metadata = await credentials.requestMetadata();
 
-      final client = http.Client();
-      addTearDown(client.close);
+        final client = http.Client();
+        addTearDown(client.close);
 
-      final response = await client.get(
-        Uri.https('storage.googleapis.com', 'storage/v1/b', {
-          'project': await computeProjectId(),
-        }),
-        headers: {
-          for (var MapEntry(key: key, value: values) in metadata.entries)
-            key: values.join(', '),
-        },
-      );
-      expect(response.statusCode, 200);
+        final response = await client.get(
+          Uri.https(
+            'pubsub.googleapis.com',
+            'v1/projects/${await computeProjectId()}/topics',
+          ),
+          headers: {
+            for (var MapEntry(key: key, value: values) in metadata.entries)
+              key: values.join(', '),
+          },
+        );
+        expect(response.statusCode, 200);
+      });
+
+      test('for gRPC', () async {
+        final credentials = await defaultCredentials();
+        final metadata = await credentials.requestMetadata();
+
+        final channel = grpc.ClientChannel('pubsub.googleapis.com');
+        addTearDown(channel.shutdown);
+
+        // Call `google.pubsub.v1.Publisher/ListTopics` without generated
+        // protobuf code by hand-encoding the `ListTopicsRequest`.
+        final listTopics = grpc.ClientMethod<List<int>, List<int>>(
+          '/google.pubsub.v1.Publisher/ListTopics',
+          (request) => request,
+          (response) => response,
+        );
+        final project = utf8.encode('projects/${await computeProjectId()}');
+        final request = [
+          0x0a, // Field 1 (`project`) with wire type 2 (length-delimited).
+          project.length, // A one byte varint since project IDs are short.
+          ...project,
+        ];
+
+        await expectLater(
+          grpc.Client(channel).$createUnaryCall(
+            listTopics,
+            request,
+            options: grpc.CallOptions(
+              metadata: {
+                for (var MapEntry(key: key, value: values) in metadata.entries)
+                  key: values.join(', '),
+              },
+            ),
+          ),
+          completes,
+        );
+      });
     });
 
     group('ServiceAccountCredentials', () {
