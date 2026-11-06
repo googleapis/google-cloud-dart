@@ -20,7 +20,9 @@ import 'package:http/http.dart' as http;
 import 'exceptions.dart';
 import 'retry.dart';
 import 'src/version.dart';
-import 'src/web.dart' if (dart.library.io) 'src/vm.dart' show clientDartVersion;
+import 'src/web.dart'
+    if (dart.library.io) 'src/vm.dart'
+    show clientDartVersion, userAgentForClient;
 
 export 'dart:typed_data' show Uint8List;
 
@@ -29,6 +31,7 @@ export 'src/web.dart'
     show httpClientFromApiKey;
 
 const String _clientKey = 'x-goog-api-client';
+const String _userAgentKey = 'user-agent';
 
 // ignore: prefer_const_declarations
 String get _baseClientName =>
@@ -97,6 +100,17 @@ class ServiceClient {
     }
 
     return buffer.toString();
+  }
+
+  /// The `User-Agent` header value sent with every request, or `null` if none
+  /// should be sent.
+  ///
+  /// On the Dart VM, returns `'gcloud-dart/<gcclVersion>'` when
+  /// [gcclVersion] is non-empty; otherwise returns `null`.
+  String? get userAgentHeader {
+    final gccl = gcclVersion?.trim();
+    if (gccl == null || gccl.isEmpty) return null;
+    return userAgentForClient(gccl);
   }
 
   Future<Map<String, dynamic>> get(Uri url, {RetryRunner retry = noRetry}) =>
@@ -194,6 +208,7 @@ class ServiceClient {
     }
     request.headers.addAll({
       _clientKey: clientHeader,
+      _userAgentKey: ?userAgentHeader,
       if (encodedBody != null) _contentTypeKey: _typeJson,
     });
 

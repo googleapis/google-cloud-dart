@@ -31,6 +31,7 @@ class TestMessage extends JsonEncodable {
   Object? toJson() => message;
 }
 
+const _isVm = bool.fromEnvironment('dart.library.io');
 final sampleUrl = Uri.https('example.org', '/path');
 final apiBaseHeaderPattern =
     r'^gl-dart/(?:3\.\d+\.\d+|0) ' +
@@ -68,7 +69,7 @@ void main() {
       }
     });
 
-    test('appends gccl token when gcclVersion provided', () async {
+    test('gccl token provided', () async {
       late Request customRequest;
       final customService = ServiceClient(
         client: MockClient((request) async {
@@ -84,14 +85,23 @@ void main() {
         'x-goog-api-client': matches(
           apiBaseHeaderPattern + RegExp.escape(' gccl/0.6.4-wip'),
         ),
+        if (_isVm) 'user-agent': 'gcloud-dart/0.6.4-wip',
       });
       expect(
         customService.clientHeader,
         matches(apiBaseHeaderPattern + RegExp.escape(' gccl/0.6.4-wip')),
       );
+      expect(
+        customService.userAgentHeader,
+        _isVm ? 'gcloud-dart/0.6.4-wip' : isNull,
+      );
+      final defaultService = ServiceClient(
+        client: MockClient((_) async => Response('', 200)),
+      );
+      expect(defaultService.userAgentHeader, isNull);
     });
 
-    test('appends gapic token when gapicVersion provided', () async {
+    test('gapic token provided', () async {
       late Request customRequest;
       final customService = ServiceClient(
         client: MockClient((request) async {
@@ -114,34 +124,55 @@ void main() {
       );
     });
 
-    test(
-      'appends both gapic and gccl tokens when both versions provided',
-      () async {
-        late Request customRequest;
-        final customService = ServiceClient(
-          client: MockClient((request) async {
-            customRequest = request;
-            return Response('', 200);
-          }),
-          gapicVersion: '0.1.0',
-          gcclVersion: '0.2.0',
-        );
+    test('both gapic and gccl tokens provided', () async {
+      late Request customRequest;
+      final customService = ServiceClient(
+        client: MockClient((request) async {
+          customRequest = request;
+          return Response('', 200);
+        }),
+        gapicVersion: '0.1.0',
+        gcclVersion: '0.2.0',
+      );
 
-        await customService.get(sampleUrl);
+      await customService.get(sampleUrl);
 
-        expect(customRequest.headers, {
-          'x-goog-api-client': matches(
-            apiBaseHeaderPattern + RegExp.escape(' gapic/0.1.0 gccl/0.2.0'),
-          ),
-        });
-        expect(
-          customService.clientHeader,
-          matches(
-            apiBaseHeaderPattern + RegExp.escape(' gapic/0.1.0 gccl/0.2.0'),
-          ),
-        );
-      },
-    );
+      expect(customRequest.headers, {
+        'x-goog-api-client': matches(
+          apiBaseHeaderPattern + RegExp.escape(' gapic/0.1.0 gccl/0.2.0'),
+        ),
+        if (_isVm) 'user-agent': 'gcloud-dart/0.2.0',
+      });
+      expect(
+        customService.clientHeader,
+        matches(
+          apiBaseHeaderPattern + RegExp.escape(' gapic/0.1.0 gccl/0.2.0'),
+        ),
+      );
+      expect(
+        customService.userAgentHeader,
+        _isVm ? 'gcloud-dart/0.2.0' : isNull,
+      );
+    });
+
+    test('gcclVersion is blank', () async {
+      late Request customRequest;
+      final customService = ServiceClient(
+        client: MockClient((request) async {
+          customRequest = request;
+          return Response('', 200);
+        }),
+        gcclVersion: '   ',
+      );
+
+      await customService.get(sampleUrl);
+
+      expect(customService.userAgentHeader, isNull);
+      expect(customService.clientHeader, matches(apiBaseHeaderPattern));
+      expect(customRequest.headers, {
+        'x-goog-api-client': matches(apiBaseHeaderPattern),
+      });
+    });
 
     group('requests with body', () {
       late Request actualRequest;
@@ -305,6 +336,33 @@ void main() {
           expect(actualRequest.body, isEmpty);
         });
       }
+    });
+
+    test('both gapic and gccl tokens provided', () async {
+      late Request customRequest;
+      final customService = ServiceClient(
+        client: MockClient((request) async {
+          customRequest = request;
+          return Response(
+            '',
+            200,
+            headers: {'content-type': 'text/event-stream'},
+          );
+        }),
+        gapicVersion: '0.1.0',
+        gcclVersion: '0.2.0',
+      );
+
+      await customService
+          .getStreaming(sampleUrl, enableSse: true)
+          .drain<Object?>();
+
+      expect(customRequest.headers, {
+        'x-goog-api-client': matches(
+          apiBaseHeaderPattern + RegExp.escape(' gapic/0.1.0 gccl/0.2.0'),
+        ),
+        if (_isVm) 'user-agent': 'gcloud-dart/0.2.0',
+      });
     });
 
     group('requests without body with SSE', () {

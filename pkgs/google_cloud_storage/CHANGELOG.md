@@ -28,6 +28,8 @@
 * Move `ChecksumValidationException` to `package:google_cloud_rpc` (re-exported
   for backwards compatibility).
 * Add `RetryRunner.isRetryable` and `RetryRunner.delays`.
+* Send `gcloud-dart/<version>` in the default `User-Agent` header on Dart VM
+  requests for API usage attribution.
 
 ## 0.6.4
 
