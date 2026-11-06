@@ -20,7 +20,8 @@ library;
 import 'credential_exception.dart';
 import 'credentials.dart';
 
-/// A base class for credentials used to authorize calls using OAuth2.
+/// Credentials used to authorize calls using
+/// [OAuth 2.0](https://www.rfc-editor.org/info/rfc6749/).
 abstract base class OAuth2Credentials extends Credentials {
   const OAuth2Credentials({
     super.universeDomain = Credentials.defaultUniverseDomain,

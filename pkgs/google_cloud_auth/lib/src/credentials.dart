@@ -26,7 +26,6 @@ abstract base class Credentials {
   /// See [Universes, regions, and zones](https://docs.cloud.google.com/docs/overview#universes_regions_and_zones).
   final String universeDomain;
 
-  /// Creates a [Credentials] instance with the specified [universeDomain].
   const Credentials({this.universeDomain = defaultUniverseDomain});
 
   /// Get the current request metadata, refreshing tokens if required.

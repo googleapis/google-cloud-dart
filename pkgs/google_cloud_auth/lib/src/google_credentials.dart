@@ -20,7 +20,8 @@ library;
 import 'credentials.dart';
 import 'oauth2_credentials.dart';
 
-/// A base class for credentials used to authorize calls to Google APIs.
+/// Credentials used to authorize calls to
+/// [Google APIs using OAuth 2.0](https://developers.google.com/identity/protocols/oauth2).
 abstract base class GoogleCredentials extends OAuth2Credentials {
   const GoogleCredentials({
     super.universeDomain = Credentials.defaultUniverseDomain,
