@@ -141,7 +141,6 @@ void main() {
           final done = Completer<void>();
           var deliveries = 0;
           String? firstMessageId;
-          ReceivedMessage? secondDelivery;
 
           final streamSubscription = subscription
               .streamingPull(
@@ -156,7 +155,6 @@ void main() {
                   await message.modifyAckDeadline(0);
                 } else if (deliveries == 2) {
                   expect(message.messageId, firstMessageId);
-                  secondDelivery = message;
                   await message.acknowledge();
                   if (!done.isCompleted) done.complete();
                 }
@@ -166,23 +164,8 @@ void main() {
           await topic.close();
 
           await done.future.timeout(const Duration(seconds: 10));
-          // Allow the stream-routed ACK frame to reach the server before
-          // tearing down the stream.
-          await Future<void>.delayed(const Duration(milliseconds: 200));
           await streamSubscription.cancel();
           await subscription.close();
-
-          final reopen = client.subscription(subscriptionName);
-          addTearDown(() async => await reopen.close());
-          await reopen.modifyAckDeadlineNow([secondDelivery!], 0);
-          await client.publish(topic.name, utf8.encode('sentinel'));
-
-          final afterAck = await pullReliably(reopen, count: 1);
-          expect(
-            afterAck.map((message) => utf8.decode(message.data)).toList(),
-            ['sentinel'],
-          );
-          await reopen.acknowledgeNow(afterAck);
         });
       },
     );

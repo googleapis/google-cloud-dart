@@ -24,7 +24,11 @@ import 'exceptions.dart';
 ///
 /// The format is either `major.minor.patch` or the special value `0`, which
 /// indicates that the version is unknown.
-const String clientDartVersion = '0';
+// Declared `final` rather than `const` to match `vm.dart`, so the analyzer
+// (which resolves the default `web.dart` branch of conditional exports) does
+// not treat `clientDartVersion` as a compile-time constant.
+// ignore: prefer_const_declarations
+final String clientDartVersion = '0';
 
 /// Returns the `User-Agent` header value for a hand-written client library
 /// with version [gcclVersion], or `null` if no `User-Agent` header should be

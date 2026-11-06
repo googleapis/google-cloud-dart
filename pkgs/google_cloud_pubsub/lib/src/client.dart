@@ -15,6 +15,7 @@
 import 'dart:async';
 
 import 'package:google_cloud_rpc/rpc.dart';
+import 'package:google_cloud_rpc/service_client.dart' show clientDartVersion;
 import 'package:grpc/grpc.dart';
 import 'package:meta/meta.dart';
 
