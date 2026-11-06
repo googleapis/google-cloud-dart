@@ -271,6 +271,54 @@ void main() {
           );
         });
       });
+
+      test('uses clientFactory to get access tokens', () async {
+        final saFile = File('${tempDir.path}/service_account.json');
+        await saFile.writeAsString(
+          jsonEncode({
+            'type': 'service_account',
+            'project_id': 'env-project',
+            'private_key': testPrivateKey,
+            'client_email': 'env-sa@project.iam.gserviceaccount.com',
+          }),
+        );
+        final mockClient = MockClient((request) async {
+          expect(request.url, Uri.https('oauth2.googleapis.com', '/token'));
+          return http.Response(
+            jsonEncode({
+              'access_token': 'service-account-access-token',
+              'expires_in': 3600,
+              'token_type': 'Bearer',
+            }),
+            200,
+          );
+        });
+
+        final credentials = await internalDefaultCredentials(
+          clientFactory: () => mockClient,
+          readEnvironment: (String name) => null,
+          wellKnownFilePath: saFile.path,
+        );
+
+        expect(
+          await (credentials as ServiceAccountCredentials).accessToken(),
+          'service-account-access-token',
+        );
+      }, skip: canUseWebCrypto ? null : 'Requires Dart 3.13 or later');
+
+      test(
+        'gets access token from the environment',
+        tags: ['google-cloud'],
+        () async {
+          final credentials = await defaultCredentials();
+          // TODO(https://github.com/dart-lang/test/issues/2576): Throw when
+          // this is fixed.
+          if (credentials is! ServiceAccountCredentials) {
+            return;
+          }
+          expect(await credentials.accessToken(), isNotEmpty);
+        },
+      );
     });
 
     group('UserCredentials', () {
