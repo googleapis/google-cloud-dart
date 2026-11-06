@@ -23,5 +23,6 @@ export 'src/credential_exception.dart';
 export 'src/google_credentials.dart';
 export 'src/service_account_credentials.dart';
 export 'src/service_account_signer.dart';
+export 'src/user_credentials.dart';
 export 'src/verifier/token_verification_exception.dart';
 export 'src/verifier/token_verifier.dart';

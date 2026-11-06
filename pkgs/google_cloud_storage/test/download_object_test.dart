@@ -24,6 +24,9 @@ import 'package:test/test.dart';
 
 import 'test_utils.dart';
 
+const _isVm = bool.fromEnvironment('dart.library.io');
+const _expectedUserAgent = _isVm ? 'gcloud-dart/$packageVersion' : null;
+
 void main() async {
   late Storage storage;
   late RetryTestHttpClient client;
@@ -284,7 +287,7 @@ void main() async {
     expect(actualData, utf8.encode('Hello World!'));
   });
 
-  test('sends gccl token in x-goog-api-client header', () async {
+  test('sends client headers', () async {
     late http.Request actualRequest;
     final mockClient = MockClient((request) async {
       actualRequest = request;
@@ -304,5 +307,6 @@ void main() async {
       actualRequest.headers['x-goog-api-client'],
       contains('gccl/$packageVersion'),
     );
+    expect(actualRequest.headers['user-agent'], _expectedUserAgent);
   });
 }

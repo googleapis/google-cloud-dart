@@ -30,6 +30,11 @@ import 'exceptions.dart';
 // ignore: prefer_const_declarations
 final String clientDartVersion = '0';
 
+/// Returns the `User-Agent` header value for a hand-written client library
+/// with version [gcclVersion], or `null` if no `User-Agent` header should be
+/// sent.
+String? userAgentForClient(String gcclVersion) => null;
+
 /// A [http.Client] authenticated using an API key.
 ///
 /// If `apiKey` is not `null` then that API key is used. If `apiKey` is `null`,
