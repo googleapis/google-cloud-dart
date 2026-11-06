@@ -16,10 +16,43 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:google_cloud_auth/google_cloud_auth.dart';
+import 'package:google_cloud_auth/src/verifier/jws_parser.dart';
+import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
 import 'package:test/test.dart';
 import 'package:webcrypto/webcrypto.dart';
 
 import 'test_utils.dart';
+
+const _clientEmail = 'test@test-project.iam.gserviceaccount.com';
+
+const _defaultScope = 'https://www.googleapis.com/auth/cloud-platform';
+
+const _minimalInfo = {
+  'type': 'service_account',
+  'private_key': testPrivateKey,
+  'client_email': _clientEmail,
+};
+
+final _defaultTokenUri = Uri.https('oauth2.googleapis.com', '/token');
+
+/// A client factory whose clients add each request to [requests] and respond
+/// with a new access token.
+http.Client Function() _recordingClientFactory(List<http.Request> requests) =>
+    () => MockClient((request) async {
+      requests.add(request);
+      return http.Response(
+        jsonEncode({
+          'access_token': 'access-token-${requests.length}',
+          'expires_in': 3599,
+          'token_type': 'Bearer',
+        }),
+        200,
+      );
+    });
+
+/// The current time, in seconds since the epoch, as used in JWT claims.
+int _nowInSeconds() => DateTime.timestamp().millisecondsSinceEpoch ~/ 1000;
 
 void main() {
   late RsassaPkcs1V15PublicKey testPublicKey;
@@ -86,6 +119,7 @@ void main() {
           expect(creds.privateKeyId, isNull);
           expect(creds.projectId, isNull);
           expect(creds.quotaProjectId, isNull);
+          expect(creds.scopes, [_defaultScope]);
         });
 
         test('interpolates custom universe_domain in '
@@ -266,6 +300,20 @@ void main() {
           );
           expect(creds.projectId, equals('string-project'));
         });
+
+        test('string with scopes and clientFactory', () async {
+          final requests = <http.Request>[];
+          final creds =
+              await ServiceAccountCredentials.fromServiceAccountString(
+                jsonEncode(_minimalInfo),
+                scopes: ['https://www.googleapis.com/auth/pubsub'],
+                clientFactory: _recordingClientFactory(requests),
+              );
+
+          expect(creds.scopes, ['https://www.googleapis.com/auth/pubsub']);
+          expect(await creds.accessToken(), 'access-token-1');
+          expect(requests, hasLength(1));
+        });
       });
 
       group('fromServiceAccountFile', () {
@@ -310,6 +358,24 @@ void main() {
             equals(Uri.https('oauth2.googleapis.com', '/token')),
           );
           expect(creds.universeDomain, equals('googleapis.com'));
+        }, testOn: 'vm');
+
+        test('uses scopes and clientFactory', () async {
+          final tempFilePath = await writeTempFile(
+            'service_account.json',
+            jsonEncode(_minimalInfo),
+          );
+          final requests = <http.Request>[];
+
+          final creds = await ServiceAccountCredentials.fromServiceAccountFile(
+            tempFilePath,
+            scopes: ['https://www.googleapis.com/auth/pubsub'],
+            clientFactory: _recordingClientFactory(requests),
+          );
+
+          expect(creds.scopes, ['https://www.googleapis.com/auth/pubsub']);
+          expect(await creds.accessToken(), 'access-token-1');
+          expect(requests, hasLength(1));
         }, testOn: 'vm');
 
         test(
@@ -363,6 +429,20 @@ void main() {
             expect(creds.universeDomain, equals('custom.domain.com'));
           },
         );
+
+        test('uses scopes and clientFactory', () async {
+          final requests = <http.Request>[];
+          final creds = await ServiceAccountCredentials.fromPkcs8(
+            clientEmail: 'pkcs8@project.iam.gserviceaccount.com',
+            privateKeyPkcs8: testPrivateKey,
+            scopes: ['https://www.googleapis.com/auth/pubsub'],
+            clientFactory: _recordingClientFactory(requests),
+          );
+
+          expect(creds.scopes, ['https://www.googleapis.com/auth/pubsub']);
+          expect(await creds.accessToken(), 'access-token-1');
+          expect(requests, hasLength(1));
+        });
       });
 
       group('sign', () {
@@ -409,6 +489,193 @@ void main() {
 
           final isValid = await testPublicKey.verifyBytes(signature, message);
           expect(isValid, isTrue);
+        });
+      });
+
+      group('accessToken', () {
+        /// Parses [jwt], verifying that it was signed with [testPrivateKey].
+        Future<JwsParts> parseVerifiedJwt(String jwt) async {
+          final parts = JwsParts.parse(jwt);
+          expect(
+            await testPublicKey.verifyBytes(
+              parts.signature,
+              parts.signedContent,
+            ),
+            isTrue,
+          );
+          return parts;
+        }
+
+        test('exchanges a signed JWT for an access token', () async {
+          final requests = <http.Request>[];
+          final creds = await ServiceAccountCredentials.fromServiceAccountInfo({
+            ..._minimalInfo,
+            'private_key_id': 'key-id-123',
+          }, clientFactory: _recordingClientFactory(requests));
+
+          final before = _nowInSeconds();
+          expect(await creds.accessToken(), 'access-token-1');
+          final after = _nowInSeconds();
+
+          final request = requests.single;
+          expect(request.method, 'POST');
+          expect(request.url, _defaultTokenUri);
+          expect(request.bodyFields, {
+            'grant_type': 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+            'assertion': isA<String>(),
+          });
+
+          final assertion = await parseVerifiedJwt(
+            request.bodyFields['assertion']!,
+          );
+          expect(assertion.header, {
+            'alg': 'RS256',
+            'typ': 'JWT',
+            'kid': 'key-id-123',
+          });
+          final claims = assertion.decodeClaims();
+          expect(claims, {
+            'iss': _clientEmail,
+            'scope': _defaultScope,
+            'aud': 'https://oauth2.googleapis.com/token',
+            'iat': inInclusiveRange(before, after),
+            'exp': (claims['iat'] as int) + 3600,
+          });
+        });
+
+        test('requests the given scopes', () async {
+          final requests = <http.Request>[];
+          final creds = await ServiceAccountCredentials.fromServiceAccountInfo(
+            _minimalInfo,
+            scopes: [
+              'https://www.googleapis.com/auth/devstorage.read_only',
+              'https://www.googleapis.com/auth/pubsub',
+            ],
+            clientFactory: _recordingClientFactory(requests),
+          );
+
+          await creds.accessToken();
+
+          final claims = JwsParts.parse(
+            requests.single.bodyFields['assertion']!,
+          ).decodeClaims();
+          expect(
+            claims['scope'],
+            'https://www.googleapis.com/auth/devstorage.read_only '
+            'https://www.googleapis.com/auth/pubsub',
+          );
+        });
+
+        test('omits kid when there is no private key ID', () async {
+          final requests = <http.Request>[];
+          final creds = await ServiceAccountCredentials.fromServiceAccountInfo(
+            _minimalInfo,
+            clientFactory: _recordingClientFactory(requests),
+          );
+
+          await creds.accessToken();
+
+          final assertion = JwsParts.parse(
+            requests.single.bodyFields['assertion']!,
+          );
+          expect(assertion.header, {'alg': 'RS256', 'typ': 'JWT'});
+        });
+
+        test('uses token_uri', () async {
+          final requests = <http.Request>[];
+          final creds = await ServiceAccountCredentials.fromServiceAccountInfo({
+            ..._minimalInfo,
+            'token_uri': 'https://oauth2.example.com/token',
+          }, clientFactory: _recordingClientFactory(requests));
+
+          await creds.accessToken();
+
+          expect(
+            requests.single.url,
+            Uri.https('oauth2.example.com', '/token'),
+          );
+          // The audience is the Google OAuth 2.0 token endpoint regardless of
+          // token_uri, as in the Java and Python libraries.
+          final claims = JwsParts.parse(
+            requests.single.bodyFields['assertion']!,
+          ).decodeClaims();
+          expect(claims['aud'], 'https://oauth2.googleapis.com/token');
+        });
+
+        test('caches the access token', () async {
+          final requests = <http.Request>[];
+          final creds = await ServiceAccountCredentials.fromServiceAccountInfo(
+            _minimalInfo,
+            clientFactory: _recordingClientFactory(requests),
+          );
+
+          expect(await creds.accessToken(), 'access-token-1');
+          expect(await creds.accessToken(), 'access-token-1');
+          expect(requests, hasLength(1));
+
+          expect(await creds.accessToken(forceRefresh: true), 'access-token-2');
+          expect(requests, hasLength(2));
+        });
+
+        test('throws CredentialException on HTTP error', () async {
+          final creds = await ServiceAccountCredentials.fromServiceAccountInfo(
+            _minimalInfo,
+            clientFactory: () => MockClient(
+              (request) async => http.Response(
+                '{"error": "invalid_grant", '
+                '"error_description": "Invalid JWT Signature."}',
+                400,
+              ),
+            ),
+          );
+
+          await expectLater(
+            creds.accessToken(),
+            throwsA(
+              isA<CredentialException>().having(
+                (e) => e.message,
+                'message',
+                allOf(
+                  contains('https://oauth2.googleapis.com/token: 400'),
+                  contains('Invalid JWT Signature.'),
+                ),
+              ),
+            ),
+          );
+        });
+
+        test('uses a self-signed JWT outside of the default universe '
+            'domain', () async {
+          final creds = await ServiceAccountCredentials.fromServiceAccountInfo(
+            {
+              ..._minimalInfo,
+              'private_key_id': 'key-id-123',
+              'universe_domain': 'custom.domain.com',
+            },
+            scopes: ['https://www.googleapis.com/auth/pubsub'],
+            clientFactory: () => fail('Unexpected HTTP request'),
+          );
+
+          final before = _nowInSeconds();
+          final token = await creds.accessToken();
+          final after = _nowInSeconds();
+
+          final jwt = await parseVerifiedJwt(token);
+          expect(jwt.header, {
+            'alg': 'RS256',
+            'typ': 'JWT',
+            'kid': 'key-id-123',
+          });
+          final claims = jwt.decodeClaims();
+          expect(claims, {
+            'iss': _clientEmail,
+            'sub': _clientEmail,
+            'scope': 'https://www.googleapis.com/auth/pubsub',
+            'iat': inInclusiveRange(before, after),
+            'exp': (claims['iat'] as int) + 3600,
+          });
+
+          expect(await creds.accessToken(), token);
         });
       });
     },
