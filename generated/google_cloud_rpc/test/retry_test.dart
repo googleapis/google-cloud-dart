@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'dart:async';
 import 'dart:math';
 
 import 'package:clock/clock.dart';
@@ -225,6 +226,12 @@ void main() {
       final error = http.ClientException('connection refused');
       expect(matchesStatusCode(error, const [Code.unavailable]), isTrue);
       expect(matchesStatusCode(error, const [Code.deadlineExceeded]), isFalse);
+    });
+
+    test('treats a timeout as DEADLINE_EXCEEDED', () {
+      final error = TimeoutException('timed out', const Duration(seconds: 1));
+      expect(matchesStatusCode(error, const [Code.deadlineExceeded]), isTrue);
+      expect(matchesStatusCode(error, const [Code.unavailable]), isFalse);
     });
 
     test('does not match other errors', () {
