@@ -23,6 +23,7 @@ import 'package:http/http.dart' as http;
 
 import 'access_token.dart';
 import 'credential_exception.dart';
+import 'credentials.dart';
 import 'google_credentials.dart';
 import 'json_utils.dart';
 import 'platform_web.dart' if (dart.library.io) 'platform_io.dart';
@@ -99,10 +100,10 @@ final class UserCredentials extends GoogleCredentials {
     final universeDomain = optionalString(info, 'universe_domain');
     if (universeDomain != null &&
         universeDomain.isNotEmpty &&
-        universeDomain != GoogleCredentials.defaultUniverseDomain) {
+        universeDomain != Credentials.defaultUniverseDomain) {
       throw FormatException(
         'User credentials are only supported in the '
-        "'${GoogleCredentials.defaultUniverseDomain}' universe domain, but "
+        "'${Credentials.defaultUniverseDomain}' universe domain, but "
         "the universe domain is '$universeDomain'.",
       );
     }
@@ -152,15 +153,7 @@ final class UserCredentials extends GoogleCredentials {
     clientFactory: clientFactory,
   );
 
-  /// A non-expired current OAuth2 access token for the user.
-  ///
-  /// If the cached token is expired or if [forceRefresh] is `true`, then a new
-  /// token is obtained from the Google OAuth 2.0 token endpoint using the
-  /// refresh token.
-  ///
-  /// It is safe to call this method concurrently.
-  ///
-  /// Throws [CredentialException] on failure.
+  @override
   Future<String> accessToken({bool forceRefresh = false}) =>
       _accessTokenCache.accessToken(forceRefresh: forceRefresh);
 }

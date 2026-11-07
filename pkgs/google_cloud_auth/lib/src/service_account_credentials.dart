@@ -23,6 +23,7 @@ import 'dart:typed_data';
 import 'package:webcrypto/webcrypto.dart';
 
 import 'credential_exception.dart';
+import 'credentials.dart';
 import 'google_credentials.dart';
 import 'json_utils.dart';
 import 'platform_web.dart' if (dart.library.io) 'platform_io.dart';
@@ -78,7 +79,7 @@ final class ServiceAccountCredentials extends GoogleCredentials
     this.projectId,
     this.quotaProjectId,
     Uri? tokenUri,
-    super.universeDomain = GoogleCredentials.defaultUniverseDomain,
+    super.universeDomain = Credentials.defaultUniverseDomain,
   }) : _privateKey = privateKey,
        tokenUri = tokenUri ?? Uri.https('oauth2.$universeDomain', '/token');
 
@@ -114,7 +115,7 @@ final class ServiceAccountCredentials extends GoogleCredentials
     final quotaProjectId = optionalString(info, 'quota_project_id');
     final universeDomain =
         optionalString(info, 'universe_domain') ??
-        GoogleCredentials.defaultUniverseDomain;
+        Credentials.defaultUniverseDomain;
 
     final tokenUriStr = optionalString(info, 'token_uri');
     final tokenUri = tokenUriStr != null ? Uri.parse(tokenUriStr) : null;
@@ -153,7 +154,7 @@ final class ServiceAccountCredentials extends GoogleCredentials
     String? projectId,
     String? quotaProjectId,
     Uri? tokenUri,
-    String universeDomain = GoogleCredentials.defaultUniverseDomain,
+    String universeDomain = Credentials.defaultUniverseDomain,
   }) async {
     final pkcs8Bytes = _parsePemPkcs8Key(privateKeyPkcs8);
     final privateKey = await RsassaPkcs1V15PrivateKey.importPkcs8Key(
@@ -187,5 +188,12 @@ final class ServiceAccountCredentials extends GoogleCredentials
         innerStackTrace: stackTrace,
       );
     }
+  }
+
+  @override
+  Future<String> accessToken({bool forceRefresh = false}) {
+    throw UnimplementedError(
+      'TODO(https://github.com/googleapis/google-cloud-dart/issues/391)',
+    );
   }
 }

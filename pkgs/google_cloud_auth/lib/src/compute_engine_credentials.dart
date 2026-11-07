@@ -28,6 +28,7 @@ import 'package:meta/meta.dart';
 
 import 'access_token.dart';
 import 'credential_exception.dart';
+import 'credentials.dart';
 import 'google_credentials.dart';
 import 'json_utils.dart';
 import 'platform_web.dart' if (dart.library.io) 'platform_io.dart';
@@ -150,14 +151,7 @@ final class ComputeEngineCredentials extends GoogleCredentials
     required FutureOr<http.Client> Function() clientFactory,
   }) : _clientFactory = clientFactory;
 
-  /// A non-expired current OAuth2 access token for the service account.
-  ///
-  /// If the cached token is expired or if [forceRefresh] is `true`, then a new
-  /// token is fetched.
-  ///
-  /// It is safe to call this method concurrently.
-  ///
-  /// Throws [CredentialException] on failure.
+  @override
   Future<String> accessToken({bool forceRefresh = false}) =>
       _accessTokenCache.accessToken(forceRefresh: forceRefresh);
 
@@ -253,9 +247,9 @@ final class ComputeEngineCredentials extends GoogleCredentials
         final trimmed = response.body.trim();
         resolvedUniverseDomain = trimmed.isNotEmpty
             ? trimmed
-            : GoogleCredentials.defaultUniverseDomain;
+            : Credentials.defaultUniverseDomain;
       } else if (response.statusCode == 404) {
-        resolvedUniverseDomain = GoogleCredentials.defaultUniverseDomain;
+        resolvedUniverseDomain = Credentials.defaultUniverseDomain;
       } else {
         throw CredentialException(
           'Failed to get universe domain from metadata server: '
