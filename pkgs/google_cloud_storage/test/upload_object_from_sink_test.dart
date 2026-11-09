@@ -18,6 +18,7 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:crypto/crypto.dart' as crypto;
+import 'package:google_cloud_rpc/retry.dart';
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 import 'package:google_cloud_storage/src/crc32c.dart';
 import 'package:google_cloud_storage/src/version.dart';
@@ -26,6 +27,9 @@ import 'package:http/testing.dart';
 import 'package:test/test.dart';
 
 import 'test_utils.dart';
+
+const _isVm = bool.fromEnvironment('dart.library.io');
+const _expectedUserAgent = _isVm ? 'gcloud-dart/$packageVersion' : null;
 
 Uint8List randomUint8List(int length, {int? seed}) {
   final random = Random(seed);
@@ -471,7 +475,7 @@ void main() {
         final sink = storage.uploadObjectFromSink(
           bucketName,
           'object',
-          retry: const NoDelayRetry(),
+          retry: const NoDelayRetry(retryIf: isTransientError),
         )..add(large);
         await sink.close();
 
@@ -497,7 +501,7 @@ void main() {
           bucketName,
           'object',
           ifGenerationMatch: BigInt.zero, // Makes session creation idempotent
-          retry: const NoDelayRetry(),
+          retry: const NoDelayRetry(retryIf: isTransientError),
         )..add(small);
         await sink.close();
 
@@ -641,7 +645,7 @@ void main() {
       final sink = storage.uploadObjectFromSink(
         'bucket',
         'object',
-        retry: const NoDelayRetry(),
+        retry: const NoDelayRetry(retryIf: isTransientError),
       );
 
       final chunk = Uint8List(256 * 1024);
@@ -709,7 +713,7 @@ void main() {
       final sink = storage.uploadObjectFromSink(
         'bucket',
         'object',
-        retry: const NoDelayRetry(),
+        retry: const NoDelayRetry(retryIf: isTransientError),
       );
 
       final chunk = Uint8List(256 * 1024);
@@ -779,7 +783,7 @@ void main() {
         final sink = storage.uploadObjectFromSink(
           'bucket',
           'object',
-          retry: const NoDelayRetry(),
+          retry: const NoDelayRetry(retryIf: isTransientError),
         );
 
         final chunk = Uint8List(256 * 1024);
@@ -790,7 +794,7 @@ void main() {
       },
     );
 
-    test('sends gccl token in x-goog-api-client', () async {
+    test('sends client headers', () async {
       final actualRequests = <http.Request>[];
       final mockClient = MockClient((request) async {
         actualRequests.add(request);
@@ -817,12 +821,69 @@ void main() {
         ..add([1, 2, 3]);
       await sink.close();
 
-      expect(actualRequests, isNotEmpty);
+      expect(actualRequests, hasLength(2));
       expect(
         actualRequests,
         everyElement(
-          (http.Request r) =>
-              r.headers['x-goog-api-client']!.contains('gccl/$packageVersion'),
+          isA<http.Request>()
+              .having(
+                (r) => r.headers['x-goog-api-client'],
+                'x-goog-api-client',
+                contains('gccl/$packageVersion'),
+              )
+              .having(
+                (r) => r.headers['user-agent'],
+                'user-agent',
+                _expectedUserAgent,
+              ),
+        ),
+      );
+    });
+
+    test('sends client headers with async client', () async {
+      final actualRequests = <http.Request>[];
+      final mockClient = MockClient((request) async {
+        actualRequests.add(request);
+        if (request.method == 'POST') {
+          return http.Response(
+            '',
+            200,
+            headers: {
+              'location': 'https://storage.googleapis.com/upload-session',
+            },
+          );
+        }
+        return http.Response(
+          '{"name": "test-obj", "bucket": "test-bucket"}',
+          200,
+        );
+      });
+
+      final storage = Storage(
+        client: Future.value(mockClient),
+        projectId: 'test-project',
+      );
+      addTearDown(storage.close);
+
+      final sink = storage.uploadObjectFromSink('test-bucket', 'test-obj')
+        ..add([1, 2, 3]);
+      await sink.close();
+
+      expect(actualRequests, hasLength(2));
+      expect(
+        actualRequests,
+        everyElement(
+          isA<http.Request>()
+              .having(
+                (r) => r.headers['x-goog-api-client'],
+                'x-goog-api-client',
+                contains('gccl/$packageVersion'),
+              )
+              .having(
+                (r) => r.headers['user-agent'],
+                'user-agent',
+                _expectedUserAgent,
+              ),
         ),
       );
     });

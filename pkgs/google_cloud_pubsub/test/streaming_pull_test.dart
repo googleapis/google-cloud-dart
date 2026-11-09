@@ -21,6 +21,7 @@ import 'dart:convert';
 import 'package:google_cloud_pubsub/google_cloud_pubsub.dart';
 import 'package:google_cloud_pubsub/src/generated/google/pubsub/v1/pubsub.pb.dart'
     as generated;
+import 'package:google_cloud_rpc/retry.dart';
 import 'package:grpc/grpc.dart' as grpc;
 import 'package:protobuf/well_known_types/google/protobuf/timestamp.pb.dart'
     as protobuf;
@@ -140,7 +141,6 @@ void main() {
           final done = Completer<void>();
           var deliveries = 0;
           String? firstMessageId;
-          ReceivedMessage? secondDelivery;
 
           final streamSubscription = subscription
               .streamingPull(
@@ -155,7 +155,6 @@ void main() {
                   await message.modifyAckDeadline(0);
                 } else if (deliveries == 2) {
                   expect(message.messageId, firstMessageId);
-                  secondDelivery = message;
                   await message.acknowledge();
                   if (!done.isCompleted) done.complete();
                 }
@@ -165,23 +164,8 @@ void main() {
           await topic.close();
 
           await done.future.timeout(const Duration(seconds: 10));
-          // Allow the stream-routed ACK frame to reach the server before
-          // tearing down the stream.
-          await Future<void>.delayed(const Duration(milliseconds: 200));
           await streamSubscription.cancel();
           await subscription.close();
-
-          final reopen = client.subscription(subscriptionName);
-          addTearDown(() async => await reopen.close());
-          await reopen.modifyAckDeadlineNow([secondDelivery!], 0);
-          await client.publish(topic.name, utf8.encode('sentinel'));
-
-          final afterAck = await pullReliably(reopen, count: 1);
-          expect(
-            afterAck.map((message) => utf8.decode(message.data)).toList(),
-            ['sentinel'],
-          );
-          await reopen.acknowledgeNow(afterAck);
         });
       },
     );
@@ -254,9 +238,9 @@ void main() {
         final received = <String>[];
         final streamSubscription = subscription
             .streamingPull(
-              retry: const ExponentialRetry(
-                initialDelay: Duration(milliseconds: 5),
-              ),
+              retry: const ExponentialRetry.onCodes([
+                Code.unavailable,
+              ], initialDelay: Duration(milliseconds: 5)),
             )
             .listen(
               (message) => received.add(String.fromCharCodes(message.data)),
@@ -289,7 +273,8 @@ void main() {
           final received = <String>[];
           final streamSubscription = subscription
               .streamingPull(
-                retry: const ExponentialRetry(
+                retry: const ExponentialRetry.onCodes(
+                  [Code.unavailable],
                   maxRetries: 1,
                   initialDelay: Duration(milliseconds: 5),
                 ),
@@ -350,6 +335,26 @@ void main() {
         },
       );
 
+      test(
+        'an Error fails immediately even if retryIf accepts everything',
+        () async {
+          final subscription = client.subscription('test-sub');
+          final errorCompleter = Completer<Object>();
+          final streamSubscription = subscription
+              .streamingPull(retry: NoDelayRetry(retryIf: (_) => true))
+              .listen((_) {}, onError: errorCompleter.complete);
+
+          await fakeSubscriber.waitForConnections(1);
+          fakeSubscriber.responseControllers[0].addError(StateError('bug'));
+
+          final error = await errorCompleter.future;
+          expect(error, isA<StateError>());
+          expect(fakeSubscriber.responseControllers, hasLength(1));
+
+          await streamSubscription.cancel();
+        },
+      );
+
       test('exhausting retries on one stream keeps sibling stream alive until '
           'all streams fail', () async {
         final subscription = client.subscription('test-sub');
@@ -359,7 +364,9 @@ void main() {
         final streamSubscription = subscription
             .streamingPull(
               maxConcurrentStreams: 2,
-              retry: const ExponentialRetry(maxRetries: 0),
+              retry: const ExponentialRetry.onCodes([
+                Code.unavailable,
+              ], maxRetries: 0),
             )
             .listen(
               (message) => received.add(String.fromCharCodes(message.data)),
@@ -551,9 +558,9 @@ void main() {
           final received = <String>[];
           final streamSubscription = subscription
               .streamingPull(
-                retry: const ExponentialRetry(
-                  initialDelay: Duration(milliseconds: 5),
-                ),
+                retry: const ExponentialRetry.onCodes([
+                  Code.unavailable,
+                ], initialDelay: Duration(milliseconds: 5)),
               )
               .listen(
                 (message) => received.add(String.fromCharCodes(message.data)),

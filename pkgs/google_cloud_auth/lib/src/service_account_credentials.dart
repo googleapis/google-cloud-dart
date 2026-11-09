@@ -23,9 +23,13 @@ import 'dart:typed_data';
 import 'package:webcrypto/webcrypto.dart';
 
 import 'credential_exception.dart';
+import 'credentials.dart';
 import 'google_credentials.dart';
+import 'json_utils.dart';
 import 'platform_web.dart' if (dart.library.io) 'platform_io.dart';
 import 'service_account_signer.dart';
+
+const _infoDescription = 'service account info';
 
 Uint8List _parsePemPkcs8Key(String pemString) {
   final lines = LineSplitter.split(pemString)
@@ -37,15 +41,6 @@ Uint8List _parsePemPkcs8Key(String pemString) {
   } on FormatException catch (e) {
     throw FormatException('Invalid PEM encoding in private key: $e');
   }
-}
-
-String? _optionalString(Map<String, dynamic> info, String key) {
-  final value = info[key];
-  if (value == null) return null;
-  if (value is! String) {
-    throw FormatException("The value of '$key' must be a string.");
-  }
-  return value;
 }
 
 /// Credentials for a Google Cloud service account.
@@ -84,7 +79,7 @@ final class ServiceAccountCredentials extends GoogleCredentials
     this.projectId,
     this.quotaProjectId,
     Uri? tokenUri,
-    super.universeDomain = GoogleCredentials.defaultUniverseDomain,
+    super.universeDomain = Credentials.defaultUniverseDomain,
   }) : _privateKey = privateKey,
        tokenUri = tokenUri ?? Uri.https('oauth2.$universeDomain', '/token');
 
@@ -112,29 +107,17 @@ final class ServiceAccountCredentials extends GoogleCredentials
       );
     }
 
-    final clientEmail = info['client_email'];
-    if (clientEmail is! String || clientEmail.isEmpty) {
-      throw const FormatException(
-        "Missing required 'client_email' in service account info.",
-      );
-    }
-
-    final privateKeyPem = info['private_key'];
-    if (privateKeyPem is! String || privateKeyPem.isEmpty) {
-      throw const FormatException(
-        "Missing required 'private_key' in service account info.",
-      );
-    }
-
-    final privateKeyId = _optionalString(info, 'private_key_id');
-    final clientId = _optionalString(info, 'client_id');
-    final projectId = _optionalString(info, 'project_id');
-    final quotaProjectId = _optionalString(info, 'quota_project_id');
+    final clientEmail = requiredString(info, 'client_email', _infoDescription);
+    final privateKeyPem = requiredString(info, 'private_key', _infoDescription);
+    final privateKeyId = optionalString(info, 'private_key_id');
+    final clientId = optionalString(info, 'client_id');
+    final projectId = optionalString(info, 'project_id');
+    final quotaProjectId = optionalString(info, 'quota_project_id');
     final universeDomain =
-        _optionalString(info, 'universe_domain') ??
-        GoogleCredentials.defaultUniverseDomain;
+        optionalString(info, 'universe_domain') ??
+        Credentials.defaultUniverseDomain;
 
-    final tokenUriStr = _optionalString(info, 'token_uri');
+    final tokenUriStr = optionalString(info, 'token_uri');
     final tokenUri = tokenUriStr != null ? Uri.parse(tokenUriStr) : null;
 
     final pkcs8Bytes = _parsePemPkcs8Key(privateKeyPem);
@@ -159,15 +142,7 @@ final class ServiceAccountCredentials extends GoogleCredentials
   /// JSON string [jsonString].
   static Future<ServiceAccountCredentials> fromServiceAccountString(
     String jsonString,
-  ) async {
-    final json = jsonDecode(jsonString);
-    if (json is! Map<String, dynamic>) {
-      throw const FormatException(
-        'Service account string does not contain a JSON object.',
-      );
-    }
-    return fromServiceAccountInfo(json);
-  }
+  ) => fromServiceAccountInfo(decodeJsonObject(jsonString));
 
   /// Creates a [ServiceAccountCredentials] instance from a PKCS#8 private key
   /// PEM string.
@@ -179,7 +154,7 @@ final class ServiceAccountCredentials extends GoogleCredentials
     String? projectId,
     String? quotaProjectId,
     Uri? tokenUri,
-    String universeDomain = GoogleCredentials.defaultUniverseDomain,
+    String universeDomain = Credentials.defaultUniverseDomain,
   }) async {
     final pkcs8Bytes = _parsePemPkcs8Key(privateKeyPkcs8);
     final privateKey = await RsassaPkcs1V15PrivateKey.importPkcs8Key(
@@ -213,5 +188,12 @@ final class ServiceAccountCredentials extends GoogleCredentials
         innerStackTrace: stackTrace,
       );
     }
+  }
+
+  @override
+  Future<String> accessToken({bool forceRefresh = false}) {
+    throw UnimplementedError(
+      'TODO(https://github.com/googleapis/google-cloud-dart/issues/391)',
+    );
   }
 }

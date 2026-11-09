@@ -17,17 +17,16 @@
 /// - https://github.com/googleapis/google-auth-library-python/blob/main/google/auth/credentials.py
 library;
 
-/// Credentials used to authenticate with Google APIs and services.
-abstract base class GoogleCredentials {
-  /// The default universe domain for Google Cloud services.
-  static const defaultUniverseDomain = 'googleapis.com';
+import 'credentials.dart';
+import 'oauth2_credentials.dart';
 
-  /// The universe domain for the credentials.
-  ///
-  /// See [Universes, regions, and zones](https://docs.cloud.google.com/docs/overview#universes_regions_and_zones).
-  final String universeDomain;
+/// Credentials used to authorize calls to
+/// [Google APIs using OAuth 2.0](https://developers.google.com/identity/protocols/oauth2).
+abstract base class GoogleCredentials extends OAuth2Credentials {
+  const GoogleCredentials({
+    super.universeDomain = Credentials.defaultUniverseDomain,
+  });
 
-  /// Creates a [GoogleCredentials] instance with the specified
-  /// [universeDomain].
-  const GoogleCredentials({this.universeDomain = defaultUniverseDomain});
+  // TODO(https://github.com/googleapis/google-cloud-dart/issues/392):
+  // implement a mechanism to insert `x-goog-user-project`.
 }

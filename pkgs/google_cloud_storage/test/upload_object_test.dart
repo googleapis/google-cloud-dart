@@ -402,7 +402,7 @@ void main() async {
       expect(responses, isEmpty);
     });
 
-    test('sends gccl token in x-goog-api-client header', () async {
+    test('sends client headers', () async {
       late http.Request actualRequest;
       final mockClient = MockClient((request) async {
         actualRequest = request;
@@ -420,6 +420,12 @@ void main() async {
       expect(
         actualRequest.headers['x-goog-api-client'],
         contains('gccl/$packageVersion'),
+      );
+      expect(
+        actualRequest.headers['user-agent'],
+        const bool.fromEnvironment('dart.library.io')
+            ? 'gcloud-dart/$packageVersion'
+            : null,
       );
     });
   });
