@@ -6,6 +6,9 @@
 - Update the package's `CHANGELOG.md` with any new features, public API
   changes, or bug fixes before declaring yourself done.
 - Wrap Markdown (`*.md`) files at 80 columns.
+- After changing a file under `pkgs/*/example/`, run
+  `dart run tool/update_excerpts.dart` to update the `README.md` code excerpts
+  (CI fails if they are out of date).
 - Update this file if you discover something useful about developing in this
   repository.
 
@@ -18,6 +21,18 @@
       followed by a noun or gerund phrase
 - Prefer the use of `Uri.https(...)` over `Uri.parse(...)` when the scheme is
   known to be https.
+- `package:google_cloud_protobuf/protobuf.dart` exports a protobuf `Duration`
+  that silently shadows `dart:core`'s `Duration`. Import it with `show` (or
+  `hide Duration`) in libraries that use `dart:core`'s `Duration`.
+- Don't use `async*` for a stream that holds a request or response open. A
+  generator that is suspended at an `await` (including in an `await for` loop)
+  doesn't notice that its subscription was cancelled until the `await`
+  completes, so `cancel()` can hang and the connection stays open. Use a
+  `StreamController` or stream transformations instead.
+- dartdoc resolves references in `{@macro}` text in the library that uses the
+  macro, and ignores that library's `@docImport`s. Give every library that uses
+  a template a real import of each name the template references (for example,
+  `dart:async` for `TimeoutException`), and check with `dart doc --dry-run`.
 
 ## Generated code
 
@@ -26,6 +41,10 @@
 - Don't edit `generated/*/CHANGELOG.md`. `librarian bump` writes the entries
   from PR titles at release time (see
   [generated/RELEASING.md](generated/RELEASING.md)).
+- To add a dependency to a generated package, add it to the package's `dart`
+  section in `librarian.yaml` (for example,
+  `dev_dependencies: fake_async,test`) and to its `pubspec.yaml`, which is
+  generated from that section (dev dependencies get the constraint `any`).
 
 ## Testing instructions
 
@@ -41,3 +60,8 @@
   if they use `projectId` (e.g.
   `GOOGLE_CLOUD_PROJECT=demo-project dart test -P firebase-emulator`).
 - Try to fix any test failures before declaring yourself done.
+- Tests that depend on the passage of time use `package:fake_async`, so they
+  are fast and deterministic (see `fakeAsyncTest` in
+  `generated/google_cloud_rpc/test/client_test.dart`). Code under test must
+  read the time from `package:clock` (`clock.now()`, `clock.stopwatch()`)
+  rather than `DateTime.now()` or `Stopwatch`, which fake time doesn't control.

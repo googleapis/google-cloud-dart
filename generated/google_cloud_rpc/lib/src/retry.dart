@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'dart:async';
 import 'dart:math';
 
 import 'package:clock/clock.dart';
@@ -311,7 +312,8 @@ final class ExponentialRetry extends RetryRunner {
   /// and [Code.alreadyExists] (409), can't be told apart.
   ///
   /// A failure to communicate with the service ([http.ClientException]) counts
-  /// as [Code.unavailable], which is how gRPC reports it.
+  /// as [Code.unavailable], and an attempt that timed out ([TimeoutException])
+  /// counts as [Code.deadlineExceeded], which is how gRPC reports them.
   const ExponentialRetry.onCodes(
     List<Code> retryableCodes, {
     this.maxRetries,
@@ -404,6 +406,8 @@ const _statusCodes = <String, (int, int)>{
 @visibleForTesting
 bool matchesStatusCode(Object error, Iterable<Code> codes) {
   switch (error) {
+    case TimeoutException():
+      return codes.contains(Code.deadlineExceeded);
     case http.ClientException():
       return codes.contains(Code.unavailable);
     case ServiceException(:final status, :final statusCode):
