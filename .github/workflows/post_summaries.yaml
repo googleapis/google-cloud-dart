@@ -30,6 +30,6 @@ on:
 jobs:
   upload:
     if: ${{ github.repository_owner == 'googleapis' }}
-    uses: dart-lang/ecosystem/.github/workflows/post_summaries.yaml@54e16739d9c15ef0b77e050242c16226ad9235f9
+    uses: dart-lang/ecosystem/.github/workflows/post_summaries.yaml@1d2b5ff862c6b93cd86dd06eadac4c9f4d5d6c20
     permissions:
       pull-requests: write
