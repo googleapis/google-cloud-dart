@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// #docregion retry
+// #region retry
 import 'package:google_cloud_rpc/retry.dart';
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 
@@ -45,5 +45,4 @@ void main() async {
 
   storage.close();
 }
-
-// #enddocregion retry
+// #endregion retry

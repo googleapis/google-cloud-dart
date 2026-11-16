@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// #docregion main
+// #region main
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 
 void main() async {
@@ -42,5 +42,4 @@ void main() async {
   );
   storage.close();
 }
-
-// #enddocregion main
+// #endregion main

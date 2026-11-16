@@ -15,8 +15,7 @@ Cloud Platform, specifically tailored for Google Cloud [structured logging].
 
 ### Using the `StructuredLogger` directly
 
-<?code-excerpt "example/structured_logger.dart (cloud-logger)"?>
-```dart
+```dart @example example/structured_logger.dart#cloud-logger
 import 'package:google_cloud_logging/google_cloud_logging.dart';
 
 const _logger = StructuredLogger();
@@ -33,8 +32,7 @@ void main() {
 
 ### Using `StructuredLogger` with `package:logging`
 
-<?code-excerpt "example/cloud_logger.dart (cloud-logger)"?>
-```dart
+```dart @example example/cloud_logger.dart#cloud-logger
 import 'package:google_cloud_logging/google_cloud_logging.dart';
 import 'package:logging/logging.dart';
 
