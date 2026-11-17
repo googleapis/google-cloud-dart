@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// #docregion cloud-logger
+// #region cloud-logger
 import 'package:google_cloud_logging/google_cloud_logging.dart';
 
 const _logger = StructuredLogger();
@@ -25,5 +25,4 @@ void main() {
     _logger.error('Database connection failure - $error', stackTrace: stack);
   }
 }
-
-// #enddocregion cloud-logger
+// #endregion cloud-logger

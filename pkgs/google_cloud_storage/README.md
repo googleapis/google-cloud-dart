@@ -21,8 +21,7 @@ A Dart client for Google Cloud Storage.
 
 All access to Google Cloud Storage is made through the `Storage` class.
 
-<?code-excerpt "example/main.dart (main)"?>
-```dart
+```dart @example example/main.dart#main
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 
 void main() async {
@@ -75,8 +74,7 @@ different limits or delays, create an `ExponentialRetry` with
 
 For example:
 
-<?code-excerpt "example/retry.dart (retry)"?>
-```dart
+```dart @example example/retry.dart#retry
 import 'package:google_cloud_rpc/retry.dart';
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 

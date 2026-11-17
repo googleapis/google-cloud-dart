@@ -21,8 +21,7 @@ A Dart client for Google Cloud Pub/Sub.
 
 All access to Google Cloud Pub/Sub is made through the `PubSub` class.
 
-<?code-excerpt "example/example.dart (main)"?>
-```dart
+```dart @example example/example.dart#main
 import 'dart:convert';
 import 'package:google_cloud_pubsub/google_cloud_pubsub.dart';
 

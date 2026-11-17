@@ -28,8 +28,7 @@ Authentication and credential management for Google Cloud.
 
 ### Loading Service Account Credentials
 
-<?code-excerpt "example/main.dart (main)"?>
-```dart
+```dart @example example/main.dart#main
 import 'dart:convert';
 import 'dart:io';
 

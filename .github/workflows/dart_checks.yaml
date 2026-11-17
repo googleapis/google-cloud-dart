@@ -50,8 +50,8 @@ jobs:
       - run: dart pub get
       - name: Format
         run: dart format --output=none --set-exit-if-changed .
-      - name: Verify Code Excerpts Up-to-Date
-        run: dart run tool/update_excerpts.dart --fail-on-update
+      - name: Verify Code Examples Up-to-Date
+        run: dart run example validate
 
   analyze:
     name: Analyze (${{ matrix.sdk }})

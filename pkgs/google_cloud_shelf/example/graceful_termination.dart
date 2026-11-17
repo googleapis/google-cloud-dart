@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// #docregion graceful-termination
+// #region graceful-termination
 import 'package:google_cloud_shelf/google_cloud_shelf.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart' as shelf_io;
@@ -31,5 +31,4 @@ Future<void> main() async {
   // Gracefully shut down the server
   await server.close();
 }
-
-// #enddocregion graceful-termination
+// #endregion graceful-termination
