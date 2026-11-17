@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// #docregion basic-setup
+// #region basic-setup
 import 'package:google_cloud_shelf/google_cloud_shelf.dart';
 import 'package:shelf/shelf.dart';
 
@@ -23,5 +23,4 @@ Future<void> main() async {
 
   await serveHandler(handler);
 }
-
-// #enddocregion basic-setup
+// #endregion basic-setup

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// #docregion project-discovery
+// #region project-discovery
 import 'package:google_cloud/google_cloud.dart';
 
 void main() async {
@@ -22,5 +22,4 @@ void main() async {
   final projectId = await computeProjectId();
   print('Running in project: $projectId');
 }
-
-// #enddocregion project-discovery
+// #endregion project-discovery

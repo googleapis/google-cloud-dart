@@ -3,6 +3,8 @@
 - Read the [DEVELOPER_GUIDE.md](DEVELOPER_GUIDE.md) before starting work.
 - Run `dart format .` before declaring yourself done.
 - Run `dart analyze .` and fix any issues before declaring yourself done.
+- Run `dart run example update` (and verify with `dart run example validate`)
+  when modifying `README.md` code blocks or `example/` files.
 - Update the package's `CHANGELOG.md` with any new features, public API
   changes, or bug fixes before declaring yourself done.
 - Wrap Markdown (`*.md`) files at 80 columns.

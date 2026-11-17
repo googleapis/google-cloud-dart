@@ -24,8 +24,7 @@ Utilities for running Dart code correctly on the Google Cloud Platform.
 
 ### Project Discovery
 
-<?code-excerpt "example/project_discovery.dart (project-discovery)"?>
-```dart
+```dart @example example/project_discovery.dart#project-discovery
 import 'package:google_cloud/google_cloud.dart';
 
 void main() async {

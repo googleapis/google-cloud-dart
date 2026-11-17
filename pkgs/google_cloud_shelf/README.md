@@ -48,8 +48,7 @@ Integrate `createLoggingMiddleware` in your pipeline and use `serveHandler` to
 launch the server. By default, this parses the port from the `PORT` environment
 variable (falling back to `8080`) and listens on all IP addresses.
 
-<?code-excerpt "example/example.dart (basic-setup)"?>
-```dart
+```dart @example example/example.dart#basic-setup
 import 'package:google_cloud_shelf/google_cloud_shelf.dart';
 import 'package:shelf/shelf.dart';
 
@@ -69,8 +68,7 @@ Enable request-log nesting in the Google Cloud Console by providing a
 or sent to standard `print()` inside the handler's execution flow are grouped
 with the request log.
 
-<?code-excerpt "example/contextual_logging.dart (contextual-logging)"?>
-```dart
+```dart @example example/contextual_logging.dart#contextual-logging
 import 'package:google_cloud_logging/google_cloud_logging.dart';
 import 'package:google_cloud_shelf/google_cloud_shelf.dart';
 import 'package:shelf/shelf.dart';
@@ -118,8 +116,7 @@ messages. Unhandled exceptions (e.g., network failures) are caught, logged
 with their full stack trace to the server logs, and safely mapped to a generic
 `500 Internal Server Error` response to prevent data leaks.
 
-<?code-excerpt "example/error_handling.dart (error-handling)"?>
-```dart
+```dart @example example/error_handling.dart#error-handling
 import 'package:google_cloud_shelf/google_cloud_shelf.dart';
 import 'package:shelf/shelf.dart';
 
@@ -156,8 +153,7 @@ Cloud Run and GKE when stopping or scaling down a container instance.
 If you are customizing the server initialization, you can call
 `waitForTerminate` manually:
 
-<?code-excerpt "example/graceful_termination.dart (graceful-termination)"?>
-```dart
+```dart @example example/graceful_termination.dart#graceful-termination
 import 'package:google_cloud_shelf/google_cloud_shelf.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart' as shelf_io;

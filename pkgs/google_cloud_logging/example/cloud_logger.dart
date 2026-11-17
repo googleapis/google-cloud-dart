@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// #docregion cloud-logger
+// #region cloud-logger
 import 'package:google_cloud_logging/google_cloud_logging.dart';
 import 'package:logging/logging.dart';
 
@@ -30,5 +30,4 @@ void main() {
     _logger.severe('Database connection failure - $error', error, stack);
   }
 }
-
-// #enddocregion cloud-logger
+// #endregion cloud-logger
