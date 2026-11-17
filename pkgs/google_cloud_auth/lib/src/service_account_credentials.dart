@@ -282,6 +282,8 @@ final class ServiceAccountCredentials extends GoogleCredentials
 
   Future<TokenResponse> _fetchAccessToken() async {
     final issuedAt = DateTime.timestamp().millisecondsSinceEpoch ~/ 1000;
+    // See "Construct the JWT claim set":
+    // https://developers.google.com/identity/protocols/oauth2/service-account#formingclaimset
     final claims = {
       'iss': clientEmail,
       'scope': scopes.join(' '),
@@ -297,6 +299,8 @@ final class ServiceAccountCredentials extends GoogleCredentials
       // Token exchange is not available outside of the default universe
       // domain, so APIs there accept self-signed JWTs as access tokens.
       return (
+        // See "Additional claims":
+        // https://developers.google.com/identity/protocols/oauth2/service-account#additionalclaims
         accessToken: await _signJwt({...claims, 'sub': clientEmail}),
         expiresIn: _jwtLifetime,
       );
@@ -308,6 +312,8 @@ final class ServiceAccountCredentials extends GoogleCredentials
       source: tokenUri.toString(),
       send: (client) => client.post(
         tokenUri,
+        // See "Request an access token":
+        // https://developers.google.com/identity/protocols/oauth2/service-account#makingrequest
         body: {'grant_type': _jwtBearerGrantType, 'assertion': assertion},
       ),
     );
@@ -319,6 +325,8 @@ final class ServiceAccountCredentials extends GoogleCredentials
   ///
   /// Throws [SigningException] on failure.
   Future<String> _signJwt(Map<String, Object> claims) async {
+    // See "Construct the JWT header":
+    // https://developers.google.com/identity/protocols/oauth2/service-account#formingheader
     final header = {'alg': 'RS256', 'typ': 'JWT', 'kid': ?privateKeyId};
     final signingInput = [header, claims]
         .map((part) => _base64UrlUnpadded(utf8.encode(jsonEncode(part))))
