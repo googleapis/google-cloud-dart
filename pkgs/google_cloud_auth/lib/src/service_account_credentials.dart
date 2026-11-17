@@ -26,6 +26,7 @@ import 'package:webcrypto/webcrypto.dart';
 
 import 'access_token.dart';
 import 'credential_exception.dart';
+import 'credentials.dart';
 import 'google_credentials.dart';
 import 'json_utils.dart';
 import 'platform_web.dart' if (dart.library.io) 'platform_io.dart';
@@ -117,7 +118,7 @@ final class ServiceAccountCredentials extends GoogleCredentials
     Uri? tokenUri,
     List<String>? scopes,
     FutureOr<http.Client> Function()? clientFactory,
-    super.universeDomain = GoogleCredentials.defaultUniverseDomain,
+    super.universeDomain = Credentials.defaultUniverseDomain,
   }) : _privateKey = privateKey,
        tokenUri = tokenUri ?? Uri.https('oauth2.$universeDomain', '/token'),
        scopes = List.unmodifiable(scopes ?? _defaultScopes),
@@ -177,7 +178,7 @@ final class ServiceAccountCredentials extends GoogleCredentials
     final quotaProjectId = optionalString(info, 'quota_project_id');
     final universeDomain =
         optionalString(info, 'universe_domain') ??
-        GoogleCredentials.defaultUniverseDomain;
+        Credentials.defaultUniverseDomain;
 
     final tokenUriStr = optionalString(info, 'token_uri');
     final tokenUri = tokenUriStr != null ? Uri.parse(tokenUriStr) : null;
@@ -238,7 +239,7 @@ final class ServiceAccountCredentials extends GoogleCredentials
     String? projectId,
     String? quotaProjectId,
     Uri? tokenUri,
-    String universeDomain = GoogleCredentials.defaultUniverseDomain,
+    String universeDomain = Credentials.defaultUniverseDomain,
     List<String>? scopes,
     FutureOr<http.Client> Function()? clientFactory,
   }) async {
@@ -277,6 +278,7 @@ final class ServiceAccountCredentials extends GoogleCredentials
   /// It is safe to call this method concurrently.
   ///
   /// Throws [CredentialException] on failure.
+  @override
   Future<String> accessToken({bool forceRefresh = false}) =>
       _accessTokenCache.accessToken(forceRefresh: forceRefresh);
 
@@ -295,7 +297,7 @@ final class ServiceAccountCredentials extends GoogleCredentials
       'exp': issuedAt + _jwtLifetime.inSeconds,
     };
 
-    if (universeDomain != GoogleCredentials.defaultUniverseDomain) {
+    if (universeDomain != Credentials.defaultUniverseDomain) {
       // Token exchange is not available outside of the default universe
       // domain, so APIs there accept self-signed JWTs as access tokens.
       return (
