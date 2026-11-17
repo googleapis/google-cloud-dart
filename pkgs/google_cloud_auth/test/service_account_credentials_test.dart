@@ -281,6 +281,31 @@ void main() {
           );
         });
 
+        test('accepts empty universe_domain and private_key_id', () async {
+          final requests = <http.Request>[];
+          final creds = await ServiceAccountCredentials.fromServiceAccountInfo({
+            ..._minimalInfo,
+            'private_key_id': '',
+            'universe_domain': '',
+          }, clientFactory: _recordingClientFactory(requests));
+
+          expect(creds.privateKeyId, isNull);
+          expect(creds.universeDomain, 'googleapis.com');
+          expect(creds.tokenUri, _defaultTokenUri);
+          expect(await creds.accessToken(), 'access-token-1');
+          expect(requests.single.url, _defaultTokenUri);
+        });
+
+        test('throws on empty scopes', () async {
+          await expectLater(
+            ServiceAccountCredentials.fromServiceAccountInfo(
+              _minimalInfo,
+              scopes: [],
+            ),
+            throwsArgumentError,
+          );
+        });
+
         test('loads credentials from string', () async {
           final info = <String, Object?>{
             'type': 'service_account',
@@ -313,6 +338,16 @@ void main() {
           expect(creds.scopes, ['https://www.googleapis.com/auth/pubsub']);
           expect(await creds.accessToken(), 'access-token-1');
           expect(requests, hasLength(1));
+        });
+
+        test('string throws on empty scopes', () async {
+          await expectLater(
+            ServiceAccountCredentials.fromServiceAccountString(
+              jsonEncode(_minimalInfo),
+              scopes: [],
+            ),
+            throwsArgumentError,
+          );
         });
       });
 
@@ -378,6 +413,21 @@ void main() {
           expect(requests, hasLength(1));
         }, testOn: 'vm');
 
+        test('throws on empty scopes', () async {
+          final tempFilePath = await writeTempFile(
+            'service_account.json',
+            jsonEncode(_minimalInfo),
+          );
+
+          await expectLater(
+            ServiceAccountCredentials.fromServiceAccountFile(
+              tempFilePath,
+              scopes: [],
+            ),
+            throwsArgumentError,
+          );
+        }, testOn: 'vm');
+
         test(
           'throws CredentialException when file cannot be read or on browser',
           () async {
@@ -430,6 +480,23 @@ void main() {
           },
         );
 
+        test('accepts empty universeDomain and privateKeyId', () async {
+          final requests = <http.Request>[];
+          final creds = await ServiceAccountCredentials.fromPkcs8(
+            clientEmail: 'pkcs8@project.iam.gserviceaccount.com',
+            privateKeyPkcs8: testPrivateKey,
+            privateKeyId: '',
+            universeDomain: '',
+            clientFactory: _recordingClientFactory(requests),
+          );
+
+          expect(creds.privateKeyId, isNull);
+          expect(creds.universeDomain, 'googleapis.com');
+          expect(creds.tokenUri, _defaultTokenUri);
+          expect(await creds.accessToken(), 'access-token-1');
+          expect(requests.single.url, _defaultTokenUri);
+        });
+
         test('uses scopes and clientFactory', () async {
           final requests = <http.Request>[];
           final creds = await ServiceAccountCredentials.fromPkcs8(
@@ -442,6 +509,17 @@ void main() {
           expect(creds.scopes, ['https://www.googleapis.com/auth/pubsub']);
           expect(await creds.accessToken(), 'access-token-1');
           expect(requests, hasLength(1));
+        });
+
+        test('throws on empty scopes', () async {
+          await expectLater(
+            ServiceAccountCredentials.fromPkcs8(
+              clientEmail: 'pkcs8@project.iam.gserviceaccount.com',
+              privateKeyPkcs8: testPrivateKey,
+              scopes: [],
+            ),
+            throwsArgumentError,
+          );
         });
       });
 
@@ -572,6 +650,21 @@ void main() {
             _minimalInfo,
             clientFactory: _recordingClientFactory(requests),
           );
+
+          await creds.accessToken();
+
+          final assertion = JwsParts.parse(
+            requests.single.bodyFields['assertion']!,
+          );
+          expect(assertion.header, {'alg': 'RS256', 'typ': 'JWT'});
+        });
+
+        test('omits kid when private key ID is empty', () async {
+          final requests = <http.Request>[];
+          final creds = await ServiceAccountCredentials.fromServiceAccountInfo({
+            ..._minimalInfo,
+            'private_key_id': '',
+          }, clientFactory: _recordingClientFactory(requests));
 
           await creds.accessToken();
 

@@ -370,6 +370,7 @@ void main() {
           }
           expect(await credentials.accessToken(), isNotEmpty);
         },
+        skip: canUseWebCrypto ? null : 'Requires Dart 3.13 or later',
       );
     });
 

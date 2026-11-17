@@ -111,24 +111,23 @@ final class ServiceAccountCredentials extends GoogleCredentials
   ServiceAccountCredentials._({
     required this.clientEmail,
     required RsassaPkcs1V15PrivateKey privateKey,
-    this.clientId,
-    this.privateKeyId,
-    this.projectId,
-    this.quotaProjectId,
-    Uri? tokenUri,
-    List<String>? scopes,
-    FutureOr<http.Client> Function()? clientFactory,
-    super.universeDomain = Credentials.defaultUniverseDomain,
+    required this.clientId,
+    required this.privateKeyId,
+    required this.projectId,
+    required this.quotaProjectId,
+    required this.tokenUri,
+    required this.scopes,
+    required FutureOr<http.Client> Function() clientFactory,
+    required super.universeDomain,
   }) : _privateKey = privateKey,
-       tokenUri = tokenUri ?? Uri.https('oauth2.$universeDomain', '/token'),
-       scopes = List.unmodifiable(scopes ?? _defaultScopes),
-       _clientFactory = clientFactory ?? http.Client.new;
+       _clientFactory = clientFactory;
 
   /// Creates a [ServiceAccountCredentials] instance from a service account
   /// JSON file at [path].
   ///
-  /// [scopes] are the OAuth 2.0 scopes requested by [accessToken]. If omitted,
-  /// `https://www.googleapis.com/auth/cloud-platform` is requested.
+  /// [scopes] are the OAuth 2.0 scopes requested by [accessToken], and must not
+  /// be empty. If omitted, `https://www.googleapis.com/auth/cloud-platform` is
+  /// requested.
   ///
   /// If provided, [clientFactory] is called to create the [http.Client]s used
   /// to make requests. Each client it returns is closed after use, so it must
@@ -152,8 +151,9 @@ final class ServiceAccountCredentials extends GoogleCredentials
   /// Creates a [ServiceAccountCredentials] instance from parsed service
   /// account JSON [info].
   ///
-  /// [scopes] are the OAuth 2.0 scopes requested by [accessToken]. If omitted,
-  /// `https://www.googleapis.com/auth/cloud-platform` is requested.
+  /// [scopes] are the OAuth 2.0 scopes requested by [accessToken], and must not
+  /// be empty. If omitted, `https://www.googleapis.com/auth/cloud-platform` is
+  /// requested.
   ///
   /// If provided, [clientFactory] is called to create the [http.Client]s used
   /// to make requests. Each client it returns is closed after use, so it must
@@ -183,31 +183,26 @@ final class ServiceAccountCredentials extends GoogleCredentials
     final tokenUriStr = optionalString(info, 'token_uri');
     final tokenUri = tokenUriStr != null ? Uri.parse(tokenUriStr) : null;
 
-    final pkcs8Bytes = _parsePemPkcs8Key(privateKeyPem);
-    final privateKey = await RsassaPkcs1V15PrivateKey.importPkcs8Key(
-      pkcs8Bytes,
-      Hash.sha256,
-    );
-
-    return ServiceAccountCredentials._(
+    return fromPkcs8(
       clientEmail: clientEmail,
-      privateKey: privateKey,
-      clientId: clientId,
+      privateKeyPkcs8: privateKeyPem,
       privateKeyId: privateKeyId,
+      clientId: clientId,
       projectId: projectId,
       quotaProjectId: quotaProjectId,
       tokenUri: tokenUri,
+      universeDomain: universeDomain,
       scopes: scopes,
       clientFactory: clientFactory,
-      universeDomain: universeDomain,
     );
   }
 
   /// Creates a [ServiceAccountCredentials] instance from a service account
   /// JSON string [jsonString].
   ///
-  /// [scopes] are the OAuth 2.0 scopes requested by [accessToken]. If omitted,
-  /// `https://www.googleapis.com/auth/cloud-platform` is requested.
+  /// [scopes] are the OAuth 2.0 scopes requested by [accessToken], and must not
+  /// be empty. If omitted, `https://www.googleapis.com/auth/cloud-platform` is
+  /// requested.
   ///
   /// If provided, [clientFactory] is called to create the [http.Client]s used
   /// to make requests. Each client it returns is closed after use, so it must
@@ -225,8 +220,9 @@ final class ServiceAccountCredentials extends GoogleCredentials
   /// Creates a [ServiceAccountCredentials] instance from a PKCS#8 private key
   /// PEM string.
   ///
-  /// [scopes] are the OAuth 2.0 scopes requested by [accessToken]. If omitted,
-  /// `https://www.googleapis.com/auth/cloud-platform` is requested.
+  /// [scopes] are the OAuth 2.0 scopes requested by [accessToken], and must not
+  /// be empty. If omitted, `https://www.googleapis.com/auth/cloud-platform` is
+  /// requested.
   ///
   /// If provided, [clientFactory] is called to create the [http.Client]s used
   /// to make requests. Each client it returns is closed after use, so it must
@@ -243,23 +239,33 @@ final class ServiceAccountCredentials extends GoogleCredentials
     List<String>? scopes,
     FutureOr<http.Client> Function()? clientFactory,
   }) async {
+    if (scopes != null && scopes.isEmpty) {
+      throw ArgumentError.value(scopes, 'scopes', 'Must not be empty');
+    }
+
     final pkcs8Bytes = _parsePemPkcs8Key(privateKeyPkcs8);
     final privateKey = await RsassaPkcs1V15PrivateKey.importPkcs8Key(
       pkcs8Bytes,
       Hash.sha256,
     );
+    final resolvedUniverseDomain = universeDomain.isEmpty
+        ? Credentials.defaultUniverseDomain
+        : universeDomain;
 
     return ServiceAccountCredentials._(
       clientEmail: clientEmail,
       privateKey: privateKey,
       clientId: clientId,
-      privateKeyId: privateKeyId,
+      privateKeyId: privateKeyId == null || privateKeyId.isEmpty
+          ? null
+          : privateKeyId,
       projectId: projectId,
       quotaProjectId: quotaProjectId,
-      tokenUri: tokenUri,
-      scopes: scopes,
-      clientFactory: clientFactory,
-      universeDomain: universeDomain,
+      tokenUri:
+          tokenUri ?? Uri.https('oauth2.$resolvedUniverseDomain', '/token'),
+      scopes: List.unmodifiable(scopes ?? _defaultScopes),
+      clientFactory: clientFactory ?? http.Client.new,
+      universeDomain: resolvedUniverseDomain,
     );
   }
 
