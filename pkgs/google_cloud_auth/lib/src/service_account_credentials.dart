@@ -289,7 +289,7 @@ final class ServiceAccountCredentials extends GoogleCredentials
     final claims = {
       'iss': clientEmail,
       'scope': scopes.join(' '),
-      // Go's `x/oauth2` and `package:googleapis_path` backdate 'iat' to
+      // Go's `x/oauth2` and `package:googleapis_auth` backdate 'iat' to
       // handle the case where the local clock is ahead of the endpoint's clock.
       // Since Java and Python do not do this, it is likely that endpoint's are
       // tolerant of clock skew.
@@ -301,8 +301,8 @@ final class ServiceAccountCredentials extends GoogleCredentials
       // Token exchange is not available outside of the default universe
       // domain, so APIs there accept self-signed JWTs as access tokens.
       return (
-        // See "Additional claims":
-        // https://developers.google.com/identity/protocols/oauth2/service-account#additionalclaims
+        // See:
+        // https://developers.google.com/identity/protocols/oauth2/service-account#jwt-auth
         accessToken: await _signJwt({...claims, 'sub': clientEmail}),
         expiresIn: _jwtLifetime,
       );
