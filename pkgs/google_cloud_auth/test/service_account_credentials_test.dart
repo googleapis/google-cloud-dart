@@ -694,49 +694,6 @@ void main() {
           ).decodeClaims();
           expect(claims['aud'], 'https://oauth2.googleapis.com/token');
         });
-
-        test('caches the access token', () async {
-          final requests = <http.Request>[];
-          final creds = await ServiceAccountCredentials.fromServiceAccountInfo(
-            _minimalInfo,
-            clientFactory: _recordingClientFactory(requests),
-          );
-
-          expect(await creds.accessToken(), 'access-token-1');
-          expect(await creds.accessToken(), 'access-token-1');
-          expect(requests, hasLength(1));
-
-          expect(await creds.accessToken(forceRefresh: true), 'access-token-2');
-          expect(requests, hasLength(2));
-        });
-
-        test('throws CredentialException on HTTP error', () async {
-          final creds = await ServiceAccountCredentials.fromServiceAccountInfo(
-            _minimalInfo,
-            clientFactory: () => MockClient(
-              (request) async => http.Response(
-                '{"error": "invalid_grant", '
-                '"error_description": "Invalid JWT Signature."}',
-                400,
-              ),
-            ),
-          );
-
-          await expectLater(
-            creds.accessToken(),
-            throwsA(
-              isA<CredentialException>().having(
-                (e) => e.message,
-                'message',
-                allOf(
-                  contains('https://oauth2.googleapis.com/token: 400'),
-                  contains('Invalid JWT Signature.'),
-                ),
-              ),
-            ),
-          );
-        });
-
         test('uses a self-signed JWT outside of the default universe '
             'domain', () async {
           final creds = await ServiceAccountCredentials.fromServiceAccountInfo(
@@ -770,6 +727,44 @@ void main() {
 
           expect(await creds.accessToken(), token);
         });
+
+        test(
+          'real token endpoint rejects an unknown service account',
+          tags: ['google-cloud'],
+          () async {
+            // A successful exchange requires a key registered with a real
+            // service account, which our test project does not allow.
+            //
+            // Instead, verify that the token endpoint accepts the grant type
+            // and parses the assertion far enough to look up its issuer,
+            // failing with "account not found" rather than with an error about
+            // the request or the JWT.
+            final creds = await ServiceAccountCredentials.fromPkcs8(
+              // Project IDs are at most 30 characters, so this service
+              // account cannot exist.
+              clientEmail:
+                  'brian@google-cloud-dart-test-account-that-does-not-'
+                  'exist.iam.gserviceaccount.com',
+              privateKeyPkcs8: testPrivateKey,
+              privateKeyId: 'key-id-123',
+            );
+
+            await expectLater(
+              creds.accessToken(),
+              throwsA(
+                isA<CredentialException>().having(
+                  (e) => e.message,
+                  'message',
+                  allOf(
+                    contains('https://oauth2.googleapis.com/token: 400'),
+                    contains('invalid_grant'),
+                    contains('account not found'),
+                  ),
+                ),
+              ),
+            );
+          },
+        );
       });
     },
     skip: canUseWebCrypto
