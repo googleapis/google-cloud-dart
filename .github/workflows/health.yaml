@@ -13,6 +13,8 @@
 # limitations under the License.
 
 name: Health
+permissions:
+  contents: read
 
 on:
   pull_request:
@@ -21,9 +23,39 @@ on:
 
 jobs:
   health:
-    uses: dart-lang/ecosystem/.github/workflows/health.yaml@main
+    uses: dart-lang/ecosystem/.github/workflows/health.yaml@1d2b5ff862c6b93cd86dd06eadac4c9f4d5d6c20
     with:
       checks: "breaking,coverage,do-not-submit,leaking,license"
+      fail_on: "do-not-submit,license"
+      warn_on: "breaking,coverage,leaking"
       coverage_web: false
+      license: |-
+        // Copyright %YEAR% Google LLC
+        //
+        // Licensed under the Apache License, Version 2.0 (the "License");
+        // you may not use this file except in compliance with the License.
+        // You may obtain a copy of the License at
+        //
+        //     https://www.apache.org/licenses/LICENSE-2.0
+        //
+        // Unless required by applicable law or agreed to in writing, software
+        // distributed under the License is distributed on an "AS IS" BASIS,
+        // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        // See the License for the specific language governing permissions and
+        // limitations under the License.
+      license_test_string: |-
+        // Copyright %YEAR% Google LLC
+        //
+        // Licensed under the Apache License, Version 2.0 (the "License");
+        // you may not use this file except in compliance with the License.
+        // You may obtain a copy of the License at
+        //
+        //     https://www.apache.org/licenses/LICENSE-2.0
+        //
+        // Unless required by applicable law or agreed to in writing, software
+        // distributed under the License is distributed on an "AS IS" BASIS,
+        // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        // See the License for the specific language governing permissions and
+        // limitations under the License.
     permissions:
       pull-requests: write
