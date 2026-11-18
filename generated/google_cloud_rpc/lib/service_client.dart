@@ -49,29 +49,35 @@ const String _typeJson = 'application/json';
 /// [ServiceClient] doesn't know whether an operation is safe to repeat, so the
 /// caller must decide.
 ///
-/// Every request method also takes a `timeout` argument. If it is set, an
-/// attempt that doesn't complete within `timeout` fails with a
+/// Every request method also takes a `timeout` argument. If `timeout` is set,
+/// an attempt that doesn't complete within `timeout` fails with a
 /// [TimeoutException]. The timeout applies to each attempt separately, and
 /// `retry` decides whether an attempt that timed out is retried. For example,
 /// [ExponentialRetry.onCodes] treats a [TimeoutException] as
-/// [Code.deadlineExceeded].
+/// [Code.deadlineExceeded]. If the final attempt fails with a
+/// [TimeoutException], then [TimeoutException] will be thrown by the request
+/// method. Even when [TimeoutException] is thrown, there is no guarantee that
+/// the server did not complete the request successfully.
 ///
 /// For a streaming request, `timeout` limits the whole stream, including time
-/// that the caller spends with its subscription paused. Streaming request
+/// that the stream subscription is subscription paused. Streaming request
 /// methods also take a `streamWaitTimeout` argument, which limits the wait for
-/// the response to start, and then each wait for more data. Time that the
-/// caller spends with its subscription paused doesn't count towards
+/// the response to start, and then the maximum delay between each event. Time
+/// that the caller spends with its subscription paused doesn't count towards
 /// `streamWaitTimeout`.
 ///
 /// If the server responds to a streaming request with server-sent events,
-/// events reach the caller as they arrive, so a timeout after the response
-/// starts ends the stream with a [TimeoutException], and isn't retried.
+/// events reach the caller as they arrive. If a timeout happens after a
+/// response has started, the response stream ends with a [TimeoutException] and
+/// is not retried.
 ///
-/// An attempt that times out may continue in the background, but its response
+/// A [TimeoutException]
+///
+/// attempt that times out may continue in the background, but its response
 /// is discarded.
 class ServiceClient {
   // As of 2026-10-16 there is no consistent timeout behavior for RPCs across
-  // implementations.
+  // implementations:
   //
   // For unary (non-streaming) requests:
   // - Go, Python, and Node.js apply the timeout to the entire call, i.e., all
@@ -353,20 +359,22 @@ class ServiceClient {
   }) {
     _checkTimeout(timeout, 'timeout');
     _checkTimeout(streamWaitTimeout, 'streamWaitTimeout');
+
+    final controller = StreamController<Map<String, dynamic>>();
+    // `cancelled.complete()` is called when 'controller` is cancelled.
+    // `cancelled.future` is used to asynchrously detect when `controller` is
+    // cancelled so the underlying HTTP `StreamController` can also be
+    // cancelled.
     final cancelled = Completer<void>();
-    late final StreamController<Map<String, dynamic>> controller;
+
     // Before the response starts, `timeout` and `streamWaitTimeout` limit the
     // same wait, so only the shorter one matters.
-    final startTimeout = switch ((timeout, streamWaitTimeout)) {
-      (null, null) => null,
-      (Duration t, null) => t,
-      (null, Duration t) => t,
-      (Duration t1, Duration t2) => t1 < t2 ? t1 : t2,
-    };
+    final startTimeout = _minDuration(timeout, streamWaitTimeout);
     final requestUrl = enableSse ? _makeUrlStreaming(url) : url;
 
     Future<Stream<Map<String, dynamic>>> attempt(String? encodedBody) async {
-      if (cancelled.isCompleted) throw _CancelledError();
+      // ignore: only_throw_errors
+      if (cancelled.isCompleted) throw _CancelSignal();
       // `timeout` limits the whole attempt, including any part of an event
       // stream that is read after the attempt completes.
       final stopwatch = clock.stopwatch()..start();
@@ -378,7 +386,8 @@ class ServiceClient {
       );
       if (cancelled.isCompleted) {
         _cancel(response).ignore();
-        throw _CancelledError();
+        // ignore: only_throw_errors
+        throw _CancelSignal();
       }
       final bytes = _withRemainingTimeout(
         _withStallTimeout(response.stream, requestUrl, streamWaitTimeout),
@@ -422,7 +431,8 @@ class ServiceClient {
           } on Exception {
             // Don't retry a failure after the caller stopped listening:
             // `ExponentialRetry` would wait before noticing.
-            if (cancelled.isCompleted) throw _CancelledError();
+            // ignore: only_throw_errors
+            if (cancelled.isCompleted) throw _CancelSignal();
             rethrow;
           }
         });
@@ -440,12 +450,12 @@ class ServiceClient {
       }
     }
 
-    controller = StreamController(
-      onListen: () => unawaited(startRequest()),
-      onCancel: () {
+    controller.onListen = () {
+      controller.onCancel = () {
         if (!cancelled.isCompleted) cancelled.complete();
-      },
-    );
+      };
+      unawaited(startRequest());
+    };
     return controller.stream;
   }
 
@@ -552,7 +562,7 @@ class ServiceClient {
     return controller.stream;
   }
 
-  /// [stream], ending with a [_CancelledError] if [cancelled] completes before
+  /// [stream], ending with a [_CancelSignal] if [cancelled] completes before
   /// [stream] is done.
   ///
   /// After [cancelled] completes, the subscription to [stream] is cancelled,
@@ -572,10 +582,10 @@ class ServiceClient {
         );
         unawaited(
           cancelled.then((_) {
-            if (controller.isClosed) return;
-            unawaited(subscription.cancel());
+            if (controller.isClosed || !controller.hasListener) return;
+            subscription.cancel().ignoreExceptions();
             controller
-              ..addError(_CancelledError())
+              ..addError(_CancelSignal())
               ..close();
           }),
         );
@@ -621,8 +631,20 @@ class ServiceClient {
 ///
 /// Because this is only raised after the caller cancels its subscription, it
 /// is never surfaced outside of this library.
-final class _CancelledError extends Error {}
+final class _CancelSignal {}
 
 extension on JsonEncodable {
   String get _asEncodedJson => jsonEncode(toJson());
+}
+
+extension on Future<void> {
+  void ignoreExceptions() {
+    unawaited(catchError((_) {}, test: (e) => e is Exception));
+  }
+}
+
+Duration? _minDuration(Duration? d1, Duration? d2) {
+  if (d1 == null) return d2;
+  if (d2 == null) return d1;
+  return d1 <= d2 ? d1 : d2;
 }
