@@ -60,10 +60,10 @@ const String _typeJson = 'application/json';
 /// the server did not complete the request successfully.
 ///
 /// For a streaming request, `timeout` limits the whole stream, including time
-/// that the stream subscription is subscription paused. Streaming request
-/// methods also take a `streamWaitTimeout` argument, which limits the wait for
-/// the response to start, and then the maximum delay between each event. Time
-/// that the caller spends with its subscription paused doesn't count towards
+/// that the stream subscription is paused. Streaming request methods also take
+/// a `streamWaitTimeout` argument, which limits the wait for the response to
+/// start, and then the maximum delay between each event. Time that the caller
+/// spends with its subscription paused doesn't count towards
 /// `streamWaitTimeout`.
 ///
 /// If the server responds to a streaming request with server-sent events,
@@ -361,11 +361,11 @@ class ServiceClient {
     _checkTimeout(streamWaitTimeout, 'streamWaitTimeout');
 
     final controller = StreamController<Map<String, dynamic>>();
-    // `cancelled.complete()` is called when 'controller` is cancelled.
-    // `cancelled.future` is used to asynchrously detect when `controller` is
-    // cancelled so the underlying HTTP `StreamController` can also be
-    // cancelled.
-    final cancelled = Completer<void>();
+    // Whether the caller has cancelled its subscription to `controller.stream`.
+    var isCancelled = false;
+    // Cancels the in-flight HTTP response before `controller.addStream` takes
+    // over. `null` while waiting for response headers or retry backoff.
+    Future<void> Function()? cancelCurrent;
 
     // Before the response starts, `timeout` and `streamWaitTimeout` limit the
     // same wait, so only the shorter one matters.
@@ -374,7 +374,7 @@ class ServiceClient {
 
     Future<Stream<Map<String, dynamic>>> attempt(String? encodedBody) async {
       // ignore: only_throw_errors
-      if (cancelled.isCompleted) throw _CancelSignal();
+      if (isCancelled) throw const _CancelSignal();
       // `timeout` limits the whole attempt, including any part of an event
       // stream that is read after the attempt completes.
       final stopwatch = clock.stopwatch()..start();
@@ -384,10 +384,10 @@ class ServiceClient {
         encodedBody,
         startTimeout,
       );
-      if (cancelled.isCompleted) {
-        _cancel(response).ignore();
+      if (isCancelled) {
+        _cancel(response).ignoreExceptions();
         // ignore: only_throw_errors
-        throw _CancelSignal();
+        throw const _CancelSignal();
       }
       final bytes = _withRemainingTimeout(
         _withStallTimeout(response.stream, requestUrl, streamWaitTimeout),
@@ -402,19 +402,40 @@ class ServiceClient {
           // The server responded with a non-streaming response, which should
           // be a list of JSON objects. The whole body is read as part of the
           // attempt, so a failure while reading it can be retried.
-          final responseBody = await utf8.decodeStream(
-            _untilCancelled(bytes, cancelled.future),
-          );
-          final json = (jsonDecode(responseBody) as List)
+          final done = Completer<void>();
+          final buffer = StringBuffer();
+          final subscription = utf8.decoder
+              .bind(bytes)
+              .listen(
+                buffer.write,
+                onError: done.completeError,
+                onDone: done.complete,
+                cancelOnError: true,
+              );
+          cancelCurrent = () {
+            cancelCurrent = null;
+            if (!done.isCompleted) done.completeError(const _CancelSignal());
+            return subscription.cancel();
+          };
+          try {
+            await done.future;
+          } finally {
+            cancelCurrent = null;
+          }
+          final json = (jsonDecode(buffer.toString()) as List)
               .cast<Map<String, dynamic>>();
           return Stream.fromIterable(json);
         case 'text/event-stream':
           // The server responded with an event stream, which is what we
           // expect. Events reach the caller as they arrive, so failures after
           // this point are not retried.
+          cancelCurrent = () {
+            cancelCurrent = null;
+            return _cancel(response);
+          };
           return _decodeEvents(bytes);
         default:
-          _cancel(response).ignore();
+          _cancel(response).ignoreExceptions();
           throw ServiceException(
             'Unsupported content type: ${response.headers['content-type']}',
             statusCode: response.statusCode,
@@ -432,27 +453,26 @@ class ServiceClient {
             // Don't retry a failure after the caller stopped listening:
             // `ExponentialRetry` would wait before noticing.
             // ignore: only_throw_errors
-            if (cancelled.isCompleted) throw _CancelSignal();
+            if (isCancelled) throw const _CancelSignal();
             rethrow;
           }
         });
-        if (cancelled.isCompleted) {
-          // The caller stopped listening as the last attempt completed.
-          unawaited(messages.listen(null).cancel());
-          return;
-        }
+        if (isCancelled) return;
+        // `addStream` forwards cancellation to `messages` from here on.
+        cancelCurrent = null;
         await controller.addStream(messages, cancelOnError: true);
       } catch (e, s) {
         // Once the caller stops listening, there is nobody to report to.
-        if (!cancelled.isCompleted) controller.addError(e, s);
+        if (!isCancelled) controller.addError(e, s);
       } finally {
-        unawaited(controller.close());
+        if (!isCancelled) unawaited(controller.close());
       }
     }
 
     controller.onListen = () {
       controller.onCancel = () {
-        if (!cancelled.isCompleted) cancelled.complete();
+        isCancelled = true;
+        return cancelCurrent?.call();
       };
       unawaited(startRequest());
     };
@@ -479,7 +499,7 @@ class ServiceClient {
     return pendingResponse.timeout(
       timeout,
       onTimeout: () {
-        pendingResponse.then(_cancel).ignore();
+        pendingResponse.then(_cancel).ignoreExceptions();
         throw TimeoutException(
           'Request to $url did not return any data',
           timeout,
@@ -544,7 +564,7 @@ class ServiceClient {
         // no reason to go out of our way to throw away a response that has
         // already arrived.
         timer = Timer(timeout - stopwatch.elapsed, () {
-          unawaited(subscription.cancel());
+          subscription.cancel().ignoreExceptions();
           controller
             ..addError(
               TimeoutException('Request to $url did not complete', timeout),
@@ -558,41 +578,6 @@ class ServiceClient {
         timer.cancel();
         return subscription.cancel();
       },
-    );
-    return controller.stream;
-  }
-
-  /// [stream], ending with a [_CancelSignal] if [cancelled] completes before
-  /// [stream] is done.
-  ///
-  /// After [cancelled] completes, the subscription to [stream] is cancelled,
-  /// even if it is paused.
-  static Stream<T> _untilCancelled<T>(
-    Stream<T> stream,
-    Future<void> cancelled,
-  ) {
-    late final StreamSubscription<T> subscription;
-    late final StreamController<T> controller;
-    controller = StreamController<T>(
-      onListen: () {
-        subscription = stream.listen(
-          controller.add,
-          onError: controller.addError,
-          onDone: controller.close,
-        );
-        unawaited(
-          cancelled.then((_) {
-            if (controller.isClosed || !controller.hasListener) return;
-            subscription.cancel().ignoreExceptions();
-            controller
-              ..addError(_CancelSignal())
-              ..close();
-          }),
-        );
-      },
-      onPause: () => subscription.pause(),
-      onResume: () => subscription.resume(),
-      onCancel: () => subscription.cancel(),
     );
     return controller.stream;
   }
@@ -631,7 +616,9 @@ class ServiceClient {
 ///
 /// Because this is only raised after the caller cancels its subscription, it
 /// is never surfaced outside of this library.
-final class _CancelSignal {}
+final class _CancelSignal {
+  const _CancelSignal();
+}
 
 extension on JsonEncodable {
   String get _asEncodedJson => jsonEncode(toJson());

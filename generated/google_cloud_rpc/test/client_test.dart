@@ -1799,12 +1799,18 @@ void main() {
       await cancelling;
     });
 
-    test('while reading a JSON list response cancels the response', () async {
+    test('while reading a JSON list response waits for response '
+        'cancellation', () async {
       final reading = Completer<void>();
-      var cancelled = false;
+      final finishCancel = Completer<void>();
+      var cancelStarted = false;
+      var cancelCompleted = false;
       final jsonList = StreamController<List<int>>(
         onListen: reading.complete,
-        onCancel: () => cancelled = true,
+        onCancel: () {
+          cancelStarted = true;
+          return finishCancel.future;
+        },
       )..add(utf8.encode('[{"fruit":"apple"},'));
       final service = ServiceClient(
         client: MockClient.streaming(
@@ -1820,10 +1826,107 @@ void main() {
           .getStreaming(sampleUrl, enableSse: false)
           .listen(neverCalled);
       await reading.future;
-      final cancelling = subscription.cancel();
+      final cancelling = subscription.cancel().then((_) {
+        cancelCompleted = true;
+      });
+      expect(cancelStarted, isTrue, reason: 'the response should be cancelled');
       await pumpEventQueue();
-      expect(cancelled, isTrue, reason: 'the response should be cancelled');
+      expect(
+        cancelCompleted,
+        isFalse,
+        reason: '`cancel()` should wait for response cancellation to finish',
+      );
+      finishCancel.complete();
       await cancelling;
+      expect(cancelCompleted, isTrue);
+    });
+
+    for (final (description, contentType, chunk, enableSse) in [
+      ('a JSON list', 'application/json', '[{"fruit":"apple"},', false),
+      (
+        'an event stream',
+        'text/event-stream',
+        'data: {"fruit":"apple"}\n',
+        true,
+      ),
+    ]) {
+      test('forwards errors from cancelling $description response', () async {
+        final ready = Completer<void>();
+        final body = StreamController<List<int>>(
+          onListen: () {
+            if (!enableSse) ready.complete();
+          },
+          onCancel: () => Future<void>.error(ClientException('cancel failed')),
+        )..add(utf8.encode(chunk));
+        final service = ServiceClient(
+          client: MockClient.streaming(
+            (request, _) async => StreamedResponse(
+              body.stream,
+              200,
+              headers: {'content-type': contentType},
+            ),
+          ),
+        );
+
+        final subscription = service
+            .getStreaming(sampleUrl, enableSse: enableSse)
+            .listen((_) {
+              if (enableSse) ready.complete();
+            });
+        await ready.future;
+        await pumpEventQueue();
+
+        await expectLater(
+          subscription.cancel(),
+          throwsA(
+            isA<ClientException>().having(
+              (e) => e.message,
+              'message',
+              'cancel failed',
+            ),
+          ),
+        );
+      });
+    }
+
+    test('ignores Exceptions but not Errors when cancelling an abandoned '
+        'response', () async {
+      Future<List<Object>> cancelAbandonedWith(Object cancelError) async {
+        final requested = Completer<void>();
+        final respond = Completer<void>();
+        final uncaught = <Object>[];
+
+        await runZonedGuarded(() async {
+          final service = ServiceClient(
+            client: MockClient.streaming((request, body) async {
+              requested.complete();
+              await respond.future;
+              return StreamedResponse(
+                StreamController<List<int>>(
+                  onCancel: () => Future<void>.error(cancelError),
+                ).stream,
+                200,
+                headers: sseHeaders,
+              );
+            }),
+          );
+
+          final subscription = service
+              .getStreaming(sampleUrl, enableSse: true)
+              .listen(neverCalled);
+          await requested.future;
+          await subscription.cancel();
+          respond.complete();
+          await pumpEventQueue();
+        }, (error, _) => uncaught.add(error));
+
+        return uncaught;
+      }
+
+      expect(await cancelAbandonedWith(ClientException('io failure')), isEmpty);
+      expect(await cancelAbandonedWith(StateError('client bug')), [
+        isA<StateError>(),
+      ]);
     });
 
     test('while waiting for more events cancels the response', () async {
@@ -1846,10 +1949,8 @@ void main() {
       // Let the request wait for more events, which the server never sends.
       await pumpEventQueue();
 
-      final cancelling = subscription.cancel();
-      await pumpEventQueue();
+      await subscription.cancel();
       expect(cancelled, isTrue, reason: 'the response should be cancelled');
-      await cancelling;
     });
   });
 }
