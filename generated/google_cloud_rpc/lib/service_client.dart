@@ -61,8 +61,8 @@ const String _typeJson = 'application/json';
 /// For a streaming request, `timeout` limits the whole stream, including time
 /// that the stream subscription is paused. Streaming request methods also take
 /// a `streamWaitTimeout` argument, which limits the wait for the response to
-/// start, and then the maximum delay between each event. Time that the stream
-/// subscription paused doesn't count towards `streamWaitTimeout`.
+/// start, and then the maximum delay between events. Time that the stream
+/// subscription is paused doesn't count towards `streamWaitTimeout`.
 ///
 /// If the server responds to a streaming request with server-sent events,
 /// events reach the caller as they arrive. If a timeout happens after a
