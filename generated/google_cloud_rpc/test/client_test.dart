@@ -1387,6 +1387,48 @@ void main() {
         expect(cancelled, isTrue, reason: 'the response should be cancelled');
       });
 
+      fakeAsyncTest('times out if the server sends bytes without completing an '
+          'event within `streamWaitTimeout`', (async) {
+        var cancelled = false;
+        late final Timer timer;
+        final events = StreamController<List<int>>(
+          onCancel: () {
+            cancelled = true;
+            timer.cancel();
+          },
+        );
+        // SSE comments keep bytes flowing, without producing an event.
+        timer = Timer.periodic(timeout ~/ 5, (_) {
+          events.add(utf8.encode(': keepalive\n'));
+        });
+        final service = fakeAsyncService(
+          MockClient.streaming(
+            (request, body) async =>
+                StreamedResponse(events.stream, 200, headers: sseHeaders),
+          ),
+        );
+
+        expect(
+          service.getStreaming(
+            sampleUrl,
+            enableSse: true,
+            streamWaitTimeout: timeout,
+          ),
+          emitsInOrder([
+            emitsError(
+              isA<TimeoutException>().having(
+                (e) => e.duration,
+                'duration',
+                timeout,
+              ),
+            ),
+            emitsDone,
+          ]),
+        );
+        async.elapse(timeout);
+        expect(cancelled, isTrue, reason: 'the response should be cancelled');
+      });
+
       fakeAsyncTest('cancels a response that starts after the timeout', (
         async,
       ) {

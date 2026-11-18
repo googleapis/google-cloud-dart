@@ -70,11 +70,6 @@ const String _typeJson = 'application/json';
 /// events reach the caller as they arrive. If a timeout happens after a
 /// response has started, the response stream ends with a [TimeoutException] and
 /// is not retried.
-///
-/// A [TimeoutException]
-///
-/// attempt that times out may continue in the background, but its response
-/// is discarded.
 class ServiceClient {
   // As of 2026-10-16 there is no consistent timeout behavior for RPCs across
   // implementations:
@@ -390,7 +385,7 @@ class ServiceClient {
         throw const _CancelSignal();
       }
       final bytes = _withRemainingTimeout(
-        _withStallTimeout(response.stream, requestUrl, streamWaitTimeout),
+        response.stream,
         requestUrl,
         timeout,
         stopwatch,
@@ -405,7 +400,7 @@ class ServiceClient {
           final done = Completer<void>();
           final buffer = StringBuffer();
           final subscription = utf8.decoder
-              .bind(bytes)
+              .bind(_withStallTimeout(bytes, requestUrl, streamWaitTimeout))
               .listen(
                 buffer.write,
                 onError: done.completeError,
@@ -433,7 +428,11 @@ class ServiceClient {
             cancelCurrent = null;
             return _cancel(response);
           };
-          return _decodeEvents(bytes);
+          return _withStallTimeout(
+            _decodeEvents(bytes),
+            requestUrl,
+            streamWaitTimeout,
+          );
         default:
           _cancel(response).ignoreExceptions();
           throw ServiceException(
@@ -512,25 +511,71 @@ class ServiceClient {
   static Future<void> _cancel(http.StreamedResponse response) =>
       response.stream.listen(null).cancel();
 
-  /// [bytes], failing with a [TimeoutException] if no data arrives for
+  /// [stream], failing with a [TimeoutException] if nothing arrives for
   /// [timeout].
   ///
   /// Time spent with the subscription paused doesn't count. After a timeout,
-  /// the subscription to [bytes] is cancelled.
-  static Stream<List<int>> _withStallTimeout(
-    Stream<List<int>> bytes,
+  /// the subscription to [stream] is cancelled.
+  static Stream<T> _withStallTimeout<T>(
+    Stream<T> stream,
     Uri url,
     Duration? timeout,
   ) {
-    if (timeout == null) return bytes;
-    return bytes.timeout(
-      timeout,
-      onTimeout: (sink) {
-        sink
-          ..addError(TimeoutException('No data received from $url', timeout))
-          ..close();
-      },
-    );
+    if (timeout == null) return stream;
+
+    final controller = StreamController<T>();
+    controller.onListen = () {
+      StreamSubscription<T>? subscription;
+      Timer? timer;
+
+      void resetTimer() {
+        timer?.cancel();
+        timer = Timer(timeout, () {
+          subscription?.cancel().ignoreExceptions();
+          // `subscription` is already cancelled; give downstream
+          // `cancelOnError` a completed future in the current zone.
+          controller
+            ..onCancel = Future<void>.value
+            ..addError(TimeoutException('No data received from $url', timeout))
+            ..close();
+        });
+      }
+
+      resetTimer();
+      subscription = stream.listen(
+        (event) {
+          timer?.cancel();
+          controller.add(event);
+          if (!controller.isPaused) resetTimer();
+        },
+        onError: (Object error, StackTrace stackTrace) {
+          timer?.cancel();
+          controller.addError(error, stackTrace);
+          if (!controller.isPaused) resetTimer();
+        },
+        onDone: () {
+          timer?.cancel();
+          // `stream` is already done, so `close` need not cancel
+          // `subscription`.
+          controller.onCancel = null;
+          unawaited(controller.close());
+        },
+      );
+      controller
+        ..onPause = () {
+          timer?.cancel();
+          subscription!.pause();
+        }
+        ..onResume = () {
+          subscription!.resume();
+          resetTimer();
+        }
+        ..onCancel = () {
+          timer?.cancel();
+          return subscription!.cancel();
+        };
+    };
+    return controller.stream;
   }
 
   /// [stream], failing with a [TimeoutException] if it isn't done by the time
@@ -556,7 +601,8 @@ class ServiceClient {
           onError: controller.addError,
           onDone: () {
             timer.cancel();
-            controller.close();
+            controller.onCancel = null;
+            unawaited(controller.close());
           },
         );
         // `Timer` treats a negative duration as zero. Even if no time remains,
@@ -566,6 +612,7 @@ class ServiceClient {
         timer = Timer(timeout - stopwatch.elapsed, () {
           subscription.cancel().ignoreExceptions();
           controller
+            ..onCancel = Future<void>.value
             ..addError(
               TimeoutException('Request to $url did not complete', timeout),
             )
