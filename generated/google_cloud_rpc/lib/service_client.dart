@@ -45,7 +45,7 @@ const String _typeJson = 'application/json';
 /// A low-level mechanism to communicate with Google APIs.
 ///
 /// Every request method takes a `retry` argument that decides whether, and
-/// how, failed attempts are retried. It defaults to [noRetry]: a
+/// how, failed attempts are retried. `retry` defaults to [noRetry]: a
 /// [ServiceClient] doesn't know whether an operation is safe to repeat, so the
 /// caller must decide.
 ///
@@ -55,16 +55,14 @@ const String _typeJson = 'application/json';
 /// `retry` decides whether an attempt that timed out is retried. For example,
 /// [ExponentialRetry.onCodes] treats a [TimeoutException] as
 /// [Code.deadlineExceeded]. If the final attempt fails with a
-/// [TimeoutException], then [TimeoutException] will be thrown by the request
-/// method. Even when [TimeoutException] is thrown, there is no guarantee that
-/// the server did not complete the request successfully.
+/// [TimeoutException], then there is no guarantee that the server did not
+/// complete the request successfully.
 ///
 /// For a streaming request, `timeout` limits the whole stream, including time
 /// that the stream subscription is paused. Streaming request methods also take
 /// a `streamWaitTimeout` argument, which limits the wait for the response to
-/// start, and then the maximum delay between each event. Time that the caller
-/// spends with its subscription paused doesn't count towards
-/// `streamWaitTimeout`.
+/// start, and then the maximum delay between each event. Time that the stream
+/// subscription paused doesn't count towards `streamWaitTimeout`.
 ///
 /// If the server responds to a streaming request with server-sent events,
 /// events reach the caller as they arrive. If a timeout happens after a
@@ -72,7 +70,7 @@ const String _typeJson = 'application/json';
 /// is not retried.
 class ServiceClient {
   // As of 2026-10-16 there is no consistent timeout behavior for RPCs across
-  // implementations:
+  // Google Cloud client libraries:
   //
   // For unary (non-streaming) requests:
   // - Go, Python, and Node.js apply the timeout to the entire call, i.e., all
@@ -368,8 +366,7 @@ class ServiceClient {
     final requestUrl = enableSse ? _makeUrlStreaming(url) : url;
 
     Future<Stream<Map<String, dynamic>>> attempt(String? encodedBody) async {
-      // ignore: only_throw_errors
-      if (isCancelled) throw const _CancelSignal();
+      if (isCancelled) return const Stream.empty();
       // `timeout` limits the whole attempt, including any part of an event
       // stream that is read after the attempt completes.
       final stopwatch = clock.stopwatch()..start();
@@ -381,8 +378,7 @@ class ServiceClient {
       );
       if (isCancelled) {
         _cancel(response).ignoreExceptions();
-        // ignore: only_throw_errors
-        throw const _CancelSignal();
+        return const Stream.empty();
       }
       final bytes = _withRemainingTimeout(
         response.stream,
@@ -409,7 +405,7 @@ class ServiceClient {
               );
           cancelCurrent = () {
             cancelCurrent = null;
-            if (!done.isCompleted) done.completeError(const _CancelSignal());
+            if (!done.isCompleted) done.complete();
             return subscription.cancel();
           };
           try {
@@ -417,6 +413,7 @@ class ServiceClient {
           } finally {
             cancelCurrent = null;
           }
+          if (isCancelled) return const Stream.empty();
           final json = (jsonDecode(buffer.toString()) as List)
               .cast<Map<String, dynamic>>();
           return Stream.fromIterable(json);
@@ -451,8 +448,7 @@ class ServiceClient {
           } on Exception {
             // Don't retry a failure after the caller stopped listening:
             // `ExponentialRetry` would wait before noticing.
-            // ignore: only_throw_errors
-            if (isCancelled) throw const _CancelSignal();
+            if (isCancelled) return const Stream<Never>.empty();
             rethrow;
           }
         });
@@ -591,41 +587,40 @@ class ServiceClient {
   ) {
     if (timeout == null) return stream;
 
-    late final StreamSubscription<T> subscription;
-    late final Timer timer;
-    late final StreamController<T> controller;
-    controller = StreamController<T>(
-      onListen: () {
-        subscription = stream.listen(
-          controller.add,
-          onError: controller.addError,
-          onDone: () {
-            timer.cancel();
-            controller.onCancel = null;
-            unawaited(controller.close());
-          },
-        );
-        // `Timer` treats a negative duration as zero. Even if no time remains,
-        // data that's already buffered arrives before the timer fires. There is
-        // no reason to go out of our way to throw away a response that has
-        // already arrived.
-        timer = Timer(timeout - stopwatch.elapsed, () {
-          subscription.cancel().ignoreExceptions();
-          controller
-            ..onCancel = Future<void>.value
-            ..addError(
-              TimeoutException('Request to $url did not complete', timeout),
-            )
-            ..close();
-        });
-      },
-      onPause: () => subscription.pause(),
-      onResume: () => subscription.resume(),
-      onCancel: () {
-        timer.cancel();
-        return subscription.cancel();
-      },
-    );
+    final controller = StreamController<T>();
+    controller.onListen = () {
+      Timer? timer;
+      final subscription = stream.listen(
+        controller.add,
+        onError: controller.addError,
+        onDone: () {
+          timer?.cancel();
+          controller.onCancel = null;
+          unawaited(controller.close());
+        },
+      );
+      if (controller.isClosed) return;
+      // `Timer` treats a negative duration as zero. Even if no time remains,
+      // data that's already buffered arrives before the timer fires. There is
+      // no reason to go out of our way to throw away a response that has
+      // already arrived.
+      timer = Timer(timeout - stopwatch.elapsed, () {
+        subscription.cancel().ignoreExceptions();
+        controller
+          ..onCancel = Future<void>.value
+          ..addError(
+            TimeoutException('Request to $url did not complete', timeout),
+          )
+          ..close();
+      });
+      controller
+        ..onPause = subscription.pause
+        ..onResume = subscription.resume
+        ..onCancel = () {
+          timer?.cancel();
+          return subscription.cancel();
+        };
+    };
     return controller.stream;
   }
 
@@ -656,15 +651,6 @@ class ServiceClient {
     query['alt'] = 'sse';
     return url.replace(queryParameters: query);
   }
-}
-
-/// Stops the attempts of a streaming request after the caller cancels its
-/// subscription.
-///
-/// Because this is only raised after the caller cancels its subscription, it
-/// is never surfaced outside of this library.
-final class _CancelSignal {
-  const _CancelSignal();
 }
 
 extension on JsonEncodable {

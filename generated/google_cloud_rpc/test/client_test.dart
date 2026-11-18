@@ -68,24 +68,21 @@ final class _FakeAsyncClient extends BaseClient {
   @override
   Future<StreamedResponse> send(BaseRequest request) async {
     final response = await _client.send(request);
-    late final StreamSubscription<List<int>> subscription;
-    late final StreamController<List<int>> body;
-    body = StreamController(
-      sync: true,
-      onListen: () {
-        subscription = response.stream.listen(
-          body.add,
-          onError: body.addError,
-          onDone: body.close,
-        );
-      },
-      onPause: () => subscription.pause(),
-      onResume: () => subscription.resume(),
-      onCancel: () {
-        unawaited(subscription.cancel());
-        return Future<void>.value();
-      },
-    );
+    final body = StreamController<List<int>>(sync: true);
+    body.onListen = () {
+      final subscription = response.stream.listen(
+        body.add,
+        onError: body.addError,
+        onDone: body.close,
+      );
+      body
+        ..onPause = subscription.pause
+        ..onResume = subscription.resume
+        ..onCancel = () {
+          unawaited(subscription.cancel());
+          return Future<void>.value();
+        };
+    };
     return StreamedResponse(
       body.stream,
       response.statusCode,
