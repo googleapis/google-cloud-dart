@@ -22,6 +22,15 @@ import 'package:meta/meta.dart';
 import '../rpc.dart';
 import 'exceptions.dart';
 
+/// A [Clock] that tells the time of the current zone's [clock].
+///
+/// `clock` parameters default to this rather than to `const Clock()`, which
+/// always tells the system time, even in tests that control the time with
+/// `withClock` or `package:fake_async`.
+const _zoneClock = Clock(_zoneNow);
+
+DateTime _zoneNow() => clock.now();
+
 /// An abstract class for running a function with retry logic.
 ///
 /// Decides which failures are retried and how long to wait between attempts.
@@ -30,7 +39,10 @@ sealed class RetryRunner {
 
   /// Runs [body], retrying it while it fails with an error that
   /// [isRetryable] accepts and the retry budget allows.
-  Future<T> run<T>(Future<T> Function() body, {Clock clock = const Clock()});
+  ///
+  /// Time is measured with [clock], which defaults to the clock of the
+  /// current zone.
+  Future<T> run<T>(Future<T> Function() body, {Clock clock = _zoneClock});
 
   /// Whether a failure with [error] should be retried.
   ///
@@ -38,7 +50,10 @@ sealed class RetryRunner {
   bool isRetryable(Exception error);
 
   /// A sequence of wait durations for retries or reconnections.
-  Iterable<Duration> delays({Clock clock = const Clock(), Random? random});
+  ///
+  /// Time is measured with [clock], which defaults to the clock of the
+  /// current zone.
+  Iterable<Duration> delays({Clock clock = _zoneClock, Random? random});
 }
 
 /// Generates a sequence of delays for exponential backoff.
@@ -101,7 +116,7 @@ Iterable<Duration> delaySequence({
   required Duration maxDelay,
   required double delayMultiplier,
   double jitter = 0.0,
-  Clock clock = const Clock(),
+  Clock clock = _zoneClock,
   Random? random,
 }) {
   final noRetriesAfter = maxRetryInterval == null
@@ -177,14 +192,14 @@ final class NoRetry extends RetryRunner {
   @override
   Future<T> run<T>(
     Future<T> Function() body, {
-    Clock clock = const Clock(),
+    Clock clock = _zoneClock,
   }) async => body();
 
   @override
   bool isRetryable(Exception error) => false;
 
   @override
-  Iterable<Duration> delays({Clock clock = const Clock(), Random? random}) =>
+  Iterable<Duration> delays({Clock clock = _zoneClock, Random? random}) =>
       const [];
 
   @override
@@ -332,7 +347,7 @@ final class ExponentialRetry extends RetryRunner {
   };
 
   @override
-  Iterable<Duration> delays({Clock clock = const Clock(), Random? random}) =>
+  Iterable<Duration> delays({Clock clock = _zoneClock, Random? random}) =>
       delaySequence(
         maxRetries: maxRetries,
         maxRetryInterval: maxRetryInterval,
@@ -347,7 +362,7 @@ final class ExponentialRetry extends RetryRunner {
   @override
   Future<T> run<T>(
     Future<T> Function() body, {
-    Clock clock = const Clock(),
+    Clock clock = _zoneClock,
   }) async {
     final iterator = delays(clock: clock).iterator;
 

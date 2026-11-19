@@ -278,8 +278,11 @@ class ServiceClient {
   /// Once [close] is called, no other methods should be called.
   void close() => client.close();
 
-  /// Sends a single request, throwing a [ServiceException] if the response
-  /// does not have a 2xx status code.
+  /// Sends a single request, completing when the response starts.
+  ///
+  /// The response may have any status code: see [_isSuccess]. The caller reads
+  /// the body of an error response, so that the caller's timeouts and
+  /// cancellation apply to that body too.
   Future<http.StreamedResponse> _send(
     Uri url,
     String method,
@@ -296,18 +299,7 @@ class ServiceClient {
       if (encodedBody != null) _contentTypeKey: _typeJson,
     });
 
-    final response = await client.send(request);
-    final statusOK = response.statusCode >= 200 && response.statusCode < 300;
-    if (!statusOK) {
-      String? responseBody;
-      try {
-        responseBody = await response.stream.bytesToString();
-      } on FormatException {
-        // The response body is not valid UTF-8.
-      }
-      throw ServiceException.fromHttpResponse(response, responseBody);
-    }
-    return response;
+    return client.send(request);
   }
 
   Future<Map<String, dynamic>> _makeRequest(
@@ -328,9 +320,22 @@ class ServiceClient {
         encodedBody,
         timeout,
       );
-      final responseBody = await utf8.decodeStream(
-        _withRemainingTimeout(response.stream, url, timeout, stopwatch),
+      final bytes = _withRemainingTimeout(
+        response.stream,
+        url,
+        timeout,
+        stopwatch,
       );
+      if (!_isSuccess(response)) {
+        String? errorBody;
+        try {
+          errorBody = await utf8.decodeStream(bytes);
+        } on FormatException {
+          // The response body is not valid UTF-8.
+        }
+        throw ServiceException.fromHttpResponse(response, errorBody);
+      }
+      final responseBody = await utf8.decodeStream(bytes);
       return responseBody.isEmpty
           ? {}
           : jsonDecode(responseBody) as Map<String, dynamic>;
@@ -356,14 +361,41 @@ class ServiceClient {
     final controller = StreamController<Map<String, dynamic>>();
     // Whether the caller has cancelled its subscription to `controller.stream`.
     var isCancelled = false;
-    // Cancels the in-flight HTTP response before `controller.addStream` takes
-    // over. `null` while waiting for response headers or retry backoff.
-    Future<void> Function()? cancelCurrent;
+    // Cancels what the request is waiting for before `controller.addStream`
+    // takes over: the in-flight HTTP response, or the wait before the next
+    // attempt. `null` while waiting for response headers.
+    Future<void>? Function()? cancelCurrent;
 
     // Before the response starts, `timeout` and `streamWaitTimeout` limit the
     // same wait, so only the shorter one matters.
     final startTimeout = _minDuration(timeout, streamWaitTimeout);
     final requestUrl = enableSse ? _makeUrlStreaming(url) : url;
+
+    // Reads all of `bytes`, the body of a response, as a string. The result
+    // is `null` if the caller cancels its subscription first.
+    Future<String?> readBody(Stream<List<int>> bytes) async {
+      final done = Completer<void>();
+      final buffer = StringBuffer();
+      final subscription = utf8.decoder
+          .bind(_withStallTimeout(bytes, requestUrl, streamWaitTimeout))
+          .listen(
+            buffer.write,
+            onError: done.completeError,
+            onDone: done.complete,
+            cancelOnError: true,
+          );
+      cancelCurrent = () {
+        cancelCurrent = null;
+        if (!done.isCompleted) done.complete();
+        return subscription.cancel();
+      };
+      try {
+        await done.future;
+      } finally {
+        cancelCurrent = null;
+      }
+      return isCancelled ? null : buffer.toString();
+    }
 
     Future<Stream<Map<String, dynamic>>> attempt(String? encodedBody) async {
       if (isCancelled) return const Stream.empty();
@@ -386,35 +418,24 @@ class ServiceClient {
         timeout,
         stopwatch,
       );
-      switch (http.MediaType.parse(
-        response.headers['content-type'] ?? '',
-      ).mimeType) {
+      if (!_isSuccess(response)) {
+        String? errorBody;
+        try {
+          errorBody = await readBody(bytes);
+        } on FormatException {
+          // The response body is not valid UTF-8.
+        }
+        if (isCancelled) return const Stream.empty();
+        throw ServiceException.fromHttpResponse(response, errorBody);
+      }
+      switch (_mimeType(response)) {
         case 'application/json':
           // The server responded with a non-streaming response, which should
           // be a list of JSON objects. The whole body is read as part of the
           // attempt, so a failure while reading it can be retried.
-          final done = Completer<void>();
-          final buffer = StringBuffer();
-          final subscription = utf8.decoder
-              .bind(_withStallTimeout(bytes, requestUrl, streamWaitTimeout))
-              .listen(
-                buffer.write,
-                onError: done.completeError,
-                onDone: done.complete,
-                cancelOnError: true,
-              );
-          cancelCurrent = () {
-            cancelCurrent = null;
-            if (!done.isCompleted) done.complete();
-            return subscription.cancel();
-          };
-          try {
-            await done.future;
-          } finally {
-            cancelCurrent = null;
-          }
-          if (isCancelled) return const Stream.empty();
-          final json = (jsonDecode(buffer.toString()) as List)
+          final responseBody = await readBody(bytes);
+          if (responseBody == null) return const Stream.empty();
+          final json = (jsonDecode(responseBody) as List)
               .cast<Map<String, dynamic>>();
           return Stream.fromIterable(json);
         case 'text/event-stream':
@@ -439,26 +460,54 @@ class ServiceClient {
       }
     }
 
+    // Makes attempts until one succeeds, `retry` gives up, or the caller
+    // cancels its subscription.
+    //
+    // `retry.run` isn't used because the wait between its attempts can't be
+    // stopped, so a timer would outlive a cancelled subscription.
+    Future<Stream<Map<String, dynamic>>> attemptWithRetries(
+      String? encodedBody,
+    ) async {
+      final delays = retry.delays().iterator;
+      while (true) {
+        try {
+          return await attempt(encodedBody);
+        } on Exception catch (e) {
+          // Don't retry a failure after the caller stopped listening.
+          if (isCancelled) return const Stream.empty();
+          if (!retry.isRetryable(e) || !delays.moveNext()) rethrow;
+        }
+        // Wait before the next attempt, unless the caller cancels first.
+        final waited = Completer<void>();
+        final timer = Timer(delays.current, waited.complete);
+        cancelCurrent = () {
+          cancelCurrent = null;
+          timer.cancel();
+          if (!waited.isCompleted) waited.complete();
+          return null;
+        };
+        await waited.future;
+        cancelCurrent = null;
+      }
+    }
+
     Future<void> startRequest() async {
       try {
         final encodedBody = body?._asEncodedJson;
-        final messages = await retry.run(() async {
-          try {
-            return await attempt(encodedBody);
-          } on Exception {
-            // Don't retry a failure after the caller stopped listening:
-            // `ExponentialRetry` would wait before noticing.
-            if (isCancelled) return const Stream<Never>.empty();
-            rethrow;
-          }
-        });
+        final messages = await attemptWithRetries(encodedBody);
         if (isCancelled) return;
         // `addStream` forwards cancellation to `messages` from here on.
         cancelCurrent = null;
         await controller.addStream(messages, cancelOnError: true);
       } catch (e, s) {
-        // Once the caller stops listening, there is nobody to report to.
-        if (!isCancelled) controller.addError(e, s);
+        if (!isCancelled) {
+          controller.addError(e, s);
+        } else if (e is! Exception) {
+          // Once the caller stops listening, there is nobody to report an
+          // `Exception` to. An `Error` is a bug, so it is still reported, as
+          // an uncaught error.
+          rethrow;
+        }
       } finally {
         if (!isCancelled) unawaited(controller.close());
       }
@@ -506,6 +555,22 @@ class ServiceClient {
   /// Cancels [response], which releases its connection.
   static Future<void> _cancel(http.StreamedResponse response) =>
       response.stream.listen(null).cancel();
+
+  /// Whether [response] has a 2xx status code.
+  static bool _isSuccess(http.BaseResponse response) =>
+      response.statusCode >= 200 && response.statusCode < 300;
+
+  /// The MIME type of [response], or `null` if its `content-type` header is
+  /// missing or malformed.
+  static String? _mimeType(http.BaseResponse response) {
+    final contentType = response.headers['content-type'];
+    if (contentType == null) return null;
+    try {
+      return http.MediaType.parse(contentType).mimeType;
+    } on FormatException {
+      return null;
+    }
+  }
 
   /// [stream], failing with a [TimeoutException] if nothing arrives for
   /// [timeout].
@@ -557,6 +622,9 @@ class ServiceClient {
           unawaited(controller.close());
         },
       );
+      // `stream` ended as soon as it was listened to, so there is nothing
+      // left to pause, resume or cancel.
+      if (controller.isClosed) return;
       controller
         ..onPause = () {
           timer?.cancel();

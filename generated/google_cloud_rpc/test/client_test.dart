@@ -91,6 +91,23 @@ final class _FakeAsyncClient extends BaseClient {
   }
 }
 
+/// A stream that is done as soon as it is listened to.
+///
+/// Streams usually deliver their events, including the done event, in a later
+/// microtask.
+final class _DoneOnListenStream<T> extends Stream<T> {
+  @override
+  StreamSubscription<T> listen(
+    void Function(T event)? onData, {
+    Function? onError,
+    void Function()? onDone,
+    bool? cancelOnError,
+  }) {
+    onDone?.call();
+    return Stream<T>.empty().listen(null);
+  }
+}
+
 void main() {
   group('non-streaming', () {
     group('requests without body', () {
@@ -623,6 +640,41 @@ void main() {
       );
       expect(cancelled, isTrue, reason: 'the response should be cancelled');
     });
+
+    for (final (description, headers) in [
+      ('missing', <String, String>{}),
+      ('malformed', {'content-type': 'not a content type'}),
+    ]) {
+      test('200 response, $description content type', () async {
+        var cancelled = false;
+        final service = ServiceClient(
+          client: MockClient.streaming(
+            (request, body) async => StreamedResponse(
+              StreamController<List<int>>(
+                onCancel: () => cancelled = true,
+              ).stream,
+              200,
+              headers: headers,
+            ),
+          ),
+        );
+
+        await expectLater(
+          service.postStreaming(sampleUrl, enableSse: true),
+          emitsInOrder([
+            emitsError(
+              isA<ServiceException>().having(
+                (e) => e.message,
+                'message',
+                startsWith('Unsupported content type'),
+              ),
+            ),
+            emitsDone,
+          ]),
+        );
+        expect(cancelled, isTrue, reason: 'the response should be cancelled');
+      });
+    }
 
     test('200 response, empty event stream response', () async {
       final service = ServiceClient(
@@ -1224,6 +1276,84 @@ void main() {
           reason: 'nothing reads a response that starts after the timeout',
         );
       });
+
+      fakeAsyncTest('times out if the body of an error response does not '
+          'complete', (async) {
+        var cancelled = false;
+        final responseBody = StreamController<List<int>>(
+          onCancel: () => cancelled = true,
+        )..add(utf8.encode('{"error":'));
+        final service = fakeAsyncService(
+          MockClient.streaming(
+            (request, body) async => StreamedResponse(responseBody.stream, 503),
+          ),
+        );
+
+        expect(
+          service.get(sampleUrl, timeout: timeout),
+          throwsA(isA<TimeoutException>()),
+        );
+        async.elapse(timeout);
+        expect(cancelled, isTrue, reason: 'the response should be cancelled');
+      });
+
+      fakeAsyncTest('cancels an error response that starts after the timeout', (
+        async,
+      ) {
+        var cancelled = false;
+        final service = fakeAsyncService(
+          MockClient.streaming((request, body) async {
+            await Future<void>.delayed(timeout * 2);
+            return StreamedResponse(
+              StreamController<List<int>>(
+                onCancel: () => cancelled = true,
+              ).stream,
+              503,
+            );
+          }),
+        );
+
+        expect(
+          service.get(sampleUrl, timeout: timeout),
+          throwsA(isA<TimeoutException>()),
+        );
+        async.elapse(timeout * 2);
+        expect(
+          cancelled,
+          isTrue,
+          reason: 'nothing reads a response that starts after the timeout',
+        );
+      });
+
+      fakeAsyncTest('stops retrying when the retry budget runs out', (async) {
+        var requestCount = 0;
+        final service = fakeAsyncService(
+          MockClient((request) {
+            ++requestCount;
+            return Completer<Response>().future;
+          }),
+        );
+
+        expect(
+          service.get(
+            sampleUrl,
+            timeout: timeout,
+            retry: const ExponentialRetry.onCodes([
+              Code.deadlineExceeded,
+            ], maxRetryInterval: Duration(seconds: 10)),
+          ),
+          throwsA(isA<TimeoutException>()),
+        );
+        // No attempt starts later than `maxRetryInterval` plus the longest
+        // wait between attempts, which is 60 seconds by default.
+        async.elapse(const Duration(minutes: 2));
+        expect(requestCount, greaterThan(1));
+        expect(
+          async.pendingTimersDebugString,
+          isEmpty,
+          reason: 'there should be no more attempts',
+        );
+      });
     });
 
     group('streaming', () {
@@ -1766,6 +1896,151 @@ void main() {
         ]);
         expect(done, isTrue);
       });
+
+      for (final (name, requestTimeout, streamWaitTimeout) in [
+        ('timeout', timeout, null),
+        ('streamWaitTimeout', null, timeout),
+      ]) {
+        fakeAsyncTest('times out if the body of an error response does not '
+            'complete within `$name`', (async) {
+          var cancelled = false;
+          final responseBody = StreamController<List<int>>(
+            onCancel: () => cancelled = true,
+          )..add(utf8.encode('{"error":'));
+          final service = fakeAsyncService(
+            MockClient.streaming(
+              (request, body) async =>
+                  StreamedResponse(responseBody.stream, 503),
+            ),
+          );
+
+          expect(
+            service.getStreaming(
+              sampleUrl,
+              enableSse: true,
+              timeout: requestTimeout,
+              streamWaitTimeout: streamWaitTimeout,
+            ),
+            emitsInOrder([
+              emitsError(
+                isA<TimeoutException>().having(
+                  (e) => e.duration,
+                  'duration',
+                  timeout,
+                ),
+              ),
+              emitsDone,
+            ]),
+          );
+          async.elapse(timeout);
+          expect(cancelled, isTrue, reason: 'the response should be cancelled');
+        });
+      }
+
+      fakeAsyncTest('streamWaitTimeout does not limit the whole of an error '
+          'response', (async) {
+        // The whole body takes longer than `streamWaitTimeout` to arrive, but
+        // no part of it does.
+        Stream<List<int>> errorBody() async* {
+          for (final chunk in ['the ', 'whole ', 'body']) {
+            await Future<void>.delayed(timeout ~/ 2);
+            yield utf8.encode(chunk);
+          }
+        }
+
+        final service = fakeAsyncService(
+          MockClient.streaming(
+            (request, body) async => StreamedResponse(errorBody(), 400),
+          ),
+        );
+
+        expect(
+          service.getStreaming(
+            sampleUrl,
+            enableSse: true,
+            streamWaitTimeout: timeout,
+          ),
+          emitsInOrder([
+            emitsError(
+              isA<BadRequestException>().having(
+                (e) => e.message,
+                'message',
+                'the whole body',
+              ),
+            ),
+            emitsDone,
+          ]),
+        );
+        async.elapse(timeout * 2);
+      });
+
+      fakeAsyncTest('stops retrying when the retry budget runs out', (async) {
+        var requestCount = 0;
+        final service = fakeAsyncService(
+          MockClient((request) {
+            ++requestCount;
+            return Completer<Response>().future;
+          }),
+        );
+
+        expect(
+          service.getStreaming(
+            sampleUrl,
+            enableSse: true,
+            timeout: timeout,
+            retry: const ExponentialRetry.onCodes([
+              Code.deadlineExceeded,
+            ], maxRetryInterval: Duration(seconds: 10)),
+          ),
+          emitsInOrder([emitsError(isA<TimeoutException>()), emitsDone]),
+        );
+        // No attempt starts later than `maxRetryInterval` plus the longest
+        // wait between attempts, which is 60 seconds by default.
+        async.elapse(const Duration(minutes: 2));
+        expect(requestCount, greaterThan(1));
+        expect(
+          async.pendingTimersDebugString,
+          isEmpty,
+          reason: 'there should be no more attempts',
+        );
+      });
+
+      fakeAsyncTest('streamWaitTimeout allows a response that ends as soon as '
+          'it is listened to', (async) {
+        // Not `fakeAsyncService`, which delivers the end of the response in a
+        // later microtask.
+        final service = ServiceClient(
+          client: MockClient.streaming(
+            (request, body) async => StreamedResponse(
+              _DoneOnListenStream(),
+              200,
+              headers: sseHeaders,
+            ),
+          ),
+        );
+
+        final received = <Object>[];
+        var done = false;
+        service
+            .getStreaming(
+              sampleUrl,
+              enableSse: true,
+              streamWaitTimeout: timeout,
+            )
+            .listen(
+              received.add,
+              onError: received.add,
+              onDone: () => done = true,
+            );
+        async.flushMicrotasks();
+        expect(received, isEmpty);
+        expect(done, isTrue);
+        expect(
+          async.pendingTimersDebugString,
+          isEmpty,
+          reason: 'no timer should outlive the request',
+        );
+      });
     });
   });
 
@@ -1990,6 +2265,103 @@ void main() {
 
       await subscription.cancel();
       expect(cancelled, isTrue, reason: 'the response should be cancelled');
+    });
+
+    fakeAsyncTest('while waiting to retry stops waiting', (async) {
+      var requestCount = 0;
+      final service = fakeAsyncService(
+        MockClient((request) async {
+          ++requestCount;
+          return Response('', 503);
+        }),
+      );
+
+      // Not `neverCalled`, whose timers would be counted as pending below.
+      final received = <Object>[];
+      final subscription = service
+          .getStreaming(
+            sampleUrl,
+            enableSse: true,
+            retry: const ExponentialRetry.onCodes([Code.unavailable]),
+          )
+          .listen(received.add, onError: received.add);
+      // Let the first attempt fail, so that the request waits to retry it.
+      async.flushMicrotasks();
+      expect(requestCount, 1);
+      expect(
+        async.pendingTimers,
+        hasLength(1),
+        reason: 'the request should be waiting to retry',
+      );
+
+      unawaited(subscription.cancel());
+      async.flushMicrotasks();
+      expect(
+        async.pendingTimersDebugString,
+        isEmpty,
+        reason: 'the wait to retry should stop',
+      );
+      async.elapse(const Duration(minutes: 5));
+      expect(requestCount, 1, reason: 'there should be no more attempts');
+      expect(received, isEmpty);
+    });
+
+    test('while reading an error response cancels the response', () async {
+      final reading = Completer<void>();
+      var cancelled = false;
+      final errorBody = StreamController<List<int>>(
+        onListen: reading.complete,
+        onCancel: () => cancelled = true,
+      )..add(utf8.encode('{"error":'));
+      final service = ServiceClient(
+        client: MockClient.streaming(
+          (request, body) async => StreamedResponse(errorBody.stream, 503),
+        ),
+      );
+
+      final subscription = service
+          .getStreaming(sampleUrl, enableSse: true)
+          .listen(neverCalled);
+      await reading.future;
+      await subscription.cancel();
+      expect(cancelled, isTrue, reason: 'the response should be cancelled');
+    });
+
+    test('ignores an Exception but not an Error from a request that fails '
+        'after cancelling', () async {
+      Future<List<Object>> failAfterCancellingWith(Object error) async {
+        final requested = Completer<void>();
+        final respond = Completer<void>();
+        final uncaught = <Object>[];
+
+        await runZonedGuarded(() async {
+          final service = ServiceClient(
+            client: MockClient((request) async {
+              requested.complete();
+              await respond.future;
+              return Future.error(error);
+            }),
+          );
+
+          final subscription = service
+              .getStreaming(sampleUrl, enableSse: true)
+              .listen(neverCalled);
+          await requested.future;
+          await subscription.cancel();
+          respond.complete();
+          await pumpEventQueue();
+        }, (error, _) => uncaught.add(error));
+
+        return uncaught;
+      }
+
+      expect(
+        await failAfterCancellingWith(ClientException('io failure')),
+        isEmpty,
+      );
+      expect(await failAfterCancellingWith(StateError('client bug')), [
+        isA<StateError>(),
+      ]);
     });
   });
 }

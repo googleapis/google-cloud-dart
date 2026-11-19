@@ -65,3 +65,9 @@
   `generated/google_cloud_rpc/test/client_test.dart`). Code under test must
   read the time from `package:clock` (`clock.now()`, `clock.stopwatch()`)
   rather than `DateTime.now()` or `Stopwatch`, which fake time doesn't control.
+  `const Clock()` always reads the system time too, so don't use it as the
+  default value of a `Clock` parameter (see `_zoneClock` in
+  `generated/google_cloud_rpc/lib/src/retry.dart`).
+- In a `fakeAsyncTest`, `neverCalled` creates timers that only fire when the
+  test elapses time. Until then they are in `async.pendingTimers`, and a test
+  that never elapses time waits for them until it times out.
