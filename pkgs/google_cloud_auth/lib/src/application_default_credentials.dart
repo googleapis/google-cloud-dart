@@ -116,7 +116,10 @@ Future<GoogleCredentials> _loadCredentialsFile(
   final type = json['type'];
   if (type == 'service_account') {
     try {
-      return await ServiceAccountCredentials.fromServiceAccountInfo(json);
+      return await ServiceAccountCredentials.fromServiceAccountInfo(
+        json,
+        clientFactory: clientFactory,
+      );
     } on FormatException catch (e, stackTrace) {
       throw CredentialException(
         'Failed to parse service account credentials from ${file.path}: '
