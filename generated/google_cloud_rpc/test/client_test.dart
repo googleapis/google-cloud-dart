@@ -47,50 +47,6 @@ final apiBaseHeaderPattern =
 void fakeAsyncTest(String description, void Function(FakeAsync async) body) =>
     test(description, () => fakeAsync(body));
 
-/// A [ServiceClient] that sends its requests with [client], for use in a
-/// [fakeAsyncTest].
-ServiceClient fakeAsyncService(Client client) =>
-    ServiceClient(client: _FakeAsyncClient(client));
-
-/// Gives each response from a [Client] a body whose cancellation completes on
-/// fake time.
-///
-/// Cancelling a subscription usually returns an already-completed future from
-/// the root zone. When a [StreamController]'s `onCancel` returns that future,
-/// as `ServiceClient`'s timeouts do, the stream waits for it on the real event
-/// loop before it delivers an error or done event, and a [fakeAsyncTest]
-/// doesn't run the real event loop.
-final class _FakeAsyncClient extends BaseClient {
-  final Client _client;
-
-  _FakeAsyncClient(this._client);
-
-  @override
-  Future<StreamedResponse> send(BaseRequest request) async {
-    final response = await _client.send(request);
-    final body = StreamController<List<int>>(sync: true);
-    body.onListen = () {
-      final subscription = response.stream.listen(
-        body.add,
-        onError: body.addError,
-        onDone: body.close,
-      );
-      body
-        ..onPause = subscription.pause
-        ..onResume = subscription.resume
-        ..onCancel = () {
-          unawaited(subscription.cancel());
-          return Future<void>.value();
-        };
-    };
-    return StreamedResponse(
-      body.stream,
-      response.statusCode,
-      headers: response.headers,
-    );
-  }
-}
-
 /// A stream that is done as soon as it is listened to.
 ///
 /// Streams usually deliver their events, including the done event, in a later
@@ -1081,8 +1037,8 @@ void main() {
       setUp(() {
         requests = [];
         responses = [];
-        service = fakeAsyncService(
-          MockClient((request) {
+        service = ServiceClient(
+          client: MockClient((request) {
             requests.add(request);
             final response = responses.removeAt(0);
             return response == null
@@ -1195,8 +1151,8 @@ void main() {
         final responseBody = StreamController<List<int>>(
           onCancel: () => cancelled = true,
         )..add(utf8.encode('{"fruit":'));
-        final service = fakeAsyncService(
-          MockClient.streaming(
+        final service = ServiceClient(
+          client: MockClient.streaming(
             (request, body) async => StreamedResponse(responseBody.stream, 200),
           ),
         );
@@ -1210,8 +1166,8 @@ void main() {
       });
 
       fakeAsyncTest('includes the wait for the response to start', (async) {
-        final service = fakeAsyncService(
-          MockClient.streaming((request, body) async {
+        final service = ServiceClient(
+          client: MockClient.streaming((request, body) async {
             // Half of `timeout` passes before the response starts.
             await Future<void>.delayed(timeout ~/ 2);
             return StreamedResponse(StreamController<List<int>>().stream, 200);
@@ -1235,8 +1191,8 @@ void main() {
 
       fakeAsyncTest('ignores failures after timeout', (async) {
         final response = Completer<Response>();
-        final service = fakeAsyncService(
-          MockClient((request) => response.future),
+        final service = ServiceClient(
+          client: MockClient((request) => response.future),
         );
 
         expect(
@@ -1253,8 +1209,8 @@ void main() {
         async,
       ) {
         var cancelled = false;
-        final service = fakeAsyncService(
-          MockClient.streaming((request, body) async {
+        final service = ServiceClient(
+          client: MockClient.streaming((request, body) async {
             await Future<void>.delayed(timeout * 2);
             return StreamedResponse(
               StreamController<List<int>>(
@@ -1283,8 +1239,8 @@ void main() {
         final responseBody = StreamController<List<int>>(
           onCancel: () => cancelled = true,
         )..add(utf8.encode('{"error":'));
-        final service = fakeAsyncService(
-          MockClient.streaming(
+        final service = ServiceClient(
+          client: MockClient.streaming(
             (request, body) async => StreamedResponse(responseBody.stream, 503),
           ),
         );
@@ -1301,8 +1257,8 @@ void main() {
         async,
       ) {
         var cancelled = false;
-        final service = fakeAsyncService(
-          MockClient.streaming((request, body) async {
+        final service = ServiceClient(
+          client: MockClient.streaming((request, body) async {
             await Future<void>.delayed(timeout * 2);
             return StreamedResponse(
               StreamController<List<int>>(
@@ -1327,8 +1283,8 @@ void main() {
 
       fakeAsyncTest('stops retrying when the retry budget runs out', (async) {
         var requestCount = 0;
-        final service = fakeAsyncService(
-          MockClient((request) {
+        final service = ServiceClient(
+          client: MockClient((request) {
             ++requestCount;
             return Completer<Response>().future;
           }),
@@ -1360,7 +1316,7 @@ void main() {
       fakeAsyncTest('times out if the response does not start by `timeout`', (
         async,
       ) {
-        final service = fakeAsyncService(MockClient(noResponse));
+        final service = ServiceClient(client: MockClient(noResponse));
 
         expect(
           service.getStreaming(sampleUrl, enableSse: true, timeout: timeout),
@@ -1379,7 +1335,7 @@ void main() {
       fakeAsyncTest(
         'times out if the response does not start by `streamWaitTimeout`',
         (async) {
-          final service = fakeAsyncService(MockClient(noResponse));
+          final service = ServiceClient(client: MockClient(noResponse));
 
           expect(
             service.getStreaming(
@@ -1406,7 +1362,7 @@ void main() {
 
       fakeAsyncTest('the shorter of timeout and streamWaitTimeout limits the '
           'wait for the response to start', (async) {
-        final service = fakeAsyncService(MockClient(noResponse));
+        final service = ServiceClient(client: MockClient(noResponse));
 
         for (final (requestTimeout, streamWaitTimeout) in [
           (null, timeout),
@@ -1438,8 +1394,8 @@ void main() {
       fakeAsyncTest('an attempt that timed out is retried until the '
           'response starts', (async) {
         var count = 0;
-        final service = fakeAsyncService(
-          MockClient((request) {
+        final service = ServiceClient(
+          client: MockClient((request) {
             ++count;
             return count == 1
                 ? Completer<Response>()
@@ -1482,8 +1438,8 @@ void main() {
         final events = StreamController<List<int>>(
           onCancel: () => cancelled = true,
         )..add(utf8.encode('data: {"fruit":"apple"}\n'));
-        final service = fakeAsyncService(
-          MockClient.streaming((request, body) async {
+        final service = ServiceClient(
+          client: MockClient.streaming((request, body) async {
             ++count;
             return StreamedResponse(events.stream, 200, headers: sseHeaders);
           }),
@@ -1528,8 +1484,8 @@ void main() {
         timer = Timer.periodic(timeout ~/ 5, (_) {
           events.add(utf8.encode(': keepalive\n'));
         });
-        final service = fakeAsyncService(
-          MockClient.streaming(
+        final service = ServiceClient(
+          client: MockClient.streaming(
             (request, body) async =>
                 StreamedResponse(events.stream, 200, headers: sseHeaders),
           ),
@@ -1563,8 +1519,8 @@ void main() {
         final events = StreamController<List<int>>(
           onCancel: () => cancelled = true,
         );
-        final service = fakeAsyncService(
-          MockClient.streaming((request, body) async {
+        final service = ServiceClient(
+          client: MockClient.streaming((request, body) async {
             await Future<void>.delayed(timeout * 2);
             return StreamedResponse(events.stream, 200, headers: sseHeaders);
           }),
@@ -1586,8 +1542,8 @@ void main() {
           'cancelled and retried', (async) {
         var count = 0;
         var cancelled = false;
-        final service = fakeAsyncService(
-          MockClient.streaming((request, body) async {
+        final service = ServiceClient(
+          client: MockClient.streaming((request, body) async {
             ++count;
             return StreamedResponse(
               count == 1
@@ -1667,8 +1623,8 @@ void main() {
         timer = Timer.periodic(const Duration(milliseconds: 7), (_) {
           events.add(utf8.encode('data: {"fruit":"apple"}\n'));
         });
-        final service = fakeAsyncService(
-          MockClient.streaming(
+        final service = ServiceClient(
+          client: MockClient.streaming(
             (request, body) async =>
                 StreamedResponse(events.stream, 200, headers: sseHeaders),
           ),
@@ -1700,8 +1656,8 @@ void main() {
 
       fakeAsyncTest('timeout includes the wait for the response to '
           'start', (async) {
-        final service = fakeAsyncService(
-          MockClient.streaming((request, body) async {
+        final service = ServiceClient(
+          client: MockClient.streaming((request, body) async {
             // Half of `timeout` passes before the response starts.
             await Future<void>.delayed(timeout ~/ 2);
             return StreamedResponse(
@@ -1745,8 +1701,8 @@ void main() {
         timer = Timer.periodic(timeout ~/ 10, (_) {
           events.add(utf8.encode('data: {"fruit":"banana"}\n'));
         });
-        final service = fakeAsyncService(
-          MockClient.streaming(
+        final service = ServiceClient(
+          client: MockClient.streaming(
             (request, body) async =>
                 StreamedResponse(events.stream, 200, headers: sseHeaders),
           ),
@@ -1787,8 +1743,8 @@ void main() {
       });
 
       fakeAsyncTest('timeout stops when the response ends', (async) {
-        final service = fakeAsyncService(
-          MockClient(
+        final service = ServiceClient(
+          client: MockClient(
             // With the newline, the event arrives before the end of the
             // response.
             (request) async =>
@@ -1829,8 +1785,8 @@ void main() {
           }
         }
 
-        final service = fakeAsyncService(
-          MockClient.streaming(
+        final service = ServiceClient(
+          client: MockClient.streaming(
             (request, body) async =>
                 StreamedResponse(events(), 200, headers: sseHeaders),
           ),
@@ -1855,8 +1811,8 @@ void main() {
           'towards streamWaitTimeout', (async) {
         final events = StreamController<List<int>>()
           ..add(utf8.encode('data: {"fruit":"apple"}\n'));
-        final service = fakeAsyncService(
-          MockClient.streaming(
+        final service = ServiceClient(
+          client: MockClient.streaming(
             (request, body) async =>
                 StreamedResponse(events.stream, 200, headers: sseHeaders),
           ),
@@ -1907,8 +1863,8 @@ void main() {
           final responseBody = StreamController<List<int>>(
             onCancel: () => cancelled = true,
           )..add(utf8.encode('{"error":'));
-          final service = fakeAsyncService(
-            MockClient.streaming(
+          final service = ServiceClient(
+            client: MockClient.streaming(
               (request, body) async =>
                   StreamedResponse(responseBody.stream, 503),
             ),
@@ -1948,8 +1904,8 @@ void main() {
           }
         }
 
-        final service = fakeAsyncService(
-          MockClient.streaming(
+        final service = ServiceClient(
+          client: MockClient.streaming(
             (request, body) async => StreamedResponse(errorBody(), 400),
           ),
         );
@@ -1976,8 +1932,8 @@ void main() {
 
       fakeAsyncTest('stops retrying when the retry budget runs out', (async) {
         var requestCount = 0;
-        final service = fakeAsyncService(
-          MockClient((request) {
+        final service = ServiceClient(
+          client: MockClient((request) {
             ++requestCount;
             return Completer<Response>().future;
           }),
@@ -2007,8 +1963,6 @@ void main() {
 
       fakeAsyncTest('streamWaitTimeout allows a response that ends as soon as '
           'it is listened to', (async) {
-        // Not `fakeAsyncService`, which delivers the end of the response in a
-        // later microtask.
         final service = ServiceClient(
           client: MockClient.streaming(
             (request, body) async => StreamedResponse(
@@ -2050,8 +2004,8 @@ void main() {
 
     fakeAsyncTest('while waiting for the response stops retrying', (async) {
       var requests = 0;
-      final service = fakeAsyncService(
-        MockClient((request) {
+      final service = ServiceClient(
+        client: MockClient((request) {
           ++requests;
           return Completer<Response>().future;
         }),
@@ -2269,8 +2223,8 @@ void main() {
 
     fakeAsyncTest('while waiting to retry stops waiting', (async) {
       var requestCount = 0;
-      final service = fakeAsyncService(
-        MockClient((request) async {
+      final service = ServiceClient(
+        client: MockClient((request) async {
           ++requestCount;
           return Response('', 503);
         }),
