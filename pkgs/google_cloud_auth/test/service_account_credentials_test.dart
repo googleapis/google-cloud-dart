@@ -281,17 +281,51 @@ void main() {
           );
         });
 
-        test('accepts empty universe_domain and private_key_id', () async {
+        test('accepts empty token_uri', () async {
+          final requests = <http.Request>[];
+          final creds = await ServiceAccountCredentials.fromServiceAccountInfo({
+            ..._minimalInfo,
+            'token_uri': '',
+          }, clientFactory: _recordingClientFactory(requests));
+
+          expect(creds.tokenUri, _defaultTokenUri);
+          expect(await creds.accessToken(), 'access-token-1');
+          expect(requests.single.url, _defaultTokenUri);
+        });
+
+        test('accepts whitespace-only token_uri', () async {
+          final requests = <http.Request>[];
+          final creds = await ServiceAccountCredentials.fromServiceAccountInfo({
+            ..._minimalInfo,
+            'token_uri': '  \t\n ',
+          }, clientFactory: _recordingClientFactory(requests));
+
+          expect(creds.tokenUri, _defaultTokenUri);
+          expect(await creds.accessToken(), 'access-token-1');
+          expect(requests.single.url, _defaultTokenUri);
+        });
+
+        test('accepts empty universe_domain', () async {
+          final requests = <http.Request>[];
+          final creds = await ServiceAccountCredentials.fromServiceAccountInfo({
+            ..._minimalInfo,
+            'universe_domain': '',
+          }, clientFactory: _recordingClientFactory(requests));
+
+          expect(creds.universeDomain, 'googleapis.com');
+          expect(creds.tokenUri, _defaultTokenUri);
+          expect(await creds.accessToken(), 'access-token-1');
+          expect(requests.single.url, _defaultTokenUri);
+        });
+
+        test('accepts empty private_key_id', () async {
           final requests = <http.Request>[];
           final creds = await ServiceAccountCredentials.fromServiceAccountInfo({
             ..._minimalInfo,
             'private_key_id': '',
-            'universe_domain': '',
           }, clientFactory: _recordingClientFactory(requests));
 
           expect(creds.privateKeyId, isNull);
-          expect(creds.universeDomain, 'googleapis.com');
-          expect(creds.tokenUri, _defaultTokenUri);
           expect(await creds.accessToken(), 'access-token-1');
           expect(requests.single.url, _defaultTokenUri);
         });

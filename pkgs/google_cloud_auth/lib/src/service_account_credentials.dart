@@ -96,6 +96,9 @@ final class ServiceAccountCredentials extends GoogleCredentials
   final String? quotaProjectId;
 
   /// The OAuth2 token endpoint URI.
+  ///
+  /// Used to construct access tokens in the default universe domain but unused
+  /// outside of it where self-signed JWTs are used instead.
   final Uri tokenUri;
 
   /// The OAuth 2.0 scopes requested by [accessToken].
@@ -116,11 +119,12 @@ final class ServiceAccountCredentials extends GoogleCredentials
     required this.projectId,
     required this.quotaProjectId,
     required this.tokenUri,
-    required this.scopes,
+    required Iterable<String> scopes,
     required FutureOr<http.Client> Function() clientFactory,
     required super.universeDomain,
   }) : _privateKey = privateKey,
-       _clientFactory = clientFactory;
+       _clientFactory = clientFactory,
+       scopes = List.of(scopes);
 
   /// Creates a [ServiceAccountCredentials] instance from a service account
   /// JSON file at [path].
@@ -137,7 +141,7 @@ final class ServiceAccountCredentials extends GoogleCredentials
   /// the web.
   static Future<ServiceAccountCredentials> fromServiceAccountFile(
     String path, {
-    List<String>? scopes,
+    Iterable<String>? scopes,
     FutureOr<http.Client> Function()? clientFactory,
   }) async {
     final contents = await readCredentialFileAsString(path);
@@ -160,7 +164,7 @@ final class ServiceAccountCredentials extends GoogleCredentials
   /// return a new client on every call.
   static Future<ServiceAccountCredentials> fromServiceAccountInfo(
     Map<String, dynamic> info, {
-    List<String>? scopes,
+    Iterable<String>? scopes,
     FutureOr<http.Client> Function()? clientFactory,
   }) async {
     final type = info['type'];
@@ -181,7 +185,11 @@ final class ServiceAccountCredentials extends GoogleCredentials
         Credentials.defaultUniverseDomain;
 
     final tokenUriStr = optionalString(info, 'token_uri');
-    final tokenUri = tokenUriStr != null ? Uri.parse(tokenUriStr) : null;
+    final tokenUri = switch (tokenUriStr) {
+      null => null,
+      final uriStr when uriStr.trim().isEmpty => null,
+      _ => Uri.parse(tokenUriStr),
+    };
 
     return fromPkcs8(
       clientEmail: clientEmail,
@@ -209,7 +217,7 @@ final class ServiceAccountCredentials extends GoogleCredentials
   /// return a new client on every call.
   static Future<ServiceAccountCredentials> fromServiceAccountString(
     String jsonString, {
-    List<String>? scopes,
+    Iterable<String>? scopes,
     FutureOr<http.Client> Function()? clientFactory,
   }) => fromServiceAccountInfo(
     decodeJsonObject(jsonString),
@@ -236,7 +244,7 @@ final class ServiceAccountCredentials extends GoogleCredentials
     String? quotaProjectId,
     Uri? tokenUri,
     String universeDomain = Credentials.defaultUniverseDomain,
-    List<String>? scopes,
+    Iterable<String>? scopes,
     FutureOr<http.Client> Function()? clientFactory,
   }) async {
     if (scopes != null && scopes.isEmpty) {
@@ -296,7 +304,7 @@ final class ServiceAccountCredentials extends GoogleCredentials
       'iss': clientEmail,
       'scope': scopes.join(' '),
       // Go's `x/oauth2` and `package:googleapis_auth` backdate 'iat' to
-      // handle the case where the local clock is ahead of the endpoint's clock.
+      // handle the case where the local clock is ahead of the endpoints clock.
       // Since Java and Python do not do this, it is likely that endpoint's are
       // tolerant of clock skew.
       'iat': issuedAt,
