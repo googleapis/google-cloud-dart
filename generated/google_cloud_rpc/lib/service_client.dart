@@ -14,8 +14,8 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:typed_data' show BytesBuilder;
 
-import 'package:clock/clock.dart';
 import 'package:google_cloud_protobuf/protobuf.dart' show JsonEncodable;
 import 'package:http/http.dart' as http;
 
@@ -280,14 +280,12 @@ class ServiceClient {
 
   /// Sends a single request, completing when the response starts.
   ///
-  /// The response may have any status code: see [_isSuccess]. The caller reads
-  /// the body of an error response, so that the caller's timeouts and
-  /// cancellation apply to that body too.
+  /// The response may have any status code: [_Call] handles it.
   Future<http.StreamedResponse> _send(
     Uri url,
     String method,
     String? encodedBody,
-  ) async {
+  ) {
     // `send` finalizes the request, so every attempt needs a new one.
     final request = http.Request(method, url);
     if (encodedBody != null) {
@@ -311,35 +309,13 @@ class ServiceClient {
   }) {
     _checkTimeout(timeout, 'timeout');
     final encodedBody = body?._asEncodedJson;
-    return retry.run(() async {
-      // `timeout` limits the whole attempt, including reading the response.
-      final stopwatch = clock.stopwatch()..start();
-      final response = await _sendWithTimeout(
-        url,
-        method,
-        encodedBody,
-        timeout,
-      );
-      final bytes = _withTimeouts(
-        response.stream,
-        url,
-        timeout: timeout,
-        stopwatch: stopwatch,
-      );
-      if (!_isSuccess(response)) {
-        String? errorBody;
-        try {
-          errorBody = await utf8.decodeStream(bytes);
-        } on FormatException {
-          // The response body is not valid UTF-8.
-        }
-        throw ServiceException.fromHttpResponse(response, errorBody);
-      }
-      final responseBody = await utf8.decodeStream(bytes);
-      return responseBody.isEmpty
-          ? {}
-          : jsonDecode(responseBody) as Map<String, dynamic>;
-    });
+    return _Call(
+      url,
+      () => _send(url, method, encodedBody),
+      retry,
+      timeout: timeout,
+      isStreaming: false,
+    ).messages.single;
   }
 
   /// Make a request that streams its results using
@@ -357,198 +333,18 @@ class ServiceClient {
   }) {
     _checkTimeout(timeout, 'timeout');
     _checkTimeout(streamWaitTimeout, 'streamWaitTimeout');
-
-    final controller = StreamController<Map<String, dynamic>>();
-    // Whether the caller has cancelled its subscription to `controller.stream`.
-    var isCancelled = false;
-    // Cancels what the request is waiting for before `controller.addStream`
-    // takes over: an in-flight response body, or the wait before the next
-    // attempt. `null` while waiting for response headers.
-    Future<void>? Function()? cancelCurrent;
-
-    // Before the response starts, `timeout` and `streamWaitTimeout` limit the
-    // same wait, so only the shorter one matters.
-    final startTimeout = _minDuration(timeout, streamWaitTimeout);
     final requestUrl = enableSse ? _makeUrlStreaming(url) : url;
-
-    // Reads all of `bytes`, the body of a response, as a string. Returns
-    // `null` if the caller cancels its subscription first.
-    Future<String?> readBody(Stream<List<int>> bytes) async {
-      final done = Completer<String?>();
-      final buffer = StringBuffer();
-      final subscription = utf8.decoder
-          .bind(
-            _withTimeouts(bytes, requestUrl, stallTimeout: streamWaitTimeout),
-          )
-          .listen(
-            buffer.write,
-            onError: done.completeError,
-            onDone: () => done.complete(buffer.toString()),
-            cancelOnError: true,
-          );
-      cancelCurrent = () {
-        if (!done.isCompleted) done.complete(null);
-        return subscription.cancel();
-      };
-      try {
-        return await done.future;
-      } finally {
-        cancelCurrent = null;
-      }
-    }
-
-    Future<void> attempt(String? encodedBody) async {
-      // `timeout` limits the whole attempt, including any part of an event
-      // stream that is read after the response starts.
-      final stopwatch = clock.stopwatch()..start();
-      final response = await _sendWithTimeout(
-        requestUrl,
-        method,
-        encodedBody,
-        startTimeout,
-      );
-      if (isCancelled) {
-        _cancel(response).ignoreExceptions();
-        return;
-      }
-      final bytes = _withTimeouts(
-        response.stream,
-        requestUrl,
-        timeout: timeout,
-        stopwatch: stopwatch,
-      );
-      if (!_isSuccess(response)) {
-        String? errorBody;
-        try {
-          errorBody = await readBody(bytes);
-        } on FormatException {
-          // The response body is not valid UTF-8.
-        }
-        if (isCancelled) return;
-        throw ServiceException.fromHttpResponse(response, errorBody);
-      }
-      switch (_mimeType(response)) {
-        case 'application/json':
-          // The server responded with a non-streaming response, which should
-          // be a list of JSON objects. The whole body is read as part of the
-          // attempt, so a failure while reading it can be retried.
-          final responseBody = await readBody(bytes);
-          if (responseBody == null) return;
-          final json = (jsonDecode(responseBody) as List)
-              .cast<Map<String, dynamic>>();
-          await controller.addStream(
-            Stream.fromIterable(json),
-            cancelOnError: true,
-          );
-        case 'text/event-stream':
-          // The server responded with an event stream, which is what we
-          // expect. Events reach the caller as they arrive, so failures after
-          // this point are not retried.
-          await controller.addStream(
-            _withTimeouts(
-              _decodeEvents(bytes),
-              requestUrl,
-              stallTimeout: streamWaitTimeout,
-            ),
-            cancelOnError: true,
-          );
-        default:
-          _cancel(response).ignoreExceptions();
-          throw ServiceException(
-            'Unsupported content type: ${response.headers['content-type']}',
-            statusCode: response.statusCode,
-          );
-      }
-    }
-
-    Future<void> startRequest() async {
-      try {
-        final encodedBody = body?._asEncodedJson;
-        final delays = retry.delays().iterator;
-        while (!isCancelled) {
-          try {
-            await attempt(encodedBody);
-            return;
-          } on Exception catch (e) {
-            // `retry.run` isn't used because its wait between attempts can't
-            // be stopped, so a timer would outlive a cancelled subscription.
-            if (isCancelled || !retry.isRetryable(e) || !delays.moveNext()) {
-              rethrow;
-            }
-          }
-          // Wait before the next attempt, unless the caller cancels first.
-          final waited = Completer<void>();
-          final timer = Timer(delays.current, waited.complete);
-          cancelCurrent = () {
-            timer.cancel();
-            if (!waited.isCompleted) waited.complete();
-            return null;
-          };
-          await waited.future;
-          cancelCurrent = null;
-        }
-      } catch (e, s) {
-        if (!isCancelled) {
-          controller.addError(e, s);
-        } else if (e is! Exception) {
-          // Once the caller stops listening, there is nobody to report an
-          // `Exception` to. An `Error` is a bug, so it is still reported, as
-          // an uncaught error.
-          rethrow;
-        }
-      } finally {
-        if (!isCancelled) unawaited(controller.close());
-      }
-    }
-
-    controller.onListen = () {
-      controller.onCancel = () {
-        isCancelled = true;
-        final cancel = cancelCurrent;
-        cancelCurrent = null;
-        return cancel?.call();
-      };
-      unawaited(startRequest());
-    };
-    return controller.stream;
+    // Encoded when the stream is listened to, like everything else.
+    late final encodedBody = body?._asEncodedJson;
+    return _Call(
+      requestUrl,
+      () => _send(requestUrl, method, encodedBody),
+      retry,
+      timeout: timeout,
+      stallTimeout: streamWaitTimeout,
+      isStreaming: true,
+    ).messages;
   }
-
-  /// Sends a request, failing with a [TimeoutException] if the response
-  /// doesn't start within [timeout].
-  ///
-  /// A request that times out isn't aborted, so it may keep running in the
-  /// background. If its response starts anyway, the response is cancelled,
-  /// because nothing will read it.
-  Future<http.StreamedResponse> _sendWithTimeout(
-    Uri url,
-    String method,
-    String? encodedBody,
-    Duration? timeout,
-  ) {
-    final pendingResponse = _send(url, method, encodedBody);
-    if (timeout == null) return pendingResponse;
-    // TODO: Use `http.Abortable` when it is widely available. In practice,
-    // `client` will almost always be a `package:googleapis_auth` wrapper, which
-    // does not forward `Abortable.abortTrigger` to the underlying client.
-    return pendingResponse.timeout(
-      timeout,
-      onTimeout: () {
-        pendingResponse.then(_cancel).ignoreExceptions();
-        throw TimeoutException(
-          'Request to $url did not return any data',
-          timeout,
-        );
-      },
-    );
-  }
-
-  /// Cancels [response], which releases its connection.
-  static Future<void> _cancel(http.StreamedResponse response) =>
-      response.stream.listen(null).cancel();
-
-  /// Whether [response] has a 2xx status code.
-  static bool _isSuccess(http.BaseResponse response) =>
-      response.statusCode >= 200 && response.statusCode < 300;
 
   /// The MIME type of [response], or `null` if its `content-type` header is
   /// missing or malformed.
@@ -562,114 +358,21 @@ class ServiceClient {
     }
   }
 
-  /// [stream], failing with a [TimeoutException] if nothing arrives for
-  /// [stallTimeout], or if [stream] isn't done by the time [stopwatch] reaches
-  /// [timeout].
-  ///
-  /// Time spent with the subscription paused counts towards [timeout], and
-  /// doesn't count towards [stallTimeout]. After a timeout, the subscription
-  /// to [stream] is cancelled.
-  static Stream<T> _withTimeouts<T>(
-    Stream<T> stream,
-    Uri url, {
-    Duration? timeout,
-    Stopwatch? stopwatch,
-    Duration? stallTimeout,
-  }) {
-    if (timeout == null && stallTimeout == null) return stream;
-
-    final controller = StreamController<T>();
-    controller.onListen = () {
-      StreamSubscription<T>? subscription;
-      Timer? deadlineTimer;
-      Timer? stallTimer;
-
-      void fail(String message, Duration duration) {
-        deadlineTimer?.cancel();
-        stallTimer?.cancel();
-        subscription?.cancel().ignoreExceptions();
-        // `subscription` is already cancelled; give downstream `cancelOnError`
-        // a completed future in the current zone.
-        controller
-          ..onCancel = Future<void>.value
-          ..addError(TimeoutException(message, duration))
-          ..close();
-      }
-
-      void resetStallTimer() {
-        if (stallTimeout == null) return;
-        stallTimer?.cancel();
-        stallTimer = Timer(
-          stallTimeout,
-          () => fail('No data received from $url', stallTimeout),
-        );
-      }
-
-      subscription = stream.listen(
-        (event) {
-          stallTimer?.cancel();
-          controller.add(event);
-          if (!controller.isPaused) resetStallTimer();
-        },
-        onError: (Object error, StackTrace stackTrace) {
-          stallTimer?.cancel();
-          controller.addError(error, stackTrace);
-          if (!controller.isPaused) resetStallTimer();
-        },
-        onDone: () {
-          deadlineTimer?.cancel();
-          stallTimer?.cancel();
-          // `stream` is already done, so `close` need not cancel
-          // `subscription`.
-          controller.onCancel = null;
-          unawaited(controller.close());
-        },
-      );
-      // `stream` ended as soon as it was listened to, so there is nothing left
-      // to time out, pause, resume or cancel.
-      if (controller.isClosed) return;
-      if (timeout != null) {
-        // `Timer` treats a negative duration as zero. Even if no time remains,
-        // data that's already buffered arrives before the timer fires. There is
-        // no reason to go out of our way to throw away a response that has
-        // already arrived.
-        deadlineTimer = Timer(
-          timeout - stopwatch!.elapsed,
-          () => fail('Request to $url did not complete', timeout),
-        );
-      }
-      if (!controller.isPaused) resetStallTimer();
-      controller
-        ..onPause = () {
-          stallTimer?.cancel();
-          subscription!.pause();
-        }
-        ..onResume = () {
-          subscription!.resume();
-          resetStallTimer();
-        }
-        ..onCancel = () {
-          deadlineTimer?.cancel();
-          stallTimer?.cancel();
-          return subscription!.cancel();
-        };
-    };
-    return controller.stream;
-  }
-
   static void _checkTimeout(Duration? timeout, String name) {
     if (timeout != null && timeout <= Duration.zero) {
       throw ArgumentError.value(timeout, name, 'must be positive');
     }
   }
 
-  static Stream<Map<String, dynamic>> _decodeEvents(Stream<List<int>> bytes) {
+  static Stream<Map<String, dynamic>> _decodeEvents(
+    http.StreamedResponse response,
+  ) {
     // Google APIs only generate "data" events.
     // The SSE specification does not require a space after the colon but
     // Google APIs always generate one.
     const dataPrefix = 'data: ';
-    return utf8.decoder
-        .bind(bytes)
+    return response.stream
+        .toStringStream()
         .transform(const LineSplitter())
         .where((line) => line.startsWith(dataPrefix))
         .map(
@@ -686,6 +389,327 @@ class ServiceClient {
   }
 }
 
+/// A request, from its first attempt to the end of its response.
+///
+/// A call makes attempts until one succeeds, or fails in a way that `retry`
+/// doesn't retry. An attempt first waits for its response to start. Then it
+/// either reads the whole body of the response (an error, a single message or
+/// a JSON list of messages), or it forwards the events of the response as
+/// they arrive.
+///
+/// An attempt fails with a [TimeoutException] if it isn't over within
+/// `timeout`, or if the server shows no sign of life for `stallTimeout` while
+/// the listener isn't paused.
+///
+/// Everything that can happen to a call is handled by a method that runs
+/// without waiting for anything, so the state of the call can't change under
+/// it. [_attempt] tells what an abandoned attempt was waiting for that the
+/// attempt is over.
+final class _Call {
+  final Uri _url;
+  final Future<http.StreamedResponse> Function() _send;
+  final RetryRunner _retry;
+  final Duration? _timeout;
+  final Duration? _stallTimeout;
+
+  /// Whether the response is a stream of messages, rather than one message.
+  final bool _isStreaming;
+
+  final _controller = StreamController<Map<String, dynamic>>();
+
+  /// How long to wait before each attempt after the first.
+  late final Iterator<Duration> _delays;
+
+  /// Identifies the attempt that is in progress, if any.
+  Object? _attempt;
+
+  /// Whether the attempt that is in progress is retried if it fails.
+  var _canRetry = true;
+
+  /// Whether the response of the attempt that is in progress has started.
+  var _hasResponse = false;
+
+  /// Reads the response of the attempt that is in progress.
+  StreamSubscription<Object?>? _subscription;
+
+  Timer? _deadlineTimer;
+  Timer? _stallTimer;
+  Timer? _retryTimer;
+
+  _Call(
+    this._url,
+    this._send,
+    this._retry, {
+    required Duration? timeout,
+    Duration? stallTimeout,
+    required bool isStreaming,
+  }) : _timeout = timeout,
+       _stallTimeout = stallTimeout,
+       _isStreaming = isStreaming {
+    _controller.onListen = () {
+      _controller
+        ..onPause = _pause
+        ..onResume = _resume
+        ..onCancel = _cancel;
+      _delays = _retry.delays().iterator;
+      _startAttempt();
+    };
+  }
+
+  /// The messages of the response: exactly one, unless the call is streaming.
+  ///
+  /// The first attempt starts when this is listened to.
+  Stream<Map<String, dynamic>> get messages => _controller.stream;
+
+  void _startAttempt() {
+    final attempt = _attempt = Object();
+    _canRetry = true;
+    _hasResponse = false;
+    if (_timeout case final timeout?) {
+      _deadlineTimer = Timer(
+        timeout,
+        () => _timeOut(
+          _hasResponse
+              ? 'Request to $_url did not complete'
+              : 'Request to $_url did not return any data',
+          timeout,
+        ),
+      );
+    }
+    _restartStallTimer();
+    // TODO: Use `http.Abortable` when it is widely available. In practice,
+    // `client` will almost always be a `package:googleapis_auth` wrapper, which
+    // does not forward `Abortable.abortTrigger` to the underlying client.
+    unawaited(
+      Future.sync(_send).then(
+        (response) {
+          if (identical(attempt, _attempt)) {
+            _run(() => _onResponse(response));
+          } else {
+            // The request of an abandoned attempt isn't aborted, so its
+            // response may start anyway. Nothing will read it.
+            _cancelResponse(response).ignoreExceptions();
+          }
+        },
+        onError: (Object error, StackTrace stackTrace) {
+          if (identical(attempt, _attempt)) {
+            _fail(error, stackTrace);
+          } else if (error is! Exception) {
+            // Nobody waits for an abandoned attempt, so there is nobody to
+            // report an `Exception` to. An `Error` is a bug, so it is still
+            // reported, as an uncaught error.
+            Error.throwWithStackTrace(error, stackTrace);
+          }
+        },
+      ),
+    );
+  }
+
+  void _onResponse(http.StreamedResponse response) {
+    _hasResponse = true;
+    _restartStallTimer();
+    if (response.statusCode < 200 || response.statusCode >= 300) {
+      _readBody(response, (bytes) {
+        String? responseBody;
+        try {
+          responseBody = utf8.decode(bytes);
+        } on FormatException {
+          // The response body is not valid UTF-8.
+        }
+        throw ServiceException.fromHttpResponse(response, responseBody);
+      });
+    } else if (!_isStreaming) {
+      _readBody(response, (bytes) {
+        final responseBody = utf8.decode(bytes);
+        _controller.add(
+          responseBody.isEmpty
+              ? {}
+              : jsonDecode(responseBody) as Map<String, dynamic>,
+        );
+        _succeed();
+      });
+    } else {
+      switch (ServiceClient._mimeType(response)) {
+        case 'application/json':
+          // The server responded with a non-streaming response, which should
+          // be a list of JSON objects. The whole body is read as part of the
+          // attempt, so a failure while reading it can be retried.
+          _readBody(response, (bytes) {
+            (jsonDecode(utf8.decode(bytes)) as List)
+                .cast<Map<String, dynamic>>()
+                .forEach(_controller.add);
+            _succeed();
+          });
+        case 'text/event-stream':
+          // The server responded with an event stream, which is what we
+          // expect. Events reach the caller as they arrive, so failures after
+          // this point are not retried.
+          _canRetry = false;
+          _listen(
+            ServiceClient._decodeEvents(response),
+            _controller.add,
+            _succeed,
+          );
+        default:
+          _cancelResponse(response).ignoreExceptions();
+          throw ServiceException(
+            'Unsupported content type: ${response.headers['content-type']}',
+            statusCode: response.statusCode,
+          );
+      }
+    }
+  }
+
+  /// Reads the whole body of [response], and then calls [onDone] with it.
+  void _readBody(
+    http.StreamedResponse response,
+    void Function(List<int> bytes) onDone,
+  ) {
+    final body = BytesBuilder(copy: false);
+    _listen(
+      // An empty chunk doesn't show that the server is still sending the body.
+      response.stream.where((chunk) => chunk.isNotEmpty),
+      body.add,
+      () => onDone(body.takeBytes()),
+    );
+  }
+
+  /// Listens to [stream], which is read from the response of the attempt that
+  /// is in progress.
+  ///
+  /// The attempt fails if [stream] has an error, or if [onDone] throws.
+  void _listen<T>(
+    Stream<T> stream,
+    void Function(T event) onData,
+    void Function() onDone,
+  ) {
+    final attempt = _attempt;
+    bool isOver() => !identical(attempt, _attempt);
+    final subscription = stream.listen(
+      (event) {
+        if (isOver()) return;
+        onData(event);
+        _restartStallTimer();
+      },
+      onError: (Object error, StackTrace stackTrace) {
+        if (!isOver()) _fail(error, stackTrace);
+      },
+      onDone: () {
+        if (isOver()) return;
+        _subscription = null;
+        _run(onDone);
+      },
+    );
+    if (isOver()) {
+      // `stream` ended, and with it the attempt, as soon as it was listened
+      // to.
+      subscription.cancel().ignoreExceptions();
+    } else {
+      _subscription = subscription;
+      if (_controller.isPaused) subscription.pause();
+    }
+  }
+
+  void _pause() {
+    _stallTimer?.cancel();
+    // The response is paused a microtask later, so that it can first deliver
+    // what it has already scheduled. If the response is done after the event
+    // that the listener is handling, then the attempt ends now, rather than
+    // being able to time out while the listener is paused.
+    scheduleMicrotask(() {
+      final subscription = _subscription;
+      if (subscription != null &&
+          !subscription.isPaused &&
+          _controller.isPaused) {
+        subscription.pause();
+      }
+    });
+  }
+
+  void _resume() {
+    _subscription?.resume();
+    _restartStallTimer();
+  }
+
+  Future<void>? _cancel() {
+    _retryTimer?.cancel();
+    // Unlike `_endAttempt`, this tells the listener whether the response was
+    // cancelled successfully.
+    final subscription = _subscription;
+    _subscription = null;
+    _endAttempt();
+    return subscription?.cancel();
+  }
+
+  /// Ends the call, after the attempt that is in progress succeeded.
+  void _succeed() {
+    _endAttempt();
+    unawaited(_controller.close());
+  }
+
+  /// Ends the attempt that is in progress, which failed with [error].
+  ///
+  /// Makes another attempt if `retry` says so. Otherwise, the call fails.
+  void _fail(Object error, StackTrace stackTrace) {
+    _endAttempt();
+    if (_canRetry &&
+        error is Exception &&
+        _retry.isRetryable(error) &&
+        _delays.moveNext()) {
+      _retryTimer = Timer(_delays.current, _startAttempt);
+    } else {
+      _controller.addError(error, stackTrace);
+      unawaited(_controller.close());
+    }
+  }
+
+  void _timeOut(String message, Duration duration) =>
+      _fail(TimeoutException(message, duration), StackTrace.current);
+
+  /// Abandons the attempt that is in progress, if any: stops its timers, and
+  /// stops reading its response.
+  void _endAttempt() {
+    _attempt = null;
+    _deadlineTimer?.cancel();
+    _stallTimer?.cancel();
+    _subscription?.cancel().ignoreExceptions();
+    _subscription = null;
+  }
+
+  /// Runs [action] as part of the attempt that is in progress, which fails if
+  /// [action] throws.
+  void _run(void Function() action) {
+    try {
+      action();
+    } catch (e, s) {
+      _fail(e, s);
+    }
+  }
+
+  /// Restarts the clock of `stallTimeout`, because the server showed a sign of
+  /// life, or because the listener resumed.
+  void _restartStallTimer() {
+    final stallTimeout = _stallTimeout;
+    if (stallTimeout == null || _attempt == null || _controller.isPaused) {
+      return;
+    }
+    _stallTimer?.cancel();
+    _stallTimer = Timer(
+      stallTimeout,
+      () => _timeOut(
+        _hasResponse
+            ? 'No data received from $_url'
+            : 'Request to $_url did not return any data',
+        stallTimeout,
+      ),
+    );
+  }
+}
+
+/// Cancels [response], which releases its connection.
+Future<void> _cancelResponse(http.StreamedResponse response) =>
+    response.stream.listen(null).cancel();
+
 extension on JsonEncodable {
   String get _asEncodedJson => jsonEncode(toJson());
 }
@@ -694,10 +718,4 @@ extension on Future<void> {
   void ignoreExceptions() {
     unawaited(catchError((_) {}, test: (e) => e is Exception));
   }
-}
-
-Duration? _minDuration(Duration? d1, Duration? d2) {
-  if (d1 == null) return d2;
-  if (d2 == null) return d1;
-  return d1 <= d2 ? d1 : d2;
 }
