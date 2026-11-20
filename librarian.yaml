@@ -450,6 +450,7 @@ libraries:
       - test/exceptions_test.dart
       - test/retry_test.dart
       - test/status_test.dart
+      - test/timeout_test.dart
       - lib/src/rpc.p.dart
     dart:
       dependencies: clock,googleapis_auth,http,meta
