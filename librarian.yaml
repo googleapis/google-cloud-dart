@@ -439,6 +439,7 @@ libraries:
     copyright_year: "2025"
     keep:
       - CHANGELOG.md
+      - STATE_MACHINE.md
       - lib/exceptions.dart
       - lib/retry.dart
       - lib/service_client.dart
