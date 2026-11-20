@@ -13,14 +13,19 @@
 // limitations under the License.
 
 import 'package:google_cloud_auth/google_cloud_auth.dart';
+import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
 import 'package:test/test.dart';
 
 final class FakeCredentials extends OAuth2Credentials {
-  final accessTokenCalls = <({bool forceRefresh})>[];
+  final accessTokenCalls = <({bool forceRefresh, http.Client client})>[];
 
   @override
-  Future<String> accessToken({bool forceRefresh = false}) async {
-    accessTokenCalls.add((forceRefresh: forceRefresh));
+  Future<String> accessToken({
+    required http.Client client,
+    bool forceRefresh = false,
+  }) async {
+    accessTokenCalls.add((forceRefresh: forceRefresh, client: client));
     return 'abc123';
   }
 }
@@ -28,17 +33,25 @@ final class FakeCredentials extends OAuth2Credentials {
 void main() {
   group('OAuth2Credentials', () {
     test('requestMetadata without forceRefresh', () async {
+      final client = MockClient(
+        (_) async => throw StateError('unexpected HTTP request'),
+      );
       final creds = FakeCredentials();
-      expect(await creds.requestMetadata(), {
+      expect(await creds.requestMetadata(client: client), {
         'authorization': ['Bearer abc123'],
       });
-      expect(creds.accessTokenCalls, [(forceRefresh: false)]);
+      expect(creds.accessTokenCalls, [(forceRefresh: false, client: client)]);
     });
 
-    test('requestMetadata with forceRefresh', () async {
-      expect(await FakeCredentials().requestMetadata(), {
+    test('requestMetadata forwards forceRefresh and client', () async {
+      final client = MockClient(
+        (_) async => throw StateError('unexpected HTTP request'),
+      );
+      final creds = FakeCredentials();
+      expect(await creds.requestMetadata(forceRefresh: true, client: client), {
         'authorization': ['Bearer abc123'],
       });
+      expect(creds.accessTokenCalls, [(forceRefresh: true, client: client)]);
     });
   });
 }

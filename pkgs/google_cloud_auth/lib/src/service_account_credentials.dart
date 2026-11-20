@@ -17,7 +17,6 @@
 /// - https://github.com/googleapis/google-cloud-python/blob/main/packages/google-auth/google/oauth2/service_account.py
 library;
 
-import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
@@ -107,9 +106,8 @@ final class ServiceAccountCredentials extends GoogleCredentials
   final List<String> scopes;
 
   final RsassaPkcs1V15PrivateKey _privateKey;
-  final FutureOr<http.Client> Function() _clientFactory;
 
-  late final _accessTokenCache = AccessTokenCache(_fetchAccessToken);
+  final _accessTokenCache = AccessTokenCache();
 
   ServiceAccountCredentials._({
     required this.clientEmail,
@@ -120,10 +118,8 @@ final class ServiceAccountCredentials extends GoogleCredentials
     required this.quotaProjectId,
     required this.tokenUri,
     required Iterable<String> scopes,
-    required FutureOr<http.Client> Function() clientFactory,
     required super.universeDomain,
   }) : _privateKey = privateKey,
-       _clientFactory = clientFactory,
        scopes = List.of(scopes);
 
   /// Creates a [ServiceAccountCredentials] instance from a service account
@@ -133,23 +129,14 @@ final class ServiceAccountCredentials extends GoogleCredentials
   /// be empty. If omitted, `https://www.googleapis.com/auth/cloud-platform` is
   /// requested.
   ///
-  /// If provided, [clientFactory] is called to create the [http.Client]s used
-  /// to make requests. Each client it returns is closed after use, so it must
-  /// return a new client on every call.
-  ///
   /// Throws a [CredentialException] if reading [path] fails or when running on
   /// the web.
   static Future<ServiceAccountCredentials> fromServiceAccountFile(
     String path, {
     Iterable<String>? scopes,
-    FutureOr<http.Client> Function()? clientFactory,
   }) async {
     final contents = await readCredentialFileAsString(path);
-    return fromServiceAccountString(
-      contents,
-      scopes: scopes,
-      clientFactory: clientFactory,
-    );
+    return fromServiceAccountString(contents, scopes: scopes);
   }
 
   /// Creates a [ServiceAccountCredentials] instance from parsed service
@@ -158,14 +145,9 @@ final class ServiceAccountCredentials extends GoogleCredentials
   /// [scopes] are the OAuth 2.0 scopes requested by [accessToken], and must not
   /// be empty. If omitted, `https://www.googleapis.com/auth/cloud-platform` is
   /// requested.
-  ///
-  /// If provided, [clientFactory] is called to create the [http.Client]s used
-  /// to make requests. Each client it returns is closed after use, so it must
-  /// return a new client on every call.
   static Future<ServiceAccountCredentials> fromServiceAccountInfo(
     Map<String, dynamic> info, {
     Iterable<String>? scopes,
-    FutureOr<http.Client> Function()? clientFactory,
   }) async {
     final type = info['type'];
     if (type != 'service_account') {
@@ -201,7 +183,6 @@ final class ServiceAccountCredentials extends GoogleCredentials
       tokenUri: tokenUri,
       universeDomain: universeDomain,
       scopes: scopes,
-      clientFactory: clientFactory,
     );
   }
 
@@ -211,19 +192,10 @@ final class ServiceAccountCredentials extends GoogleCredentials
   /// [scopes] are the OAuth 2.0 scopes requested by [accessToken], and must not
   /// be empty. If omitted, `https://www.googleapis.com/auth/cloud-platform` is
   /// requested.
-  ///
-  /// If provided, [clientFactory] is called to create the [http.Client]s used
-  /// to make requests. Each client it returns is closed after use, so it must
-  /// return a new client on every call.
   static Future<ServiceAccountCredentials> fromServiceAccountString(
     String jsonString, {
     Iterable<String>? scopes,
-    FutureOr<http.Client> Function()? clientFactory,
-  }) => fromServiceAccountInfo(
-    decodeJsonObject(jsonString),
-    scopes: scopes,
-    clientFactory: clientFactory,
-  );
+  }) => fromServiceAccountInfo(decodeJsonObject(jsonString), scopes: scopes);
 
   /// Creates a [ServiceAccountCredentials] instance from a PKCS#8 private key
   /// PEM string.
@@ -231,10 +203,6 @@ final class ServiceAccountCredentials extends GoogleCredentials
   /// [scopes] are the OAuth 2.0 scopes requested by [accessToken], and must not
   /// be empty. If omitted, `https://www.googleapis.com/auth/cloud-platform` is
   /// requested.
-  ///
-  /// If provided, [clientFactory] is called to create the [http.Client]s used
-  /// to make requests. Each client it returns is closed after use, so it must
-  /// return a new client on every call.
   static Future<ServiceAccountCredentials> fromPkcs8({
     required String clientEmail,
     required String privateKeyPkcs8,
@@ -245,7 +213,6 @@ final class ServiceAccountCredentials extends GoogleCredentials
     Uri? tokenUri,
     String universeDomain = Credentials.defaultUniverseDomain,
     Iterable<String>? scopes,
-    FutureOr<http.Client> Function()? clientFactory,
   }) async {
     if (scopes != null && scopes.isEmpty) {
       throw ArgumentError.value(scopes, 'scopes', 'Must not be empty');
@@ -272,7 +239,6 @@ final class ServiceAccountCredentials extends GoogleCredentials
       tokenUri:
           tokenUri ?? Uri.https('oauth2.$resolvedUniverseDomain', '/token'),
       scopes: List.unmodifiable(scopes ?? _defaultScopes),
-      clientFactory: clientFactory ?? http.Client.new,
       universeDomain: resolvedUniverseDomain,
     );
   }
@@ -280,23 +246,31 @@ final class ServiceAccountCredentials extends GoogleCredentials
   /// A non-expired current OAuth2 access token for the service account, with
   /// the requested [scopes].
   ///
+  /// [client] is used to fetch the token. [client] must be unauthenticated and
+  /// is not closed by this method.
+  ///
+  /// If the cached token is expired or if [forceRefresh] is `true`, then a new
+  /// token is obtained.
+  ///
   /// In the default universe domain, the token is obtained from [tokenUri] in
   /// exchange for a JWT signed with the private key
   /// ([RFC 7523](https://datatracker.ietf.org/doc/html/rfc7523)). That
   /// exchange is not available in other universe domains, so the token is a
   /// self-signed JWT ([AIP-4111](https://google.aip.dev/auth/4111)) instead.
   ///
-  /// If the cached token is expired or if [forceRefresh] is `true`, then a new
-  /// token is obtained.
-  ///
   /// It is safe to call this method concurrently.
   ///
   /// Throws [CredentialException] on failure.
   @override
-  Future<String> accessToken({bool forceRefresh = false}) =>
-      _accessTokenCache.accessToken(forceRefresh: forceRefresh);
+  Future<String> accessToken({
+    required http.Client client,
+    bool forceRefresh = false,
+  }) => _accessTokenCache.accessToken(
+    () => _fetchAccessToken(client),
+    forceRefresh: forceRefresh,
+  );
 
-  Future<TokenResponse> _fetchAccessToken() async {
+  Future<TokenResponse> _fetchAccessToken(http.Client client) async {
     final issuedAt = DateTime.timestamp().millisecondsSinceEpoch ~/ 1000;
     // See "Construct the JWT claim set":
     // https://developers.google.com/identity/protocols/oauth2/service-account#formingclaimset
@@ -324,9 +298,8 @@ final class ServiceAccountCredentials extends GoogleCredentials
 
     final assertion = await _signJwt({...claims, 'aud': _oauth2TokenAudience});
     return fetchAccessToken(
-      clientFactory: _clientFactory,
       source: tokenUri.toString(),
-      send: (client) => client.post(
+      send: () => client.post(
         tokenUri,
         // See "Request an access token":
         // https://developers.google.com/identity/protocols/oauth2/service-account#makingrequest
@@ -353,9 +326,11 @@ final class ServiceAccountCredentials extends GoogleCredentials
 
   /// Signs [message] using RSASSA-PKCS1-v1_5 with SHA-256 and the private key.
   ///
+  /// [client] is unused because signing is performed locally.
+  ///
   /// Throws [SigningException] on failure.
   @override
-  Future<Uint8List> sign(List<int> message) async {
+  Future<Uint8List> sign(List<int> message, {http.Client? client}) async {
     try {
       return await _privateKey.signBytes(message);
     } on Exception catch (e, stackTrace) {
