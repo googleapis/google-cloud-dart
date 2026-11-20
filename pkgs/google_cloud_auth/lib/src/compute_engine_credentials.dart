@@ -296,11 +296,11 @@ final class ComputeEngineCredentials extends GoogleCredentials
     final requestBody = jsonEncode({'payload': base64.encode(message)});
 
     final ownedClient = client == null ? http.Client() : null;
-    final httpClient = client ?? ownedClient!;
+    client ??= ownedClient!;
     try {
       String token;
       try {
-        token = await accessToken(client: httpClient);
+        token = await accessToken(client: client);
       } on Exception catch (e, stackTrace) {
         throw SigningException(
           'Failed to obtain access token for signing: $e',
@@ -314,7 +314,7 @@ final class ComputeEngineCredentials extends GoogleCredentials
         attempts++;
         final http.Response response;
         try {
-          response = await httpClient.post(
+          response = await client.post(
             signBlobUrl,
             headers: {
               'Authorization': 'Bearer $token',
@@ -351,7 +351,7 @@ final class ComputeEngineCredentials extends GoogleCredentials
         if (response.statusCode == 401 && !refreshedToken) {
           refreshedToken = true;
           try {
-            token = await accessToken(forceRefresh: true, client: httpClient);
+            token = await accessToken(forceRefresh: true, client: client);
           } on Exception catch (e, stackTrace) {
             throw SigningException(
               'Failed to refresh access token for signing: $e',
