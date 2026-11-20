@@ -29,16 +29,18 @@ stateDiagram-v2
         [*] --> AwaitingHeaders
 
         AwaitingHeaders : _hasResponse = false, _canRetry = true
-        AwaitingHeaders : _subscription = null
+        AwaitingHeaders : no response _subscription yet
 
         ReadingErrorBody : non-2xx, _hasResponse = true, _canRetry = true
-        ReadingErrorBody : buffers non-empty chunks in BytesBuilder
+        ReadingErrorBody : _subscription = response bytes (BytesBuilder)
 
         ReadingBufferedBody : 2xx unary or application/json
         ReadingBufferedBody : _hasResponse = true, _canRetry = true
+        ReadingBufferedBody : _subscription = response bytes (BytesBuilder)
 
         StreamingEvents : 2xx text/event-stream (irrevocable)
         StreamingEvents : _hasResponse = true, _canRetry = false
+        StreamingEvents : _subscription = decoded SSE events
 
         AwaitingHeaders --> ReadingErrorBody : non-2xx status
         AwaitingHeaders --> ReadingBufferedBody : 2xx unary or application/json
@@ -100,13 +102,13 @@ attempt lifecycle:
 ```mermaid
 stateDiagram-v2
     Running : _stallTimer runs during an active attempt
-    Running : _subscription delivers data
+    Running : response _subscription delivers data
 
     PausePending : _stallTimer cancelled immediately
-    PausePending : scheduleMicrotask queued for _subscription.pause()
+    PausePending : scheduleMicrotask queued to pause response _subscription
 
     UpstreamPaused : _stallTimer stopped
-    UpstreamPaused : _subscription paused (if attached)
+    UpstreamPaused : response _subscription paused (if attached)
 
     [*] --> Running
     Running --> PausePending : onPause
