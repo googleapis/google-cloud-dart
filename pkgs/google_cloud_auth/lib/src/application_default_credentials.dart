@@ -37,18 +37,17 @@ String? _readEnvironment(String name) => Platform.environment[name];
 
 /// Provides the Application Default Credential from the environment.
 ///
-/// If provided, [client] is used to make metadata server requests. [client]
-/// must be unauthenticated and is not closed by this function. Otherwise, a
-/// temporary [http.Client] is created as needed and closed after use.
+/// [client] is used to make metadata server requests. [client] must be
+/// unauthenticated and is not closed by this function.
 ///
 /// Throws a [CredentialException] if no credentials could be found or loaded.
-Future<GoogleCredentials> defaultCredentials({http.Client? client}) =>
+Future<GoogleCredentials> defaultCredentials({required http.Client client}) =>
     internalDefaultCredentials(client: client);
 
 /// [defaultCredentials] with some extra parameters for testing.
 @internal
 Future<GoogleCredentials> internalDefaultCredentials({
-  http.Client? client,
+  required http.Client client,
   @visibleForTesting
   String? Function(String name) readEnvironment = _readEnvironment,
   @visibleForTesting String? wellKnownFilePath,

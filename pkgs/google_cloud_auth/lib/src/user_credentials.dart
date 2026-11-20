@@ -109,13 +109,12 @@ final class UserCredentials extends GoogleCredentials {
 
   @override
   Future<String> accessToken({
+    required http.Client client,
     bool forceRefresh = false,
-    http.Client? client,
   }) => _accessTokenCache.accessToken(
     () => fetchAccessToken(
-      client: client,
       source: _tokenUri.toString(),
-      send: (c) => c.post(
+      send: () => client.post(
         _tokenUri,
         body: {
           'grant_type': 'refresh_token',

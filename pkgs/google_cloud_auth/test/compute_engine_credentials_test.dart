@@ -24,7 +24,11 @@ import 'package:test/test.dart';
 import 'test_utils.dart';
 
 void main() async {
-  final isOnGce = await ComputeEngineCredentials.isOnComputeEngine();
+  final gceCheckClient = http.Client();
+  final isOnGce = await ComputeEngineCredentials.isOnComputeEngine(
+    client: gceCheckClient,
+  );
+  gceCheckClient.close();
 
   group('ComputeEngineCredentials', () {
     group('create', () {
@@ -448,8 +452,14 @@ void main() async {
         testOn: 'vm',
       );
 
-      test('returns false on browser when no client is provided', () async {
-        expect(await ComputeEngineCredentials.isOnComputeEngine(), isFalse);
+      test('returns false on browser without making HTTP requests', () async {
+        final mockClient = MockClient((request) async {
+          fail('Should not attempt network call');
+        });
+        expect(
+          await ComputeEngineCredentials.isOnComputeEngine(client: mockClient),
+          isFalse,
+        );
       }, testOn: 'browser');
 
       test('returns false when NO_GCE_CHECK is true', () async {
@@ -822,13 +832,16 @@ void main() async {
         tags: ['google-cloud'],
         skip: isOnGce ? null : 'Not running on Google Compute Engine',
         () async {
-          final creds = await ComputeEngineCredentials.create();
+          final client = http.Client();
+          addTearDown(client.close);
+
+          final creds = await ComputeEngineCredentials.create(client: client);
           expect(creds.clientEmail, contains('@'));
 
           final message = utf8.encode(
             'Hello from ComputeEngineCredentials test!',
           );
-          final signature = await creds.sign(message);
+          final signature = await creds.sign(message, client: client);
 
           expect(signature, isNotEmpty);
           expect(signature.length, greaterThan(64));

@@ -16,12 +16,16 @@
 library;
 
 import 'package:google_cloud_auth/google_cloud_auth.dart';
+import 'package:http/testing.dart';
 import 'package:test/test.dart';
 
 void main() {
   test('defaultCredentials throws CredentialException on the web', () async {
+    final mockClient = MockClient(
+      (request) async => fail('Unexpected HTTP request: ${request.url}'),
+    );
     await expectLater(
-      defaultCredentials(),
+      defaultCredentials(client: mockClient),
       throwsA(
         isA<CredentialException>().having(
           (e) => e.message,

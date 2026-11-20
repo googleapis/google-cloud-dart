@@ -17,66 +17,33 @@ import 'dart:convert';
 import 'package:google_cloud_auth/google_cloud_auth.dart';
 import 'package:google_cloud_auth/src/access_token.dart';
 import 'package:http/http.dart' as http;
-import 'package:http/testing.dart';
 import 'package:test/test.dart';
-
-final _tokenUri = Uri.https('oauth2.example.com', '/token');
-
-// TODO(https://github.com/dart-lang/http/issues/2126):
-// Use `MockClient` directly when the issue is fixed. Also expand testing to
-// verify that other classes close their `http.Client`s.
-final class _TrackingClient extends http.BaseClient {
-  final http.Client _inner;
-  bool isClosed = false;
-
-  _TrackingClient(this._inner);
-
-  @override
-  Future<http.StreamedResponse> send(http.BaseRequest request) =>
-      _inner.send(request);
-
-  @override
-  void close() {
-    isClosed = true;
-    _inner.close();
-  }
-}
 
 void main() {
   group('fetchAccessToken', () {
-    test('success and does not close provided client', () async {
-      final client = _TrackingClient(
-        MockClient(
-          (request) async => http.Response(
-            jsonEncode({
-              'access_token': 'test-token',
-              'expires_in': 3599,
-              'token_type': 'Bearer',
-            }),
-            200,
-          ),
-        ),
-      );
+    test('success', () async {
       final response = await fetchAccessToken(
-        client: client,
-        send: (client) => client.get(_tokenUri),
+        send: () async => http.Response(
+          jsonEncode({
+            'access_token': 'test-token',
+            'expires_in': 3599,
+            'token_type': 'Bearer',
+          }),
+          200,
+        ),
         source: 'test endpoint',
       );
 
       expect(response.accessToken, 'test-token');
       expect(response.expiresIn, const Duration(seconds: 3599));
-      expect(client.isClosed, isFalse);
     });
 
     test('truncates fractional expires_in', () async {
       final response = await fetchAccessToken(
-        client: MockClient(
-          (request) async => http.Response(
-            jsonEncode({'access_token': 'test-token', 'expires_in': 3599.9}),
-            200,
-          ),
+        send: () async => http.Response(
+          jsonEncode({'access_token': 'test-token', 'expires_in': 3599.9}),
+          200,
         ),
-        send: (client) => client.get(_tokenUri),
         source: 'test endpoint',
       );
 
@@ -86,10 +53,7 @@ void main() {
     test('throws CredentialException on network error', () async {
       await expectLater(
         fetchAccessToken(
-          client: MockClient(
-            (request) async => throw http.ClientException('Network down'),
-          ),
-          send: (client) => client.get(_tokenUri),
+          send: () async => throw http.ClientException('Network down'),
           source: 'test endpoint',
         ),
         throwsA(
@@ -111,10 +75,7 @@ void main() {
     test('throws CredentialException on HTTP error', () async {
       await expectLater(
         fetchAccessToken(
-          client: MockClient(
-            (request) async => http.Response('{"error": "invalid_grant"}', 400),
-          ),
-          send: (client) => client.get(_tokenUri),
+          send: () async => http.Response('{"error": "invalid_grant"}', 400),
           source: 'test endpoint',
         ),
         throwsA(
@@ -131,10 +92,7 @@ void main() {
     test('truncates long HTTP error bodies', () async {
       await expectLater(
         fetchAccessToken(
-          client: MockClient(
-            (request) async => http.Response('${'a' * 500}${'b' * 500}', 500),
-          ),
-          send: (client) => client.get(_tokenUri),
+          send: () async => http.Response('${'a' * 500}${'b' * 500}', 500),
           source: 'test endpoint',
         ),
         throwsA(
@@ -181,8 +139,7 @@ void main() {
       test('throws CredentialException on $description', () async {
         await expectLater(
           fetchAccessToken(
-            client: MockClient((request) async => http.Response(body, 200)),
-            send: (client) => client.get(_tokenUri),
+            send: () async => http.Response(body, 200),
             source: 'test endpoint',
           ),
           throwsA(

@@ -32,10 +32,8 @@ abstract base class Credentials {
 
   /// Get the current request metadata, refreshing tokens if required.
   ///
-  /// If provided, [client] is used for any HTTP requests needed to refresh
-  /// credentials. [client] must be unauthenticated and is not closed by this
-  /// method. Otherwise, a temporary [http.Client] is created as needed and
-  /// closed after use.
+  /// [client] is used for any HTTP requests needed to refresh credentials.
+  /// [client] must be unauthenticated and is not closed by this method.
   ///
   /// This should be called by the transport layer on each request,
   /// and the data should be populated in headers or other context.
@@ -43,8 +41,8 @@ abstract base class Credentials {
   /// If a quota project is associated with these credentials then
   /// "x-goog-user-project" will be set.
   Future<Map<String, List<String>>> requestMetadata({
+    required http.Client client,
     Uri? uri,
     bool forceRefresh = false,
-    http.Client? client,
   });
 }

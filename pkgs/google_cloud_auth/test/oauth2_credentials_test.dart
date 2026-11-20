@@ -18,12 +18,12 @@ import 'package:http/testing.dart';
 import 'package:test/test.dart';
 
 final class FakeCredentials extends OAuth2Credentials {
-  final accessTokenCalls = <({bool forceRefresh, http.Client? client})>[];
+  final accessTokenCalls = <({bool forceRefresh, http.Client client})>[];
 
   @override
   Future<String> accessToken({
+    required http.Client client,
     bool forceRefresh = false,
-    http.Client? client,
   }) async {
     accessTokenCalls.add((forceRefresh: forceRefresh, client: client));
     return 'abc123';
@@ -32,12 +32,15 @@ final class FakeCredentials extends OAuth2Credentials {
 
 void main() {
   group('OAuth2Credentials', () {
-    test('requestMetadata without forceRefresh or client', () async {
+    test('requestMetadata without forceRefresh', () async {
+      final client = MockClient(
+        (_) async => throw StateError('unexpected HTTP request'),
+      );
       final creds = FakeCredentials();
-      expect(await creds.requestMetadata(), {
+      expect(await creds.requestMetadata(client: client), {
         'authorization': ['Bearer abc123'],
       });
-      expect(creds.accessTokenCalls, [(forceRefresh: false, client: null)]);
+      expect(creds.accessTokenCalls, [(forceRefresh: false, client: client)]);
     });
 
     test('requestMetadata forwards forceRefresh and client', () async {

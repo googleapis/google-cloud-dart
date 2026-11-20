@@ -19,16 +19,17 @@ import 'google_credentials.dart';
 
 /// Provides the Application Default Credential from the environment.
 ///
-/// If provided, [client] is used to make metadata server requests. [client]
-/// must be unauthenticated and is not closed by this function. Otherwise, a
-/// temporary [http.Client] is created as needed and closed after use.
+/// [client] is used to make metadata server requests. [client] must be
+/// unauthenticated and is not closed by this function.
 ///
 /// Always throws a [CredentialException] on the web, where environment
 /// variables and local credential files are unavailable, and where the
 /// Compute Engine metadata server cannot be used (browsers rarely run on
 /// Compute Engine, and the metadata server does not support CORS preflight
 /// requests for the required `Metadata-Flavor` header).
-Future<GoogleCredentials> defaultCredentials({http.Client? client}) async {
+Future<GoogleCredentials> defaultCredentials({
+  required http.Client client,
+}) async {
   throw CredentialException(
     'Application Default Credentials are not supported on the web.',
   );

@@ -806,8 +806,11 @@ void main() {
               privateKeyId: 'key-id-123',
             );
 
+            final client = http.Client();
+            addTearDown(client.close);
+
             await expectLater(
-              creds.accessToken(),
+              creds.accessToken(client: client),
               throwsA(
                 isA<CredentialException>().having(
                   (e) => e.message,

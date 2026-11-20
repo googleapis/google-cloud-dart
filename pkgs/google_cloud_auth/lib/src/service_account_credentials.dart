@@ -246,12 +246,11 @@ final class ServiceAccountCredentials extends GoogleCredentials
   /// A non-expired current OAuth2 access token for the service account, with
   /// the requested [scopes].
   ///
+  /// [client] is used to fetch the token. [client] must be unauthenticated and
+  /// is not closed by this method.
+  ///
   /// If the cached token is expired or if [forceRefresh] is `true`, then a new
   /// token is obtained.
-  ///
-  /// If provided, [client] is used to fetch the token. [client] must be
-  /// unauthenticated and is not closed by this method. Otherwise, a temporary
-  /// [http.Client] is created as needed and closed after use.
   ///
   /// In the default universe domain, the token is obtained from [tokenUri] in
   /// exchange for a JWT signed with the private key
@@ -264,14 +263,14 @@ final class ServiceAccountCredentials extends GoogleCredentials
   /// Throws [CredentialException] on failure.
   @override
   Future<String> accessToken({
+    required http.Client client,
     bool forceRefresh = false,
-    http.Client? client,
   }) => _accessTokenCache.accessToken(
     () => _fetchAccessToken(client),
     forceRefresh: forceRefresh,
   );
 
-  Future<TokenResponse> _fetchAccessToken(http.Client? client) async {
+  Future<TokenResponse> _fetchAccessToken(http.Client client) async {
     final issuedAt = DateTime.timestamp().millisecondsSinceEpoch ~/ 1000;
     // See "Construct the JWT claim set":
     // https://developers.google.com/identity/protocols/oauth2/service-account#formingclaimset
@@ -299,9 +298,8 @@ final class ServiceAccountCredentials extends GoogleCredentials
 
     final assertion = await _signJwt({...claims, 'aud': _oauth2TokenAudience});
     return fetchAccessToken(
-      client: client,
       source: tokenUri.toString(),
-      send: (c) => c.post(
+      send: () => client.post(
         tokenUri,
         // See "Request an access token":
         // https://developers.google.com/identity/protocols/oauth2/service-account#makingrequest

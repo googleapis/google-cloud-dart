@@ -34,13 +34,11 @@ abstract interface class ServiceAccountSigner {
 
   /// Signs [message].
   ///
-  /// If provided, [client] is used for any HTTP requests needed for remote
-  /// signing. [client] must be unauthenticated and is not closed by this
-  /// method. Otherwise, a temporary [http.Client] is created as needed and
-  /// closed after use.
+  /// [client] is used for any HTTP requests needed for remote signing. [client]
+  /// must be unauthenticated and is not closed by this method.
   ///
   /// Throws [SigningException] on failure.
-  Future<Uint8List> sign(List<int> message, {http.Client? client});
+  Future<Uint8List> sign(List<int> message, {required http.Client client});
 }
 
 /// Exception thrown when cryptographic signing fails.

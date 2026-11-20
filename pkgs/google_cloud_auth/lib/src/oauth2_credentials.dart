@@ -31,26 +31,28 @@ abstract base class OAuth2Credentials extends Credentials {
 
   /// A non-expired current OAuth2 access token.
   ///
+  /// [client] is used to fetch the token. [client] must be unauthenticated and
+  /// is not closed by this method.
+  ///
   /// If the cached token is expired or if [forceRefresh] is `true`, then a new
   /// token is fetched.
-  ///
-  /// If provided, [client] is used to fetch the token. [client] must be
-  /// unauthenticated and is not closed by this method. Otherwise, a temporary
-  /// [http.Client] is created as needed and closed after use.
   ///
   /// It is safe to call this method concurrently.
   ///
   /// Throws [CredentialException] on failure.
-  Future<String> accessToken({bool forceRefresh = false, http.Client? client});
+  Future<String> accessToken({
+    required http.Client client,
+    bool forceRefresh = false,
+  });
 
   @override
   Future<Map<String, List<String>>> requestMetadata({
+    required http.Client client,
     Uri? uri,
     bool forceRefresh = false,
-    http.Client? client,
   }) async => {
     'authorization': [
-      'Bearer ${await accessToken(forceRefresh: forceRefresh, client: client)}',
+      'Bearer ${await accessToken(client: client, forceRefresh: forceRefresh)}',
     ],
   };
 }

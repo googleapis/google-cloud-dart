@@ -29,10 +29,6 @@ typedef TokenResponse = ({String accessToken, Duration expiresIn});
 
 /// Requests an access token from a token endpoint.
 ///
-/// If provided, [client] is passed to [send]. [client] must be unauthenticated
-/// and is not closed by this function. Otherwise, a temporary [http.Client] is
-/// created and closed after use.
-///
 /// The response body must be a JSON object with `access_token` and
 /// `expires_in` fields, as returned by OAuth 2.0 token endpoints
 /// ([RFC 6749 §5.1](https://datatracker.ietf.org/doc/html/rfc6749#section-5.1))
@@ -43,18 +39,12 @@ typedef TokenResponse = ({String accessToken, Duration expiresIn});
 /// Throws a [CredentialException] on failure.
 @internal
 Future<TokenResponse> fetchAccessToken({
-  required Future<http.Response> Function(http.Client client) send,
+  required Future<http.Response> Function() send,
   required String source,
-  http.Client? client,
 }) async {
   final http.Response response;
   try {
-    final ownedClient = client == null ? http.Client() : null;
-    try {
-      response = await send(client ?? ownedClient!);
-    } finally {
-      ownedClient?.close();
-    }
+    response = await send();
   } on Exception catch (e, stackTrace) {
     throw CredentialException(
       'Failed to get access token from $source: $e',
