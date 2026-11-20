@@ -17,7 +17,6 @@
 /// - https://github.com/googleapis/google-auth-library-python/blob/main/google/auth/_default.py
 library;
 
-import 'dart:async';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
@@ -38,19 +37,18 @@ String? _readEnvironment(String name) => Platform.environment[name];
 
 /// Provides the Application Default Credential from the environment.
 ///
-/// If provided, [clientFactory] is called to create the [http.Client]s used
-/// to make requests. Each client it returns is closed after use, so it must
-/// return a new client on every call.
+/// If provided, [client] is used to make metadata server requests. [client]
+/// must be unauthenticated and is not closed by this function. Otherwise, a
+/// temporary [http.Client] is created as needed and closed after use.
 ///
 /// Throws a [CredentialException] if no credentials could be found or loaded.
-Future<GoogleCredentials> defaultCredentials({
-  FutureOr<http.Client> Function()? clientFactory,
-}) => internalDefaultCredentials(clientFactory: clientFactory);
+Future<GoogleCredentials> defaultCredentials({http.Client? client}) =>
+    internalDefaultCredentials(client: client);
 
 /// [defaultCredentials] with some extra parameters for testing.
 @internal
 Future<GoogleCredentials> internalDefaultCredentials({
-  FutureOr<http.Client> Function()? clientFactory,
+  http.Client? client,
   @visibleForTesting
   String? Function(String name) readEnvironment = _readEnvironment,
   @visibleForTesting String? wellKnownFilePath,
@@ -65,7 +63,7 @@ Future<GoogleCredentials> internalDefaultCredentials({
         'file that does not exist: $envPath',
       );
     }
-    return await _loadCredentialsFile(file, clientFactory: clientFactory);
+    return await _loadCredentialsFile(file);
   }
 
   // Check well-known credentials file
@@ -74,17 +72,17 @@ Future<GoogleCredentials> internalDefaultCredentials({
   if (adcPath != null) {
     final file = File(adcPath);
     if (await file.exists()) {
-      return await _loadCredentialsFile(file, clientFactory: clientFactory);
+      return await _loadCredentialsFile(file);
     }
   }
 
   // Check Google Compute Engine metadata server
   if (await internalIsOnComputeEngine(
-    clientFactory: clientFactory,
+    client: client,
     readEnvironment: readEnvironment,
   )) {
     return await ComputeEngineCredentials.create(
-      clientFactory: clientFactory,
+      client: client,
       metadataHost: readEnvironment('GCE_METADATA_HOST')?.trim(),
     );
   }
@@ -96,10 +94,7 @@ Future<GoogleCredentials> internalDefaultCredentials({
   );
 }
 
-Future<GoogleCredentials> _loadCredentialsFile(
-  File file, {
-  FutureOr<http.Client> Function()? clientFactory,
-}) async {
+Future<GoogleCredentials> _loadCredentialsFile(File file) async {
   final content = await readCredentialFileAsString(file.path);
 
   final Map<String, dynamic> json;
@@ -116,10 +111,7 @@ Future<GoogleCredentials> _loadCredentialsFile(
   final type = json['type'];
   if (type == 'service_account') {
     try {
-      return await ServiceAccountCredentials.fromServiceAccountInfo(
-        json,
-        clientFactory: clientFactory,
-      );
+      return await ServiceAccountCredentials.fromServiceAccountInfo(json);
     } on FormatException catch (e, stackTrace) {
       throw CredentialException(
         'Failed to parse service account credentials from ${file.path}: '
@@ -138,10 +130,7 @@ Future<GoogleCredentials> _loadCredentialsFile(
 
   if (type == 'authorized_user') {
     try {
-      return UserCredentials.fromAuthorizedUserInfo(
-        json,
-        clientFactory: clientFactory,
-      );
+      return UserCredentials.fromAuthorizedUserInfo(json);
     } on FormatException catch (e, stackTrace) {
       throw CredentialException(
         'Failed to parse user credentials from ${file.path}: ${e.message}',

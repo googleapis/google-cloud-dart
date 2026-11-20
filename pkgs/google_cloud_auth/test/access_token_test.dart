@@ -22,11 +22,31 @@ import 'package:test/test.dart';
 
 final _tokenUri = Uri.https('oauth2.example.com', '/token');
 
+// TODO(https://github.com/dart-lang/http/issues/2126):
+// Use `MockClient` directly when the issue is fixed. Also expand testing to
+// verify that other classes close their `http.Client`s.
+final class _TrackingClient extends http.BaseClient {
+  final http.Client _inner;
+  bool isClosed = false;
+
+  _TrackingClient(this._inner);
+
+  @override
+  Future<http.StreamedResponse> send(http.BaseRequest request) =>
+      _inner.send(request);
+
+  @override
+  void close() {
+    isClosed = true;
+    _inner.close();
+  }
+}
+
 void main() {
   group('fetchAccessToken', () {
-    test('success', () async {
-      final response = await fetchAccessToken(
-        clientFactory: () => MockClient(
+    test('success and does not close provided client', () async {
+      final client = _TrackingClient(
+        MockClient(
           (request) async => http.Response(
             jsonEncode({
               'access_token': 'test-token',
@@ -36,17 +56,21 @@ void main() {
             200,
           ),
         ),
+      );
+      final response = await fetchAccessToken(
+        client: client,
         send: (client) => client.get(_tokenUri),
         source: 'test endpoint',
       );
 
       expect(response.accessToken, 'test-token');
       expect(response.expiresIn, const Duration(seconds: 3599));
+      expect(client.isClosed, isFalse);
     });
 
     test('truncates fractional expires_in', () async {
       final response = await fetchAccessToken(
-        clientFactory: () => MockClient(
+        client: MockClient(
           (request) async => http.Response(
             jsonEncode({'access_token': 'test-token', 'expires_in': 3599.9}),
             200,
@@ -62,7 +86,7 @@ void main() {
     test('throws CredentialException on network error', () async {
       await expectLater(
         fetchAccessToken(
-          clientFactory: () => MockClient(
+          client: MockClient(
             (request) async => throw http.ClientException('Network down'),
           ),
           send: (client) => client.get(_tokenUri),
@@ -84,27 +108,10 @@ void main() {
       );
     });
 
-    test('throws CredentialException when clientFactory throws', () async {
-      await expectLater(
-        fetchAccessToken(
-          clientFactory: () => throw http.ClientException('No client'),
-          send: (client) => client.get(_tokenUri),
-          source: 'test endpoint',
-        ),
-        throwsA(
-          isA<CredentialException>().having(
-            (e) => e.innerException,
-            'innerException',
-            isA<http.ClientException>(),
-          ),
-        ),
-      );
-    });
-
     test('throws CredentialException on HTTP error', () async {
       await expectLater(
         fetchAccessToken(
-          clientFactory: () => MockClient(
+          client: MockClient(
             (request) async => http.Response('{"error": "invalid_grant"}', 400),
           ),
           send: (client) => client.get(_tokenUri),
@@ -124,7 +131,7 @@ void main() {
     test('truncates long HTTP error bodies', () async {
       await expectLater(
         fetchAccessToken(
-          clientFactory: () => MockClient(
+          client: MockClient(
             (request) async => http.Response('${'a' * 500}${'b' * 500}', 500),
           ),
           send: (client) => client.get(_tokenUri),
@@ -174,8 +181,7 @@ void main() {
       test('throws CredentialException on $description', () async {
         await expectLater(
           fetchAccessToken(
-            clientFactory: () =>
-                MockClient((request) async => http.Response(body, 200)),
+            client: MockClient((request) async => http.Response(body, 200)),
             send: (client) => client.get(_tokenUri),
             source: 'test endpoint',
           ),
@@ -210,111 +216,123 @@ void main() {
 
     test('fetches a token on first use', () async {
       var fetchCount = 0;
-      final cache = AccessTokenCache(() async {
+      Future<TokenResponse> fetch() async {
         fetchCount++;
         return (
           accessToken: 'token-$fetchCount',
           expiresIn: const Duration(hours: 1),
         );
-      }, clock: () => now);
+      }
 
-      expect(await cache.accessToken(), 'token-1');
+      final cache = AccessTokenCache(clock: () => now);
+
+      expect(await cache.accessToken(fetch), 'token-1');
       expect(fetchCount, 1);
     });
 
     test('reuses a token until a minute before it expires', () async {
       var fetchCount = 0;
-      final cache = AccessTokenCache(() async {
+      Future<TokenResponse> fetch() async {
         fetchCount++;
         return (
           accessToken: 'token-$fetchCount',
           expiresIn: const Duration(hours: 1),
         );
-      }, clock: () => now);
+      }
 
-      await cache.accessToken();
+      final cache = AccessTokenCache(clock: () => now);
+
+      await cache.accessToken(fetch);
 
       now = now.add(const Duration(minutes: 58, seconds: 59));
-      expect(await cache.accessToken(), 'token-1');
+      expect(await cache.accessToken(fetch), 'token-1');
       expect(fetchCount, 1);
 
       now = now.add(const Duration(seconds: 1));
-      expect(await cache.accessToken(), 'token-2');
+      expect(await cache.accessToken(fetch), 'token-2');
       expect(fetchCount, 2);
     });
 
     test('does not reuse a token that expires within a minute', () async {
       var fetchCount = 0;
-      final cache = AccessTokenCache(() async {
+      Future<TokenResponse> fetch() async {
         fetchCount++;
         return (
           accessToken: 'token-$fetchCount',
           expiresIn: const Duration(seconds: 30),
         );
-      }, clock: () => now);
+      }
 
-      expect(await cache.accessToken(), 'token-1');
-      expect(await cache.accessToken(), 'token-2');
+      final cache = AccessTokenCache(clock: () => now);
+
+      expect(await cache.accessToken(fetch), 'token-1');
+      expect(await cache.accessToken(fetch), 'token-2');
       expect(fetchCount, 2);
     });
 
     test('fetches a new token when forceRefresh is true', () async {
       var fetchCount = 0;
-      final cache = AccessTokenCache(() async {
+      Future<TokenResponse> fetch() async {
         fetchCount++;
         return (
           accessToken: 'token-$fetchCount',
           expiresIn: const Duration(hours: 1),
         );
-      }, clock: () => now);
+      }
 
-      await cache.accessToken();
+      final cache = AccessTokenCache(clock: () => now);
 
-      expect(await cache.accessToken(forceRefresh: true), 'token-2');
+      await cache.accessToken(fetch);
+
+      expect(await cache.accessToken(fetch, forceRefresh: true), 'token-2');
       expect(fetchCount, 2);
     });
 
     test('keeps the cached token when a fetch fails', () async {
       var fail = false;
       var count = 0;
-      final cache = AccessTokenCache(() async {
+      Future<TokenResponse> fetch() async {
         count++;
         if (fail) throw CredentialException('Fetch failed');
         return (
           accessToken: 'token-$count',
           expiresIn: const Duration(hours: 1),
         );
-      }, clock: () => now);
+      }
 
-      expect(await cache.accessToken(), 'token-1');
+      final cache = AccessTokenCache(clock: () => now);
+
+      expect(await cache.accessToken(fetch), 'token-1');
 
       fail = true;
       await expectLater(
-        cache.accessToken(forceRefresh: true),
+        cache.accessToken(fetch, forceRefresh: true),
         throwsA(isA<CredentialException>()),
       );
-      expect(await cache.accessToken(), 'token-1');
+      expect(await cache.accessToken(fetch), 'token-1');
 
       // The failed fetch is not shared with later callers.
       fail = false;
-      expect(await cache.accessToken(forceRefresh: true), 'token-3');
+      expect(await cache.accessToken(fetch, forceRefresh: true), 'token-3');
     });
 
     test('shares an in-flight fetch between concurrent callers', () async {
       var fetchCount = 0;
-      final cache = AccessTokenCache(() async {
+      Future<TokenResponse> fetch() async {
         fetchCount++;
         return (
           accessToken: 'token-$fetchCount',
           expiresIn: const Duration(hours: 1),
         );
-      }, clock: () => now);
+      }
+
+      final cache = AccessTokenCache(clock: () => now);
 
       expect(
         await (
-          cache.accessToken(),
-          cache.accessToken(),
-          cache.accessToken(forceRefresh: true),
+          cache.accessToken(fetch),
+          cache.accessToken(fetch),
+          cache.accessToken(fetch, forceRefresh: true),
         ).wait,
         ('token-1', 'token-1', 'token-1'),
       );

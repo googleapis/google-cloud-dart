@@ -17,6 +17,8 @@
 /// - https://github.com/googleapis/google-auth-library-python/blob/main/google/auth/credentials.py
 library;
 
+import 'package:http/http.dart' as http;
+
 import 'credential_exception.dart';
 import 'credentials.dart';
 
@@ -32,18 +34,23 @@ abstract base class OAuth2Credentials extends Credentials {
   /// If the cached token is expired or if [forceRefresh] is `true`, then a new
   /// token is fetched.
   ///
+  /// If provided, [client] is used to fetch the token. [client] must be
+  /// unauthenticated and is not closed by this method. Otherwise, a temporary
+  /// [http.Client] is created as needed and closed after use.
+  ///
   /// It is safe to call this method concurrently.
   ///
   /// Throws [CredentialException] on failure.
-  Future<String> accessToken({bool forceRefresh = false});
+  Future<String> accessToken({bool forceRefresh = false, http.Client? client});
 
   @override
   Future<Map<String, List<String>>> requestMetadata({
     Uri? uri,
     bool forceRefresh = false,
+    http.Client? client,
   }) async => {
     'authorization': [
-      'Bearer ${await accessToken(forceRefresh: forceRefresh)}',
+      'Bearer ${await accessToken(forceRefresh: forceRefresh, client: client)}',
     ],
   };
 }

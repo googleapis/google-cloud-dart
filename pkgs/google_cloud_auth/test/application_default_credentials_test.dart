@@ -324,7 +324,7 @@ void main() {
         });
       });
 
-      test('uses clientFactory to get access tokens', () async {
+      test('uses client to get access tokens', () async {
         final saFile = File('${tempDir.path}/service_account.json');
         await saFile.writeAsString(
           jsonEncode({
@@ -347,13 +347,14 @@ void main() {
         });
 
         final credentials = await internalDefaultCredentials(
-          clientFactory: () => mockClient,
           readEnvironment: (String name) => null,
           wellKnownFilePath: saFile.path,
         );
 
         expect(
-          await (credentials as ServiceAccountCredentials).accessToken(),
+          await (credentials as ServiceAccountCredentials).accessToken(
+            client: mockClient,
+          ),
           'service-account-access-token',
         );
       }, skip: canUseWebCrypto ? null : 'Requires Dart 3.13 or later');
@@ -425,7 +426,7 @@ void main() {
         );
       });
 
-      test('uses clientFactory to get access tokens', () async {
+      test('uses client to get access tokens', () async {
         final userFile = File(
           '${tempDir.path}/application_default_credentials.json',
         );
@@ -443,13 +444,14 @@ void main() {
         });
 
         final credentials = await internalDefaultCredentials(
-          clientFactory: () => mockClient,
           readEnvironment: (String name) => null,
           wellKnownFilePath: userFile.path,
         );
 
         expect(
-          await (credentials as UserCredentials).accessToken(),
+          await (credentials as UserCredentials).accessToken(
+            client: mockClient,
+          ),
           'user-access-token',
         );
       });
@@ -519,7 +521,7 @@ void main() {
     );
 
     final credentials = await internalDefaultCredentials(
-      clientFactory: () => mockClient,
+      client: mockClient,
       readEnvironment: (String name) => null,
       wellKnownFilePath: '${tempDir.path}/non_existent.json',
     );
@@ -561,7 +563,7 @@ void main() {
     });
 
     final credentials = await internalDefaultCredentials(
-      clientFactory: () => mockClient,
+      client: mockClient,
       readEnvironment: (String name) => switch (name) {
         'GCE_METADATA_HOST' => 'custom-metadata-host',
         _ => null,
@@ -584,7 +586,7 @@ void main() {
 
     expect(
       () => internalDefaultCredentials(
-        clientFactory: () => mockClient,
+        client: mockClient,
         readEnvironment: (String name) => null,
         wellKnownFilePath: '${tempDir.path}/non_existent.json',
       ),

@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'dart:async';
-
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 
@@ -31,8 +29,9 @@ typedef TokenResponse = ({String accessToken, Duration expiresIn});
 
 /// Requests an access token from a token endpoint.
 ///
-/// [clientFactory] is called to create the [http.Client] passed to [send],
-/// which makes the token request. The client is closed afterwards.
+/// If provided, [client] is passed to [send]. [client] must be unauthenticated
+/// and is not closed by this function. Otherwise, a temporary [http.Client] is
+/// created and closed after use.
 ///
 /// The response body must be a JSON object with `access_token` and
 /// `expires_in` fields, as returned by OAuth 2.0 token endpoints
@@ -44,17 +43,17 @@ typedef TokenResponse = ({String accessToken, Duration expiresIn});
 /// Throws a [CredentialException] on failure.
 @internal
 Future<TokenResponse> fetchAccessToken({
-  required FutureOr<http.Client> Function() clientFactory,
   required Future<http.Response> Function(http.Client client) send,
   required String source,
+  http.Client? client,
 }) async {
   final http.Response response;
   try {
-    final client = await clientFactory();
+    final ownedClient = client == null ? http.Client() : null;
     try {
-      response = await send(client);
+      response = await send(client ?? ownedClient!);
     } finally {
-      client.close();
+      ownedClient?.close();
     }
   } on Exception catch (e, stackTrace) {
     throw CredentialException(
@@ -107,7 +106,6 @@ final class AccessTokenCache {
   /// Cached tokens that expire within this margin are not used.
   static const _expiryMargin = Duration(minutes: 1);
 
-  final Future<TokenResponse> Function() _fetch;
   final DateTime Function() _clock;
 
   ({String accessToken, DateTime expiry})? _cached;
@@ -115,28 +113,31 @@ final class AccessTokenCache {
   /// The in-flight fetch, so that concurrent callers share one request.
   Future<String>? _activeFetch;
 
-  /// Creates an [AccessTokenCache] that calls [_fetch] to obtain new tokens.
+  /// Creates an [AccessTokenCache].
   ///
   /// If provided, [clock] is used to determine the current time.
-  AccessTokenCache(this._fetch, {DateTime Function()? clock})
+  AccessTokenCache({DateTime Function()? clock})
     : _clock = clock ?? DateTime.timestamp;
 
   /// A non-expired access token.
   ///
   /// If the cached token expires within `_expiryMargin`, or if [forceRefresh]
-  /// is `true`, then a new token is fetched.
+  /// is `true`, then a new token is fetched using [fetch].
   ///
   /// It is safe to call this method concurrently: concurrent callers share a
   /// single fetch.
   ///
   /// Throws any exception thrown while fetching a new token, in which case
   /// the cached token, if any, is unchanged.
-  Future<String> accessToken({bool forceRefresh = false}) async {
+  Future<String> accessToken(
+    Future<TokenResponse> Function() fetch, {
+    bool forceRefresh = false,
+  }) async {
     if (!forceRefresh) {
       if (_freshToken() case final token?) return token;
     }
 
-    return await (_activeFetch ??= _refresh().whenComplete(() {
+    return await (_activeFetch ??= _refresh(fetch).whenComplete(() {
       _activeFetch = null;
     }));
   }
@@ -150,8 +151,8 @@ final class AccessTokenCache {
         : null;
   }
 
-  Future<String> _refresh() async {
-    final response = await _fetch();
+  Future<String> _refresh(Future<TokenResponse> Function() fetch) async {
+    final response = await fetch();
     _cached = (
       accessToken: response.accessToken,
       expiry: _clock().add(response.expiresIn),

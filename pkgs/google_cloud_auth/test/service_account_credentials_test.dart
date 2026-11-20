@@ -36,10 +36,10 @@ const _minimalInfo = {
 
 final _defaultTokenUri = Uri.https('oauth2.googleapis.com', '/token');
 
-/// A client factory whose clients add each request to [requests] and respond
-/// with a new access token.
-http.Client Function() _recordingClientFactory(List<http.Request> requests) =>
-    () => MockClient((request) async {
+/// A client that adds each request to [requests] and responds with a new access
+/// token.
+http.Client _recordingClient(List<http.Request> requests) =>
+    MockClient((request) async {
       requests.add(request);
       return http.Response(
         jsonEncode({
@@ -286,10 +286,13 @@ void main() {
           final creds = await ServiceAccountCredentials.fromServiceAccountInfo({
             ..._minimalInfo,
             'token_uri': '',
-          }, clientFactory: _recordingClientFactory(requests));
+          });
 
           expect(creds.tokenUri, _defaultTokenUri);
-          expect(await creds.accessToken(), 'access-token-1');
+          expect(
+            await creds.accessToken(client: _recordingClient(requests)),
+            'access-token-1',
+          );
           expect(requests.single.url, _defaultTokenUri);
         });
 
@@ -298,10 +301,13 @@ void main() {
           final creds = await ServiceAccountCredentials.fromServiceAccountInfo({
             ..._minimalInfo,
             'token_uri': '  \t\n ',
-          }, clientFactory: _recordingClientFactory(requests));
+          });
 
           expect(creds.tokenUri, _defaultTokenUri);
-          expect(await creds.accessToken(), 'access-token-1');
+          expect(
+            await creds.accessToken(client: _recordingClient(requests)),
+            'access-token-1',
+          );
           expect(requests.single.url, _defaultTokenUri);
         });
 
@@ -310,11 +316,14 @@ void main() {
           final creds = await ServiceAccountCredentials.fromServiceAccountInfo({
             ..._minimalInfo,
             'universe_domain': '',
-          }, clientFactory: _recordingClientFactory(requests));
+          });
 
           expect(creds.universeDomain, 'googleapis.com');
           expect(creds.tokenUri, _defaultTokenUri);
-          expect(await creds.accessToken(), 'access-token-1');
+          expect(
+            await creds.accessToken(client: _recordingClient(requests)),
+            'access-token-1',
+          );
           expect(requests.single.url, _defaultTokenUri);
         });
 
@@ -323,10 +332,13 @@ void main() {
           final creds = await ServiceAccountCredentials.fromServiceAccountInfo({
             ..._minimalInfo,
             'private_key_id': '',
-          }, clientFactory: _recordingClientFactory(requests));
+          });
 
           expect(creds.privateKeyId, isNull);
-          expect(await creds.accessToken(), 'access-token-1');
+          expect(
+            await creds.accessToken(client: _recordingClient(requests)),
+            'access-token-1',
+          );
           expect(requests.single.url, _defaultTokenUri);
         });
 
@@ -360,17 +372,19 @@ void main() {
           expect(creds.projectId, equals('string-project'));
         });
 
-        test('string with scopes and clientFactory', () async {
+        test('string with scopes', () async {
           final requests = <http.Request>[];
           final creds =
               await ServiceAccountCredentials.fromServiceAccountString(
                 jsonEncode(_minimalInfo),
                 scopes: ['https://www.googleapis.com/auth/pubsub'],
-                clientFactory: _recordingClientFactory(requests),
               );
 
           expect(creds.scopes, ['https://www.googleapis.com/auth/pubsub']);
-          expect(await creds.accessToken(), 'access-token-1');
+          expect(
+            await creds.accessToken(client: _recordingClient(requests)),
+            'access-token-1',
+          );
           expect(requests, hasLength(1));
         });
 
@@ -429,7 +443,7 @@ void main() {
           expect(creds.universeDomain, equals('googleapis.com'));
         }, testOn: 'vm');
 
-        test('uses scopes and clientFactory', () async {
+        test('uses scopes', () async {
           final tempFilePath = await writeTempFile(
             'service_account.json',
             jsonEncode(_minimalInfo),
@@ -439,11 +453,13 @@ void main() {
           final creds = await ServiceAccountCredentials.fromServiceAccountFile(
             tempFilePath,
             scopes: ['https://www.googleapis.com/auth/pubsub'],
-            clientFactory: _recordingClientFactory(requests),
           );
 
           expect(creds.scopes, ['https://www.googleapis.com/auth/pubsub']);
-          expect(await creds.accessToken(), 'access-token-1');
+          expect(
+            await creds.accessToken(client: _recordingClient(requests)),
+            'access-token-1',
+          );
           expect(requests, hasLength(1));
         }, testOn: 'vm');
 
@@ -521,27 +537,31 @@ void main() {
             privateKeyPkcs8: testPrivateKey,
             privateKeyId: '',
             universeDomain: '',
-            clientFactory: _recordingClientFactory(requests),
           );
 
           expect(creds.privateKeyId, isNull);
           expect(creds.universeDomain, 'googleapis.com');
           expect(creds.tokenUri, _defaultTokenUri);
-          expect(await creds.accessToken(), 'access-token-1');
+          expect(
+            await creds.accessToken(client: _recordingClient(requests)),
+            'access-token-1',
+          );
           expect(requests.single.url, _defaultTokenUri);
         });
 
-        test('uses scopes and clientFactory', () async {
+        test('uses scopes', () async {
           final requests = <http.Request>[];
           final creds = await ServiceAccountCredentials.fromPkcs8(
             clientEmail: 'pkcs8@project.iam.gserviceaccount.com',
             privateKeyPkcs8: testPrivateKey,
             scopes: ['https://www.googleapis.com/auth/pubsub'],
-            clientFactory: _recordingClientFactory(requests),
           );
 
           expect(creds.scopes, ['https://www.googleapis.com/auth/pubsub']);
-          expect(await creds.accessToken(), 'access-token-1');
+          expect(
+            await creds.accessToken(client: _recordingClient(requests)),
+            'access-token-1',
+          );
           expect(requests, hasLength(1));
         });
 
@@ -623,10 +643,13 @@ void main() {
           final creds = await ServiceAccountCredentials.fromServiceAccountInfo({
             ..._minimalInfo,
             'private_key_id': 'key-id-123',
-          }, clientFactory: _recordingClientFactory(requests));
+          });
 
           final before = _nowInSeconds();
-          expect(await creds.accessToken(), 'access-token-1');
+          expect(
+            await creds.accessToken(client: _recordingClient(requests)),
+            'access-token-1',
+          );
           final after = _nowInSeconds();
 
           final request = requests.single;
@@ -663,10 +686,9 @@ void main() {
               'https://www.googleapis.com/auth/devstorage.read_only',
               'https://www.googleapis.com/auth/pubsub',
             ],
-            clientFactory: _recordingClientFactory(requests),
           );
 
-          await creds.accessToken();
+          await creds.accessToken(client: _recordingClient(requests));
 
           final claims = JwsParts.parse(
             requests.single.bodyFields['assertion']!,
@@ -682,10 +704,9 @@ void main() {
           final requests = <http.Request>[];
           final creds = await ServiceAccountCredentials.fromServiceAccountInfo(
             _minimalInfo,
-            clientFactory: _recordingClientFactory(requests),
           );
 
-          await creds.accessToken();
+          await creds.accessToken(client: _recordingClient(requests));
 
           final assertion = JwsParts.parse(
             requests.single.bodyFields['assertion']!,
@@ -698,9 +719,9 @@ void main() {
           final creds = await ServiceAccountCredentials.fromServiceAccountInfo({
             ..._minimalInfo,
             'private_key_id': '',
-          }, clientFactory: _recordingClientFactory(requests));
+          });
 
-          await creds.accessToken();
+          await creds.accessToken(client: _recordingClient(requests));
 
           final assertion = JwsParts.parse(
             requests.single.bodyFields['assertion']!,
@@ -713,9 +734,9 @@ void main() {
           final creds = await ServiceAccountCredentials.fromServiceAccountInfo({
             ..._minimalInfo,
             'token_uri': 'https://oauth2.example.com/token',
-          }, clientFactory: _recordingClientFactory(requests));
+          });
 
-          await creds.accessToken();
+          await creds.accessToken(client: _recordingClient(requests));
 
           expect(
             requests.single.url,
@@ -737,11 +758,13 @@ void main() {
               'universe_domain': 'custom.domain.com',
             },
             scopes: ['https://www.googleapis.com/auth/pubsub'],
-            clientFactory: () => fail('Unexpected HTTP request'),
+          );
+          final unexpectedClient = MockClient(
+            (_) async => fail('Unexpected HTTP request'),
           );
 
           final before = _nowInSeconds();
-          final token = await creds.accessToken();
+          final token = await creds.accessToken(client: unexpectedClient);
           final after = _nowInSeconds();
 
           final jwt = await parseVerifiedJwt(token);
@@ -759,7 +782,7 @@ void main() {
             'exp': (claims['iat'] as int) + 3600,
           });
 
-          expect(await creds.accessToken(), token);
+          expect(await creds.accessToken(client: unexpectedClient), token);
         });
 
         test(

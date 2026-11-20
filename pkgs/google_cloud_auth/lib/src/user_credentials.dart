@@ -17,8 +17,6 @@
 /// - https://github.com/googleapis/google-cloud-python/blob/main/packages/google-auth/google/oauth2/credentials.py
 library;
 
-import 'dart:async';
-
 import 'package:http/http.dart' as http;
 
 import 'access_token.dart';
@@ -46,34 +44,16 @@ final class UserCredentials extends GoogleCredentials {
   final String _clientId;
   final String _clientSecret;
   final String _refreshToken;
-  final FutureOr<http.Client> Function() _clientFactory;
-
-  late final _accessTokenCache = AccessTokenCache(
-    () => fetchAccessToken(
-      clientFactory: _clientFactory,
-      source: _tokenUri.toString(),
-      send: (client) => client.post(
-        _tokenUri,
-        body: {
-          'grant_type': 'refresh_token',
-          'client_id': _clientId,
-          'client_secret': _clientSecret,
-          'refresh_token': _refreshToken,
-        },
-      ),
-    ),
-  );
+  final _accessTokenCache = AccessTokenCache();
 
   UserCredentials._({
     required String clientId,
     required String clientSecret,
     required String refreshToken,
     this.quotaProjectId,
-    FutureOr<http.Client> Function()? clientFactory,
   }) : _clientId = clientId,
        _clientSecret = clientSecret,
-       _refreshToken = refreshToken,
-       _clientFactory = clientFactory ?? http.Client.new;
+       _refreshToken = refreshToken;
 
   /// Creates [UserCredentials] from parsed authorized user JSON.
   ///
@@ -82,15 +62,8 @@ final class UserCredentials extends GoogleCredentials {
   /// `type` field must be `authorized_user` and the `universe_domain` field
   /// must be `googleapis.com`. Other fields, such as `token_uri`, are ignored.
   ///
-  /// If provided, [clientFactory] is called to create the [http.Client]s used
-  /// to make requests. Each client it returns is closed after use, so it must
-  /// return a new client on every call.
-  ///
   /// Throws a [FormatException] if [info] is not valid.
-  factory UserCredentials.fromAuthorizedUserInfo(
-    Map<String, dynamic> info, {
-    FutureOr<http.Client> Function()? clientFactory,
-  }) {
+  factory UserCredentials.fromAuthorizedUserInfo(Map<String, dynamic> info) {
     if (info['type'] case final type? when type != 'authorized_user') {
       throw const FormatException(
         "The value of 'type' must be 'authorized_user' or omitted.",
@@ -113,7 +86,6 @@ final class UserCredentials extends GoogleCredentials {
       clientSecret: requiredString(info, 'client_secret', _infoDescription),
       refreshToken: requiredString(info, 'refresh_token', _infoDescription),
       quotaProjectId: optionalString(info, 'quota_project_id'),
-      clientFactory: clientFactory,
     );
   }
 
@@ -121,39 +93,38 @@ final class UserCredentials extends GoogleCredentials {
   ///
   /// See [UserCredentials.fromAuthorizedUserInfo] for the supported fields.
   ///
-  /// If provided, [clientFactory] is called to create the [http.Client]s used
-  /// to make requests. Each client it returns is closed after use, so it must
-  /// return a new client on every call.
-  ///
   /// Throws a [FormatException] if [jsonString] is not valid.
-  factory UserCredentials.fromAuthorizedUserString(
-    String jsonString, {
-    FutureOr<http.Client> Function()? clientFactory,
-  }) => .fromAuthorizedUserInfo(
-    decodeJsonObject(jsonString),
-    clientFactory: clientFactory,
-  );
+  factory UserCredentials.fromAuthorizedUserString(String jsonString) =>
+      .fromAuthorizedUserInfo(decodeJsonObject(jsonString));
 
   /// Creates [UserCredentials] from an authorized user JSON file at [path],
   /// such as the one created by `gcloud auth application-default login`.
   ///
   /// See [UserCredentials.fromAuthorizedUserInfo] for the supported fields.
   ///
-  /// If provided, [clientFactory] is called to create the [http.Client]s used
-  /// to make requests. Each client it returns is closed after use, so it must
-  /// return a new client on every call.
-  ///
   /// Throws a [CredentialException] if reading [path] fails or when running on
   /// the web, and a [FormatException] if the file contents are not valid.
-  static Future<UserCredentials> fromAuthorizedUserFile(
-    String path, {
-    FutureOr<http.Client> Function()? clientFactory,
-  }) async => .fromAuthorizedUserString(
-    await readCredentialFileAsString(path),
-    clientFactory: clientFactory,
-  );
+  static Future<UserCredentials> fromAuthorizedUserFile(String path) async =>
+      .fromAuthorizedUserString(await readCredentialFileAsString(path));
 
   @override
-  Future<String> accessToken({bool forceRefresh = false}) =>
-      _accessTokenCache.accessToken(forceRefresh: forceRefresh);
+  Future<String> accessToken({
+    bool forceRefresh = false,
+    http.Client? client,
+  }) => _accessTokenCache.accessToken(
+    () => fetchAccessToken(
+      client: client,
+      source: _tokenUri.toString(),
+      send: (c) => c.post(
+        _tokenUri,
+        body: {
+          'grant_type': 'refresh_token',
+          'client_id': _clientId,
+          'client_secret': _clientSecret,
+          'refresh_token': _refreshToken,
+        },
+      ),
+    ),
+    forceRefresh: forceRefresh,
+  );
 }
