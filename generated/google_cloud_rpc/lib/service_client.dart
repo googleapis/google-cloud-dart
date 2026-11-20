@@ -421,13 +421,11 @@ final class _Call {
   late final Iterator<Duration> _delays;
 
   /// Identifies the attempt that is in progress, if any.
+  /// XXX
   Object? _attempt;
 
   /// Whether the attempt that is in progress is retried if it fails.
   var _canRetry = true;
-
-  /// Whether the response of the attempt that is in progress has started.
-  var _hasResponse = false;
 
   /// Reads the response of the attempt that is in progress.
   StreamSubscription<Object?>? _subscription;
@@ -461,10 +459,12 @@ final class _Call {
   /// The first attempt starts when this is listened to.
   Stream<Map<String, dynamic>> get messages => _controller.stream;
 
+  /// Whether the response of the attempt that is in progress has started.
+  bool get _hasResponse => _subscription != null;
+
   void _startAttempt() {
     final attempt = _attempt = Object();
     _canRetry = true;
-    _hasResponse = false;
     if (_timeout case final timeout?) {
       _deadlineTimer = Timer(
         timeout,
@@ -506,7 +506,6 @@ final class _Call {
   }
 
   void _onResponse(http.StreamedResponse response) {
-    _hasResponse = true;
     _restartStallTimer();
     if (response.statusCode < 200 || response.statusCode >= 300) {
       _readBody(response, (bytes) {
