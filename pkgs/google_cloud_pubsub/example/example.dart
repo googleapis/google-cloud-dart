@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// #docregion main
+// #region main
 import 'dart:convert';
 import 'package:google_cloud_pubsub/google_cloud_pubsub.dart';
 
@@ -81,5 +81,4 @@ void main() async {
 
   await pubSub.close();
 }
-
-// #enddocregion main
+// #endregion main

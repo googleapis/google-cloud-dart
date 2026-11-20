@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// #docregion error-handling
+// #region error-handling
 import 'package:google_cloud_shelf/google_cloud_shelf.dart';
 import 'package:shelf/shelf.dart';
 
@@ -38,8 +38,7 @@ Response _profileHandler(Request request) {
 
   return Response.ok('User Profile Data');
 }
-
-// #enddocregion error-handling
+// #endregion error-handling
 
 void main() {
   // Suppress unused element warning for the private handler

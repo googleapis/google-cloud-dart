@@ -18,8 +18,10 @@ library;
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:google_cloud/google_cloud.dart';
 import 'package:google_cloud_auth/google_cloud_auth.dart';
 import 'package:google_cloud_auth/src/application_default_credentials.dart';
+import 'package:grpc/grpc.dart' as grpc;
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:test/test.dart';
@@ -38,13 +40,63 @@ void main() {
   });
 
   group('applicationDefaultCredentials', () {
-    test(
-      'always available when a GCP project is available',
-      tags: 'google-cloud',
-      () async {
-        await defaultCredentials();
-      },
-    );
+    group('produces useable request metadata', tags: 'google-cloud', () {
+      test('for HTTP', () async {
+        final credentials = await defaultCredentials();
+        final metadata = await credentials.requestMetadata();
+
+        final client = http.Client();
+        addTearDown(client.close);
+
+        final response = await client.get(
+          Uri.https(
+            'pubsub.googleapis.com',
+            'v1/projects/${await computeProjectId()}/topics',
+          ),
+          headers: {
+            for (var MapEntry(key: key, value: values) in metadata.entries)
+              key: values.join(', '),
+          },
+        );
+        expect(response.statusCode, 200);
+      });
+
+      test('for gRPC', () async {
+        final credentials = await defaultCredentials();
+        final metadata = await credentials.requestMetadata();
+
+        final channel = grpc.ClientChannel('pubsub.googleapis.com');
+        addTearDown(channel.shutdown);
+
+        // Call `google.pubsub.v1.Publisher/ListTopics` without generated
+        // protobuf code by hand-encoding the `ListTopicsRequest`.
+        final listTopics = grpc.ClientMethod<List<int>, List<int>>(
+          '/google.pubsub.v1.Publisher/ListTopics',
+          (request) => request,
+          (response) => response,
+        );
+        final project = utf8.encode('projects/${await computeProjectId()}');
+        final request = [
+          0x0a, // Field 1 (`project`) with wire type 2 (length-delimited).
+          project.length, // A one byte varint since project IDs are short.
+          ...project,
+        ];
+
+        await expectLater(
+          grpc.Client(channel).$createUnaryCall(
+            listTopics,
+            request,
+            options: grpc.CallOptions(
+              metadata: {
+                for (var MapEntry(key: key, value: values) in metadata.entries)
+                  key: values.join(', '),
+              },
+            ),
+          ),
+          completes,
+        );
+      });
+    });
 
     group('ServiceAccountCredentials', () {
       group('from GOOGLE_APPLICATION_CREDENTIALS', () {
@@ -271,6 +323,55 @@ void main() {
           );
         });
       });
+
+      test('uses clientFactory to get access tokens', () async {
+        final saFile = File('${tempDir.path}/service_account.json');
+        await saFile.writeAsString(
+          jsonEncode({
+            'type': 'service_account',
+            'project_id': 'env-project',
+            'private_key': testPrivateKey,
+            'client_email': 'env-sa@project.iam.gserviceaccount.com',
+          }),
+        );
+        final mockClient = MockClient((request) async {
+          expect(request.url, Uri.https('oauth2.googleapis.com', '/token'));
+          return http.Response(
+            jsonEncode({
+              'access_token': 'service-account-access-token',
+              'expires_in': 3600,
+              'token_type': 'Bearer',
+            }),
+            200,
+          );
+        });
+
+        final credentials = await internalDefaultCredentials(
+          clientFactory: () => mockClient,
+          readEnvironment: (String name) => null,
+          wellKnownFilePath: saFile.path,
+        );
+
+        expect(
+          await (credentials as ServiceAccountCredentials).accessToken(),
+          'service-account-access-token',
+        );
+      }, skip: canUseWebCrypto ? null : 'Requires Dart 3.13 or later');
+
+      test(
+        'gets access token from the environment',
+        tags: ['google-cloud'],
+        () async {
+          final credentials = await defaultCredentials();
+          // TODO(https://github.com/dart-lang/test/issues/2576): Throw when
+          // this is fixed.
+          if (credentials is! ServiceAccountCredentials) {
+            return;
+          }
+          expect(await credentials.accessToken(), isNotEmpty);
+        },
+        skip: canUseWebCrypto ? null : 'Requires Dart 3.13 or later',
+      );
     });
 
     group('UserCredentials', () {

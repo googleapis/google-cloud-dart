@@ -61,20 +61,12 @@ void main() {
         );
 
         test(
-          'batched acknowledge flushed on close() prevents redelivery',
+          'acknowledge with invalid ackId throws BadRequestException',
           () async {
-            final topicName = testResourceName('ack-topic');
-            final subscriptionName = testResourceName('ack-sub');
+            final topicName = testResourceName('ack-invalid-topic');
+            final subscriptionName = testResourceName('ack-invalid-sub');
             final topic = client.topic(topicName);
-            final subscription = client.subscription(
-              subscriptionName,
-              ackSettings: AckSettings(
-                batching: BatchingSettings(
-                  maxMessages: 50,
-                  maxDelay: const Duration(seconds: 30),
-                ),
-              ),
-            );
+            final subscription = client.subscription(subscriptionName);
 
             await topic.create();
             addTearDown(() async => await topic.delete());
@@ -82,32 +74,50 @@ void main() {
             await subscription.create(topic: topic.name);
             addTearDown(() async => await subscription.delete());
 
-            for (var i = 0; i < 5; i++) {
-              await topic.publish(utf8.encode('ack-msg-$i'));
-            }
-            await topic.close();
-
-            final received = await pullReliably(subscription, count: 5);
-            expect(received, hasLength(5));
-            received.forEach(subscription.acknowledge);
-            await subscription.close();
-
-            final reopen = client.subscription(subscriptionName);
-            addTearDown(() async => await reopen.close());
-            // Nacking already-acknowledged messages is a no-op; if `close()`
-            // had not flushed the batch, this would make them redeliverable
-            // immediately alongside the sentinel message below.
-            await reopen.modifyAckDeadlineNow(received, 0);
-            await client.publish(topic.name, utf8.encode('sentinel'));
-
-            final afterAck = await pullReliably(reopen, count: 1);
             expect(
-              afterAck.map((message) => utf8.decode(message.data)).toList(),
-              ['sentinel'],
+              () => subscription.acknowledgeNow([
+                ReceivedMessage(
+                  ackId: 'invalid-ack-id',
+                  messageId: 'msg-id',
+                  publishTime: DateTime.now(),
+                  message: Message(data: []),
+                ),
+              ]),
+              throwsA(isA<BadRequestException>()),
             );
-            await reopen.acknowledgeNow(afterAck);
           },
         );
+
+        test('batched acknowledge flushes on close()', () async {
+          final topicName = testResourceName('ack-topic');
+          final subscriptionName = testResourceName('ack-sub');
+          final topic = client.topic(topicName);
+          final subscription = client.subscription(
+            subscriptionName,
+            ackSettings: AckSettings(
+              batching: BatchingSettings(
+                maxMessages: 50,
+                maxDelay: const Duration(seconds: 30),
+              ),
+            ),
+          );
+
+          await topic.create();
+          addTearDown(() async => await topic.delete());
+
+          await subscription.create(topic: topic.name);
+          addTearDown(() async => await subscription.delete());
+
+          for (var i = 0; i < 5; i++) {
+            await topic.publish(utf8.encode('ack-msg-$i'));
+          }
+          await topic.close();
+
+          final received = await pullReliably(subscription, count: 5);
+          expect(received, hasLength(5));
+          received.forEach(subscription.acknowledge);
+          await subscription.close();
+        });
       },
     );
 

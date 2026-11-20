@@ -14,7 +14,7 @@
 
 // ignore_for_file: cascade_invocations
 
-// #docregion contextual-logging
+// #region contextual-logging
 import 'package:google_cloud_logging/google_cloud_logging.dart';
 import 'package:google_cloud_shelf/google_cloud_shelf.dart';
 import 'package:shelf/shelf.dart';
@@ -46,5 +46,4 @@ Response _userHandler(Request request) {
 
   return Response.ok('User Profile');
 }
-
-// #enddocregion contextual-logging
+// #endregion contextual-logging
