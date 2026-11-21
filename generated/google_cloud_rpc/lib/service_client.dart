@@ -398,13 +398,13 @@ class ServiceClient {
 /// they arrive.
 ///
 /// An attempt fails with a [TimeoutException] if it isn't over within
-/// `timeout`, or if the server shows no sign of life for `stallTimeout` while
-/// the listener isn't paused.
+/// `timeout`, or if the server doesn't generate a data event for `stallTimeout`
+/// while the listener isn't paused.
 ///
 /// Everything that can happen to a call is handled by a method that runs
 /// without waiting for anything, so the state of the call can't change under
-/// it. [_attempt] tells what an abandoned attempt was waiting for that the
-/// attempt is over.
+/// it. [_currentAttempt] tells what an abandoned attempt was waiting for tha
+/// the attempt is over.
 final class _Call {
   final Uri _url;
   final Future<http.StreamedResponse> Function() _send;
@@ -421,7 +421,12 @@ final class _Call {
   late final Iterator<Duration> _delays;
 
   /// Identifies the attempt that is in progress, if any.
-  Object? _attempt;
+  /// 
+  /// Used to check whether an attempt is the current attempt. If a callback
+  /// captures `_currentAttempt` and it changes after an asynchronous gap then
+  /// it can just do whatever cleanup is required for attempts that have been
+  /// discarded (e.g. due to timeout).
+  Object? _currentAttempt;
 
   /// Whether the attempt that is in progress is retried if it fails.
   var _canRetry = true;
@@ -462,7 +467,7 @@ final class _Call {
   bool get _hasResponse => _subscription != null;
 
   void _startAttempt() {
-    final attempt = _attempt = Object();
+    final attempt = _currentAttempt = Object();
     _canRetry = true;
     if (_timeout case final timeout?) {
       _deadlineTimer = Timer(
@@ -482,7 +487,7 @@ final class _Call {
     unawaited(
       Future.sync(_send).then(
         (response) {
-          if (identical(attempt, _attempt)) {
+          if (identical(attempt, _currentAttempt)) {
             try {
               _onResponse(response);
             } catch (e, s) {
@@ -495,7 +500,7 @@ final class _Call {
           }
         },
         onError: (Object error, StackTrace stackTrace) {
-          if (identical(attempt, _attempt)) {
+          if (identical(attempt, _currentAttempt)) {
             _fail(error, stackTrace);
           } else if (error is! Exception) {
             // Nobody waits for an abandoned attempt, so there is nobody to
@@ -585,18 +590,18 @@ final class _Call {
     void Function(T event) onData,
     void Function() onDone,
   ) {
-    final attempt = _attempt;
+    final attempt = _currentAttempt;
     final subscription = stream.listen(
       (event) {
-        if (!identical(attempt, _attempt)) return;
+        if (!identical(attempt, _currentAttempt)) return;
         onData(event);
         _restartStallTimer();
       },
       onError: (Object error, StackTrace stackTrace) {
-        if (identical(attempt, _attempt)) _fail(error, stackTrace);
+        if (identical(attempt, _currentAttempt)) _fail(error, stackTrace);
       },
       onDone: () {
-        if (!identical(attempt, _attempt)) return;
+        if (!identical(attempt, _currentAttempt)) return;
         _subscription = null;
         try {
           onDone();
@@ -605,7 +610,7 @@ final class _Call {
         }
       },
     );
-    if (!identical(attempt, _attempt)) {
+    if (!identical(attempt, _currentAttempt)) {
       // `stream` ended, and with it the attempt, as soon as it was listened
       // to.
       subscription.cancel().ignoreExceptions();
@@ -674,7 +679,7 @@ final class _Call {
   /// Abandons the attempt that is in progress, if any: stops its timers, and
   /// stops reading its response.
   void _endAttempt() {
-    _attempt = null;
+    _currentAttempt = null;
     _deadlineTimer?.cancel();
     _stallTimer?.cancel();
     _subscription?.cancel().ignoreExceptions();
@@ -685,7 +690,9 @@ final class _Call {
   /// life, or because the listener resumed.
   void _restartStallTimer() {
     final stallTimeout = _stallTimeout;
-    if (stallTimeout == null || _attempt == null || _controller.isPaused) {
+    if (stallTimeout == null ||
+        _currentAttempt == null ||
+        _controller.isPaused) {
       return;
     }
     _stallTimer?.cancel();
