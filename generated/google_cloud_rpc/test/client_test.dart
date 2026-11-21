@@ -34,6 +34,19 @@ class TestMessage extends JsonEncodable {
   Object? toJson() => message;
 }
 
+final class _ThrowingMessage extends JsonEncodable {
+  final Exception error;
+  int toJsonCalls = 0;
+
+  _ThrowingMessage(this.error);
+
+  @override
+  Object? toJson() {
+    ++toJsonCalls;
+    throw error;
+  }
+}
+
 const _isVm = bool.fromEnvironment('dart.library.io');
 final sampleUrl = Uri.https('example.org', '/path');
 final apiBaseHeaderPattern =
@@ -1015,6 +1028,29 @@ void main() {
           ]),
         );
         expect(count, 1);
+      });
+
+      test('does not retry a body that fails to serialize', () {
+        final body = _ThrowingMessage(const FormatException('bad body'));
+        var sent = false;
+        final service = ServiceClient(
+          client: MockClient((request) async {
+            sent = true;
+            return Response('', 200);
+          }),
+        );
+
+        expect(
+          () => service.postStreaming(
+            sampleUrl,
+            enableSse: true,
+            body: body,
+            retry: NoDelayRetry(retryIf: (_) => true, maxRetries: 3),
+          ),
+          throwsFormatException,
+        );
+        expect(body.toJsonCalls, 1);
+        expect(sent, isFalse);
       });
     });
   });

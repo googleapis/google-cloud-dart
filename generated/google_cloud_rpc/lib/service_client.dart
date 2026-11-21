@@ -334,8 +334,7 @@ class ServiceClient {
     _checkTimeout(timeout, 'timeout');
     _checkTimeout(streamWaitTimeout, 'streamWaitTimeout');
     final requestUrl = enableSse ? _makeUrlStreaming(url) : url;
-    // Encoded when the stream is listened to, like everything else.
-    late final encodedBody = body?._asEncodedJson;
+    final encodedBody = body?._asEncodedJson;
     return _Call(
       requestUrl,
       () => _send(requestUrl, method, encodedBody),
