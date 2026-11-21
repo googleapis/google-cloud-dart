@@ -421,7 +421,7 @@ final class _Call {
   late final Iterator<Duration> _delays;
 
   /// Identifies the attempt that is in progress, if any.
-  /// 
+  ///
   /// Used to check whether an attempt is the current attempt. If a callback
   /// captures `_currentAttempt` and it changes after an asynchronous gap then
   /// it can just do whatever cleanup is required for attempts that have been
