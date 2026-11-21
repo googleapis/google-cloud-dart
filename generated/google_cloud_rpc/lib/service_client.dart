@@ -421,7 +421,6 @@ final class _Call {
   late final Iterator<Duration> _delays;
 
   /// Identifies the attempt that is in progress, if any.
-  /// XXX
   Object? _attempt;
 
   /// Whether the attempt that is in progress is retried if it fails.
@@ -484,7 +483,11 @@ final class _Call {
       Future.sync(_send).then(
         (response) {
           if (identical(attempt, _attempt)) {
-            _run(() => _onResponse(response));
+            try {
+              _onResponse(response);
+            } catch (e, s) {
+              _fail(e, s);
+            }
           } else {
             // The request of an abandoned attempt isn't aborted, so its
             // response may start anyway. Nothing will read it.
@@ -583,23 +586,26 @@ final class _Call {
     void Function() onDone,
   ) {
     final attempt = _attempt;
-    bool isOver() => !identical(attempt, _attempt);
     final subscription = stream.listen(
       (event) {
-        if (isOver()) return;
+        if (!identical(attempt, _attempt)) return;
         onData(event);
         _restartStallTimer();
       },
       onError: (Object error, StackTrace stackTrace) {
-        if (!isOver()) _fail(error, stackTrace);
+        if (identical(attempt, _attempt)) _fail(error, stackTrace);
       },
       onDone: () {
-        if (isOver()) return;
+        if (!identical(attempt, _attempt)) return;
         _subscription = null;
-        _run(onDone);
+        try {
+          onDone();
+        } catch (e, s) {
+          _fail(e, s);
+        }
       },
     );
-    if (isOver()) {
+    if (!identical(attempt, _attempt)) {
       // `stream` ended, and with it the attempt, as soon as it was listened
       // to.
       subscription.cancel().ignoreExceptions();
@@ -673,16 +679,6 @@ final class _Call {
     _stallTimer?.cancel();
     _subscription?.cancel().ignoreExceptions();
     _subscription = null;
-  }
-
-  /// Runs [action] as part of the attempt that is in progress, which fails if
-  /// [action] throws.
-  void _run(void Function() action) {
-    try {
-      action();
-    } catch (e, s) {
-      _fail(e, s);
-    }
   }
 
   /// Restarts the clock of `stallTimeout`, because the server showed a sign of
