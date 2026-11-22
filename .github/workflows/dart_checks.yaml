@@ -27,7 +27,6 @@ env:
   FORMAT_DART_VERSION: 3.13.2
   GO_VERSION: 1.26.1
   GOOGLE_CLOUD_PROJECT: test-project
-  LIBRARIAN_VERSION: v0.44.1-0.20260915154909-bea74dadf46d
   MINIMUM_DART_TEST_VERSION: &MINIMUM_DART_TEST_VERSION 3.10.1
 name: Dart Checks
 jobs:
@@ -174,25 +173,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-      - name: Install protoc
-        run: |
-          set -e
-          curl -fSSL  --retry 3 --retry-all-errors --retry-delay 15 -o /tmp/protoc.zip https://github.com/protocolbuffers/protobuf/releases/download/v28.3/protoc-28.3-linux-x86_64.zip
-          cd /usr/local
-          sudo unzip -x /tmp/protoc.zip
-          protoc --version
-      - name: Install Go
-        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e
+      # Version of librarian is pulled from librarian.yaml,
+      # action is pinned to commit SHA to satisfy blanket security policy.
+      - uses: googleapis/librarian@c54791693e09a76a7403f3dc81c7c97782908b3d # v0.53.0
         with:
-          go-version: ${{ env.GO_VERSION }}
-          cache: false
-      - name: Cache Go Librarian
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
-        with:
-          path: |
-            ~/.cache/go-build
-            ~/go/pkg/mod
-          key: ${{ runner.os }}-go-librarian-${{ env.LIBRARIAN_VERSION }}
+          protoc-version: '28.3'
+          protoc-checksum: 'e602ec25bdf351965db652e37fbe7897d5c98a84fe54225ed5a394bc1e3217ab68b008c55d58363d1afe0a24300acf02c80da62da9141a12cb8b3b4ddd43b157'
       - name: Install Dart  # The generator uses "dart format".
         uses: dart-lang/setup-dart@2286a0c042b44434fe26d292bbce8d34f7ec662b
         with:
@@ -203,11 +189,9 @@ jobs:
       # the inputs should be pinned, including the generator version and the
       # googleapis SHA.
       - name: Regenerate existing clients
-        # The current head version of librarian can be generated with:
-        # GOPROXY=direct go list -m -u -f '{{.Version}}' github.com/googleapis/librarian@main
-        run: go run github.com/googleapis/librarian/cmd/librarian@${{ env.LIBRARIAN_VERSION }} generate -all
+        run: librarian generate -all
       - name: Format librarian configuration
-        run: go run github.com/googleapis/librarian/cmd/librarian@${{ env.LIBRARIAN_VERSION }} tidy
+        run: librarian tidy
       - name: Update documentation
         run: dart run tool/update_docs.dart
       - name: Generated Diff
