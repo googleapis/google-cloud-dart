@@ -51,7 +51,7 @@ jobs:
       - name: Format
         run: dart format --output=none --set-exit-if-changed .
       - name: Verify Code Examples Up-to-Date
-        run: dart run example validate
+        run: dart run snippets validate
 
   analyze:
     name: Analyze (${{ matrix.sdk }})
