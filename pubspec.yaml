@@ -50,6 +50,6 @@ workspace:
 
 dev_dependencies:
   dart_flutter_team_lints: ^3.5.2
-  example: ^0.9.0
   path: ^1.9.0
+  snippets: ^0.9.0
   webcrypto: ^0.6.0
