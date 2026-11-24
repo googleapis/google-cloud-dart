@@ -23,7 +23,6 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:test/test.dart';
 
-import '../test_utils.dart';
 import 'wycheproof_vectors.dart';
 
 void main() {
