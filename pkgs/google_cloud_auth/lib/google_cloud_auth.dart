@@ -15,6 +15,7 @@
 /// Authentication and credential management for Google Cloud.
 library;
 
+export 'src/api_key_credentials.dart';
 export 'src/application_default_credentials.dart'
     if (dart.library.js_interop) 'src/application_default_credentials_web.dart'
     show defaultCredentials;
