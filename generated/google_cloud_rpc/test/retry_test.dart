@@ -12,9 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'dart:async';
 import 'dart:math';
 
 import 'package:clock/clock.dart';
+import 'package:fake_async/fake_async.dart';
 import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:google_cloud_rpc/retry.dart';
 import 'package:google_cloud_rpc/rpc.dart';
@@ -227,6 +229,12 @@ void main() {
       expect(matchesStatusCode(error, const [Code.deadlineExceeded]), isFalse);
     });
 
+    test('treats a timeout as DEADLINE_EXCEEDED', () {
+      final error = TimeoutException('timed out', const Duration(seconds: 1));
+      expect(matchesStatusCode(error, const [Code.deadlineExceeded]), isTrue);
+      expect(matchesStatusCode(error, const [Code.unavailable]), isFalse);
+    });
+
     test('does not match other errors', () {
       expect(
         matchesStatusCode(const FormatException('bad json'), const [
@@ -405,6 +413,42 @@ void main() {
         throwsStateError,
       );
       expect(count, 1);
+    });
+
+    test('stops after maxRetryInterval', () {
+      fakeAsync((async) {
+        var count = 0;
+        expect(
+          const ExponentialRetry.onCodes([
+            Code.unavailable,
+          ], maxRetryInterval: Duration(seconds: 10)).run<int>(() async {
+            ++count;
+            throw http.ClientException('transport failure');
+          }),
+          throwsA(isA<http.ClientException>()),
+        );
+        // No retry starts later than `maxRetryInterval` plus the longest wait
+        // between retries, which is 60 seconds by default.
+        async.elapse(const Duration(minutes: 2));
+        expect(count, greaterThan(1));
+        expect(
+          async.pendingTimersDebugString,
+          isEmpty,
+          reason: 'there should be no more retries',
+        );
+      });
+    });
+
+    test('measures maxRetryInterval with the clock of the current zone', () {
+      fakeAsync((async) {
+        final delays = const ExponentialRetry.onCodes([
+          Code.unavailable,
+        ], maxRetryInterval: Duration(seconds: 3)).delays().iterator;
+
+        expect(delays.moveNext(), isTrue);
+        async.elapse(const Duration(seconds: 4));
+        expect(delays.moveNext(), isFalse);
+      });
     });
 
     test('toString includes the retryable codes', () {
