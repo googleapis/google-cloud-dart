@@ -33,4 +33,5 @@ dependencies:
   meta: ^1.16.0
 
 dev_dependencies:
+  fake_async: any
   test: any

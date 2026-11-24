@@ -439,6 +439,7 @@ libraries:
     copyright_year: "2025"
     keep:
       - CHANGELOG.md
+      - STATE_MACHINE.md
       - lib/exceptions.dart
       - lib/retry.dart
       - lib/service_client.dart
@@ -450,10 +451,11 @@ libraries:
       - test/exceptions_test.dart
       - test/retry_test.dart
       - test/status_test.dart
+      - test/timeout_test.dart
       - lib/src/rpc.p.dart
     dart:
       dependencies: clock,googleapis_auth,http,meta
-      dev_dependencies: test
+      dev_dependencies: fake_async,test
       part_file: rpc.p.dart
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_rpc
   - name: google_cloud_secretmanager_v1
