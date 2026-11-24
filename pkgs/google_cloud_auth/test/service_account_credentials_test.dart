@@ -57,338 +57,327 @@ int _nowInSeconds() => DateTime.timestamp().millisecondsSinceEpoch ~/ 1000;
 void main() {
   late RsassaPkcs1V15PublicKey testPublicKey;
 
-  group(
-    'ServiceAccountCredentials',
-    () {
-      setUpAll(() async {
-        if (!canUseWebCrypto) return;
-        testPublicKey = await getTestPublicKey();
-      });
+  group('ServiceAccountCredentials', () {
+    setUpAll(() async {
+      testPublicKey = await getTestPublicKey();
+    });
 
-      group('fromServiceAccountInfo', () {
-        test('all keys set', () async {
-          final info = {
-            'type': 'service_account',
-            'project_id': 'test-project',
-            'private_key_id': 'key-id-123',
-            'private_key': testPrivateKey,
-            'client_email': 'test@test-project.iam.gserviceaccount.com',
-            'client_id': 'client-123',
-            'token_uri': 'https://oauth2.googleapis.com/custom_token',
-            'universe_domain': 'custom.domain.com',
-            'quota_project_id': 'quota-project',
-          };
+    group('fromServiceAccountInfo', () {
+      test('all keys set', () async {
+        final info = {
+          'type': 'service_account',
+          'project_id': 'test-project',
+          'private_key_id': 'key-id-123',
+          'private_key': testPrivateKey,
+          'client_email': 'test@test-project.iam.gserviceaccount.com',
+          'client_id': 'client-123',
+          'token_uri': 'https://oauth2.googleapis.com/custom_token',
+          'universe_domain': 'custom.domain.com',
+          'quota_project_id': 'quota-project',
+        };
 
-          final creds = await ServiceAccountCredentials.fromServiceAccountInfo(
-            info,
-          );
-
-          expect(
-            creds.clientEmail,
-            equals('test@test-project.iam.gserviceaccount.com'),
-          );
-
-          expect(creds.clientId, equals('client-123'));
-          expect(creds.privateKeyId, equals('key-id-123'));
-          expect(creds.projectId, equals('test-project'));
-          expect(creds.quotaProjectId, equals('quota-project'));
-          expect(
-            creds.tokenUri,
-            equals(Uri.https('oauth2.googleapis.com', '/custom_token')),
-          );
-          expect(creds.universeDomain, equals('custom.domain.com'));
-        });
-
-        test('minimal keys set', () async {
-          final info = {
-            'type': 'service_account',
-            'private_key': testPrivateKey,
-            'client_email': 'test@test-project.iam.gserviceaccount.com',
-          };
-
-          final creds = await ServiceAccountCredentials.fromServiceAccountInfo(
-            info,
-          );
-
-          expect(
-            creds.tokenUri,
-            equals(Uri.https('oauth2.googleapis.com', '/token')),
-          );
-          expect(creds.universeDomain, equals('googleapis.com'));
-          expect(creds.clientId, isNull);
-          expect(creds.privateKeyId, isNull);
-          expect(creds.projectId, isNull);
-          expect(creds.quotaProjectId, isNull);
-          expect(creds.scopes, [_defaultScope]);
-        });
-
-        test('interpolates custom universe_domain in '
-            'default token_uri', () async {
-          final info = {
-            'type': 'service_account',
-            'private_key': testPrivateKey,
-            'client_email': 'test@test-project.iam.gserviceaccount.com',
-            'universe_domain': 'custom.domain.com',
-          };
-
-          final creds = await ServiceAccountCredentials.fromServiceAccountInfo(
-            info,
-          );
-
-          expect(
-            creds.tokenUri,
-            equals(Uri.https('oauth2.custom.domain.com', '/token')),
-          );
-          expect(creds.universeDomain, equals('custom.domain.com'));
-        });
-
-        test('throws on missing type', () async {
-          final info = {
-            'private_key': testPrivateKey,
-            'client_email': 'test@test-project.iam.gserviceaccount.com',
-          };
-
-          expect(
-            () => ServiceAccountCredentials.fromServiceAccountInfo(info),
-            throwsFormatException,
-          );
-        });
-
-        test('throws on invalid type', () async {
-          final info = {
-            'type': 'authorized_user',
-            'private_key': testPrivateKey,
-            'client_email': 'test@test-project.iam.gserviceaccount.com',
-          };
-
-          expect(
-            () => ServiceAccountCredentials.fromServiceAccountInfo(info),
-            throwsFormatException,
-          );
-        });
-
-        test('throws on missing client_email', () async {
-          final info = {
-            'type': 'service_account',
-            'private_key': testPrivateKey,
-          };
-
-          expect(
-            () => ServiceAccountCredentials.fromServiceAccountInfo(info),
-            throwsFormatException,
-          );
-        });
-
-        test('throws on missing private_key', () async {
-          final info = {
-            'type': 'service_account',
-            'client_email': 'test@test-project.iam.gserviceaccount.com',
-          };
-
-          expect(
-            () => ServiceAccountCredentials.fromServiceAccountInfo(info),
-            throwsFormatException,
-          );
-        });
-
-        test(
-          'fromServiceAccountInfo throws on non-string private_key_id',
-          () async {
-            final info = <String, Object?>{
-              'type': 'service_account',
-              'private_key': testPrivateKey,
-              'client_email': 'test@test-project.iam.gserviceaccount.com',
-              'private_key_id': 12345,
-            };
-
-            expect(
-              () => ServiceAccountCredentials.fromServiceAccountInfo(info),
-              throwsFormatException,
-            );
-          },
+        final creds = await ServiceAccountCredentials.fromServiceAccountInfo(
+          info,
         );
 
-        test('throws on non-string client_id', () async {
-          final info = <String, Object?>{
-            'type': 'service_account',
-            'private_key': testPrivateKey,
-            'client_email': 'test@test-project.iam.gserviceaccount.com',
-            'client_id': 12345,
-          };
-
-          expect(
-            () => ServiceAccountCredentials.fromServiceAccountInfo(info),
-            throwsFormatException,
-          );
-        });
-
-        test(
-          'fromServiceAccountInfo throws on non-string project_id',
-          () async {
-            final info = <String, Object?>{
-              'type': 'service_account',
-              'private_key': testPrivateKey,
-              'client_email': 'test@test-project.iam.gserviceaccount.com',
-              'project_id': 12345,
-            };
-
-            expect(
-              () => ServiceAccountCredentials.fromServiceAccountInfo(info),
-              throwsFormatException,
-            );
-          },
+        expect(
+          creds.clientEmail,
+          equals('test@test-project.iam.gserviceaccount.com'),
         );
 
-        test('throws on non-string quota_project_id', () async {
-          final info = <String, Object?>{
-            'type': 'service_account',
-            'private_key': testPrivateKey,
-            'client_email': 'test@test-project.iam.gserviceaccount.com',
-            'quota_project_id': 12345,
-          };
-
-          expect(
-            () => ServiceAccountCredentials.fromServiceAccountInfo(info),
-            throwsFormatException,
-          );
-        });
-
-        test('throws on non-string universe_domain', () async {
-          final info = <String, Object?>{
-            'type': 'service_account',
-            'private_key': testPrivateKey,
-            'client_email': 'test@test-project.iam.gserviceaccount.com',
-            'universe_domain': 12345,
-          };
-
-          expect(
-            () => ServiceAccountCredentials.fromServiceAccountInfo(info),
-            throwsFormatException,
-          );
-        });
-
-        test('throws on non-string token_uri', () async {
-          final info = <String, Object?>{
-            'type': 'service_account',
-            'private_key': testPrivateKey,
-            'client_email': 'test@test-project.iam.gserviceaccount.com',
-            'token_uri': 12345,
-          };
-
-          expect(
-            () => ServiceAccountCredentials.fromServiceAccountInfo(info),
-            throwsFormatException,
-          );
-        });
-
-        test('accepts empty token_uri', () async {
-          final requests = <http.Request>[];
-          final creds = await ServiceAccountCredentials.fromServiceAccountInfo({
-            ..._minimalInfo,
-            'token_uri': '',
-          }, clientFactory: _recordingClientFactory(requests));
-
-          expect(creds.tokenUri, _defaultTokenUri);
-          expect(await creds.accessToken(), 'access-token-1');
-          expect(requests.single.url, _defaultTokenUri);
-        });
-
-        test('accepts whitespace-only token_uri', () async {
-          final requests = <http.Request>[];
-          final creds = await ServiceAccountCredentials.fromServiceAccountInfo({
-            ..._minimalInfo,
-            'token_uri': '  \t\n ',
-          }, clientFactory: _recordingClientFactory(requests));
-
-          expect(creds.tokenUri, _defaultTokenUri);
-          expect(await creds.accessToken(), 'access-token-1');
-          expect(requests.single.url, _defaultTokenUri);
-        });
-
-        test('accepts empty universe_domain', () async {
-          final requests = <http.Request>[];
-          final creds = await ServiceAccountCredentials.fromServiceAccountInfo({
-            ..._minimalInfo,
-            'universe_domain': '',
-          }, clientFactory: _recordingClientFactory(requests));
-
-          expect(creds.universeDomain, 'googleapis.com');
-          expect(creds.tokenUri, _defaultTokenUri);
-          expect(await creds.accessToken(), 'access-token-1');
-          expect(requests.single.url, _defaultTokenUri);
-        });
-
-        test('accepts empty private_key_id', () async {
-          final requests = <http.Request>[];
-          final creds = await ServiceAccountCredentials.fromServiceAccountInfo({
-            ..._minimalInfo,
-            'private_key_id': '',
-          }, clientFactory: _recordingClientFactory(requests));
-
-          expect(creds.privateKeyId, isNull);
-          expect(await creds.accessToken(), 'access-token-1');
-          expect(requests.single.url, _defaultTokenUri);
-        });
-
-        test('throws on empty scopes', () async {
-          await expectLater(
-            ServiceAccountCredentials.fromServiceAccountInfo(
-              _minimalInfo,
-              scopes: [],
-            ),
-            throwsArgumentError,
-          );
-        });
-
-        test('loads credentials from string', () async {
-          final info = <String, Object?>{
-            'type': 'service_account',
-            'project_id': 'string-project',
-            'private_key': testPrivateKey,
-            'client_email': 'string@string-project.iam.gserviceaccount.com',
-          };
-
-          final creds =
-              await ServiceAccountCredentials.fromServiceAccountString(
-                jsonEncode(info),
-              );
-
-          expect(
-            creds.clientEmail,
-            equals('string@string-project.iam.gserviceaccount.com'),
-          );
-          expect(creds.projectId, equals('string-project'));
-        });
-
-        test('string with scopes and clientFactory', () async {
-          final requests = <http.Request>[];
-          final creds =
-              await ServiceAccountCredentials.fromServiceAccountString(
-                jsonEncode(_minimalInfo),
-                scopes: ['https://www.googleapis.com/auth/pubsub'],
-                clientFactory: _recordingClientFactory(requests),
-              );
-
-          expect(creds.scopes, ['https://www.googleapis.com/auth/pubsub']);
-          expect(await creds.accessToken(), 'access-token-1');
-          expect(requests, hasLength(1));
-        });
-
-        test('string throws on empty scopes', () async {
-          await expectLater(
-            ServiceAccountCredentials.fromServiceAccountString(
-              jsonEncode(_minimalInfo),
-              scopes: [],
-            ),
-            throwsArgumentError,
-          );
-        });
+        expect(creds.clientId, equals('client-123'));
+        expect(creds.privateKeyId, equals('key-id-123'));
+        expect(creds.projectId, equals('test-project'));
+        expect(creds.quotaProjectId, equals('quota-project'));
+        expect(
+          creds.tokenUri,
+          equals(Uri.https('oauth2.googleapis.com', '/custom_token')),
+        );
+        expect(creds.universeDomain, equals('custom.domain.com'));
       });
 
-      group('fromServiceAccountFile', () {
-        test('loads credentials from file', () async {
-          // This string was taken from a real key dump.
-          const jsonString = r'''
+      test('minimal keys set', () async {
+        final info = {
+          'type': 'service_account',
+          'private_key': testPrivateKey,
+          'client_email': 'test@test-project.iam.gserviceaccount.com',
+        };
+
+        final creds = await ServiceAccountCredentials.fromServiceAccountInfo(
+          info,
+        );
+
+        expect(
+          creds.tokenUri,
+          equals(Uri.https('oauth2.googleapis.com', '/token')),
+        );
+        expect(creds.universeDomain, equals('googleapis.com'));
+        expect(creds.clientId, isNull);
+        expect(creds.privateKeyId, isNull);
+        expect(creds.projectId, isNull);
+        expect(creds.quotaProjectId, isNull);
+        expect(creds.scopes, [_defaultScope]);
+      });
+
+      test('interpolates custom universe_domain in '
+          'default token_uri', () async {
+        final info = {
+          'type': 'service_account',
+          'private_key': testPrivateKey,
+          'client_email': 'test@test-project.iam.gserviceaccount.com',
+          'universe_domain': 'custom.domain.com',
+        };
+
+        final creds = await ServiceAccountCredentials.fromServiceAccountInfo(
+          info,
+        );
+
+        expect(
+          creds.tokenUri,
+          equals(Uri.https('oauth2.custom.domain.com', '/token')),
+        );
+        expect(creds.universeDomain, equals('custom.domain.com'));
+      });
+
+      test('throws on missing type', () async {
+        final info = {
+          'private_key': testPrivateKey,
+          'client_email': 'test@test-project.iam.gserviceaccount.com',
+        };
+
+        expect(
+          () => ServiceAccountCredentials.fromServiceAccountInfo(info),
+          throwsFormatException,
+        );
+      });
+
+      test('throws on invalid type', () async {
+        final info = {
+          'type': 'authorized_user',
+          'private_key': testPrivateKey,
+          'client_email': 'test@test-project.iam.gserviceaccount.com',
+        };
+
+        expect(
+          () => ServiceAccountCredentials.fromServiceAccountInfo(info),
+          throwsFormatException,
+        );
+      });
+
+      test('throws on missing client_email', () async {
+        final info = {'type': 'service_account', 'private_key': testPrivateKey};
+
+        expect(
+          () => ServiceAccountCredentials.fromServiceAccountInfo(info),
+          throwsFormatException,
+        );
+      });
+
+      test('throws on missing private_key', () async {
+        final info = {
+          'type': 'service_account',
+          'client_email': 'test@test-project.iam.gserviceaccount.com',
+        };
+
+        expect(
+          () => ServiceAccountCredentials.fromServiceAccountInfo(info),
+          throwsFormatException,
+        );
+      });
+
+      test(
+        'fromServiceAccountInfo throws on non-string private_key_id',
+        () async {
+          final info = <String, Object?>{
+            'type': 'service_account',
+            'private_key': testPrivateKey,
+            'client_email': 'test@test-project.iam.gserviceaccount.com',
+            'private_key_id': 12345,
+          };
+
+          expect(
+            () => ServiceAccountCredentials.fromServiceAccountInfo(info),
+            throwsFormatException,
+          );
+        },
+      );
+
+      test('throws on non-string client_id', () async {
+        final info = <String, Object?>{
+          'type': 'service_account',
+          'private_key': testPrivateKey,
+          'client_email': 'test@test-project.iam.gserviceaccount.com',
+          'client_id': 12345,
+        };
+
+        expect(
+          () => ServiceAccountCredentials.fromServiceAccountInfo(info),
+          throwsFormatException,
+        );
+      });
+
+      test('fromServiceAccountInfo throws on non-string project_id', () async {
+        final info = <String, Object?>{
+          'type': 'service_account',
+          'private_key': testPrivateKey,
+          'client_email': 'test@test-project.iam.gserviceaccount.com',
+          'project_id': 12345,
+        };
+
+        expect(
+          () => ServiceAccountCredentials.fromServiceAccountInfo(info),
+          throwsFormatException,
+        );
+      });
+
+      test('throws on non-string quota_project_id', () async {
+        final info = <String, Object?>{
+          'type': 'service_account',
+          'private_key': testPrivateKey,
+          'client_email': 'test@test-project.iam.gserviceaccount.com',
+          'quota_project_id': 12345,
+        };
+
+        expect(
+          () => ServiceAccountCredentials.fromServiceAccountInfo(info),
+          throwsFormatException,
+        );
+      });
+
+      test('throws on non-string universe_domain', () async {
+        final info = <String, Object?>{
+          'type': 'service_account',
+          'private_key': testPrivateKey,
+          'client_email': 'test@test-project.iam.gserviceaccount.com',
+          'universe_domain': 12345,
+        };
+
+        expect(
+          () => ServiceAccountCredentials.fromServiceAccountInfo(info),
+          throwsFormatException,
+        );
+      });
+
+      test('throws on non-string token_uri', () async {
+        final info = <String, Object?>{
+          'type': 'service_account',
+          'private_key': testPrivateKey,
+          'client_email': 'test@test-project.iam.gserviceaccount.com',
+          'token_uri': 12345,
+        };
+
+        expect(
+          () => ServiceAccountCredentials.fromServiceAccountInfo(info),
+          throwsFormatException,
+        );
+      });
+
+      test('accepts empty token_uri', () async {
+        final requests = <http.Request>[];
+        final creds = await ServiceAccountCredentials.fromServiceAccountInfo({
+          ..._minimalInfo,
+          'token_uri': '',
+        }, clientFactory: _recordingClientFactory(requests));
+
+        expect(creds.tokenUri, _defaultTokenUri);
+        expect(await creds.accessToken(), 'access-token-1');
+        expect(requests.single.url, _defaultTokenUri);
+      });
+
+      test('accepts whitespace-only token_uri', () async {
+        final requests = <http.Request>[];
+        final creds = await ServiceAccountCredentials.fromServiceAccountInfo({
+          ..._minimalInfo,
+          'token_uri': '  \t\n ',
+        }, clientFactory: _recordingClientFactory(requests));
+
+        expect(creds.tokenUri, _defaultTokenUri);
+        expect(await creds.accessToken(), 'access-token-1');
+        expect(requests.single.url, _defaultTokenUri);
+      });
+
+      test('accepts empty universe_domain', () async {
+        final requests = <http.Request>[];
+        final creds = await ServiceAccountCredentials.fromServiceAccountInfo({
+          ..._minimalInfo,
+          'universe_domain': '',
+        }, clientFactory: _recordingClientFactory(requests));
+
+        expect(creds.universeDomain, 'googleapis.com');
+        expect(creds.tokenUri, _defaultTokenUri);
+        expect(await creds.accessToken(), 'access-token-1');
+        expect(requests.single.url, _defaultTokenUri);
+      });
+
+      test('accepts empty private_key_id', () async {
+        final requests = <http.Request>[];
+        final creds = await ServiceAccountCredentials.fromServiceAccountInfo({
+          ..._minimalInfo,
+          'private_key_id': '',
+        }, clientFactory: _recordingClientFactory(requests));
+
+        expect(creds.privateKeyId, isNull);
+        expect(await creds.accessToken(), 'access-token-1');
+        expect(requests.single.url, _defaultTokenUri);
+      });
+
+      test('throws on empty scopes', () async {
+        await expectLater(
+          ServiceAccountCredentials.fromServiceAccountInfo(
+            _minimalInfo,
+            scopes: [],
+          ),
+          throwsArgumentError,
+        );
+      });
+
+      test('loads credentials from string', () async {
+        final info = <String, Object?>{
+          'type': 'service_account',
+          'project_id': 'string-project',
+          'private_key': testPrivateKey,
+          'client_email': 'string@string-project.iam.gserviceaccount.com',
+        };
+
+        final creds = await ServiceAccountCredentials.fromServiceAccountString(
+          jsonEncode(info),
+        );
+
+        expect(
+          creds.clientEmail,
+          equals('string@string-project.iam.gserviceaccount.com'),
+        );
+        expect(creds.projectId, equals('string-project'));
+      });
+
+      test('string with scopes and clientFactory', () async {
+        final requests = <http.Request>[];
+        final creds = await ServiceAccountCredentials.fromServiceAccountString(
+          jsonEncode(_minimalInfo),
+          scopes: ['https://www.googleapis.com/auth/pubsub'],
+          clientFactory: _recordingClientFactory(requests),
+        );
+
+        expect(creds.scopes, ['https://www.googleapis.com/auth/pubsub']);
+        expect(await creds.accessToken(), 'access-token-1');
+        expect(requests, hasLength(1));
+      });
+
+      test('string throws on empty scopes', () async {
+        await expectLater(
+          ServiceAccountCredentials.fromServiceAccountString(
+            jsonEncode(_minimalInfo),
+            scopes: [],
+          ),
+          throwsArgumentError,
+        );
+      });
+    });
+
+    group('fromServiceAccountFile', () {
+      test('loads credentials from file', () async {
+        // This string was taken from a real key dump.
+        const jsonString = r'''
 {
   "type": "service_account",
   "project_id": "test-project",
@@ -403,406 +392,387 @@ void main() {
   "universe_domain": "googleapis.com"
 }
 ''';
-          final tempFilePath = await writeTempFile(
-            'service_account.json',
-            jsonString,
-          );
+        final tempFilePath = await writeTempFile(
+          'service_account.json',
+          jsonString,
+        );
 
-          final creds = await ServiceAccountCredentials.fromServiceAccountFile(
+        final creds = await ServiceAccountCredentials.fromServiceAccountFile(
+          tempFilePath,
+        );
+
+        expect(
+          creds.clientEmail,
+          equals('testkey@test-project.iam.gserviceaccount.com'),
+        );
+        expect(creds.projectId, equals('test-project'));
+        expect(
+          creds.privateKeyId,
+          equals('b6405252fba05768ca6b5f57a80ee58aad2dd354'),
+        );
+        expect(creds.clientId, equals('114569939335839849739'));
+        expect(
+          creds.tokenUri,
+          equals(Uri.https('oauth2.googleapis.com', '/token')),
+        );
+        expect(creds.universeDomain, equals('googleapis.com'));
+      }, testOn: 'vm');
+
+      test('uses scopes and clientFactory', () async {
+        final tempFilePath = await writeTempFile(
+          'service_account.json',
+          jsonEncode(_minimalInfo),
+        );
+        final requests = <http.Request>[];
+
+        final creds = await ServiceAccountCredentials.fromServiceAccountFile(
+          tempFilePath,
+          scopes: ['https://www.googleapis.com/auth/pubsub'],
+          clientFactory: _recordingClientFactory(requests),
+        );
+
+        expect(creds.scopes, ['https://www.googleapis.com/auth/pubsub']);
+        expect(await creds.accessToken(), 'access-token-1');
+        expect(requests, hasLength(1));
+      }, testOn: 'vm');
+
+      test('throws on empty scopes', () async {
+        final tempFilePath = await writeTempFile(
+          'service_account.json',
+          jsonEncode(_minimalInfo),
+        );
+
+        await expectLater(
+          ServiceAccountCredentials.fromServiceAccountFile(
             tempFilePath,
-          );
+            scopes: [],
+          ),
+          throwsArgumentError,
+        );
+      }, testOn: 'vm');
 
-          expect(
-            creds.clientEmail,
-            equals('testkey@test-project.iam.gserviceaccount.com'),
-          );
-          expect(creds.projectId, equals('test-project'));
-          expect(
-            creds.privateKeyId,
-            equals('b6405252fba05768ca6b5f57a80ee58aad2dd354'),
-          );
-          expect(creds.clientId, equals('114569939335839849739'));
-          expect(
-            creds.tokenUri,
-            equals(Uri.https('oauth2.googleapis.com', '/token')),
-          );
-          expect(creds.universeDomain, equals('googleapis.com'));
-        }, testOn: 'vm');
-
-        test('uses scopes and clientFactory', () async {
-          final tempFilePath = await writeTempFile(
-            'service_account.json',
-            jsonEncode(_minimalInfo),
-          );
-          final requests = <http.Request>[];
-
-          final creds = await ServiceAccountCredentials.fromServiceAccountFile(
-            tempFilePath,
-            scopes: ['https://www.googleapis.com/auth/pubsub'],
-            clientFactory: _recordingClientFactory(requests),
-          );
-
-          expect(creds.scopes, ['https://www.googleapis.com/auth/pubsub']);
-          expect(await creds.accessToken(), 'access-token-1');
-          expect(requests, hasLength(1));
-        }, testOn: 'vm');
-
-        test('throws on empty scopes', () async {
-          final tempFilePath = await writeTempFile(
-            'service_account.json',
-            jsonEncode(_minimalInfo),
-          );
-
+      test(
+        'throws CredentialException when file cannot be read or on browser',
+        () async {
           await expectLater(
             ServiceAccountCredentials.fromServiceAccountFile(
-              tempFilePath,
-              scopes: [],
+              'non_existent_service_account.json',
             ),
-            throwsArgumentError,
+            throwsA(isA<CredentialException>()),
           );
-        }, testOn: 'vm');
+        },
+      );
+    });
 
-        test(
-          'throws CredentialException when file cannot be read or on browser',
-          () async {
-            await expectLater(
-              ServiceAccountCredentials.fromServiceAccountFile(
-                'non_existent_service_account.json',
-              ),
-              throwsA(isA<CredentialException>()),
-            );
-          },
+    group('fromPkcs8', () {
+      test('creates valid credentials', () async {
+        final creds = await ServiceAccountCredentials.fromPkcs8(
+          clientEmail: 'pkcs8@project.iam.gserviceaccount.com',
+          privateKeyPkcs8: testPrivateKey,
+          privateKeyId: 'pkcs8-key',
+          projectId: 'pkcs8-project',
+        );
+
+        expect(
+          creds.clientEmail,
+          equals('pkcs8@project.iam.gserviceaccount.com'),
+        );
+        expect(creds.projectId, equals('pkcs8-project'));
+        expect(creds.privateKeyId, equals('pkcs8-key'));
+        expect(
+          creds.tokenUri,
+          equals(Uri.https('oauth2.googleapis.com', '/token')),
+        );
+        expect(creds.universeDomain, equals('googleapis.com'));
+      });
+
+      test('interpolates custom universeDomain in default tokenUri', () async {
+        final creds = await ServiceAccountCredentials.fromPkcs8(
+          clientEmail: 'pkcs8@project.iam.gserviceaccount.com',
+          privateKeyPkcs8: testPrivateKey,
+          universeDomain: 'custom.domain.com',
+        );
+
+        expect(
+          creds.tokenUri,
+          equals(Uri.https('oauth2.custom.domain.com', '/token')),
+        );
+        expect(creds.universeDomain, equals('custom.domain.com'));
+      });
+
+      test('accepts empty universeDomain and privateKeyId', () async {
+        final requests = <http.Request>[];
+        final creds = await ServiceAccountCredentials.fromPkcs8(
+          clientEmail: 'pkcs8@project.iam.gserviceaccount.com',
+          privateKeyPkcs8: testPrivateKey,
+          privateKeyId: '',
+          universeDomain: '',
+          clientFactory: _recordingClientFactory(requests),
+        );
+
+        expect(creds.privateKeyId, isNull);
+        expect(creds.universeDomain, 'googleapis.com');
+        expect(creds.tokenUri, _defaultTokenUri);
+        expect(await creds.accessToken(), 'access-token-1');
+        expect(requests.single.url, _defaultTokenUri);
+      });
+
+      test('uses scopes and clientFactory', () async {
+        final requests = <http.Request>[];
+        final creds = await ServiceAccountCredentials.fromPkcs8(
+          clientEmail: 'pkcs8@project.iam.gserviceaccount.com',
+          privateKeyPkcs8: testPrivateKey,
+          scopes: ['https://www.googleapis.com/auth/pubsub'],
+          clientFactory: _recordingClientFactory(requests),
+        );
+
+        expect(creds.scopes, ['https://www.googleapis.com/auth/pubsub']);
+        expect(await creds.accessToken(), 'access-token-1');
+        expect(requests, hasLength(1));
+      });
+
+      test('throws on empty scopes', () async {
+        await expectLater(
+          ServiceAccountCredentials.fromPkcs8(
+            clientEmail: 'pkcs8@project.iam.gserviceaccount.com',
+            privateKeyPkcs8: testPrivateKey,
+            scopes: [],
+          ),
+          throwsArgumentError,
+        );
+      });
+    });
+
+    group('sign', () {
+      test('signs message and signature is valid with public key', () async {
+        final creds = await ServiceAccountCredentials.fromPkcs8(
+          clientEmail: 'test@example.com',
+          privateKeyPkcs8: testPrivateKey,
+        );
+
+        final message = utf8.encode('Hello Google Cloud!');
+        final signature = await creds.sign(message);
+
+        expect(signature, isNotEmpty);
+
+        final isValid = await testPublicKey.verifyBytes(signature, message);
+        expect(isValid, isTrue);
+      });
+
+      test('signature fails for modified message', () async {
+        final creds = await ServiceAccountCredentials.fromPkcs8(
+          clientEmail: 'test@example.com',
+          privateKeyPkcs8: testPrivateKey,
+        );
+
+        final message = utf8.encode('Hello Google Cloud!');
+        final signature = await creds.sign(message);
+
+        final tamperedMessage = utf8.encode('Hello Google Cloud?');
+        final isValid = await testPublicKey.verifyBytes(
+          signature,
+          tamperedMessage,
+        );
+        expect(isValid, isFalse);
+      });
+
+      test('signs Uint8List message directly', () async {
+        final creds = await ServiceAccountCredentials.fromPkcs8(
+          clientEmail: 'test@example.com',
+          privateKeyPkcs8: testPrivateKey,
+        );
+
+        final message = Uint8List.fromList([1, 2, 3, 4, 5]);
+        final signature = await creds.sign(message);
+
+        final isValid = await testPublicKey.verifyBytes(signature, message);
+        expect(isValid, isTrue);
+      });
+    });
+
+    group('accessToken', () {
+      /// Parses [jwt], verifying that it was signed with [testPrivateKey].
+      Future<JwsParts> parseVerifiedJwt(String jwt) async {
+        final parts = JwsParts.parse(jwt);
+        expect(
+          await testPublicKey.verifyBytes(parts.signature, parts.signedContent),
+          isTrue,
+        );
+        return parts;
+      }
+
+      test('exchanges a signed JWT for an access token', () async {
+        final requests = <http.Request>[];
+        final creds = await ServiceAccountCredentials.fromServiceAccountInfo({
+          ..._minimalInfo,
+          'private_key_id': 'key-id-123',
+        }, clientFactory: _recordingClientFactory(requests));
+
+        final before = _nowInSeconds();
+        expect(await creds.accessToken(), 'access-token-1');
+        final after = _nowInSeconds();
+
+        final request = requests.single;
+        expect(request.method, 'POST');
+        expect(request.url, _defaultTokenUri);
+        expect(request.bodyFields, {
+          'grant_type': 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+          'assertion': isA<String>(),
+        });
+
+        final assertion = await parseVerifiedJwt(
+          request.bodyFields['assertion']!,
+        );
+        expect(assertion.header, {
+          'alg': 'RS256',
+          'typ': 'JWT',
+          'kid': 'key-id-123',
+        });
+        final claims = assertion.decodeClaims();
+        expect(claims, {
+          'iss': _clientEmail,
+          'scope': _defaultScope,
+          'aud': 'https://oauth2.googleapis.com/token',
+          'iat': inInclusiveRange(before, after),
+          'exp': (claims['iat'] as int) + 3600,
+        });
+      });
+
+      test('requests the given scopes', () async {
+        final requests = <http.Request>[];
+        final creds = await ServiceAccountCredentials.fromServiceAccountInfo(
+          _minimalInfo,
+          scopes: [
+            'https://www.googleapis.com/auth/devstorage.read_only',
+            'https://www.googleapis.com/auth/pubsub',
+          ],
+          clientFactory: _recordingClientFactory(requests),
+        );
+
+        await creds.accessToken();
+
+        final claims = JwsParts.parse(requests.single.bodyFields['assertion']!)
+            .decodeClaims();
+        expect(
+          claims['scope'],
+          'https://www.googleapis.com/auth/devstorage.read_only '
+          'https://www.googleapis.com/auth/pubsub',
         );
       });
 
-      group('fromPkcs8', () {
-        test('creates valid credentials', () async {
-          final creds = await ServiceAccountCredentials.fromPkcs8(
-            clientEmail: 'pkcs8@project.iam.gserviceaccount.com',
-            privateKeyPkcs8: testPrivateKey,
-            privateKeyId: 'pkcs8-key',
-            projectId: 'pkcs8-project',
-          );
-
-          expect(
-            creds.clientEmail,
-            equals('pkcs8@project.iam.gserviceaccount.com'),
-          );
-          expect(creds.projectId, equals('pkcs8-project'));
-          expect(creds.privateKeyId, equals('pkcs8-key'));
-          expect(
-            creds.tokenUri,
-            equals(Uri.https('oauth2.googleapis.com', '/token')),
-          );
-          expect(creds.universeDomain, equals('googleapis.com'));
-        });
-
-        test(
-          'interpolates custom universeDomain in default tokenUri',
-          () async {
-            final creds = await ServiceAccountCredentials.fromPkcs8(
-              clientEmail: 'pkcs8@project.iam.gserviceaccount.com',
-              privateKeyPkcs8: testPrivateKey,
-              universeDomain: 'custom.domain.com',
-            );
-
-            expect(
-              creds.tokenUri,
-              equals(Uri.https('oauth2.custom.domain.com', '/token')),
-            );
-            expect(creds.universeDomain, equals('custom.domain.com'));
-          },
+      test('omits kid when there is no private key ID', () async {
+        final requests = <http.Request>[];
+        final creds = await ServiceAccountCredentials.fromServiceAccountInfo(
+          _minimalInfo,
+          clientFactory: _recordingClientFactory(requests),
         );
 
-        test('accepts empty universeDomain and privateKeyId', () async {
-          final requests = <http.Request>[];
-          final creds = await ServiceAccountCredentials.fromPkcs8(
-            clientEmail: 'pkcs8@project.iam.gserviceaccount.com',
-            privateKeyPkcs8: testPrivateKey,
-            privateKeyId: '',
-            universeDomain: '',
-            clientFactory: _recordingClientFactory(requests),
-          );
+        await creds.accessToken();
 
-          expect(creds.privateKeyId, isNull);
-          expect(creds.universeDomain, 'googleapis.com');
-          expect(creds.tokenUri, _defaultTokenUri);
-          expect(await creds.accessToken(), 'access-token-1');
-          expect(requests.single.url, _defaultTokenUri);
-        });
-
-        test('uses scopes and clientFactory', () async {
-          final requests = <http.Request>[];
-          final creds = await ServiceAccountCredentials.fromPkcs8(
-            clientEmail: 'pkcs8@project.iam.gserviceaccount.com',
-            privateKeyPkcs8: testPrivateKey,
-            scopes: ['https://www.googleapis.com/auth/pubsub'],
-            clientFactory: _recordingClientFactory(requests),
-          );
-
-          expect(creds.scopes, ['https://www.googleapis.com/auth/pubsub']);
-          expect(await creds.accessToken(), 'access-token-1');
-          expect(requests, hasLength(1));
-        });
-
-        test('throws on empty scopes', () async {
-          await expectLater(
-            ServiceAccountCredentials.fromPkcs8(
-              clientEmail: 'pkcs8@project.iam.gserviceaccount.com',
-              privateKeyPkcs8: testPrivateKey,
-              scopes: [],
-            ),
-            throwsArgumentError,
-          );
-        });
+        final assertion = JwsParts.parse(
+          requests.single.bodyFields['assertion']!,
+        );
+        expect(assertion.header, {'alg': 'RS256', 'typ': 'JWT'});
       });
 
-      group('sign', () {
-        test('signs message and signature is valid with public key', () async {
-          final creds = await ServiceAccountCredentials.fromPkcs8(
-            clientEmail: 'test@example.com',
-            privateKeyPkcs8: testPrivateKey,
-          );
+      test('omits kid when private key ID is empty', () async {
+        final requests = <http.Request>[];
+        final creds = await ServiceAccountCredentials.fromServiceAccountInfo({
+          ..._minimalInfo,
+          'private_key_id': '',
+        }, clientFactory: _recordingClientFactory(requests));
 
-          final message = utf8.encode('Hello Google Cloud!');
-          final signature = await creds.sign(message);
+        await creds.accessToken();
 
-          expect(signature, isNotEmpty);
-
-          final isValid = await testPublicKey.verifyBytes(signature, message);
-          expect(isValid, isTrue);
-        });
-
-        test('signature fails for modified message', () async {
-          final creds = await ServiceAccountCredentials.fromPkcs8(
-            clientEmail: 'test@example.com',
-            privateKeyPkcs8: testPrivateKey,
-          );
-
-          final message = utf8.encode('Hello Google Cloud!');
-          final signature = await creds.sign(message);
-
-          final tamperedMessage = utf8.encode('Hello Google Cloud?');
-          final isValid = await testPublicKey.verifyBytes(
-            signature,
-            tamperedMessage,
-          );
-          expect(isValid, isFalse);
-        });
-
-        test('signs Uint8List message directly', () async {
-          final creds = await ServiceAccountCredentials.fromPkcs8(
-            clientEmail: 'test@example.com',
-            privateKeyPkcs8: testPrivateKey,
-          );
-
-          final message = Uint8List.fromList([1, 2, 3, 4, 5]);
-          final signature = await creds.sign(message);
-
-          final isValid = await testPublicKey.verifyBytes(signature, message);
-          expect(isValid, isTrue);
-        });
+        final assertion = JwsParts.parse(
+          requests.single.bodyFields['assertion']!,
+        );
+        expect(assertion.header, {'alg': 'RS256', 'typ': 'JWT'});
       });
 
-      group('accessToken', () {
-        /// Parses [jwt], verifying that it was signed with [testPrivateKey].
-        Future<JwsParts> parseVerifiedJwt(String jwt) async {
-          final parts = JwsParts.parse(jwt);
-          expect(
-            await testPublicKey.verifyBytes(
-              parts.signature,
-              parts.signedContent,
-            ),
-            isTrue,
-          );
-          return parts;
-        }
+      test('uses token_uri', () async {
+        final requests = <http.Request>[];
+        final creds = await ServiceAccountCredentials.fromServiceAccountInfo({
+          ..._minimalInfo,
+          'token_uri': 'https://oauth2.example.com/token',
+        }, clientFactory: _recordingClientFactory(requests));
 
-        test('exchanges a signed JWT for an access token', () async {
-          final requests = <http.Request>[];
-          final creds = await ServiceAccountCredentials.fromServiceAccountInfo({
+        await creds.accessToken();
+
+        expect(requests.single.url, Uri.https('oauth2.example.com', '/token'));
+        // The audience is the Google OAuth 2.0 token endpoint regardless of
+        // token_uri, as in the Java and Python libraries.
+        final claims = JwsParts.parse(requests.single.bodyFields['assertion']!)
+            .decodeClaims();
+        expect(claims['aud'], 'https://oauth2.googleapis.com/token');
+      });
+      test('uses a self-signed JWT outside of the default universe '
+          'domain', () async {
+        final creds = await ServiceAccountCredentials.fromServiceAccountInfo(
+          {
             ..._minimalInfo,
             'private_key_id': 'key-id-123',
-          }, clientFactory: _recordingClientFactory(requests));
+            'universe_domain': 'custom.domain.com',
+          },
+          scopes: ['https://www.googleapis.com/auth/pubsub'],
+          clientFactory: () => fail('Unexpected HTTP request'),
+        );
 
-          final before = _nowInSeconds();
-          expect(await creds.accessToken(), 'access-token-1');
-          final after = _nowInSeconds();
+        final before = _nowInSeconds();
+        final token = await creds.accessToken();
+        final after = _nowInSeconds();
 
-          final request = requests.single;
-          expect(request.method, 'POST');
-          expect(request.url, _defaultTokenUri);
-          expect(request.bodyFields, {
-            'grant_type': 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-            'assertion': isA<String>(),
-          });
-
-          final assertion = await parseVerifiedJwt(
-            request.bodyFields['assertion']!,
-          );
-          expect(assertion.header, {
-            'alg': 'RS256',
-            'typ': 'JWT',
-            'kid': 'key-id-123',
-          });
-          final claims = assertion.decodeClaims();
-          expect(claims, {
-            'iss': _clientEmail,
-            'scope': _defaultScope,
-            'aud': 'https://oauth2.googleapis.com/token',
-            'iat': inInclusiveRange(before, after),
-            'exp': (claims['iat'] as int) + 3600,
-          });
+        final jwt = await parseVerifiedJwt(token);
+        expect(jwt.header, {'alg': 'RS256', 'typ': 'JWT', 'kid': 'key-id-123'});
+        final claims = jwt.decodeClaims();
+        expect(claims, {
+          'iss': _clientEmail,
+          'sub': _clientEmail,
+          'scope': 'https://www.googleapis.com/auth/pubsub',
+          'iat': inInclusiveRange(before, after),
+          'exp': (claims['iat'] as int) + 3600,
         });
 
-        test('requests the given scopes', () async {
-          final requests = <http.Request>[];
-          final creds = await ServiceAccountCredentials.fromServiceAccountInfo(
-            _minimalInfo,
-            scopes: [
-              'https://www.googleapis.com/auth/devstorage.read_only',
-              'https://www.googleapis.com/auth/pubsub',
-            ],
-            clientFactory: _recordingClientFactory(requests),
+        expect(await creds.accessToken(), token);
+      });
+
+      test(
+        'real token endpoint rejects an unknown service account',
+        tags: ['google-cloud'],
+        () async {
+          // A successful exchange requires a key registered with a real
+          // service account, which our test project does not allow.
+          //
+          // Instead, verify that the token endpoint accepts the grant type
+          // and parses the assertion far enough to look up its issuer,
+          // failing with "account not found" rather than with an error about
+          // the request or the JWT.
+          final creds = await ServiceAccountCredentials.fromPkcs8(
+            // Project IDs are at most 30 characters, so this service
+            // account cannot exist.
+            clientEmail:
+                'brian@google-cloud-dart-test-account-that-does-not-'
+                'exist.iam.gserviceaccount.com',
+            privateKeyPkcs8: testPrivateKey,
+            privateKeyId: 'key-id-123',
           );
 
-          await creds.accessToken();
-
-          final claims = JwsParts.parse(
-            requests.single.bodyFields['assertion']!,
-          ).decodeClaims();
-          expect(
-            claims['scope'],
-            'https://www.googleapis.com/auth/devstorage.read_only '
-            'https://www.googleapis.com/auth/pubsub',
-          );
-        });
-
-        test('omits kid when there is no private key ID', () async {
-          final requests = <http.Request>[];
-          final creds = await ServiceAccountCredentials.fromServiceAccountInfo(
-            _minimalInfo,
-            clientFactory: _recordingClientFactory(requests),
-          );
-
-          await creds.accessToken();
-
-          final assertion = JwsParts.parse(
-            requests.single.bodyFields['assertion']!,
-          );
-          expect(assertion.header, {'alg': 'RS256', 'typ': 'JWT'});
-        });
-
-        test('omits kid when private key ID is empty', () async {
-          final requests = <http.Request>[];
-          final creds = await ServiceAccountCredentials.fromServiceAccountInfo({
-            ..._minimalInfo,
-            'private_key_id': '',
-          }, clientFactory: _recordingClientFactory(requests));
-
-          await creds.accessToken();
-
-          final assertion = JwsParts.parse(
-            requests.single.bodyFields['assertion']!,
-          );
-          expect(assertion.header, {'alg': 'RS256', 'typ': 'JWT'});
-        });
-
-        test('uses token_uri', () async {
-          final requests = <http.Request>[];
-          final creds = await ServiceAccountCredentials.fromServiceAccountInfo({
-            ..._minimalInfo,
-            'token_uri': 'https://oauth2.example.com/token',
-          }, clientFactory: _recordingClientFactory(requests));
-
-          await creds.accessToken();
-
-          expect(
-            requests.single.url,
-            Uri.https('oauth2.example.com', '/token'),
-          );
-          // The audience is the Google OAuth 2.0 token endpoint regardless of
-          // token_uri, as in the Java and Python libraries.
-          final claims = JwsParts.parse(
-            requests.single.bodyFields['assertion']!,
-          ).decodeClaims();
-          expect(claims['aud'], 'https://oauth2.googleapis.com/token');
-        });
-        test('uses a self-signed JWT outside of the default universe '
-            'domain', () async {
-          final creds = await ServiceAccountCredentials.fromServiceAccountInfo(
-            {
-              ..._minimalInfo,
-              'private_key_id': 'key-id-123',
-              'universe_domain': 'custom.domain.com',
-            },
-            scopes: ['https://www.googleapis.com/auth/pubsub'],
-            clientFactory: () => fail('Unexpected HTTP request'),
-          );
-
-          final before = _nowInSeconds();
-          final token = await creds.accessToken();
-          final after = _nowInSeconds();
-
-          final jwt = await parseVerifiedJwt(token);
-          expect(jwt.header, {
-            'alg': 'RS256',
-            'typ': 'JWT',
-            'kid': 'key-id-123',
-          });
-          final claims = jwt.decodeClaims();
-          expect(claims, {
-            'iss': _clientEmail,
-            'sub': _clientEmail,
-            'scope': 'https://www.googleapis.com/auth/pubsub',
-            'iat': inInclusiveRange(before, after),
-            'exp': (claims['iat'] as int) + 3600,
-          });
-
-          expect(await creds.accessToken(), token);
-        });
-
-        test(
-          'real token endpoint rejects an unknown service account',
-          tags: ['google-cloud'],
-          () async {
-            // A successful exchange requires a key registered with a real
-            // service account, which our test project does not allow.
-            //
-            // Instead, verify that the token endpoint accepts the grant type
-            // and parses the assertion far enough to look up its issuer,
-            // failing with "account not found" rather than with an error about
-            // the request or the JWT.
-            final creds = await ServiceAccountCredentials.fromPkcs8(
-              // Project IDs are at most 30 characters, so this service
-              // account cannot exist.
-              clientEmail:
-                  'brian@google-cloud-dart-test-account-that-does-not-'
-                  'exist.iam.gserviceaccount.com',
-              privateKeyPkcs8: testPrivateKey,
-              privateKeyId: 'key-id-123',
-            );
-
-            await expectLater(
-              creds.accessToken(),
-              throwsA(
-                isA<CredentialException>().having(
-                  (e) => e.message,
-                  'message',
-                  allOf(
-                    contains('https://oauth2.googleapis.com/token: 400'),
-                    contains('invalid_grant'),
-                    contains('account not found'),
-                  ),
+          await expectLater(
+            creds.accessToken(),
+            throwsA(
+              isA<CredentialException>().having(
+                (e) => e.message,
+                'message',
+                allOf(
+                  contains('https://oauth2.googleapis.com/token: 400'),
+                  contains('invalid_grant'),
+                  contains('account not found'),
                 ),
               ),
-            );
-          },
-        );
-      });
-    },
-    skip: canUseWebCrypto
-        ? null
-        : 'Requires Dart 3.13 or later for native assets',
-  );
+            ),
+          );
+        },
+      );
+    });
+  });
 }

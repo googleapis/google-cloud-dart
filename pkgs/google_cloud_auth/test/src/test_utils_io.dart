@@ -16,19 +16,6 @@ import 'dart:io';
 
 import 'package:test/test.dart';
 
-/// Whether `package:webcrypto` can be used on the current platform.
-///
-/// The VM requires Dart 3.13 or later.
-final canUseWebCrypto = () {
-  final versionStr = Platform.version.split(' ').first;
-  final parts = versionStr.split('.').map(int.tryParse).toList();
-  if (parts.length >= 2 && parts[0] != null && parts[1] != null) {
-    if (parts[0]! > 3) return true;
-    if (parts[0]! == 3 && parts[1]! >= 13) return true;
-  }
-  return false;
-}();
-
 /// The value of the environment variable [name], or `null` if unset.
 String? readEnvironment(String name) => Platform.environment[name];
 
