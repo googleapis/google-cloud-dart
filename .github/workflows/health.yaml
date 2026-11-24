@@ -23,11 +23,12 @@ on:
 
 jobs:
   health:
-    uses: dart-lang/ecosystem/.github/workflows/health.yaml@1d2b5ff862c6b93cd86dd06eadac4c9f4d5d6c20
+    uses: dart-lang/ecosystem/.github/workflows/health.yaml@1d2b5ff862c6b93cd86dd06eadac4c9f4d5d6c20 # main
     with:
-      checks: "breaking,coverage,do-not-submit,leaking,license"
-      fail_on: "do-not-submit,license"
+      checks: "breaking,coverage,do-not-submit,leaking,license,publish"
+      fail_on: "do-not-submit,license,publish"
       warn_on: "breaking,coverage,leaking"
+      ignore_publish: "generated/**"
       coverage_web: false
       license: |-
         // Copyright %YEAR% Google LLC
