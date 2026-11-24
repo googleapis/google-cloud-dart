@@ -52,7 +52,7 @@ final class ApiKeyCredentials extends Credentials {
   Future<Map<String, List<String>>> requestMetadata({
     Uri? uri,
     bool forceRefresh = false,
-  }) async => {
+  }) => Future.value({
     _apiKeyHeader: [_apiKey],
-  };
+  });
 }
