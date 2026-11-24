@@ -393,9 +393,8 @@ void main() {
           payload: validPayload({'aud': 'anything'}),
         );
 
-        final claims = await buildVerifier(
-          allowedAudiences: null,
-        ).verify(token);
+        final claims = await buildVerifier(allowedAudiences: null)
+            .verify(token);
 
         expect(claims.audience, ['anything']);
       });
@@ -426,9 +425,8 @@ void main() {
       test('treats a null audience as absent', () async {
         final token = await mintToken(payload: validPayload({'aud': null}));
 
-        final claims = await buildVerifier(
-          allowedAudiences: null,
-        ).verify(token);
+        final claims = await buildVerifier(allowedAudiences: null)
+            .verify(token);
 
         expect(claims.audience, isEmpty);
       });

@@ -651,9 +651,8 @@ void main() {
 
         await creds.accessToken();
 
-        final claims = JwsParts.parse(
-          requests.single.bodyFields['assertion']!,
-        ).decodeClaims();
+        final claims = JwsParts.parse(requests.single.bodyFields['assertion']!)
+            .decodeClaims();
         expect(
           claims['scope'],
           'https://www.googleapis.com/auth/devstorage.read_only '
@@ -703,9 +702,8 @@ void main() {
         expect(requests.single.url, Uri.https('oauth2.example.com', '/token'));
         // The audience is the Google OAuth 2.0 token endpoint regardless of
         // token_uri, as in the Java and Python libraries.
-        final claims = JwsParts.parse(
-          requests.single.bodyFields['assertion']!,
-        ).decodeClaims();
+        final claims = JwsParts.parse(requests.single.bodyFields['assertion']!)
+            .decodeClaims();
         expect(claims['aud'], 'https://oauth2.googleapis.com/token');
       });
       test('uses a self-signed JWT outside of the default universe '

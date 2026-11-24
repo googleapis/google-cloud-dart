@@ -103,9 +103,10 @@ const _pemFooter = '-----END CERTIFICATE-----';
 /// Throws a [FormatException] if [pem] is not valid PEM.
 @internal
 Uint8List parsePemCertificate(String pem) {
-  final lines = LineSplitter.split(
-    pem,
-  ).map((line) => line.trim()).where((line) => line.isNotEmpty).toList();
+  final lines = LineSplitter.split(pem)
+      .map((line) => line.trim())
+      .where((line) => line.isNotEmpty)
+      .toList();
   if (lines.length < 2 ||
       lines.first != _pemHeader ||
       lines.last != _pemFooter) {
