@@ -34,33 +34,29 @@ void main() {
         });
       });
 
-      test(
-        'API rejects an invalid API key',
-        tags: ['google-cloud'],
-        () async {
-          // A successful request requires a valid API key.
-          //
-          // Instead, verify that the API finds the API key in the request
-          // metadata, failing because the key is invalid (400
-          // `API_KEY_INVALID`) rather than because the request is
-          // unauthenticated (403 `ACCESS_DENIED`).
-          final credentials = ApiKeyCredentials('invalid-api-key');
-          final metadata = await credentials.requestMetadata();
+      test('API rejects an invalid API key', tags: ['google-cloud'], () async {
+        // A successful request requires a valid API key.
+        //
+        // Instead, verify that the API finds the API key in the request
+        // metadata, failing because the key is invalid (400
+        // `API_KEY_INVALID`) rather than because the request is
+        // unauthenticated (403 `ACCESS_DENIED`).
+        final credentials = ApiKeyCredentials('invalid-api-key');
+        final metadata = await credentials.requestMetadata();
 
-          final client = http.Client();
-          addTearDown(client.close);
+        final client = http.Client();
+        addTearDown(client.close);
 
-          final response = await client.get(
-            Uri.https('generativelanguage.googleapis.com', '/v1/models'),
-            headers: {
-              for (var MapEntry(key: key, value: values) in metadata.entries)
-                key: values.join(', '),
-            },
-          );
-          expect(response.statusCode, 400);
-          expect(response.body, contains('API_KEY_INVALID'));
-        },
-      );
+        final response = await client.get(
+          Uri.https('generativelanguage.googleapis.com', '/v1/models'),
+          headers: {
+            for (var MapEntry(key: key, value: values) in metadata.entries)
+              key: values.join(', '),
+          },
+        );
+        expect(response.statusCode, 400);
+        expect(response.body, contains('API_KEY_INVALID'));
+      });
     });
   });
 }
