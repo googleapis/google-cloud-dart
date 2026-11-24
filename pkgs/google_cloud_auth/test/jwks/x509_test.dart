@@ -84,25 +84,19 @@ void main() {
   });
 
   group('extractSubjectPublicKeyInfo', () {
-    test(
-      'parses a real Google certificate',
-      skip: canUseWebCrypto
-          ? null
-          : 'Requires Dart 3.13 or later for native assets',
-      () async {
-        final der = parsePemCertificate(testGoogleSecureTokenCertificatePem);
+    test('parses a real Google certificate', () async {
+      final der = parsePemCertificate(testGoogleSecureTokenCertificatePem);
 
-        final spki = extractSubjectPublicKeyInfo(der);
+      final spki = extractSubjectPublicKeyInfo(der);
 
-        // Proves the bytes really are an SPKI, not just a plausible slice.
-        final imported = await RsassaPkcs1V15PublicKey.importSpkiKey(
-          spki,
-          Hash.sha256,
-        );
-        final jwk = await imported.exportJsonWebKey();
-        expect(jwk['kty'], 'RSA');
-      },
-    );
+      // Proves the bytes really are an SPKI, not just a plausible slice.
+      final imported = await RsassaPkcs1V15PublicKey.importSpkiKey(
+        spki,
+        Hash.sha256,
+      );
+      final jwk = await imported.exportJsonWebKey();
+      expect(jwk['kty'], 'RSA');
+    });
 
     test('empty input', () {
       expect(

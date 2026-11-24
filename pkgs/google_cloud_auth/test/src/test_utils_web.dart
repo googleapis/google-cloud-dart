@@ -12,11 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/// Whether `package:webcrypto` can be used on the current platform.
-///
-/// The browser always provides the Web Crypto API, so this is always true.
-const canUseWebCrypto = true;
-
 /// Environment variables are not available on the web.
 String? readEnvironment(String name) => null;
 

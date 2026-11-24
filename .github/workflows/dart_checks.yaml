@@ -24,11 +24,11 @@ on:
 
 env:
   # Formatting changes between SDK versions so fix the SDK version used for `dart format`.
-  FORMAT_DART_VERSION: 3.13.2
+  FORMAT_DART_VERSION: 3.13.3
   GO_VERSION: 1.26.1
   GOOGLE_CLOUD_PROJECT: test-project
   LIBRARIAN_VERSION: v0.44.1-0.20260915154909-bea74dadf46d
-  MINIMUM_DART_TEST_VERSION: &MINIMUM_DART_TEST_VERSION 3.10.1
+  MINIMUM_DART_TEST_VERSION: &MINIMUM_DART_TEST_VERSION 3.13.3
 name: Dart Checks
 jobs:
   format:

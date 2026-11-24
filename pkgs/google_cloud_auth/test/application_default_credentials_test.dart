@@ -126,7 +126,7 @@ void main() {
               'env-sa@project.iam.gserviceaccount.com',
             ),
           );
-        }, skip: canUseWebCrypto ? null : 'Requires Dart 3.13 or later');
+        });
 
         test('file does not exist', () async {
           expect(
@@ -254,7 +254,7 @@ void main() {
             'env-sa@project.iam.gserviceaccount.com',
           ),
         );
-      }, skip: canUseWebCrypto ? null : 'Requires Dart 3.13 or later');
+      });
 
       group('from well-known file', () {
         test('success', () async {
@@ -281,7 +281,7 @@ void main() {
               'env-sa@project.iam.gserviceaccount.com',
             ),
           );
-        }, skip: canUseWebCrypto ? null : 'Requires Dart 3.13 or later');
+        });
 
         test('not valid JSON', () async {
           final invalidFile = File('${tempDir.path}/invalid.json');
@@ -356,7 +356,7 @@ void main() {
           await (credentials as ServiceAccountCredentials).accessToken(),
           'service-account-access-token',
         );
-      }, skip: canUseWebCrypto ? null : 'Requires Dart 3.13 or later');
+      });
 
       test(
         'gets access token from the environment',
@@ -370,7 +370,6 @@ void main() {
           }
           expect(await credentials.accessToken(), isNotEmpty);
         },
-        skip: canUseWebCrypto ? null : 'Requires Dart 3.13 or later',
       );
     });
 
