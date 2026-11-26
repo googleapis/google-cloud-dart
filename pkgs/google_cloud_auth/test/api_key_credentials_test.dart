@@ -34,6 +34,21 @@ void main() {
         });
       });
 
+      test('with uri and forceRefresh', () async {
+        // `uri` and `forceRefresh` should be ignored.
+        final credentials = ApiKeyCredentials('test-api-key');
+
+        expect(
+          await credentials.requestMetadata(
+            uri: Uri.https('storage.googleapis.com', '/'),
+            forceRefresh: true,
+          ),
+          {
+            'x-goog-api-key': ['test-api-key'],
+          },
+        );
+      });
+
       test('API rejects an invalid API key', tags: ['google-cloud'], () async {
         // A successful request requires a valid API key.
         //
