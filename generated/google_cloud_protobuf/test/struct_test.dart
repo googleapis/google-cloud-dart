@@ -67,6 +67,51 @@ void main() {
     ]);
   });
 
+  group('cyclic JSON', () {
+    test('a map that contains itself', () {
+      final map = <String, dynamic>{};
+      map['self'] = map;
+      expect(() => Value.fromJson(map), throwsFormatException);
+      expect(() => Struct.fromJson(map), throwsFormatException);
+    });
+
+    test('a list that contains itself', () {
+      final list = <dynamic>[];
+      list.add(list);
+      expect(() => Value.fromJson(list), throwsFormatException);
+      expect(() => ListValue.fromJson(list), throwsFormatException);
+    });
+
+    test('a cycle through a map and a list', () {
+      final map = <String, dynamic>{};
+      map['list'] = [map];
+      expect(() => Value.fromJson(map), throwsFormatException);
+    });
+
+    test('a map used twice without a cycle', () {
+      final shared = {'a': 1};
+      final value = Value.fromJson({
+        'x': shared,
+        'y': [shared, shared],
+      });
+      expect(value.toJson(), {
+        'x': {'a': 1.0},
+        'y': [
+          {'a': 1.0},
+          {'a': 1.0},
+        ],
+      });
+    });
+
+    test('a later decode works after a cycle was rejected', () {
+      final map = <String, dynamic>{};
+      map['self'] = map;
+      expect(() => Value.fromJson(map), throwsFormatException);
+      map['self'] = 'no longer a cycle';
+      expect(Value.fromJson(map).toJson(), {'self': 'no longer a cycle'});
+    });
+  });
+
   test('NullValue', () {
     expect(Value.fromJson(null).nullValue, isNotNull);
     expect(Value.fromJson('foo').nullValue, isNull);
