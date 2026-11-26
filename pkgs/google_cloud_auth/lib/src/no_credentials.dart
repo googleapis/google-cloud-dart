@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/// @docImport 'oauth2_credentials.dart';
+/// 
 /// Design based on:
 /// - https://github.com/googleapis/google-cloud-java/blob/main/sdk-platform-java/java-core/google-cloud-core/src/main/java/com/google/cloud/NoCredentials.java
 /// - https://github.com/googleapis/google-cloud-python/blob/main/packages/google-auth/google/auth/credentials.py
