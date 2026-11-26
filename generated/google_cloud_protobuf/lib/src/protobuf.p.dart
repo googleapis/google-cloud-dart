@@ -545,13 +545,33 @@ class _BytesValueHelper {
       BytesValue(value: decodeBytes(value as String));
 }
 
+/// The maps and lists that [_StructHelper] and [_ListValueHelper] are decoding,
+/// from the outermost to the current one.
+///
+/// A map or list that is already in the set contains itself, which JSON cannot
+/// represent, so decoding it would never end.
+final _containersBeingDecoded = Set<Object>.identity();
+
+T _decodeContainer<T>(Object container, T Function() decode) {
+  if (!_containersBeingDecoded.add(container)) {
+    throw const FormatException('Invalid Value: the JSON contains a cycle');
+  }
+  try {
+    return decode();
+  } finally {
+    _containersBeingDecoded.remove(container);
+  }
+}
+
 class _StructHelper {
   static Map<String, Object?> encode(Struct value) =>
       value.fields.map((key, value) => MapEntry(key, value.toJson()));
 
   static Struct decode(Object? value) {
-    final fields = (value as Map<String, dynamic>).map(
-      (key, value) => MapEntry(key, Value.fromJson(value)),
+    final map = value as Map<String, dynamic>;
+    final fields = _decodeContainer(
+      map,
+      () => map.map((key, value) => MapEntry(key, Value.fromJson(value))),
     );
     return Struct(fields: fields);
   }
@@ -562,7 +582,11 @@ class _ListValueHelper {
       value.values.map((v) => v.toJson()).toList();
 
   static ListValue decode(Object? value) {
-    final values = (value as List).map(Value.fromJson).toList();
+    final list = value as List;
+    final values = _decodeContainer(
+      list,
+      () => list.map(Value.fromJson).toList(),
+    );
     return ListValue(values: values);
   }
 }
