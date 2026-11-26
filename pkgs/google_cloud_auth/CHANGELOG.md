@@ -8,3 +8,4 @@
   `gcloud auth application-default login`, using `UserCredentials`.
   `defaultCredentials` returns `UserCredentials` for `authorized_user`
   credential files.
+* Support for authorizing requests with an API key, using `ApiKeyCredentials`.
