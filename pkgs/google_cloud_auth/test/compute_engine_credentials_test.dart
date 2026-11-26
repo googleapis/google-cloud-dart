@@ -24,7 +24,11 @@ import 'package:test/test.dart';
 import 'test_utils.dart';
 
 void main() async {
-  final isOnGce = await ComputeEngineCredentials.isOnComputeEngine();
+  final gceCheckClient = http.Client();
+  final isOnGce = await ComputeEngineCredentials.isOnComputeEngine(
+    client: gceCheckClient,
+  );
+  gceCheckClient.close();
 
   group('ComputeEngineCredentials', () {
     group('create', () {
@@ -36,7 +40,7 @@ void main() async {
         });
 
         final creds = await ComputeEngineCredentials.create(
-          clientFactory: () => mockClient,
+          client: mockClient,
           clientEmail: 'explicit@iam.gserviceaccount.com',
           universeDomain: 'explicit.domain.com',
           metadataHost: 'test-metadata',
@@ -62,7 +66,7 @@ void main() async {
         });
 
         final creds = await ComputeEngineCredentials.create(
-          clientFactory: () => mockClient,
+          client: mockClient,
           metadataHost: 'test-metadata',
         );
 
@@ -79,7 +83,7 @@ void main() async {
 
           expect(
             () => ComputeEngineCredentials.create(
-              clientFactory: () => mockClient,
+              client: mockClient,
               metadataHost: 'test-metadata',
             ),
             throwsA(
@@ -100,7 +104,7 @@ void main() async {
 
         expect(
           () => ComputeEngineCredentials.create(
-            clientFactory: () => mockClient,
+            client: mockClient,
             metadataHost: 'test-metadata',
           ),
           throwsA(
@@ -131,7 +135,7 @@ void main() async {
         );
 
         final creds = await ComputeEngineCredentials.create(
-          clientFactory: () => mockClient,
+          client: mockClient,
           clientEmail: 'test-sa@project.iam.gserviceaccount.com',
           metadataHost: 'test-metadata',
         );
@@ -151,7 +155,7 @@ void main() async {
         );
 
         final creds = await ComputeEngineCredentials.create(
-          clientFactory: () => mockClient,
+          client: mockClient,
           clientEmail: 'test-sa@project.iam.gserviceaccount.com',
           metadataHost: 'test-metadata',
         );
@@ -175,7 +179,7 @@ void main() async {
 
         expect(
           () => ComputeEngineCredentials.create(
-            clientFactory: () => mockClient,
+            client: mockClient,
             metadataHost: 'test-metadata',
           ),
           throwsA(
@@ -208,23 +212,26 @@ void main() async {
         });
 
         final creds = await ComputeEngineCredentials.create(
-          clientFactory: () => mockClient,
+          client: mockClient,
           clientEmail: 'sa@test.com',
           universeDomain: 'googleapis.com',
           metadataHost: 'test-metadata',
         );
 
-        final token1 = await creds.accessToken();
+        final token1 = await creds.accessToken(client: mockClient);
         expect(token1, 'token-1');
         expect(callCount, 1);
 
         // Cached
-        final token2 = await creds.accessToken();
+        final token2 = await creds.accessToken(client: mockClient);
         expect(token2, 'token-1');
         expect(callCount, 1);
 
         // Force refresh
-        final token3 = await creds.accessToken(forceRefresh: true);
+        final token3 = await creds.accessToken(
+          forceRefresh: true,
+          client: mockClient,
+        );
         expect(token3, 'token-2');
         expect(callCount, 2);
       });
@@ -239,14 +246,14 @@ void main() async {
         );
 
         final creds = await ComputeEngineCredentials.create(
-          clientFactory: () => mockClient,
+          client: mockClient,
           clientEmail: 'sa@test.com',
           universeDomain: 'googleapis.com',
           metadataHost: 'test-metadata',
         );
 
         expect(
-          creds.accessToken,
+          () => creds.accessToken(client: mockClient),
           throwsA(
             isA<CredentialException>().having(
               (e) => e.message,
@@ -271,9 +278,7 @@ void main() async {
             );
           });
 
-          final isGce = await internalIsOnComputeEngine(
-            clientFactory: () => mockClient,
-          );
+          final isGce = await internalIsOnComputeEngine(client: mockClient);
           expect(isGce, isTrue);
         },
       );
@@ -291,7 +296,7 @@ void main() async {
         });
 
         final isGce = await internalIsOnComputeEngine(
-          clientFactory: () => mockClient,
+          client: mockClient,
           isLinux: false,
         );
         expect(isGce, isFalse);
@@ -307,7 +312,7 @@ void main() async {
         });
 
         final isGce = await internalIsOnComputeEngine(
-          clientFactory: () => mockClient,
+          client: mockClient,
           isLinux: false,
         );
         expect(isGce, isFalse);
@@ -321,7 +326,7 @@ void main() async {
         });
 
         final isGce = await internalIsOnComputeEngine(
-          clientFactory: () => mockClient,
+          client: mockClient,
           isLinux: false,
         );
         expect(isGce, isFalse);
@@ -336,7 +341,7 @@ void main() async {
         });
 
         final isGce = await internalIsOnComputeEngine(
-          clientFactory: () => mockClient,
+          client: mockClient,
           isLinux: false,
         );
         expect(isGce, isFalse);
@@ -358,9 +363,7 @@ void main() async {
           );
         });
 
-        final isGce = await internalIsOnComputeEngine(
-          clientFactory: () => mockClient,
-        );
+        final isGce = await internalIsOnComputeEngine(client: mockClient);
         expect(isGce, isTrue);
         expect(callCount, 3);
       });
@@ -378,7 +381,7 @@ void main() async {
           );
 
           final isGce = await internalIsOnComputeEngine(
-            clientFactory: () => mockClient,
+            client: mockClient,
             isLinux: true,
             linuxProductNamePath: dmiPath,
           );
@@ -398,7 +401,7 @@ void main() async {
         });
 
         final isGce = await internalIsOnComputeEngine(
-          clientFactory: () => mockClient,
+          client: mockClient,
           isLinux: true,
           linuxProductNamePath: dmiPath,
         );
@@ -415,7 +418,7 @@ void main() async {
           });
 
           final isGce = await internalIsOnComputeEngine(
-            clientFactory: () => mockClient,
+            client: mockClient,
             isLinux: true,
             linuxProductNamePath: dmiPath,
           );
@@ -438,7 +441,7 @@ void main() async {
           });
 
           final isGce = await internalIsOnComputeEngine(
-            clientFactory: () => mockClient,
+            client: mockClient,
             isLinux: true,
             linuxProductNamePath: dmiPath,
             readEnvironment: (name) =>
@@ -449,8 +452,14 @@ void main() async {
         testOn: 'vm',
       );
 
-      test('returns false on browser when no client is provided', () async {
-        expect(await ComputeEngineCredentials.isOnComputeEngine(), isFalse);
+      test('returns false on browser without making HTTP requests', () async {
+        final mockClient = MockClient((request) async {
+          fail('Should not attempt network call');
+        });
+        expect(
+          await ComputeEngineCredentials.isOnComputeEngine(client: mockClient),
+          isFalse,
+        );
       }, testOn: 'browser');
 
       test('returns false when NO_GCE_CHECK is true', () async {
@@ -459,7 +468,7 @@ void main() async {
         });
 
         final isGce = await internalIsOnComputeEngine(
-          clientFactory: () => mockClient,
+          client: mockClient,
           readEnvironment: (name) => name == 'NO_GCE_CHECK' ? 'true' : null,
         );
         expect(isGce, isFalse);
@@ -471,7 +480,7 @@ void main() async {
         });
 
         final isGce = await internalIsOnComputeEngine(
-          clientFactory: () => mockClient,
+          client: mockClient,
           readEnvironment: (name) => name == 'NO_GCE_CHECK' ? '1' : null,
         );
         expect(isGce, isFalse);
@@ -488,7 +497,7 @@ void main() async {
         });
 
         final isGce = await internalIsOnComputeEngine(
-          clientFactory: () => mockClient,
+          client: mockClient,
           readEnvironment: (name) =>
               name == 'GCE_METADATA_HOST' ? 'custom-metadata' : null,
         );
@@ -544,18 +553,18 @@ void main() async {
         });
 
         final creds = await ComputeEngineCredentials.create(
-          clientFactory: () => mockClient,
+          client: mockClient,
           clientEmail: 'sa@test.iam.gserviceaccount.com',
           metadataHost: 'test-metadata',
         );
 
-        final signature = await creds.sign(expectedMessage);
+        final signature = await creds.sign(expectedMessage, client: mockClient);
         expect(signature, equals(mockSignatureBytes));
         expect(tokenCallCount, 1);
         expect(signBlobCallCount, 1);
 
         // Subsequent call reuses cached token:
-        await creds.sign(expectedMessage);
+        await creds.sign(expectedMessage, client: mockClient);
         expect(tokenCallCount, 1);
         expect(signBlobCallCount, 2);
       });
@@ -599,12 +608,12 @@ void main() async {
         });
 
         final creds = await ComputeEngineCredentials.create(
-          clientFactory: () => mockClient,
+          client: mockClient,
           clientEmail: 'sa@test.iam.gserviceaccount.com',
           metadataHost: 'test-metadata',
         );
 
-        final signature = await creds.sign(message);
+        final signature = await creds.sign(message, client: mockClient);
         expect(signature, equals(mockSignatureBytes));
         expect(signBlobAttempts, 2);
         expect(tokenCount, 2);
@@ -645,12 +654,12 @@ void main() async {
         });
 
         final creds = await ComputeEngineCredentials.create(
-          clientFactory: () => mockClient,
+          client: mockClient,
           clientEmail: 'sa@test.iam.gserviceaccount.com',
           metadataHost: 'test-metadata',
         );
 
-        final signature = await creds.sign(message);
+        final signature = await creds.sign(message, client: mockClient);
         expect(signature, equals(mockSignatureBytes));
         expect(signBlobAttempts, 2);
       });
@@ -687,13 +696,13 @@ void main() async {
         );
 
         final creds = await ComputeEngineCredentials.create(
-          clientFactory: () => mockClient,
+          client: mockClient,
           clientEmail: 'sa@test.iam.gserviceaccount.com',
           metadataHost: 'test-metadata',
         );
 
         expect(
-          () => creds.sign(message),
+          () => creds.sign(message, client: mockClient),
           throwsA(
             isA<SigningException>().having(
               (e) => e.message,
@@ -725,13 +734,13 @@ void main() async {
         );
 
         final creds = await ComputeEngineCredentials.create(
-          clientFactory: () => mockClient,
+          client: mockClient,
           clientEmail: 'sa@test.iam.gserviceaccount.com',
           metadataHost: 'test-metadata',
         );
 
         expect(
-          () => creds.sign(message),
+          () => creds.sign(message, client: mockClient),
           throwsA(
             isA<SigningException>()
                 .having(
@@ -769,13 +778,13 @@ void main() async {
         );
 
         final creds = await ComputeEngineCredentials.create(
-          clientFactory: () => mockClient,
+          client: mockClient,
           clientEmail: 'sa@test.iam.gserviceaccount.com',
           metadataHost: 'test-metadata',
         );
 
         expect(
-          () => creds.sign(message),
+          () => creds.sign(message, client: mockClient),
           throwsA(
             isA<SigningException>().having(
               (e) => e.message,
@@ -800,13 +809,13 @@ void main() async {
           );
 
           final creds = await ComputeEngineCredentials.create(
-            clientFactory: () => mockClient,
+            client: mockClient,
             clientEmail: 'sa@test.iam.gserviceaccount.com',
             metadataHost: 'test-metadata',
           );
 
           expect(
-            () => creds.sign(message),
+            () => creds.sign(message, client: mockClient),
             throwsA(
               isA<SigningException>().having(
                 (e) => e.message,
@@ -823,13 +832,16 @@ void main() async {
         tags: ['google-cloud'],
         skip: isOnGce ? null : 'Not running on Google Compute Engine',
         () async {
-          final creds = await ComputeEngineCredentials.create();
+          final client = http.Client();
+          addTearDown(client.close);
+
+          final creds = await ComputeEngineCredentials.create(client: client);
           expect(creds.clientEmail, contains('@'));
 
           final message = utf8.encode(
             'Hello from ComputeEngineCredentials test!',
           );
-          final signature = await creds.sign(message);
+          final signature = await creds.sign(message, client: client);
 
           expect(signature, isNotEmpty);
           expect(signature.length, greaterThan(64));

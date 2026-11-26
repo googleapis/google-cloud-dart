@@ -29,10 +29,10 @@ const _minimumUserInfo = {
 
 final _defaultTokenUri = Uri.https('oauth2.googleapis.com', '/token');
 
-/// A client factory whose clients add each request to [requests] and respond
-/// with an access token.
-http.Client Function() _recordingClientFactory(List<http.Request> requests) =>
-    () => MockClient((request) async {
+/// A client that adds each request to [requests] and responds with an access
+/// token.
+http.Client _recordingClient(List<http.Request> requests) =>
+    MockClient((request) async {
       requests.add(request);
       return http.Response(
         jsonEncode({
@@ -58,12 +58,12 @@ void main() {
           'quota_project_id': 'quota-project',
           'universe_domain': 'googleapis.com',
           'account': '',
-        }, clientFactory: _recordingClientFactory(requests));
+        });
 
         expect(creds.quotaProjectId, 'quota-project');
         expect(creds.universeDomain, 'googleapis.com');
 
-        await creds.accessToken();
+        await creds.accessToken(client: _recordingClient(requests));
         expect(requests.single.url, _defaultTokenUri);
         expect(requests.single.bodyFields, {
           'grant_type': 'refresh_token',
@@ -79,12 +79,12 @@ void main() {
           'client_id': 'client-123.apps.googleusercontent.com',
           'client_secret': 'secret-123',
           'refresh_token': 'refresh-123',
-        }, clientFactory: _recordingClientFactory(requests));
+        });
 
         expect(creds.quotaProjectId, isNull);
         expect(creds.universeDomain, 'googleapis.com');
 
-        await creds.accessToken();
+        await creds.accessToken(client: _recordingClient(requests));
         expect(requests.single.url, _defaultTokenUri);
         expect(requests.single.bodyFields, {
           'grant_type': 'refresh_token',
@@ -99,9 +99,9 @@ void main() {
         final creds = UserCredentials.fromAuthorizedUserInfo({
           ..._minimumUserInfo,
           'token_uri': 'https://example.com/token',
-        }, clientFactory: _recordingClientFactory(requests));
+        });
 
-        await creds.accessToken();
+        await creds.accessToken(client: _recordingClient(requests));
         expect(requests.single.url, _defaultTokenUri);
       });
 
@@ -206,12 +206,11 @@ void main() {
             ..._minimumUserInfo,
             'quota_project_id': 'quota-project',
           }),
-          clientFactory: _recordingClientFactory(requests),
         );
 
         expect(creds.quotaProjectId, 'quota-project');
 
-        await creds.accessToken();
+        await creds.accessToken(client: _recordingClient(requests));
         expect(
           requests.single.bodyFields,
           containsPair(
@@ -258,13 +257,12 @@ void main() {
 
         final creds = await UserCredentials.fromAuthorizedUserFile(
           tempFilePath,
-          clientFactory: _recordingClientFactory(requests),
         );
 
         expect(creds.quotaProjectId, 'test-project');
         expect(creds.universeDomain, 'googleapis.com');
 
-        await creds.accessToken();
+        await creds.accessToken(client: _recordingClient(requests));
         expect(requests.single.url, _defaultTokenUri);
         expect(
           requests.single.bodyFields,
