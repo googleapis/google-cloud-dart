@@ -13,7 +13,6 @@
 // limitations under the License.
 
 import 'package:google_cloud_auth/google_cloud_auth.dart';
-import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 
 void main() {
